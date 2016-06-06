@@ -1,0 +1,27 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @event, @my_travel], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Invitee *
+            .col-lg-7
+              - default_agenda_type = @event.invitees.collect{|p| [ p.name_of_the_invitee, p.id ]}
+              - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
+              %i.arrow.single
+              = f.select("my_travel", "invitee_id", default_agenda_type, {:selected => f.object.invitee_id,:prompt => "#{f.object.invitee_id.present? ? f.object.invitee_id : "Select Invitee" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:invitee_id].join("") rescue nil 
+        = f.new_custom_file_browser_field :attach_file, "Attach File (png/jpg/pdf) upto 10mb only *", :id => "uploadBtn", :value => f.object.attach_file_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)

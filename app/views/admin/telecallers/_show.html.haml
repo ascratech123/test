@@ -1,0 +1,103 @@
+= stylesheet_link_tag "css/telecaller_show"
+.mdl-grid.ml-color--shades-white.mdl-card.mdl-shadow--1dp#tab1.bottomTime
+  - if obj.blank?
+    %p.txtcenter.Thankpop
+      Thank You
+  - else
+    - obj1 = obj.attributes.except('id', 'created_at', 'updated_at', 'invitee_structure_id')
+    .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15 
+      =# form_for obj, :url=>update_details_admin_event_invitee_datas_path(:event_id => @event.id), :method => :post,:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      = form_for obj, :url=>admin_event_invitee_data_path(:event_id => @event.id,:id=> obj.id), :method => :put,:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+        - session[:invitee_datum_id] = @data.id
+        = f.custom_text_field :attr1, "Email id *", :value => f.object.attr1.present? ? f.object.attr1 : "","background" => "false"
+        = f.custom_text_field :attr2, "First Name *", :value => f.object.attr2.present? ? f.object.attr2 : "","background" => "false"
+        = f.custom_text_field :attr3, "Last Name *", :value => f.object.attr3.present? ? f.object.attr3 : "","background" => "false"
+        = f.custom_text_field :attr4, "Designation *", :value => f.object.attr3.present? ? f.object.attr4 : "","background" => "false"
+        = f.custom_text_field :attr6, "Company *", :value => f.object.attr6.present? ? f.object.attr6 : "","background" => "false"
+        = f.custom_text_field :attr11, "Landline Number *", :value => f.object.attr11.present? ? f.object.attr11 : "","background" => "false"
+        = f.custom_text_field :attr12, "Mobile Number *", :value => f.object.attr12.present? ? f.object.attr12 : "","background" => "false"
+        = f.custom_text_field :remark, "Remark *", "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .form-group
+            %label.col-lg-4.control-label
+              Status *
+            .col-lg-7
+              - default_remark = [["REGISTERED","REGISTERED"],["HOT", "HOT"], ["WARM", "WARM"], ["FOLLOW UP", "FOLLOW UP"], ["REGRET", "REGRET"], ["TENTATIVE", "TENTATIVE"], ["CALL BACK", "CALL BACK"], ["DISCREPANT NUMBER", "DISCREPANT NUMBER"], ["NO NUMBER", "NO NUMBER"], ["DISCREPANT CONTACT", "DISCREPANT CONTACT"], ["DO NOT CALL", "DO NOT CALL"], ["BLACK LISTED", "BLACK LISTED"], ["UNSUBSCRIBE", "UNSUBSCRIBE"], ["DUPLICATE", "DUPLICATE"], ["UNTAPPED", "UNTAPPED"]]
+              - default_remark = default_remark.sort {|a,b| a[0] <=> b[0]}
+              - default_remark = default_remark + [["OTHER", "OTHER"]]
+              %i.arrow.single
+              = f.select("invitee_datum", "status", default_remark, {:selected => f.object.status,:prompt => "#{(f.object.status.present? and f.object.status != "select Status") ? f.object.status : "Select Status" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:status].join("") rescue nil
+        / = f.custom_text_field :callback_datetime, "Callback Datetime *", "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .bs-component
+            .form-group
+              %label.col-lg-4.control-label{:for => "_Event Start Date"} Start Callback Datetime *
+              = f.custom_text_field_date :callback_date, "Callback Datetime", :id => "date-start", :value => f.object.callback_datetime.present? ? f.object.callback_datetime.strftime('%d/%m/%Y') : ''
+              .col-lg-3.timeDropdown
+                .timeTab
+                  = f.custom_text_field_date :callback_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.callback_datetime.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :callback_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.callback_datetime.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :callback_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.callback_datetime.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"   
+        = f.hidden_field :check_remark_and_status_present , :value => "true"
+        .fixed-activon-btn-new.teleclick  
+          = f.custom_submit_button "NEXT"
+          .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+              = link_to admin_dashboards_path, :class => "waves-effect waves-light btn" do
+                Cancel
+              
+- if @need_to_call == "true" and obj.present?
+  .popup-overlay
+  .ClientPopup
+    #register-form.col.s12.ClientPopup-info
+      %p.txtcenter.m-b-30
+        %table
+          %tr
+            %td.popTxtRight Email :
+            %td.popupLeft= obj.attr1
+          %tr
+            %td.popTxtRight Status :
+            %td.popupLeft= obj.status        
+          %tr
+            %td.popTxtRight Date / Time : 
+            %td.popupLeft= obj.callback_datetime.strftime("%d/%m/%Y %l:%M:%p") rescue nil
+          %tr
+            %td.popTxtRight Remark : 
+            %td.popupLeft= obj.remark
+      %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
+        ok
+      
+
+- if params[:action] == "update_details" and (params[:invitee_datum][:status] == "CALL BACK"  or params[:invitee_datum][:status] == "FOLLOW UP")
+  :javascript
+    $('#date-start,#date-start1').parent().parent().parent().show();
+- elsif (obj.present? and params[:action] == "show") and (obj.status == "CALL BACK" or obj.status == "FOLLOW UP")
+  :javascript
+    $('#date-start,#date-start1').parent().parent().parent().show();
+- else params[:action] == "edit" 
+  :javascript
+    $('#date-start,#date-start1').parent().parent().parent().hide();
+
+:javascript
+  $('#invitee_datum_status').on('change', function() {
+    val = $(this).val();
+    if(val == "CALL BACK" || val == "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().show();
+    }
+    if(val != "CALL BACK" && val != "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().hide();
+    }
+  });
+  
+
+:javascript
+  $(window).load(function(){
+  flightTime();
+  minutes();
+  times(); 
+  
+  })
+ 

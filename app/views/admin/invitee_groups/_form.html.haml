@@ -1,0 +1,24 @@
+= javascript_include_tag "jquery.fancybox"
+.save_button.mdl-card
+  = form_for [:admin, @event ,@invitee_group], :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+      = f.custom_text_field :name, "Name *", :class => 'mdl-textfield__input'
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "margin-top: 30px"}
+        .form-group
+          %label.col-lg-4.control-label.ml-color--shades-white
+            Select invitee *
+          .col-lg-7
+            - default_invitee_list = [['Select All', 'select_all']]
+            - default_invitee_list += @invitees.collect{|invitee| [ invitee.name_with_email, invitee.id ]}
+            = f.select("invitee_group", "invitee_ids", default_invitee_list,{:selected => f.object.invitee_ids},{include_blank: 'None', :multiple => true, :style => 'min-height:300px'})
+            .field_with_errors
+              .span{:class => "errorMessage"}
+                = f.object.errors.messages[:invitee_ids].join("") rescue nil   
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)

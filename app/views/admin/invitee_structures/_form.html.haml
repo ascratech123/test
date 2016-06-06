@@ -1,0 +1,54 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @event ,@invitee_structure], :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
+            /   what's this?
+        = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "database.png", :section_id => "speaker_general_section"}
+        = f.custom_text_field :attr1, "Column 1 Name", :value => "Email id",:readonly => true
+        = f.custom_text_field :attr2, "Column 2 Name", :value => "First Name",:readonly => true
+        = f.custom_text_field :attr3, "Column 3 Name", :value => "Last Name",:readonly => true
+        = f.custom_text_field :attr4, "Column 4 Name", :value => "Designation",:readonly => true
+        = f.custom_text_field :attr5, "Column 5 Name", :value => "Department",:readonly => true
+        = f.custom_text_field :attr6, "Column 6 Name", :value => "Company",:readonly => true
+        = f.custom_text_field :attr7, "Column 7 Name", :value => "Address",:readonly => true
+        = f.custom_text_field :attr8, "Column 8 Name", :value => "City",:readonly => true
+        = f.custom_text_field :attr9, "Column 9 Name", :value => "Pin Code",:readonly => true
+        = f.custom_text_field :attr10, "Column 10 Name", :value => "STD Code",:readonly => true
+        = f.custom_text_field :attr11, "Column 11 Name", :value => "Landline Number",:readonly => true
+        = f.custom_text_field :attr12, "Column 12 Name", :value => "Mobile Number",:readonly => true
+        = f.custom_text_field :attr13, "Column 13 Name", :value => "DB Source ( Client / Shobiz)",:readonly => true
+        = f.custom_text_field :attr14, "Column 14 Name", :value => "Industry",:readonly => true
+        = f.custom_text_field :attr15, "Column 15 Name", :value => "Turnover",:readonly => true
+        = f.custom_text_field :attr16, "Column 16 Name", :value => "Employee",:readonly => true
+        = f.custom_text_field :attr17, "Column 17 Name", :disabled => (f.object.attr17.present? and f.object.invitee_datum.length != 0) ? true : false
+        = f.custom_text_field :attr18, "Column 18 Name", :disabled => (f.object.attr18.present? and f.object.invitee_datum.length != 0) ? true : false
+        = f.custom_text_field :attr19, "Column 19 Name", :disabled => (f.object.attr19.present? and f.object.invitee_datum.length != 0) ? true : false
+        = f.custom_text_field :attr20, "Column 20 Name", :disabled => (f.object.attr20.present? and f.object.invitee_datum.length != 0) ? true : false
+        = f.custom_text_field :attr21, "Column 21 Name", :disabled => (f.object.attr21.present? and f.object.invitee_datum.length != 0) ? true : false
+        - if @invitee_structure.new_record?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Select Unique Identifier?
+              .col-lg-7
+                %i.arrow.single
+                = f.select("invitee_structure", "uniq_identifier", [["Column 1", 'attr1'], ["Column 2", 'attr2'], ["Column 3", 'attr3'], ["Column 4", 'attr4'], ["Column 5", 'attr5'], ["Column 6", 'attr6'], ["Column 7", 'attr7'], ["Column 8", 'attr8'], ["Column 9", 'attr9'], ["Column 10", 'attr10'], ["Column 11", 'attr11'], ["Column 12", 'attr12'], ["Column 13", 'attr13'], ["Column 14", 'attr14'], ["Column 15", 'attr15']], {:selected => @invitee_structure.uniq_identifier}, {include_blank: 'None',:class=> 'select2-single form-control' })
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+         
+:javascript
+  $(window).load(function(){
+    $('.fileUpload input').change(function(){
+      filename = $(this)[0].files[0].name;
+      $(".file_name").text(filename);
+    });
+  })   

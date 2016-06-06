@@ -1,0 +1,177 @@
+%html{:lang => "en"}
+  %head
+    %title Hobnob
+    %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
+      %link{:href => "/assets/css/qna_wall.css", :rel => "stylesheet"}
+        %script{:src => "/assets/jquery-1.11.3.min.js"}
+        %script{:src => "/assets/bootstrap.js"}
+        
+          
+            
+            
+  %body
+    .main.QnaWall
+      .top.qna_wall
+        -if @event.inside_logo.present?
+          .QnaImg 
+            %img.logo{:alt => "LOGO", :src => "#{@event.inside_logo_url}"}
+            -#%img.logo{:alt => "LOGO", :src => "/assets/hob_nob_web.png"}
+        %p.qa.ref-icon
+          %a{:href => "", :onclick => "window.location.reload();"}
+            %i.material-icons refresh
+      - unanswer_qnas = Qna.get_unanswer(objs,nil)
+      %p.qa.QnaTitle Q&A
+      .bs-example
+        #accordion.panel-group
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title
+                %a.clickLink{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseOne", :onclick => "show_menu()"}
+                  %i#down.material-icons keyboard_arrow_down
+                  %i#up.material-icons keyboard_arrow_up
+                  %span.name UNANSWERED
+                  %span.count= unanswer_qnas.count rescue 0
+            #collapseOne.panel-collapse.collapse.in
+              .panel-body
+                .tabDiv
+                  %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+                    %tbody
+                      %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
+                        %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
+                          %p.tabHead TimeStamp
+                        %td{:align => "center", :valign => "middle", :width => "15%"}
+                          %p.tabHead From
+                        %td{:align => "center", :valign => "middle", :width => "15%"}
+                          %p.tabHead To
+                        %td{:align => "center", :valign => "middle", :width => "40%"}
+                          %p.tabHead Question
+                        %td{:align => "center", :valign => "middle", :width => "15%"}
+                          %p.tabHead Answer/Ignore
+                      - unanswer_qnas.each do |qna|
+                        %tr
+                          %td{:align => "center", :valign => "middle"}
+                            %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                          %td
+                            %p.userTxt= qna.get_user_name
+                            %br
+                              %p.companyTxt
+                          %td
+                            %p.userTxt= qna.get_receiver_user_name
+                          %td
+                            %p.userTxt
+                              = qna.question
+                          %td{:align => "center", :valign => "middle"}
+                            = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "approved"), :method => "put" do
+                              %img.cross{:alt => "check", :src => "/assets/check.PNG", :style => "float:none;"}
+                            = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "rejected"), :method => "put" do
+                              %img.cross{:alt => "check", :src => "/assets/cross.PNG", :style => "float:none;"}
+          - answered_qnas = Qna.get_unanswer(objs,"approved")
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title
+                %a.clickLink{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseTwo", :onclick => "show_menu1()"}
+                  %i#down1.material-icons keyboard_arrow_down
+                  %i#up1.material-icons keyboard_arrow_up
+                  %span.name ANSWERED
+                  %span.count= answered_qnas.count rescue 0
+            #collapseTwo.panel-collapse.collapse
+              .panel-body
+                %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+                  %tbody
+                    %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
+                      %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
+                        %p.tabHead TimeStamp
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead From
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead To
+                      %td{:align => "center", :valign => "middle", :width => "55%"}
+                        %p.tabHead Question
+                      / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
+                    - answered_qnas.each do |qna|
+                      %tr
+                        %td{:align => "center", :valign => "middle"}
+                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                        %td
+                          %p.userTxt= qna.get_user_name
+                          %br
+                            %p.companyTxt
+                        %td
+                          %p.userTxt= qna.get_receiver_user_name
+                        %td
+                          %p.userTxt
+                            = qna.question  
+          - rejected_qnas = Qna.get_unanswer(objs,"rejected")
+          .panel.panel-default
+            .panel-heading
+              %h4.panel-title
+                %a.clickLink{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapseThree", :onclick => "show_menu2()"}
+                  %i#down2.material-icons keyboard_arrow_down
+                  %i#up2.material-icons keyboard_arrow_up
+                  %span.name IGNORED
+                  %span.count= rejected_qnas.count rescue 0
+            #collapseThree.panel-collapse.collapse
+              .panel-body
+                %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+                  %tbody
+                    %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
+                      %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
+                        %p.tabHead TimeStamp
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead From
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead To
+                      %td{:align => "center", :valign => "middle", :width => "55%"}
+                        %p.tabHead Question
+                      / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
+                    - rejected_qnas.each do |qna|
+                      %tr
+                        %td{:align => "center", :valign => "middle"}
+                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                        %td
+                          %p.userTxt= qna.get_user_name
+                          %br
+                            %p.companyTxt
+                        %td
+                          %p.userTxt= qna.get_receiver_user_name
+                        %td
+                          %p.userTxt
+                            = qna.question
+  
+:javascript
+  function show_menu(){
+      var down = document.getElementById('down');
+    var up = document.getElementById('up');
+  
+      if(down.style.display == 'block'){
+          down.style.display = 'none';
+      up.style.display = 'block';
+      }else {
+          down.style.display = 'block';                    
+      up.style.display = 'none';                    
+      }
+  }
+  function show_menu1(){
+      var down1 = document.getElementById('down1');
+    var up1 = document.getElementById('up1');
+  
+      if(down1.style.display == 'none'){
+          down1.style.display = 'block';
+      up1.style.display = 'none';
+      }else {
+          down1.style.display = 'none';                    
+      up1.style.display = 'block';                    
+      }
+  }
+  function show_menu2(){
+      var down2 = document.getElementById('down2');
+    var up2 = document.getElementById('up2');
+  
+      if(down2.style.display == 'none'){
+          down2.style.display = 'block';
+      up2.style.display = 'none';
+      }else {
+          down2.style.display = 'none';                    
+      up2.style.display = 'block';                    
+      }
+  }

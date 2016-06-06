@@ -1,0 +1,6 @@
+- if @select.present? and @clients.present?
+  = render :partial => '/layouts/select_popup', :locals => {:url => admin_clients_path, :objs => @clients, :prompt_message => 'Select Client'}
+- else
+  = render :partial => 'admin/layouts/index_header', :locals => {:objs => @clients}
+  / -if @clients.present?
+  /   = render :partial => 'admin/layouts/more_links'

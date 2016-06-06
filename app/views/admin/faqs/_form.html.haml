@@ -1,0 +1,18 @@
+.save_button.mdl-card.agendaHeight
+  = form_for [:admin, @event, @faq], :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-shadow--1dp.p-b-25
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General
+          / %a{:href => '/whats_this/faq/general_information/faq_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+          /   what's this?
+      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "faq_generalInfo.jpg", :section_id => "faq_general_section"}
+      = f.custom_text_field :question, "Question *","background" => "false"
+      = f.custom_text_area_field :answer, "answer *", "background" => "false"
+      = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+  

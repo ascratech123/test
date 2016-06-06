@@ -1,0 +1,30 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @event, @poll], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => '/whats_this/poll/general_information/poll_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "poll_generalInfo.jpg", :section_id => "poll_general_section"}
+        = f.custom_text_field :question, "Question *","background" => "false"
+        = f.custom_text_field :option1, "Option1 *","background" => "false"
+        = f.custom_text_field :option2, "Option2 *","background" => "false"
+        = f.custom_text_field :option3, "Option3","background" => "false"
+        = f.custom_text_field :option4, "Option4","background" => "false"
+        = f.custom_text_field :option5, "Option5","background" => "false"
+        = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+:javascript
+  $(window).load(function(){
+    flightTime();
+    minutes();
+    times();  
+  })

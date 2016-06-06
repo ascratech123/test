@@ -1,0 +1,26 @@
+.save_button.mdl-card.agendaheight
+  = form_for [:admin, @event, @custom_page5], :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-shadow--1dp.p-b-35
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10
+          General Information
+          / %a{:href =>'/whats_this/contact_us/general_information/contact_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+          /   what's this?
+      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "contact_generalInfo.jpg", :section_id => "contact_general_section"}
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Page Type
+          .col-lg-3.p-h-12
+            = f.custom_radio_button_menu :page_type, "url","URL", :id => "url_page_type_custom5", :default_checked => (f.object.page_type == 'url' or f.object.page_type.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :page_type, "build_new","Build New", :id => "build_new_page_type_custom5", :default_checked => (f.object.page_type == 'build_new') ? 'checked' : ''
+      = f.custom_text_field :site_url, "URL *",:message_display => (f.object.page_type == 'url' or f.object.page_type.blank?) ? "" : "none"
+      .ckeditor_custom{:style => "display: #{(f.object.page_type == 'build_new') ? "" : "none"}"}
+        = f.label "Create New Page *"
+        = f.cktext_area :description
+    .fixed-activon-btn-new
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+= javascript_include_tag "custom_page"

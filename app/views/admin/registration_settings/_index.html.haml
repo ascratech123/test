@@ -1,0 +1,25 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = index_nodata_message("Registration Setting")
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("Registration Settings")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Registration
+      %th Login
+      %th Response Type
+      %th
+    - objs.each do |regi_setting|
+      %tr
+        %td.description_adjust.font16= regi_setting.registration
+        / %td.description_adjust.font16= ques_answer.answer
+        %td.font16= regi_setting.login
+        %td.font16= regi_setting.response_type
+        %td.IconDrp
+          = more_vert_button(regi_setting.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{regi_setting.id}"}
+            = edit_link(params, regi_setting.id)
+            = delete_link(params, regi_setting.id)
+  = will_paginate objs

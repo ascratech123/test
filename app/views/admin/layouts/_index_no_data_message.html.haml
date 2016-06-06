@@ -1,0 +1,23 @@
+.row
+  .CreateDashLayout
+    %h2
+      - if params[:controller] == "admin/events" and params[:feature] == "mobile_application" and params[:mobile_application_id].present? 
+        All Event Added in Mobile App, create New to Add
+      - else
+        Create Your first
+        %span.AppName
+          = Client::No_Data_Hash[title]
+    %p
+      =# "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, a galley of type and scrambled it to make a type specimen book."
+      - if false
+        =# Client::No_Data_Msg_Hash[title]
+    .appBtn
+      %a{:href => url , :class => 'DashAddIcon mdl-color--light-blue-600 appsize', :id => "add_user_popup_index"}
+        %i.material-icons
+          added
+        - if "#{Client::No_Data_Hash[title]}" == "Poll"  
+          = "New Question"
+        - else
+          = "New #{Client::No_Data_Hash[title]}"
+      - if title == "users"
+        = render :partial => '/admin/users/add_user_with_role' , :locals => {:page_id => 'add_user_popup_index'}

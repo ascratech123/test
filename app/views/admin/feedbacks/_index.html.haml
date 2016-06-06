@@ -1,0 +1,39 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "feedbacks", :url => "/admin/events/#{params[:event_id]}/feedbacks/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("feedbacks")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.sequenceInputWidht{"template-pagination" => "custom/pager"}
+    %tr
+      %th Sequence
+      %th Question 
+      %th Option Type
+      %th Text box 
+      %th 
+    - objs.each_with_index do |feedback,index|
+      %tr
+        %td.sortable
+          .sort-indicator.frstsequence
+            =# feedback.sequence.to_i rescue nil
+          .orderseq
+            - if index != 0
+              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :seq_type => "up", :feature_type => "feedbacks"),:class => "uparrow", :method => "put", :remote => true
+            - if feedback.sequence.to_i != 0 and (@feedbacks.length - 1) != index
+              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
+        %td.description_adjust.font16= show_link(params, feedback.id, feedback.question) rescue nil
+        %td.font16= feedback.option_type rescue nil
+        %td.font16= (feedback.description ? "Yes" : "No")
+        %td.IconDrp
+          = more_vert_button(feedback.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback.id}"}
+            = edit_link(params, feedback.id)
+            = delete_link(params, feedback.id)
+  =# will_paginate objs
+
+:javascript
+
+  $('input[readonly]').dblclick(function() {
+    $(this).removeAttr('readonly');
+  });  

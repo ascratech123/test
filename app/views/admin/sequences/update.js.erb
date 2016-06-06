@@ -1,0 +1,7 @@
+<% if @redirect_feature == "event_features" %>
+  $(".sequence_update").html('<%= escape_javascript(render :partial => "admin/menus/index", :locals => {:objs => @features}) %>');
+<% elsif @redirect_feature == "images" %>
+	$(".sequence_update").html('<%= escape_javascript(render :partial => "admin/images/index", :locals => {:objs => @features}) %>');
+<% else %>
+  $(".sequence_update").html('<%= escape_javascript(render :partial => "admin/#{@redirect_feature}/index", :locals => {:objs => @features}) %>');
+<% end %>

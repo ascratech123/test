@@ -1,0 +1,24 @@
+class Admin::UserPollsController < ApplicationController
+
+  layout 'admin'
+  load_and_authorize_resource
+  before_filter :authenticate_user, :authorize_event_role, :find_features
+
+  def index
+    respond_to do |format|
+      format.html  
+      format.xls do
+        method_allowed = [:Timestamp, :email_id, :name, :question, :user_answer]
+        send_data @user_polls.to_xls(:methods => method_allowed)
+      end
+    end
+  end
+
+  private
+
+  def find_features
+    @polls = @event.polls
+    @user_polls = UserPoll.where(:poll_id => @polls.pluck(:id))# if params[:format].present?
+  end
+
+end

@@ -1,0 +1,35 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @telecaller],:url => params[:action] == "new" || params[:action] == "create" ? admin_event_telecallers_path(:event_id => params[:event_id]) : admin_event_telecaller_path(:event_id => params[:event_id]), :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-35
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+          / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
+          /   what's this?
+        = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "licensee_generalInfo.jpg", :section_id => "licensee_general_section"}
+        = f.custom_text_field :first_name, "first Name *"
+        = f.custom_text_field :last_name, "Last Name *"
+        = f.custom_text_field :email, "Email id *", :value => f.object.email.present? ? f.object.email : ''
+        - if f.object.new_record?
+          = f.custom_text_field :password, "Password *"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Assign Grouping *
+            .col-lg-7
+              - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
+              %i.arrow.single
+              = f.select("user", "assign_grouping", default_grouping, {:selected => f.object.assign_grouping,:prompt => "#{(f.object.assign_grouping.present? and f.object.assign_grouping != "Add New Group") ? f.object.assign_grouping : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:assign_grouping].join("") rescue nil
+        = f.hidden_field :telecaller, :value => true
+        = f.hidden_field_tag :get_role, params[:get_role] if params[:get_role].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)

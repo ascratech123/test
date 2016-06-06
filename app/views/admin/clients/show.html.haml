@@ -1,0 +1,41 @@
+/ %section#content
+/   / start container
+/   .container
+/     %section#tab_part
+/       .adminHeading
+/         %h1 Client Detail
+/         .rightBtn
+/           = back_button(:back)
+          
+/       %section.FilterData
+/         .row
+/           .input-field.col.s12.m6.l3
+/             Client Name :
+/           .input-field.col.s12.m6.l3
+/             = @client.name.capitalize
+/     - if @client.events.present?
+/       %section#tab_part
+/         .adminHeading
+/           %h1 Client Event
+/       .table-responsive.eventTable{"data-pattern" => "priority-columns"}
+/         %table#tech-companies-1.table.table-small-font.table-bordered.table-striped{:cellspacing => "0"}
+/           %thead
+/             %tr
+/               %th{"data-priority" => "1"} Code
+/               %th{"data-priority" => "1"} Name
+/               %th{"data-priority" => "1"} City
+/               %th{"data-priority" => "1"} Event_date
+/               %th
+/           %tbody
+/             - i = 0
+/             - @client.events.each do |event|
+/               %tr.white
+/                 %td= event.event_code.capitalize rescue nil
+/                 %td= event.event_name.capitalize rescue nil
+/                 %td
+/                 / = event.cities rescue nil
+/                 %td
+/                   = "#{event.start_event_date.strftime("%b %d, %Y")}  To  #{event.end_event_date.strftime("%b %d, %Y")}" rescue nil
+/                 %td
+/                   = link_to admin_event_path(event.id),:class =>"waves-effect waves-light btn" do
+/                     %i.material-icons.center{:title => "show"} visibility

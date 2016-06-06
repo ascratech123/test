@@ -1,0 +1,25 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'telecaller', :url => "/admin/events/#{params[:event_id]}/telecallers/new", :msg => 'test'} 
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt
+    = get_search_data("telecallers")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.sequenceInputWidht{"template-pagination" => "custom/pager"}
+    %tr
+      %th First Name
+      %th Last Name 
+      %th Company Name
+      %th Email id
+      %th  
+    - objs.each do |telecaller|
+      %tr
+        %td.description_adjust.font16= telecaller.first_name
+        %td.description_adjust.font16= telecaller.last_name
+        %td.description_adjust.font16= telecaller.company
+        %td.description_adjust.font16= telecaller.email
+        %td.IconDrp
+          = more_vert_button(telecaller.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{telecaller.id}"}
+            = edit_link(params, telecaller.id)
+  = will_paginate objs 

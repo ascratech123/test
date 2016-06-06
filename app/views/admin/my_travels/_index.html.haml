@@ -1,0 +1,22 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'my_travels', :url => "/admin/events/#{params[:event_id]}/my_travels/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("my_travels")
+- else 
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Invitee Name 
+      %th Attach File Name
+      %th 
+        - objs.each do |my_travel|
+          %tr
+            %td.font16= Invitee.get_invitee_name(my_travel.invitee_id) rescue nil
+            %td.font16= my_travel.attach_file_file_name rescue nil
+            %td.IconDrp
+              = more_vert_button(my_travel.id)
+              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{my_travel.id}"}
+                = edit_link(params, my_travel.id)
+                = delete_link(params, my_travel.id)
+  = will_paginate objs               

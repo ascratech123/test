@@ -1,0 +1,88 @@
+class Api::V1::InviteesController < ApplicationController
+	skip_before_action :load_filter
+	skip_before_action :authenticate_user!
+  before_action :qr_code_access , :only => [:create]
+	respond_to :json
+	def index
+		mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code]) 
+		event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"])
+		if mobile_application.present?
+			events = mobile_application.events
+			event = events.where(:id => params[:event_id], :status => event_status) rescue nil
+			if event.present?
+				invitees = Invitee.where(:event_id => event.first.id, :visible_status => 'active') rescue []
+				render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:except => [:created_at, :updated_at, :badge_count, :encrypted_password, :salt, :key, :secret_key, :authentication_token]) } rescue []
+			else
+				render :status => 200, :json => {:status => "Failure", :message => "Event Not Found."}
+			end	
+		else
+			render :status => 200, :json => {:status => "Failure", :message => "Mobile Application Not Found."}
+		end	
+	end
+
+	def update
+    invitee = Invitee.where(:id => params[:id], :event_id => params[:event_id]).first rescue []
+    if invitee.present? and params[:profile_pic].present?
+      if invitee.update(:profile_pic => params[:profile_pic])
+        event = invitee.event rescue nil
+        feature = event.event_features.where(:name => "leaderboard") rescue nil
+        if feature.present?
+          analytic = Analytic.create(:viewable_type => 'Invitee', :viewable_id => invitee.id, :action => 'profile_pic', :invitee_id => invitee.id, :event_id => invitee.event_id, :platform => params[:platform], :points => 5)
+        else
+          analytic = Analytic.create(:viewable_type => 'Invitee', :viewable_id => invitee.id, :action => 'profile_pic', :invitee_id => invitee.id, :event_id => invitee.event_id, :platform => params[:platform], :points => 0)
+        end
+        render :status=>200,:json=>{:status=>"Success",:message=>"profile picture updated successfully." }
+      else
+        render :status=>200,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{invitee.errors.full_messages.join(" , ")}" }
+      end
+    else
+      render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee Not Found."}
+    end
+  end
+
+  def create
+    invitee = Invitee.find_by_id(params["invitee_id"])
+    if invitee.present?
+      if params["qr_code_scan"] == "true"
+        favorite = Favorite.new(invitee_id: params["invitee_id"], favoritable_type: params["favoritable_type"], favoritable_id: params["favoritable_id"], event_id: params["event_id"])
+        if favorite.save
+          platform = (params["platform"].present? ? params["platform"] : "")
+          favorite.qr_code_analytics(platform)
+          invitee = Invitee.find_by_id(favorite.favoritable_id)
+          render :staus => 200, :json => {:status => "Success",:favorite => favorite.as_json(:only => [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id]), :invitee => invitee.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url])} rescue []
+        else
+          render :status=>200,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{favorite.errors.full_messages.join(" , ")}"}
+        end
+      else
+        my_network_invitee = Invitee.find_by_id(params["favoritable_id"])
+        render :staus => 200, :json => {:status => "Success",:invitee => my_network_invitee.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id], :methods => [:qr_code_url,:profile_pic_url]) } rescue []
+      end  
+    else
+      render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee Not Found."}
+    end
+  end
+
+  def show
+    invitee = Invitee.find_by_id(params["invitee_id"])
+    if invitee.present?
+      render :staus => 200, :json => {:status => "Success",:invitee => invitee.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id], :methods => [:qr_code_url,:profile_pic_url]) } rescue []
+    else
+      render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee Not Found."}
+    end
+  end
+
+  private
+
+  def qr_code_access
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
+    favoritable_invitee = Invitee.find_by_id(params[:favoritable_id])
+    if (params["qr_code_scan"] == "true") and mobile_application.present?
+      mobile_app = favoritable_invitee.event.mobile_application.submitted_code if favoritable_invitee.present? rescue nil
+      if mobile_app != mobile_application.submitted_code
+        render :status => 200, :json => {:status => "Failure", :message => "Favoritable invitee does not belong to this event."}
+      end
+    elsif (params["qr_code_scan"] == "true") and mobile_application.blank?
+      render :status => 200, :json => {:status => "Failure", message: "Mobile application not found."}  
+    end
+  end
+end

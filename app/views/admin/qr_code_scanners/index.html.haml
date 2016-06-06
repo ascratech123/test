@@ -1,0 +1,33 @@
+#main
+  #header
+    %div{:style => "position:relative;top:+20px;left:0px;"}
+      %g:plusone{:size => "medium"}
+    %p#mp1
+      Hobnob Scanner
+    %ul
+  #mainbody
+    %table.tsel{:border => "0", :width => "100%"}
+      %tr
+        %td{:align => "center", :valign => "top", :width => "50%"}
+          %table.tsel{:border => "0"}
+            %tr
+              %td{:align => "center", :colspan => "2"}
+                #outdiv
+      %tr
+        %td{:align => "center", :colspan => "3"}
+      %tr
+        %td{:align => "center", :colspan => "3"}
+          #result
+          %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
+  #footer
+    %br
+      %h5{:align => "center"}
+        Copyright &copy; 2016
+        %a{:href => "http://www.hobnobspace.com", :target => "_blank"} Hobnobspace
+%canvas#qr-canvas{:height => "600", :width => "800"}
+:javascript
+  load();
+  var APP_URL = "#{APP_URL}"
+  var EVENT_ID = "#{@event.id}"
+  
+  

@@ -1,0 +1,33 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card.quizCheckbox
+    = form_for [:admin, @event, @quiz], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.quizzeInfo.mdl-shadow--1dp
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => '/whats_this/quiz/general_information/quiz_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "quiz_generalInfo.jpg", :section_id => "quizze_general_section"}
+        = f.custom_text_field_quiz_question :question, "Question *","background" => "false"
+        = f.custom_text_field_quiz :option1, "Option1 *", f.object.correct_answer.first.present? ? f.object.attributes.key(f.object.correct_answer.first.to_s) : "","background" => "false"
+        .field_with_errors.quizErrors
+          .span{:class => "errorMessage"}
+            = f.object.errors.messages[:correct_answer].join("") rescue nil
+        = f.custom_text_field_quiz :option2, "Option2 *", f.object.correct_answer.first.present? ? f.object.attributes.key(f.object.correct_answer.first.to_s) : "","background" => "false"
+        = f.custom_text_field_quiz :option3, "Option3", f.object.correct_answer.first.present? ? f.object.attributes.key(f.object.correct_answer.first.to_s) : "","background" => "false"
+        = f.custom_text_field_quiz :option4, "Option4", f.object.correct_answer.first.present? ? f.object.attributes.key(f.object.correct_answer.first.to_s) : "","background" => "false"
+        = f.custom_text_field_quiz :option5, "Option5", f.object.correct_answer.first.present? ? f.object.attributes.key(f.object.correct_answer.first.to_s) : "","background" => "false"
+        = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+:javascript
+  $(window).load(function(){
+    flightTime();
+    minutes();
+    times();  
+  })

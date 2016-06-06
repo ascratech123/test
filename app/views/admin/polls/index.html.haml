@@ -1,0 +1,5 @@
+- if params[:type] != "public_wall"
+  = render :partial => 'admin/layouts/index_header', :locals => {:objs => @polls}
+  = render :partial => 'admin/layouts/more_links'
+- else
+  = render :partial => 'poll_wall', :locals => {:objs => @polls}

@@ -1,0 +1,9 @@
+.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+  .form-group
+    %label.col-lg-4.control-label.ml-color--shades-white
+      Select Speaker
+    .col-lg-7  
+      - list_of_speakers = @speakers.collect{|p| [ p.speaker_name, p.id ]}
+      - list_of_speakers.unshift(["Add Speaker", 0])
+      %i.arrow.single
+      = f.select :panel_id, "", list_of_speakers, {:prompt => "select speaker", :selected => "#{@panel.panel_id == 0 ? 0 : @panel.id}"}, {:class=> 'select2-single form-control',:id => "selected_speaker"}

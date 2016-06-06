@@ -1,0 +1,70 @@
+.save_button.mdl-card
+  = form_for [:admin, @event, @notification], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-card.mdl-shadow--1dp
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+          / %a{:href => '/whats_this/notification/general_information/notification_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+          /   what's this?
+      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "notification_generalInfo.jpg", :section_id => "notification_general_section"}
+      = f.custom_text_field :description, "Text *","background" => "false"
+      - if !Rails.env.production?
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "margin-top: 30px"}
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Type
+            .col-lg-7
+              %i.arrow.single
+              - grouped_options = get_notification_type_group_array(@event)#[['Group based',['Group Notification']], ['Action based',['Agenda Rating', 'Agenda Favorite', 'Speaker Rating', 'Speaker Favorite', 'Invitee Favorite', 'Sponsors Favorite', 'Exhibitors Favorite']],['Logic based',['Polls Taken', 'Feedback Submitted', 'Quiz Answered', 'Question Asked', 'QR code scanned']],['Destination based',['Event Highlight', 'Event Listing', 'Quiz', 'Q&A', 'Speaker', 'Invitee', 'Profile ', 'Feedback', 'Agenda', 'Quiz', 'Poll', 'Leaderboard', 'FAQ', 'About', 'Conversation', 'E-Kit', 'Award', 'Contact', 'Sponsor', 'Gallery', 'Emergency Exit', 'Note', 'Venue', 'Custum Page1', 'Custum Page2', 'Custum Page3', 'Custom Page4', 'Custom Page5']]]
+              = select_tag "notification[action]", grouped_options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Notification Type', :class =>"select2-single form-control"
+        = f.new_custom_file_browser_field :image, "Notification Image", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "margin-top: 30px"}
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Groups
+              %br
+              %a{:href => admin_event_invitee_groups_path(:event_id => @event.id), :class =>'', :title => "Invitee Groups", :target => '_blank'}
+                (View Available Groups)
+            .col-lg-7
+              - default_group_list = @groups.collect{|group| [ group.name, group.id ]}
+              = f.select("notification", "group_ids", default_group_list,{:selected => f.object.group_ids},{include_blank: 'None', :multiple => true})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:group_ids].join("") rescue nil
+      - if false
+        = f.custom_text_field :push_page, "Page","background" => "false"
+        = f.custom_text_field :page_id, "Page Id","background" => "false"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .bs-component
+          .form-group
+            %label.col-lg-4.control-label{:for => "Push Time"} Push Time
+            = f.custom_text_field_date :push_datetime, "Push Time", :id => "date-start", :value => f.object.push_datetime.present? ? f.object.push_datetime.strftime('%d/%m/%Y') : '' 
+            .col-lg-3.timeDropdown
+              .timeTab
+                = f.custom_text_field_date :push_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.push_datetime.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2'
+                = f.custom_text_field_date :push_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.push_datetime.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2'
+                = f.custom_text_field_date :push_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.push_datetime.strftime('%p') rescue nil}", :col => '3'
+      = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SEND"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+      - if !Rails.env.production?
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
+:javascript
+  $(window).load(function(){
+    flightTime();
+    minutes();
+    times();  
+    $("#notification_notify_type").change(function(){
+      selected_value = $("#notification_notify_type").val();
+      if (selected_value == "Group"){
+        $("#notification_notify_to").parent().parent().parent().show();
+      }else{
+        $("#notification_notify_to").parent().parent().parent().hide();
+      }  
+    });
+  })

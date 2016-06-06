@@ -1,0 +1,42 @@
+%html
+  %head
+    %title Hobnob
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0", :name => "viewport"}
+    %link{:href => "/assets/conversations_wall_style.css", :rel => "stylesheet", :type => "text/css"}
+  %body.newcoversationwallImg
+    %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
+      %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
+        %p.conv-logo
+          %img{:src => @event.inside_logo.url, :alt => ""}/
+        %section#content.covesationPage
+          - @conversations.each do |conversation|
+            - event = conversation.event
+            .col
+              #one.card
+                .flip-container
+                  .flipper
+                    .front
+                      .usrDiv
+                        / %img.tataL{:alt => "", :src => event.inside_logo_url}
+                        %p.userName
+                          - user = conversation.user
+                          = user.name_of_the_invitee rescue nil
+                        %p.companyName
+                          = user.company_name rescue nil
+                      .qstnDiv
+                        %p
+                          = conversation.description
+                    .back.back-img
+                      - if conversation.image.present?
+                        %img.backImg{:src => conversation.image.url}
+                      - else
+                        .usrDivBack
+                          / %img.tataL{:alt => "", :src => event.inside_logo_url}
+                          %p.userNameBack
+                            = user.name_of_the_invitee rescue nil
+                          %p.companyNameBack
+                            = user.company_name rescue nil
+                        .qstnDivBack
+                          %p
+                            = conversation.description    

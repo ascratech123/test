@@ -1,0 +1,88 @@
+class Comment < ActiveRecord::Base
+  
+  attr_accessor :platform
+  belongs_to :commentable, polymorphic: true
+  belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
+  
+  validates :description,:commentable_id,:commentable_type,:user_id,:presence =>true
+  
+  after_create :create_analytic_record
+  after_save :update_conversation
+
+  default_scope { order('created_at desc') }
+  
+  def commented_user_name
+    Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+  end
+
+  def update_conversation
+    Conversation.find_by_id(self.commentable_id).update_column(:updated_at, self.updated_at) rescue nil
+  end
+
+  def self.get_comments(conversations, start_event_date, end_event_date)
+    data = []
+    conversations.each do |conversation|
+      data << Comment.where(:commentable_id => conversation.id, :commentable_type => "Conversation", :updated_at =>  start_event_date..end_event_date).limit(5)
+    end
+    data.flatten!
+  end
+
+  def commented_user_email
+    self.user.email rescue ""
+  end
+
+  def email
+    self.user.email rescue ""
+  end
+
+  def user_name
+    self.user.name_of_the_invitee
+  end
+
+  def name
+    self.user.name_of_the_invitee rescue ""
+  end
+
+  def conversation
+    self.commentable.description
+  end
+
+  def comment
+    self.description
+  end
+
+  def like_count
+    Like.where(:likable_id => self.commentable_id, :likable_type => "Conversation").length rescue 0
+  end
+  
+  def timestamp
+    self.commentable.created_at.strftime('%m/%d/%Y %H:%M') rescue ""
+  end
+  def image_url
+    conversation = Conversation.find_by_id(self.commentable_id)
+    url = conversation.present? ? conversation.image.url(:large) : conversation.image.url
+    url = "" if url == "/images/large/missing.png"
+    url
+  end
+  
+  def create_analytic_record
+    event_id = Invitee.find_by_id(self.user_id).event_id rescue nil
+    analytic = Analytic.new(viewable_type: self.commentable_type, viewable_id: self.commentable_id, action: "comment", invitee_id: self.user_id, event_id: event_id, platform: platform)
+    analytic.save rescue nil
+  end
+
+  def self.get_top_commented(count, type, event_id, from_date, to_date)
+    conversation_ids = Conversation.where(:event_id => event_id).pluck(:id)
+    comments = Comment.where('commentable_type = ? and commentable_id IN (?) and Date(created_at) >= ? and Date(created_at) <= ?', type, conversation_ids, from_date, to_date)
+    comments.group(:commentable_id).count.sort_by{|k, v| v}.last(count).reverse
+  end
+
+  def post_id
+    self.commentable.id
+  end
+
+  def Status
+    self.commentable.status rescue ""
+  end
+
+end

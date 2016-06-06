@@ -1,0 +1,29 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "notifications", :url => "/admin/events/#{params[:event_id]}/notifications/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("notifications")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Description 
+      %th Page 
+      %th Page Id
+      %th Push Time 
+      %th Pushed
+      %th
+        - objs.each do |notification|
+          %tr
+            %td.font16= notification.description rescue nil
+            %td.font16= notification.push_page rescue nil
+            %td.font16= notification.page_id rescue nil
+            %td.font16= notification.push_datetime.strftime("%d-%m-%Y %H:%M") rescue nil
+            %td.font16= notification.pushed rescue nil
+            %td.IconDrp
+              = more_vert_button(notification.id)
+              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{notification.id}"}
+                - if !notification.pushed?
+                  = edit_link(params, notification.id)
+                  = delete_link(params, notification.id)
+  = will_paginate objs

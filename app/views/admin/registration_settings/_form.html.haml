@@ -1,0 +1,189 @@
+.save_button
+  = form_for [:admin, @event, @registration_setting], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          Registration
+      = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "qna_generalInfo.jpg", :section_id => "qna_general_section"}
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Registration?
+          .col-lg-3.p-h-12
+            = f.custom_radio_button_menu :registration, "hobnob","HobNob", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :registration, "external", "External", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
+          
+          / - if params[:action] == "edit" and f.object.reg_url.present? 
+          /   = link_to "view page","#{f.object.reg_url}",:target => "_blank"
+          / -else
+          /   = link_to "view page","#{f.object.external_reg_url}",:target => "_blank"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{:style => "display:#{(f.object.registration == 'hobnob' or (f.object.new_record? and params[:action]!= "create")) ? "" : "none"}"}
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Choose Template *
+          .col-lg-3.p-h-12
+            - er = f.object.errors.messages[:template].join(',') rescue nil
+            - f.object.errors.messages[:template].clear if f.object.errors.messages[:template].present?
+            = f.custom_radio_button_menu :template, "default","Default ", :id => "option_1_template", :default_checked => "#{(f.object.template == "Template 1" or f.object.template == "default") ? 'checked' : ''}"
+            = f.custom_radio_button_menu :template, "custom", "Custom", :id => "option_2_custom", :default_checked => "#{f.object.template == "custom" ? 'checked' : ''}"
+            .field_with_errors
+              .span{:class => "errorMessage"}
+                = er
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "display: #{(f.object.template == "Template 1" or f.object.template == "default") ? '' : 'none'}"}
+        .form-group.set_highlight_select
+          %label.col-lg-4.control-label.ml-color--shades-white
+            Select template
+            %br
+            %a{:href => '/whats_this/app_info/general_information/1.png', :class =>'fancybox', :title => "Splash Screen"}
+              (View Available Templates)
+          / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Login Screen" => "template-02.jpg","Event Listing Screen" => "template-03.jpg","Event Highlight " => "template-04.jpg","Event Feature Screen" => "template-05.jpg","Drawer Screen" => "template-06.jpg","About" => "template-07.jpg","Agenda Listing" => "template-08.jpg","Agenda" => "template-09.jpg","Agenda Rating" => "template-10.jpg","Attendees" => "template-11.jpg","Speaker Listing" => "template-12.jpg","Speaker " => "template-13.jpg","Speaker Rating " => "template-14.jpg","FAQ's" => "template-15.jpg","Q&A" => "template-16.jpg","Conversations" => "template-17.jpg","Gallery Listing" => "template-18.jpg","Gallery" => "template-19.jpg","Awards Listing" => "template-20.jpg","Polls Listing" => "template-21.jpg","Polls" => "template-22.jpg","Polls Response" => "template-23.jpg","Feedback" => "template-24.jpg","E-kit Listing" => "template-25.jpg","E-kit Details" => "template-26.jpg","E-kit" => "template-27.jpg","Notes" => "template-28.jpg","Notes Listing" => "template-29.jpg","Venue" => "template-30.jpg","Contact Us" => "template-31.jpg"}, :section_id => "temp_app_master_section",:path => "template"}
+          .col-lg-7  
+            %i.arrow.single
+            = f.select("registration_setting", "template_name", ['Template 1'], {:selected => f.object.template,:prompt => 'Select Option Type'},{:class=> 'select2-single form-control',:id=> "regi_setti_templ_select"})
+            .field_with_errors
+              .span{:class => "errorMessage"}
+                = f.object.errors.messages[:template_name].join("") rescue nil
+          .span.col-lg-1
+            = link_to("?" ,"/whats_this/app_info/general_information/1.png", rel: "selecte_template", title: "Selecte Template", :class =>"fancybox whatsImg")
+      = f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
+      =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
+
+      = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
+      = f.custom_text_area_field :external_reg_surl, "Registration Success URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
+    
+    .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp.m-t-40
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          Login
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Login?
+          .col-lg-3.p-h-12
+            = f.custom_radio_button_menu :login, "hobnob","HobNob", :id => params[:action] == "new" ? "option1_logi" : "option1_login", :default_checked => (f.object.login == 'hobnob' or f.object.login.blank?) ? 'checked' : ''
+            = f.custom_radio_button :login, "external", "External", :id => "option_2_login", :default_checked => (f.object.login == 'external') ? 'checked' : ''
+          / - if params[:action] == "edit" and f.object.login_url.present?
+          /   = link_to "view page","#{f.object.login_url}",:target => "_blank"
+          / -else
+          /   = link_to "view page","#{f.object.external_login_url}",:target => "_blank"
+      = f.custom_text_area_field :login_url, "Login URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
+      =# f.custom_text_area_field :login_surl, "Login Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
+      
+      = f.custom_text_area_field :external_login_url, "Login URL *",:message_display => (f.object.login == 'external') ? "" : "none"
+      = f.custom_text_area_field :external_login_surl, "Login Success URL *",:message_display => (f.object.login == 'external') ? "" : "none"
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+      /   .mdl-grid.p-v-5
+      /     .col-lg-4.mdl-typography--text-right
+      /       %p.displayInlineBlock.multicitytxt Response Type?
+      /     .col-lg-3.p-h-12   
+      /       = f.custom_radio_button :response_type, "create_and_select","Create & Select", :id => "option1_response_type"
+      /       = f.custom_radio_button :response_type, "select", "Select", :id => "option_2_response_type"
+      = f.custom_text_area_field :forget_pass_url, "Forgot password URL"
+      = f.custom_text_area_field :forget_pass_surl, "Forgot password Success URL"
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+      - if f.object.template.present? and f.object.template == "custom" and @event.registrations.present?
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+          .mdl-cell--12-col.mdl-cell--12-col-tablet
+            = link_to "Extract Code",edit_admin_event_registration_path(:event_id=> @event.id,:id => @event.registrations.first.id,:change_code => "true")
+      / .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+      /   .mdl-cell--12-col.mdl-cell--12-col-tablet
+      /     = link_to "Change code",edit_admin_event_registration_path(:event_id => @event.id,:id => @event.registrations.first.id,:change_code => "true")
+
+:javascript
+  $("#option_1_registration").click(function(){
+    value = $("#option_1_registration").val();
+    if (value == "hobnob"){
+      $("#option_1_template").parent().parent().parent().parent().show();
+      $("#option_2_custom").parent().parent().parent().parent().show();
+      $("#reg_url_sample5").parent().parent().parent().parent().show();
+      $("#reg_surl_sample5").parent().parent().parent().parent().show();
+      $("#external_reg_url_sample5").parent().parent().parent().parent().hide();
+      $("#external_reg_surl_sample5").parent().parent().parent().parent().hide();
+    }
+  }); 
+
+  $("#option1_regi").click(function(){
+    value = $("#option1_regi").val();
+    if (value == "hobnob"){
+      $("#reg_url_sample5").parent().parent().parent().parent().hide();
+      $("#reg_surl_sample5").parent().parent().parent().parent().hide();
+      $("#option_1_template").parent().parent().parent().parent().show();
+      $("#option_2_custom").parent().parent().parent().parent().show();
+      $("#external_reg_url_sample5").parent().parent().parent().parent().hide();
+      $("#external_reg_surl_sample5").parent().parent().parent().parent().hide();
+    }
+  }); 
+
+  $("#option_2_registration").click(function(){
+    value = $("#option_2_registration").val();
+    if (value == "external"){
+      $("#reg_url_sample5").parent().parent().parent().parent().hide();
+      $("#reg_surl_sample5").parent().parent().parent().parent().hide();
+      $("#option_1_template").parent().parent().parent().parent().hide();
+      $("#option_2_custom").parent().parent().parent().parent().hide();
+      $("#regi_setti_templ_select").parent().parent().parent().hide();
+      $("#external_reg_url_sample5").parent().parent().parent().parent().show();
+      $("#external_reg_surl_sample5").parent().parent().parent().parent().show();
+    }
+  }); 
+
+  $("#option1_login").click(function(){
+    value = $("#option1_login").val();
+    if (value == "hobnob"){
+      $("#login_url_sample5").parent().parent().parent().parent().show();
+      $("#login_surl_sample5").parent().parent().parent().parent().show();
+      $("#external_login_url_sample5").parent().parent().parent().parent().hide();
+      $("#external_login_surl_sample5").parent().parent().parent().parent().hide();
+    }
+  }); 
+
+  $("#option1_logi").click(function(){
+    value = $("#option1_logi").val();
+    if (value == "hobnob"){
+      $("#login_url_sample5").parent().parent().parent().parent().hide();
+      $("#login_surl_sample5").parent().parent().parent().parent().hide();
+      $("#external_login_url_sample5").parent().parent().parent().parent().hide();
+      $("#external_login_surl_sample5").parent().parent().parent().parent().hide();
+    }
+  }); 
+  $("#option_2_login").click(function(){
+    value = $("#option_2_login").val();
+    if (value == "external"){
+      $("#login_url_sample5").parent().parent().parent().parent().hide();
+      $("#login_surl_sample5").parent().parent().parent().parent().hide();
+      $("#external_login_url_sample5").parent().parent().parent().parent().show();
+      $("#external_login_surl_sample5").parent().parent().parent().parent().show();
+    }
+  });
+
+  $("#option1_login").click(function(){
+    value = $("#option1_login").val();
+    if (value == "hobnob"){
+      $("#login_url_sample5").parent().parent().parent().show();
+      $("#login_surl_sample5").parent().parent().parent().show();
+    }
+  }); 
+  $("#option_2_login").click(function(){
+    value = $("#option_2_login").val();
+    if (value == "external"){
+      $("#login_url_sample5").parent().parent().parent().show();
+      $("#login_surl_sample5").parent().parent().parent().show();
+    }
+  });
+  $("#option_1_template").click(function(){
+    value = $("#option_1_template").val();
+    if (value == "default"){
+      $("#regi_setti_templ_select").parent().parent().parent().show();
+    }
+  });
+  $("#option_2_custom").click(function(){
+    value = $("#option_2_custom").val();
+    if (value == "custom"){
+      $("#regi_setti_templ_select").parent().parent().parent().hide();
+    }
+  });
+  

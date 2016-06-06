@@ -1,0 +1,42 @@
+.save_button.mdl-card.agendaHeight
+  = form_for [:admin, @event, @panel],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-shadow--1dp
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+          / %a{:href => '/whats_this/Panel/general_information/panel_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+          /   what's this?
+      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "panel_generalInfo.jpg", :section_id => "panel_general_section"}
+      = f.hidden_field_tag :panel_type, "speaker"
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+      /   .form-group.set_highlight_select
+      /     %label.col-lg-4.control-label.ml-color--shades-white
+      /       Select Type*
+      /     .col-lg-7  
+      /       %i.arrow.single
+      /       = f.select("panel_type", "panel_type", [["speaker", "speaker"]], { :prompt => "select type *"},{:class=> 'select2-single form-control', :id => "selected_type"})
+      = render :partial => "select_data", :locals => { :f => f}
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+        #add_speaker
+          = f.custom_text_field :speaker_name, "Add Speaker *","background" => "false"
+    .fixed-activon-btn-new
+      = f.custom_submit_button "SAVE"  
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+
+:javascript 
+  if ("#{@panel.panel_id}" == "0"){
+    $("#panel_speaker_name").val("#{@panel.name}");
+  }else{
+    $("#add_speaker").hide();
+  }
+  
+  $("#selected_speaker").click(function(){
+    value = $("#selected_speaker").val();
+    if (value == 0){
+      $("#add_speaker").show();
+    }else{
+      $("#add_speaker").hide();
+    }
+  });

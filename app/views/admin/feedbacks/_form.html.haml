@@ -1,0 +1,81 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @event, @feedback],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.feedbackinfo.mdl-shadow--1dp
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => '/whats_this/feedback/general_information/feedback_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "feedback_generalInfo.jpg", :section_id => "feedback_general_section"}
+        = f.custom_text_field :question, "Question *","background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Option Type*
+            .col-lg-7
+              %i.arrow.single
+              = f.select("feedback", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
+              - if @feedback.present? and @feedback.errors.present? and @feedback.errors.messages.include? :option_type
+                .field_with_errors{:style => 'color:red'}
+                  %span{:for => "feedback_option2", :class => "errorMessage"} 
+                  = "This field is required."
+        - @show_options = (f.object.option_type == "Radio" or f.object.option_type == "Checkbox") ? true : false
+        = f.custom_text_field :option1, "Option 1 *","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option2, "Option 2 *","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option3, "Option 3","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option4, "Option 4","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option5, "Option 5","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option6, "Option 6","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option7, "Option 7","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option8, "Option 8","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option9, "Option 9","background" => "false", class: "feedback_hide_field"
+        = f.custom_text_field :option10, "Option 10","background" => "false", class: "feedback_hide_field"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.p-b-5
+          .mdl-grid.p-v-5.form-group.feedback_hide_field1
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Text box to be shown after options?
+            .col-lg-7.p-h-12  
+              = f.custom_radio_button :description, true, "Yes", :id => "option-1"
+              = f.custom_radio_button :description, false, "No", :id => "option-2"
+        = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+
+- if params[:action] == "new" and @show_options == true
+  :javascript
+    $('.feedback_hide_field').parent().parent().show()
+    $(".feedback_hide_field1").show();    
+- elsif @show_options == false
+  :javascript
+    $('input.feedback_hide_field').parent().parent().hide();
+    $(".feedback_hide_field1").hide();
+
+:javascript
+  $('input.col-lg-7.p-h-12').parent().parent().hide();
+  $('#feedback_option_type').on('change', function() {
+    val = $(this).val();
+    if(val == "Checkbox" || val == "Radio"){
+      $('.feedback_hide_field').parent().parent().show()
+      $(".feedback_hide_field1").show();
+    }
+    if(val == "Textbox"){
+      $('input.feedback_hide_field').parent().parent().hide();
+      $(".feedback_hide_field1").hide();
+    }
+  });
+
+  if ("#{params[:action]}" == "edit")
+    $(window).load(function(){
+      if ("#{@feedback.option_type}" == "Textbox"){
+        $('input.feedback_hide_field').parent().parent().hide();
+        $(".feedback_hide_field1").hide();
+      } 
+    }) 
+      
+        

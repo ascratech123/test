@@ -1,0 +1,47 @@
+class Api::V1::ChatsController < ApplicationController
+	respond_to :json 
+
+  def index
+  	event = Event.find_by_id(params[:event_id])
+    if event.present?
+      member = Invitee.find_by_id(params[:member_ids])
+      member_first_name = member.first_name rescue ''
+      member_last_name = member.last_name rescue ''
+  		chats = event.chats.where('sender_id = ? and member_ids = ? or sender_id = ? and member_ids = ?', params[:sender_id], params[:member_ids], params[:member_ids], params[:sender_id]).where('id > ?', params[:id].to_i)
+  		render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at])}
+  	else
+  		render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
+  	end
+  end
+
+  def create
+  	event = Event.find_by_id(params[:event_id])
+  	if params[:message].blank? or params[:sender_id].blank? or params[:member_ids].blank?
+      render :status=>200,:json=>{:status=>"Failure",:message=>"The request must contain the sender_id, receiver_id, member_ids."}
+      return
+    end
+    if event.present?
+  		chat = event.chats.new(:chat_type => params[:chat_type], :sender_id => params[:sender_id], :member_ids => params[:member_ids], :message => params[:message], :platform => params[:platform])
+  		if chat.save
+  		  render :status=> 200, :json=>{:status=> "Success",:message=>"chat Created Successfully.", :chat => chat.as_json(:only => [:id, :message, :sender_id, :member_ids, :event_id])}
+  		else
+  			render :status=>200, :json=>{:status=>"Failure",:message=>"You need to pass these values: #{chat.errors.full_messages.join(" , ")}"}
+  		end	
+  	else
+  		render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
+  	end
+  end
+
+  def update
+    chat = Chat.find_by_id(params[:id])
+    if chat.present?
+      if chat.update(:chat_type => params[:chat_type], :sender_id => params[:sender_id], :member_ids => params[:member_ids])
+        render :status=> 200, :json=>{:status=> "Success",:message=>"chat Updated Successfully."}
+      else
+        render :status=>200, :json=>{:status=>"Failure",:message=>"You need to pass these values: #{chat.errors.full_messages.join(" , ")}"}
+      end 
+    else
+      render :status=>200, :json=>{:status=>"Failure",:message=>"Chat Not Found."}
+    end
+  end
+end

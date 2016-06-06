@@ -1,0 +1,4 @@
+= render :partial => 'admin/layouts/index_header', :locals => {:objs => @speakers} 
+- if @speakers.present?
+  = render :partial => 'admin/layouts/more_links'      
+  
