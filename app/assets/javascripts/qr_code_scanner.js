@@ -1,4 +1,4 @@
-$("#btnPrint").bind("click", function () {
+$("#btnPrint").on("click", function () {
   var divContents = $("#result").html();
   var printWindow = window.open('', '', 'height=400,width=800');
   printWindow.document.write('<html><head><title>Invitee Profile</title>');

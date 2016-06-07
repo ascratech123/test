@@ -221,7 +221,7 @@ class Analytic < ActiveRecord::Base
         end
       end
       user_engagement << "Rating" if event.event_features.map{|f| f.name}.include? 'speakers' or event.event_features.map{|f| f.name}.include? 'agendas'
-      user_engagement += ['One on one'] if event.event_features.map{|f| f.name}.include? 'chats'
+      user_engagement += ['One on one chat'] if event.event_features.map{|f| f.name}.include? 'chats'
       user_engagement.each do |engagement|
         (0..23).each do |hour|
           q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
@@ -237,9 +237,9 @@ class Analytic < ActiveRecord::Base
           elsif engagement == 'E-Kit'
             type = ['E-Kit']
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?) and viewable_id IS NOT NULL', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
-          elsif engagement == 'One on one'
+          elsif engagement == 'One on one chat'
             type = ['Chat']
-            query_engagement = ['One on one' => 'one_on_one']
+            query_engagement = ['One on one chat' => 'one_on_one']
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type IN (?) and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), type, query_engagement).count
           else
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
@@ -366,7 +366,6 @@ class Analytic < ActiveRecord::Base
     result_hsh['active_users'] = Analytic.get_active_users(params[:id], params[:start_date], params[:end_date])
     result_hsh['unique_users'] = Analytic.get_unique_users(params[:id], params[:start_date], params[:end_date])
     result_hsh['leaderboards'] = Analytic.get_leaderboards(params[:id])
-
     if params[:filter_date].present? and params[:filter_date] != 'Today'
       result_hsh['user_engagements'] = Analytic.get_user_engagements(params[:id], params[:start_date], params[:end_date], params[:filter_date])
     else

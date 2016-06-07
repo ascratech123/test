@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601064853) do
+ActiveRecord::Schema.define(version: 20160603094750) do
 
   create_table "abouts", force: :cascade do |t|
     t.text     "description", limit: 65535
@@ -64,6 +64,13 @@ ActiveRecord::Schema.define(version: 20160601064853) do
     t.string   "platform",      limit: 255
     t.integer  "points",        limit: 4
   end
+
+  add_index "analytics", ["action"], name: "index_on_action_in_analytics", using: :btree
+  add_index "analytics", ["event_id"], name: "index_on_event_id_in_analytics", using: :btree
+  add_index "analytics", ["invitee_id"], name: "index_on_invitee_id_in_analytics", using: :btree
+  add_index "analytics", ["platform"], name: "index_on_platform_in_analytics", using: :btree
+  add_index "analytics", ["viewable_id"], name: "index_on_viewable_id_in_analytics", using: :btree
+  add_index "analytics", ["viewable_type"], name: "index_on_viewable_type_in_analytics", using: :btree
 
   create_table "attendees", force: :cascade do |t|
     t.string   "attendee_name", limit: 255
@@ -877,6 +884,9 @@ ActiveRecord::Schema.define(version: 20160601064853) do
     t.datetime "updated_at",                   null: false
     t.string   "correct_answer", limit: 255
   end
+
+  add_index "quizzes", ["event_id"], name: "index_on_event_id_in_quizzes", using: :btree
+  add_index "quizzes", ["question"], name: "index_on_question_in_quizzes", length: {"question"=>255}, using: :btree
 
   create_table "ratings", force: :cascade do |t|
     t.integer  "ratable_id",   limit: 4
