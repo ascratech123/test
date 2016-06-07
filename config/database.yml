@@ -31,7 +31,7 @@ staging:
 # source 8_jan_shobiz_stag.sql
 
 #mysql -h dbshobiz.c6yiaaaxxz5r.ap-southeast-1.rds.amazonaws.com -u dbusrshobiz -ppwdshobiz
-#mysqldump -h dbshobiz.c6yiaaaxxz5r.ap-southeast-1.rds.amazonaws.com -u dbusrshobiz -ppwdshobiz shobiz_production > shobiz_production_15_april.sql
+
 production:
   adapter: mysql2
   host: dbshobiz.c6yiaaaxxz5r.ap-southeast-1.rds.amazonaws.com

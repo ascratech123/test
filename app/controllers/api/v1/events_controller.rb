@@ -28,7 +28,7 @@ class Api::V1::EventsController < ApplicationController
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 
-  end	
+  end 
   
   def create
     chanages_done = []
