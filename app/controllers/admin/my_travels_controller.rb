@@ -10,6 +10,7 @@ class Admin::MyTravelsController < ApplicationController
   end
   def new
     @my_travel = @event.my_travels.build
+    @import = Import.new if params[:import].present?
   end
   def create
     @my_travel = MyTravel.find_or_initialize_by(:event_id => @event.id, :invitee_id => params[:my_travel][:invitee_id])

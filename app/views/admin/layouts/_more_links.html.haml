@@ -264,3 +264,8 @@
                 - if @user_quizees.present?
                   = link_to admin_event_user_quizees_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                     Export Answer
+          - when 'my_travel'
+            %li
+              - if @event.present?
+                = link_to new_admin_event_my_travel_path(:importable_type => 'my_travel', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                  Import   
