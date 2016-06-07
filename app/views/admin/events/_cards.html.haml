@@ -28,7 +28,7 @@
                 - count = (@event.emergency_exit.present?) ? 1 : 0
                 - redirection = (count == 1 ? "/#{@event.emergency_exit.id}/edit" : "/new")
 
-              - elsif ["notes","qr_code","my_profile","my_calendar", "favourites","chats"].include? (url)
+              - elsif ["notes","qr_code","my_profile","my_calendar", "favourites","chats","social_sharings"].include? (url)
               - elsif url == "leaderboard"
                 - count = Invitee.get_leaderboard_count(@event)
               - elsif ["poll_walls","conversation_walls","qna_walls"].include? (url)
@@ -74,7 +74,7 @@
                 - display_title = "Manage" if url == "custom_page3s" and @event.custom_page3s.present?
                 - display_title = "Manage" if url == "custom_page4s" and @event.custom_page4s.present?
                 - display_title = "Manage" if url == "custom_page5s" and @event.custom_page5s.present?
-              - if ["notes","qr_code","my_profile","my_calendar", "favourites","chats"].exclude? (url)
+              - if ["notes","qr_code","my_profile","my_calendar", "favourites","chats","social_sharings"].exclude? (url)
                 - url1 = "emergency_exits" if url == "venue"
                 - url1 = url if url != "venue"
                 - url1 = "leaderboards" if url == "leaderboard"

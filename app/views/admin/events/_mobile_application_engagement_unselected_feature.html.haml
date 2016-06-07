@@ -18,4 +18,6 @@
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"Leaderboard.png", :objs => "", :url => "leaderboard"}
       - if show_card_except_event_features("chats") and !Rails.env.production?
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"polls_1.png", :objs => "", :url => "chats"}    
-    
+      
+      - if show_card_except_event_features("social_sharings") and !Rails.env.production?
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"polls_1.png", :objs => "", :url => "social_sharings"}

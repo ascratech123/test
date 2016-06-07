@@ -43,8 +43,8 @@
                     .mdl-cell--8-col.mdl-cell--8-col-tablet
                       - page_link = redirect_urls['look_and_feel1']
                       = link_to Event::REVIEW_ATTRIBUTES[feature], page_link
-              - content_missing = @event.check_event_content_status[0] - ["e_kits","feedbacks","polls","quizzes","chats"]
-              - engagement_missing = @event.check_event_content_status[0] - ["abouts","agendas","speakers","faqs","images","awards","invitees","contacts","event_highlights","sponsors","exhibitors","chats"]
+              - content_missing = @event.check_event_content_status[0] - ["e_kits","feedbacks","polls","quizzes","chats","social_sharings"]
+              - engagement_missing = @event.check_event_content_status[0] - ["abouts","agendas","speakers","faqs","images","awards","invitees","contacts","event_highlights","sponsors","exhibitors","chats","social_sharings"]
               -if content_missing.present?
                 .mdl-cell--2-col.mdl-cell--2-col-tablet
                   %h4.heading-borderCard.mdl-cell--6-col.mdl-cell--6-col-tablet     
