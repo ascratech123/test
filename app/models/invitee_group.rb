@@ -40,6 +40,8 @@ class InviteeGroup < ActiveRecord::Base
         invitee_ids = Analytic.where(viewable_type: "Chat", action: 'one_on_one', event_id: self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       end
+      invitee_ids = invitee_ids.map{|n| n.to_s}
+      self.update_attributes(:invitee_ids => invitee_ids)
       invitee_ids
     else
       invitee_ids = self.invitee_ids
