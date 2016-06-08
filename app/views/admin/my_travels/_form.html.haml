@@ -19,7 +19,7 @@
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:invitee_id].join("") rescue nil 
-        = f.new_custom_file_browser_field :attach_file, "Attach File (png/jpg/pdf) upto 10mb only *", :id => "uploadBtn", :value => f.object.attach_file_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+        = f.new_custom_file_browser_field :attach_file, "Attach File (pdf) upto 10mb only *", :id => "uploadBtn", :value => f.object.attach_file_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

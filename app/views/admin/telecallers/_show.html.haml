@@ -82,22 +82,9 @@
     $('#date-start,#date-start1').parent().parent().parent().hide();
 
 :javascript
-  $('#invitee_datum_status').on('change', function() {
-    val = $(this).val();
-    if(val == "CALL BACK" || val == "FOLLOW UP"){
-      $('#date-start,#date-start1').parent().parent().parent().show();
-    }
-    if(val != "CALL BACK" && val != "FOLLOW UP"){
-      $('#date-start,#date-start1').parent().parent().parent().hide();
-    }
-  });
-  
-
-:javascript
   $(window).load(function(){
-  flightTime();
-  minutes();
-  times(); 
-  
+    flightTime();
+    minutes();
+    times(); 
   })
  
