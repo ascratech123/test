@@ -78,7 +78,7 @@ class Event < ActiveRecord::Base
   validate :event_count_within_limit, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
-  after_create :update_theme_updated_at, :set_uniq_token
+  after_create :update_theme_updated_at, :set_uniq_token, :create_default_invitee_groups
   after_save :update_login_at_for_app_level
   #before_validation :set_time
   
@@ -117,6 +117,15 @@ class Event < ActiveRecord::Base
 
   def update_theme_updated_at
     self.theme.update_column(:updated_at, Time.now) rescue nil
+  end
+
+  def create_default_invitee_groups
+    ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].each do |n|
+      if InviteeGroup.where(:event_id => self.id, :invitee_ids => ['0'], :name => n).blank?
+        n = InviteeGroup.new(:event_id => self.id, :invitee_ids => ['0'], :name => n)
+        n.save
+      end
+    end
   end
 
   def update_login_at_for_app_level
