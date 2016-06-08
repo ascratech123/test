@@ -9,6 +9,14 @@ class InviteeGroup < ActiveRecord::Base
     names.join(",")
   end
 
+  def default_logical_group?
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
+      true
+    else
+      false
+    end
+  end
+
   def get_invitee_ids
     invitee_ids = []
     if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
