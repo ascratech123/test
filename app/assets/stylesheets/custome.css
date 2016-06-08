@@ -12,6 +12,11 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.col-lg-7.notific .field_with_errors{margin-left: -20px; margin-top: -4px;}
+.col-lg-7.notification {height: 200px;overflow-y: scroll; margin-bottom: 10px;}
+.notification .md-checkbox{display: block; min-height: 30px;}
+.notification .md-checkbox .checkbox{min-height: 20px;}
+.notification .md-checkbox .checkbox{padding-top: 0px;}
 .menuSubCard .menustatusnew{width:90px;}
 .menuSubCard .event-imgupload input.upload {width: 100%;top: 23px;padding-left: 33px;}
 .converblog .full_width{width:100%;}

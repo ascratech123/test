@@ -691,5 +691,5 @@ end
     end
     #all_arr = [['Group based', ['Group Notification']], ['Action based', action_arr], ['Logic based', logic_arr], ['Destination based', dest_arr]]
     # all_arr = [['Group based', ['Group Notification']], ['Destination based', dest_arr]]
-    all_arr = [['Destination', dest_arr]]
+    all_arr = [['Destination pages', dest_arr]]
   end
