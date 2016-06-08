@@ -22,7 +22,7 @@ class InviteeGroup < ActiveRecord::Base
     if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
       case self.name
       when 'No Polls taken'
-        invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => 165).pluck(:invitee_id).uniq
+        invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Feedback given'
         invitee_ids = Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :event_id => self.event_id).pluck(:invitee_id).uniq
