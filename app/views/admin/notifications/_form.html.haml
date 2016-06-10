@@ -1,4 +1,5 @@
-.save_button.mdl-card
+= stylesheet_link_tag "css/telecaller_show"
+.save_button
   = form_for [:admin, @event, @notification], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     .mdl-grid.mdl-card.mdl-shadow--1dp
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
