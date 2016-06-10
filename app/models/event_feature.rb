@@ -20,11 +20,12 @@ class EventFeature < ActiveRecord::Base
   validates_attachment_content_type :main_icon, :content_type => ["image/png"],:message => "please select valid format."
   validate :image_dimensions
   before_save :set_interpolate_time_stamp
-  after_create :update_visibility
+  after_create :update_visibility, :create_default_invitee_groups
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
   after_save :venue_menu_icon_selection
+  after_destroy :delete_default_invitee_groups
 
   default_scope { order("sequence") }
   
@@ -117,6 +118,20 @@ class EventFeature < ActiveRecord::Base
         end  
       end
     end  
+  end
+
+  def create_default_invitee_groups
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    if invitee_groups[self.name].present? and InviteeGroup.where(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name]).blank?
+      invitee_group = InviteeGroup.new(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name])
+      invitee_group.save
+    end
+  end
+
+  def delete_default_invitee_groups
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    invitee_group = InviteeGroup.where(:event_id => self.event_id, :name => invitee_groups[self.name]).first
+    invitee_group.destroy if invitee_group.present?
   end
 
   def set_status(event_feature)

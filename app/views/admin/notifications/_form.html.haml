@@ -43,7 +43,7 @@
             .col-lg-7
               %i.arrow.single
               - grouped_options = get_notification_type_group_array(@event)
-              = select_tag "notification[action]", grouped_options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Notification Type', :class =>"select2-single form-control"
+              = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
