@@ -33,11 +33,11 @@ class InviteeGroup < ActiveRecord::Base
       when 'No Q&A'
         invitee_ids = Analytic.where(:action => 'question asked', :viewable_type => 'Q&A', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
-      when 'NO QR code scanned'
-        invitee_ids = Analytic.where(:action => 'qr code scan', :viewable_type => 'Invitee', :event_id => self.event_id).pluck(:invitee_id).uniq
+      when 'No Participation in Conversations'
+        invitee_ids = Analytic.where(:action => 'conversation post', :viewable_type => 'Conversation', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
-      when 'No Chat'
-        invitee_ids = Analytic.where(viewable_type: "Chat", action: 'one_on_one', event_id: self.event_id).pluck(:invitee_id).uniq
+      when 'No Favorites added'
+        invitee_ids = Analytic.where(viewable_type: "Invitee", action: 'favorite', event_id: self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       end
       invitee_ids = invitee_ids.map{|n| n.to_s}
