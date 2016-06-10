@@ -62,7 +62,7 @@ class Notification < ActiveRecord::Base
         event = notification.event
         if event.mobile_application_id.present?
           if notification.group_ids.present?
-            groups = InviteeGroup.where("id IN(?)", self.group_ids)
+            groups = InviteeGroup.where("id IN(?)", notification.group_ids)
             invitee_ids = []
             groups.each do |group|
               invitee_ids = invitee_ids + group.get_invitee_ids
