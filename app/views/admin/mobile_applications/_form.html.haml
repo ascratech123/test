@@ -92,7 +92,24 @@
                 = f.custom_radio_button :login_at, "Yes", "Yes", :id => "option4"
                 = f.custom_radio_button :login_at, "No", "No", :id => "option5"
         
-        = f.new_custom_file_browser_field :listing_screen_background, "Listing Screen Background (960X1600px) only", :id => "listing_screen_uploadBtn", :value => f.object.listing_screen_background_file_name, :action=> params[:action], :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenBackground.jpg", :rel=> "mobil_app_listing_screen_background", :title => "Listing Screen Background"}
+        =# f.new_custom_file_browser_field :listing_screen_background, "Listing Screen Background (960X1600px) only", :id => "listing_screen_uploadBtn", :value => f.object.listing_screen_background_file_name, :action=> params[:action], :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenBackground.jpg", :rel=> "mobil_app_listing_screen_background", :title => "Listing Screen Background"}
+
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
+          .bs-component
+            .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+              .span.col-lg-4
+                = f.label "Listing Screen Background (960X1600px) only ",:class =>"control-label", style: "float: right;"
+                - if (current_user.has_role? :licensee_admin and @mobile_application.listing_screen_background.present? and ["edit","update"].include? params[:action])
+                  %br
+                  = link_to "(Download Listing Screen Background)",edit_admin_event_mobile_application_path(:event_id => params[:event_id],:id => params[:id],:download_image => "true",:image_name => @mobile_application.listing_screen_background_file_name,:image_url=>@mobile_application.listing_screen_background.url), style: "float: right;"
+              .col-lg-7.Closetheme
+                %label.field.file
+                  %span.button.btn-primary
+                    Choose File 
+                  = f.file_field :listing_screen_background,:id => "listing_screen_uploadBtn", :class=>"gui-file"
+                  = text_field_tag("text_file_name","", id: "listing_screen_uploadBtn1", class: "gui-input", :value => "#{f.object.listing_screen_background_file_name.nil? ? "there is no Attachment Available !" : f.object.listing_screen_background_file_name}", :read_only => true)
+
+
         = f.custom_text_field_display :listing_screen_text_color, "Listing Screen Text Color *", :value => @mobile_application.listing_screen_text_color, :class => 'pick-a-color', :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenTextColor.jpg", :rel=> "mobil_app_listing_screen_text_color", :title => "Listing Screen Text Color"}
 
       .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
@@ -115,6 +132,9 @@
             .form-group{:style => "display: #{ get_login_at(@event,f.object)}", :class => "#{get_highlight_class(f.object)}" }
               .span.col-lg-4
                 = f.label "Login screen background (960X1600px) only",:class =>"control-label", style: "float: right;"
+                - if (current_user.has_role? :licensee_admin and @mobile_application.login_background.present? and ["edit","update"].include? params[:action])
+                  %br
+                  = link_to "(Download Login screen background)",edit_admin_event_mobile_application_path(:event_id => params[:event_id],:id => params[:id],:download_image => "true",:image_name => @mobile_application.login_background_file_name,:image_url=>@mobile_application.login_background.url), style: "float: right;"
               .col-lg-7
                 %label.field.file
                   %span.button.btn-primary
