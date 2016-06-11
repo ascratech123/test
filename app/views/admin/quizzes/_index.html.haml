@@ -14,8 +14,6 @@
     - objs.each_with_index do |quizze,index|
       %tr
         %td.sortable
-          .sort-indicator.frstsequence
-            =# quizze.sequence.to_i rescue nil
           .orderseq
             - if index != 0
               %span= link_to "",admin_event_sequence_path(:event_id => quizze.event_id, :id => quizze.id, :seq_type => "up", :feature_type => "quizzes"),:class => "uparrow", :method => "put", :remote => true
