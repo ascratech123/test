@@ -18,7 +18,7 @@
             %td.font16= notification.description rescue nil
             %td.font16= notification.push_page rescue nil
             %td.font16= notification.page_id rescue nil
-            %td.font16= notification.push_datetime.strftime("%d-%m-%Y %H:%M") rescue nil
+            %td.font16= notification.push_datetime#.strftime("%d-%m-%Y %H:%M") rescue nil
             %td.font16= notification.pushed rescue nil
             %td.IconDrp
               = more_vert_button(notification.id)

@@ -10,7 +10,7 @@ class InviteeGroup < ActiveRecord::Base
   end
 
   def default_logical_group?
-    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
       true
     else
       false
@@ -19,7 +19,7 @@ class InviteeGroup < ActiveRecord::Base
 
   def get_invitee_ids
     invitee_ids = []
-    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
       case self.name
       when 'No Polls taken'
         invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => self.event_id).pluck(:invitee_id).uniq
