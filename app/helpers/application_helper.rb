@@ -23,7 +23,26 @@ module ApplicationHelper
     url = back_path if url == :back
     html_content = content_tag(:span, "Cancel", :class => "waves-effect waves-light btn")
     link_to html_content, url, :confirm =>'Are you sure?'#,:style => "float:right;width:120px"
-  end  
+  end
+
+  def time_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
+    else
+      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
+    end
+  end
+
+  def get_hour_minute_second_ampm(time, format)
+    case format
+    when 'hour'
+      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
+    when 'hour'
+      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
+    when 'hour'
+      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
+    end
+  end
 
   def back_button_detailed_page(url = :back)
     url = back_path if url == :back
@@ -679,17 +698,19 @@ end
     # destination_based = {'event_highlights' => [['Event Highlight', 'event_highlights']], 'quizzes' => [['Quiz', 'quizzes']], 'qnas' => [['Q&A', 'qnas']], 'speakers' => [['Speaker', 'speakers']], 'invitees' => [['Invitee', 'invitees']], 'my_profile' => [['My Profile', 'my_profile']], 'feedbacks' => [['Feedback', 'feedbacks']], 'agendas' => [['Agenda', 'agendas']], 'polls' => [['Poll', 'polls']], 'leaderboard' => [['Leaderboard', 'leaderboard']], 'faqs' => [['FAQ', 'faqs']], 'abouts' => [['About', 'abouts']], 'conversations' => [['Conversation', 'conversations']], 'e_kits' => [['E-Kit', 'e_kits']], 'awards' => [['Award', 'awards']], 'contacts' => [['Contact', 'contacts']], 'sponsors' => [['Sponsors', 'sponsors']], 'galleries' => [['Gallery', 'galleries']], 'emergency_exits' => [['Emergency Exit', 'emergency_exits']], 'notes' => [['Note', 'notes']], 'venue' => [['Venue', 'venue']], 'custom_page1s' => [['Custom Page1', 'custom_page1s']], 'custom_page2s' => [['Custom Page2', 'custom_page2s']], 'custom_page3s' => [['Custom Page3', 'custom_page3s']], 'custom_page4s' => [['Custom Page4', 'custom_page4s']], 'custom_page5s' => [['Custom Page5', 'custom_page5s']]}
     #action_based = {'agendas' => [['Agenda Rating', 'Agenda Rating']], 'speakers' => [['Speaker Rating', 'Speaker Rating']], 'favourites' => [['Agenda Favorite', 'Agenda Favorite'], ['Speaker Favorite', 'Speaker Favorite'], ['Invitee Favorite', 'Invitee Favorite'], ['Sponsor Favorite', 'Sponsor Favorite'], ['Exhibitors Favorite', 'Exhibitors Favorite']]}
     #logic_based = {'polls' => [['Polls Taken', 'Polls Taken']], 'feedbacks' => [['Feedback Submitted', 'Feedback Submitted']], 'quizzes' => [['Quiz Answered', 'Quiz Answered']], 'qnas' => [['Question Asked', 'Question Asked']], 'qr_code' => [['QR Code Scanned', 'QR Code Scanned']]}
-    destination_based = {'event_highlights' => [['Event Highlight', 'Event Highlight']], 'quizzes' => [['Quiz', 'Quiz']], 'qnas' => [['Q&A', 'Q&A']], 'Q&A' => [['Speaker', 'Speaker']], 'invitees' => [['Invitee', 'Invitee']], 'my_profile' => [['My Profile', 'Profile']], 'feedbacks' => [['Feedback', 'Feedback']], 'agendas' => [['Agenda', 'Agenda']], 'polls' => [['Poll', 'Poll']], 'leaderboard' => [['Leaderboard', 'Leaderboard']], 'faqs' => [['FAQ', 'FAQ']], 'abouts' => [['About', 'About']], 'conversations' => [['Conversation', 'Conversation']], 'e_kits' => [['E-Kit', 'E-Kit']], 'awards' => [['Award', 'Award']], 'contacts' => [['Contact', 'Contact']], 'sponsors' => [['Sponsors', 'Sponsors']], 'galleries' => [['Gallery', 'Gallery']], 'emergency_exits' => [['Emergency Exit', 'Emergency Exit']], 'notes' => [['Note', 'Note']], 'venue' => [['Venue', 'Venue']], 'custom_page1s' => [['Custom Page1', 'Custom Page1']], 'custom_page2s' => [['Custom Page2', 'Custom Page2']], 'custom_page3s' => [['Custom Page3', 'Custom Page3']], 'custom_page4s' => [['Custom Page4', 'Custom Page4']], 'custom_page5s' => [['Custom Page5', 'Custom Page5']]}
-    all_arr = []
-    action_arr = []
-    logic_arr = []
+    # destination_based = {'event_highlights' => [['Event Highlight', 'Event Highlight']], 'quizzes' => [['Quiz', 'Quiz']], 'qnas' => [['Q&A', 'Q&A']], 'Q&A' => [['Speaker', 'Speaker']], 'invitees' => [['Invitee', 'Invitee']], 'my_profile' => [['My Profile', 'Profile']], 'feedbacks' => [['Feedback', 'Feedback']], 'agendas' => [['Agenda', 'Agenda']], 'polls' => [['Poll', 'Poll']], 'leaderboard' => [['Leaderboard', 'Leaderboard']], 'faqs' => [['FAQ', 'FAQ']], 'abouts' => [['About', 'About']], 'conversations' => [['Conversation', 'Conversation']], 'e_kits' => [['E-Kit', 'E-Kit']], 'awards' => [['Award', 'Award']], 'contacts' => [['Contact', 'Contact']], 'sponsors' => [['Sponsors', 'Sponsors']], 'galleries' => [['Gallery', 'Gallery']], 'emergency_exits' => [['Emergency Exit', 'Emergency Exit']], 'notes' => [['Note', 'Note']], 'venue' => [['Venue', 'Venue']], 'custom_page1s' => [['Custom Page1', 'Custom Page1']], 'custom_page2s' => [['Custom Page2', 'Custom Page2']], 'custom_page3s' => [['Custom Page3', 'Custom Page3']], 'custom_page4s' => [['Custom Page4', 'Custom Page4']], 'custom_page5s' => [['Custom Page5', 'Custom Page5']]}
+    destination_based = {'event_highlights' => ['Event Highlight', 'Event Highlight'], 'quizzes' => ['Quiz', 'Quiz'], 'qnas' => ['Q&A', 'Q&A'], 'Q&A' => ['Speaker', 'Speaker'], 'invitees' => ['Invitee', 'Invitee'], 'my_profile' => ['My Profile', 'Profile'], 'feedbacks' => ['Feedback', 'Feedback'], 'agendas' => ['Agenda', 'Agenda'], 'polls' => ['Poll', 'Poll'], 'leaderboard' => ['Leaderboard', 'Leaderboard'], 'faqs' => ['FAQ', 'FAQ'], 'abouts' => ['About', 'About'], 'conversations' => ['Conversation', 'Conversation'], 'e_kits' => ['E-Kit', 'E-Kit'], 'awards' => ['Award', 'Award'], 'contacts' => ['Contact', 'Contact'], 'sponsors' => ['Sponsors', 'Sponsors'], 'galleries' => ['Gallery', 'Gallery'], 'emergency_exits' => ['Emergency Exit', 'Emergency Exit'], 'notes' => ['Note', 'Note'], 'venue' => ['Venue', 'Venue'], 'custom_page1s' => ['Custom Page1', 'Custom Page1'], 'custom_page2s' => ['Custom Page2', 'Custom Page2'], 'custom_page3s' => ['Custom Page3', 'Custom Page3'], 'custom_page4s' => ['Custom Page4', 'Custom Page4'], 'custom_page5s' => ['Custom Page5', 'Custom Page5']}
+    # all_arr = []
+    # action_arr = []
+    # logic_arr = []
     dest_arr = []
     event.event_features.each do |feature|
       #action_arr += action_based[feature.name] if action_based[feature.name].present?
       #logic_arr += logic_based[feature.name] if logic_based[feature.name].present?
-      dest_arr += destination_based[feature.name] if destination_based[feature.name].present?
+      dest_arr << destination_based[feature.name] if destination_based[feature.name].present?
     end
     #all_arr = [['Group based', ['Group Notification']], ['Action based', action_arr], ['Logic based', logic_arr], ['Destination based', dest_arr]]
     # all_arr = [['Group based', ['Group Notification']], ['Destination based', dest_arr]]
-    all_arr = [['Destination', dest_arr]]
+    # all_arr = [['Destination pages', dest_arr]]
+    dest_arr
   end

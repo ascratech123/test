@@ -7,9 +7,19 @@ class Admin::InviteesController < ApplicationController
 
   def index
     if params["send_mail"] == "true"
-      invitees = @invitees.where("email_send !=?", "true")
+      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
+        event_ids = @event.mobile_application.events.pluck(:id)
+        invitees = []
+        @invitees.each do |invitee|
+          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
+          invitees << invitee1
+        end
+        invitees = invitees.compact
+      else 
+        invitees = @invitees.where("email_send !=?", "true")
+      end
       invitees.each do |invitee|
-        UserMailer.send_password_invitees(invitee).deliver_now
+        UserMailer.send_password_invitees(invitee).deliver_now 
         invitee.update_column(:email_send, 'true')
       end
     end

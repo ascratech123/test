@@ -20,6 +20,7 @@ class Notification < ActiveRecord::Base
   validates :description,:event_id, presence: { :message => "This field is required." }
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
   validates :push_datetime, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.push_timing == 'later' }
+  validates :notification_type, presence: true
   before_save :update_details
   after_save :push_notification
 
@@ -55,7 +56,7 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).to_formatted_s(:db), (Time.now - 10.minutes).to_formatted_s(:db))
+    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.zone.now).to_formatted_s(:db), (Time.zone.now - 10.minutes).to_formatted_s(:db))
     if notifications.present?
       notifications.each do |notification|
         event = notification.event
@@ -64,8 +65,9 @@ class Notification < ActiveRecord::Base
             groups = InviteeGroup.where("id IN(?)", notification.group_ids)
             invitee_ids = []
             groups.each do |group|
-              invitee_ids = invitee_ids + group.invitee_ids
+              invitee_ids = invitee_ids + group.get_invitee_ids
             end  
+            invitee_ids = invitee_ids.uniq rescue []
             objects = Invitee.where("id IN(?)", invitee_ids)
           else
             objects = event.invitees
@@ -122,7 +124,9 @@ class Notification < ActiveRecord::Base
 
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
-      self.push_datetime = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
+      time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
+      time = time.to_time rescue nil
+      self.push_datetime = time
     end
   end
 

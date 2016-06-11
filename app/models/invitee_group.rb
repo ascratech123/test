@@ -9,12 +9,20 @@ class InviteeGroup < ActiveRecord::Base
     names.join(",")
   end
 
+  def default_logical_group?
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
+      true
+    else
+      false
+    end
+  end
+
   def get_invitee_ids
     invitee_ids = []
-    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'NO QR code scanned', 'No Chat'].include? self.name
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
       case self.name
       when 'No Polls taken'
-        invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => 165).pluck(:invitee_id).uniq
+        invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Feedback given'
         invitee_ids = Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :event_id => self.event_id).pluck(:invitee_id).uniq
@@ -25,13 +33,15 @@ class InviteeGroup < ActiveRecord::Base
       when 'No Q&A'
         invitee_ids = Analytic.where(:action => 'question asked', :viewable_type => 'Q&A', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
-      when 'NO QR code scanned'
-        invitee_ids = Analytic.where(:action => 'qr code scan', :viewable_type => 'Invitee', :event_id => self.event_id).pluck(:invitee_id).uniq
+      when 'No Participation in Conversations'
+        invitee_ids = Analytic.where(:action => 'conversation post', :viewable_type => 'Conversation', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
-      when 'No Chat'
-        invitee_ids = Analytic.where(viewable_type: "Chat", action: 'one_on_one', event_id: self.event_id).pluck(:invitee_id).uniq
+      when 'No Favorites added'
+        invitee_ids = Analytic.where(viewable_type: "Invitee", action: 'favorite', event_id: self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       end
+      invitee_ids = invitee_ids.map{|n| n.to_s}
+      self.update_attributes(:invitee_ids => invitee_ids)
       invitee_ids
     else
       invitee_ids = self.invitee_ids
