@@ -38,9 +38,9 @@
               = f.custom_text_field_date :callback_date, "Callback Datetime", :id => "date-start", :value => f.object.callback_datetime.present? ? f.object.callback_datetime.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab
-                  = f.custom_text_field_date :callback_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.callback_datetime.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :callback_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.callback_datetime.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :callback_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.callback_datetime.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"   
+                  = f.custom_text_field_date :callback_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.callback_datetime, 'hour')}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :callback_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.callback_datetime, 'minute')}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :callback_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{get_hour_minute_second_ampm(f.object.callback_datetime, 'ampm')}", :col => '3',:maxlength => "2"   
         = f.hidden_field :check_remark_and_status_present , :value => "true"
         .fixed-activon-btn-new.teleclick  
           = f.custom_submit_button "NEXT"
@@ -63,7 +63,7 @@
             %td.popupLeft= obj.status        
           %tr
             %td.popTxtRight Date / Time : 
-            %td.popupLeft= obj.callback_datetime.strftime("%d/%m/%Y %l:%M:%p") rescue nil
+            %td.popupLeft= get_datetime_in_ampm(obj.callback_datetime) rescue nil
           %tr
             %td.popTxtRight Remark : 
             %td.popupLeft= obj.remark

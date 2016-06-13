@@ -36,12 +36,26 @@ module ApplicationHelper
   def get_hour_minute_second_ampm(time, format)
     case format
     when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
-    when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
-    when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0')
+      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') rescue nil
+    when 'minute'
+      time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') rescue nil
+    when 'second'
+      time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') rescue nil
+    when 'ampm'
+      time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') rescue nil
     end
+  end
+
+  def get_only_time_in_ampm(time)
+    time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
+  end
+
+  def get_datetime(time)
+    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') rescue nil
+  end
+
+  def get_datetime_in_ampm(time)
+    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') rescue nil
   end
 
   def back_button_detailed_page(url = :back)

@@ -86,7 +86,7 @@
                       - if @speaker.ratings.present?
                         - @speaker.ratings.each do |rating|
                           = show_field_new("Comment : ", rating.comments)
-                          = show_field_new("date : ", rating.created_at.strftime("%d %b %Y %l:%M %p"))
+                          = show_field_new("date : ", rating.created_at.in_time_zone('Kolkata').strftime("%d %b %Y %l:%M %p"))
                           = show_field_new("Name : ", rating.get_user_name)
                           
                       - else

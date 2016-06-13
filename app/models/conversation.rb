@@ -94,7 +94,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def timestamp
-    self.created_at.strftime('%m/%d/%Y %H:%M')
+    self.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes

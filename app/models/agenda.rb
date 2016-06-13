@@ -51,14 +51,17 @@ class Agenda < ActiveRecord::Base
   def set_time
     start_date = self.start_agenda_date rescue nil
     end_date = self.end_agenda_date rescue nil
-    self.start_agenda_time = "#{start_date.strftime('%d/%m/%Y')} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.start_time_am}" if start_date.present?
-    self.end_agenda_time = "#{end_date.strftime('%d/%m/%Y')} #{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if end_date.present?
+    start_time = "#{start_date.strftime('%d/%m/%Y')} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.start_time_am}" if start_date.present?
+    end_time = "#{end_date.strftime('%d/%m/%Y')} #{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if end_date.present?
+    self.start_agenda_time = start_time.to_time if start_date.present?
+    self.end_agenda_time = end_time.to_time if end_date.present?
   end
 
   def set_end_date_if_end_date_not_selected
     end_agenda_time = "#{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if self.end_agenda_time.blank? and self.end_time_hour.present? and self.end_time_minute.present? and self.end_time_am.present?
     if self.start_agenda_time.to_date.present? and end_agenda_time.present?
-      self.end_agenda_time = "#{self.start_agenda_time.strftime('%d/%m/%Y')} #{end_agenda_time}"
+      time = "#{self.start_agenda_time.strftime('%d/%m/%Y')} #{end_agenda_time}"
+      self.end_agenda_time = time.to_time rescue nil
       self.save
     end
   end
