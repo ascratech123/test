@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   #before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_url_history, :except => :back
+  before_filter :set_url_for_smtp_setting, :except => [:back,:set_url_history]
   before_action :set_current_user,:find_clients
   before_filter :telecaller_is_login
   #before_action :redirect_show_to_edit , :only => :show
@@ -162,6 +163,13 @@ class ApplicationController < ActionController::Base
     redirect_to (url || "/")
   end
   
+  def set_url_for_smtp_setting
+    session[:smtp_url] ||= []
+    session[:smtp_url] << request.referrer unless session[:smtp_url].last == request.referrer
+    session[:smtp_url].shift if session[:smtp_url].length == 10
+    session[:smtp_url].compact if session[:smtp_url].present?
+  end
+
   def licensee_current_user
     if current_user.present? and current_user.has_role? :super_admin and session['licensee_user_id'].present?
       User.unscoped.find session['licensee_user_id']
