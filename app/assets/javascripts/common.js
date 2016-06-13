@@ -361,6 +361,13 @@ function flightTime() {
       });
   }
 
+  /*telecaller show page */
+    $(window).load(function(){
+      flightTime();
+      minutes();
+      times(); 
+   })
+
   /* Event Feature and emergency exit form file upload name */
   $(window).load(function(){
     $('.gui-file').change(function(){
@@ -427,7 +434,6 @@ function flightTime() {
     $('.popup-overlay').hide();
   })
 
-
   /* Telecaller show page */
   
   $('#invitee_datum_status').on('change', function() {
@@ -439,7 +445,7 @@ function flightTime() {
       $('#date-start,#date-start1').parent().parent().parent().hide();
     }
   });
-  
+
     // $('.owl-carousel').owlCarousel({
     //   margin:10,
     //   responsiveClass:true,
