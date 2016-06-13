@@ -95,7 +95,7 @@
         =# f.new_custom_file_browser_field :listing_screen_background, "Listing Screen Background (960X1600px) only", :id => "listing_screen_uploadBtn", :value => f.object.listing_screen_background_file_name, :action=> params[:action], :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenBackground.jpg", :rel=> "mobil_app_listing_screen_background", :title => "Listing Screen Background"}
 
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
-          .bs-component
+          .bs-component{:style => "display: #{(f.object.application_type == 'multi event' or params[:action] == "new") ? "" : "none"}"}
             .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
               .span.col-lg-4
                 = f.label "Listing Screen Background (960X1600px) only ",:class =>"control-label", style: "float: right;"
@@ -108,7 +108,6 @@
                     Choose File 
                   = f.file_field :listing_screen_background,:id => "listing_screen_uploadBtn", :class=>"gui-file"
                   = text_field_tag("text_file_name","", id: "listing_screen_uploadBtn1", class: "gui-input", :value => "#{f.object.listing_screen_background_file_name.nil? ? "there is no Attachment Available !" : f.object.listing_screen_background_file_name}", :read_only => true)
-
 
         = f.custom_text_field_display :listing_screen_text_color, "Listing Screen Text Color *", :value => @mobile_application.listing_screen_text_color, :class => 'pick-a-color', :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenTextColor.jpg", :rel=> "mobil_app_listing_screen_text_color", :title => "Listing Screen Text Color"}
 
