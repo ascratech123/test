@@ -90,8 +90,10 @@ class Poll < ActiveRecord::Base
   def set_time
     start_date = self.poll_start_date_time.nil? ? Time.now : self.poll_start_date_time
     end_date = self.poll_end_date_time.nil? ? Time.now : self.poll_end_date_time
-    self.poll_start_date_time = "#{start_date.strftime('%d/%m/%Y')} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "") rescue nil}:#{0} #{self.start_time_am}"
-    self.poll_end_date_time = "#{end_date.strftime('%d/%m/%Y')} #{self.end_time_hour.gsub(':', "") rescue nil}:#{self.end_time_minute.gsub(':', "") rescue nil}:#{0} #{self.end_time_am}"
+    start_date_time = "#{start_date.strftime('%d/%m/%Y')} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "") rescue nil}:#{0} #{self.start_time_am}"
+    end_date_time = "#{end_date.strftime('%d/%m/%Y')} #{self.end_time_hour.gsub(':', "") rescue nil}:#{self.end_time_minute.gsub(':', "") rescue nil}:#{0} #{self.end_time_am}"
+    self.poll_start_date_time = start_date_time.to_time rescue nil
+    self.poll_end_date_time = end_date_time.to_time rescue nil
   end
 
   def time_format

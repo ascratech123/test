@@ -28,7 +28,7 @@
                 - @log_changes.each do |log_change|         
                   %tr
                     %td.font16
-                      = log_change.created_at.strftime('%d/%m/%Y %H:%M')
+                      = get_datetime(log_change.created_at)
                     %td.font16
                       - user = log_change.user
                       = user.first_name rescue nil

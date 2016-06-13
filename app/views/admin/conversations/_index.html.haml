@@ -45,7 +45,7 @@
             = ""
         %td.font16= conversation.user_name
         %td.font16= conversation.get_company_name
-        %td.font16= conversation.created_at.to_s.gsub("UTC", "") rescue nil
+        %td.font16= time_with_zone(conversation.created_at, 'IST')
         %td.IconDrp
           = more_vert_button(conversation.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{conversation.id}"}

@@ -59,9 +59,9 @@
             = f.custom_text_field_date :push_datetime, "Push Time", :id => "date-start", :value => f.object.push_datetime.present? ? f.object.push_datetime.strftime('%d/%m/%Y') : '' 
             .col-lg-3.timeDropdown
               .timeTab
-                = f.custom_text_field_date :push_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.push_datetime.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2'
-                = f.custom_text_field_date :push_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.push_datetime.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2'
-                = f.custom_text_field_date :push_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.push_datetime.strftime('%p') rescue nil}", :col => '3'
+                = f.custom_text_field_date :push_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.push_datetime, 'hour')}", :col => '2'
+                = f.custom_text_field_date :push_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.push_datetime, 'minute')}", :col => '2'
+                = f.custom_text_field_date :push_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{get_hour_minute_second_ampm(f.object.push_datetime, 'ampm')}", :col => '3'
       = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
     .fixed-activon-btn-new  
       = f.custom_submit_button "SEND"

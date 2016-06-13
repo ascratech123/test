@@ -42,7 +42,7 @@
                         = show_field_newQuestion("Answer : ", description.description) rescue nil
                       = show_field("Name : ", user.first_name) rescue nil
                       / = show_field("Company : ", user.company_name) rescue nil
-                      = show_field("Date : ", description.created_at.strftime('%d-%m-%Y %H:%M')) rescue nil
+                      = show_field("Date : ", get_datetime(description.created_at)) rescue nil
                       .feedbackBorder  
                   - else
                     .p-20
