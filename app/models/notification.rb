@@ -61,7 +61,7 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).to_formatted_s(:db), (Time.now - 10.minutes).to_formatted_s(:db))
+    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.zone.now).to_formatted_s(:db), (Time.zone.now - 10.minutes).to_formatted_s(:db))
     if notifications.present?
       notifications.each do |notification|
         event = notification.event
@@ -101,6 +101,7 @@ class Notification < ActiveRecord::Base
         time = self.push_datetime
         b_count = 1
         ios_devices.each do |device|
+          ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
           Rails.logger.info("***********#{device.token}***************#{device.email}********************")
           self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
         end
@@ -110,7 +111,7 @@ class Notification < ActiveRecord::Base
   end
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end
@@ -159,7 +160,9 @@ class Notification < ActiveRecord::Base
 
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
-      self.push_datetime = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
+      time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
+      time = time.to_time rescue nil
+      self.push_datetime = time
     end
   end
 
