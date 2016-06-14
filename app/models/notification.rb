@@ -95,6 +95,8 @@ class Notification < ActiveRecord::Base
       end
       PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, 1) if android_devices.present?
     end
+    self.update_column(:pushed, true)
+    self.update_column(:push_datetime, Time.now)
   end
 
   def self.get_action_based_invitees(invitees, notification_type)
