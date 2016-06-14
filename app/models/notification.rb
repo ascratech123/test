@@ -101,6 +101,7 @@ class Notification < ActiveRecord::Base
         time = self.push_datetime
         b_count = 1
         ios_devices.each do |device|
+          Rails.logger.info("***********#{token}***************#{device.email}********************")
           self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
         end
       end
@@ -109,7 +110,6 @@ class Notification < ActiveRecord::Base
   end
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
-    Rails.logger.info("******************************#{token}****************************************************")
     notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
