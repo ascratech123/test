@@ -61,7 +61,7 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.zone.now).to_formatted_s(:db), (Time.zone.now - 10.minutes).to_formatted_s(:db))
+    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).to_formatted_s(:db), (Time.now - 10.minutes).to_formatted_s(:db))
     if notifications.present?
       notifications.each do |notification|
         event = notification.event
@@ -160,9 +160,7 @@ class Notification < ActiveRecord::Base
 
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
-      time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
-      time = time.to_time rescue nil
-      self.push_datetime = time
+      self.push_datetime = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
     end
   end
 
