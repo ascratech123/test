@@ -1,4 +1,6 @@
 class Notification < ActiveRecord::Base
+  require 'rubygems'
+  require 'aws-sdk'
   require 'push_notification'
   ACTION_TO_PAGE_HSH = {'Group Notification' => 'Group','Agenda Rating' => 'Agenda', 'Agenda Favorite' => 'Agenda', 'Speaker Rating' => 'Speaker', 'Speaker Favorite' => 'Speaker', 'Invitee Favorite​' => 'Invitee', 'Sponsors Favorite' => 'Sponsor', 'Sponsors' => 'Sponsor', 'Exhibitors Favorite​​' => 'Exhibitor', 'Polls Taken' => 'Poll', 'Feedback Submitted' => 'Feedback', 'Quiz Answered' => 'Quiz', 'Question Asked' => 'Q&A', 'QR code scanned' => 'QR code', 'Event Highlight' => 'Event Highlight', 'Event Listing' => 'Event Listing', 'Quiz' => 'Quiz', 'Q&A' => 'Q&A', 'Speaker' => 'Speaker', 'Invitee' => 'Invitee', 'Profile' => 'Profile', 'Feedback' => 'Feedback', 'Agenda' => 'Agenda', 'Quiz' => 'Quiz', 'Poll' => 'Poll', 'Leaderboard' => 'Leaderboard', 'FAQ' => 'FAQ', 'About' => 'About', 'Conversation' => 'Conversation', 'E-Kit' => 'E-Kit', 'Award' => 'Award', 'Contact' => 'Contact', 'Sponsor' => 'Sponsor', 'Gallery' => 'Gallery', 'Emergency Exit' => 'Emergency Exit', 'Note' => 'Note', 'Venue' => 'Venue', 'Custom Page1' => 'Custom Page1', 'Custom Page2' => 'Custom Page2', 'Custom Page3' => 'Custom Page3', 'Custom Page4' => 'Custom Page4', 'Custom Page5' => 'Custom Page5', 'My Travel' => 'My Travel', 'Exhibitor' => 'Exhibitor', 'My Favorite' => 'My Favorite', 'QR code' => 'QR code'}
   
@@ -92,13 +94,25 @@ class Notification < ActiveRecord::Base
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
       android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
       if ios_devices.present?
+        msg = self.description
+        push_page = self.push_page
+        type = self.group_ids.present? ? self.group_ids : 'All'
+        page_id = 0
+        time = self.push_datetime
+        b_count = 1
         ios_devices.each do |device|
-          Rails.logger.info("******************************#{device.token}****************#{device.email}************************************")
-          PushNotification.push_to_ios(device.token, self, push_pem_file, ios_obj, 1)
+          self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
         end
       end
       PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, 1) if android_devices.present?
     end
+  end
+
+  def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
+    Rails.logger.info("******************************#{token}****************************************************")
+    notification = Grocer::Notification.new("device_token" => 'e76ec766bf7f1ef4dcdcc140c075f6304e1d98a7b81ff5b9de26848a34231067', "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
+    response = ios_obj.push(notification)
+    Rails.logger.info("******************************#{response}****************************************************")
   end
 
   def self.get_action_based_invitees(invitees, notification_type)
