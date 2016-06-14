@@ -40,15 +40,16 @@ class Notification < ActiveRecord::Base
         end  
         invitee_ids = invitee_ids.uniq rescue []
         invitees = Invitee.where("id IN(?)", invitee_ids)
+        mobile_application = self.event.mobile_application
+        push_pem_file = mobile_application.push_pem_file if mobile_application.present?
+      # invitees = Notification.get_action_based_invitees(invitees, self.action)
+        if mobile_application.present? and mobile_application.push_pem_file.present?
+          PushNotification.push_notification(self, invitees, mobile_application.id)
+        end
       else
         invitees = self.event.invitees
-      end
-
-      # invitees = Notification.get_action_based_invitees(invitees, self.action)
-      mobile_application = self.event.mobile_application
-      push_pem_file = mobile_application.push_pem_file if mobile_application.present?
-      if mobile_application.present? and mobile_application.push_pem_file.present?
-        PushNotification.push_notification(self, invitees, mobile_application.id)
+        objects = event.invitees
+        self.send_to_all
       end
     end
   end
@@ -69,14 +70,30 @@ class Notification < ActiveRecord::Base
             end  
             invitee_ids = invitee_ids.uniq rescue []
             objects = Invitee.where("id IN(?)", invitee_ids)
+            PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
           else
             objects = event.invitees
+            notification.send_to_all
           end
-          #objects = event.invitees #if notification.notify_type == "group" and notification.notify_to == "invitees"
-          #objects = event.speakers if notification.notify_type == "group" and notification.notify_to == "speakers"
-          PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
         end
       end
+    end
+  end
+
+  def send_to_all
+    mobile_application_id = self.event.mobile_application_id rescue nil
+    if mobile_application_id.present?
+      push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
+      ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
+      if ios_devices.present?
+        ios_devices.each do |device|
+          Rails.logger.info("******************************#{device.token}****************#{device.email}************************************")
+          PushNotification.push_to_ios(device.token, self, push_pem_file, ios_obj, 1)
+        end
+      end
+      PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, 1) if android_devices.present?
     end
   end
 
