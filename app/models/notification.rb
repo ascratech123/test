@@ -101,7 +101,7 @@ class Notification < ActiveRecord::Base
         time = self.push_datetime
         b_count = 1
         ios_devices.each do |device|
-          Rails.logger.info("***********#{token}***************#{device.email}********************")
+          Rails.logger.info("***********#{device.token}***************#{device.email}********************")
           self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
         end
       end
