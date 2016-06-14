@@ -446,6 +446,22 @@ function flightTime() {
     }
   });
 
+  /* Event _Form  start */
+    // $('#selectAll').click(function() {
+    //   $(':checkbox').each(function() {
+    //     this.checked = true;                        
+    //   });
+    // });  
+
+    // $('#unSelectAll').click(function() {
+    //   $(':checkbox').each(function() {
+    //     this.checked = false;                        
+    //   });
+    // });
+  /* Event _Form  End */
+
+
+
     // $('.owl-carousel').owlCarousel({
     //   margin:10,
     //   responsiveClass:true,

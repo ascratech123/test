@@ -97,23 +97,3 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-:javascript
-
-  $('#selectAll').click(function() {
-    $(':checkbox').each(function() {
-      this.checked = true;                        
-    });
-  });  
-
-  $('#unSelectAll').click(function() {
-    $(':checkbox').each(function() {
-      this.checked = false;                        
-    });
-  });     
-
-:javascript
-  $(window).load(function(){
-  flightTime();
-  minutes();
-  times();  
-  })
