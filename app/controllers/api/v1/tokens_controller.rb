@@ -205,9 +205,9 @@ class Api::V1::TokensController < ApplicationController
     if (params[:token].present? and params[:platform].present?) and @mobile_application.present?
       device = Device.where(:token => params[:token]).first
       if device.present?
-        device.update(:invitee_id =>  @user.id,:email => @user.email, :mobile_application_id => @mobile_application.id)
+        device.update(:invitee_id =>  @user.id,:email => @user.email, :mobile_application_id => @mobile_application.id, :enabled => 'true')
       else
-        Device.create(:invitee_id => @user.id, :token => params[:token], :platform => params[:platform], :email => @user.email,:mobile_application_id => @mobile_application.id)
+        Device.create(:invitee_id => @user.id, :token => params[:token], :platform => params[:platform], :email => @user.email,:mobile_application_id => @mobile_application.id, :enabled => 'true')
       end
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Mobile Application Code Invalid and device token cant be blank."} and return
