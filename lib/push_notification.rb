@@ -56,7 +56,7 @@ module PushNotification
     push_page = notification.push_page
     type = notification.group_ids.present? ? notification.group_ids : 'All'
     page_id = 0
-    time = notification.push_datetime.utc rescue ''
+    time = notification.push_datetime
     notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
@@ -68,7 +68,7 @@ module PushNotification
     push_page = notification.push_page
     type = notification.group_ids.present? ? notification.group_ids : 'All'
     page_id = 0
-    time = notification.push_datetime.utc rescue ''
+    time = notification.push_datetime
     options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => push_pem_file.title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time}}
     response = gcm_obj.send(tokens, options)
     puts "******************************#{response}*************response of gcm***************************************"

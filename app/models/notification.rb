@@ -13,7 +13,7 @@ class Notification < ActiveRecord::Base
 
   
   validates_attachment_content_type :image, :content_type => ["image/png", "image/JPEG", "image/jpeg", "image/jpg", "image/jpeg"]
-  validates_attachment_size :image, :less_than => 1.megabytes
+  validates_attachment_size :image, :less_than => 100.kilobytes
   # validate :image_dimensions
 
   belongs_to :resourceable, polymorphic: true
