@@ -39,8 +39,8 @@ class Chat < ActiveRecord::Base
   def send_to_receivers(receivers, mobile_application, push_pem_file, ios_obj)
     receivers.each do |receiver|
       b_count = receiver.get_badge_count
-      ios_devices = receiver.devices.where(:platform => 'ios', :mobile_application_id => mobile_application.id)
-      android_devices = receiver.devices.where(:platform => 'android', :mobile_application_id => mobile_application.id)
+      ios_devices = receiver.devices.where(:platform => 'ios', :mobile_application_id => mobile_application.id).where.not(:enabled => "false")
+      android_devices = receiver.devices.where(:platform => 'android', :mobile_application_id => mobile_application.id).where.not(:enabled => "false")
       if ios_devices.present?
         ios_devices.each do |device|
           Rails.logger.info("***********#{device.platform}*******************#{device.token}***************#{device.email}*************************************")
