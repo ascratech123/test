@@ -101,6 +101,7 @@ class Notification < ActiveRecord::Base
         time = self.push_datetime
         b_count = 1
         ios_devices.each do |device|
+          ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
           Rails.logger.info("***********#{device.token}***************#{device.email}********************")
           self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
         end
@@ -110,7 +111,8 @@ class Notification < ActiveRecord::Base
   end
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
+    Rails.logger.info("******************************#{notification.inspect}****************************************************")
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end
