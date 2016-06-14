@@ -84,6 +84,8 @@ class Notification < ActiveRecord::Base
 
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
+    self.update_column(:pushed, true)
+    self.update_column(:push_datetime, Time.now)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
       ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
@@ -97,8 +99,6 @@ class Notification < ActiveRecord::Base
       end
       PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, 1) if android_devices.present?
     end
-    self.update_column(:pushed, true)
-    self.update_column(:push_datetime, Time.now)
   end
 
   def self.get_action_based_invitees(invitees, notification_type)
