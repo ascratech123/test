@@ -19,7 +19,20 @@
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:invitee_id].join("") rescue nil 
-        = f.new_custom_file_browser_field :attach_file, "Attach File (pdf) upto 10mb only *", :id => "uploadBtn", :value => f.object.attach_file_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+        = f.custom_text_field :attach_file_1_name, "File Name 1 *","background" => "false"
+        = f.new_custom_file_browser_field :attach_file, "Attach File 1(pdf) upto 10mb only *", :id => "uploadBtn1", :value => f.object.attach_file_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+
+        = f.custom_text_field :attach_file_2_name, "File Name 2","background" => "false"
+        = f.new_custom_file_browser_field :attach_file_2, "Attach File 2(pdf) upto 10mb only", :id => "uploadBtn2", :value => f.object.attach_file_2_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+
+        = f.custom_text_field :attach_file_3_name, "File Name 3","background" => "false"
+        = f.new_custom_file_browser_field :attach_file_3, "Attach File 3(pdf) upto 10mb only", :id => "uploadBtn3", :value => f.object.attach_file_3_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+
+        = f.custom_text_field :attach_file_4_name, "File Name 4","background" => "false"
+        = f.new_custom_file_browser_field :attach_file_4, "Attach File 4(pdf) upto 10mb only", :id => "uploadBtn4", :value => f.object.attach_file_4_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+
+        = f.custom_text_field :attach_file_5_name, "File Name 5","background" => "false"
+        = f.new_custom_file_browser_field :attach_file_5, "Attach File 5(pdf) upto 10mb only", :id => "uploadBtn5", :value => f.object.attach_file_5_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

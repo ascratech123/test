@@ -52,16 +52,64 @@ module ExcelImportMyTravel
       end
       event = Event.find_by_id(event_id)
       invitee_id = event.invitees.find_by_email(objekt["invitee_email"]).id rescue nil
-      url = objekt["pdf_url"] rescue nil
-      data = open(url).read
-      write_file_content = File.open("public/#{url.split("/").last.split("-").last.split("?").first}", 'wb') do |f|
-        f.write(data)
+      if objekt["file_1_url"].present?
+        url1 = objekt["file_1_url"] rescue nil
+        data = open(url1).read
+        write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        attach_file_1 = (File.open("public/#{url1.split('/').last}",'rb'))
       end
-      attach_file = (File.open("public/#{url.split("/").last.split("-").last.split("?").first}",'rb'))
+      if objekt["file_2_url"].present?
+        url2 = objekt["file_2_url"] rescue nil
+        data = open(url2).read
+        write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        attach_file_2 = (File.open("public/#{url2.split('/').last}",'rb'))
+      end
+      if objekt["file_3_url"].present?
+        url3 = objekt["file_3_url"] rescue nil
+        data = open(url3).read
+        write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        attach_file_3 = (File.open("public/#{url3.split('/').last}",'rb'))
+      end
+      if objekt["file_4_url"].present?
+        url4 = objekt["file_4_url"] rescue nil
+        data = open(url4).read
+        write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        attach_file_4 = (File.open("public/#{url4.split('/').last}",'rb'))
+      end
+      if objekt["file_5_url"].present?
+        url5 = objekt["file_5_url"] rescue nil
+        data = open(url5).read
+        write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
+      end
+      # my_travel = MyTravel.new(:event_id => event_id,:invitee_id => invitee_id,:attach_file => attach_file_1,:attach_file_1_name => objekt["file_name_1"],:attach_file_2 => attach_file_2,:attach_file_2_name => objekt["file_name_2"],:attach_file_3 => attach_file_3,:attach_file_3_name => objekt["file_name_3"],:attach_file_4 => attach_file_4,:attach_file_4_name => objekt["file_name_4"],:attach_file_5 => attach_file_5,:attach_file_5_name => objekt["file_name_5"])
       my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
-      my_travel.attach_file = attach_file
+      my_travel.attach_file = attach_file_1
+      my_travel.attach_file_1_name = objekt["file_name_1"]
+      my_travel.attach_file_2 = attach_file_2
+      my_travel.attach_file_2_name = objekt["file_name_2"]
+      my_travel.attach_file_3 = attach_file_3
+      my_travel.attach_file_3_name = objekt["file_name_3"]
+      my_travel.attach_file_4 = attach_file_4
+      my_travel.attach_file_4_name = objekt["file_name_4"]
+      my_travel.attach_file_5 = attach_file_5
+      my_travel.attach_file_5_name = objekt["file_name_5"]
       objekts << my_travel
-      File.delete("public/#{url.split("/").last.split("-").last.split("?").first}") if File.exist?("public/#{url.split("/").last.split("-").last.split("?").first}")
+      File.delete("public/#{url1.split('/').last}") if url1.present? and File.exist?("public/#{url1.split('/').last}")
+      File.delete("public/#{url2.split('/').last}") if url2.present? and File.exist?("public/#{url2.split('/').last}")
+      File.delete("public/#{url3.split('/').last}") if url3.present? and File.exist?("public/#{url3.split('/').last}")
+      File.delete("public/#{url4.split('/').last}") if url4.present? and File.exist?("public/#{url4.split('/').last}")
+      File.delete("public/#{url5.split('/').last}") if url5.present? and File.exist?("public/#{url5.split('/').last}")
     end
     objekts.compact
   end

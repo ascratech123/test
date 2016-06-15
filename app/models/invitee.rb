@@ -467,6 +467,9 @@ class Invitee < ActiveRecord::Base
   def self.get_invitee_name(id)
     Invitee.find(id).name_of_the_invitee
   end
+  def self.get_invitee_email(id)
+    Invitee.find(id).email
+  end
 
   def get_invitee_name
     self.name_of_the_invitee
