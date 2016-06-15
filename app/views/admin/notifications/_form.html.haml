@@ -24,8 +24,21 @@
                 (View Available Groups)
             .col-lg-7.notification
               -# default_group_list = [['No Polls taken', 'No Polls taken'], ['No Feedback given', 'No Feedback given'], ['No Quiz taken', 'No Quiz taken'], ['No Q&A', 'No Q&A'], ['NO QR code scanned', 'NO QR code scanned'], ['No Chat', 'No Chat']]
-              - default_group_list = @groups.collect{|group| [ group.name, group.id ]}
-              - default_group_list.each do |group|
+              - default_group_list = @default_groups.collect{|group| [ group.name, group.id ]}
+              - default_group_list.each_with_index do |group, index|
+                - if index == 0
+                  .usersep
+                    Default Groups
+                .md-checkbox
+                  %label
+                    = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+                    %span.checkbox 
+                    = group[0]
+              - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
+              - default_group_list.each_with_index do |group, index|
+                - if index == 0
+                  .usersep
+                    Groups created by you
                 .md-checkbox
                   %label
                     = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"

@@ -90,7 +90,6 @@ class Notification < ActiveRecord::Base
     self.update_column(:push_datetime, Time.now)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
       android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
       if ios_devices.present?
