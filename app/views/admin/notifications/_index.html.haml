@@ -15,7 +15,7 @@
       %th
         - objs.each do |notification|
           %tr
-            %td.font16= notification.description rescue nil
+            %td.font16.notiTabinfo= notification.description rescue nil
             %td.font16= notification.push_page rescue nil
             %td.font16= notification.page_id rescue nil
             %td.font16= notification.push_datetime.strftime("%d-%m-%Y %H:%M") rescue nil
