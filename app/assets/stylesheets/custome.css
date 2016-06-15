@@ -12,8 +12,11 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
+#invitee_group_invitee_ids{border: 1px solid #d7d7d7;}
+#invitee_group_invitee_ids option{padding-bottom: 5px;}
 .col-lg-7.notific .field_with_errors{margin-left: -20px; margin-top: -4px;}
-.col-lg-7.notification {height: 200px;overflow-y: scroll; margin-bottom: 10px;}
+.col-lg-7.notification {height: 200px;overflow-y: scroll; margin-bottom: 10px;border: 1px solid #d7d7d7; padding: 0px;}
 .notification .md-checkbox{display: block; min-height: 30px;}
 .notification .md-checkbox .checkbox{min-height: 20px;}
 .notification .md-checkbox .checkbox{padding-top: 0px;}
