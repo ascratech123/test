@@ -12,7 +12,7 @@ class Invitee < ActiveRecord::Base
   has_many :comments, :class_name => 'Comment', :foreign_key => 'user_id'  
   has_many :favorites, as: :favoritable, :dependent => :destroy
   has_many :ratings, :class_name => 'Rating', :foreign_key => 'rated_by'  
-  has_one :my_travel
+  has_one :my_travel, :dependent => :destroy
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
@@ -466,6 +466,9 @@ class Invitee < ActiveRecord::Base
 
   def self.get_invitee_name(id)
     Invitee.find(id).name_of_the_invitee
+  end
+  def self.get_invitee_email(id)
+    Invitee.find(id).email
   end
 
   def name_with_email
