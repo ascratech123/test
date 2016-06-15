@@ -1,36 +1,11 @@
 class MyTravel < ActiveRecord::Base
   belongs_to :event
   belongs_to :invitee
-  has_attached_file :attach_file, {:styles => {:large => "640x640>",:small => "200x200>",
-    :thumb => "60x60>"},
-    :convert_options => {:large => "-strip -quality 90", 
-                          :small => "-strip -quality 80", 
-                          :thumb => "-strip -quality 80"}
-                        }.merge(ATTACH_FILE_PATH)
-  has_attached_file :attach_file_2, {:styles => {:large => "640x640>",:small => "200x200>",
-    :thumb => "60x60>"},
-    :convert_options => {:large => "-strip -quality 90", 
-                          :small => "-strip -quality 80", 
-                          :thumb => "-strip -quality 80"}
-                        }.merge(ATTACH_FILE_2_PATH)
-  has_attached_file :attach_file_3, {:styles => {:large => "640x640>",:small => "200x200>",
-    :thumb => "60x60>"},
-    :convert_options => {:large => "-strip -quality 90", 
-                          :small => "-strip -quality 80", 
-                          :thumb => "-strip -quality 80"}
-                        }.merge(ATTACH_FILE_3_PATH)
-  has_attached_file :attach_file_4, {:styles => {:large => "640x640>",:small => "200x200>",
-    :thumb => "60x60>"},
-    :convert_options => {:large => "-strip -quality 90", 
-                          :small => "-strip -quality 80", 
-                          :thumb => "-strip -quality 80"}
-                        }.merge(ATTACH_FILE_4_PATH)
-  has_attached_file :attach_file_5, {:styles => {:large => "640x640>",:small => "200x200>",
-    :thumb => "60x60>"},
-    :convert_options => {:large => "-strip -quality 90", 
-                          :small => "-strip -quality 80", 
-                          :thumb => "-strip -quality 80"}
-                        }.merge(ATTACH_FILE_5_PATH)
+  has_attached_file :attach_file, {}.merge(ATTACH_FILE_PATH)
+  has_attached_file :attach_file_2, {}.merge(ATTACH_FILE_2_PATH)
+  has_attached_file :attach_file_3, {}.merge(ATTACH_FILE_3_PATH)
+  has_attached_file :attach_file_4, {}.merge(ATTACH_FILE_4_PATH)
+  has_attached_file :attach_file_5, {}.merge(ATTACH_FILE_5_PATH)
 
 validates_attachment :attach_file,:attach_file_2,:attach_file_3,:attach_file_4,:attach_file_5, size: { in: 0..10.megabytes, :message => "upload file upto 10 mb" }
 #do_not_validate_attachment_file_type :attach_file
