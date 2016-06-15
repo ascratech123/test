@@ -23,7 +23,7 @@
         %td.font16= ques_answer.get_speaker_name
         %td.font16= ques_answer.get_user_name
         %td.font16= ques_answer.get_company_name
-        %td.font16= ques_answer.created_at.to_s.gsub("UTC", "") rescue nil
+        %td.font16= get_datetime(ques_answer.created_at) rescue nil
         %td.font16
           = ques_answer.status
         %td.font16

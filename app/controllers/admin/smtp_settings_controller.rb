@@ -2,7 +2,7 @@ class Admin::SmtpSettingsController < ApplicationController
   layout 'admin'
 
   before_filter :authenticate_user, :find_smtp_setting
-  before_filter :set_back_url, :only => [:create,:update]
+  before_filter :set_back_url, :only => [:new,:edit]
   def index
 
   end
@@ -18,6 +18,8 @@ class Admin::SmtpSettingsController < ApplicationController
   def create
     @smtp_setting = SmtpSetting.new(smtp_setting_params)
     if @smtp_setting.save
+      @url = session[:smtp_url]
+      session[:smtp_url] = nil
       redirect_to (@url || "/")
     else
       render :action => 'new'
@@ -29,6 +31,8 @@ class Admin::SmtpSettingsController < ApplicationController
 
   def update
     if @smtp_setting.update_attributes(smtp_setting_params)
+      @url = session[:smtp_url]
+      session[:smtp_url] = nil
       redirect_to (@url || "/")
     else
       render :action => "edit"
@@ -58,6 +62,7 @@ class Admin::SmtpSettingsController < ApplicationController
   end
 
   def set_back_url
-    @url = session[:smtp_url].include?(params[:smtp_setting][:smtp_url]) ? params[:smtp_setting][:smtp_url] : nil if params[:smtp_setting][:smtp_url].present?
+    session[:smtp_url] = request.referer 
+    @url = session[:smtp_url] 
   end
 end

@@ -121,7 +121,7 @@ class EventFeature < ActiveRecord::Base
   end
 
   def create_default_invitee_groups
-    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A Participation', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
     if invitee_groups[self.name].present? and InviteeGroup.where(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name]).blank?
       invitee_group = InviteeGroup.new(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name])
       invitee_group.save
@@ -129,7 +129,7 @@ class EventFeature < ActiveRecord::Base
   end
 
   def delete_default_invitee_groups
-    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A Participation', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
     invitee_group = InviteeGroup.where(:event_id => self.event_id, :name => invitee_groups[self.name]).first
     invitee_group.destroy if invitee_group.present?
   end

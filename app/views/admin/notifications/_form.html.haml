@@ -5,13 +5,13 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10.m-b-15
           General Information
-      = f.custom_text_field :description, "Text *","background" => "false"
+      = f.custom_text_field :description, "Text (upto 200) *","background" => "false"
       - if !Rails.env.production?
-        = f.new_custom_file_browser_field :image, "Notification Image", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
+        = f.new_custom_file_browser_field :image, "Image (less than 100 KB)", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Select Type
+              %p.displayInlineBlock.multicitytxt  Send to *
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
               = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
@@ -40,7 +40,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
-              Select Destination
+              Destination
             .col-lg-7
               %i.arrow.single
               - grouped_options = get_notification_type_group_array(@event)
@@ -48,10 +48,10 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
-            %p.displayInlineBlock.multicitytxt  Select Time
+            %p.displayInlineBlock.multicitytxt  Select Time *
           .col-lg-7.p-h-12 
-            = f.custom_radio_button_menu :push_timing, "now","Push Now", :id => 'option3', :default_checked => (f.object.push_timing == 'now' or f.object.push_timing.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :push_timing, "later","Push Time", :id => 'option4', :default_checked => (f.object.push_timing == 'later') ? 'checked' : ''
+            = f.custom_radio_button_menu :push_timing, "now","Now", :id => 'option3', :default_checked => (f.object.push_timing == 'now' or f.object.push_timing.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :push_timing, "later","Set Time", :id => 'option4', :default_checked => (f.object.push_timing == 'later') ? 'checked' : ''
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{:style => ((f.object.push_timing == 'now' or f.object.push_timing.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px')}
         .bs-component
           .form-group

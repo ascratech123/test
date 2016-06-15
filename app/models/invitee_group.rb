@@ -10,7 +10,7 @@ class InviteeGroup < ActiveRecord::Base
   end
 
   def default_logical_group?
-    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'].include? self.name
       true
     else
       false
@@ -19,7 +19,7 @@ class InviteeGroup < ActiveRecord::Base
 
   def get_invitee_ids
     invitee_ids = []
-    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A', 'No Participation in Conversations', 'No Favorites added'].include? self.name
+    if ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'].include? self.name
       case self.name
       when 'No Polls taken'
         invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => self.event_id).pluck(:invitee_id).uniq
@@ -30,7 +30,7 @@ class InviteeGroup < ActiveRecord::Base
       when 'No Quiz taken'
         invitee_ids = Analytic.where(:action => 'played', :viewable_type => 'Quiz', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
-      when 'No Q&A'
+      when 'No Q&A Participation'
         invitee_ids = Analytic.where(:action => 'question asked', :viewable_type => 'Q&A', :event_id => self.event_id).pluck(:invitee_id).uniq
         invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Participation in Conversations'

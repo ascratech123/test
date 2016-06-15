@@ -59,7 +59,7 @@
                 My Profile
             - if (current_user.has_role? "licensee_admin" or current_user.has_role? "client_admin" or current_user.has_role? "event_admin")
               %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
-                = link_to "Smtp Setting", new_admin_smtp_setting_path(:smtp_url => "#{request.url}"),:class =>'logoutwieght'
+                = link_to "Smtp Setting", new_admin_smtp_setting_path(),:class =>'logoutwieght'
                 / %a{:href =>"/admin/smtp_settings/new",:class => "logoutwieght"}
                 /   Smtp Setting
             %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
