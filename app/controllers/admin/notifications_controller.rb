@@ -2,7 +2,7 @@ class Admin::NotificationsController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :find_groups
+  before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :find_groups, :only => [:new, :create, :edit, :update]
   def index
     @notifications = @notifications.paginate(:page => params[:page], :per_page => 10)
