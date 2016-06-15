@@ -111,8 +111,7 @@ class Notification < ActiveRecord::Base
   end
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
-    Rails.logger.info("******************************#{notification.inspect}****************************************************")
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end
@@ -161,9 +160,7 @@ class Notification < ActiveRecord::Base
 
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
-      time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
-      time = time.to_time rescue nil
-      self.push_datetime = time
+      self.push_datetime = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
     end
   end
 
