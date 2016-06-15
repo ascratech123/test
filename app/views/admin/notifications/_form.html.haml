@@ -61,14 +61,14 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
-            %p.displayInlineBlock.multicitytxt  Select Time *
+            %p.displayInlineBlock.multicitytxt  Push Time *
           .col-lg-7.p-h-12 
             = f.custom_radio_button_menu :push_timing, "now","Now", :id => 'option3', :default_checked => (f.object.push_timing == 'now' or f.object.push_timing.blank?) ? 'checked' : ''
             = f.custom_radio_button_menu :push_timing, "later","Set Time", :id => 'option4', :default_checked => (f.object.push_timing == 'later') ? 'checked' : ''
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{:style => ((f.object.push_timing == 'now' or f.object.push_timing.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px')}
         .bs-component
           .form-group
-            %label.col-lg-4.control-label{:for => "Push Time"} Push Time(IST)
+            %label.col-lg-4.control-label{:for => "Push Time"} Set Time(IST)
             = f.custom_text_field_date :push_datetime, "Push Time", :id => "date-start", :value => f.object.push_datetime.present? ? f.object.push_datetime.strftime('%d/%m/%Y') : '' 
             .col-lg-3.timeDropdown
               .timeTab
