@@ -468,6 +468,10 @@ class Invitee < ActiveRecord::Base
     Invitee.find(id).name_of_the_invitee
   end
 
+  def get_invitee_name
+    self.name_of_the_invitee
+  end
+
   def name_with_email
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
