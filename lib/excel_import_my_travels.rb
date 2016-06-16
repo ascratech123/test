@@ -104,6 +104,7 @@ module ExcelImportMyTravel
       my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
       my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
       my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
+      my_travel.comment_box = objekt["comment_box"]
       objekts << my_travel
       File.delete("public/#{url1.split('/').last}") if url1.present? and File.exist?("public/#{url1.split('/').last}")
       File.delete("public/#{url2.split('/').last}") if url2.present? and File.exist?("public/#{url2.split('/').last}")
