@@ -10,7 +10,7 @@ module PushNotification
       notification.update_column(:push_datetime, Time.now)
       if objekts.present?
         arr = objekts.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
-        InviteeNotifivation.create(arr)
+        InviteeNotification.create(arr)
         push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
         ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
         objekts.each do |objekt|
