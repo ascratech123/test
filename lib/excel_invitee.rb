@@ -47,7 +47,8 @@ module ExcelInvitee
       objekt = nil
       objekt = {} #klass_name.classify.constantize.new()
       columns_in_worksheet.each_with_index do |attrib, index|
-        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
+        # objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
+        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(Numeric) ? (workbook.cell(line, letters_array[index]).to_s.strip rescue '') : (workbook.cell(line, letters_array[index]).strip rescue '')
       end
       email = objekt['email'].downcase rescue nil
       invitee = Invitee.find_or_initialize_by(:email => email, :event_id => event_id)
