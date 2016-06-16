@@ -204,8 +204,8 @@ module SyncMobileData
         chanages_done << SyncMobileData.create_record(value,"Invitee")  
       when "Analytic" 
         chanages_done << SyncMobileData.create_record(value,"Analytic")  
-      when "Notification" 
-        chanages_done << SyncMobileData.create_record(value,"Notification")  
+      when "InviteeNotification" 
+        chanages_done << SyncMobileData.create_record(value,"InviteeNotification")  
       end
     chanages_done  
   end

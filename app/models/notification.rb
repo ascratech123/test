@@ -4,7 +4,7 @@ class Notification < ActiveRecord::Base
   require 'push_notification'
   ACTION_TO_PAGE_HSH = {'Group Notification' => 'Group','Agenda Rating' => 'Agenda', 'Agenda Favorite' => 'Agenda', 'Speaker Rating' => 'Speaker', 'Speaker Favorite' => 'Speaker', 'Invitee Favorite​' => 'Invitee', 'Sponsors Favorite' => 'Sponsor', 'Sponsors' => 'Sponsor', 'Exhibitors Favorite​​' => 'Exhibitor', 'Polls Taken' => 'Poll', 'Feedback Submitted' => 'Feedback', 'Quiz Answered' => 'Quiz', 'Question Asked' => 'Q&A', 'QR code scanned' => 'QR code', 'Event Highlight' => 'Event Highlight', 'Event Listing' => 'Event Listing', 'Quiz' => 'Quiz', 'Q&A' => 'Q&A', 'Speaker' => 'Speaker', 'Invitee' => 'Invitee', 'Profile' => 'Profile', 'Feedback' => 'Feedback', 'Agenda' => 'Agenda', 'Quiz' => 'Quiz', 'Poll' => 'Poll', 'Leaderboard' => 'Leaderboard', 'FAQ' => 'FAQ', 'About' => 'About', 'Conversation' => 'Conversation', 'E-Kit' => 'E-Kit', 'Award' => 'Award', 'Contact' => 'Contact', 'Sponsor' => 'Sponsor', 'Gallery' => 'Gallery', 'Emergency Exit' => 'Emergency Exit', 'Note' => 'Note', 'Venue' => 'Venue', 'Custom Page1' => 'Custom Page1', 'Custom Page2' => 'Custom Page2', 'Custom Page3' => 'Custom Page3', 'Custom Page4' => 'Custom Page4', 'Custom Page5' => 'Custom Page5', 'My Travel' => 'My Travel', 'Exhibitor' => 'Exhibitor', 'My Favorite' => 'My Favorite', 'QR code' => 'QR code'}
   
-  attr_accessor :push_time_hour, :push_time_minute ,:push_time_am, :push_timing
+  attr_accessor :push_time_hour, :push_time_minute ,:push_time_am, :push_timing, :n_user
   serialize :group_ids, Array
 
   has_attached_file :image, {:styles => {:small => "200x200>", 
@@ -88,6 +88,9 @@ class Notification < ActiveRecord::Base
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
     self.update_column(:push_datetime, Time.now)
+    invitees = Invitee.where(:event_id => self.event_id)
+    arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
+    InviteeNotifivation.create(arr)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
@@ -187,5 +190,6 @@ class Notification < ActiveRecord::Base
   #   event_features.each do |feature|
 
   # end
+
 
 end
