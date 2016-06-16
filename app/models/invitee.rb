@@ -433,9 +433,9 @@ class Invitee < ActiveRecord::Base
     notification_ids = []
     notifications = notifications.where(:pushed => true)
     notifications.each do |notification|
-      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id) if user.present?
+      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?
-        notification_ids << notification.id if invitee_notification_ids.include? user.id#
+        notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
       else
         notification_ids << notification.id
       end
