@@ -89,7 +89,7 @@ class Notification < ActiveRecord::Base
     self.update_column(:pushed, true)
     self.update_column(:push_datetime, Time.now)
     invitees = Invitee.where(:event_id => self.event_id)
-    arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
+    arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotifivation.create(arr)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
