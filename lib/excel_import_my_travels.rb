@@ -94,16 +94,17 @@ module ExcelImportMyTravel
       end
       # my_travel = MyTravel.new(:event_id => event_id,:invitee_id => invitee_id,:attach_file => attach_file_1,:attach_file_1_name => objekt["file_name_1"],:attach_file_2 => attach_file_2,:attach_file_2_name => objekt["file_name_2"],:attach_file_3 => attach_file_3,:attach_file_3_name => objekt["file_name_3"],:attach_file_4 => attach_file_4,:attach_file_4_name => objekt["file_name_4"],:attach_file_5 => attach_file_5,:attach_file_5_name => objekt["file_name_5"])
       my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
-      my_travel.attach_file = attach_file_1
+      my_travel.attach_file = attach_file_1 
       my_travel.attach_file_1_name = objekt["file_name_1"]
-      my_travel.attach_file_2 = attach_file_2
-      my_travel.attach_file_2_name = objekt["file_name_2"]
-      my_travel.attach_file_3 = attach_file_3
-      my_travel.attach_file_3_name = objekt["file_name_3"]
-      my_travel.attach_file_4 = attach_file_4
-      my_travel.attach_file_4_name = objekt["file_name_4"]
-      my_travel.attach_file_5 = attach_file_5
-      my_travel.attach_file_5_name = objekt["file_name_5"]
+      my_travel.attach_file_2 = attach_file_2 if attach_file_2.present?
+      my_travel.attach_file_2_name = objekt["file_name_2"] if objekt["file_name_2"].present?
+      my_travel.attach_file_3 = attach_file_3 if attach_file_3.present?
+      my_travel.attach_file_3_name = objekt["file_name_3"] if objekt["file_name_3"].present?
+      my_travel.attach_file_4 = attach_file_4 if attach_file_4.present?
+      my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
+      my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
+      my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
+      my_travel.comment_box = objekt["comment_box"]
       objekts << my_travel
       File.delete("public/#{url1.split('/').last}") if url1.present? and File.exist?("public/#{url1.split('/').last}")
       File.delete("public/#{url2.split('/').last}") if url2.present? and File.exist?("public/#{url2.split('/').last}")

@@ -24,6 +24,7 @@ class Admin::MyTravelsController < ApplicationController
     @my_travel.attach_file_4_name = params[:my_travel][:attach_file_4_name] if params[:my_travel][:attach_file_4_name].present?
     @my_travel.attach_file_5 = params[:my_travel][:attach_file_5] if params[:my_travel][:attach_file_5].present?
     @my_travel.attach_file_5_name = params[:my_travel][:attach_file_5_name] if params[:my_travel][:attach_file_5_name].present?
+    @my_travel.comment_box = params[:my_travel][:comment_box]
     if @my_travel.save
       redirect_to admin_event_my_travels_path(:event_id => @event.id)
     else

@@ -7,7 +7,7 @@ class Api::V1::MyTravelsController < ApplicationController
     if @invitee.present?
       my_travel = @invitee.my_travel
       if my_travel.present?
-        render :staus => 200, :json => {:status => "Success",:my_travel => my_travel.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at], :methods => [:attached_url, :attachment_type])} rescue []
+        render :staus => 200, :json => {:status => "Success",:my_travel => my_travel.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type])} rescue []
       else
         render :status => 200, :json => {:status => "Failure", :message => "MyTravel Not Found."}
       end 
