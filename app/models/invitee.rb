@@ -89,7 +89,7 @@ class Invitee < ActiveRecord::Base
   end
 
   def set_auto_generated_password
-    if self.new_record? and self.invitee_password.blank? and self.email.present?
+    if self.new_record? and self.password.blank? and self.email.present?
       event_ids = self.event.mobile_application.events.pluck(:id) rescue []
       other_invitees = Invitee.where('email = ? and event_id IN (?) and invitee_password IS NOT NULL', self.email, event_ids)
       if other_invitees.present?
