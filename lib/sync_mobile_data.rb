@@ -86,7 +86,7 @@ module SyncMobileData
           info = Invitee.get_notification(info, current_user)
           data[:"notifications"] = info
         when 'InviteeNotification'
-          info = Invitee.get_read_notification(info, current_user)
+          info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
