@@ -33,8 +33,8 @@
 
         = f.custom_text_field :attach_file_5_name, "File Name 5","background" => "false"
         = f.new_custom_file_browser_field :attach_file_5, "Attach File 5(pdf) upto 10mb only", :id => "uploadBtn5", :value => f.object.attach_file_5_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
-        = f.custom_text_field :comment_box, "Comments text box","background" => "false"
-      .fixed-activon-btn-new  
+        = f.custom_text_field :comment_box, "Comment box (100 characters only)","background" => "false"
+      .fixed-activon-btn-new     
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
           .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
