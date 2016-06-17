@@ -457,6 +457,23 @@ class Invitee < ActiveRecord::Base
     notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
     notifications.present? ? notifications : []
   end
+
+  def get_read_notification(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
+  end
+
+  def self.get_read_notification(info, event_ids, current_user)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = InviteeNotification.where(:invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
+  end
   
   def get_licensee_admin
     self.event.client.licensee rescue nil
