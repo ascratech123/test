@@ -157,8 +157,8 @@
               .col-lg-4.mdl-typography--text-right
                 %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
               .col-lg-3.p-h-12   
-                = f.custom_radio_button_menu :social_media_status, "active","Active", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
-                = f.custom_radio_button_menu :social_media_status, "deactive","Deactive", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
+                = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
+                = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
 
       / .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
