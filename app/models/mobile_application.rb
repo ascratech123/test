@@ -83,7 +83,7 @@ class MobileApplication < ActiveRecord::Base
 
   def update_social_media_status
     if self.social_media_status.blank?
-      self.update_column(:social_media_status => 'deactive')
+      self.update_column(:social_media_status, 'deactive')
     end
   end
 
