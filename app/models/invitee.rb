@@ -470,7 +470,7 @@ class Invitee < ActiveRecord::Base
   def self.get_read_notification(info, event_ids, user)
     user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
     data = []
-    invitee_notifications = InviteeNotification.where(:invitee_id => user_ids) rescue nil
+    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
     data
   end
