@@ -20,6 +20,7 @@ class Notification < ActiveRecord::Base
 
   belongs_to :resourceable, polymorphic: true
   belongs_to :event
+  has_many :invitee_notifications, :dependent => :destroy
   validates :description,:event_id, presence: { :message => "This field is required." }
   validates_length_of :description, :maximum => 200, :message => "text must be less than 200 character"
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
