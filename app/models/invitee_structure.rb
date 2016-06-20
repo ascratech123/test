@@ -21,7 +21,11 @@ class InviteeStructure < ActiveRecord::Base
 
   def create_default_group
     if self.new_record?
-      Grouping.create(name: "Default Group", event_id: self.event_id)
+      Grouping.create(name: "Default Group", event_id: self.event_id, default_group: 'true')
     end
+  end
+
+  def check_invitee_data_present?
+    InviteeDatum.where(:invitee_structure_id => self.id).present?
   end
 end
