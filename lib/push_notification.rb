@@ -9,19 +9,9 @@ module PushNotification
       notification.update_column(:pushed, true)
       notification.update_column(:push_datetime, Time.now)
       if objekts.present?
+        arr = objekts.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
+        InviteeNotification.create(arr)
         push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-        # s3 = Aws::S3::Resource.new(
-        #   region: 'ap-southeast-1',
-        #   access_key_id: S3_access_key,
-        #   secret_access_key: S3_secret_access_key
-        # )
-        # key = push_pem_file.pem_file.url.split("#{S3_bucket}/").last.split("?").first
-        # s3.bucket(S3_bucket).object(key).get(response_target: "lib/isopushpemfile#{push_pem_file.id}.pem")
-
-        # data = open(push_pem_file.pem_file.url).read
-        # z = File.open("lib/isopushpemfile#{push_pem_file.id}.pem", 'wb') do |f|
-        #   f.write(data)
-        # end
         ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
         objekts.each do |objekt|
           PushNotification.push_to_user(objekt, notification, mobile_application_id, push_pem_file, ios_obj)
@@ -57,7 +47,7 @@ module PushNotification
     type = notification.group_ids.present? ? notification.group_ids : 'All'
     page_id = 0
     time = notification.push_datetime
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time})
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end
@@ -69,7 +59,7 @@ module PushNotification
     type = notification.group_ids.present? ? notification.group_ids : 'All'
     page_id = 0
     time = notification.push_datetime
-    options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => push_pem_file.title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time}}
+    options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => push_pem_file.title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id}}
     response = gcm_obj.send(tokens, options)
     puts "******************************#{response}*************response of gcm***************************************"
     Rails.logger.info("******************************#{response}***************response of gcm*************************************")

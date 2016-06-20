@@ -424,7 +424,7 @@ class Invitee < ActiveRecord::Base
           user.save
         end
         new_user = user
-      end   
+      end
     end
     new_user
   end
@@ -433,11 +433,9 @@ class Invitee < ActiveRecord::Base
     notification_ids = []
     notifications = notifications.where(:pushed => true)
     notifications.each do |notification|
+      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?
-        groups = InviteeGroup.where("id IN(?)", notification.group_ids)
-        invitee_ids = []
-        groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
-        notification_ids << notification.id if user.present? and invitee_ids.include? user.id.to_s
+        notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
       else
         notification_ids << notification.id
       end
@@ -456,8 +454,25 @@ class Invitee < ActiveRecord::Base
       groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
         notification_ids << notification.id if invitee_ids.include? self.id.to_s
     end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids])
+    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
     notifications.present? ? notifications : []
+  end
+
+  def get_read_notification(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
+  end
+
+  def self.get_read_notification(info, event_ids, user)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
   end
   
   def get_licensee_admin
@@ -466,6 +481,13 @@ class Invitee < ActiveRecord::Base
 
   def self.get_invitee_name(id)
     Invitee.find(id).name_of_the_invitee
+  end
+  def self.get_invitee_email(id)
+    Invitee.find(id).email
+  end
+
+  def get_invitee_name
+    self.name_of_the_invitee
   end
 
   def name_with_email

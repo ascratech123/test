@@ -73,6 +73,9 @@ class Ability
 
       can :create, Notification
       can :manage, Notification, :event_id => e_ids
+      can :create, InviteeNotification
+      can :manage, InviteeNotification, :event_id => e_ids
+
 
       can :create, Registration
       can :manage, Registration
@@ -180,6 +183,8 @@ class Ability
 
       can :create, Notification
       can :manage, Notification, :event_id => e_ids
+      can :create, InviteeNotification
+      can :manage, InviteeNotification, :event_id => e_ids
       can :create, Grouping
       can :manage, Grouping, :event_id => e_ids
 
@@ -284,6 +289,8 @@ class Ability
 
       can :create, Notification
       can :manage, Notification, :event_id => e_ids
+      can :create, InviteeNotification
+      can :manage, InviteeNotification, :event_id => e_ids
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
@@ -373,6 +380,8 @@ class Ability
       can :manage, Grouping, :event_id => e_ids
       can :create, Notification
       can :manage, Notification, :event_id => e_ids
+      can :create, InviteeNotification
+      can :manage, InviteeNotification, :event_id => e_ids
       
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -454,6 +463,8 @@ class Ability
       can :manage, Grouping, :event_id => e_ids
       can :create, Notification
       can :manage, Notification, :event_id => e_ids
+      can :create, InviteeNotification
+      can :manage, InviteeNotification, :event_id => e_ids
       
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'

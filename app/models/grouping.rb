@@ -1,6 +1,6 @@
 class Grouping < ActiveRecord::Base
   resourcify
-  OPERATOR_SIGN = {"Greater than" => '>', "Greater than equal to" => '>=', "Less than" => '<', "Less than equal to" => '<=', "Equal to" => 'IN', "Not equal" => 'NOT IN', 'Contains' => 'like', 'Not contains' => 'not like', 'Starts with' => 'like',  'Ends with' => 'like','In' => '='}#, 'In' => '=', 'Between' => '='}
+  OPERATOR_SIGN = {"Greater than" => '>', "Greater than equal to" => '>=', "Less than" => '<', "Less than equal to" => '<=', "Equal to" => 'IN', "Not equal" => 'NOT IN', 'Contains' => 'like', 'Not contains' => 'not like', 'Starts with' => 'like',  'Ends with' => 'like','In' => '=', 'Between Two Numbers' => 'IN'}
   attr_accessor :value, :validation, :options
   serialize :condition, Hash
   
@@ -18,16 +18,24 @@ class Grouping < ActiveRecord::Base
 
 
   def self.default_validation
-    ["Equal to", "Not equal", 'Starts with', 'Ends with']#, 'In', 'Between']
+    ["Equal to", "Not equal", 'Starts with', 'Ends with', 'Contains', 'Greater than equal to', 'Less than equal to', 'Between Two Numbers']
   end
 
   def self.get_query_value(c, v)
     case c
     when 'Contains'
-      " #{v}%" 
+      "#{v}".split(",").map{|v|v.strip && '%'+v.strip+"%"}
     when 'Not contains'
       # "%#{v}%".split(',')
       "#{v}".split(",").map{|v|v.strip && "%"+v.strip+"%"}
+    when 'Between Two Numbers'
+      f = "#{v}".split(",").map{|v|v.strip}.first rescue 0
+      l = "#{v}".split(",").map{|v|v.strip}.last rescue 1000
+      f..l
+    when 'Greater than equal to'
+      "#{v}".to_i rescue 0
+    when 'Less than equal to'
+      "#{v}".to_i rescue 0
     when 'Starts with'
       # "#{v}%".split(',')
       "#{v}".split(",").map{|v|v.strip && v.strip+"%"}
@@ -63,9 +71,11 @@ class Grouping < ActiveRecord::Base
         c = Grouping.get_query_condition(condition[1]['condition'])
         v = Grouping.get_query_value(condition[1]['condition'], condition[1]['value'])
         if c == "like"
+          invitee_data1 = []
           v.each do |value|
-            invitee_data = invitee_data.where("#{k} #{c} (?)", value)
-          end 
+            invitee_data1 += invitee_data.where("#{k} #{c} (?)", value)
+          end
+          invitee_data = invitee_data1 
         else
           invitee_data = invitee_data.where("#{k} #{c} (?)", v)
         end

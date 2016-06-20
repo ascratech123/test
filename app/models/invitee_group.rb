@@ -23,23 +23,18 @@ class InviteeGroup < ActiveRecord::Base
       case self.name
       when 'No Polls taken'
         invitee_ids = Analytic.where(:action => 'poll answered', :viewable_type => 'Poll', :event_id => self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Feedback given'
         invitee_ids = Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :event_id => self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Quiz taken'
         invitee_ids = Analytic.where(:action => 'played', :viewable_type => 'Quiz', :event_id => self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Q&A Participation'
         invitee_ids = Analytic.where(:action => 'question asked', :viewable_type => 'Q&A', :event_id => self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Participation in Conversations'
         invitee_ids = Analytic.where(:action => 'conversation post', :viewable_type => 'Conversation', :event_id => self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       when 'No Favorites added'
         invitee_ids = Analytic.where(viewable_type: "Invitee", action: 'favorite', event_id: self.event_id).pluck(:invitee_id).uniq
-        invitee_ids = Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id)
       end
+      invitee_ids = invitee_ids.present? ? Invitee.where("event_id = ? and id NOT IN (?)", self.event_id, invitee_ids).pluck(:id) : Invitee.where("event_id = ?", self.event_id).pluck(:id)
       invitee_ids = invitee_ids.map{|n| n.to_s}
       self.update_attributes(:invitee_ids => invitee_ids)
       invitee_ids

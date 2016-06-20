@@ -10,11 +10,9 @@
           = render :partial => 'admin/layouts/add_link'
     - if !@agendas.present?
       .mdl-typography--text-center.BlnkTxt.p-t-10
-        - page = params[:controller].split("/").second
-        - if page == "agendas"
-          - event_feature = @event.event_features.where(:name => page)
-          - page = page.titleize
-          - if event_feature.blank?
+        - if @page == "agendas"
+          - @page = @page.titleize
+          - if @event_feature.blank?
             = "This feature is not available you need to "
             - if @event.mobile_application.present?
               = link_to "Enable it.", edit_admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application.id,:type => "event_edit") ,:class => " centerAlign"

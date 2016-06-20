@@ -4,7 +4,12 @@ module SyncMobileData
     message = {}
     ids = (model_name.constantize).pluck(:id)
     values.each do |value|
-      if ids.include?(value["id"].to_i)
+      if model_name == 'InviteeNotification'
+        update_data = (model_name.constantize).where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
+        update_data.update(params_data(value)) if update_data.present?
+        message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
+        message[:data] =  update_data.as_json() rescue nil
+      elsif ids.include?(value["id"].to_i)
         update_data = (model_name.constantize).find_by_id(value["id"])
         update_data.update(params_data(value)) if update_data.present?
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
@@ -39,7 +44,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup'].each {|value| model_name.delete(value)}
+    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'MyTravel'].each {|value| model_name.delete(value)}
     model_name.each do |model|
       info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
@@ -80,6 +85,9 @@ module SyncMobileData
         when 'Notification'
           info = Invitee.get_notification(info, current_user)
           data[:"notifications"] = info
+        when 'InviteeNotification'
+          info = Invitee.get_read_notification(info, event_ids, current_user)
+          data[:"invitee_notifications"] = info
         when 'Poll'
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
         when 'Invitee'
@@ -204,6 +212,8 @@ module SyncMobileData
         chanages_done << SyncMobileData.create_record(value,"Invitee")  
       when "Analytic" 
         chanages_done << SyncMobileData.create_record(value,"Analytic")  
+      when "InviteeNotification" 
+        chanages_done << SyncMobileData.create_record(value,"InviteeNotification")  
       end
     chanages_done  
   end
