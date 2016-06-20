@@ -17,11 +17,12 @@
           %td.IconDrp
             = more_vert_button(grouping.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{grouping.id}"}
-              = edit_link(params, grouping.id)
-              = delete_link(params, grouping.id)
-              - if grouping_count > 0
-                = link_to admin_event_grouping_path(:event_id => @event.id, :id => grouping.id,:format => 'xls'), :class =>"mdl-menu__item" do
-                  Export Invitee data
+              - if grouping.default_group != 'true'
+                = edit_link(params, grouping.id)
+                = delete_link(params, grouping.id)
+                - if grouping_count > 0
+                  = link_to admin_event_grouping_path(:event_id => @event.id, :id => grouping.id,:format => 'xls'), :class =>"mdl-menu__item" do
+                    Export Invitee data
       - if false
         - present_keys = []
         - invitee_attributes = @invitee_structure.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier')
@@ -51,6 +52,5 @@
   $('input[readonly]').dblclick(function() {
     $(this).removeAttr('readonly');
   });
-
 
 
