@@ -23,7 +23,7 @@ class Registration < ActiveRecord::Base
   belongs_to :event
   has_many :user_registrations
   
-  attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4
+  attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4,:mandatory_field,:text_box_required_after_options
   
   validate :mandate_field_check
 
@@ -34,9 +34,10 @@ class Registration < ActiveRecord::Base
       if field[:label].blank? or field[:option_type].blank? or field[:validation_type].blank? or field[:option_1].blank? or field[:option_2].blank?
         errors.add(:label, "This field is required.") if field[:label].blank?
         errors.add(:option_type, "This field is required.") if field[:option_type].blank?
-        errors.add(:validation_type, "This field is required.") if field[:validation_type].blank?
-        errors.add(:option_1, "This field is required.") if ((field[:option_type] == "Check Box" or field[:option_type] == "Radio Button") and field[:option_1].blank?)
-        errors.add(:option_2, "This field is required.") if ((field[:option_type] == "Check Box" or field[:option_type] == "Radio Button") and field[:option_2].blank?)
+        errors.add('field1[validation_type]', "This field is required.") if (field[:validation_type].blank? and (["Text Box","Text Area"].include?(field[:option_type])))
+        errors.add('field1[option_1]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:option_1].blank?)
+        errors.add('field1[option_2]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:option_2].blank?)
+        errors.add('field1[text_box_required_after_options]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:text_box_required_after_options].blank?)
     end
   end
 end
