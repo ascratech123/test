@@ -528,7 +528,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
    def custom_text_area_field1(name, title, *args)
     args[0] ||= {}
     args.first[:col] ||= "12"
-    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8", :style => "display: #{args[0][:display] == "true" ? "true" : "none"}" do
+    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8 #{args[0][:klass]}", :style => "display: #{args[0][:display] == "true" ? "true" : "none"}" do
       (@template.content_tag :div, class: "bs-component", :style => "display: #{options[:message_display].present? ? options[:message_display] : ""}" do
         @template.content_tag :div, class: "form-group" do
           str = @template.label("", "#{title}", class: "col-lg-4 control-label")

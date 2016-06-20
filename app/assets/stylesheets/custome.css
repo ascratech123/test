@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.options_form_tag_for_new{display:none;}
 .usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
 #invitee_group_invitee_ids{border: 1px solid #d7d7d7;}
 #invitee_group_invitee_ids option{padding-bottom: 5px;}
