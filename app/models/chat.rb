@@ -57,7 +57,7 @@ class Chat < ActiveRecord::Base
   end
 
   def self.push_to_ios(token, msg, push_pem_file, ios_obj, b_count, push_page, page_id, sender, member_ids, event_id)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')})
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> "#{sender.get_invitee_name}: #{msg}", "action"=> "Read"}, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, "message_text"=> msg, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')})
     response = ios_obj.push(notification)
   end
 
