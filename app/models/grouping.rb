@@ -71,11 +71,11 @@ class Grouping < ActiveRecord::Base
         c = Grouping.get_query_condition(condition[1]['condition'])
         v = Grouping.get_query_value(condition[1]['condition'], condition[1]['value'])
         if c == "like"
-          invitee_data1 = []
+          invitee_data_ids = []
           v.each do |value|
-            invitee_data1 += invitee_data.where("#{k} #{c} (?)", value)
+            invitee_data_ids += invitee_data.where("#{k} #{c} (?)", value).pluck(:id)
           end
-          invitee_data = invitee_data1 
+          invitee_data = invitee_data.where(:id => invitee_data_ids) 
         else
           invitee_data = invitee_data.where("#{k} #{c} (?)", v)
         end

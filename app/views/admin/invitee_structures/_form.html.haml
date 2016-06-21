@@ -11,27 +11,27 @@
             /   what's this?
         - data_present = @invitee_structure.check_invitee_data_present?
         = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "database.png", :section_id => "speaker_general_section"}
-        = f.custom_text_field :attr1, "Column 1(Unique Identifier)", :value => "Email id",:readonly => data_present ? true : false
-        = f.custom_text_field :attr2, "Column 2", :value => "First Name",:readonly => data_present ? true : false
-        = f.custom_text_field :attr3, "Column 3", :value => "Last Name",:readonly => data_present ? true : false
-        = f.custom_text_field :attr4, "Column 4", :value => "Designation",:readonly => data_present ? true : false
-        = f.custom_text_field :attr5, "Column 5", :value => "Department",:readonly => data_present ? true : false
-        = f.custom_text_field :attr6, "Column 6", :value => "Company",:readonly => data_present ? true : false
-        = f.custom_text_field :attr7, "Column 7", :value => "Address",:readonly => data_present ? true : false
-        = f.custom_text_field :attr8, "Column 8", :value => "City",:readonly => data_present ? true : false
-        = f.custom_text_field :attr9, "Column 9", :value => "Pin Code",:readonly => data_present ? true : false
-        = f.custom_text_field :attr10, "Column 10", :value => "STD Code",:readonly => data_present ? true : false
-        = f.custom_text_field :attr11, "Column 11", :value => "Landline Number",:readonly => data_present ? true : false
-        = f.custom_text_field :attr12, "Column 12", :value => "Mobile Number",:readonly => data_present ? true : false
-        = f.custom_text_field :attr13, "Column 13", :value => "DB Source ( Client / Shobiz)",:readonly => data_present ? true : false
-        = f.custom_text_field :attr14, "Column 14", :value => "Industry",:readonly => data_present ? true : false
-        = f.custom_text_field :attr15, "Column 15", :value => "Turnover",:readonly => data_present ? true : false
-        = f.custom_text_field :attr16, "Column 16", :value => "Employee",:readonly => data_present ? true : false
-        = f.custom_text_field :attr17, "Column 17", :disabled => (f.object.attr17.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
-        = f.custom_text_field :attr18, "Column 18", :disabled => (f.object.attr18.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
-        = f.custom_text_field :attr19, "Column 19", :disabled => (f.object.attr19.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
-        = f.custom_text_field :attr20, "Column 20", :disabled => (f.object.attr20.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
-        = f.custom_text_field :attr21, "Column 21", :disabled => (f.object.attr21.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        = f.custom_text_field :attr1, "Column 1(Unique Identifier)", :value => f.object.attr1.present? ? f.object.attr1 : "Email id",:readonly => data_present ? true : false
+        = f.custom_text_field :attr2, "Column 2", :value => f.object.attr2.present? ? f.object.attr2 : "First Name",:readonly => data_present ? true : false
+        = f.custom_text_field :attr3, "Column 3", :value => f.object.attr3.present? ? f.object.attr3 : "Last Name",:readonly => data_present ? true : false
+        = f.custom_text_field :attr4, "Column 4", :value => f.object.attr4.present? ? f.object.attr4 : "Designation",:readonly => data_present ? true : false
+        = f.custom_text_field :attr5, "Column 5", :value => f.object.attr5.present? ? f.object.attr5 : "Department",:readonly => data_present ? true : false
+        = f.custom_text_field :attr6, "Column 6", :value => f.object.attr6.present? ? f.object.attr6 : "Company",:readonly => data_present ? true : false
+        = f.custom_text_field :attr7, "Column 7", :value => f.object.attr7.present? ? f.object.attr7 : "Address",:readonly => data_present ? true : false
+        = f.custom_text_field :attr8, "Column 8", :value => f.object.attr8.present? ? f.object.attr8 : "City",:readonly => data_present ? true : false
+        = f.custom_text_field :attr9, "Column 9", :value => f.object.attr9.present? ? f.object.attr9 : "Pin Code",:readonly => data_present ? true : false
+        = f.custom_text_field :attr10, "Column 10", :value => f.object.attr10.present? ? f.object.attr10 : "STD Code",:readonly => data_present ? true : false
+        = f.custom_text_field :attr11, "Column 11", :value => f.object.attr11.present? ? f.object.attr11 : "Landline Number",:readonly => data_present ? true : false
+        = f.custom_text_field :attr12, "Column 12", :value => f.object.attr12.present? ? f.object.attr12 : "Mobile Number",:readonly => data_present ? true : false
+        = f.custom_text_field :attr13, "Column 13", :value => f.object.attr13.present? ? f.object.attr13 : "DB Source ( Client / Shobiz)",:readonly => data_present ? true : false
+        = f.custom_text_field :attr14, "Column 14", :value => f.object.attr14.present? ? f.object.attr14 : "Industry",:readonly => data_present ? true : false
+        = f.custom_text_field :attr15, "Column 15", :value => f.object.attr15.present? ? f.object.attr15 : "Turnover",:readonly => data_present ? true : false
+        = f.custom_text_field :attr16, "Column 16", :value => f.object.attr16.present? ? f.object.attr16 : "Employee",:readonly => data_present ? true : false
+        = f.custom_text_field :attr17, "Column 17", :value => f.object.attr17.present? ? f.object.attr17 : '', :disabled => (f.object.attr17.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        = f.custom_text_field :attr18, "Column 18", :value => f.object.attr18.present? ? f.object.attr18 : '', :disabled => (f.object.attr18.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        = f.custom_text_field :attr19, "Column 19", :value => f.object.attr19.present? ? f.object.attr19 : '', :disabled => (f.object.attr19.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        = f.custom_text_field :attr20, "Column 20", :value => f.object.attr20.present? ? f.object.attr20 : '', :disabled => (f.object.attr20.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        = f.custom_text_field :attr21, "Column 21", :value => f.object.attr21.present? ? f.object.attr21 : '', :disabled => (f.object.attr21.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
         = f.hidden_field :uniq_identifier, :value => 'attr1'
         - if false#@invitee_structure.new_record?
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
