@@ -17,6 +17,8 @@ class UserRegistration < ActiveRecord::Base
               elsif regi_valid[1][:validation_type] == "Numeric only"
                 errors.add(user_regi_valid[0], "This field required only Numeric. ") if (regi_valid[0] == user_regi_valid[0] and user_regi_valid[1].present? and (user_regi_valid[1] =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/ ? false : true))
               end      
+            else
+              errors.add(user_regi_valid[0], "This field is required.") if((regi_valid[1][:mandatory_field].present? and regi_valid[1][:mandatory_field] == "yes") and regi_valid[0] == user_regi_valid[0] and user_regi_valid[1].blank?)
             end
           end
         end

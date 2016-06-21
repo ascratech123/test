@@ -1,6 +1,6 @@
-.save_button.newresitration.mdl-card.agendaHeight
+.save_button.newresitration.agendaHeight
   = form_for [:admin, @event, @user_registration], :builder => CustomFormBuilder do |f|
-    .mdl-grid.mdl-shadow--1dp.p-b-25.m-b-5
+    .mdl-grid.mdl-shadow--1dp.p-b-25.m-b-5.mdl-card
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10.m-b-15
           Registration
@@ -41,6 +41,14 @@
                     .field_with_errors
                       .span{:class => "errorMessage"}
                         = er
+          -if hsh[:text_box_required_after_options].present? and hsh[:text_box_required_after_options] == "yes" 
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+              .bs-component
+                .form-group
+                  .col-lg-4.control-label
+                    = "Text box for #{hsh['label']}"
+                  .col-lg-7
+                    = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]", f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
         - if hsh['label'].present? and hsh['option_type'] == 'Check Box'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
             .mdl-grid.p-v-5.form-group.mobiappstype
@@ -94,6 +102,14 @@
                         .field_with_errors
                           .span{:class => "errorMessage"}
                             = er
+          -if hsh[:text_box_required_after_options].present? and hsh[:text_box_required_after_options] == "yes" 
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+              .bs-component
+                .form-group
+                  .col-lg-4.control-label
+                    = "Text box for #{hsh['label']}"
+                  .col-lg-7
+                    = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]",f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
         - if hsh['label'].present? and hsh['option_type'] == 'Text Box'
           = f.custom_text_field key, "#{hsh['label']}"
         - if hsh['label'].present? and hsh['option_type'] == 'Text Area'
