@@ -15,7 +15,7 @@ class MobileApplication < ActiveRecord::Base
   # attr_accessor :template_id
   
   belongs_to :client
-  has_one :push_pem_file
+  has_one :push_pem_file, :dependent => :destroy
   has_one :store_info
   has_many :events
   accepts_nested_attributes_for :events
