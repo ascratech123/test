@@ -167,7 +167,6 @@ class Analytic < ActiveRecord::Base
           user_engagement  << features[f.name] if features.keys.include? f.name
         end
       end
-      {"conversations" => 'Conversation', 'favourites' => 'Favorite', 'qnas' => 'Q&A', 'polls' => 'Poll', 'feedbacks' => 'Feedback', 'e_kits' => 'E-Kit', 'qr_code' => 'QR code scan', 'quizzes' => 'Quiz'}
       user_engagement << 'Rating' if event.event_features.map{|f| f.name}.include? 'speakers' or event.event_features.map{|f| f.name}.include? 'agendas'
       user_engagement += ['One on one chat'] if event.event_features.map{|f| f.name}.include? 'chats'
       user_engagement.each do |engagement|
