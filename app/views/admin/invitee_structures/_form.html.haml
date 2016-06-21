@@ -31,7 +31,7 @@
         = f.custom_text_field :attr18, "Column 18", :value => f.object.attr18.present? ? f.object.attr18 : '', :disabled => (f.object.attr18.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
         = f.custom_text_field :attr19, "Column 19", :value => f.object.attr19.present? ? f.object.attr19 : '', :disabled => (f.object.attr19.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
         = f.custom_text_field :attr20, "Column 20", :value => f.object.attr20.present? ? f.object.attr20 : '', :disabled => (f.object.attr20.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
-        = f.custom_text_field :attr21, "Column 21", :value => f.object.attr21.present? ? f.object.attr21 : '', :disabled => (f.object.attr21.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
+        =# f.custom_text_field :attr21, "Column 21", :value => f.object.attr21.present? ? f.object.attr21 : '', :disabled => (f.object.attr21.present? and f.object.invitee_datum.length != 0 and data_present) ? true : false
         = f.hidden_field :uniq_identifier, :value => 'attr1'
         - if false#@invitee_structure.new_record?
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
