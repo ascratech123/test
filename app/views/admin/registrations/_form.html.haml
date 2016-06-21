@@ -58,7 +58,7 @@
                   ="#{count <= 1 ? 'Answer Type *' : 'Answer Type'}"
                 .col-lg-7
                   %i.arrow.single
-                  = field.select("registration[#{default_field}]", "option_type", [["Radio Buttons","Radio Button"], ["Check Boxes","Check Box"], ["Drop-down list","Drop-Down list"], ["Text box - single line","Text Box"], ["Text box - multiple lines","Text Area"], ["Date Picker","Date Picker"]], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:option_type].present?) ? f.object.attributes[default_field][:option_type] : "",:prompt => 'Select type'}, { include_blank: true,:class=> 'show_hide select2-single form-control', check_field: "#{default_field}_for_text_area"})
+                  = field.select("registration[#{default_field}]", "option_type", [["Radio Buttons (for one option selection)","Radio Button"], ["Check Boxes (for multiple option selection)","Check Box"], ["Drop-down list","Drop-Down list"], ["Text box - single line","Text Box"], ["Text box - multiple lines","Text Area"], ["Date Picker","Date Picker"]], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:option_type].present?) ? f.object.attributes[default_field][:option_type] : "",:prompt => 'Select type'}, { include_blank: true,:class=> 'show_hide select2-single form-control', check_field: "#{default_field}_for_text_area"})
                   .field_with_errors
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:option_type].join("") rescue nil if count <= 1

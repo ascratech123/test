@@ -8,7 +8,7 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Registration Form?
+            %p.displayInlineBlock.multicitytxt Registration Form
           .col-lg-7.p-h-12
             = f.custom_radio_button_menu :registration, "hobnob","Create new", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
             = f.custom_radio_button_menu :registration, "external", "Use existing URL", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
