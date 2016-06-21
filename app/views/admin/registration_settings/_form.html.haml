@@ -8,10 +8,10 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Registration?
-          .col-lg-3.p-h-12
-            = f.custom_radio_button_menu :registration, "hobnob","HobNob", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :registration, "external", "External", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
+            %p.displayInlineBlock.multicitytxt Registration Form?
+          .col-lg-7.p-h-12
+            = f.custom_radio_button_menu :registration, "hobnob","Create new", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :registration, "external", "Use existing URL", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
           
           / - if params[:action] == "edit" and f.object.reg_url.present? 
           /   = link_to "view page","#{f.object.reg_url}",:target => "_blank"
@@ -49,7 +49,7 @@
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
       = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
-      = f.custom_text_area_field :external_reg_surl, "Registration Success URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
+      = f.custom_text_area_field :external_reg_surl, "Registration Success URL",:message_display => (f.object.registration == 'external') ? '' : "none"
     
     .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp.m-t-40
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
