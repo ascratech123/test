@@ -130,7 +130,8 @@ class Event < ActiveRecord::Base
       self.mobile_application.update_column(:login_at, app_login)
       self.mobile_application.update_column(:updated_at, Time.now)
       self.mobile_application.events.each do |event|
-        event.update_column(:login_at, self.login_at)
+        login_at = self.login_at || mobile_application.events.first.login_at rescue 'Before Interaction'
+        event.update_column(:login_at, login_at)
         event.update_column(:updated_at, Time.now) rescue nil
       end
     end

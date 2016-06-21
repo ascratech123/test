@@ -87,7 +87,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Staging Shobiz Error Notifier",
    :sender_address => %{"Error notifier" <error@ascratech.com>},
-   :exception_recipients => %w{shiv@ascratech.com sandeep@ascratech.com sushil@ascratech.in}
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in}
  }
 
 
