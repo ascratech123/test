@@ -39,7 +39,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup'].each {|value| model_name.delete(value)}
+    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'MyTravel'].each {|value| model_name.delete(value)}
     model_name.each do |model|
       info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
