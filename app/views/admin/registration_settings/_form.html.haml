@@ -29,14 +29,13 @@
             .field_with_errors
               .span{:class => "errorMessage"}
                 = er
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "display: #{(f.object.template == "Template 1" or f.object.template == "default") ? '' : 'none'}"}
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "display: #{(f.object.template == "Template 1" or f.object.template == "default" and f.object.registration != "external") ? '' : 'none'}"}
         .form-group.set_highlight_select
           %label.col-lg-4.control-label.ml-color--shades-white
             Select template
             %br
             %a{:href => '/whats_this/app_info/general_information/1.png', :class =>'fancybox', :title => "Splash Screen"}
               (View Available Templates)
-          / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Login Screen" => "template-02.jpg","Event Listing Screen" => "template-03.jpg","Event Highlight " => "template-04.jpg","Event Feature Screen" => "template-05.jpg","Drawer Screen" => "template-06.jpg","About" => "template-07.jpg","Agenda Listing" => "template-08.jpg","Agenda" => "template-09.jpg","Agenda Rating" => "template-10.jpg","Attendees" => "template-11.jpg","Speaker Listing" => "template-12.jpg","Speaker " => "template-13.jpg","Speaker Rating " => "template-14.jpg","FAQ's" => "template-15.jpg","Q&A" => "template-16.jpg","Conversations" => "template-17.jpg","Gallery Listing" => "template-18.jpg","Gallery" => "template-19.jpg","Awards Listing" => "template-20.jpg","Polls Listing" => "template-21.jpg","Polls" => "template-22.jpg","Polls Response" => "template-23.jpg","Feedback" => "template-24.jpg","E-kit Listing" => "template-25.jpg","E-kit Details" => "template-26.jpg","E-kit" => "template-27.jpg","Notes" => "template-28.jpg","Notes Listing" => "template-29.jpg","Venue" => "template-30.jpg","Contact Us" => "template-31.jpg"}, :section_id => "temp_app_master_section",:path => "template"}
           .col-lg-7  
             %i.arrow.single
             = f.select("registration_setting", "template_name", ['Template 1'], {:selected => f.object.template,:prompt => 'Select Option Type'},{:class=> 'select2-single form-control',:id=> "regi_setti_templ_select"})
@@ -49,7 +48,7 @@
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
       = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
-      = f.custom_text_area_field :external_reg_surl, "Registration Success URL",:message_display => (f.object.registration == 'external') ? '' : "none"
+      =# f.custom_text_area_field :external_reg_surl, "Registration Success URL",:message_display => (f.object.registration == 'external') ? '' : "none"
     
     .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp.m-t-40
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
@@ -70,7 +69,8 @@
       =# f.custom_text_area_field :login_surl, "Login Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
       
       = f.custom_text_area_field :external_login_url, "Login URL *",:message_display => (f.object.login == 'external') ? "" : "none"
-      = f.custom_text_area_field :external_login_surl, "Login Success URL *",:message_display => (f.object.login == 'external') ? "" : "none"
+      = f.custom_text_area_field :external_login_surl, "Login Success URL ",:message_display => (f.object.login == 'external') ? "" : "none"
+
       / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
       /   .mdl-grid.p-v-5
       /     .col-lg-4.mdl-typography--text-right
@@ -79,7 +79,7 @@
       /       = f.custom_radio_button :response_type, "create_and_select","Create & Select", :id => "option1_response_type"
       /       = f.custom_radio_button :response_type, "select", "Select", :id => "option_2_response_type"
       = f.custom_text_area_field :forget_pass_url, "Forgot password URL"
-      = f.custom_text_area_field :forget_pass_surl, "Forgot password Success URL"
+      =# f.custom_text_area_field :forget_pass_surl, "Forgot password Success URL"
     .fixed-activon-btn-new  
       = f.custom_submit_button "SAVE"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

@@ -120,11 +120,11 @@
                   = hsh['label']
                 = f.custom_text_field_date key, hsh['label'], :col =>"7", :id => "date-start", :value => f.object["#{key}"].present? ? f.object["#{key}"] : ''  
         - if hsh['label'].present? and hsh['option_type'] == 'Drop-Down list'
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-t-15
             .form-group
               %label.col-lg-4.control-label.ml-color--shades-white
                 = hsh['label']
-              .col-lg-7
+              .col-lg-7.m-8
                 - drop_down_items = []
                 - drop_down_items << "#{hsh['option_1']}" if "#{hsh['option_1']}".present?
                 - drop_down_items = drop_down_items << "#{hsh['option_2']}" if "#{hsh['option_2']}".present?
@@ -142,6 +142,7 @@
                   .col-lg-4.control-label
                   .col-lg-7
                     = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]",f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
+      =# f.hidden_field :invitee_id, :value => current_user.id
     .fixed-activon-btn-new.btn-bottom
       = f.custom_submit_button1 "REGISTER"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
