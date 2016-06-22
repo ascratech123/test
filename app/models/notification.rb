@@ -96,6 +96,8 @@ class Notification < ActiveRecord::Base
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
       android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
+      event = self.event
+      title = push_pem_file.title.present? ? push_pem_file.title : event.event_name
       if ios_devices.present?
         msg = self.description
         push_page = self.push_page
@@ -106,15 +108,15 @@ class Notification < ActiveRecord::Base
         ios_devices.each do |device|
           ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
           Rails.logger.info("***********#{device.token}***************#{device.email}********************")
-          self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
+          self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
         end
       end
-      PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, 1) if android_devices.present?
+      PushNotification.push_to_android(android_devices.pluck(:token), self, push_pem_file, title, 1) if android_devices.present?
     end
   end
 
-  def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id})
+  def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end
