@@ -37,6 +37,7 @@ class Chat < ActiveRecord::Base
 
   def send_to_receivers(receivers, mobile_application, push_pem_file, ios_obj)
     sender = Invitee.find_by_id(self.sender_id)
+    event = Event.find(self.event_id)
     if sender.present?
       receivers.each do |receiver|
         b_count = receiver.get_badge_count
@@ -45,25 +46,25 @@ class Chat < ActiveRecord::Base
         if ios_devices.present?
           ios_devices.each do |device|
             Rails.logger.info("***********#{device.platform}*******************#{device.token}***************#{device.email}*************************************")
-            Chat.push_to_ios(device.token, self.message, push_pem_file, ios_obj, b_count, 'chat', 0, sender, self.member_ids,self.event_id)
+            Chat.push_to_ios(device.token, self.message, push_pem_file, ios_obj, b_count, 'chat', 0, sender, self.member_ids,self.event_id, event.event_name)
           end
         end
         if android_devices.present?
           Rails.logger.info("***********#{android_devices.pluck(:platform)}*******************#{android_devices.pluck(:token)}***************#{android_devices.pluck(:email)}*************************************")
-          Chat.push_to_android(android_devices.pluck(:token), self.message, push_pem_file, b_count, 'chat', 0, sender, self.member_ids,self.event_id)
+          Chat.push_to_android(android_devices.pluck(:token), self.message, push_pem_file, b_count, 'chat', 0, sender, self.member_ids,self.event_id, event.event_name)
         end
       end
     end
   end
 
-  def self.push_to_ios(token, msg, push_pem_file, ios_obj, b_count, push_page, page_id, sender, member_ids, event_id)
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> push_pem_file.title, "body"=> "#{sender.get_invitee_name}: #{msg}", "action"=> "Read"}, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, "message_text"=> msg, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')})
+  def self.push_to_ios(token, msg, push_pem_file, ios_obj, b_count, push_page, page_id, sender, member_ids, event_id, title)
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> "#{sender.get_invitee_name}: #{msg}", "action"=> "Read"}, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => page_id, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, "message_text"=> msg, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')})
     response = ios_obj.push(notification)
   end
 
-  def self.push_to_android(tokens, msg, push_pem_file, b_count=1, push_page='', page_id='', sender, member_ids, event_id)
+  def self.push_to_android(tokens, msg, push_pem_file, b_count=1, push_page='', page_id='', sender, member_ids, event_id, title)
     gcm_obj = GCM.new(push_pem_file.android_push_key)
-    options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => push_pem_file.title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')}}
+    options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')}}
     response = gcm_obj.send(tokens, options)
     Rails.logger.info("******************************#{response}***************response of gcm*************************************")
   end
