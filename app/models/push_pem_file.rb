@@ -20,7 +20,9 @@ class PushPemFile < ActiveRecord::Base
   default_scope { order('created_at desc') }
 
   def rename_pem_file_name
-    extension = File.extname(pem_file_file_name).downcase
-    self.pem_file_file_name = "#{Time.now.to_i.to_s}#{extension}"
+    if self.pem_file_updated_at_changed?
+      extension = File.extname(pem_file_file_name).downcase
+      self.pem_file_file_name = "#{Time.now.to_i.to_s}#{extension}"
+    end
   end
 end
