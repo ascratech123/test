@@ -14,6 +14,7 @@
             .col-lg-7
               - default_agenda_type = @event.invitees.collect{|p| [ p.name_with_email, p.id ]}
               - default_agenda_type = default_agenda_type.sort {|a,b| a[0] <=> b[0]}
+              - default_agenda_type = default_agenda_type.sort_by{|a| a[0].downcase}
               - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
               %i.arrow.single
               = f.select("my_travel", "invitee_id", default_agenda_type, {:selected => f.object.invitee_id,:prompt => "#{f.object.invitee_id.present? ? f.object.invitee_id : "Select Invitee" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
