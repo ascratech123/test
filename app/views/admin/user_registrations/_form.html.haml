@@ -46,7 +46,6 @@
               .bs-component
                 .form-group
                   .col-lg-4.control-label
-                    = "Text box for #{hsh['label']}"
                   .col-lg-7
                     = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]", f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
         - if hsh['label'].present? and hsh['option_type'] == 'Check Box'
@@ -107,7 +106,6 @@
               .bs-component
                 .form-group
                   .col-lg-4.control-label
-                    = "Text box for #{hsh['label']}"
                   .col-lg-7
                     = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]",f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
         - if hsh['label'].present? and hsh['option_type'] == 'Text Box'
@@ -137,6 +135,13 @@
                 .field_with_errors
                   .span{:class => "errorMessage"}
                     = f.object.errors.messages[key.to_sym].join("") rescue nil
+          -if hsh[:text_box_required_after_options].present? and hsh[:text_box_required_after_options] == "yes" 
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+              .bs-component
+                .form-group
+                  .col-lg-4.control-label
+                  .col-lg-7
+                    = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]",f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
     .fixed-activon-btn-new.btn-bottom
       = f.custom_submit_button1 "REGISTER"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

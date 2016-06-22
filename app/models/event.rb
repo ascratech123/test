@@ -27,14 +27,14 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :feedbacks, :dependent => :destroy
   has_many :images, as: :imageable, :dependent => :destroy
-  has_many :panels
+  has_many :panels, :dependent => :destroy
   has_many :event_features, :dependent => :destroy
-  has_many :feedbacks
-  has_many :e_kits
-  has_many :contacts 
+  has_many :feedbacks, :dependent => :destroy
+  has_many :e_kits, :dependent => :destroy
+  has_many :contacts, :dependent => :destroy 
   has_many :notifications, :dependent => :destroy
-  has_many :highlight_images
-  has_many :groupings
+  has_many :highlight_images, :dependent => :destroy
+  has_many :groupings, :dependent => :destroy
   has_many :quizzes, :dependent => :destroy
   has_many :invitee_structures, :dependent => :destroy
   has_many :favorites, :dependent => :destroy
@@ -49,8 +49,8 @@ class Event < ActiveRecord::Base
   has_many :custom_page3s, :dependent => :destroy
   has_many :custom_page4s, :dependent => :destroy
   has_many :custom_page5s, :dependent => :destroy
-  has_many :chats
-  has_many :invitee_groups
+  has_many :chats, :dependent => :destroy
+  has_many :invitee_groups, :dependent => :destroy
   has_many :my_travels, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
