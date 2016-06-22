@@ -36,10 +36,19 @@ class Admin::MyTravelsController < ApplicationController
     
   end
   def update
-   if @my_travel.update_attributes(my_travel_params)
-      redirect_to admin_event_my_travels_path(:event_id => @event.id)
+    if params[:remove_image] == "true"
+      @my_travel.update_attribute(:attach_file, nil) if @my_travel.attach_file.present? and params[:file_field_name] == "attach_file"
+      @my_travel.update_attribute(:attach_file_2, nil) if @my_travel.attach_file_2.present? and params[:file_field_name] == "attach_file_2"
+      @my_travel.update_attribute(:attach_file_3, nil) if @my_travel.attach_file_3.present? and params[:file_field_name] == "attach_file_3"
+      @my_travel.update_attribute(:attach_file_4, nil) if @my_travel.attach_file_4.present? and params[:file_field_name] == "attach_file_4"
+      @my_travel.update_attribute(:attach_file_5, nil) if @my_travel.attach_file_5.present? and params[:file_field_name] == "attach_file_5"
+      redirect_to edit_admin_event_my_travel_path(:event_id => @event.id, :id => @my_travel.id)
     else
-      render :action => "edit"
+      if @my_travel.update_attributes(my_travel_params)
+        redirect_to admin_event_my_travels_path(:event_id => @event.id)
+      else
+        render :action => "edit"
+      end
     end 
   end
 
