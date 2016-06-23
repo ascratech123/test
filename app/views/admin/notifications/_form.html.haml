@@ -1,3 +1,5 @@
+.overlayBg
+  %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
 .save_button.mdl-card
   = form_for [:admin, @event, @notification], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     .mdl-grid.mdl-card.mdl-shadow--1dp
@@ -46,7 +48,7 @@
                 = f.custom_text_field_date :push_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.push_datetime.strftime('%p') rescue nil}", :col => '3'
       = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
     .fixed-activon-btn-new  
-      = f.custom_submit_button "SEND"
+      = f.custom_submit_button "SEND", :class => "send-notification-btn"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
@@ -67,4 +69,8 @@
         $("#notification_notify_to").parent().parent().parent().hide();
       }  
     });
-  })
+  });
+
+  $(".send-notification-btn").click(function(){
+    $(".overlayBg").show();
+  });
