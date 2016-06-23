@@ -179,7 +179,7 @@
             if(options.autoScrolling && !options.scrollBar){
                 $htmlBody.css({
                     'overflow' : 'hidden',
-                    'height' : '100%'
+                    /*'height' : '100%'*/
                 });
 
                 FP.setRecordHistory(originals.recordHistory, 'internal');
