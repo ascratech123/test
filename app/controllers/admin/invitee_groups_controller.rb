@@ -29,6 +29,7 @@ class Admin::InviteeGroupsController < ApplicationController
 
   def edit
   	@invitees = @event.invitees
+    redirect_to admin_event_invitee_groups_path(:event_id => @invitee_group.event_id) if @invitee_group.default_logical_group?
   end
 
   def update
