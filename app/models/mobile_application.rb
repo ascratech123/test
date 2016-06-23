@@ -11,7 +11,7 @@ class MobileApplication < ActiveRecord::Base
   # attr_accessor :template_id
   
   belongs_to :client
-  has_one :push_pem_file
+  has_one :push_pem_file, :dependent => :destroy
   has_one :store_info
   has_many :events
   accepts_nested_attributes_for :events
@@ -79,7 +79,7 @@ class MobileApplication < ActiveRecord::Base
 
   def update_social_media_status
     if self.social_media_status.blank?
-      self.update_column(:social_media_status => 'deactive')
+      self.update_column(:social_media_status, 'deactive')
     end
   end
 

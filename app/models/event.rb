@@ -254,7 +254,7 @@ class Event < ActiveRecord::Base
   
   def set_features_default_list()
     default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s"]
-    default_features += ["chats", "my_travels"] if !Rails.env.production?
+    default_features += ["chats", "my_travels","social_sharings"] if !Rails.env.production?
     default_features
   end
 
@@ -291,7 +291,7 @@ class Event < ActiveRecord::Base
     content_missing_arr = []
     features.each do |feature|
       feature = 'images' if feature == 'galleries'
-      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue') and (feature != 'emergency_exits' and feature != 'emergency_exit')
+      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings') and (feature != 'emergency_exits' and feature != 'emergency_exit')
       condition, feature = EmergencyExit.where(:event_id => self.id).blank?, 'emergency_exits' if feature == 'emergency_exits' or feature == 'emergency_exit'
       if (condition or (feature == 'abouts' and self.about.blank? or ((feature == 'event_highlights' and self.description.blank?) )))
         count += 1
@@ -335,7 +335,7 @@ class Event < ActiveRecord::Base
     #percentage
     total = 0
     features = self.event_features
-    features = features.where("name NOT IN (?)", ["event_highlights","my_calendar","chats"])
+    features = features.where("name NOT IN (?)", ["event_highlights","my_calendar","chats","social_sharings"])
     feature_length = features.length
     total = feature_length * 2 if feature_length.present?
     count = 0
