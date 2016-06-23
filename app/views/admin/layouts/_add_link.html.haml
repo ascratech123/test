@@ -132,9 +132,8 @@
     - if @event.present?
       = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Notification
-      - if !Rails.env.production?
-        = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-          New Group 
+      = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Group 
   - when 'qna'
     - if !(current_user.has_role? :moderator)
       = link_to admin_event_panels_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

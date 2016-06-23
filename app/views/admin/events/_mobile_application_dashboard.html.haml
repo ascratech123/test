@@ -62,5 +62,5 @@
       - if show_card("custom_page5s")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "custom.png", :objs => @event.custom_page5s, :url => "custom_page5s", :@count => 0} 
 
-      - if show_card("my_travels") and !Rails.env.production?
+      - if show_card("my_travels")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "travel.png", :objs => @event.my_travels, :url => "my_travels", :@count => 0}   
