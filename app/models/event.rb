@@ -268,8 +268,10 @@ class Event < ActiveRecord::Base
   def set_time(start_event_date, start_time_hour, start_time_minute, start_time_am, end_event_date, end_time_hour, end_time_minute, end_time_am)
     # start_event_date = self.start_event_date.to_date if self.start_event_date.present?
     # end_event_date = self.end_event_date.to_date if self.end_event_date.present?
-    self.start_event_time = "#{start_event_date} #{start_time_hour.gsub(':', "") rescue nil}:#{start_time_minute.gsub(':', "") rescue nil}:#{0} #{start_time_am}" if start_event_date.present?
-    self.end_event_time = "#{end_event_date} #{end_time_hour.gsub(':', "") rescue nil}:#{end_time_minute.gsub(':', "") rescue nil}:#{0} #{end_time_am}" if end_event_date.present?
+    start_event_time = "#{start_event_date} #{start_time_hour.gsub(':', "") rescue nil}:#{start_time_minute.gsub(':', "") rescue nil}:#{0} #{start_time_am}" if start_event_date.present?
+    end_event_time = "#{end_event_date} #{end_time_hour.gsub(':', "") rescue nil}:#{end_time_minute.gsub(':', "") rescue nil}:#{0} #{end_time_am}" if end_event_date.present?
+    self.start_event_time = start_event_time.to_time if start_event_date.present?
+    self.end_event_time = end_event_time.to_time if end_event_date.present?
   end
 
   def end_event_time_is_after_start_event_time

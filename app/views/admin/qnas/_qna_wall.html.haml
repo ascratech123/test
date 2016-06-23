@@ -2,13 +2,9 @@
   %head
     %title Hobnob
     %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
-      %link{:href => "/assets/css/qna_wall.css", :rel => "stylesheet"}
-        %script{:src => "/assets/jquery-1.11.3.min.js"}
-        %script{:src => "/assets/bootstrap.js"}
-        
-          
-            
-            
+    %link{:href => "/assets/css/qna_wall.css", :rel => "stylesheet"}
+    %script{:src => "/assets/jquery-1.11.3.min.js"}
+    %script{:src => "/assets/bootstrap.js"}
   %body
     .main.QnaWall
       .top.qna_wall
@@ -50,7 +46,7 @@
                       - unanswer_qnas.each do |qna|
                         %tr
                           %td{:align => "center", :valign => "middle"}
-                            %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                            %p.userTxt= get_only_time_in_ampm(qna.created_at)
                           %td
                             %p.userTxt= qna.get_user_name
                             %br
@@ -91,7 +87,7 @@
                     - answered_qnas.each do |qna|
                       %tr
                         %td{:align => "center", :valign => "middle"}
-                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                          %p.userTxt= get_only_time_in_ampm(qna.created_at)
                         %td
                           %p.userTxt= qna.get_user_name
                           %br
@@ -127,7 +123,7 @@
                     - rejected_qnas.each do |qna|
                       %tr
                         %td{:align => "center", :valign => "middle"}
-                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                          %p.userTxt= get_only_time_in_ampm(qna.created_at)
                         %td
                           %p.userTxt= qna.get_user_name
                           %br
