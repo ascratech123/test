@@ -4,7 +4,8 @@
 -elsif !objs.present? and params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = get_search_data("notifications")
-- else  
+- else
+  - push_page = {'Sponsor' => 'Sponsors', 'Exhibitor' => 'Exhibitors', 'Speaker' => 'Speakers', 'Invitee' => 'Invitees', 'Poll' => 'Polls', 'Conversation' => 'Conversations', 'Award' => 'Awards', 'Sponsor' => 'Sponsors', 'Note' => 'Notes', 'Exhibitor' => 'Exhibitors', 'My Favorite' => 'My Favorites'}  
   %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
     %tr
       %th Description 
@@ -16,7 +17,8 @@
         - objs.each do |notification|
           %tr
             %td.font16.notiTabinfo= notification.description rescue nil
-            %td.font16= notification.push_page rescue nil
+            %td.font16
+              = push_page[notification.push_page].present? ? push_page[notification.push_page] : notification.push_page
             %td.font16= notification.page_id rescue nil
             %td.font16= notification.push_datetime.strftime("%d-%m-%Y %H:%M") rescue nil
             %td.font16= notification.pushed rescue nil
