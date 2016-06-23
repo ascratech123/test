@@ -154,7 +154,7 @@ class EventFeature < ActiveRecord::Base
   # end
 
   def self.for_sequence_get_model_name
-    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor"}
+    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award"}
   end
 
   def update_menu_saved_field_when_no_feature_selected
