@@ -6,58 +6,57 @@
         %h4.heading-border.p-t-10.m-b-15
           General Information
       = f.custom_text_field :description, "Text (upto 200) *","background" => "false"
-      - if !Rails.env.production?
-        = f.new_custom_file_browser_field :image, "Image (less than 100 KB)", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
-          .mdl-grid.p-v-5.form-group.mobiappstype
-            .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Send to *
-            .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
-              = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => ((f.object.notification_type == 'all' or f.object.notification_type.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px'), :id => 'group_check_boxes'}
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Select Groups
-              %br
-              %a{:href => admin_event_invitee_groups_path(:event_id => @event.id), :class =>'', :title => "Invitee Groups", :target => '_blank'}
-                (View Available Groups)
-            .col-lg-7.notification
-              -# default_group_list = [['No Polls taken', 'No Polls taken'], ['No Feedback given', 'No Feedback given'], ['No Quiz taken', 'No Quiz taken'], ['No Q&A', 'No Q&A'], ['NO QR code scanned', 'NO QR code scanned'], ['No Chat', 'No Chat']]
-              - default_group_list = @default_groups.collect{|group| [ group.name, group.id ]}
-              - default_group_list.each_with_index do |group, index|
-                - if index == 0
-                  .usersep
-                    Default Groups
-                .md-checkbox
-                  %label
-                    = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
-                    %span.checkbox 
-                    = group[0]
-              - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
-              - default_group_list.each_with_index do |group, index|
-                - if index == 0
-                  .usersep
-                    Groups created by you
-                .md-checkbox
-                  %label
-                    = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
-                    %span.checkbox 
-                    = group[0]
-              =# f.select("notification", "group_ids", default_group_list,{:selected => f.object.group_ids},{include_blank: 'None', :multiple => true})
-          .form-group
-            %label.col-lg-4
-            .field_with_errors.col-lg-7
-              .span{:class => "errorMessage"}
-                = f.object.errors.messages[:group_ids].join("") rescue nil
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Destination
-            .col-lg-7
-              %i.arrow.single
-              - grouped_options = get_notification_type_group_array(@event)
-              = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
+      = f.new_custom_file_browser_field :image, "Image (less than 100 KB)", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+        .mdl-grid.p-v-5.form-group.mobiappstype
+          .col-lg-4.mdl-typography--text-right 
+            %p.displayInlineBlock.multicitytxt  Send to *
+          .col-lg-7.p-h-12.notific 
+            = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
+            = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => ((f.object.notification_type == 'all' or f.object.notification_type.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px'), :id => 'group_check_boxes'}
+        .form-group
+          %label.col-lg-4.control-label.ml-color--shades-white
+            Select Groups
+            %br
+            %a{:href => admin_event_invitee_groups_path(:event_id => @event.id), :class =>'', :title => "Invitee Groups", :target => '_blank'}
+              (View Available Groups)
+          .col-lg-7.notification
+            -# default_group_list = [['No Polls taken', 'No Polls taken'], ['No Feedback given', 'No Feedback given'], ['No Quiz taken', 'No Quiz taken'], ['No Q&A', 'No Q&A'], ['NO QR code scanned', 'NO QR code scanned'], ['No Chat', 'No Chat']]
+            - default_group_list = @default_groups.collect{|group| [ group.name, group.id ]}
+            - default_group_list.each_with_index do |group, index|
+              - if index == 0
+                .usersep
+                  Default Groups
+              .md-checkbox
+                %label
+                  = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+                  %span.checkbox 
+                  = group[0]
+            - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
+            - default_group_list.each_with_index do |group, index|
+              - if index == 0
+                .usersep
+                  Groups created by you
+              .md-checkbox
+                %label
+                  = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+                  %span.checkbox 
+                  = group[0]
+            =# f.select("notification", "group_ids", default_group_list,{:selected => f.object.group_ids},{include_blank: 'None', :multiple => true})
+        .form-group
+          %label.col-lg-4
+          .field_with_errors.col-lg-7
+            .span{:class => "errorMessage"}
+              = f.object.errors.messages[:group_ids].join("") rescue nil
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+        .form-group
+          %label.col-lg-4.control-label.ml-color--shades-white
+            Destination
+          .col-lg-7
+            %i.arrow.single
+            - grouped_options = get_notification_type_group_array(@event)
+            = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
@@ -81,10 +80,9 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-      - if !Rails.env.production?
-        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-            = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
 :javascript
   $(window).load(function(){
     flightTime();
