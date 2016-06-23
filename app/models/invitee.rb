@@ -474,5 +474,4 @@ class Invitee < ActiveRecord::Base
   def name_with_email
     user = "#{self.first_name.to_s + " " + self.last_name.to_s}(#{self.email})"
   end
-
 end
