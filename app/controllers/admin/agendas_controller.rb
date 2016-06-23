@@ -8,6 +8,8 @@ class Admin::AgendasController < ApplicationController
   def index
     @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_time)")
     @agenda_having_no_date = @agendas.where("start_agenda_time is null")
+    @page = params[:controller].split("/").second
+    @event_feature = @event.event_features.where(:name => @page)
     respond_to do |format|
       format.html  
       format.xls do
