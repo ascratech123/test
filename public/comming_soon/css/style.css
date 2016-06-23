@@ -2,7 +2,7 @@
 /* CSS Document */
 @import url(../fonts.css);
 body{ font-family: 'Conv_Ubuntu-R';  transition: all 0.5s ease;}
-.herder{ width:100%; height:85px; background:rgba(0,0,0,0.63); position:fixed; z-index:999;
+.herder{ width:100%; height:85px; background:rgba(0,0,0,0.63); position:fixed; z-index:9999;
 	/* opacity: 0.4;
     filter: alpha(opacity=40); For IE8 and earlier */
 	padding-bottom:1%;
@@ -51,7 +51,7 @@ border-radius: 4px;
 	.login{ display:block !important;}
 }	
 	
-/* xxxxxxxxxxxxxxxxxxxxx Animation XXXXXXXXXXXXXXXXXXXXXXXXX */
+/* xxxxxxxxxxxxxxxxxxxxx Animation XXXXXXXXXXXXXXXXXXXXXXXXX 
 .slideanim {visibility:hidden;}
   .slide {
       animation-name: slide;
@@ -81,19 +81,23 @@ border-radius: 4px;
     }
   }
   
-
+*/
 
 
 #product_wrap{ height:100%; background:#FFFFFF;}
-@media all and ( max-width:1024px){
+@media all and ( max-width:1023px){
 #product_wrap{ height:auto;}
 }
 #product_wrap h2{ font-size:22px; font-family: 'Conv_Ubuntu-B'; letter-spacing:3px; color:#00aebb; padding:7% 0px 0% 0px; width:150px;}
 #product_wrap h3{ font-size:44px; color:#00aebb; font-family: 'Conv_Ubuntu-L'; margin-top:0px; }
+@media all and ( max-width:1200px){
+#product_wrap h3{ font-size:40px;}
+}
 #product_wrap  .listApps{ margin:20px 0px 16px; font-size:20px;}
 #product_wrap  .listApps ul{ margin:0px; padding:0px;}
 #product_wrap  .listApps ul li{ background:url(../images/arr.png) no-repeat left; padding-left:26px; color:#00aebb; margin-bottom:6px; font-family: 'Conv_Ubuntu-R'; font-size:21px;}
-.know_more{ margin-bottom:20px;}
+.know_more{float: left;
+    margin-top: 20px;}
 .know_more a{ background:#ef5b47; text-decoration:none; color:#FFFFFF; letter-spacing:1px; padding:10px 24px;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
@@ -121,7 +125,7 @@ border-radius: 4px;
 .circleImg .margintop{ margin-top:-11px;}
 .circleImg .marginbottom{ margin-top:3px;}
 .mobileImg{ width:80%; text-align:center; margin:0 auto; margin-bottom:20px; margin-top:-12px;}
-@media all and (max-width:1024px){
+@media all and (max-width:1100px){
 .productAppwrp{ width:100%;}
 }
 
@@ -233,7 +237,7 @@ border-radius: 4px;
 
 #footer{ width:100%; height:100%; background:url(../images/footer.jpg) center repeat-y; background-size: contain; padding-top:75px; font-family: 'Conv_Ubuntu-L'; color:#FFFFFF; position:relative;}
 
-@media all and ( max-width:1300px){
+@media all and ( max-width:1023px){
 #footer{ height:auto;}
 }
 
@@ -328,11 +332,11 @@ border-radius: 4px;
 }
 
 .nav>li>a{ padding: 4px 40px; font-size:16px;}
-@media all and ( max-width:990px){
+@media all and ( max-width:993px){
 	.nav>li>a{ padding: 4px 18px;}
 }
 .navbar-center{ width:800px; margin:0 auto; float:right; margin-top:40px;}
-@media all and ( max-width:990px){
+@media all and ( max-width:993px){
 	.navbar-center{ width:auto;}
 }
 .navbar-brand {height: 85px;}
@@ -367,4 +371,4 @@ border-radius: 4px;
     font-family: 'Conv_Ubuntu-R';}	
 #privacy_wrap .privacytable ul li{ margin-bottom:15px;}
 
-.comodo_Logo{ margin-bottom:10px;}
+.comodo_Logo{ margin-bottom:10px; width:100px; float:left; margin-left:30px;}
