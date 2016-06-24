@@ -106,8 +106,8 @@
                 %label.field.file
                   %span.button.btn-primary
                     Choose File 
-                  = f.file_field :listing_screen_background,:id => "listing_screen_uploadBtn", :class=>"gui-file"
-                  = text_field_tag("text_file_name","", id: "listing_screen_uploadBtn1", class: "gui-input", :value => "#{f.object.listing_screen_background_file_name.nil? ? "there is no Attachment Available !" : f.object.listing_screen_background_file_name}", :read_only => true)
+                  = f.file_field :listing_screen_background,:id => "listing_screen_uploadBtn1", :class=>"gui-file"
+                  = text_field_tag("text_file_name","", id: "1listing_screen_uploadBtn1", class: "gui-input", :value => "#{f.object.listing_screen_background_file_name.nil? ? "there is no Attachment Available !" : f.object.listing_screen_background_file_name}", :read_only => true)
 
         = f.custom_text_field_display :listing_screen_text_color, "Listing Screen Text Color *", :value => @mobile_application.listing_screen_text_color, :class => 'pick-a-color', :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenTextColor.jpg", :rel=> "mobil_app_listing_screen_text_color", :title => "Listing Screen Text Color"}
 
@@ -209,12 +209,6 @@
 
 :javascript
   $(window).load(function(){
-    $('.gui-file').change(function(){
-      filename = $(this)[0].files[0].name;
-      file_id = $(this).attr("id")
-      $("#1" + file_id).val(filename);
-      });
-    
     $(".pick-a-color").pickAColor({
       showSpectrum            : true,
       showSavedColors         : true,
