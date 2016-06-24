@@ -305,7 +305,7 @@ module ApplicationHelper
   end  
 
   def send_mail_to_invitee(params,id)
-    content_tag :a , class: "mdl-menu__item mdl-js-ripple-effect", href: "/admin/events/#{params[:event_id]}/invitees/#{id}?send_mail=true" , class: "mdl-menu__item"  do
+    content_tag :a , class: "mdl-menu__item mdl-js-ripple-effect", href: "/admin/events/#{params[:event_id]}/invitees/#{id}?send_mail=true" , class: "mdl-menu__item send-password-btn"  do
       "Send Password"
     end
   end

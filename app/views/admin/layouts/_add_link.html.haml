@@ -59,7 +59,7 @@
   - when 'invitee'
     = link_to new_admin_event_invitee_path(:event_id => @event.id) ,:class => "rightBtn hvr-sweep-to-right" do
       New Invitee
-    = link_to admin_event_invitees_path(:event_id => @event.id, :send_mail => true) ,:class => "rightBtn hvr-sweep-to-right", data: { confirm: "Are you sure you want to send passwords to all new invitees?"} do
+    = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
       Send Password To All
   - when 'user'
     = link_to 'javascript:void(0);',:class => "rightBtn hvr-sweep-to-right", :id => 'add_user_popup' do
