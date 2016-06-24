@@ -3,7 +3,7 @@ class InviteeStructure < ActiveRecord::Base
   belongs_to :event
   has_many :invitee_datum
   
-  validates :event_id, :uniq_identifier, :presence => true
+  validates :event_id, :attr1, :uniq_identifier, :presence => true
   before_save :create_default_group
 
   default_scope { order('created_at desc') }

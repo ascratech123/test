@@ -193,6 +193,7 @@ protected
     end
     if params[:add_existing].present? or params[:old_one].present?
       @event.update_column(:mobile_application_id , @mobile_application.id)
+      @event.update_login_at_for_app_level
       @event.add_default_invitee
       redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id)
     elsif params[:event_id].present?
