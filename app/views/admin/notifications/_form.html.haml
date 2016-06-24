@@ -1,5 +1,12 @@
 .overlayBg
-  %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+  / %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+  .spinner
+    .rect1
+    .rect2
+    .rect3
+    .rect4
+    .rect5
+  
 .save_button.mdl-card
   = form_for [:admin, @event, @notification], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     .mdl-grid.mdl-card.mdl-shadow--1dp
