@@ -361,12 +361,6 @@ function flightTime() {
       });
   }
 
-  /*telecaller show page */
-    $(window).load(function(){
-      flightTime();
-      minutes();
-      times(); 
-   })
 
   /* Event Feature and emergency exit form file upload name */
   $(window).load(function(){
@@ -377,6 +371,13 @@ function flightTime() {
     });
   }) 
   
+  /*telecaller show page */
+    $(window).load(function(){
+      flightTime();
+      minutes();
+      times(); 
+   })
+    
   /* EKit Form */
 
   $("#tag_select").click(function() {

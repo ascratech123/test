@@ -106,7 +106,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def custom_submit_button(value=nil, options={})
     @template.content_tag :div, class: "mdl-button mdl-js-button mdl-button--raised mdl-color--light-blue-600 mdl-js-ripple-effect btnsubmit floatRight m-l-18" do
       @template.content_tag :div, class: "mdl-cell--12-col mdl-cell--12-col-tablet" do
-        str = submit_tag(value, options={:onClick =>'showSuccessToast();'})
+        str = submit_tag(value, options={:onClick =>'showSuccessToast();', :class => options[:class]})
       end  
     end 
   end
