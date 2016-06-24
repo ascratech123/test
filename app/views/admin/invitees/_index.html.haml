@@ -1,3 +1,11 @@
+.overlayBg
+  / %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+  .spinner
+    .rect1
+    .rect2
+    .rect3
+    .rect4
+    .rect5
 - if !objs.present? and !params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "invitees", :url => "/admin/events/#{params[:event_id]}/invitees/new", :msg => 'test'}
@@ -32,3 +40,21 @@
                   = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/invitees", :id => invitee.id, :visible_status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   = will_paginate objs 
               
+:javascript
+  $(".send-password-btn").click(function(){
+    $(".overlayBg").show();
+    $(".fixed-activon-btn-new.morefixed-activon-btn").css({"pointer-events":"none","opacity":"0.5"});
+  });
+  $(".send-password-confirm").click(function(){
+    if(confirm('Are you sure you want to send passwords to all new invitees?')) {
+      var url1 = window.location.href
+      var url = url1.split('?').shift();
+      window.location.href = url + '?send_mail=true'
+      $(".overlayBg").show();
+      $(".fixed-activon-btn-new.morefixed-activon-btn").css({"pointer-events":"none","opacity":"0.5"});
+    }
+    else {
+      $(".overlayBg").hide();
+    }
+  })
+  
