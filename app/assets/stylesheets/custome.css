@@ -22,6 +22,11 @@
 .notification .md-checkbox{display: block; min-height: 30px;}
 .notification .md-checkbox .checkbox{min-height: 20px;}
 .notification .md-checkbox .checkbox{padding-top: 0px;}
+.col-lg-3.p-h-12.chekboxtell .field_with_errors{text-align: center;top:-28px;}
+.col-lg-3.p-h-12.chekboxtell {text-align: right;}
+.md-checkbox .chekboxtell input[type="checkbox"] + .checkbox{right:0; left: auto;}
+.invitee_tell .form-group{margin-bottom: 0px;}
+.fixed-activon-btn-new.btn-bottom.tellbgnone{background:none;}
 .menuSubCard .menustatusnew{width:90px;}
 .menuSubCard .event-imgupload input.upload {width: 100%;top: 23px;padding-left: 33px;}
 .converblog .full_width{width:100%;}
@@ -1069,6 +1074,8 @@ i.incards {font-size: 60px}
 .pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
 .pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
 
+
+
 /*rwd table css start - Deepti */
 .blueheaderFont .breadcrumb {background-color: transparent;border-radius: 0;float: left;font-size: 12px;margin-bottom: 0;padding: 1px 5px 0 0;position: relative;}
 .table-responsive { font-family: "Ubuntu",sans-serif;}
@@ -1128,142 +1135,3 @@ i.incards {font-size: 60px}
     background-color: #01579b;
 }
 /*rwd table css end - Deepti */
-
-
-/* notification overlay css - Deepti*/
-.overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
-.loader-img{position: absolute;left: 0;margin: 0 auto;right: 0;top: 50%;transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);z-index: 9999;}
-.spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 60px;
-  text-align: center;
-  font-size: 10px;
-  position: absolute;
-  left: 0;
-  margin: 0 auto;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  z-index: 9999;
-}
-
-.spinner > div {
-  background-color: #00b1bb;
-  height: 100%;
-  width: 8px;
-  display: inline-block;
-  
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
-
-
-.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
-/* notification overlay css - Deepti*/
-.overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
-.loader-img{position: absolute;left: 0;margin: 0 auto;right: 0;top: 50%;transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);z-index: 9999;}
-.spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 60px;
-  text-align: center;
-  font-size: 10px;
-  position: absolute;
-  left: 0;
-  margin: 0 auto;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  z-index: 9999;
-}
-
-.spinner > div {
-  background-color: #00b1bb;
-  height: 100%;
-  width: 8px;
-  display: inline-block;
-  
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
-
-
-.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
-

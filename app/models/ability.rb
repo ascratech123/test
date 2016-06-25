@@ -96,6 +96,8 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
+      can :create, TelecallerAccessibleColumn
+      can :manage, TelecallerAccessibleColumn, :event_id => e_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -534,16 +536,16 @@ class Ability
       can :read, :all
     elsif user.has_role? :client_moderator
       can :read, :all
-    # elsif user.has_role? :telecaller
-    #   can :read, Client.with_role(:module_admin, user)
-    #   c_ids = Client.with_role(:event_admin, user).pluck(:id)
-    #   c_ids += Event.with_role(:event_admin, user).pluck(:client_id)
-    #   c_ids = c_ids.uniq
-    #   can :read, Event, :client_id => c_ids
+    elsif user.has_role? :telecaller
+      c_ids = Client.with_role(:telecaller, user).pluck(:id)
+      c_ids += Event.with_role(:telecaller, user).pluck(:client_id)
+      can :read, Client, :id => c_ids
+      c_ids = c_ids.uniq
+      can :read, Event, :client_id => c_ids
       
-    #   e_ids = Event.where(:client_id => c_ids).pluck(:id).uniq
+      # e_ids = Event.where(:client_id => c_ids).pluck(:id).uniq
 
-    #   can [:update,:read], InviteeData, :event_id => e_ids
+      # can [:update,:read], InviteeData, :event_id => e_ids
     end
 
     # Define abilities for the passed in user here. For example:
