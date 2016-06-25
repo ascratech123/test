@@ -5,7 +5,10 @@ class Admin::UserRegistrationsController < ApplicationController
   skip_before_filter :authenticate_user, :load_filter
     
   def index
-   redirect_to new_admin_event_user_registration_path(:event_id => @event.id) 
+   # redirect_to new_admin_event_user_registration_path(:event_id => @event.id) 
+   @registration = @event.registrations.first
+   @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
+   render :layout => 'admin'
   end
 
   def new
