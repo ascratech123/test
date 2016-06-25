@@ -78,8 +78,9 @@
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "true", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'telecaller'
-    = link_to new_admin_event_telecaller_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
-      New TeleCaller.
+    - if @event.invitee_structures.present?
+      = link_to new_admin_event_telecaller_accessible_column_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+        Telecaller Access Column
   - when 'my_travel'
     = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
       New My Travel

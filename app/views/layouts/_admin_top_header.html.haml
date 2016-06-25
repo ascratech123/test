@@ -84,12 +84,14 @@
             - elsif page == "telecallers"
               = link_to "User", admin_client_users_path(:client_id => @client.id),:class => "mdl-color-text--white" if @client.present? and params[:from_client].present?
               = link_to "User", admin_event_users_path(:event_id => @event.id),:class => "mdl-color-text--white" if @event.present? and params[:from_event].present?
+              = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id),:class => "mdl-color-text--white" if (params[:from_telecaller].present? or params[:telecaller_index].present?)
             = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers"
         - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel")
           = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
           - if params[:action] == "new" and params[:controller] == "admin/telecallers"
             %li.breadcrumb-link
-              = link_to "New User", "javascript:void(0);", :class => "mdl-color-text--white" 
+              / = link_to "New Telecaller", "javascript:void(0);", :class => "mdl-color-text--white" if params[:telecaller_index].present?
+              = link_to "New User", "javascript:void(0);", :class => "mdl-color-text--white" if (params[:from_client].present? or params[:from_event].present?)
       - if (@mobile_application.present? and @event.present?) and (params[:controller] == "admin/mobile_applications" and params[:action] == "edit")
         %li.breadcrumb-link
           = link_to "App Info", edit_admin_event_mobile_application_path(event_id: @event.id, id: @mobile_application.id), :class => "mdl-color-text--white"
