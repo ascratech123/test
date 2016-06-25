@@ -29,8 +29,12 @@
     - else
       - default_fields = ["field1","field2","field3","field4","field5","field6","field7","field8","field9","field10","field11","field12","field13","field14","field15","field16","field17","field18","field19","field20"]
       - count = 0
+      - last_index = get_last_user_registration_field_index(f.object)
+      - last_index = 5 if last_index.blank?
+      - last_index = (last_index.present? and last_index < 4) ? 5 : last_index + 1
       - default_fields.each do |default_field|
-        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp
+        - attrs = f.object.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code')
+        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and (attrs[default_field].present? and attrs[default_field]['label'].blank? or f.object.new_record?)) ? 'display:none' : ''}"}
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
               = "Registration Field #{count + 1}"
@@ -124,6 +128,7 @@
                   .field_with_errors
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 1
+        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{((count + 1) == last_index) ? '' : 'display:none'}"
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
@@ -187,3 +192,8 @@
       $('.text_area_form_group.'+check_field).hide();
      }
   }
+  $('.link_to_add_more').click(function(){
+    div_show = $(this).attr('for');
+    $('.'+div_show).show();
+    $(this).hide();
+  })

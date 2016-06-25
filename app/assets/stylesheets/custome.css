@@ -1134,3 +1134,6 @@ i.incards {font-size: 60px}
     -webkit-transform: scaleY(1.0);
   }
 }
+
+
+.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}

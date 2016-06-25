@@ -566,6 +566,16 @@ module ApplicationHelper
     end
   end
 
+  def get_last_user_registration_field_index(obj)
+    a = []
+    obj.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code').each_with_index do |t, index|
+      index = index + 1
+      a << ((t[1].present? and t[1]['label'].present?) ? index : nil)
+    end
+    a = a.compact
+    index = a.last
+    index
+  end
 end
 
 
