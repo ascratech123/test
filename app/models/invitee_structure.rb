@@ -19,6 +19,10 @@ class InviteeStructure < ActiveRecord::Base
   	attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? k.downcase : nil}.compact
   end
 
+  def get_database_columns
+    attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? v.downcase : nil}.compact
+  end
+
   def create_default_group
     if self.new_record?
       Grouping.create(name: "Default Group", event_id: self.event_id, default_group: 'true')

@@ -10,7 +10,8 @@
       - objs.each_with_index do |grouping,index|
         %tr
           %td
-            = grouping.name rescue nil
+            = link_to admin_event_invitee_datas_path(:event_id => @event.id, :grouping_id => grouping.id), :target => '_blank' do
+              = grouping.name
           %td
             - grouping_count = grouping.get_search_data_count(@invitee_data).count rescue 0
             = grouping_count
@@ -52,5 +53,4 @@
   $('input[readonly]').dblclick(function() {
     $(this).removeAttr('readonly');
   });
-
 
