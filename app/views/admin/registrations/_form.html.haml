@@ -33,8 +33,9 @@
       - last_index = 5 if last_index.blank?
       - last_index = (last_index.present? and last_index < 4) ? 5 : last_index + 1
       - default_fields.each do |default_field|
-        - attrs = f.object.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code')
-        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and (attrs[default_field].present? and attrs[default_field]['label'].blank? or f.object.new_record?)) ? 'display:none' : ''}"}
+        -# attrs = f.object.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code')
+        -#.m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and (attrs[default_field].present? and attrs[default_field]['label'].blank? or f.object.new_record?)) ? 'display:none' : ''}"}
+        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and ((count + 1) >= last_index)) ? 'display:none' : ''}"}  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
               = "Registration Field #{count + 1}"
