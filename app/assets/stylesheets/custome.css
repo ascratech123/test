@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.tellbgnone .editButton .waves-effect.waves-light.btn,.tellbgnone .editButton a{font-size: 14px; font-weight: 100;}
 .options_form_tag_for_new{display:none;}
 .mdl-data-table .notiTabinfo{ width:44%;}
 .usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
