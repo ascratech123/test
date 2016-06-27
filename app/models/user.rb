@@ -312,5 +312,20 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+  def get_count(telecaller_id,event_id, type)
+    event = Event.find(event_id)
+    telecaller = User.unscoped.find(telecaller_id)
+    grouping = Grouping.find(telecaller.assign_grouping) rescue nil
+    groupings = Grouping.with_role(telecaller.roles.pluck(:name), telecaller)
+    invitee_structure = event.invitee_structures.first if event.invitee_structures.present?
+    invitee_data = invitee_structure.invitee_datum
+    @data = Grouping.get_search_data_count(invitee_data, [grouping]) if groupings.present? and invitee_data.present?
+    @assigned = @data.count
+    @processed = @data.where('status IS NOT NULL').count rescue 0
+    @remaining = @data.where(:status => nil).count rescue 0
+    return @assigned if type == "Assigned"
+    return @processed if type == "Processed"
+    return @remaining if type == "Remaining"
+  end
+
 end
