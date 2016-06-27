@@ -319,9 +319,10 @@ class User < ActiveRecord::Base
     groupings = Grouping.with_role(telecaller.roles.pluck(:name), telecaller)
     invitee_structure = event.invitee_structures.first if event.invitee_structures.present?
     invitee_data = invitee_structure.invitee_datum
-    @assigned = Grouping.get_search_data_count(invitee_data, groupings).count if groupings.present? and invitee_data.present?
-    @processed = invitee_data.where('status IS NOT NULL').count rescue nil
-    @remaining = invitee_data.where(:status => nil).count rescue nil
+    @data = Grouping.get_search_data_count(invitee_data, [grouping]) if groupings.present? and invitee_data.present?
+    @assigned = @data.count
+    @processed = @data.where('status IS NOT NULL').count rescue 0
+    @remaining = @data.where(:status => nil).count rescue 0
     return @assigned if type == "Assigned"
     return @processed if type == "Processed"
     return @remaining if type == "Remaining"

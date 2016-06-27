@@ -4,6 +4,6 @@ class TelecallerAccessibleColumn < ActiveRecord::Base
   validate :check_attr1_is_present
 
   def check_attr1_is_present
-    errors.add(:accessible_attribute, "at least one field is required.") if self.accessible_attribute.blank?
+    errors.add(:accessible_attribute, "This field is required.") if self.accessible_attribute.blank?
   end
 end

@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.tellbgnone .editButton .waves-effect.waves-light.btn,.tellbgnone .editButton a{font-size: 14px; font-weight: 100;}
 .col-lg-3.p-h-12.chekboxtell .field_with_errors{text-align: center;top:-28px;}
 .col-lg-3.p-h-12.chekboxtell {text-align: right;}
 .md-checkbox .chekboxtell input[type="checkbox"] + .checkbox{right:0; left: auto;}

@@ -1,6 +1,6 @@
 - if !objs.present? and !params[:admin_search].present?
-  .mdl-typography--text-center.BlnkTxt
-    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'telecaller', :url => "/admin/events/#{params[:event_id]}/telecallers/new?telecaller_index=true", :msg => 'test'} 
+  / .mdl-typography--text-center.BlnkTxt
+  /   = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'telecaller', :url => "/admin/events/#{params[:event_id]}/telecallers/new?telecaller_index=true", :msg => 'test'} 
 -elsif !objs.present? and params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt
     = get_search_data("telecallers")
