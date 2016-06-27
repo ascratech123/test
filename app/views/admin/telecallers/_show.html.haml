@@ -100,7 +100,8 @@
             %td.popupLeft= obj.status        
           %tr
             %td.popTxtRight Date / Time : 
-            %td.popupLeft= get_datetime_in_ampm(obj.callback_datetime) rescue nil
+            %td.popupLeft= time_with_zone(obj.callback_datetime, 'IST')
+            / obj.callback_datetime.strftime("%d/%m/%Y %l:%M:%p") rescue nil  
           %tr
             %td.popTxtRight Remark : 
             %td.popupLeft= obj.remark
