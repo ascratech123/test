@@ -28,7 +28,14 @@
     });
    });
 
+  $(document).ready(function(){
+    var dropdownMenuList = $('.dropdown-menu li').length;
+    if (dropdownMenuList >= 10)
+    {
+      $(".dropdown-menu").css({"height":"400px","overflow-y":"scroll"});
+    }else{
+      $(".dropdown-menu").css({"height":"auto","overflow-y":"auto"});
+    }
+  });
 %script{:src => "/assets/rwd-table.js", :type => "text/javascript"}
 %script{:src => "/assets/bootstrap.js", :type => "text/javascript"}
-
-
