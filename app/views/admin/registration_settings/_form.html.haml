@@ -45,6 +45,13 @@
           .span.col-lg-1
             = link_to("?" ,"/whats_this/app_info/general_information/1.png", rel: "selecte_template", title: "Selecte Template", :class =>"fancybox whatsImg")
       = f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Show on mobile app
+          .col-lg-7.p-h-12
+            = f.custom_radio_button_menu :on_mobile_app, "yes","Yes", :id => params[:action] == "new" ? "option1_regi" : "ssoption_1_registration", :default_checked => (f.object.registration == 'yes' or f.object.registration.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :on_mobile_app, "no", "No", :id => "ssoption_2_registration", :default_checked => (f.object.registration == 'no') ? 'checked' : ''
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
       = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
