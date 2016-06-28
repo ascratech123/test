@@ -12,6 +12,8 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.Regiserror{margin-top: 5px;}
+.Regiserror .field_with_errors{left: 34%;position: absolute;top: 30px;}
 .options_form_tag_for_new{display:none;}
 .menuSubCard .menustatusnew{width:90px;}
 .menuSubCard .event-imgupload input.upload {width: 100%;top: 23px;padding-left: 33px;}
