@@ -51,8 +51,8 @@
           .col-lg-3.p-h-12
             - er = f.object.errors.messages[:on_mobile_app].join(',') rescue nil
             - f.object.errors.messages[:on_mobile_app].clear if f.object.errors.messages[:on_mobile_app].present?
-            = f.custom_radio_button_menu :on_mobile_app, "yes","Yes", :id => "option_1_visible_on_mobile_app", :default_checked => "#{f.object.visible_on_mobile_app == "yes" ? 'checked' : ''}"
-            = f.custom_radio_button_menu :on_mobile_app, "no", "No", :id => "option_2_visible_on_mobile_app", :default_checked => "#{f.object.visible_on_mobile_app == "no" ? 'checked' : ''}"
+            = f.custom_radio_button_menu :on_mobile_app, "yes","Yes", :id => "option_1_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "yes" ? 'checked' : ''}"
+            = f.custom_radio_button_menu :on_mobile_app, "no", "No", :id => "option_2_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "no" ? 'checked' : ''}"
             .field_with_errors
               .span{:class => "errorMessage"}
                 = er
@@ -83,13 +83,6 @@
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:end_date].join("") rescue nil
       = f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .mdl-grid.p-v-5
-          .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Show on mobile app
-          .col-lg-7.p-h-12
-            = f.custom_radio_button_menu :on_mobile_app, "yes","Yes", :id => params[:action] == "new" ? "option1_regi" : "ssoption_1_registration", :default_checked => (f.object.registration == 'yes' or f.object.registration.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :on_mobile_app, "no", "No", :id => "ssoption_2_registration", :default_checked => (f.object.registration == 'no') ? 'checked' : ''
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
       = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
