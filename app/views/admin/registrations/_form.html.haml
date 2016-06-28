@@ -107,9 +107,14 @@
                   .form-group  
                     %label.col-lg-4.control-label.ml-color--shades-white
                     .col-lg-7.addmoretext
-                      = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : ''} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
-                        %i.material-icons.mdl-color-text--white
-                          add
+                      - if f.object.id.present?
+                        = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : ''} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
+                          %i.material-icons.mdl-color-text--white
+                            add
+                      - else
+                        = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : 'options_form_tag_for_new'} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
+                          %i.material-icons.mdl-color-text--white
+                            add
 
               - ['option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10'].each_with_index do |op, index|
                 -# op_attrs = f.object.attributes[default_field].except('label', 'option_type', 'validation_type', 'mandatory_field').map{|o| o[1].present? ? o[0] : nil}.compact
@@ -155,7 +160,7 @@
                   .field_with_errors
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 1
-        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{((count + 1) == last_index) ? '' : 'display:none'}"
+        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{(count == last_index) ? '' : 'display:none'}"
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
