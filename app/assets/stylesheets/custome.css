@@ -12,6 +12,8 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.Regiserror{margin-top: 5px;}
+.Regiserror .field_with_errors{left: 34%;position: absolute;top: 30px;}
 .optionsDiv.col-lg-12 .col-lg-7{padding-right: 0px;}
 .addmoretext{text-align: right;padding-right: 8px;}
 .addmoretext a{display: inline-block; border-radius: 50%;}
