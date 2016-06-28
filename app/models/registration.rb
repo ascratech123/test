@@ -23,7 +23,7 @@ class Registration < ActiveRecord::Base
   belongs_to :event
   has_many :user_registrations
   
-  attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4,:mandatory_field,:text_box_required_after_options
+  attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4,:option_5,:option_6,:option_7,:option_8,:option_9,:option_10,:mandatory_field,:text_box_required_after_options
   
   validate :mandate_field_check
 

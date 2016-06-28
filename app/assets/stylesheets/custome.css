@@ -12,6 +12,9 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.optionsDiv.col-lg-12 .col-lg-7{padding-right: 0px;}
+.addmoretext{text-align: right;padding-right: 8px;}
+.addmoretext a{display: inline-block; border-radius: 50%;}
 .options_form_tag_for_new{display:none;}
 .menuSubCard .menustatusnew{width:90px;}
 .menuSubCard .event-imgupload input.upload {width: 100%;top: 23px;padding-left: 33px;}
