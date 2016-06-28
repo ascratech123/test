@@ -31,18 +31,18 @@
       - count = 0
       - last_index = get_last_user_registration_field_index(f.object)
       - last_index = 5 if last_index.blank?
-      - last_index = (last_index.present? and last_index < 4) ? 5 : last_index + 1
+      - last_index = (last_index.present? and last_index < 5) ? 5 : last_index
       - default_fields.each do |default_field|
+        - count += 1 
         -# attrs = f.object.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code')
         -#.m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and (attrs[default_field].present? and attrs[default_field]['label'].blank? or f.object.new_record?)) ? 'display:none' : ''}"}
-        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and ((count + 1) >= last_index)) ? 'display:none' : ''}"}  
+        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count}", :style => "#{(count > 5 and ((count) > last_index)) ? 'display:none' : ''}"}  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
-              = "Registration Field #{count + 1}"
-          - count += 1 
+              = "Registration Field #{count}"
           = f.fields_for default_field do |field|
             - if !(f.object.new_record?)
-              = field.custom_text_field :label, "Question #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
+              = field.custom_text_field :label, "Question #{count <= 2 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
@@ -56,7 +56,7 @@
                   %label.col-lg-4.control-label  
                   .col-lg-7.field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:label].join("") rescue nil if count <= 1
+                      = f.object.errors.messages[:label].join("") rescue nil if count == 2
             .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
               .form-group
                 %label.col-lg-4.control-label.ml-color--shades-white
@@ -153,13 +153,13 @@
               .mdl-grid.p-v-5
                 .col-lg-4.mdl-typography--text-right
                   %p.displayInlineBlock.multicitytxt  
-                  = "#{count <= 1 ? 'Text box required after options? *' : 'Text box required after options?'}"
+                  = "#{count <= 2 ? 'Text box required after options? *' : 'Text box required after options?'}"
                 .col-lg-3.p-h-12
                   = field.custom_radio_button_menu :text_box_required_after_options, "yes","Yes", :id => "option_1_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "yes") ? 'checked' : ''
                   = field.custom_radio_button_menu :text_box_required_after_options, "no", "No", :id => "option_2_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "no") ? 'checked' : ''
                   .field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 1
+                      = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 2
         = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{(count == last_index) ? '' : 'display:none'}"
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
