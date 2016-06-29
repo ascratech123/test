@@ -537,7 +537,7 @@ module ApplicationHelper
     a = []
     obj.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code').each_with_index do |t, index|
       index = index + 1
-      a << ((t[1].present? and t[1]['label'].present?) ? index : nil)
+      a << ((t[1].present? and t[1]['label'].present? or t[1].present? and t[1]['option_type'].present?) ? index : nil)
     end
     a = a.compact
     index = a.last
