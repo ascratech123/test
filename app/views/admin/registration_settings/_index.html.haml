@@ -14,9 +14,9 @@
       %th
     - objs.each do |regi_setting|
       %tr
-        %td.description_adjust.font16= (regi_setting.registration == "hobnob" ? "Create new" : "Use existing URL") rescue nil
-        %td.font16= regi_setting.start_date.strftime('%d/%m/%Y %l:%M %p') rescue nil
-        %td.font16= regi_setting.end_date.strftime('%d/%m/%Y %l:%M %p') rescue nil
+        %td.description_adjust.font16= regi_setting.on_mobile_app.capitalize rescue nil
+        %td.font16= time_with_zone(regi_setting.start_date,"IST")
+        %td.font16= time_with_zone(regi_setting.end_date,"IST")
         - regi_setti_url = (regi_setting.registration == "hobnob" ? regi_setting.reg_url : regi_setting.external_reg_url) rescue nil
         %td.font16= regi_setti_url
         %td.IconDrp
@@ -26,7 +26,7 @@
               Edit Setting
             = link_to regi_setti_url,:target =>"_blank"  ,:class => "mdl-menu__item mdl-js-ripple-effect" do
               Preview Form
-            -if regi_setting.registration == "hobnob"
+            -if @event.registrations.present? and regi_setting.registration == "hobnob"
               = link_to edit_admin_event_registration_path(:event_id => @event.id, :id => @event.registrations.first.id), :class => "mdl-menu__item mdl-js-ripple-effect" do
                 Edit Form
             -if regi_setting.template == "custom"
