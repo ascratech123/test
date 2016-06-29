@@ -80,4 +80,8 @@ class Speaker < ActiveRecord::Base
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
+
+  def self.get_speakers_by_event(event_id)
+    Speaker.where(:event_id => event_id)
+  end
 end

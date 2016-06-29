@@ -39,4 +39,8 @@ class Registration < ActiveRecord::Base
         errors.add(:option_2, "This field is required.") if ((field[:option_type] == "Check Box" or field[:option_type] == "Radio Button") and field[:option_2].blank?)
     end
   end
+
+  def self.get_events_by_event_id(event_ids)
+    Registration.where(:event_id => event_ids)
+  end
 end

@@ -66,14 +66,14 @@
           / - @clients = Client.with_role(current_user.roles.pluck(:name), current_user)
           - client_ids = @clients.pluck('clients.id')
           - client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
-          - @events = Event.where(:client_id => client_ids)
+          - @events = Event.get_events_by_client_ids(client_ids)
           - if current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
-            - @mobile_applications = MobileApplication.where(:id => ids)
+            - @mobile_applications = MobileApplication.get_mobile_application_by_ids(ids)
           - else
-            - @mobile_applications = MobileApplication.where(:client_id => client_ids)
+            - @mobile_applications = MobileApplication.get_mobile_application_by_client_ids(client_ids)
           - event_ids = @events.pluck(:id)
-          - @registrations = Registration.where(:event_id => event_ids)
+          - @registrations = Registration.get_events_by_event_id(event_ids)
           - if current_user.has_role? :event_admin
             - @users = User.get_managed_user(current_user,client_ids,@count.pluck(:id)) rescue []
           - else   

@@ -16,7 +16,7 @@
           - page = params[:controller].split("/").second
           - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images", "abouts", "sponsors", "my_profile", "qr_code","my_calendar", "favourites", 'leaderboard','custom_page1s','custom_page2s','custom_page3s','custom_page4s','custom_page5s']
           - if ["poll_walls","conversation_walls","qna_walls"].exclude? url and show_card_except_event_features(url)
-            - event_feature = @event.event_features.where(:name => page)
+            - event_feature = @event.get_event_features_by_names(page)
             - page = page.titleize
           - else
             %h2.fs40.mt5.mbn

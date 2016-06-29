@@ -507,5 +507,13 @@ class Event < ActiveRecord::Base
   #   end
   #   content_missing_arr
   # end
+
+  def get_event_features_by_names(name_arr)
+    self.event_features.where(:name => name_arr)
+  end
+
+  def self.get_events_by_client_ids(client_ids)
+    Event.where(:client_id => client_ids)
+  end
   
 end

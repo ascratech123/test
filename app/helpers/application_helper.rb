@@ -122,7 +122,7 @@ module ApplicationHelper
     if params[:client_id].present?
       admin_client_events_path(:client_id => params[:client_id], :feature => feature) 
     elsif params[:event_id].present? and !params[:client].present?
-      client_id = Event.find(params[:event_id]).client.id rescue nil
+      client_id = Event.get_event_by_id(params[:event_id]).client.id rescue nil
       admin_client_events_path(:client_id => client_id, :feature => feature)
     else
       "/admin/events/#{params[:event_id]}/#{feature}"   
@@ -393,7 +393,7 @@ module ApplicationHelper
   end
 
   def event_speakers_list(event_id)
-    list_of_speakers = Speaker.where("event_id =?", event_id) if event_id.present?
+    list_of_speakers = Speaker.get_speakers_by_event(event_id) if event_id.present?
   end
 
   def correct_user_polls_for_percentile(poll,option)

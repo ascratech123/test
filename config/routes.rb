@@ -10,12 +10,8 @@ end
 root "admin/homes#index"
 get 'back' => 'application#back'
 namespace :admin do
-  get 'bee_editor' => 'bee_editors#index'
   get '/mobile_applications/:mobile_application_id/success' => 'external_login#show'
   get '/events/:event_id/success' => 'user_registrations#show'
-  get 'bee_editor/token' => 'bee_editors#token'
-  get 'bee_editor/template' => 'bee_editors#template'
-  # get '/check_email_existance' => 'users#check_email_existance'
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login
   resources :licensees do
@@ -74,10 +70,6 @@ end
     namespace :v1 do
       get 'tokens/destroy_token' => 'tokens#destroy_token', defaults: {format: 'json'}
       post 'tokens/get_key' => 'tokens#get_key'#, defaults: {format: 'json'}
-      get 'tokens/check_token' => 'tokens#check_token', defaults: {format: 'json'}
-      post 'tokens/user_sign_up' => 'tokens#user_sign_up', defaults: {format: 'json'}
-      post 'tokens/facebook_authentication' => 'tokens#facebook_authentication', defaults: {format: 'json'}
-      post 'tokens/twitter_authentication' => 'tokens#twitter_authentication', defaults: {format: 'json'}
       resources :events do 
         post 'delete_mobile_data', on: :collection 
         resources :chats

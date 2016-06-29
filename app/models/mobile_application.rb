@@ -219,4 +219,12 @@ class MobileApplication < ActiveRecord::Base
     end  
     apps
   end
+
+  def self.get_mobile_application_by_ids(ids)
+    MobileApplication.where(:id => ids)
+  end
+
+  def self.get_mobile_application_by_client_ids(client_ids)
+    MobileApplication.where(:client_id => client_ids)
+  end
 end
