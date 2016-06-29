@@ -22,10 +22,10 @@
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
             .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
               = back_button(:back)
-          - if !f.object.new_record?
-            .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
-              .mdl-cell--12-col.mdl-cell--12-col-tablet
-                = link_to "Preview",new_admin_event_user_registration_path(:event_id => @event.id),:target => "_blank"
+          / - if !f.object.new_record?
+          /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+          /     .mdl-cell--12-col.mdl-cell--12-col-tablet
+          /       = link_to "Preview",new_admin_event_user_registration_path(:event_id => @event.id),:target => "_blank"
     - else
       - default_fields = ["field1","field2","field3","field4","field5","field6","field7","field8","field9","field10","field11","field12","field13","field14","field15","field16","field17","field18","field19","field20"]
       - count = 0
