@@ -5,12 +5,12 @@ class Admin::RegistrationsController < ApplicationController
   before_filter :authorize_event_role, :if => Proc.new{params[:event_id].present?}
 
   def index
-    if @event.registrations.present?
-      # @registrations = @event.registrations
-      redirect_to edit_admin_event_registration_path(:event_id => params[:event_id],:id => @event.registrations.first.id)
-    else
-      redirect_to new_admin_event_registration_path(:event_id => params[:event_id])
-    end
+    # if @event.registrations.present?
+      # redirect_to edit_admin_event_registration_path(:event_id => params[:event_id],:id => @event.registrations.first.id)
+      redirect_to admin_event_registration_settings_path(:event_id => params[:event_id],:id => @event.registrations.first.id)
+    # else
+    #   redirect_to new_admin_event_registration_path(:event_id => params[:event_id])
+    # end
   end
 
   def new
@@ -27,7 +27,9 @@ class Admin::RegistrationsController < ApplicationController
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
       else
-        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
+        # redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
+        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
+
       end
     else
       render :action => 'new'
@@ -53,7 +55,8 @@ class Admin::RegistrationsController < ApplicationController
       @registration.update_attributes(registration_params)
       redirect_to edit_admin_event_registration_path(:event_id => @event.id,:id => @registration.id,:change_code => "true")
     elsif @registration.update_attributes(registration_params)
-      redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
+      # redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
+      redirect_to admin_event_registration_settings_path(:event_id => @event.id)
     else
       render :action => "edit"
     end

@@ -5,11 +5,12 @@ class Admin::RegistrationSettingsController < ApplicationController
 
 
   def index
-    if @registration_settings.present?
-      redirect_to edit_admin_event_registration_setting_path(:event_id => params[:event_id], :id => @event.registration_settings.last.id)
-    else
-      redirect_to new_admin_event_registration_setting_path(:event_id => params[:event_id])
-    end
+    # if @registration_settings.present?
+    #   redirect_to edit_admin_event_registration_setting_path(:event_id => params[:event_id], :id => @event.registration_settings.last.id)
+    # else
+    #   redirect_to new_admin_event_registration_setting_path(:event_id => params[:event_id])
+    # end
+    @registration_settings = @event.registration_settings.paginate(page: params[:page], per_page: 10)
   end
 
   def new
@@ -26,7 +27,7 @@ class Admin::RegistrationSettingsController < ApplicationController
       if @registration_setting.registration == "hobnob"
         redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id)
       else
-        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration_setting.event_id,:analytics=>true)
+        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
       end
     else
       render :action => 'new'
