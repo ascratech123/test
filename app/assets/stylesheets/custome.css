@@ -12,6 +12,8 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.Regiserror{margin-top: 5px;}
+.Regiserror .field_with_errors{left: 34%;position: absolute;top: 30px;}
 .telehead{font-size: 18px; font-weight: 400; color:#a9acbd; line-height: 18px;}
 .textright{text-align: right;}
 .optionsDiv.col-lg-12 .col-lg-7{padding-right: 0px;}
@@ -292,7 +294,7 @@
  .editshowlink .editLink{color: #fff;}
  .heading-borderCard{border-bottom: 1px solid #d7d7d7;padding-bottom: 4px;}
  .setting,.content{clear:both; display: block; background: none;}
- .breadcrumb > li{vertical-align: top;}
+ .breadcrumb > li{vertical-align: middle;}
 .breadcrumb > li.breadcrumb-active{font-size: 18px;}
  @media screen and (-webkit-min-device-pixel-ratio:0){.fixed-activon-btn-new .btnsubmit input { padding: 9px 25px; } }
  #template_name_{position: relative;z-index: 9999;}
@@ -1082,63 +1084,3 @@ i.incards {font-size: 60px}
 
 
 .link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
-
-/*rwd table css start - Deepti */
-.blueheaderFont .breadcrumb {background-color: transparent;border-radius: 0;float: left;font-size: 12px;margin-bottom: 0;line-height: 0px;padding: 1px 5px 0 0;position: relative;}
-.table-responsive { font-family: "Ubuntu",sans-serif;}
-.table-responsive .mdl-data-table td, .mdl-data-table th{text-align: left;}
-.table-responsive .table-bordered > thead > tr > th, .table-bordered > thead > tr > td{border-bottom-width: inherit;}
-/*.table-responsive .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{ background-color: #fff;}*/
-.table-responsive .table-bordered > thead > tr > th, .table-responsive .table-bordered > tbody > tr > th, .table-responsive .table-bordered > tfoot > tr > th, .table-responsive .table-bordered > thead > tr > td,.table-responsive .table-bordered > tbody > tr > td, .table-responsive .table-bordered > tfoot > tr > td{border: none;}
-.table-responsive thead{background: #eee none repeat scroll 0 0;}
-.table-responsive .table > thead > tr > th{vertical-align: middle;}
-.table-responsive .table > thead > tr > th {
-    box-sizing: border-box;
-    color: #000;
-    font-size: 12px;
-    font-weight: 500;
-    height: 48px;
-    letter-spacing: 0;
-    line-height: 24px;
-    padding-bottom: 8px;
-    position: relative;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    vertical-align: middle;
-}
-.btn-toolbar{margin-top: 20px;}
-.btn-toolbar .checkbox-row  input[type=checkbox] {
-    display: none;
-}
-.btn-toolbar .checkbox-row label {
-    cursor: pointer;
-    display: inline-block;
-    font-size: 13px;
-    margin-right: 15px;
-    padding-left: 25px;
-    position: relative;
-}
-.btn-toolbar .checkbox-row label::before {
-    background-color: #fff;
-    bottom: 1px;
-    content: "";
-    display: inline-block;
-    height: 16px;
-    left: 0;
-    margin-right: 10px;
-    position: absolute;
-    width: 16px;
-    border-radius: 2px;
-    border: 2px solid #01579b;
-}
-
-.btn-toolbar .checkbox-row input[type="checkbox"]:checked + label::before {
-    color: #f3f3f3;
-    content: "✓";
-    font-size: 15px;
-    line-height: 12px;
-    text-align: center;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    background-color: #01579b;
-}
-/*rwd table css end - Deepti */

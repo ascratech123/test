@@ -1,10 +1,13 @@
 class RegistrationSetting < ActiveRecord::Base
+  
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :start_date_time, :end_date_time
   belongs_to :event 
 
-  validates :login, :event_id, :registration, presence: true
+  validates :login, :event_id, :registration, :on_mobile_app, presence: true
   # validates :login_url, :login_surl, :reg_url, :reg_surl, presence: true, :if :registration == 'hobnob'
   # validates :forget_pass_url, :forget_pass_surl, presence: true
-  validate :check_external_regi_and_login_present
+  validate :check_external_regi_and_login_present,:check_start_and_end_date_are_present
+  before_validation :set_time
 
   before_save :update_registation_login_url,:update_template_to_template_name
   after_save :update_registation_surl
@@ -50,4 +53,17 @@ class RegistrationSetting < ActiveRecord::Base
     end
   end
 
+  def set_time
+    start_date = self.start_date_time rescue nil
+    end_date = self.end_date_time rescue nil
+    start_date = "#{start_date} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.start_time_am}" if start_date.present?
+    end_date = "#{end_date} #{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if end_date_time.present?
+      self.start_date = start_date.to_time rescue nil
+      self.end_date = end_date.to_time rescue nil
+  end
+
+  def check_start_and_end_date_are_present
+    errors.add(:start_date, "This field is required.") if self.start_date_time.blank?
+    errors.add(:end_date, "This field is required.") if self.end_date_time.blank?
+  end
 end
