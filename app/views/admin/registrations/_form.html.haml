@@ -127,7 +127,7 @@
                 - op_next = op_count + 1
                 - op_n = "option_#{op_next}"
                 
-                .optionsDiv.col-lg-12{:style => "#{((f.object.attributes[default_field].present? and f.object.attributes[default_field][op].present?) and index <= 6) ? '' : 'display:none'}", :class => "registration_field_#{default_field}_option_#{op_count}"}
+                .optionsDiv.col-lg-12{:style => "#{((f.object.attributes[default_field].present? and f.object.attributes[default_field][op].present?) and index <= 6) ? '' : 'display:none'}", :class => "registration_field_#{default_field}_option_#{op_count} #{default_field}_for_opt"}
                   = field.custom_text_area_field1 op, "Option #{op_count}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][op] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : '', :class => "registration_field_#{default_field}_option_#{op_count}"
                   .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
                     .bs-component
@@ -173,7 +173,7 @@
                   .field_with_errors
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 2
-        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{(count == last_index) ? '' : 'display:none'}"
+        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{(count == last_index and count < 20) ? '' : 'display:none'}"
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
