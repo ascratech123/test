@@ -53,7 +53,7 @@ class Admin::RegistrationsController < ApplicationController
   def update
     if params[:change_code].present?
       @registration.update_attributes(registration_params)
-      redirect_to edit_admin_event_registration_path(:event_id => @event.id,:id => @registration.id,:change_code => "true")
+      redirect_to admin_event_registration_settings_path(:event_id => @event.id)
     elsif @registration.update_attributes(registration_params)
       # redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
       redirect_to admin_event_registration_settings_path(:event_id => @event.id)
