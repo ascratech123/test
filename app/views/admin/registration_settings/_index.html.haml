@@ -7,19 +7,29 @@
 - else  
   %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
     %tr
-      %th Registration
-      %th Login
-      %th Response Type
+      %th Show on Mobile app
+      %th Start Date
+      %th End Date
+      %th URL
       %th
     - objs.each do |regi_setting|
       %tr
-        %td.description_adjust.font16= regi_setting.registration
-        / %td.description_adjust.font16= ques_answer.answer
-        %td.font16= regi_setting.login
-        %td.font16= regi_setting.response_type
+        %td.description_adjust.font16= (regi_setting.registration == "hobnob" ? "Create new" : "Use existing URL") rescue nil
+        %td.font16= regi_setting.start_date.strftime('%d/%m/%Y %l:%M %p') rescue nil
+        %td.font16= regi_setting.end_date.strftime('%d/%m/%Y %l:%M %p') rescue nil
+        - regi_setti_url = (regi_setting.registration == "hobnob" ? regi_setting.reg_url : regi_setting.external_reg_url) rescue nil
+        %td.font16= regi_setti_url
         %td.IconDrp
           = more_vert_button(regi_setting.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{regi_setting.id}"}
-            = edit_link(params, regi_setting.id)
-            = delete_link(params, regi_setting.id)
+            = link_to edit_admin_event_registration_setting_path(:event_id => @event.id, :id => regi_setting.id), :class => "mdl-menu__item mdl-js-ripple-effect" do
+              Edit Setting
+            = link_to regi_setti_url,:target =>"_blank"  ,:class => "mdl-menu__item mdl-js-ripple-effect" do
+              Preview Form
+            -if regi_setting.registration == "hobnob"
+              = link_to edit_admin_event_registration_path(:event_id => @event.id, :id => @event.registrations.first.id), :class => "mdl-menu__item mdl-js-ripple-effect" do
+                Edit Form
+            -if regi_setting.template == "custom"
+              = link_to edit_admin_event_registration_path(:event_id=> @event.id,:id => @event.registrations.first.id,:change_code => "true"), :class => "mdl-menu__item mdl-js-ripple-effect" do
+                Extract Code
   = will_paginate objs

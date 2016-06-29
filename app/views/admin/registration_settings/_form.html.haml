@@ -82,51 +82,53 @@
             .field_with_errors
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:end_date].join("") rescue nil
-      = f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
+      =# f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
       = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
       =# f.custom_text_area_field :external_reg_surl, "Registration Success URL",:message_display => (f.object.registration == 'external') ? '' : "none"
     
-    .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp.m-t-40
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        %h4.heading-border.p-t-10.m-b-15
-          Login
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .mdl-grid.p-v-5
-          .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Login?
-          .col-lg-3.p-h-12
-            = f.custom_radio_button_menu :login, "hobnob","HobNob", :id => params[:action] == "new" ? "option1_logi" : "option1_login", :default_checked => (f.object.login == 'hobnob' or f.object.login.blank?) ? 'checked' : ''
-            = f.custom_radio_button :login, "external", "External", :id => "option_2_login", :default_checked => (f.object.login == 'external') ? 'checked' : ''
-          / - if params[:action] == "edit" and f.object.login_url.present?
-          /   = link_to "view page","#{f.object.login_url}",:target => "_blank"
-          / -else
-          /   = link_to "view page","#{f.object.external_login_url}",:target => "_blank"
-      = f.custom_text_area_field :login_url, "Login URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
-      =# f.custom_text_area_field :login_surl, "Login Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
-      
-      = f.custom_text_area_field :external_login_url, "Login URL *",:message_display => (f.object.login == 'external') ? "" : "none"
-      = f.custom_text_area_field :external_login_surl, "Login Success URL ",:message_display => (f.object.login == 'external') ? "" : "none"
+    -if false
+      .mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp.m-t-40
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            Login
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Login?
+            .col-lg-3.p-h-12
+              = f.custom_radio_button_menu :login, "hobnob","HobNob", :id => params[:action] == "new" ? "option1_logi" : "option1_login", :default_checked => (f.object.login == 'hobnob' or f.object.login.blank?) ? 'checked' : ''
+              = f.custom_radio_button :login, "external", "External", :id => "option_2_login", :default_checked => (f.object.login == 'external') ? 'checked' : ''
+            / - if params[:action] == "edit" and f.object.login_url.present?
+            /   = link_to "view page","#{f.object.login_url}",:target => "_blank"
+            / -else
+            /   = link_to "view page","#{f.object.external_login_url}",:target => "_blank"
+        = f.custom_text_area_field :login_url, "Login URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
+        =# f.custom_text_area_field :login_surl, "Login Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
+        
+        = f.custom_text_area_field :external_login_url, "Login URL *",:message_display => (f.object.login == 'external') ? "" : "none"
+        = f.custom_text_area_field :external_login_surl, "Login Success URL ",:message_display => (f.object.login == 'external') ? "" : "none"
 
-      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-      /   .mdl-grid.p-v-5
-      /     .col-lg-4.mdl-typography--text-right
-      /       %p.displayInlineBlock.multicitytxt Response Type?
-      /     .col-lg-3.p-h-12   
-      /       = f.custom_radio_button :response_type, "create_and_select","Create & Select", :id => "option1_response_type"
-      /       = f.custom_radio_button :response_type, "select", "Select", :id => "option_2_response_type"
-      = f.custom_text_area_field :forget_pass_url, "Forgot password URL"
-      =# f.custom_text_area_field :forget_pass_surl, "Forgot password Success URL"
+        / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        /   .mdl-grid.p-v-5
+        /     .col-lg-4.mdl-typography--text-right
+        /       %p.displayInlineBlock.multicitytxt Response Type?
+        /     .col-lg-3.p-h-12   
+        /       = f.custom_radio_button :response_type, "create_and_select","Create & Select", :id => "option1_response_type"
+        /       = f.custom_radio_button :response_type, "select", "Select", :id => "option_2_response_type"
+        = f.custom_text_area_field :forget_pass_url, "Forgot password URL"
+        =# f.custom_text_area_field :forget_pass_surl, "Forgot password Success URL"
     .fixed-activon-btn-new  
       = f.custom_submit_button "SAVE"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-      - if f.object.template.present? and f.object.template == "custom" and @event.registrations.present?
-        .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
-          .mdl-cell--12-col.mdl-cell--12-col-tablet
-            = link_to "Extract Code",edit_admin_event_registration_path(:event_id=> @event.id,:id => @event.registrations.first.id,:change_code => "true")
+      / - if f.object.template.present? and f.object.template == "custom" and @event.registrations.present?
+      /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+      /     .mdl-cell--12-col.mdl-cell--12-col-tablet
+      /       = link_to "Extract Code",edit_admin_event_registration_path(:event_id=> @event.id,:id => @event.registrations.first.id,:change_code => "true")
+
       / .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet
       /     = link_to "Change code",edit_admin_event_registration_path(:event_id => @event.id,:id => @event.registrations.first.id,:change_code => "true")

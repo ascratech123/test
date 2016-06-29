@@ -175,14 +175,15 @@
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
           .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
             = back_button(:back)
-        - if @event.registration_settings.present?
-          .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
-            .mdl-cell--12-col.mdl-cell--12-col-tablet
-              = link_to "Edit Setting",edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
-        - if @event.registration_settings.present? and !f.object.new_record?
-          .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting.m-l-18
-            .mdl-cell--12-col.mdl-cell--12-col-tablet
-              = link_to "QR Scanner", admin_event_qr_code_scanners_path(:event_id => @event.id), :target => '_blank'
+        / - if @event.registration_settings.present?
+        /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+        /     .mdl-cell--12-col.mdl-cell--12-col-tablet
+        /       = link_to "Edit Setting",edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
+        
+        / - if @event.registration_settings.present? and !f.object.new_record?
+        /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting.m-l-18
+        /     .mdl-cell--12-col.mdl-cell--12-col-tablet
+        /       = link_to "QR Scanner", admin_event_qr_code_scanners_path(:event_id => @event.id), :target => '_blank'
 
 :javascript
   var selected_option_text_field = ["Check Box","Radio Button","Drop-Down list"], check_field;
