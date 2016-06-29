@@ -4,6 +4,14 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           General Information
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-12.p-h-12
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone 
+              .col-lg-8.p-h-16
+                %span.top6.p-h-2.telehead Field Name 
+              .col-lg-4.p-h-12.textright
+                %span.top6.p-h-5.telehead Visible to Telecaller
       - @invitee_structures.each do |key, value|
         - if value.present?
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
