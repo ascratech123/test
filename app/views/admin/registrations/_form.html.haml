@@ -42,7 +42,7 @@
               = "Registration Field #{count}"
           = f.fields_for default_field do |field|
             - if !(f.object.new_record?)
-              = field.custom_text_field :label, "Question #{count <= 2 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
+              = field.custom_text_field :label, "Question #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
@@ -162,7 +162,7 @@
               .mdl-grid.p-v-5
                 .col-lg-4.mdl-typography--text-right
                   %p.displayInlineBlock.multicitytxt  
-                  = "#{count <= 2 ? 'Text box required after options? *' : 'Text box required after options?'}"
+                  = "#{count <= 1 ? 'Text box required after options? *' : 'Text box required after options?'}"
                 .col-lg-3.p-h-12
                   = field.custom_radio_button_menu :text_box_required_after_options, "yes","Yes", :id => "option_1_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "yes") ? 'checked' : ''
                   = field.custom_radio_button_menu :text_box_required_after_options, "no", "No", :id => "option_2_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "no") ? 'checked' : ''
