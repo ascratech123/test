@@ -25,7 +25,8 @@ class Admin::RegistrationSettingsController < ApplicationController
     @registration_setting = @event.registration_settings.build(regi_setting_params)
     if @registration_setting.save
       if @registration_setting.registration == "hobnob"
-        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id)
+        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id) if @event.registrations.blank?
+        redirect_to admin_event_registration_settings_path(:event_id => @event.id) if @event.registrations.present?
       else
         redirect_to admin_event_registration_settings_path(:event_id => @event.id)
       end
@@ -40,13 +41,10 @@ class Admin::RegistrationSettingsController < ApplicationController
   def update
     if @registration_setting.update_attributes(regi_setting_params)
       if @registration_setting.registration == "hobnob"
-        if @event.registrations.present?
-          redirect_to edit_admin_event_registration_path(:event_id => @registration_setting.event_id,:id => @event.registrations.last.id)
-        else
-          redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id)
-        end
+        redirect_to admin_event_registration_settings_path(:event_id => @event.id) if @event.registrations.present?
+        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id) if @event.registrations.blank?
       else
-        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration_setting.event_id,:analytics=>true)
+        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
       end
     else
       render :action => "edit"
