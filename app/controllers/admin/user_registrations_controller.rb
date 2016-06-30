@@ -11,7 +11,22 @@ class Admin::UserRegistrationsController < ApplicationController
       redirect_to :back
     else
       @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
-      render :layout => 'admin'
+      respond_to do |format|
+        format.html do
+          @user_registrations = @user_registrations.paginate(page: params[:page], per_page: 10)
+          render :layout => 'admin'
+        end  
+        format.xls do
+          @export_array = [@registration.selected_column_values]
+          method_allowed = []
+          @only_columns = @registration.selected_columns
+          for invitee in @user_registrations
+            arr = @only_columns.map{|c| invitee.attributes[c]}
+            @export_array << arr
+          end
+          send_data @export_array.to_reports_xls, filename: "registered_user_#{@registration.id}.xls"
+        end
+      end
     end
   end
 

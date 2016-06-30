@@ -264,3 +264,8 @@
                 - if @user_quizees.present?
                   = link_to admin_event_user_quizees_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                     Export Answer
+          - when 'user_registration'
+            %li
+              - if @event.present? and @user_registrations.present?
+                = link_to admin_event_user_registrations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
+                  Export
