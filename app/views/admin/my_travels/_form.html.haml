@@ -32,8 +32,13 @@
                 %label.field.file
                   %span.button.btn-primary
                     Choose File 
+                  - er = f.object.errors.messages[:attach_file].join(',') rescue nil
+                  - f.object.errors.messages[:attach_file].clear if f.object.errors.messages[:attach_file].present?
                   = f.file_field :attach_file,:id => "attach_file_uploadBtn", :class=>"gui-file"
                   = text_field_tag("text_file_name","", id: "1attach_file_uploadBtn", class: "gui-input", :value => "#{f.object.attach_file_file_name.nil? ? "there is no Attachment Available !" : f.object.attach_file_file_name}", :read_only => true)
+                .field_with_errors
+                  .span{:class => "errorMessage"}
+                    = er
               - if @my_travel.present? and @event.present? and @my_travel.attach_file_file_name.present?
                 .col-lg-1
                   = link_to admin_event_my_travel_path(:event_id => @event.id, :id => @my_travel.id,:remove_image => true,:file_field_name => "attach_file"), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do

@@ -151,14 +151,13 @@
           %p.OrTxt{:style => "display: #{(@event.login_at == 'Before Interaction' or @event.login_at == 'After Highlight') ? "none" : "" if @event.present?} "}
             or
           = f.custom_text_field_display1 :login_background_color, "Login screen background Color", :value => @mobile_application.login_background_color, :class => 'pick-a-color', :display => "#{(@event.login_at == 'Before Interaction'or @event.login_at == 'After Highlight') ? "false" : "true" if @event.present?}", :view_popup => {:image_path => "app_info/master_screens/AppInfo_LoginScreenBackground.png", :rel=> "login_background_color", :title => "Login screen background Color"}, :highlight_class => "#{get_highlight_class1(f.object)}"
-        - if !Rails.env.production?
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-            .mdl-grid.p-v-5
-              .col-lg-4.mdl-typography--text-right
-                %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
-              .col-lg-3.p-h-12   
-                = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
-                = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
+            .col-lg-3.p-h-12   
+              = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
+              = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
 
       / .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5

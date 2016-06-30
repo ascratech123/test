@@ -23,8 +23,8 @@
     - if show_card("polls")
       = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.polls, :url => "polls", :@count => @count}
     
-    - if show_card("chats") and !Rails.env.production?
+    - if show_card("chats")
       = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.chats, :url => "chats", :@count => @count}       
 
-    - if show_card("social_sharings") and !Rails.env.production?
+    - if show_card("social_sharings")
       = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.chats, :url => "social_sharings", :@count => @count}  
