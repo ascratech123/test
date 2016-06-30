@@ -12,6 +12,12 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+/*nitin*/
+.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
+.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
+
+
+.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
 .Regiserror{margin-top: 5px;}
 .Regiserror .field_with_errors{left: 34%;position: absolute;top: 36px;}
 .table-responsive th:first-child{text-align:left;}
@@ -295,7 +301,7 @@
  .editshowlink .editLink{color: #fff;}
  .heading-borderCard{border-bottom: 1px solid #d7d7d7;padding-bottom: 4px;}
  .setting,.content{clear:both; display: block; background: none;}
- .breadcrumb > li{vertical-align: top;}
+ .breadcrumb > li{vertical-align: middle;}
 .breadcrumb > li.breadcrumb-active{font-size: 18px;}
  @media screen and (-webkit-min-device-pixel-ratio:0){.fixed-activon-btn-new .btnsubmit input { padding: 9px 25px; } }
  #template_name_{position: relative;z-index: 9999;}
@@ -1076,12 +1082,6 @@ i.incards {font-size: 60px}
 }
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
 
-
-
-
-/*nitin*/
-.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
-.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
 
 
 
