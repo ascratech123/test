@@ -7,8 +7,12 @@ class Admin::UserRegistrationsController < ApplicationController
   def index
    # redirect_to new_admin_event_user_registration_path(:event_id => @event.id) 
    @registration = @event.registrations.first
-   @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
-   render :layout => 'admin'
+    if @registration.blank?
+      redirect_to :back
+    else
+      @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
+      render :layout => 'admin'
+    end
   end
 
   def new

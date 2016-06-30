@@ -12,7 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
-.table-responsive th:first-child{text-align:left;}
+.table-responsive th{text-align:left;}
 .telehead{font-size: 18px; font-weight: 400; color:#a9acbd; line-height: 18px;}
 .textright{text-align: right;}
 .tellbgnone .editButton .waves-effect.waves-light.btn,.tellbgnone .editButton a{font-size: 14px; font-weight: 100;}
