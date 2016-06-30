@@ -5,9 +5,6 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             Registration   
-        //= f.custom_text_area_field1 :custom_css, "Custom CSS", :value => f.object[:custom_css].present? ? f.object[:custom_css] : "", :display => "true"
-        //= f.custom_text_area_field1 :custom_js, "Custom JS", :value => f.object[:custom_js].present? ? f.object[:custom_js] : "", :display => "true"
-        / = f.custom_text_area_field1 :custom_source_code, "Custom Source Code", :value => f.object[:custom_source_code].present? ? f.object.custom_source_code : "", :display => "true"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.textareaFeid
           .bs-component
             .form-group
@@ -22,10 +19,6 @@
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
             .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
               = back_button(:back)
-          / - if !f.object.new_record?
-          /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
-          /     .mdl-cell--12-col.mdl-cell--12-col-tablet
-          /       = link_to "Preview",new_admin_event_user_registration_path(:event_id => @event.id),:target => "_blank"
     - else
       - default_fields = ["field1","field2","field3","field4","field5","field6","field7","field8","field9","field10","field11","field12","field13","field14","field15","field16","field17","field18","field19","field20"]
       - count = 0
@@ -34,8 +27,6 @@
       - last_index = (last_index.present? and last_index < 5) ? 5 : last_index
       - default_fields.each do |default_field|
         - count += 1 
-        -# attrs = f.object.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code')
-        -#.m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count + 1}", :style => "#{(count > 4 and (attrs[default_field].present? and attrs[default_field]['label'].blank? or f.object.new_record?)) ? 'display:none' : ''}"}
         .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count}", :style => "#{(count > 5 and ((count) > last_index)) ? 'display:none' : ''}"}  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
@@ -121,8 +112,6 @@
                             add
               - glob = 0
               - ['option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10'].each_with_index do |op, index|
-                -# op_attrs = f.object.attributes[default_field].except('label', 'option_type', 'validation_type', 'mandatory_field').map{|o| o[1].present? ? o[0] : nil}.compact
-                -# last_option_index = op_attrs.present? ? op_attrs.last.split('_').last.to_i : 3
                 - op_count = op.split('_').last.to_i
                 - op_next = op_count + 1
                 - op_n = "option_#{op_next}"
@@ -142,26 +131,10 @@
                   .maxoption{:id => "maxoption_#{default_field}", class: "#{default_field}_for_opt registration_field_#{default_field}", check_field_for_opt_maxoption: "#{default_field}_for_opt", :style => 'display:none'}
                     = op_count
                   - glob = op_count
-                  =# link_to 'Add More', 'javascript:void(0)', :class => ((index < 6) ? "link_to_add_more_option registration_field_option_#{op.split('_').last}" : 'link_to_add_more_option'), :for => "registration_field_option_#{op.split('_').last.to_i + 1}", :style => "#{((f.object.attributes[default_field][op].present? and f.object.attributes[default_field][op_next].blank?) and index < 6) ? '' : 'display:none'}"
               - if glob == 0
                 .maxoption{:id => "maxoption_#{default_field}", class: "registration_field_#{default_field} #{default_field}_for_opt", check_field_for_opt_maxoption: "#{default_field}_for_opt", :style => 'display:none'}
                   = glob
-              - if false
-                = field.custom_text_area_field1 :option_5, "Option 5", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_5] : "", :display => "true", klass: (['new','create', 'edit', 'update'].include?(params[:action]) or f.object.errors.keys.include?(:"#{default_field}[option_5]").present?) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-                = link_to 'Add More', 'javascript:void(0)', :class => (count < 10 ? "link_to_add_more_option registration_field_option_5" : 'link_to_add_more_option'), :for => "registration_field_option_6", :style => "#{(f.object.attributes[default_field][:option_5].present? and f.object.attributes[default_field][:option_6].blank?) ? '' : 'display:none'}"
-                = field.custom_text_area_field1 :option_6, "Option 6", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_6] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-                = link_to 'Add More', 'javascript:void(0)', :class => (count < 10 ? "link_to_add_more_option registration_field_option_6" : 'link_to_add_more_option'), :for => "registration_field_option_7", :style => "#{(f.object.attributes[default_field][:option_6].present? and f.object.attributes[default_field][:option_7].blank?) ? '' : 'display:none'}"
-
-                = field.custom_text_area_field1 :option_7, "Option 7", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_7] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-                = link_to 'Add More', 'javascript:void(0)', :class => (count < 10 ? "link_to_add_more_option registration_field_option_7" : 'link_to_add_more_option'), :for => "registration_field_option_8", :style => "#{(f.object.attributes[default_field][:option_7].present? and f.object.attributes[default_field][:option_8].blank?) ? '' : 'display:none'}"
-
-                = field.custom_text_area_field1 :option_8, "Option 8", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_8] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-                = link_to 'Add More', 'javascript:void(0)', :class => (count < 10 ? "link_to_add_more_option registration_field_option_8" : 'link_to_add_more_option'), :for => "registration_field_option_9", :style => "#{(f.object.attributes[default_field][:option_8].present? and f.object.attributes[default_field][:option_9].blank?) ? '' : 'display:none'}"
-
-                = field.custom_text_area_field1 :option_9, "Option 9", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_9] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-                = link_to 'Add More', 'javascript:void(0)', :class => (count < 10 ? "link_to_add_more_option registration_field_option_9" : 'link_to_add_more_option'), :for => "registration_field_option_10", :style => "#{(f.object.attributes[default_field][:option_9].present? and f.object.attributes[default_field][:option_10].blank?) ? '' : 'display:none'}"
-
-                = field.custom_text_area_field1 :option_10, "Option 10", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_10] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
+              
             .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.textboxrequired{:class => "#{default_field}_for_text_area",:style => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"].present?) ? '' : 'display:none;'}
               .mdl-grid.p-v-5
                 .col-lg-4.mdl-typography--text-right
@@ -179,15 +152,6 @@
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
           .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
             = back_button(:back)
-        / - if @event.registration_settings.present?
-        /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
-        /     .mdl-cell--12-col.mdl-cell--12-col-tablet
-        /       = link_to "Edit Setting",edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
-        
-        / - if @event.registration_settings.present? and !f.object.new_record?
-        /   .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting.m-l-18
-        /     .mdl-cell--12-col.mdl-cell--12-col-tablet
-        /       = link_to "QR Scanner", admin_event_qr_code_scanners_path(:event_id => @event.id), :target => '_blank'
 
 :javascript
   var selected_option_text_field = ["Check Box","Radio Button","Drop-Down list"], check_field;
