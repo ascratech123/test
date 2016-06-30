@@ -15,10 +15,10 @@
               = link_to feature_count, manage_link, :target => '_blank' if card_title == "QR Scanner"
               = link_to feature_count, manage_link if card_title != "QR Scanner"
       .row.pv5.AddmoreCard
-        .col-xs-12.ph5
-          = link_to new_label, new_link, :target => '_blank', :class => 'displayBlock' if card_title == "QR Scanner"
-          = link_to new_label, new_link, :class => 'displayBlock' if card_title != "QR Scanner"
-          - if card_title == 'Mobile App' and @multi_mobile_applications.present? and @event.mobile_application.blank?
-            = link_to 'Add To Existing Multi-Event app', admin_client_mobile_applications_path(:client_id => @event.client_id, :feature => 'events', :event_id => @event.id)
-          / - elsif card_title == 'Registration' and @event.registration_settings.present?
-          /   = link_to 'Manage Registration Setting', edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
+        - if card_title != "Telecaller"   
+          .col-xs-12.ph5
+            = link_to new_label, new_link, :class => 'displayBlock'
+            - if card_title == 'Mobile App' and @multi_mobile_applications.present? and @event.mobile_application.blank?
+              = link_to 'Add To Existing Multi-Event app', admin_client_mobile_applications_path(:client_id => @event.client_id, :feature => 'events', :event_id => @event.id)
+            / - elsif card_title == 'Registration' and @event.registration_settings.present?
+            /   = link_to 'Manage Registration Setting', edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
