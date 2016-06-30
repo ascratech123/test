@@ -23,7 +23,7 @@
         %td.description_adjust.font16= telecaller.get_count(telecaller.id,@event.id,"Processed") rescue nil
         %td.description_adjust.font16= telecaller.get_count(telecaller.id,@event.id,"Remaining") rescue nil
         %td.IconDrp
-          = more_vert_button(telecaller.id)
-          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{telecaller.id}"}
-            = edit_link(params, telecaller.id)
+          / = more_vert_button(telecaller.id)
+          / %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{telecaller.id}"}
+          /   = edit_link(params, telecaller.id)
   = will_paginate objs 
