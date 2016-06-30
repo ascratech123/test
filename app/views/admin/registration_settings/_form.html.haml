@@ -6,31 +6,31 @@
           Registration
       = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "qna_generalInfo.jpg", :section_id => "qna_general_section"}
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .mdl-grid.p-v-5
+        .mdl-grid.p-v-5.m-b-20
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Registration Form
           .col-lg-7.p-h-12
-            = f.custom_radio_button_menu :registration, "hobnob","Create new", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :registration, "external", "Use existing URL", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
+            = f.custom_radio_button_menu_regis :registration, "hobnob","Create new", :id => params[:action] == "new" ? "option1_regi" : "option_1_registration", :default_checked => (f.object.registration == 'hobnob' or f.object.registration.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu_regis :registration, "external", "Use existing URL", :id => "option_2_registration", :default_checked => (f.object.registration == 'external') ? 'checked' : ''
           
           / - if params[:action] == "edit" and f.object.reg_url.present? 
           /   = link_to "view page","#{f.object.reg_url}",:target => "_blank"
           / -else
           /   = link_to "view page","#{f.object.external_reg_url}",:target => "_blank"
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{:style => "display:#{(f.object.registration == 'hobnob' or (f.object.new_record? and params[:action]!= "create")) ? "" : "none"}"}
-        .mdl-grid.p-v-5
+        .mdl-grid.p-v-5.m-b-20
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Choose Template *
-          .col-lg-3.p-h-12
+          .col-lg-7.p-h-12
             - er = f.object.errors.messages[:template].join(',') rescue nil
             - f.object.errors.messages[:template].clear if f.object.errors.messages[:template].present?
-            = f.custom_radio_button_menu :template, "default","Default ", :id => "option_1_template", :default_checked => "#{(f.object.template == "Template 1" or f.object.template == "default") ? 'checked' : ''}"
-            = f.custom_radio_button_menu :template, "custom", "Custom", :id => "option_2_custom", :default_checked => "#{f.object.template == "custom" ? 'checked' : ''}"
-            .field_with_errors
+            = f.custom_radio_button_menu_regis :template, "default","Default ", :id => "option_1_template", :default_checked => "#{(f.object.template == "Template 1" or f.object.template == "default") ? 'checked' : ''}"
+            = f.custom_radio_button_menu_regis :template, "custom", "Custom", :id => "option_2_custom", :default_checked => "#{f.object.template == "custom" ? 'checked' : ''}"
+            .field_with_errors.clear
               .span{:class => "errorMessage"}
                 = er
       .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "display: #{(f.object.template == "Template 1" or f.object.template == "default" and f.object.registration != "external") ? '' : 'none'}"}
-        .form-group.set_highlight_select
+        .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
             Select template
             %br
@@ -39,25 +39,25 @@
           .col-lg-7  
             %i.arrow.single
             = f.select("registration_setting", "template_name", ['Template 1'], {:selected => f.object.template,:prompt => 'Select Option Type'},{:class=> 'select2-single form-control',:id=> "regi_setti_templ_select"})
-            .field_with_errors
+            .field_with_errors.clear
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:template_name].join("") rescue nil
           .span.col-lg-1
             = link_to("?" ,"/whats_this/app_info/general_information/1.png", rel: "selecte_template", title: "Selecte Template", :class =>"fancybox whatsImg")
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .mdl-grid.p-v-5
+        .mdl-grid.p-v-5.m-b-20
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Show on Mobile App *
-          .col-lg-3.p-h-12
+          .col-lg-7.p-h-12
             - er = f.object.errors.messages[:on_mobile_app].join(',') rescue nil
             - f.object.errors.messages[:on_mobile_app].clear if f.object.errors.messages[:on_mobile_app].present?
-            = f.custom_radio_button_menu :on_mobile_app, "yes","Yes", :id => "option_1_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "yes" ? 'checked' : ''}"
-            = f.custom_radio_button_menu :on_mobile_app, "no", "No", :id => "option_2_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "no" ? 'checked' : ''}"
-            .field_with_errors
+            = f.custom_radio_button_menu_regis :on_mobile_app, "yes","Yes", :id => "option_1_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "yes" ? 'checked' : ''}"
+            = f.custom_radio_button_menu_regis :on_mobile_app, "no", "No", :id => "option_2_visible_on_mobile_app", :default_checked => "#{f.object.on_mobile_app == "no" ? 'checked' : ''}"
+            .field_with_errors.clear
               .span{:class => "errorMessage"}
                 = er
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
-        .bs-component
+        .bs-component.m-b-30
           .form-group
             %label.col-lg-4.control-label{:for => "Start Regi_setting Date"} Start Registration Date/Time *
             = f.custom_text_field_date :start_date_time, "Start Registration Date", :id => "date-start",:value => f.object.start_date.present? ? f.object.start_date.strftime('%d/%m/%Y') : ''
@@ -70,7 +70,7 @@
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:start_date].join("") rescue nil
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
-        .bs-component
+        .bs-component.m-b-30
           .form-group
             %label.col-lg-4.control-label{:for => "End Regi_setting Date"} End Registration Date/Time *
             = f.custom_text_field_date :end_date_time, "End Registration Date", :id => "date-end",:value => f.object.end_date.present? ? f.object.end_date.strftime('%d/%m/%Y ') : ''

@@ -6,6 +6,13 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   include ActionView::Helpers::AssetTagHelper
 
 
+  def custom_radio_button_menu_regis(method, tag_value,options = {}, *args)
+    @template.content_tag :label, class: "col-lg-4 mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}" do
+     str = @template.radio_button(@object_name, method, tag_value, :checked => args.first[:default_checked], id: "#{args[0].values[0]}", class: "#{args[0][:class].present? ? "#{args[0][:class]} mdl-radio__button": "mdl-radio__button"}")
+      str += label(options)   
+    end
+  end
+  
   def custom_radio_button1(method, tag_value, options = {})
     @template.radio_button(@object_name, method, tag_value, objectify_options(options)) + 
     @template.label(@object_name, options[:label], objectify_options(options))
