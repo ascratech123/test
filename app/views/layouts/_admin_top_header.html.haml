@@ -87,8 +87,8 @@
               = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id),:class => "mdl-color-text--white" if (params[:from_telecaller].present? or params[:telecaller_index].present?)
             - elsif page == 'telecaller_accessible_columns'
               = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id,:telecaller_index => "true"),:class => "mdl-color-text--white"
-            = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers"
-        - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and(page != "telecaller_accessible_columns")
+            = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
+        - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
           = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
           - if params[:action] == "new" and params[:controller] == "admin/telecallers"
             %li.breadcrumb-link
