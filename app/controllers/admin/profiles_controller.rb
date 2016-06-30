@@ -33,7 +33,7 @@ class Admin::ProfilesController < ApplicationController
     #user_errors and @user.update_attributes(user_params.except(:current_password))
     if @user.update_attributes(user_params.except(:current_password))
       url = session[:url_history].pop 
-      redirect_to session[:url_history].pop if url.present?
+      redirect_to url if url.present?
       redirect_to admin_dashboards_path if url.blank?   
     else
       render :action => "edit"
