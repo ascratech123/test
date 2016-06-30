@@ -269,3 +269,8 @@
               - if @event.present?
                 = link_to new_admin_event_my_travel_path(:importable_type => 'my_travel', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import   
+          - when 'user_registration'
+            %li
+              - if @event.present? and @user_registrations.present?
+                = link_to admin_event_user_registrations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
+                  Export
