@@ -30,8 +30,12 @@ class UserPoll < ActiveRecord::Base
     Invitee.find(self.user_id).email rescue nil
 	end
 
-  def name
-    Invitee.find(self.user_id).name_of_the_invitee rescue nil
+  def first_name
+    Invitee.find(self.user_id).first_name rescue nil
+  end
+
+  def last_name
+    Invitee.find(self.user_id).last_name rescue nil
   end
 
   def question

@@ -22,8 +22,12 @@ class UserFeedback < ActiveRecord::Base
 		Invitee.find_by_id(self.user_id).email rescue ""
 	end
 
-  def name
-    Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+  def first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+
+  def last_name
+    Invitee.find_by_id(self.user_id).last_name rescue ""
   end
 
 	def Question
