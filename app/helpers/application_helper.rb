@@ -407,7 +407,7 @@ module ApplicationHelper
     if user_quizzes.present?
       count = 0
       user_quizzes.each do |ans|
-        count = count + 1 if ans.answer.split(',').include?(option)
+        count = count + 1 if ans.answer.split(',').include?(quiz.attributes[option])
       end
     end
     return count
