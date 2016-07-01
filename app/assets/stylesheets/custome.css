@@ -12,6 +12,12 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+/*nitin*/
+/*.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
+.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}*/
+
+
+.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
 .Regiserror{margin-top: 5px;}
 .Regiserror .field_with_errors{left: 34%;position: absolute;top: 36px;}
 .optionsDiv.col-lg-12 .col-lg-7{padding-right: 0px;}
@@ -1061,9 +1067,3 @@ i.incards {font-size: 60px}
 
 
 
-/*nitin*/
-.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
-.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
-
-
-.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
