@@ -11,7 +11,7 @@
           Add Client Admin
   - if current_user.has_role? :licensee_admin or current_user.has_role? :client_admin
     %li.mdl-menu__item
-      - if @event.present?
+      - if @event.present? and !Rails.env.production?
         = link_to new_admin_event_user_path(:event_id => @event.id, :feature => 'users', :role => 'event_admin',:page_id => "#{page_id}" || params[:page_id], :get_role => params["role"]), :class => "mdl-color-text--white" do
           Add Event Admin
       - elsif params[:client_id].present?
