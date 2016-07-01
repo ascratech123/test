@@ -31,7 +31,7 @@ class Api::V1::InviteesController < ApplicationController
         else
           analytic = Analytic.create(:viewable_type => 'Invitee', :viewable_id => invitee.id, :action => 'profile_pic', :invitee_id => invitee.id, :event_id => invitee.event_id, :platform => params[:platform], :points => 0)
         end
-        render :status=>200,:json=>{:status=>"Success",:message=>"profile picture updated successfully." }
+        render :status=>200,:json=>{:status=>"Success",:message=>"profile picture updated successfully.", :profile_pic_url => invitee.profile_pic.url}
       else
         render :status=>200,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{invitee.errors.full_messages.join(" , ")}" }
       end
