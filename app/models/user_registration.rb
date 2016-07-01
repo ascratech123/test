@@ -21,7 +21,7 @@ class UserRegistration < ActiveRecord::Base
           end
         end
       end
-    end
+    end    
 
     def validation_and_mandate_present(regi_valid,user_regi_valid)
       errors.add(user_regi_valid[0], "This field is required.") if((regi_valid[1][:mandatory_field].present? and regi_valid[1][:mandatory_field] == "yes") and regi_valid[0] == user_regi_valid[0] and user_regi_valid[1].blank?)
