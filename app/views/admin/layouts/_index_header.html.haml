@@ -18,7 +18,7 @@
             -else
               Manage
               = page.humanize.titleize == "E Kits" ? "e-KIT" : page.humanize.titleize
-        - if ["panels", "highlight_images", "event_highlights", "abouts", "groupings", 'invitee_structures', 'analytics', "manage_users", "leaderboards","events","chats", "invitee_groups, invitee_groups"].exclude?(page)
+        - if ["panels", "highlight_images", "event_highlights", "abouts", "groupings", 'invitee_structures', 'analytics', "manage_users", "leaderboards","events","chats", "invitee_groups"].exclude?(page)
           = render :partial => 'search'
     - if ["admin/attendees","admin/licensees","admin/speakers"].include? (params[:controller])
       .mdl-grid.HideSearchBlog
