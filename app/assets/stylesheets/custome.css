@@ -16,7 +16,7 @@
 /*.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
 .pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}*/
 
-
+.fixed-activon-btn-new .registcancel a{color: #fff;font-size: 14px;font-weight: 400;}
 .link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
 .Regiserror{margin-top: 5px;}
 .Regiserror .field_with_errors{left: 34%;position: absolute;top: 36px;}
