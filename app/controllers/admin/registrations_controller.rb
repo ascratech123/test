@@ -5,11 +5,13 @@ class Admin::RegistrationsController < ApplicationController
   before_filter :authorize_event_role, :if => Proc.new{params[:event_id].present?}
 
   def index
-    if @event.registrations.present?
-      # redirect_to edit_admin_event_registration_path(:event_id => params[:event_id],:id => @event.registrations.first.id)
-      redirect_to admin_event_registration_settings_path(:event_id => params[:event_id],:id => @event.registrations.first.id)
+    @registration = @event.registrations.first
+    @registration_setting = @event.registration_settings.first
+    if @registration.present?
+      # @registrations = @event.registrations
+      redirect_to edit_admin_event_registration_path(:event_id => params[:event_id],:id => @registration.id)
     else
-    redirect_to new_admin_event_registration_path(:event_id => params[:event_id])
+      redirect_to new_admin_event_registration_path(:event_id => params[:event_id])
     end
   end
 

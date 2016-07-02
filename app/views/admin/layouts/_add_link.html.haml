@@ -170,5 +170,6 @@
     = link_to new_admin_event_exhibitor_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Exhibitor
   - when 'registration_setting'
-    = link_to admin_event_user_registrations_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      Registered Users
+    - if @event.present? and @registration_setting.present? and @registration_setting.registration == 'hobnob'
+      = link_to admin_event_user_registrations_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Registered Users
