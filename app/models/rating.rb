@@ -41,6 +41,10 @@ class Rating < ActiveRecord::Base
     self.user.email rescue ""
   end
 
+  def name
+    Invitee.find_by_id(self.rated_by).name_of_the_invitee rescue ""
+  end
+
   def first_name
     Invitee.find_by_id(self.rated_by).first_name rescue ""
   end
