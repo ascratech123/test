@@ -14,7 +14,7 @@ class Admin::AgendasController < ApplicationController
       format.html  
       format.xls do
         only_columns = []
-        method_allowed = [:Timestamp, :email_id, :name, :session_name, :speaker_name,:star_rating,:user_comment]
+        method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :session_name, :speaker_name,:star_rating,:user_comment]
         send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
       end
     end
