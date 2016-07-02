@@ -139,7 +139,7 @@
               .mdl-grid.p-v-5
                 .col-lg-4.mdl-typography--text-right
                   %p.displayInlineBlock.multicitytxt  
-                  = "#{count <= 1 ? 'Text box required after options? *' : 'Text box required after options?'}"
+                  = "Text box required after options?"
                 .col-lg-3.p-h-12
                   = field.custom_radio_button_menu :text_box_required_after_options, "yes","Yes", :id => "option_1_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "yes") ? 'checked' : ''
                   = field.custom_radio_button_menu :text_box_required_after_options, "no", "No", :id => "option_2_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "no") ? 'checked' : ''
@@ -150,8 +150,9 @@
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-            = back_button(:back)
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn.registcancel
+            = link_to admin_event_registration_settings_path(:event_id => @event.id),:class => "waves-effect waves-light btn" do
+              Cancel
 
 :javascript
   var selected_option_text_field = ["Check Box","Radio Button","Drop-Down list"], check_field;

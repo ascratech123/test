@@ -37,7 +37,7 @@ class Registration < ActiveRecord::Base
         errors.add('field1[validation_type]', "This field is required.") if (field[:validation_type].blank? and (["Text Box","Text Area"].include?(field[:option_type])))
         errors.add('field1[option_1]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:option_1].blank?)
         errors.add('field1[option_2]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:option_2].blank?)
-        errors.add('field1[text_box_required_after_options]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:text_box_required_after_options].blank?)
+        # errors.add('field1[text_box_required_after_options]', "This field is required.") if (["Radio Button","Check Box","Drop-Down list"].include?(field[:option_type]) and field[:text_box_required_after_options].blank?)
     end
   end
 end

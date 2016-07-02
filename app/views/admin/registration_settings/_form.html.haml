@@ -32,7 +32,7 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => "display: #{(f.object.template == "Template 1" or f.object.template == "default" and f.object.registration != "external") ? '' : 'none'}"}
         .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
-            Select template
+            Select template *
             %br
             %a{:href => '/whats_this/app_info/general_information/1.png', :class =>'fancybox', :title => "Splash Screen"}
               (View Available Templates)
@@ -85,7 +85,7 @@
       =# f.custom_text_area_field :reg_url, "Registration URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:disabled => true
       =# f.custom_text_area_field :reg_surl, "Registration Success URL",:message_display => ((f.object.registration == 'hobnob' and params[:action] != "create") or (!f.object.new_record? and params[:action]!= "update" and f.object.registration != 'external')) ? "" : "none",:readonly => true
 
-      = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none"
+      = f.custom_text_area_field :external_reg_url, "Registration URL *",:message_display => (f.object.registration == 'external') ? '' : "none", "background" => "false"
       =# f.custom_text_area_field :external_reg_surl, "Registration Success URL",:message_display => (f.object.registration == 'external') ? '' : "none"
     
     -if false
