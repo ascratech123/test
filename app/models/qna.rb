@@ -58,8 +58,12 @@ class Qna < ActiveRecord::Base
     Invitee.find_by_id(self.sender_id).email rescue nil
   end
 
-  def name
-    Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+  def first_name
+    Invitee.find_by_id(self.sender_id).first_name rescue ""
+  end
+
+  def last_name
+    Invitee.find_by_id(self.sender_id).last_name rescue ""
   end
 
   def question_ask

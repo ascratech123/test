@@ -23,7 +23,7 @@ class Admin::QnasController < ApplicationController
         format.html  
         format.xls do
           only_columns = []
-          method_allowed = [:Timestamp, :email_id, :name, :question_ask, :speaker_name, :qna_status]
+          method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :question_ask, :speaker_name, :qna_status]
           send_data @qnas.to_xls(:only => only_columns, :methods => method_allowed)
         end
       end

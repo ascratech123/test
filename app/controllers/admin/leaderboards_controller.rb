@@ -7,7 +7,7 @@ class Admin::LeaderboardsController < ApplicationController
 		respond_to do |format|
       format.html  
       format.xls do
-        only_columns = [:name_of_the_invitee, :email, :designation, :company_name, :points]
+        only_columns = [:first_name, :last_name, :email, :designation, :company_name, :points]
         method_allowed = [:rank]
         send_data @invitees.to_xls(:only => only_columns, :methods => method_allowed)
       end
