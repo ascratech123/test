@@ -17,7 +17,7 @@ class Admin::SpeakersController < ApplicationController
           method_allowed = [:Timestamp, :email_id, :name, :speaker_name, :user_rating, :user_comment]
           send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
         else
-          only_columns = [:speaker_name, :designation, :email_address, :address, :speaker_info, :phone_no, :company]
+          only_columns = [:first_name, :last_name, :designation, :email_address, :address, :speaker_info, :phone_no, :company]
           method_allowed = []
           send_data @speakers.to_xls(:only => only_columns)
         end
