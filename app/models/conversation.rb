@@ -144,8 +144,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.each do |comment|
-      comment_obj << comment[0]
+    comments.first.each do |comment|
+      comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment
     object

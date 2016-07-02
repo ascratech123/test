@@ -43,6 +43,15 @@ class Comment < ActiveRecord::Base
     self.user.name_of_the_invitee rescue ""
   end
 
+
+  def first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+  
+  def last_name
+    Invitee.find_by_id(self.user_id).last_name rescue ""
+  end
+  
   def conversation
     self.commentable.description
   end
