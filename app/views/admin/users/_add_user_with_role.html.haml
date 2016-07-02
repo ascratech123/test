@@ -44,7 +44,7 @@
         = link_to admin_clients_path(:feature => 'users', :role => 'moderator'), :class => "mdl-color-text--white" do
           Add Moderator
     %li.mdl-menu__item
-      - if @event.present?      
+      - if @event.present?   
         = link_to new_admin_event_telecaller_path(:event_id => @event.id, :get_role => params['role'],:from_event => "true"), :class => "mdl-color-text--white" do
           Add Telecaller
       - elsif params[:client_id].present? and (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
