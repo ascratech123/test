@@ -63,7 +63,8 @@
 .btnsubmit.newtelebtn{display: block;width:116px; margin:0 auto 10px;}
 
 /*Azeem CSS End*/
-
+#ui-id-6 ,#ui-id-5{height: 50px !important;}
+.ui-widget-content{height: 140px !important; padding-left: 0px !important;}
 .positionRelative{position: relative;}
 .hobnobBottom{position: absolute; bottom: 0px; width: 240px; left: 0px; margin:5px auto; overflow: hidden;}
 .hobnobBottom .brand-logo.darken-1{margin: 10px auto;}

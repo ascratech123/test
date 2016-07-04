@@ -74,7 +74,7 @@
           .form-group
             %label.col-lg-4.control-label{:for => "End Regi_setting Date"} End Registration Date/Time *
             = f.custom_text_field_date :end_date_time, "End Registration Date", :id => "date-end",:value => f.object.end_date.present? ? f.object.end_date.strftime('%d/%m/%Y ') : ''
-            .col-lg-3.timeDropdown
+            .col-lg-3.timeDropdown.timeHeight
               .timeTab
                 = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.end_date, 'hour')}", :col => '2',:maxlength => "2"
                 = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.end_date, 'minute')}", :col => '2',:maxlength => "2"
