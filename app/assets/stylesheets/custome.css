@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 .mdl-data-table .notiTabinfo{ width:44%;}
 .usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
 #invitee_group_invitee_ids{border: 1px solid #d7d7d7;}
