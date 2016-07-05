@@ -7,7 +7,7 @@ class EmergencyExit < ActiveRecord::Base
                                          :thumb => "-strip -quality 80"}
                                          }.merge(Emergency_Exit_icon_IMAGE_PATH)
 
-  validates_attachment_content_type :emergency_exit, :content_type => ['application/pdf', 'application/msword', 'text/plain',"image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+  validates_attachment_content_type :emergency_exit, :content_type => ['application/pdf', 'application/msword', 'text/plain',"image/jpg", "image/jpeg", "image/png"],:message => "please select valid format."
   validates_attachment_content_type :icon, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_presence :emergency_exit,:message => "This field is required."
   validates :title, presence: { :message => "This field is required." } 
@@ -26,6 +26,11 @@ class EmergencyExit < ActiveRecord::Base
   end
   def icon_url
     self.icon.url
+  end
+
+  def attachment_type
+    file_type = self.emergency_exit_content_type.split("/").last rescue ""
+    file_type
   end
 
    def image_dimensions
