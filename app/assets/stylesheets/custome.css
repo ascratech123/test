@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+.col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 /*nitin*/
 /*.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
 .pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}*/
