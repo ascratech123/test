@@ -17,7 +17,7 @@
       - if show_card_except_event_features("leaderboard")
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"Leaderboard.png", :objs => "", :url => "leaderboard"}
       - if show_card_except_event_features("chats")
-        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"polls_1.png", :objs => "", :url => "chats"}    
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"chat.png", :objs => "", :url => "chats"}    
       
       - if show_card_except_event_features("social_sharings")
-        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"polls_1.png", :objs => "", :url => "social_sharings"}
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"social_sharing.png", :objs => "", :url => "social_sharings"}
