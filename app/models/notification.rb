@@ -194,5 +194,8 @@ class Notification < ActiveRecord::Base
 
   # end
 
+<<<<<<< Temporary merge branch 1
+=======
 
+>>>>>>> Temporary merge branch 2
 end

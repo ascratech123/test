@@ -101,6 +101,8 @@ module ApplicationHelper
       url = "/admin/events/#{params[:event_id]}/themes/new?step=event_theme" if (params[:id].blank? and params[:action] == "new")
     elsif params[:controller] == "admin/winners"
       url = "/admin/events/#{params[:event_id]}/awards/#{params[:award_id]}/winners"
+    elsif params[:controller] == "admin/edms"
+       url = "/admin/events/#{params[:event_id]}/campaigns/#{params[:campaign_id]}/edms" 
     elsif params[:event_id].present?
       url ="/admin/events/#{params[:event_id]}/#{feature}?role=all" if params[:role] == "all" || params[:get_role] == "all"
       url = "/admin/events/#{params[:event_id]}/#{feature}#{single_associate_redirect}" if params[:role] != "all" and params[:get_role] != "all"

@@ -173,3 +173,9 @@
     - if @event.present? and @registration_settings.present? and @registration_settings.first.registration == 'hobnob'
       = link_to admin_event_user_registrations_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Registered Users
+  - when 'campaign'
+    = link_to new_admin_event_campaign_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      New Campaign
+  - when 'edm'
+    = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
+      New eDM

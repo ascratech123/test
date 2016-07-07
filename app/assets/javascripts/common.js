@@ -447,6 +447,41 @@ function flightTime() {
     }
   });
 
+/* EDM Form JS start */
+
+  $("#default_template_for_edm").click(function(){
+    value = $("#default_template_for_edm").val();
+    if (value == "default_template"){
+      $("#header_image_uploadBtn").parent().parent().parent().parent().show();
+      $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
+      $("#body_sample5").parent().parent().parent().show();
+      $(".ckeditor_custom").hide();
+    }
+  }); 
+  $("#custom_template_for_edm").click(function(){
+    value = $("#custom_template_for_edm").val();
+    if (value == "custom_template"){
+      $(".ckeditor_custom").show();
+      $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#body_sample5").parent().parent().parent().hide();
+    }
+  });
+
+  $("#edm_broadcast_time_now").click(function(){
+    value = $("#edm_broadcast_time_now").val();
+    if (value == "now"){
+      $("#date-start").parent().parent().parent().parent().hide();
+    }
+  }); 
+  $("#edm_broadcast_time_scheduled").click(function(){
+    value = $("#edm_broadcast_time_scheduled").val();
+    if (value == "scheduled"){
+      $("#date-start").parent().parent().parent().parent().show();
+    }
+  });
+/* EDM Form JS end */
+
   /* Event _Form  start */
     // $('#selectAll').click(function() {
     //   $(':checkbox').each(function() {

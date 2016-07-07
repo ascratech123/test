@@ -43,13 +43,14 @@
       - elsif (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
         = link_to admin_clients_path(:feature => 'users', :role => 'moderator'), :class => "mdl-color-text--white" do
           Add Moderator
-    %li.mdl-menu__item
-      - if @event.present?   
-        = link_to new_admin_event_telecaller_path(:event_id => @event.id, :get_role => params['role'],:from_event => "true"), :class => "mdl-color-text--white" do
-          Add Telecaller
-      - elsif params[:client_id].present? and (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
-        = link_to admin_client_events_path(:client_id => params[:client_id], :feature => 'users', :role => 'telecaller', :redirect_page => 'new',:page_id => "#{page_id}" || params[:page_id]), :class => "mdl-color-text--white" do
-          Add Telecaller
-      - elsif (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
-        = link_to admin_clients_path(:feature => 'users', :role => 'telecaller'), :class => "mdl-color-text--white" do
-          Add Telecaller
+    - if !Rails.env.production?
+      %li.mdl-menu__item
+        - if @event.present?
+          = link_to new_admin_event_telecaller_path(:event_id => @event.id, :get_role => params['role'],:from_event => "true"), :class => "mdl-color-text--white" do
+            Add Telecaller
+        - elsif params[:client_id].present? and (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
+          = link_to admin_client_events_path(:client_id => params[:client_id], :feature => 'users', :role => 'telecaller', :redirect_page => 'new',:page_id => "#{page_id}" || params[:page_id]), :class => "mdl-color-text--white" do
+            Add Telecaller
+        - elsif (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
+          = link_to admin_clients_path(:feature => 'users', :role => 'telecaller'), :class => "mdl-color-text--white" do
+            Add Telecaller
