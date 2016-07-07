@@ -24,7 +24,8 @@ class UserMailer < ActionMailer::Base
       set_credential(@smtp_setting)
       @invitee = invitee
       @event = @invitee.event
-      mail(to: invitee.email, subject: "Your #{@event.event_name} App Credentials", from: @smtp_setting.from_email, :bcc => "shiv@ascratech.com")
+      mobile_application = @event.mobile_application
+      mail(to: invitee.email, subject: "Your #{mobile_application.name} App Credentials", from: @smtp_setting.from_email, :bcc => "shiv@ascratech.com")
     end  
   end
 
