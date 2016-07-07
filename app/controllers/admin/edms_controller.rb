@@ -1,6 +1,6 @@
 class Admin::EdmsController < ApplicationController
   layout 'admin'
-  # load_and_authorize_resource
+  load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role
   before_filter :find_edms
 
