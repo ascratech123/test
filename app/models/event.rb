@@ -52,6 +52,7 @@ class Event < ActiveRecord::Base
   has_many :chats, :dependent => :destroy
   has_many :invitee_groups, :dependent => :destroy
   has_many :my_travels, :dependent => :destroy
+  has_many :campaigns, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 

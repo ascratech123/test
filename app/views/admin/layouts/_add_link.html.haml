@@ -169,3 +169,9 @@
   - when 'registration_setting'
     = link_to new_admin_event_registration_setting_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Registration Setting
+  - when 'campaign'
+    = link_to new_admin_event_campaign_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      New Campaign
+  - when 'edm'
+    = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
+      New eDM

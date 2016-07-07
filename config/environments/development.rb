@@ -95,6 +95,10 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         }
 
 
+HEADER_IMAGE_PATH =   {:path => "edm/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+FOOTER_IMAGE_PATH =   {:path => "edm/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_PATH =   {:path => "my_travel/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_2_PATH =   {:path => "my_travel/:style/:id-:filename",

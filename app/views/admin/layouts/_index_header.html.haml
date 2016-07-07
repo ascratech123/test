@@ -9,6 +9,8 @@
             -if display_page_name.keys.include?(page)
               Manage 
               = display_page_name[page]
+            - elsif page == "edms"
+              Manage eDM's
             - elsif page == "invitee_structures"
               Manage Database Group
             - elsif page == "manage_users"
@@ -42,6 +44,8 @@
                       = objs.count rescue nil
                     -if page == "qnas"
                       Q&A
+                    - elsif page == "edms"
+                      eDM
                     - elsif page == "feedbacks"
                       Feedback
                     - elsif page == "contacts"
@@ -58,6 +62,8 @@
                       = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
                   -elsif (page == "polls" or page == "faqs")
                     No Questions
+                  -elsif (page == "edms")
+                    No eDM's
                   -else 
                     - if @invitee_structures.present?
                       = '1'

@@ -12,6 +12,9 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+
+/*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
+form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 .mdl-data-table .notiTabinfo{ width:44%;}
 .usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
@@ -1055,6 +1058,12 @@ i.incards {font-size: 60px}
 
 
 /*============================= manahe Theme css End ======================================= */
+
+/*=======================Nilam CSS Start=================================*/
+  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
+  .ckeditor_custom {text-align: left;}
+  
+/*=======================Nilam CSS End =================================*/
 
 @media only screen and (max-width: 1300px) {
 .galleryLayout li {display: inline-block;margin-right: 2%;text-align: left; width: 30.99%;}
