@@ -193,9 +193,4 @@ class Notification < ActiveRecord::Base
   #   event_features.each do |feature|
 
   # end
-
-<<<<<<< Temporary merge branch 1
-=======
-
->>>>>>> Temporary merge branch 2
 end
