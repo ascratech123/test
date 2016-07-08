@@ -455,6 +455,7 @@ function flightTime() {
       $("#header_image_uploadBtn").parent().parent().parent().parent().show();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
       $("#body_sample5").parent().parent().parent().show();
+      $("#edm_templ_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
     }
   }); 
@@ -465,6 +466,7 @@ function flightTime() {
       $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#body_sample5").parent().parent().parent().hide();
+      $("#edm_templ_select").parent().parent().parent().hide();
     }
   });
 

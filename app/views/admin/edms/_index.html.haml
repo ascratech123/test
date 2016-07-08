@@ -8,11 +8,13 @@
   %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
     %tr
       %th Subject Line
+      %th Template Type
       %th eDM Broadcast Date
       %th
     - objs.each do |edm|
       %tr
         %td.font16= edm.subject_line
+        %td.font16= (edm.template_type == "default_template" ? "Default Template" : "Custom Template")
         %td.font16= time_with_zone(edm.edm_broadcast_time,"IST")
         %td.IconDrp
           = more_vert_button(edm.id)
@@ -21,4 +23,6 @@
               Edit
             = link_to admin_event_campaign_edm_path(edm.campaign.event_id, edm.campaign_id,edm.id),method: :delete,:class =>"mdl-menu__item" do
               Delete
+            = link_to "/emailer.jpg",target:"_blank", :class => "mdl-menu__item" do
+              Preview eDM
   = will_paginate objs
