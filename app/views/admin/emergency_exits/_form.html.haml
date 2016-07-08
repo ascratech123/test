@@ -9,7 +9,7 @@
       = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "emergency_exit_generalInfo.jpg", :section_id => "emergency_exit_general_section"}
       = f.custom_text_field :title, "Title *","background" => "false"
       = hidden_field_tag :event_id, params[:event_id]
-      = f.new_custom_file_browser_field :emergency_exit, "Emergency Exit File *( pdf/jpg/png/gif) only", :id => "uploadBtn", :value => f.object.emergency_exit_file_name, :action=> params[:action], "background" => "false"
+      = f.new_custom_file_browser_field :emergency_exit, "Emergency Exit File *( pdf/jpg/png) only", :id => "uploadBtn", :value => f.object.emergency_exit_file_name, :action=> params[:action], "background" => "false"
       =# f.custom_text_field :uber_link, "Uber Link"
       = f.new_custom_file_browser_field :icon, "Icon (288x288px)(png) only", :id => "uploadBtn1", :value => f.object.icon_file_name, :action=> params[:action], "background" => "false"
     .fixed-activon-btn-new  
