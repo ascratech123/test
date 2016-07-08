@@ -1,3 +1,4 @@
+= stylesheet_link_tag "css/edm_time"
 .save_button.mdl-card.agendaheight
   = form_for [:admin, @event, @campaign, @edm],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     -if params[:next].present?
@@ -11,11 +12,11 @@
               %p.displayInlineBlock.multicitytxt eDM Broadcast Time
             .col-lg-3.p-h-12   
               = f.custom_radio_button_menu :edm_broadcast_value, "now","Now", :id => "edm_broadcast_time_now", :default_checked => (f.object.edm_broadcast_value == 'now' or f.object.edm_broadcast_time.blank?) ? 'checked' : ''
-              = f.custom_radio_button_menu :edm_broadcast_value, "scheduled","Scheduled", :id => "edm_broadcast_time_scheduled", :default_checked => (f.object.edm_broadcast_value == 'scheduled') ? 'checked' : ''
+              = f.custom_radio_button_menu :edm_broadcast_value, "scheduled","Schedule", :id => "edm_broadcast_time_scheduled", :default_checked => (f.object.edm_broadcast_value == 'scheduled') ? 'checked' : ''
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror{:style => "display: #{(f.object.edm_broadcast_time == 'scheduled') ? "" : "none"}"}
           .bs-component.m-t-30
             .form-group
-              %label.col-lg-4.control-label{:for => "Start EDM Date"} Scheduled Date
+              %label.col-lg-4.control-label{:for => "Start EDM Date"} Schedule Date
               = f.custom_text_field_date :start_date_time, "Start EDM Date", :id => "date-start",:value => f.object.edm_broadcast_time.present? ? f.object.edm_broadcast_time.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab
@@ -42,9 +43,51 @@
             .col-lg-7.p-h-12   
               = f.custom_radio_button_menu :template_type, "default_template","Default Template", :id => "default_template_for_edm", :default_checked => (f.object.template_type == 'default_template' or f.object.template_type.blank?) ? 'checked' : ''
               = f.custom_radio_button_menu :template_type, "custom_template","Custom Template", :id => "custom_template_for_edm", :default_checked => (f.object.template_type == 'custom_template') ? 'checked' : ''
-        = f.new_custom_file_browser_field :header_image, "Header Image", :id => "header_image_uploadBtn", :value => f.object.header_image_file_name, :action=> params[:action], "background" => "false"
-        = f.custom_text_area_field :body,"Body", "background" => "false"
-        = f.new_custom_file_browser_field :footer_image, "Footer Image", :id => "footer_image_uploadBtn", :value => f.object.footer_image_file_name, :action=> params[:action], "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select template
+              %br
+              %a{:href => '/emailer.jpg', :class =>'fancybox', :title => "Template"}
+                (View Available Templates)
+            .col-lg-7  
+              %i.arrow.single
+              = f.select("edm", "default_template", ['Template 1','Template 2','Template 3'], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:default_template].join("") rescue nil
+        / = f.new_custom_file_browser_field :header_image, "Header Image", :id => "header_image_uploadBtn", :value => f.object.header_image_file_name, :action=> params[:action], "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
+          .bs-component
+            .form-group
+              .span.col-lg-4
+                = f.label "Header Image",:class =>"control-label", style: "float: right;"
+              .col-lg-7
+                %label.field.file
+                  %span.button.btn-primary
+                    Choose File 
+                  = f.file_field :header_image,:id => "header_image_uploadBtn", :class=>"gui-file"
+                  = text_field_tag("text_file_name","", id: "1header_image_uploadBtn", class: "gui-input", :value => "#{f.object.header_image_file_name.nil? ? "there is no Attachment Available !" : f.object.header_image_file_name}", :read_only => true)
+              .span.col-lg-1
+                = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Header Image", :class =>"fancybox whatsImg")
+
+        = f.custom_text_area_field :body,"Body text", "background" => "false"
+        
+        / = f.new_custom_file_browser_field :footer_image, "Footer Image", :id => "footer_image_uploadBtn", :value => f.object.footer_image_file_name, :action=> params[:action], "background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
+          .bs-component
+            .form-group
+              .span.col-lg-4
+                = f.label "Footer Image",:class =>"control-label", style: "float: right;"
+              .col-lg-7
+                %label.field.file
+                  %span.button.btn-primary
+                    Choose File 
+                  = f.file_field :footer_image,:id => "footer_image_uploadBtn", :class=>"gui-file"
+                  = text_field_tag("text_file_name","", id: "1footer_image_uploadBtn", class: "gui-input", :value => "#{f.object.footer_image_file_name.nil? ? "there is no Attachment Available !" : f.object.footer_image_file_name}", :read_only => true)
+              .span.col-lg-1
+                = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Footer Image", :class =>"fancybox whatsImg")
+
         .edm_ckeditor
           .ckeditor_custom{:style => "display: #{(f.object.template_type == 'custom_template') ? "" : "none"}"}
             = f.label "Custom Template *"
@@ -61,6 +104,7 @@
     $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
     $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
     $("#body_sample5").parent().parent().parent().hide();
+    $("#edm_templ_select").parent().parent().parent().hide();
 - if @edm.edm_broadcast_value.present? and @edm.edm_broadcast_value == "scheduled"
   :javascript
     $("#date-start").parent().parent().parent().parent().show();
