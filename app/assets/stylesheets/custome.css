@@ -573,7 +573,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
   border: 1px solid #aaaaaa;
   background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
   color: #222222;
-  max-height: 318px;
+  
   overflow-y: auto;
 }
 .ui-widget-content a {
