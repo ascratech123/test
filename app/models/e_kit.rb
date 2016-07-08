@@ -34,8 +34,10 @@ class EKit < ActiveRecord::Base
     self.attachment.url rescue nil
   end
 
-  def attachment_type
+    def attachment_type
+    hsh = {'png' => 'png', 'jpeg' => 'jpeg', 'jpg' => 'jpg', 'doc' => 'docx', 'docm' => 'docx', 'docx' => 'docx', 'xls' => 'xls', 'xlsx' => 'xlx', 'pdf' => 'pdf', 'ppt' => 'ppt', 'msword' => 'docx'}
     file_type = self.attachment_content_type.split("/").last rescue ""
+    file_type = hsh[file_type.downcase].present? ? hsh[file_type.downcase] : file_type
     file_type
   end
 
