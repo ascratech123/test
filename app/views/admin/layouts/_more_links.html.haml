@@ -135,15 +135,17 @@
                 Add Licensee
           - when 'conversation'
             %li
-              = link_to new_admin_event_conversation_path(:importable_type => 'conversation', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                Import   
               - if @conversations.present?
-                = link_to new_admin_event_conversation_path(:importable_type => 'comments', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                  Import Comments
-                = link_to new_admin_event_conversation_path(:importable_type => 'likes', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                  Import Likes
                 = link_to admin_event_conversations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
+              - if false
+                = link_to new_admin_event_conversation_path(:importable_type => 'conversation', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                  Import   
+                - if @conversations.present?
+                  = link_to new_admin_event_conversation_path(:importable_type => 'comments', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                    Import Comments
+                  = link_to new_admin_event_conversation_path(:importable_type => 'likes', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                    Import Likes
                 - if false#@comments.present?
                   = link_to admin_event_comments_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                     Export 
@@ -158,8 +160,9 @@
               - if params[:action] == "index" and @feedbacks.present?
                 = link_to admin_event_feedbacks_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export  
-                = link_to new_admin_event_feedback_path(:event_id => @event.id, :importable_type => 'user_feedbacks', :import => "xls") ,:class => "centerAlign" do
-                  Import Answer     
+                - if false
+                  = link_to new_admin_event_feedback_path(:event_id => @event.id, :importable_type => 'user_feedbacks', :import => "xls") ,:class => "centerAlign" do
+                    Import Answer     
                 - if @user_feedbacks.present?
                   = link_to admin_event_user_feedbacks_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                     Export Answer 
@@ -189,8 +192,9 @@
                 / - if params[:action] == "index" and @polls.present?
                 /   = link_to admin_event_polls_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                 /     Export
-                = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'user_polls', :import => "xls") ,:class => "centerAlign" do
-                  Import Answer
+                - if false
+                  = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'user_polls', :import => "xls") ,:class => "centerAlign" do
+                    Import Answer
                 - if @user_polls.present?
                   = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                     Export Answer
@@ -199,8 +203,9 @@
               - if @qnas.present?
                 = link_to admin_event_qnas_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export 
-              = link_to new_admin_event_qna_path(:importable_type => 'qna', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                Import        
+              - if false
+                = link_to new_admin_event_qna_path(:importable_type => 'qna', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                  Import        
           - when 'sponsor'
             %li
               - if params[:show_history] != "true" and @sponsor.nil?
