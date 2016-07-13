@@ -47,7 +47,8 @@ class Invitee < ActiveRecord::Base
   before_save :set_full_name
   after_save :clear_password, :update_favorite
   after_save :generate_qr_code
-  after_create :update_event_updated_at, :send_password_to_invitee
+  after_save :update_event_updated_at
+  # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
   
   aasm :column => :visible_status do  # defaults to aasm_state
@@ -176,7 +177,7 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       events = mobile_app.events.where(:status => event_status)
       events.each do |event|
-        event_id << event.id if event.invitees.where(:visible_status => "active").pluck(:email).include?(self.email)
+        event_id << event.id if event.invitees.where(:visible_status => "active").map{|invitee| invitee.email.downcase}.include?(self.email.downcase)
       end if events.present?
     end
     event_id
@@ -191,7 +192,7 @@ class Invitee < ActiveRecord::Base
       if change_events.present?
         events = mobile_app.events.where(:status => event_status)
         events.each do |event|
-          event_id << event.id if event.invitees.where(:visible_status => "active").pluck(:email).include?(self.email)
+          event_id << event.id if event.invitees.where(:visible_status => "active").map{|invitee| invitee.email.downcase}.include?(self.email.downcase)
         end if events.present?
       end  
     end
