@@ -9,6 +9,10 @@
             Application Features
           / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
           /   what's this?
+        - if @event.present? and @event.event_features.pluck(:name).exclude? 'event_highlights' and @event.login_at == 'After Highlight' 
+          .field_with_errors
+            .span{:class => "errorMessage"}
+              = 'Kindly active Event Highlights feature to set login at After highlights'
       - if params[:feature] == "my_calender"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5
