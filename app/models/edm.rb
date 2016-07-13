@@ -32,4 +32,21 @@ class Edm < ActiveRecord::Base
       errors.add(:custom_code, "This field is required.") if self.custom_code.blank?
     end
   end
+
+  def sent_mail(edm,event)
+    grouping = Grouping.find(edm.group_id) rescue nil
+    invitee_structure = event.invitee_structures.first if event.invitee_structures.present?
+    invitee_data = invitee_structure.invitee_datum rescue nil
+    data = Grouping.get_search_data_count(invitee_data, [grouping]) if grouping.present? and invitee_data.present?
+    smtp_setting = SmtpSetting.last
+    if smtp_setting.present? and data.present?
+      data.each do |f|
+        email = f["#{edm.database_email_field}"] 
+        UserMailer.default_template(edm,email,smtp_setting).deliver_now if edm.template_type.present? and edm.template_type == "default_template"
+        UserMailer.custom_template(edm,email,smtp_setting).deliver_now if edm.template_type.present? and edm.template_type == "custom_template"
+      end
+    end
+  end
 end
+
+

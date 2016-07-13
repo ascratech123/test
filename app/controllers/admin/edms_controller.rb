@@ -3,6 +3,7 @@ class Admin::EdmsController < ApplicationController
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role
   before_filter :find_edms
+  before_action :find_fields_from_database, :only => [:new, :edit, :update, :create]
 
   def index
     @edms = @edms.paginate(page: params[:page], per_page: 10)
@@ -32,9 +33,11 @@ class Admin::EdmsController < ApplicationController
     if params[:broadcast_date].present?
       @edm.edm_broadcast_time = @edm.set_time(params[:edm][:start_date_time],params[:edm][:start_time_hour],params[:edm][:start_time_minute],params[:edm][:start_time_am]) if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "scheduled")
       @edm.edm_broadcast_time = Time.now if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "now")
-      @edm.edm_broadcast_value = params[:edm][:edm_broadcast_value]
-      @edm.flag = "1"
+      @edm.edm_broadcast_value, @edm.group_type, @edm.flag, @edm.database_email_field = params[:edm][:edm_broadcast_value], params[:edm][:group_type], "1", params[:edm][:database_email_field]
+      @edm.group_id = params[:edm][:group_id] if params[:edm][:group_type].present? and params[:edm][:group_type] != "all"
+      @edm.group_id = @event.groupings.where(name:"Default Group").first.id if params[:edm][:group_type].present? and params[:edm][:group_type] == "all" and @event.groupings.present?
       @edm.save
+      @edm.sent_mail(@edm,@event)
     else
       @edm.update_attributes(edm_params)
     end
@@ -59,6 +62,10 @@ class Admin::EdmsController < ApplicationController
   end
 
   protected
+
+  def find_fields_from_database
+    @fields = Grouping.get_default_grouping_fields(@event) if @event.invitee_structures.present? and @event.groupings.present?
+  end
 
   def find_edms
     @campaign = @event.campaigns.find_by_id(params[:campaign_id])
