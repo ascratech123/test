@@ -88,13 +88,13 @@
                     - answered_qnas.each do |qna|
                       %tr
                         %td
+                          %p.userTxt= qna.get_receiver_user_name
+                        %td
                           %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
                           %p.userTxt= qna.get_company_name
-                        %td
-                          %p.userTxt= qna.get_receiver_user_name
                         %td
                           %p.userTxt
                             = qna.question  
@@ -124,13 +124,13 @@
                     - rejected_qnas.each do |qna|
                       %tr
                         %td
+                          %p.userTxt= qna.get_receiver_user_name
+                        %td
                           %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
                           %p.userTxt= qna.get_company_name
-                        %td
-                          %p.userTxt= qna.get_receiver_user_name
                         %td
                           %p.userTxt
                             = qna.question
