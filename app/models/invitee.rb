@@ -16,6 +16,8 @@ class Invitee < ActiveRecord::Base
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :downcase_email
+
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
   validates :email,
             :format => {
@@ -493,5 +495,12 @@ class Invitee < ActiveRecord::Base
 
   def name_with_email
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
+  end
+
+
+  private
+
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
   end
 end
