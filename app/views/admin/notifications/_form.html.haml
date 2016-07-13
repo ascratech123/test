@@ -6,14 +6,37 @@
         %h4.heading-border.p-t-10.m-b-15
           General Information
       = f.custom_text_field :description, "Text (max 200 characters) *","background" => "false"
-      = f.new_custom_file_browser_field :image, "Image (less than 100 KB)", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
-        .mdl-grid.p-v-5.form-group.mobiappstype
-          .col-lg-4.mdl-typography--text-right 
-            %p.displayInlineBlock.multicitytxt  Send to *
-          .col-lg-7.p-h-12.notific 
+      / = f.new_custom_file_browser_field :image, "Image (less than 100 KB)", :id => "uploadBtn", :value => f.object.image_file_name, :action=> params[:action], "background" => "false"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
+        .bs-component
+          .form-group
+            .span.col-lg-4
+              = f.label "Image (less than 100 KB)",:class =>"control-label", style: "float: right;"
+            .col-lg-7
+              %label.field.file
+                %span.button.btn-primary
+                  Choose File 
+                = f.file_field :image,:id => "uploadBtn", :class=>"gui-file"
+                = text_field_tag("text_file_name","", id: "1uploadBtn", class: "gui-input", :value => "#{f.object.image_file_name.nil? ? "there is no Attachment Available !" : f.object.image_file_name}")
+            .span.col-lg-1
+              = link_to("?" ,"/whats_this/notification/general_information/image_notification.png", rel: "login_background_popup", title: "Image", :class =>"fancybox whatsImg") 
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+      /   .mdl-grid.p-v-5.form-group.mobiappstype
+      /     .col-lg-4.mdl-typography--text-right 
+      /       %p.displayInlineBlock.multicitytxt  Send to *
+      /     .col-lg-7.p-h-12.notific 
+      /       = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
+      /       = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Send to *
+          .col-lg-3.p-h-12   
             = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
             = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
+          .col-lg-1.agenda_help
+            = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
+
       .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => ((f.object.notification_type == 'all' or f.object.notification_type.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px'), :id => 'group_check_boxes'}
         .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
@@ -57,6 +80,9 @@
             %i.arrow.single
             - grouped_options = get_notification_type_group_array(@event)
             = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
+          .span.col-lg-1
+            = link_to("?" ,"/whats_this/notification/general_information/select_root_destination.png", rel: "selecte_template", title: "Destination", :class =>"fancybox whatsImg")
+
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
