@@ -469,7 +469,6 @@ function flightTime() {
       $("#edm_templ_select").parent().parent().parent().hide();
     }
   });
-
   $("#edm_broadcast_time_now").click(function(){
     value = $("#edm_broadcast_time_now").val();
     if (value == "now"){
@@ -482,6 +481,18 @@ function flightTime() {
       $("#date-start").parent().parent().parent().parent().show();
     }
   });
+  $("#group_type_all_option").click(function(){
+    value = $("#group_type_all_option").val();
+    if (value == "all"){
+      $("#edm_group_id").parent().parent().parent().hide();
+    }
+  });
+  $("#group_type_group_option").click(function(){
+    value = $("#group_type_group_option").val();
+    if (value == "group"){
+      $("#edm_group_id").parent().parent().parent().show();
+    }
+  }); 
 /* EDM Form JS end */
 
   /* Event _Form  start */

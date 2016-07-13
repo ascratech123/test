@@ -6,6 +6,36 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10
             General Information
+        - if @fields.present?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Choose Field
+              .col-lg-7
+                - default_grouping = @fields.collect{|p| [ p[1], p[0] ]}
+                %i.arrow.single
+                = f.select("edm", "database_email_field", default_grouping, {:selected => f.object.database_email_field,:prompt => "#{(f.object.database_email_field.present?) ? f.object.database_email_field : "Select Email field" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+                / .field_with_errors
+                /   .span{:class => "errorMessage"}
+                /     = f.object.errors.messages[:database_email_field].join("") rescue nil
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Send to
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :group_type, "all", "All", :id => "group_type_all_option"
+              = f.custom_radio_button :group_type, "group", "Group", :id => "group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Assign Grouping
+            .col-lg-7
+              - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
+              %i.arrow.single
+              = f.select("edm", "group_id", default_grouping, {:selected => f.object.group_id,:prompt => "#{(f.object.group_id.present?) ? f.object.group_id : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:group_id].join("") rescue nil
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5
             .col-lg-4.mdl-typography--text-right
@@ -17,7 +47,7 @@
           .bs-component.m-t-30
             .form-group
               %label.col-lg-4.control-label{:for => "Start EDM Date"} Schedule Date
-              = f.custom_text_field_date :start_date_time, "Start EDM Date", :id => "date-start",:value => f.object.edm_broadcast_time.present? ? f.object.edm_broadcast_time.strftime('%d/%m/%Y') : ''
+              = f.custom_text_field_date :start_date_time, "Start EDM Date", :id => "date-start",:value => f.object.edm_broadcast_time.present? ? f.object.edm_broadcast_time.to_time.in_time_zone('Kolkata').strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab
                   = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.edm_broadcast_time, 'hour')}", :col => '2',:maxlength => "2"
@@ -48,8 +78,9 @@
             %label.col-lg-4.control-label.ml-color--shades-white
               Select template
               %br
-              %a{:href => '/emailer.jpg', :class =>'fancybox', :title => "Template"}
+              %a{:href => '/whats_this/edm/template1.jpg', :class =>'fancybox', :rel=> "edm_view_template", :title => "Template"}
                 (View Available Templates)
+            = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Template2" => "template2.jpg","Template3" => "template3.jpg"}, :section_id => "edm_view_template",:path => "edm"}
             .col-lg-7  
               %i.arrow.single
               = f.select("edm", "default_template", ['Template 1','Template 2','Template 3'], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})

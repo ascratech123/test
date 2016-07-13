@@ -1,0 +1,15 @@
+!!!
+%html
+  %body{:bgcolor => "#f5f5f5", :leftmargin => "0", :marginheight => "0", :marginwidth => "0", :offset => "0", :topmargin => "0"}
+    %table#bgtable{:align => "center", :bgcolor => "#f5f5f5", :border => "0", :cellpadding => "0", :cellspacing => "20", :height => "100%", :width => "100%"}
+      %tr
+        %td{:align => "center", :valign => "top"}
+          %table{:align => "center", :bgcolor => "#fff", :cellpadding => "0", :cellspacing => "0", :style => " font-family:Arial,Helvetica,sans-serif;border-collapse:collapse;font-size:14px; color: #3f3f3f;", :width => "600"}
+            %tr{:style => "text-align:center;"}
+              %td{:height => "105", :width => "600"}
+                %p{:style => "width:300px;margin:0 auto;"}
+                  %a{:href => "javascript:void(0);"}
+                    = image_tag(@edm.header_image.url, :alt => "Event Logo",:style => "width:100%;") rescue nil
+                    / %img{:src => "assets/event-logo2.jpg", :style => "width:100%;"}/
+                / <p style="font-size:20px;">Logo</p>
+            = render :partial => 'default_template_body.html.haml'
