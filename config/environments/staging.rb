@@ -110,16 +110,16 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         :s3_credentials => S3_CREDENTIALS,
                         :bucket => S3_bucket
                         }
-ATTACH_FILE_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-ATTACH_FILE_2_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-ATTACH_FILE_3_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-ATTACH_FILE_4_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-ATTACH_FILE_5_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment2/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_3_PATH =   {:path => "my_travel/attachment3/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment3/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
