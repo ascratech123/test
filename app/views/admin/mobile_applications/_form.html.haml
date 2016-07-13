@@ -110,6 +110,10 @@
                 - data = [["After Splash Screen", "After Splash"],["Before User Interaction","Before Interaction"]]
                 - data << ["After Event Highlights","After Highlight"] if @mobile_application.application_type != "single event"
                 = f.select("event", "login_at", data , {:selected => "#{@event.login_at if @event.present?}"}, {include_blank: 'None',:class=> 'select2-single form-control',:onclick =>"answers();"})
+                - if f.object.new_record? or @event.present? and @event.event_features.pluck(:name).exclude? 'event_highlights'
+                  .field_with_errors#displayhighlight_message{:style => "display: #{(f.object.new_record? or @event.present? and @event.event_features.pluck(:name).exclude? 'event_highlights' and @event.login_at != 'After Highlight' ) ? 'none' : ''}"}
+                    .span{:class => "errorMessage"}
+                      = 'Kindly active Event Highlights feature to set login at After highlights'
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
           .bs-component
             .form-group{:style => "display: #{ get_login_at(@event,f.object)}", :class => "#{get_highlight_class(f.object)}" }
@@ -262,18 +266,21 @@
       $("#mobile_application_login_background_color").parent().parent().parent().hide();
       $(".OrTxt").hide();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().hide()
+      $("#displayhighlight_message").hide()
     }
     if(answer[answer.selectedIndex].value=="After Splash"){
       $("#login_background_uploadBtn").parent().parent().parent().show();
       $("#mobile_application_login_background_color").parent().parent().parent().show();
       $(".OrTxt").show();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().show()
+      $("#displayhighlight_message").hide()
     }
     if(answer[answer.selectedIndex].value=="After Highlight"){
       $("#login_background_uploadBtn").parent().parent().parent().hide();
       $("#mobile_application_login_background_color").parent().parent().parent().hide();
       $(".OrTxt").hide();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().hide()
+      $("#displayhighlight_message").show()
     }
   }
 
@@ -301,4 +308,13 @@
       $("#event_login_at").append($("<option value='After Highlight'>After Event Highlights</option>"));
     }
     $("#mobile_application_listing_screen_text_color").parent().parent().parent().show();
+  });
+
+  $("#option1").click(function(){
+    $("#listing_screen_background_label").hide()
+    $("#listing_screen_uploadBtn").parent().parent().parent().hide();
+    $("#listing_screen_uploadBtn").parent().parent().parent().prev('label').hide()
+    $("#this_listing_screen_uploadBtn").hide();
+    $("#event_login_at option[value='After Highlight']").remove();
+    $("#mobile_application_listing_screen_text_color").parent().parent().parent().hide();
   });
