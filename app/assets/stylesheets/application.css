@@ -18,6 +18,7 @@
  *= require theme
  *= require forms
  *= require custome
+ *= require responsive
  *= require jquery.fancybox
  *= require jquery.mCustomScrollbar.min
  
