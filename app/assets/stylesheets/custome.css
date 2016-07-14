@@ -21,9 +21,6 @@
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
-/*nitin*/
-/*.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
-.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}*/
 
 /* notification overlay css - Deepti*/
 .overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
@@ -216,8 +213,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .btnsubmit.newtelebtn{display: block;width:116px; margin:0 auto 10px;}
 
 /*Azeem CSS End*/
-#ui-id-6 ,#ui-id-5{height: 50px !important;}
-.ui-widget-content{height: 140px !important; padding-left: 0px !important;}
+
 .positionRelative{position: relative;}
 .hobnobBottom{position: absolute; bottom: 0px; width: 240px; left: 0px; margin:5px auto; overflow: hidden;}
 .hobnobBottom .brand-logo.darken-1{margin: 10px auto;}
@@ -578,7 +574,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
   border: 1px solid #aaaaaa;
   background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
   color: #222222;
-  
+  max-height: 318px;
   overflow-y: auto;
 }
 .ui-widget-content a {
