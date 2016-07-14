@@ -12,4 +12,7 @@
                 %p{:style => "font-size:13px;margin-top:0;margin-bottom:0px;"}
                 = @edm.body rescue nil
         %td{:width => "50"}
-= render :partial => 'default_template_footer.html.haml'
+- if @smtp_setting.blank? and params[:controller] == "admin/edms" and params[:action] == "show"
+  = render :partial => '/user_mailer/default_template_footer.html.haml', :locals => {:@edm => @edm}
+- else
+  = render :partial => 'default_template_footer.html.haml'

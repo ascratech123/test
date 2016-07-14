@@ -12,4 +12,7 @@
                     = image_tag(@edm.header_image.url, :alt => "Event Logo",:style => "width:100%;") rescue nil
                     / %img{:src => "assets/event-logo2.jpg", :style => "width:100%;"}/
                 / <p style="font-size:20px;">Logo</p>
-            = render :partial => 'default_template_body.html.haml'
+            - if @smtp_setting.blank? and params[:controller] == "admin/edms" and params[:action] == "show"
+              = render :partial => '/user_mailer/default_template_body.html.haml', :locals => {:@edm => @edm}
+            - else
+              = render :partial => 'default_template_body.html.haml'

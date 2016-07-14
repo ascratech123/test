@@ -23,6 +23,6 @@
               Edit
             = link_to admin_event_campaign_edm_path(edm.campaign.event_id, edm.campaign_id,edm.id),method: :delete,data: { confirm: 'Are you sure?' },:class =>"mdl-menu__item" do
               Delete
-            = link_to "/emailer.jpg",target:"_blank", :class => "mdl-menu__item" do
+            = link_to admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),target:"_blank", :class => "mdl-menu__item" do
               Preview eDM
   = will_paginate objs
