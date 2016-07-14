@@ -15,7 +15,7 @@
       .eventDetailSection.relative.clear.middleHeading
         = render :partial => "/admin/dashboards/breadcumb_links",:locals => {:name => params[:controller],:page => 'New User Registration'}
         .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-phone.p-t-75
-          .p-40.ml-card-holder
+          .p-40.ml-card-holder.mob-p-20
             .mdl-card.mdl-color--grey-100
-              .p-b-40.p-r-40.p-l-40
+              .p-b-40.p-r-40.p-l-40.mob-p-l-0.mob-p-r-0
                 = render :partial => 'form'
