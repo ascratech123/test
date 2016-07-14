@@ -1,0 +1,4 @@
+-if @edm.template_type.present? and @edm.template_type == "default_template"
+  = render :partial => '/user_mailer/default_template_header.html.haml', :locals => {:@edm => @edm}
+-else @edm.template_type.present? and @edm.template_type == "custom_template"
+  = render :partial => '/user_mailer/preview_custom_template', :locals => {:@edm => @edm}
