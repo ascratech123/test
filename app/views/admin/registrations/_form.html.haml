@@ -31,6 +31,14 @@
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
               = "Registration Field #{count}"
+          - if (@registration.new_record? or @registration.user_registrations.blank?) and count == 1
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+              .form-group
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  Which One Is Email Field?
+                .col-lg-7
+                  %i.arrow.single
+                  = f.select("registrations", "email_field", [["Field 1", 'attr1'], ["Field 2", 'attr2'], ["Field 3", 'attr3'], ["Field 4", 'attr4'], ["Field 5", 'attr5'], ["Field 6", 'attr6'], ["Field 7", 'attr7'], ["Field 8", 'attr8'], ["Field 9", 'attr9'], ["Field 10", 'attr10'], ["Field 11", 'attr11'], ["Field 12", 'attr12'], ["Field 13", 'attr13'], ["Field 14", 'attr14'], ["Field 15", 'attr15'], ["Field 16", 'attr16'], ["Field 17", 'attr17'], ["Field 18", 'attr18'], ["Field 19", 'attr19'], ["Field 20", 'attr20']], {:selected => @registration.email_field}, {include_blank: 'None',:class=> 'select2-single form-control' })
           = f.fields_for default_field do |field|
             - if !(f.object.new_record?)
               = field.custom_text_field :label, "Question #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
