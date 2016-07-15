@@ -56,6 +56,18 @@
             .field_with_errors.clear
               .span{:class => "errorMessage"}
                 = er
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-grid.p-v-5.m-b-20
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Auto Approved *
+          .col-lg-7.p-h-12
+            - er = f.object.errors.messages[:auto_approved].join(',') rescue nil
+            - f.object.errors.messages[:auto_approved].clear if f.object.errors.messages[:auto_approved].present?
+            = f.custom_radio_button_menu_regis :auto_approved, "yes","Yes", :id => "option_1_visible_auto_approved", :default_checked => "#{f.object.auto_approved == "yes" ? 'checked' : ''}"
+            = f.custom_radio_button_menu_regis :auto_approved, "no", "No", :id => "option_2_visible_auto_approved", :default_checked => "#{(f.object.new_record? or f.object.auto_approved == "no") ? 'checked' : ''}"
+            .field_with_errors.clear
+              .span{:class => "errorMessage"}
+                = er
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
         .bs-component.m-b-30
           .form-group
