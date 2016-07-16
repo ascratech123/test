@@ -499,6 +499,12 @@ function flightTime() {
   $("#group_type_all_option").click(function(){
     $(".apply_filterCls").hide();
   });
+  $("#need_social_icon_yes_for_edm").click(function(){
+    $(".md-checkboxsocialcheck").show();
+  });
+  $("#need_social_icon_no_for_edm").click(function(){
+    $(".md-checkboxsocialcheck").hide();
+  });
 /* EDM Form JS end */
 
   /* Event _Form  start */
