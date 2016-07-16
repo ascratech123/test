@@ -4,16 +4,21 @@
   %tr{:style => "text-align:center;background-color:#00b1bb;color:#fff;font-size:10px;"}
     %td{:height => "105", :width => "600"}
       %p
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/fb-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/twitter-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/google-plus-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/instagram-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/pinterest-icon.png"}/
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/fb-icon.png"}/
+        - if @edm.social_icons.include? 'twitter'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/twitter-icon.png"}/
+        - if @edm.social_icons.include? 'google_plus'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/google-plus-icon.png"}/
+        - if @edm.social_icons.include? 'linked_in'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/instagram-icon.png"}/
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/pinterest-icon.png"}/
       %p{:style => "margin:2px;"} Call us: +91 9892 381682
       %p{:style => "margin:0 0 12px;"} Copyright &copy; 2015. All rights reserved.
 -elsif @edm.default_template.present? and @edm.default_template == "Template 2"
@@ -22,16 +27,21 @@
   %tr{:style => "text-align:center;background-color:#4d4e4f;color:#fff;font-size:10px;"}
     %td{:height => "105", :width => "600"}
       %p
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/fb-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/twitter-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/google-plus-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/instagram-icon.png"}/
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/pinterest-icon.png"}/
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/fb-icon.png"}/
+        - if @edm.social_icons.include? 'twitter'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/twitter-icon.png"}/
+        - if @edm.social_icons.include? 'google_plus'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/google-plus-icon.png"}/
+        - if @edm.social_icons.include? 'linked_in'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/instagram-icon.png"}/
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/pinterest-icon.png"}/
       %p{:style => "margin:2px;"} Call us: +91 9892 381682
       %p{:style => "margin:0 0 12px;"} Copyright &copy; 2015. All rights reserved.
 -elsif @edm.default_template.present? and @edm.default_template == "Template 3"
@@ -40,15 +50,21 @@
   %tr{:style => "text-align:center;background-color:#F15B47;color:#fff;font-size:10px;"}
     %td{:height => "105", :width => "600"}
       %p
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/fb-icon.png"}
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/twitter-icon.png"}
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/google-plus-icon.png"}
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/instagram-icon.png"}
-        %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
-          %img{:src => "http://shobiz.ascratech.com/assets/pinterest-icon.png"}
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/fb-icon.png"}/
+        - if @edm.social_icons.include? 'twitter'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/twitter-icon.png"}/
+        - if @edm.social_icons.include? 'google_plus'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/google-plus-icon.png"}/
+        - if @edm.social_icons.include? 'linked_in'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/instagram-icon.png"}/
+        - if @edm.social_icons.include? 'facebook'
+          %a{:href => "javascript:void(0);", :style => "margin-right:10px;"}
+            %img{:src => "#{APP_URL}/assets/pinterest-icon.png"}/
       %p{:style => "margin:2px;"} Call us: +91 9892 381682
       %p{:style => "margin:0 0 12px;"} Copyright &copy; 2015. All rights reserved.
+%img{:style => "display:none;visibility:hidden;", :src => "#{APP_URL}/admin/events/#{@event.id}/campaigns/#{@campaign.id}/edms/#{@edm.id}?user_email=#{@email}"}

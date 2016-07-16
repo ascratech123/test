@@ -33,12 +33,12 @@ class Admin::EdmsController < ApplicationController
     if params[:broadcast_date].present?
       @edm.assign_attributes(edm_params) if params[:edm][:group_type].present? and params[:edm][:group_type] == "apply filter"
       @edm.set_time(params[:edm][:start_date_time],params[:edm][:start_time_hour],params[:edm][:start_time_minute],params[:edm][:start_time_am]) if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "scheduled")
-      @edm.send_mail_to_invitees
       # @edm.edm_broadcast_time = Time.now if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "now")
       # @edm.edm_broadcast_value, @edm.group_type, @edm.flag, @edm.database_email_field = params[:edm][:edm_broadcast_value], params[:edm][:group_type], "1", params[:edm][:database_email_field]
       # @edm.group_id = params[:edm][:group_id] if params[:edm][:group_type].present? and params[:edm][:group_type] != "all"
       # @edm.group_id = @event.groupings.where(name:"Default Group").first.id if params[:edm][:group_type].present? and params[:edm][:group_type] == "all" and @event.groupings.present?
       @edm.save
+      @edm.send_mail_to_invitees
       # @edm.sent_mail(@edm,@event)
     else
       @edm.update_attributes(edm_params)
