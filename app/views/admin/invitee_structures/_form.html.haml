@@ -10,6 +10,14 @@
             / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
             /   what's this?
         - data_present = @invitee_structure.check_invitee_data_present?
+        - if true#(@invitee_structure.new_record? or @invitee_structure.invitee_datum.blank?)
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Which One Is Email Field?
+              .col-lg-7
+                %i.arrow.single
+                = f.select("invitee_structure", "email_field", [["Column 1", 'attr1'], ["Column 2", 'attr2'], ["Column 3", 'attr3'], ["Column 4", 'attr4'], ["Column 5", 'attr5'], ["Column 6", 'attr6'], ["Column 7", 'attr7'], ["Column 8", 'attr8'], ["Column 9", 'attr9'], ["Column 10", 'attr10'], ["Column 11", 'attr11'], ["Column 12", 'attr12'], ["Column 13", 'attr13'], ["Column 14", 'attr14'], ["Column 15", 'attr15'], ["Column 16", 'attr16'], ["Column 17", 'attr17'], ["Column 18", 'attr18'], ["Column 19", 'attr19'], ["Column 20", 'attr20']], {:selected => @invitee_structure.email_field}, {include_blank: 'None',:class=> 'select2-single form-control' })
         = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "database.png", :section_id => "speaker_general_section"}
         = f.custom_text_field :attr1, "Column 1(Unique Identifier)", :value => f.object.attr1.present? ? f.object.attr1 : "Email id",:readonly => data_present ? true : false
         = f.custom_text_field :attr2, "Column 2", :value => f.object.attr2.present? ? f.object.attr2 : "First Name",:readonly => data_present ? true : false
