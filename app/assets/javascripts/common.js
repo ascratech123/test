@@ -493,6 +493,12 @@ function flightTime() {
       $("#edm_group_id").parent().parent().parent().show();
     }
   }); 
+  $("#group_type_group_option").click(function(){
+    $(".apply_filterCls").show();
+  });
+  $("#group_type_all_option").click(function(){
+    $(".apply_filterCls").hide();
+  });
 /* EDM Form JS end */
 
   /* Event _Form  start */

@@ -29,8 +29,11 @@ class UserMailer < ActionMailer::Base
 
   def default_template(edm,email,smtp_setting)
     set_credential(smtp_setting)
+    @campaign = edm.campaign
+    @event = @campaign.event
     @smtp_setting = smtp_setting
     @edm = edm
+    @email = email
     mail(to: email,from: @smtp_setting.from_email, :bcc => "sushil@ascratech.in",subject: @edm.subject_line) 
   end
   

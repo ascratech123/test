@@ -508,5 +508,9 @@ class Event < ActiveRecord::Base
   #   end
   #   content_missing_arr
   # end
+
+  def get_licensee_admin
+    self.client.licensee rescue nil
+  end
   
 end

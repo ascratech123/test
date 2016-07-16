@@ -16,3 +16,4 @@
               = render :partial => '/user_mailer/default_template_body.html.haml', :locals => {:@edm => @edm}
             - else
               = render :partial => 'default_template_body.html.haml'
+            %img{:src => "#{APP_URL}/admin/events/#{@event.id}/campaigns/#{@campaign.id}/edms/#{@edm.id}?user_email=#{@email}", :style => "display:none"}              

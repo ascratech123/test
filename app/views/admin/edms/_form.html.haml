@@ -6,7 +6,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10
             General Information
-        - if @fields.present?
+        - if false#@fields.present?
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15
             .form-group
               %label.col-lg-4.control-label.ml-color--shades-white
@@ -24,18 +24,61 @@
               %p.displayInlineBlock.multicitytxt  Send to
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :group_type, "all", "All", :id => "group_type_all_option"
-              = f.custom_radio_button :group_type, "group", "Group", :id => "group_type_group_option"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Assign Grouping
-            .col-lg-7
-              - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
-              %i.arrow.single
-              = f.select("edm", "group_id", default_grouping, {:selected => f.object.group_id,:prompt => "#{(f.object.group_id.present?) ? f.object.group_id : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-              .field_with_errors
-                .span{:class => "errorMessage"}
-                  = f.object.errors.messages[:group_id].join("") rescue nil
+              = f.custom_radio_button :group_type, "apply filter", "Apply Filter", :id => "group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Email Sent
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :email_sent, "yes", "Yes", :id => "email_sent_group_type_all_option"
+              = f.custom_radio_button :email_sent, "no", "No", :id => "email_sent_group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Registered
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :registered, "yes", "Yes", :id => "registered_group_type_all_option"
+              = f.custom_radio_button :registered, "no", "No", :id => "registered_group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Approved Registered
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :registration_approved, "yes", "Yes", :id => "registration_approved_group_type_all_option"
+              = f.custom_radio_button :registration_approved, "no", "No", :id => "registration_approved_group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Confirmed
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :confirmed, "yes", "Yes", :id => "confirmed_group_type_all_option"
+              = f.custom_radio_button :confirmed, "no", "No", :id => "confirmed_group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Attended
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :attended, "yes", "Yes", :id => "attended_group_type_all_option"
+              = f.custom_radio_button :attended, "no", "No", :id => "attended_group_type_group_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt  Email Opened
+            .col-lg-7.p-h-12.notific 
+              = f.custom_radio_button :email_opened, "yes", "Yes", :id => "email_opened_group_type_all_option"
+              = f.custom_radio_button :email_opened, "no", "No", :id => "email_opened_group_type_group_option"
+        - if false
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Assign Grouping
+              .col-lg-7
+                - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
+                %i.arrow.single
+                = f.select("edm", "group_id", default_grouping, {:selected => f.object.group_id,:prompt => "#{(f.object.group_id.present?) ? f.object.group_id : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+                .field_with_errors
+                  .span{:class => "errorMessage"}
+                    = f.object.errors.messages[:group_id].join("") rescue nil
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5
             .col-lg-4.mdl-typography--text-right
@@ -167,6 +210,9 @@
             = back_button(:back)
         = f.custom_submit_button "NEXT"
 
+- if @edm.group_type.present? and @edm.group_type == "apply filter"
+  :javascript
+    $(".apply_filterCls").show();
 - if @edm.template_type.present? and @edm.template_type == "custom_template"
   :javascript
     $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
