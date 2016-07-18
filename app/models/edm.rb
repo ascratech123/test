@@ -29,7 +29,7 @@ class Edm < ActiveRecord::Base
 
   def self.send_email_time_basis
     puts "*************EDM********#{Time.now}**********************"
-    edms = Edm.where("sent != ? and edm_broadcast_time < ? and edm_broadcast_time > ?", 'yes', (Time.zone.now + 10.minutes).to_formatted_s(:db), (Time.zone.now - 30.minutes).to_formatted_s(:db))
+    edms = Edm.where("sent != ? and edm_broadcast_time < ? and edm_broadcast_time > ?", 'yes', (Time.zone.now).to_formatted_s(:db), (Time.zone.now - 30.minutes).to_formatted_s(:db))
     if edms.present?
       edms.each do |edm|
         edm.send_mail_to_invitees
@@ -40,8 +40,8 @@ class Edm < ActiveRecord::Base
   def send_mail_to_invitees
     if self.edm_broadcast_value == 'now'
       edm = self
-      self.edm_broadcast_time = Time.now
-      self.sent = 'yes'
+      self.update_column(:edm_broadcast_time, Time.now)
+      self.update_column(:sent, 'yes')
       final_emails_arr = []
       campaign = self.campaign
       event = campaign.event
