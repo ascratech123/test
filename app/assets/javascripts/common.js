@@ -506,7 +506,7 @@ function flightTime() {
     $(".md-checkboxsocialcheck").hide();
   });
   $("#custom_template_for_edm").click(function(){
-    $(".md-checkboxsocialcheck").show();
+    $(".md-checkboxsocialcheck").hide();
   });
 /* EDM Form JS end */
 
