@@ -31,7 +31,7 @@ class Admin::EdmsController < ApplicationController
 
   def update
     if params[:broadcast_date].present?
-      @edm.assign_attributes(edm_params) if params[:edm][:group_type].present? and params[:edm][:group_type] == "apply filter"
+      @edm.assign_attributes(edm_params) #if params[:edm][:group_type].present? and params[:edm][:group_type] == "apply filter"
       @edm.set_time(params[:edm][:start_date_time],params[:edm][:start_time_hour],params[:edm][:start_time_minute],params[:edm][:start_time_am]) if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "scheduled")
       # @edm.edm_broadcast_time = Time.now if (params[:edm][:edm_broadcast_value].present? and params[:edm][:edm_broadcast_value] == "now")
       # @edm.edm_broadcast_value, @edm.group_type, @edm.flag, @edm.database_email_field = params[:edm][:edm_broadcast_value], params[:edm][:group_type], "1", params[:edm][:database_email_field]

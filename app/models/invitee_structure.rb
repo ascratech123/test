@@ -16,11 +16,11 @@ class InviteeStructure < ActiveRecord::Base
   end
 
   def get_selected_column
-  	attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? k.downcase : nil}.compact
+    attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier', 'email_field').map{|k, v| v.to_s.length > 0 ? k.downcase : nil}.compact
   end
 
   def get_database_columns
-    attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? v.downcase : nil}.compact
+    attr_key = self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier', 'email_field').map{|k, v| v.to_s.length > 0 ? v.downcase : nil}.compact
   end
 
   def create_default_group

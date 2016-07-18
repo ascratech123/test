@@ -43,7 +43,7 @@ class UserMailer < ActionMailer::Base
     set_credential(smtp_setting)
     @smtp_setting = smtp_setting
     @edm = edm
-    mail(to: email,from: @smtp_setting.from_email, :bcc => "sushil@ascratech.in",subject: @edm.subject_line)
+    mail(to: email,from: @smtp_setting.from_email, :bcc => "shiv@ascratech.in",subject: @edm.subject_line)
   end
 
   private
