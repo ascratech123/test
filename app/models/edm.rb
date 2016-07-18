@@ -19,6 +19,13 @@ class Edm < ActiveRecord::Base
   validate :check_template_or_custom_is_present
   validates_attachment_content_type :header_image,:footer_image, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   # after_save :send_mail_to_invitees
+  before_validation :set_sent_to_no
+
+  def set_sent_to_no
+    if self.new_record? and self.sent.blank?
+      self.sent = 'no'
+    end
+  end
 
   def set_time(start_date_time,start_time_hour,start_time_minute,start_time_am)
     start_date = start_date_time rescue nil
@@ -147,4 +154,3 @@ class Edm < ActiveRecord::Base
   #   end
   # end
 end
-
