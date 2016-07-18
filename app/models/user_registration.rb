@@ -1,5 +1,6 @@
 class UserRegistration < ActiveRecord::Base
     before_validation :check_validation
+    after_save :auto_approved
 
     def check_validation
       event = Event.find(self.event_id)
@@ -22,4 +23,12 @@ class UserRegistration < ActiveRecord::Base
         end
       end
     end
+
+  def auto_approved
+    event = Event.find(self.event_id)
+    registration_setting = event.registration_settings.last rescue nil
+    if registration_setting.present? and registration_setting.auto_approved == 'yes'
+      self.update_column(:status => 'approved')
+    end
+  end
 end
