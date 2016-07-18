@@ -28,7 +28,7 @@ class UserRegistration < ActiveRecord::Base
     event = Event.find(self.event_id)
     registration_setting = event.registration_settings.last rescue nil
     if registration_setting.present? and registration_setting.auto_approved == 'yes'
-      self.update_column(:status => 'approved')
+      self.update_column(:status, 'approved')
     end
   end
 end
