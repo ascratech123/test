@@ -1,6 +1,6 @@
 = stylesheet_link_tag "css/edm_time"
 .save_button.mdl-card.agendaheight
-  = form_for [:admin, @event, @campaign, @edm],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+  = form_for [:admin, @event, @campaign, @edm],:html => {:class =>'form-horizontal.checkboxclass'}, :builder => CustomFormBuilder do |f|
     -if params[:next].present?
       .mdl-grid.mdl-shadow--1dp
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
