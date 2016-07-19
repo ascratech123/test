@@ -7148,6 +7148,8 @@ select[multiple] .input-lg {
   margin-bottom: 0;
   padding-top: 7px;
 }
+
+#new_edm.form-horizontal .checkbox{min-height:auto; padding-top: 0px;}
 .form-horizontal .radio,
 .form-horizontal .checkbox {
   min-height: 27px;
@@ -20031,4 +20033,10 @@ body.basic-timeline .panel-clone {
     padding: 0 20px;
     width: 100%;
   }
+}
+
+#ui-id-1, #ui-id-2 {
+    bottom: 120px !important;
+    padding-left: 0 !important;
+    top: inherit !important;
 }
