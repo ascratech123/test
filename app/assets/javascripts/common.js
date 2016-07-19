@@ -508,6 +508,7 @@ function flightTime() {
   $("#custom_template_for_edm").click(function(){
     $(".md-checkboxsocialcheck").hide();
   });
+  $('input,textarea').attr('autocomplete', 'off');
 /* EDM Form JS end */
 
   /* Event _Form  start */
