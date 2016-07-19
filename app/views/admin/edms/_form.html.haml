@@ -28,42 +28,42 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Email Sent
+              %p.displayInlineBlock.multicitytxt  Sent email 
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :email_sent, "yes", "Yes", :id => "email_sent_group_type_all_option"
               = f.custom_radio_button :email_sent, "no", "No", :id => "email_sent_group_type_group_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Registered
+              %p.displayInlineBlock.multicitytxt  Registered users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :registered, "yes", "Yes", :id => "registered_group_type_all_option"
               = f.custom_radio_button :registered, "no", "No", :id => "registered_group_type_group_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Approved Registered
+              %p.displayInlineBlock.multicitytxt  Approved Registered users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :registration_approved, "yes", "Yes", :id => "registration_approved_group_type_all_option"
               = f.custom_radio_button :registration_approved, "no", "No", :id => "registration_approved_group_type_group_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Confirmed
+              %p.displayInlineBlock.multicitytxt  Confirmed attendee
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :confirmed, "yes", "Yes", :id => "confirmed_group_type_all_option"
               = f.custom_radio_button :confirmed, "no", "No", :id => "confirmed_group_type_group_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Attended
+              %p.displayInlineBlock.multicitytxt  Attended users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :attended, "yes", "Yes", :id => "attended_group_type_all_option"
               = f.custom_radio_button :attended, "no", "No", :id => "attended_group_type_group_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
-              %p.displayInlineBlock.multicitytxt  Email Opened
+              %p.displayInlineBlock.multicitytxt  Email opened
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button :email_opened, "yes", "Yes", :id => "email_opened_group_type_all_option"
               = f.custom_radio_button :email_opened, "no", "No", :id => "email_opened_group_type_group_option"
@@ -135,7 +135,7 @@
           .bs-component
             .form-group
               .span.col-lg-4
-                = f.label "Header Image",:class =>"control-label", style: "float: right;"
+                = f.label "Header Image (105x600px) jpg/png only",:class =>"control-label", style: "float: right;"
               .col-lg-7
                 %label.field.file
                   %span.button.btn-primary
@@ -148,19 +148,19 @@
         = f.custom_text_area_field :body,"Body text", "background" => "false"
         
         / = f.new_custom_file_browser_field :footer_image, "Footer Image", :id => "footer_image_uploadBtn", :value => f.object.footer_image_file_name, :action=> params[:action], "background" => "false"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
-          .bs-component
-            .form-group
-              .span.col-lg-4
-                = f.label "Footer Image",:class =>"control-label", style: "float: right;"
-              .col-lg-7
-                %label.field.file
-                  %span.button.btn-primary
-                    Choose File 
-                  = f.file_field :footer_image,:id => "footer_image_uploadBtn", :class=>"gui-file"
-                  = text_field_tag("text_file_name","", id: "1footer_image_uploadBtn", class: "gui-input", :value => "#{f.object.footer_image_file_name.nil? ? "there is no Attachment Available !" : f.object.footer_image_file_name}", :read_only => true)
-              .span.col-lg-1
-                = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Footer Image", :class =>"fancybox whatsImg")
+        / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
+        /   .bs-component
+        /     .form-group
+        /       .span.col-lg-4
+        /         = f.label "Footer Image",:class =>"control-label", style: "float: right;"
+        /       .col-lg-7
+        /         %label.field.file
+        /           %span.button.btn-primary
+        /             Choose File 
+        /           = f.file_field :footer_image,:id => "footer_image_uploadBtn", :class=>"gui-file"
+        /           = text_field_tag("text_file_name","", id: "1footer_image_uploadBtn", class: "gui-input", :value => "#{f.object.footer_image_file_name.nil? ? "there is no Attachment Available !" : f.object.footer_image_file_name}", :read_only => true)
+        /       .span.col-lg-1
+        /         = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Footer Image", :class =>"fancybox whatsImg")
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5.m-b-10
             .col-lg-4.mdl-typography--text-right
@@ -185,13 +185,13 @@
                   = check_box_tag "edm[social_icons][]","google_plus",(f.object.social_icons.present? and f.object.social_icons.include?("google_plus") ? "checked" : false), :id => "edm_2"
                   %span.checkbox
                   %span.top6
-                    Google Plus
+                    Google +
               .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
                 %label.help-tip{:for => "edm_3"}
                   = check_box_tag "edm[social_icons][]","linked_in",(f.object.social_icons.present? and f.object.social_icons.include?("linked_in") ? "checked" : false), :id => "edm_3" 
                   %span.checkbox
                   %span.top6
-                    Linked in
+                    LinkedIn
               .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
                 %label.help-tip{:for => "edm_4"}
                   = check_box_tag "edm[social_icons][]","twitter",(f.object.social_icons.present? and f.object.social_icons.include?("twitter") ? "checked" : false), :id => "edm_4" 
