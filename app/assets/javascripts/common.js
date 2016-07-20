@@ -509,6 +509,7 @@ function flightTime() {
     $(".md-checkboxsocialcheck").hide();
   });
   $('input,textarea').attr('autocomplete', 'off');
+  $('input[type="radio"][checked="checked"]').prop('checked', true);
 /* EDM Form JS end */
 
   /* Event _Form  start */
