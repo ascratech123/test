@@ -1143,3 +1143,6 @@ i.incards {font-size: 60px}
     -webkit-transform: scaleY(1.0);
   }
 }
+
+.mdl-grid.mdl-shadow--1dp{
+  background: #fff;}

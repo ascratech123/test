@@ -457,6 +457,8 @@ function flightTime() {
       $("#body_sample5").parent().parent().parent().show();
       $("#edm_templ_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
+      $(".without_social_icons").show();
+      $(".md-checkboxsocialcheck").show();
     }
   }); 
   $("#custom_template_for_edm").click(function(){
@@ -467,6 +469,8 @@ function flightTime() {
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#body_sample5").parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
+      $(".without_social_icons").hide();
+      $(".md-checkboxsocialcheck").hide();
     }
   });
   $("#edm_broadcast_time_now").click(function(){
@@ -484,13 +488,13 @@ function flightTime() {
   $("#group_type_all_option").click(function(){
     value = $("#group_type_all_option").val();
     if (value == "all"){
-      $("#edm_group_id").parent().parent().parent().hide();
+      // $("#edm_group_id").parent().parent().parent().hide();
     }
   });
   $("#group_type_group_option").click(function(){
     value = $("#group_type_group_option").val();
     if (value == "group"){
-      $("#edm_group_id").parent().parent().parent().show();
+      // $("#edm_group_id").parent().parent().parent().show();
     }
   }); 
   $("#group_type_group_option").click(function(){
