@@ -20,7 +20,8 @@ class Admin::EdmsController < ApplicationController
       if params[:commit].present? and params[:commit] == "NEXT"
         redirect_to edit_admin_event_campaign_edm_path(:event_id => @campaign.event_id, :campaign_id => @edm.campaign_id,:id => @edm.id,:next => params[:commit])
       else
-        redirect_to admin_event_campaign_edms_path(:event_id => @campaign.event_id, :campaign_id => @edm.campaign_id)
+        # redirect_to admin_event_campaign_edms_path(:event_id => @campaign.event_id, :campaign_id => @edm.campaign_id)
+        redirect_to admin_event_campaign_edm_path(@edm.campaign.event_id,@edm.campaign_id,@edm.id)
       end
     else
       render :action => 'new'
@@ -47,8 +48,10 @@ class Admin::EdmsController < ApplicationController
       if @edm.errors.blank?
         if params[:commit].present? and params[:commit] == "NEXT"
           redirect_to edit_admin_event_campaign_edm_path(:event_id => @campaign.event_id, :campaign_id => @edm.campaign_id,:id => @edm.id,:next => params[:commit])
-        else
+        elsif params[:commit].present? and params[:commit] == "SEND"
           redirect_to admin_event_campaign_edms_path(:event_id => @campaign.event_id, :campaign_id => @edm.campaign_id)
+        else
+          redirect_to admin_event_campaign_edm_path(@edm.campaign.event_id,@edm.campaign_id,@edm.id)
         end
       else
         render :action => "edit"
