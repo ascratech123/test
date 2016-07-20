@@ -12,10 +12,155 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+/*=======================Nilam CSS Start=================================*/
+  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
+  .ckeditor_custom {text-align: left;}
 
+.titleQuestion{margin-left:15px;}
+.mdl-grid.mdl-shadow--1dp{background:#fff;}
+/*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
+
+/* notification overlay css - Deepti*/
+.overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
+.loader-img{position: absolute;left: 0;margin: 0 auto;right: 0;top: 50%;transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);z-index: 9999;}
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  margin: 0 auto;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  z-index: 9999;
+}
+
+.spinner > div {
+  background-color: #00b1bb;
+  height: 100%;
+  width: 8px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+
+/*rwd table css start - Deepti */    
+.blueheaderFont .breadcrumb {background-color: transparent;border-radius: 0;float: left;font-size: 12px;margin-bottom: 0;line-height: 0px;padding: 1px 5px 0 0;position: relative;}
+.table-responsive { font-family: "Ubuntu",sans-serif;}
+.table-responsive .mdl-data-table td, .mdl-data-table th{text-align: left;}
+.table-responsive .table-bordered > thead > tr > th, .table-bordered > thead > tr > td{border-bottom-width: inherit;}
+/*.table-responsive .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{ background-color: #fff;}*/
+.table-responsive .table-bordered > thead > tr > th, .table-responsive .table-bordered > tbody > tr > th, .table-responsive .table-bordered > tfoot > tr > th, .table-responsive .table-bordered > thead > tr > td,.table-responsive .table-bordered > tbody > tr > td, .table-responsive .table-bordered > tfoot > tr > td{border: none;}
+.table-responsive thead{background: #eee none repeat scroll 0 0;}
+.table-responsive .table > thead > tr > th{vertical-align: middle;}
+.table-responsive .table > thead > tr > th {
+    box-sizing: border-box;
+    color: #000;
+    font-size: 12px;
+    font-weight: 500;
+    height: 48px;
+    letter-spacing: 0;
+    line-height: 24px;
+    padding-bottom: 8px;
+    position: relative;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+.btn-toolbar{margin-top: 20px;}
+.btn-toolbar .checkbox-row  input[type=checkbox] {
+    display: none;
+}
+.btn-toolbar .checkbox-row label {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    margin-right: 15px;
+    padding-left: 25px;
+    position: relative;
+}
+.btn-toolbar .checkbox-row label::before {
+    background-color: #fff;
+    bottom: 1px;
+    content: "";
+    display: inline-block;
+    height: 16px;
+    left: 0;
+    margin-right: 10px;
+    position: absolute;
+    width: 16px;
+    border-radius: 2px;
+    border: 2px solid #01579b;
+}
+
+.btn-toolbar .checkbox-row input[type="checkbox"]:checked + label::before {
+    color: #f3f3f3;
+    content: "✓";
+    font-size: 15px;
+    line-height: 12px;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #01579b;
+}
+/*rwd table css end - Deepti */
+
+.fixed-activon-btn-new .registcancel a{color: #fff;font-size: 14px;font-weight: 400;}
+.link_to_add_more{float: right;font-size: 14px !important;margin-top: 15px;}
+.Regiserror{margin-top: 5px;}
+.Regiserror .field_with_errors{left: 34%;position: absolute;top: 36px;}
+.table-responsive th:first-child{text-align:left;}
+.telehead{font-size: 18px; font-weight: 400; color:#a9acbd; line-height: 18px;}
+.textright{text-align: right;}
+.optionsDiv.col-lg-12 .col-lg-7{padding-right: 0px;}
+.addmoretext{text-align: right;padding-right: 8px;}
+.addmoretext a{display: inline-block; border-radius: 50%;}
+.tellbgnone .editButton .waves-effect.waves-light.btn,.tellbgnone .editButton a{font-size: 14px; font-weight: 100;}
+.options_form_tag_for_new{display:none;}
 .mdl-data-table .notiTabinfo{ width:44%;}
 .usersep{border-bottom: 1px solid #d7d7d7;padding: 4px 5px; }
 #invitee_group_invitee_ids{border: 1px solid #d7d7d7;}
@@ -25,6 +170,11 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .notification .md-checkbox{display: block; min-height: 30px;}
 .notification .md-checkbox .checkbox{min-height: 20px;}
 .notification .md-checkbox .checkbox{padding-top: 0px;}
+.col-lg-3.p-h-12.chekboxtell .field_with_errors{text-align: center;top:-22px;}
+.col-lg-3.p-h-12.chekboxtell {text-align: right;}
+.md-checkbox .chekboxtell input[type="checkbox"] + .checkbox{right:0; left: auto;}
+.invitee_tell .form-group{margin-bottom: 0px;}
+.fixed-activon-btn-new.btn-bottom.tellbgnone{background:none;}
 .menuSubCard .menustatusnew{width:90px;}
 .menuSubCard .event-imgupload input.upload {width: 100%;top: 23px;padding-left: 33px;}
 .converblog .full_width{width:100%;}
@@ -425,7 +575,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
   border: 1px solid #aaaaaa;
   background: #ffffff url(images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
   color: #222222;
-  
+  max-height: 318px;
   overflow-y: auto;
 }
 .ui-widget-content a {
@@ -1059,12 +1209,6 @@ i.incards {font-size: 60px}
 
 /*============================= manahe Theme css End ======================================= */
 
-/*=======================Nilam CSS Start=================================*/
-  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
-  .ckeditor_custom {text-align: left;}
-  
-/*=======================Nilam CSS End =================================*/
-
 @media only screen and (max-width: 1300px) {
 .galleryLayout li {display: inline-block;margin-right: 2%;text-align: left; width: 30.99%;}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
@@ -1073,76 +1217,3 @@ i.incards {font-size: 60px}
 
 
 
-
-/*nitin*/
-.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
-.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
-
-/* notification overlay css - Deepti*/
-.overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
-.loader-img{position: absolute;left: 0;margin: 0 auto;right: 0;top: 50%;transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);z-index: 9999;}
-.spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 60px;
-  text-align: center;
-  font-size: 10px;
-  position: absolute;
-  left: 0;
-  margin: 0 auto;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  z-index: 9999;
-}
-
-.spinner > div {
-  background-color: #00b1bb;
-  height: 100%;
-  width: 8px;
-  display: inline-block;
-  
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
-
-.mdl-grid.mdl-shadow--1dp{
-  background: #fff;}
