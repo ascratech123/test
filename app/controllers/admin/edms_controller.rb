@@ -40,7 +40,7 @@ class Admin::EdmsController < ApplicationController
       # @edm.group_id = params[:edm][:group_id] if params[:edm][:group_type].present? and params[:edm][:group_type] != "all"
       # @edm.group_id = @event.groupings.where(name:"Default Group").first.id if params[:edm][:group_type].present? and params[:edm][:group_type] == "all" and @event.groupings.present?
       @edm.save
-      @edm.send_mail_to_invitees
+      @edm.send_mail_to_invitees if @edm.edm_broadcast_value == 'now' and @edm.sent == 'no'
       # @edm.sent_mail(@edm,@event)
     else
       @edm.update_attributes(edm_params)
