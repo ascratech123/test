@@ -45,7 +45,7 @@ class Edm < ActiveRecord::Base
   end
 
   def send_mail_to_invitees
-    if self.edm_broadcast_value == 'now'
+    # if self.edm_broadcast_value == 'now'
       edm = self
       self.update_column(:edm_broadcast_time, Time.now)
       self.update_column(:sent, 'yes')
@@ -127,7 +127,7 @@ class Edm < ActiveRecord::Base
           UserMailer.custom_template(edm,email,smtp_setting).deliver_now if edm.template_type.present? and edm.template_type == "custom_template"
         end
       end
-    end
+    # end
   end
 
   def check_template_or_custom_is_present
