@@ -7,8 +7,8 @@
 - else  
   %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
     %tr
-      %th Subject Line
-      %th Template Type
+      %th Subject
+      %th Template
       %th eDM Broadcast Date
       %th
     - objs.each do |edm|
@@ -21,10 +21,10 @@
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{edm.id}"}
             = link_to edit_admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),:class => "mdl-menu__item" do
               Edit
-            = link_to edit_admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id, :next => 'NEXT'), :class => "mdl-menu__item" do
-              Broadcast
+            / = link_to edit_admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id, :next => 'NEXT'), :class => "mdl-menu__item" do
+            /   Broadcast
             = link_to admin_event_campaign_edm_path(edm.campaign.event_id, edm.campaign_id,edm.id),method: :delete,data: { confirm: 'Are you sure?' },:class =>"mdl-menu__item" do
               Delete
-            = link_to admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),target:"_blank", :class => "mdl-menu__item" do
-              Preview eDM
+            / = link_to admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),target:"_blank", :class => "mdl-menu__item" do
+            /   Preview eDM
   = will_paginate objs

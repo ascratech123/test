@@ -20,6 +20,7 @@ class Edm < ActiveRecord::Base
   validates_attachment_content_type :header_image,:footer_image, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   # after_save :send_mail_to_invitees
   before_validation :set_sent_to_no
+  validate :image_dimensions
 
   def set_sent_to_no
     if self.new_record? and self.sent.blank?
@@ -153,4 +154,13 @@ class Edm < ActiveRecord::Base
   #     end
   #   end
   # end
+
+  def image_dimensions
+    if header_image_file_name.present? and header_image_file_name_changed?
+      edm_header_image_height, edm_header_image_width  = 105.0, 600.0
+      dimensions_header_image = Paperclip::Geometry.from_file(header_image.queued_for_write[:original].path) if header_image_file_name.present?
+      errors.add(:header_image, "Image size should be 600x105px only") if (dimensions_header_image.width != edm_header_image_width or dimensions_header_image.height != edm_header_image_height)
+    end
+  end
+    
 end
