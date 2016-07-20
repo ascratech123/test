@@ -92,7 +92,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
         when 'Invitee'
           arr = []
-          leaders = Invitee.unscoped.where(:event_id => event_ids).order('points desc') rescue []
+          leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
           event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}
           data[:"leaderboard"] = arr#event_ids.map{|id| {'id' => id, 'data'=> leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}}
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
