@@ -19,6 +19,13 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def custom_radio_button_edm(method, tag_value, options = {}, *args)
+    @template.content_tag :label, class: "mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}", :style => "#{args[0][:width]}" do
+     str = @template.radio_button(@object_name, method, tag_value, id: "#{args[0].values[0]}", class: "mdl-radio__button")
+      str += label(options)   
+    end
+  end
+
   def custom_radio_button_menu(method, tag_value,options = {}, *args)
     @template.content_tag :label, class: "mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}" do
      str = @template.radio_button(@object_name, method, tag_value, :checked => args.first[:default_checked], id: "#{args[0].values[0]}", class: "#{args[0][:class].present? ? "#{args[0][:class]} mdl-radio__button": "mdl-radio__button"}")
