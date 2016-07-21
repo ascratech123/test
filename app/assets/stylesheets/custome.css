@@ -619,7 +619,8 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
     vertical-align: middle;
 }
 /*demo css End */
-.mdl-card.clients{min-height: 400px;}
+.mdl-card.clients{min-height  : 400px;}
+.mdl-card.clients.index_mdl{min-height:auto;}
 .collapseHide{display:none;}
 .SubMenucollapseHide{display: none;}
 #new_theme .dropdown-menu{float: none; right: 0px;}

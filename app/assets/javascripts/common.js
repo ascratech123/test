@@ -458,7 +458,10 @@ function flightTime() {
       $("#edm_templ_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
       $(".without_social_icons").show();
-      $(".md-checkboxsocialcheck").show();
+      checked = document.getElementById("need_social_icon_yes_for_edm").checked;
+      if (checked == "true"){
+        $(".md-checkboxsocialcheck").show();    
+      }
     }
   }); 
   $("#custom_template_for_edm").click(function(){
@@ -470,7 +473,10 @@ function flightTime() {
       $("#body_sample5").parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
       $(".without_social_icons").hide();
-      $(".md-checkboxsocialcheck").hide();
+      checked = document.getElementById("need_social_icon_no_for_edm").checked;
+      if (checked == "true"){
+        $(".md-checkboxsocialcheck").hide();    
+      }
     }
   });
   $("#edm_broadcast_time_now").click(function(){

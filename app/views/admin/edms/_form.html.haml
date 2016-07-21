@@ -21,7 +21,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-l-8.mr-6.m-b-10.m-t-15
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
-              Assign Grouping
+              Select Group
             .col-lg-7
               - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
               %i.arrow.single
@@ -237,3 +237,6 @@
 - if @edm.edm_broadcast_value.present? and @edm.edm_broadcast_value == "scheduled"
   :javascript
     $("#date-start").parent().parent().parent().parent().show();
+- if @edm.need_social_icon.present? and @edm.need_social_icon == "no"
+  :javascript
+    $(".md-checkboxsocialcheck").hide();
