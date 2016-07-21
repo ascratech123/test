@@ -66,6 +66,13 @@ class Admin::UserRegistrationsController < ApplicationController
   def show
   end
 
+  def update
+    @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
+    @user_registration = @user_registrations.find_by_id(params[:id])
+    @user_registration.update_attributes(:status => params[:status]) if params[:status].present? and params[:manual_approve].present? and params[:manual_approve] == 'true'
+    redirect_to :back
+  end
+
 
   protected
   

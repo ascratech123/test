@@ -42,7 +42,7 @@ class Registration < ActiveRecord::Base
   end
 
   def selected_columns
-    self.attributes.except('id', 'created_at', 'updated_at', 'event_id').map{|k, v| (v.present? and v['label'].present?)? k : nil}.compact
+    self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_source_code').map{|k, v| (v.present? and v['label'].present?)? k : nil}.compact
   end
 
   def selected_column_values
