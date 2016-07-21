@@ -10,8 +10,13 @@ class Api::V1::InviteesController < ApplicationController
 			events = mobile_application.events
 			event = events.where(:id => params[:event_id], :status => event_status) rescue nil
 			if event.present?
-				invitees = Invitee.where(:event_id => event.first.id, :visible_status => 'active') rescue []
-				render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:except => [:created_at, :updated_at, :badge_count, :encrypted_password, :salt, :key, :secret_key, :authentication_token]) } rescue []
+				invitee = Invitee.where(:key => params[:key]).last rescue nil
+				if params[:key].present? and invitee.present?
+          invitees = Invitee.where('event_id = ? and visible_status = ? or event_id = ? and id = ?', event.first.id, 'active', event.first.id, invitee.id) rescue []
+        else
+          invitees = Invitee.where(:event_id => event.first.id, :visible_status => 'active') rescue []
+        end
+        render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:except => [:created_at, :updated_at, :badge_count, :encrypted_password, :salt, :key, :secret_key, :authentication_token]) } rescue []
 			else
 				render :status => 200, :json => {:status => "Failure", :message => "Event Not Found."}
 			end	

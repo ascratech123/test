@@ -44,7 +44,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'MyTravel'].each {|value| model_name.delete(value)}
+    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","EKit","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'MyTravel', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn'].each {|value| model_name.delete(value)}
     model_name.each do |model|
       info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
@@ -92,7 +92,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
         when 'Invitee'
           arr = []
-          leaders = Invitee.unscoped.where(:event_id => event_ids).order('points desc') rescue []
+          leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
           event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}
           data[:"leaderboard"] = arr#event_ids.map{|id| {'id' => id, 'data'=> leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}}
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
