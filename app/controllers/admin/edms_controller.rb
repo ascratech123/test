@@ -1,5 +1,6 @@
 class Admin::EdmsController < ApplicationController
   layout 'admin'
+  Mime::Type.register "image/gif", :gif
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role
   before_filter :find_edms
@@ -39,7 +40,7 @@ class Admin::EdmsController < ApplicationController
       # @edm.group_id = params[:edm][:group_id] if params[:edm][:group_type].present? and params[:edm][:group_type] != "all"
       # @edm.group_id = @event.groupings.where(name:"Default Group").first.id if params[:edm][:group_type].present? and params[:edm][:group_type] == "all" and @event.groupings.present?
       @edm.save
-      @edm.send_mail_to_invitees
+      @edm.send_mail_to_invitees if @edm.edm_broadcast_value == 'now' and @edm.sent == 'no'
       # @edm.sent_mail(@edm,@event)
     else
       @edm.update_attributes(edm_params)
@@ -61,8 +62,11 @@ class Admin::EdmsController < ApplicationController
     if params[:email_open].present?
       edm = Edm.find(params[:id])
       email_sent = EdmMailSent.where(:edm_id => edm.id, :email => params[:user_email]).first
-      email_sent.update_column(:open, 'yes')
-      send_data open("#{Rails.root}/public/Transparent.gif", "rb") { |f| f.read }
+      email_sent.update_column(:open, 'yes') if email_sent.present?
+      respond_to do |format|
+        format.html{}
+        format.gif{send_data open("#{Rails.root}/public/Transparent.gif", "rb") { |f| f.read }}
+      end
     else
       render :layout => false
     end
