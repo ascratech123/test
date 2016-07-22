@@ -30,7 +30,7 @@ module Shobiz
     config.action_mailer.smtp_settings = {
                                             :user_name => "AKIAJWBA6672A22HLPZA",
                                             :password => "Ahefo5f1ReDD+tRNY3jdGQHEMc36oXIP9k5v4WMrZ8xk",
-                                            :domain => "ascratech.com",
+                                            :domain => "hobnobspace.com",
                                             :address => "email-smtp.us-east-1.amazonaws.com",
                                             :port => 587,
                                             :authentication => :plain,

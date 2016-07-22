@@ -96,8 +96,8 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  # :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
  :email => {
    :email_prefix => "Production Shobiz Error Notifier",
-   :sender_address => %{"Error notifier" <error@ascratech.com>},
-   :exception_recipients => %w{shiv@ascratech.com sandeep@ascratech.com sushil@ascratech.in atul@ascratech.com}
+   :sender_address => %w{info@hobnobspace.com},
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in atul@ascratech.com}
  }
 
 
