@@ -13,8 +13,10 @@ class Admin::ConversationsController < ApplicationController
     @conversations = @conversations.paginate(page: params[:page], per_page: 10) if params["format"] != "xls" and params[:conversations_wall].blank?
     @conversations = Conversation.get_conversations_by_status(@conversations, params[:type]) if params[:type].present? and params[:type] != 'dashboard_new'
     Conversation.set_auto_approve(params[:auto_approve],@event) if params[:auto_approve].present?
+    @conversations = @conversations.asc_ordered if not params[:conversations_wall].present?
     respond_to do |format|
-      @conversations = @conversations.where(:on_wall => "yes",:status => "approved").last(12) if params[:conversations_wall].present?
+
+      @conversations = @conversations.where(:on_wall => "yes",:status => "approved").asc_ordered.last(12) if params[:conversations_wall].present?
       format.html{render :layout => false} if params[:conversations_wall].present?
       format.html if params[:conversations_wall].blank?
       format.xls do
