@@ -5,6 +5,7 @@ class Admin::EdmsController < ApplicationController
   before_filter :authenticate_user, :authorize_event_role
   before_filter :find_edms
   before_action :find_fields_from_database, :only => [:new, :edit, :update, :create]
+  before_filter :check_smtp_setting, :only => [:new, :index]
 
   def index
     @edms = @edms.paginate(page: params[:page], per_page: 10)
@@ -90,6 +91,15 @@ class Admin::EdmsController < ApplicationController
       @edms = @campaign.edms
       @edm = @edms.find_by_id(params[:id]) if params[:id].present? and @edms.present?
     end  
+  end
+
+  def check_smtp_setting
+    event = @campaign.event
+    licensee_admin = event.get_licensee_admin
+    smtp_setting = licensee_admin.smtp_setting
+    if smtp_setting.blank?
+      redirect_to new_admin_smtp_setting_path(:smtp_url => params[:smtp_url])
+    end
   end
 
   def edm_params
