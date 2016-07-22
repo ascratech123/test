@@ -454,14 +454,16 @@ function flightTime() {
     if (value == "default_template"){
       $("#header_image_uploadBtn").parent().parent().parent().parent().show();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
-      $("#body_sample5").parent().parent().parent().show();
       $("#edm_templ_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
       $(".without_social_icons").show();
+      $(".custome_hide").parent().parent().parent().parent().show();
+      $(".ckeditor_custome_hide").show();
       checked = document.getElementById("need_social_icon_yes_for_edm").checked;
       if (checked == "true"){
         $(".md-checkboxsocialcheck").show();    
       }
+    $(".custome_hide").parent().parent().parent().parent().parent().show();
     }
   }); 
   $("#custom_template_for_edm").click(function(){
@@ -470,9 +472,10 @@ function flightTime() {
       $(".ckeditor_custom").show();
       $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
-      $("#body_sample5").parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
       $(".without_social_icons").hide();
+      $(".custome_hide").parent().parent().parent().parent().hide();
+      $(".ckeditor_custome_hide").hide();
       checked = document.getElementById("need_social_icon_no_for_edm").checked;
       if (checked == "true"){
         $(".md-checkboxsocialcheck").hide();    
@@ -520,6 +523,17 @@ function flightTime() {
   });
   $('input,textarea').attr('autocomplete', 'off');
   $('input[type="radio"][checked="checked"]').prop('checked', true);
+
+
+  $(document).ready(function (){
+   $('.chkbox_input_div  input[type="checkbox"]').click(function() { 
+    if ($(this).is(':checked')) {
+        $(this).parent().next('.input_box_url').css('display','inline-block');
+    } else {
+        $(this).parent().next('.input_box_url').css('display','none');
+    }
+  });
+});
 /* EDM Form JS end */
 
   /* Event _Form  start */
