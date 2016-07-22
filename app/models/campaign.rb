@@ -4,7 +4,7 @@ class Campaign < ActiveRecord::Base
   belongs_to :event
   has_many :edms, :dependent => :destroy
   validates :campaign_name, presence:{ :message => "This field is required." } 
-  before_validation :set_time
+  # before_validation :set_time
 
   def set_time
     start_date = self.start_date_time rescue nil

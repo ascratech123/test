@@ -18,6 +18,12 @@
 
 .titleQuestion{margin-left:15px;}
 .mdl-grid.mdl-shadow--1dp{background:#fff;}
+
+.mdl-cell--12-col .mdl-cell--12-col-tablet .ml-color--shades-white.input_box_url{display:none; width:80%; vertical-align: top;}
+.chkbox_input_div .help-tip{width: 98px;}
+.chkbox_input_div{width:100%;}
+.chkbox_input_div .help-tip{display:inline-block; vertical-align: top;}
+.md-checkbox  .input_box_url label{padding: 0px;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
@@ -202,6 +208,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 
 .m12t{margin-top:12px;}
 .top6{position: relative; top:6px;}
+.top3{position: relative; top:3px;}
 .fixed-activon-btn-new.btn-bottom{text-align: center;position: static;background-color: #f5f5f5;}
 .scroller-sm.heightAuto{height: auto;max-height: none;}
 .btn-deactive{background-color:#4d4e4f;}
@@ -619,7 +626,8 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
     vertical-align: middle;
 }
 /*demo css End */
-.mdl-card.clients{min-height: 400px;}
+.mdl-card.clients{min-height  : 400px;}
+.mdl-card.clients.index_mdl{background:#fff;}
 .collapseHide{display:none;}
 .SubMenucollapseHide{display: none;}
 #new_theme .dropdown-menu{float: none; right: 0px;}

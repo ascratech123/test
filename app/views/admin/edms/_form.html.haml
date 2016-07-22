@@ -18,17 +18,7 @@
                 / .field_with_errors
                 /   .span{:class => "errorMessage"}
                 /     = f.object.errors.messages[:database_email_field].join("") rescue nil
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-l-8.mr-6.m-b-10.m-t-15
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Assign Grouping
-            .col-lg-7
-              - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
-              %i.arrow.single
-              = f.select("edm", "group_id", default_grouping, {:selected => f.object.group_id,:prompt => "#{(f.object.group_id.present?) ? f.object.group_id : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-              .field_with_errors
-                .span{:class => "errorMessage"}
-                  = f.object.errors.messages[:group_id].join("") rescue nil
+        = f.custom_text_field :sender_email, "Sender Email", :value => @edm.sender_email,"background" => "false"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
@@ -41,43 +31,60 @@
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Sent email 
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :email_sent, "yes", "Yes", :id => "email_sent_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :email_sent, "no", "No", :id => "email_sent_group_type_group_option"
+              = f.custom_radio_button_edm :email_sent, "yes", "Yes", :id => "email_sent_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :email_sent, "no", "No", :id => "email_sent_group_type_no_option"
+              = f.custom_radio_button :email_sent, "all", "All", :id => "email_sent_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Registered users
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :registered, "yes", "Yes", :id => "registered_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :registered, "no", "No", :id => "registered_group_type_group_option"
+              = f.custom_radio_button_edm :registered, "yes", "Yes", :id => "registered_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :registered, "no", "No", :id => "registered_group_type_no_option"
+              = f.custom_radio_button :registered, "all", "All", :id => "registered_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Approved Registered users
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :registration_approved, "yes", "Yes", :id => "registration_approved_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :registration_approved, "no", "No", :id => "registration_approved_group_type_group_option"
+              = f.custom_radio_button_edm :registration_approved, "yes", "Yes", :id => "registration_approved_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :registration_approved, "no", "No", :id => "registration_approved_group_type_no_option"
+              = f.custom_radio_button :registration_approved, "all", "All", :id => "registration_approved_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Confirmed attendee
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :confirmed, "yes", "Yes", :id => "confirmed_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :confirmed, "no", "No", :id => "confirmed_group_type_group_option"
+              = f.custom_radio_button_edm :confirmed, "yes", "Yes", :id => "confirmed_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :confirmed, "no", "No", :id => "confirmed_group_type_no_option"
+              = f.custom_radio_button :confirmed, "all", "All", :id => "confirmed_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Attended users
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :attended, "yes", "Yes", :id => "attended_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :attended, "no", "No", :id => "attended_group_type_group_option"
+              = f.custom_radio_button_edm :attended, "yes", "Yes", :id => "attended_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :attended, "no", "No", :id => "attended_group_type_no_option"
+              = f.custom_radio_button :attended, "all", "All", :id => "attended_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
               %p.displayInlineBlock.multicitytxt  Email opened
             .col-lg-7.p-h-12.notific 
-              = f.custom_radio_button_edm :email_opened, "yes", "Yes", :id => "email_opened_group_type_all_option", :width => 'width:70px;'
-              = f.custom_radio_button :email_opened, "no", "No", :id => "email_opened_group_type_group_option"
+              = f.custom_radio_button_edm :email_opened, "yes", "Yes", :id => "email_opened_group_type_yes_option", :width => 'width:70px;'
+              = f.custom_radio_button :email_opened, "no", "No", :id => "email_opened_group_type_no_option"
+              = f.custom_radio_button :email_opened, "all", "All", :id => "email_opened_group_type_all_option"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-l-8.mr-6.m-b-10.m-t-15
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Group
+            .col-lg-7
+              - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
+              %i.arrow.single
+              = f.select("edm", "group_id", default_grouping, {:selected => f.object.group_id,:prompt => "#{(f.object.group_id.present?) ? f.object.group_id : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:group_id].join("") rescue nil
         - if false
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
             .form-group
@@ -134,10 +141,10 @@
               %br
               %a{:href => '/whats_this/edm/template1.jpg', :class =>'fancybox', :rel=> "edm_view_template", :title => "Template"}
                 (View Available Templates)
-            = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Template2" => "template2.jpg","Template3" => "template3.jpg"}, :section_id => "edm_view_template",:path => "edm"}
+            / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Template2" => "template2.jpg","Template3" => "template3.jpg"}, :section_id => "edm_view_template",:path => "edm"}
             .col-lg-7  
               %i.arrow.single
-              = f.select("edm", "default_template", ['Template 1','Template 2','Template 3'], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})
+              = f.select("edm", "default_template", ['Template 1'], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:default_template].join("") rescue nil
@@ -155,9 +162,17 @@
                   = text_field_tag("text_file_name","", id: "1header_image_uploadBtn", class: "gui-input", :value => "#{f.object.header_image_file_name.nil? ? "there is no Attachment Available !" : f.object.header_image_file_name}", :read_only => true)
               .span.col-lg-1
                 = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Header Image", :class =>"fancybox whatsImg")
-
-        = f.custom_text_area_field :body,"Body text", "background" => "false"
         
+        = f.custom_text_field :header_color, "Header Color", :value => @edm.header_color, :class => 'pick-a-color custome_hide',"background" => "false"
+
+        / = f.custom_text_area_field :body,"Body text", "background" => "false"
+        .edm_ckeditor
+          .ckeditor_custom.ckeditor_custome_hide
+            = f.label "Body text"
+            = f.cktext_area :body
+        
+        = f.custom_text_field :footer_color, "Footer Color", :value => @edm.footer_color, :class => 'pick-a-color custome_hide',"background" => "false"
+
         / = f.new_custom_file_browser_field :footer_image, "Footer Image", :id => "footer_image_uploadBtn", :value => f.object.footer_image_file_name, :action=> params[:action], "background" => "false"
         / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
         /   .bs-component
@@ -185,31 +200,34 @@
               %p.displayInlineBlock.multicitytxt
                 Social Icons
             .col-lg-7.p-h-12.socialchk
-              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
                 %label.help-tip{:for => "edm_1"}
                   = check_box_tag "edm[social_icons][]","facebook",(f.object.social_icons.present? and f.object.social_icons.include?("facebook") ? "checked" : false), :id => "edm_1"
                   %span.checkbox
-                  %span.top6
+                  %span.top3
                     Facebook
-              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
+                = f.custom_text_field_for_edm_social_icon :facebook_link, "URL", "edm_1", "background" => "false"
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
                 %label.help-tip{:for => "edm_2"}
                   = check_box_tag "edm[social_icons][]","google_plus",(f.object.social_icons.present? and f.object.social_icons.include?("google_plus") ? "checked" : false), :id => "edm_2"
                   %span.checkbox
-                  %span.top6
+                  %span.top3
                     Google +
-              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
+                = f.custom_text_field_for_edm_social_icon :google_plus_link, "URL", "edm_2","background" => "false"
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
                 %label.help-tip{:for => "edm_3"}
                   = check_box_tag "edm[social_icons][]","linked_in",(f.object.social_icons.present? and f.object.social_icons.include?("linked_in") ? "checked" : false), :id => "edm_3" 
                   %span.checkbox
-                  %span.top6
+                  %span.top3
                     LinkedIn
-              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8
+                = f.custom_text_field_for_edm_social_icon :linkedin_link, "URL", "edm_3", "background" => "false"
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
                 %label.help-tip{:for => "edm_4"}
                   = check_box_tag "edm[social_icons][]","twitter",(f.object.social_icons.present? and f.object.social_icons.include?("twitter") ? "checked" : false), :id => "edm_4" 
                   %span.checkbox
-                  %span.top6
+                  %span.top3
                     Twitter
-
+                = f.custom_text_field_for_edm_social_icon :twitter_link, "URL", "edm_4", "background" => "false"
         .edm_ckeditor
           .ckeditor_custom{:style => "display: #{(f.object.template_type == 'custom_template') ? "" : "none"}"}
             = f.label "Custom Template *"
@@ -223,17 +241,50 @@
             / = back_button(:back)
         / = f.custom_submit_button "NEXT"
 
+= javascript_include_tag "pick-a-color-1.2.0.min", "tinycolor", "jquery.fancybox", "theme_color_pick"
+
 - if @edm.group_type.present? and @edm.group_type == "apply filter"
   :javascript
     $(".apply_filterCls").show();
 - if @edm.template_type.present? and @edm.template_type == "custom_template"
   :javascript
-    $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
-    $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
-    $("#body_sample5").parent().parent().parent().hide();
-    $("#edm_templ_select").parent().parent().parent().hide();
-    $(".without_social_icons").hide();
-    $(".md-checkboxsocialcheck").hide();
+    $(document).ready(function(){
+      $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#edm_templ_select").parent().parent().parent().hide();
+      $(".without_social_icons").hide();
+      $(".md-checkboxsocialcheck").hide();
+      $(".custome_hide").parent().parent().parent().parent().hide();
+      $(".ckeditor_custome_hide").hide();
+    })
+
 - if @edm.edm_broadcast_value.present? and @edm.edm_broadcast_value == "scheduled"
   :javascript
     $("#date-start").parent().parent().parent().parent().show();
+- if @edm.need_social_icon.present? and @edm.need_social_icon == "no"
+  :javascript
+    $(".md-checkboxsocialcheck").hide();
+
+- if @edm.social_icons.present?
+  :javascript
+    checked = document.getElementById("edm_1").checked;
+    if (checked == true){
+      $("div#edm_check_edm_1").css('display','inline-block');
+      $("div#edm_check_edm_1").show();    
+    }
+    checked = document.getElementById("edm_2").checked;
+    if (checked == true){
+      $("div#edm_check_edm_2").css('display','inline-block');
+      $("div#edm_check_edm_2").show();    
+      }
+    checked = document.getElementById("edm_3").checked;
+    if (checked == true){
+        $("div#edm_check_edm_3").css('display','inline-block');
+      $("div#edm_check_edm_3").show();     
+      }
+    checked = document.getElementById("edm_4").checked;
+    if (checked == true){
+        $("div#edm_check_edm_4").css('display','inline-block');
+      $("div#edm_check_edm_4").show();     
+      }
+
