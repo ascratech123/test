@@ -2,27 +2,10 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :send_mail_to_all
   
 
   def index
-    if params["send_mail"] == "true"
-      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
-        event_ids = @event.mobile_application.events.pluck(:id)
-        invitees = []
-        @invitees.each do |invitee|
-          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
-          invitees << invitee1
-        end
-        invitees = invitees.compact
-      else 
-        invitees = @invitees.where("email_send !=?", "true")
-      end
-      invitees.each do |invitee|
-        UserMailer.send_password_invitees(invitee).deliver_now 
-        invitee.update_column(:email_send, 'true')
-      end
-    end
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
     @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
@@ -92,5 +75,25 @@ class Admin::InviteesController < ApplicationController
 
   def invitee_params
     params.require(:invitee).permit!
+  end
+
+  def send_mail_to_all
+    if params["send_mail"] == "true"
+      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
+        event_ids = @event.mobile_application.events.pluck(:id)
+        invitees = []
+        @invitees.each do |invitee|
+          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
+          invitees << invitee1
+        end
+        invitees = invitees.compact
+      else 
+        invitees = @invitees.where("email_send !=?", "true")
+      end
+      invitees.each do |invitee|
+        UserMailer.send_password_invitees(invitee).deliver_now 
+        invitee.update_column(:email_send, 'true')
+      end
+    end
   end
 end
