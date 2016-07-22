@@ -48,7 +48,7 @@ class Admin::ConversationsController < ApplicationController
       
 	def update
     if params[:status].present? or params[:on_wall].present?
-      @conversation.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
+      @conversation.update_attribute(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @conversation.perform_conversation(params[:status]) if params[:status].present?
       redirect_to admin_event_conversations_path(:event_id => @conversation.event_id,:page => params[:page])
     elsif @conversation.update_attributes(conversation_params)
