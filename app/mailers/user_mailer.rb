@@ -36,14 +36,14 @@ class UserMailer < ActionMailer::Base
     @smtp_setting = smtp_setting
     @edm = edm
     @email = email
-    mail(to: email,from: @smtp_setting.from_email, :bcc => "shiv@ascratech.com",subject: @edm.subject_line) 
+    mail(to: email,from: @edm.sender_email, :bcc => "shiv@ascratech.com",subject: @edm.subject_line) 
   end
   
   def custom_template(edm,email,smtp_setting)
     set_credential(smtp_setting)
     @smtp_setting = smtp_setting
     @edm = edm
-    mail(to: email,from: @smtp_setting.from_email, :bcc => "shiv@ascratech.in",subject: @edm.subject_line)
+    mail(to: email,from: @edm.sender_email, :bcc => "shiv@ascratech.in",subject: @edm.subject_line)
   end
 
   private
