@@ -28,8 +28,8 @@ module Shobiz
     config.action_mailer.default_url_options = { host: 'hobnobspace.com'}
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
-                                            :user_name => "AKIAJWBA6672A22HLPZA",
-                                            :password => "Ahefo5f1ReDD+tRNY3jdGQHEMc36oXIP9k5v4WMrZ8xk",
+                                            :user_name => "AKIAJIMELKZO4DNFQHUQ",
+                                            :password => "AhBEaoHJLWfTJqz0Yw1XQIWZ4N+8vT9spPPBV+dWJia3",
                                             :domain => "hobnobspace.com",
                                             :address => "email-smtp.us-east-1.amazonaws.com",
                                             :port => 587,
