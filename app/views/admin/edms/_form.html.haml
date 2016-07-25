@@ -18,7 +18,7 @@
                 / .field_with_errors
                 /   .span{:class => "errorMessage"}
                 /     = f.object.errors.messages[:database_email_field].join("") rescue nil
-        = f.custom_text_field :sender_email, "Sender Email", :value => @edm.sender_email,"background" => "false"
+        = f.custom_text_field :sender_email, "Sender Email", :value => @edm.sender_email,"background" => "false" ,:style => "margin-bottom:10px;"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
           .mdl-grid.p-v-5.form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right 
@@ -32,7 +32,7 @@
               %p.displayInlineBlock.multicitytxt  Sent email 
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :email_sent, "yes", "Yes", :id => "email_sent_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :email_sent, "no", "No", :id => "email_sent_group_type_no_option"
+              = f.custom_radio_button_edm :email_sent, "no", "No", :id => "email_sent_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :email_sent, "all", "All", :id => "email_sent_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
@@ -40,7 +40,7 @@
               %p.displayInlineBlock.multicitytxt  Registered users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :registered, "yes", "Yes", :id => "registered_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :registered, "no", "No", :id => "registered_group_type_no_option"
+              = f.custom_radio_button_edm :registered, "no", "No", :id => "registered_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :registered, "all", "All", :id => "registered_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
@@ -48,7 +48,7 @@
               %p.displayInlineBlock.multicitytxt  Approved Registered users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :registration_approved, "yes", "Yes", :id => "registration_approved_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :registration_approved, "no", "No", :id => "registration_approved_group_type_no_option"
+              = f.custom_radio_button_edm :registration_approved, "no", "No", :id => "registration_approved_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :registration_approved, "all", "All", :id => "registration_approved_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
@@ -56,7 +56,7 @@
               %p.displayInlineBlock.multicitytxt  Confirmed attendee
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :confirmed, "yes", "Yes", :id => "confirmed_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :confirmed, "no", "No", :id => "confirmed_group_type_no_option"
+              = f.custom_radio_button_edm :confirmed, "no", "No", :id => "confirmed_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :confirmed, "all", "All", :id => "confirmed_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
@@ -64,7 +64,7 @@
               %p.displayInlineBlock.multicitytxt  Attended users
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :attended, "yes", "Yes", :id => "attended_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :attended, "no", "No", :id => "attended_group_type_no_option"
+              = f.custom_radio_button_edm :attended, "no", "No", :id => "attended_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :attended, "all", "All", :id => "attended_group_type_all_option"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.apply_filterCls{:style => "display: #{(f.object.group_type.present? and f.object.group_type == "group") ? "" : "none"}"}
           .mdl-grid.p-v-5.form-group.mobiappstype
@@ -72,9 +72,9 @@
               %p.displayInlineBlock.multicitytxt  Email opened
             .col-lg-7.p-h-12.notific 
               = f.custom_radio_button_edm :email_opened, "yes", "Yes", :id => "email_opened_group_type_yes_option", :width => 'width:70px;'
-              = f.custom_radio_button :email_opened, "no", "No", :id => "email_opened_group_type_no_option"
+              = f.custom_radio_button_edm :email_opened, "no", "No", :id => "email_opened_group_type_no_option", :width => 'width:70px;'
               = f.custom_radio_button :email_opened, "all", "All", :id => "email_opened_group_type_all_option"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-l-8.mr-6.m-b-10.m-t-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8l-8.mr-6.m-b-10
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
               Select Group
@@ -241,6 +241,7 @@
             / = back_button(:back)
         / = f.custom_submit_button "NEXT"
 
+= javascript_include_tag "edm_header_footer_color_display_hash"
 = javascript_include_tag "pick-a-color-1.2.0.min", "tinycolor", "jquery.fancybox", "theme_color_pick"
 
 - if @edm.group_type.present? and @edm.group_type == "apply filter"
