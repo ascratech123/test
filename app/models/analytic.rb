@@ -173,7 +173,7 @@ class Analytic < ActiveRecord::Base
         (from_date.to_date..to_date.to_date).each do |dt|
           if engagement == 'Favorite'
             type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
-            count = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', type, event_id, from_date, to_date).count
+            count = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) = ?', type, event_id, dt).count
             # count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           elsif engagement == 'Rating'
             type = ['Agenda', 'Speaker']
