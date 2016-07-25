@@ -267,7 +267,7 @@ class Analytic < ActiveRecord::Base
     hsh['page_count'] = Analytic.where(:action => 'page view', :event_id => event_id).where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date).count
     hsh['conversations_count'] = Analytic.where(:action => ['conversation post', 'like', 'comment'], :event_id => event_id).where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date).count if event_features.include? 'conversations'
     hsh['qnas_count'] = Analytic.where('action = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'question asked', event_id, from_date, to_date).count if event_features.include? 'qnas'
-    hsh['notifications_count'] = Analytic.where('viewable_type = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'Notification', event_id, from_date, to_date).count
+    hsh['notifications_count'] = Notification.where('event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, from_date, to_date).count
     hsh
   end
 
