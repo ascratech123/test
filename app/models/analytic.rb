@@ -108,7 +108,7 @@ class Analytic < ActiveRecord::Base
   end
 
   def self.get_top_pages(count, event_id, from_date, to_date)
-    analytics = Analytic.where('action = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'page view', event_id, from_date, to_date)
+    analytics = Analytic.where('action = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ? and viewable_type NOT IN (?)', 'page view', event_id, from_date, to_date, ['Attendee'])
     arr = analytics.group(:viewable_type).count.sort_by{|k, v| v}.last(count).reverse
     [analytics.count, arr]
   end
@@ -185,7 +185,7 @@ class Analytic < ActiveRecord::Base
             count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?) and viewable_id IS NOT NULL', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           elsif engagement == 'One on one chat'
             type = ['Chat']
-            query_engagement = ['One on one chat' => 'one_on_one']
+            query_engagement = ['One on one chat', 'one_on_one']
             count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, query_engagement).count
           else
             count = analytics.where('Date(created_at) = ? and viewable_type = ? and action IN (?)', dt, engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
@@ -238,7 +238,7 @@ class Analytic < ActiveRecord::Base
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?) and viewable_id IS NOT NULL', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           elsif engagement == 'One on one chat'
             type = ['Chat']
-            query_engagement = ['One on one chat' => 'one_on_one']
+            query_engagement = ['One on one chat', 'one_on_one']
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type IN (?) and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), type, query_engagement).count
           else
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
@@ -315,21 +315,21 @@ class Analytic < ActiveRecord::Base
     all_hsh['user_engagements'] = Analytic.get_user_engagements(event_id, params[:start_date], params[:end_date], params[:filter_date])
     all_hsh['feature_count'] = Analytic.get_features_count(event_id, params[:start_date], params[:end_date])
     all_hsh['xaxis_interval_labels_and_interval'] = Analytic.get_x_axis_labels_and_interval(params)
-    all_hsh['top_fav_speakers'] = Favorite.get_top_favorite(10, 'Speaker', event_id, start_date, end_date) if features.include? 'speakers' and features.include? 'favourites'
+    all_hsh['top_fav_speakers'] = Favorite.get_top_favorite(10, ['Speakers', 'Speaker'], event_id, start_date, end_date) if features.include? 'speakers' and features.include? 'favourites'
     all_hsh['top_rated_speakers'] = Rating.get_top_rated(10, event_id, 'Speaker', start_date, end_date) if features.include? 'speakers'
     all_hsh['top_question_speakers'] = Qna.get_top_question_speakers(10, event_id, 'Speaker', start_date, end_date) if features.include? 'speakers' and features.include? 'qnas'
     all_hsh['top_pages'] = Analytic.get_top_pages(10, event_id, start_date, end_date)
     all_hsh['top_actions'] = Analytic.get_top_actions(10, event_id, start_date, end_date)
-    all_hsh['top_fav_agendas'] = Favorite.get_top_favorite(10, 'Sessions', event_id, start_date, end_date) if features.include? 'agendas' and features.include? 'favourites'
-    all_hsh['top_rated_agendas'] = Rating.get_top_rated(10, event_id, 'Sessions', start_date, end_date) if features.include? 'agendas'
+    all_hsh['top_fav_agendas'] = Favorite.get_top_favorite(10, ['Sessions', 'Session'], event_id, start_date, end_date) if features.include? 'agendas' and features.include? 'favourites'
+    all_hsh['top_rated_agendas'] = Rating.get_top_rated(10, event_id, 'Agenda', start_date, end_date) if features.include? 'agendas'
     all_hsh['top_viewed_ekits'] = Analytic.get_top_page_views(10, event_id, 'E-Kit', start_date, end_date) if features.include? 'e_kits'
-    all_hsh['top_like_conversations'] = Like.get_top_liked(10, 'Conversation', event_id, start_date, end_date) if features.include? 'conversations'
+    all_hsh['top_liked_conversations'] = Like.get_top_liked(10, 'Conversation', event_id, start_date, end_date) if features.include? 'conversations'
     all_hsh['top_commented_conversations'] = Comment.get_top_commented(10, 'Conversation', event_id, start_date, end_date) if features.include? 'conversations'
     all_hsh['top_answered_polls'] = UserPoll.get_most_answered(10, event_id, start_date, end_date) if features.include? 'polls'
-    all_hsh['top_fav_invitees'] = Favorite.get_top_favorite(10, 'Invitee', event_id, start_date, end_date) if features.include? 'invitees' and features.include? 'favourites'
-    all_hsh['top_fav_sponsors'] = Favorite.get_top_favorite(10, 'Sponsor', event_id, start_date, end_date) if features.include? 'sponsors' and features.include? 'favourites'
+    all_hsh['top_fav_invitees'] = Favorite.get_top_favorite(10, ['Invitee'], event_id, start_date, end_date) if features.include? 'invitees' and features.include? 'favourites'
+    all_hsh['top_fav_sponsors'] = Favorite.get_top_favorite(10, ['Sponsor'], event_id, start_date, end_date) if features.include? 'sponsors' and features.include? 'favourites'
     all_hsh['top_viewed_sponsors'] = Analytic.get_top_page_views(10, event_id, 'Sponsor', start_date, end_date) if features.include? 'sponsors'
-    all_hsh['top_fav_exhibitors'] = Favorite.get_top_favorite(10, 'Exhibitor', event_id, start_date, end_date) if features.include? 'exhibitors' and features.include? 'favourites'
+    all_hsh['top_fav_exhibitors'] = Favorite.get_top_favorite(10, ['Exhibitor', 'Exhibitors'], event_id, start_date, end_date) if features.include? 'exhibitors' and features.include? 'favourites'
     all_hsh['top_viewed_exhibitors'] = Analytic.get_top_page_views(10, event_id, 'Exhibitor', start_date, end_date) if features.include? 'exhibitors'
     all_hsh['top_answered_quizzes'] = UserQuiz.get_most_answered(10, event_id, start_date, end_date) if features.include? 'quizzes'
     all_hsh['top_fav_leaderboard'] = Invitee.unscoped.where("event_id =? and visible_status =? and points !=?", event_id, 'active', 0).order('points desc').first(10).map{|i| [i.id,i.points]} rescue [] if features.include? 'leaderboard'
