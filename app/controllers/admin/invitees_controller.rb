@@ -2,8 +2,7 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :send_mail_to_all
-  
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :check_smtp_setting, :send_mail_to_all
 
   def index
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
@@ -94,6 +93,12 @@ class Admin::InviteesController < ApplicationController
         UserMailer.send_password_invitees(invitee).deliver_now 
         invitee.update_column(:email_send, 'true')
       end
+    end
+  end
+
+  def check_smtp_setting
+    if current_user.get_smtp_setting.blank? and ['index', 'show'].include? params[:action]
+      redirect_to new_admin_smtp_setting_path
     end
   end
 end

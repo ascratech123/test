@@ -201,6 +201,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def get_smtp_setting
+    licensee_admin = get_licensee_admin
+    smtp_setting = licensee_admin.smtp_setting rescue nil
+  end
+
   def perform_event(status)
     self.approve! if status== "approve"
     self.reject! if status== "reject"
