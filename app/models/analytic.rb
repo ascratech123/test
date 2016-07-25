@@ -172,8 +172,9 @@ class Analytic < ActiveRecord::Base
       user_engagement.each do |engagement|
         (from_date.to_date..to_date.to_date).each do |dt|
           if engagement == 'Favorite'
-            type = ['Invitee', 'Sponsor', 'Agenda', 'Speaker']
-            count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
+            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+            count = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', type, event_id, from_date, to_date).count
+            # count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           elsif engagement == 'Rating'
             type = ['Agenda', 'Speaker']
             count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
@@ -225,8 +226,8 @@ class Analytic < ActiveRecord::Base
         (0..23).each do |hour|
           q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
           if engagement == 'Favorite'
-            type = ['Invitee', 'Sponsor', 'Agenda', 'Speaker']
-            count = analytics.where('created_at >= ? and created_at <= ? and viewable_type IN (?) and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
+            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+            count = Favorite.where('favoritable_type IN (?) and event_id = ? and created_at >= ? and created_at <= ?', type, event_id, q_time.to_datetime, (q_time.to_datetime + 1.hour)).count
           elsif engagement == 'Rating'
             type = ['Agenda', 'Speaker']
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type IN (?) and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
@@ -376,5 +377,4 @@ class Analytic < ActiveRecord::Base
   end
 
 end
-
 
