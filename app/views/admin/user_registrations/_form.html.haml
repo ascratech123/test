@@ -7,7 +7,7 @@
           / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
           /   what's this?
       / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "faq_generalInfo.jpg", :section_id => "faq_general_section"}
-      - @registration.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css','custom_js', 'custom_source_code').map{|key, value| (value['label'].present? and value['option_type'].present?) ? [key,value] : nil}.compact!.each do |key,hsh|
+      - @registration.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css','custom_js', 'custom_source_code','email_field').map{|key, value| (value['label'].present? and value['option_type'].present?) ? [key,value] : nil}.compact!.each do |key,hsh|
         - if hsh['label'].present? and hsh['option_type'] == 'Radio Button'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
             .mdl-grid.p-v-5.form-group.mobiappstype
