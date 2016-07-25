@@ -9,11 +9,11 @@ class UserRegistration < ActiveRecord::Base
       event = Event.find(self.event_id)
       registration = event.registrations
       registration.each do |validation|
-        attre = validation.attributes.except("id", "event_id","created_at", "updated_at","custom_css","custom_js","custom_source_code", 'status')
+        attre = validation.attributes.except("id", "event_id","created_at", "updated_at","custom_css","custom_js","custom_source_code", 'status','email_field')
         attre.each do |regi_valid|
-          self_attre = self.attributes.except("id", "registration_id","invitee_id", "event_id")
+          self_attre = self.attributes.except("id", "registration_id","invitee_id", "event_id",'created_at','updated_at','text_box_for_checkbox_or_radiobutton','status')
           self_attre.each do |user_regi_valid|
-            if (regi_valid[1].present? and regi_valid[1][:validation_type].present? and regi_valid[1][:mandatory_field].present?)
+            if (regi_valid[1].present? and regi_valid[1][:mandatory_field].present?)
               self.validation_and_mandate_present(regi_valid,user_regi_valid)
             end
             if regi_valid[1].present? and regi_valid[1][:validation_type].present?
