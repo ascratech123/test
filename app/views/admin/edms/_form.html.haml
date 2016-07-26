@@ -123,18 +123,18 @@
               Cancel 
     -else
       .mdl-grid.mdl-shadow--1dp
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.error_space
           %h4.heading-border.p-t-10
             General Information
         = f.custom_text_field :subject_line, "Subject Line","background" => "false" 
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.error_space
           .mdl-grid.p-v-5.m-b-10.m-t-10
             .col-lg-4.mdl-typography--text-right
               %p.displayInlineBlock.multicitytxt Template Type *
             .col-lg-7.p-h-12   
               = f.custom_radio_button_menu :template_type, "default_template","Default Template", :id => "default_template_for_edm", :default_checked => (f.object.template_type == 'default_template' or f.object.template_type.blank?) ? 'checked' : ''
               = f.custom_radio_button_menu :template_type, "custom_template","Custom Template", :id => "custom_template_for_edm", :default_checked => (f.object.template_type == 'custom_template') ? 'checked' : ''
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.error_space
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
               Select template
@@ -149,7 +149,7 @@
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:default_template].join("") rescue nil
         / = f.new_custom_file_browser_field :header_image, "Header Image", :id => "header_image_uploadBtn", :value => f.object.header_image_file_name, :action=> params[:action], "background" => "false"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.error_space
           .bs-component
             .form-group
               .span.col-lg-4
@@ -187,7 +187,7 @@
         /           = text_field_tag("text_file_name","", id: "1footer_image_uploadBtn", class: "gui-input", :value => "#{f.object.footer_image_file_name.nil? ? "there is no Attachment Available !" : f.object.footer_image_file_name}", :read_only => true)
         /       .span.col-lg-1
         /         = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackgroundddd.png", rel: "", title: "Footer Image", :class =>"fancybox whatsImg")
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.without_social_icons
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-l-8.m-r-8.without_social_icons.error_space_h57.m-t-15
           .mdl-grid.p-v-10
             .col-lg-4.mdl-typography--text-right
               %p.displayInlineBlock.multicitytxt Email template without social icons
@@ -250,7 +250,7 @@
 - if @edm.template_type.present? and @edm.template_type == "custom_template"
   :javascript
     $(document).ready(function(){
-      $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().hide();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
       $(".without_social_icons").hide();
