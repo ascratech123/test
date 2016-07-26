@@ -118,7 +118,7 @@
                   %th #
                   %th First Name
               %tbody
-                - if @live_analytics['leaderboards'].present?
+                - if @live_analytics['leaderboards'].present? and event_features_array.include? 'invitees'
                   - @live_analytics['leaderboards'].each do |invitee_id|
                     %tr
                       - invitee = Invitee.get_invitee_by_id(invitee_id[0])
