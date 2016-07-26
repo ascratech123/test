@@ -10,7 +10,7 @@
       - @registration.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css','custom_js', 'custom_source_code','email_field').map{|key, value| (value['label'].present? and value['option_type'].present?) ? [key,value] : nil}.compact!.each do |key,hsh|
         - if hsh['label'].present? and hsh['option_type'] == 'Radio Button'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
-            .mdl-grid.p-v-5.form-group.mobiappstype
+            .mdl-grid.p-v-5.mobiappstype.m-t-15
               .col-lg-4.mdl-typography--text-right 
                 %p.displayInlineBlock.multicitytxt
                   = hsh['label']
@@ -86,7 +86,7 @@
                     = text_field_tag "user_registration[text_box_for_checkbox_or_radiobutton][#{key}][]", f.object.text_box_for_checkbox_or_radiobutton.present? ? eval(f.object.text_box_for_checkbox_or_radiobutton)[key] : '',:class => "form-control"
         - if hsh['label'].present? and hsh['option_type'] == 'Check Box'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
-            .mdl-grid.p-v-5.form-group.mobiappstype
+            .mdl-grid.p-v-5.mobiappstype
               .col-lg-4.mdl-typography--text-right
                 %p.displayInlineBlock.multicitytxt.m12t
                   = hsh['label']
