@@ -452,7 +452,7 @@ function flightTime() {
   $("#default_template_for_edm").click(function(){
     value = $("#default_template_for_edm").val();
     if (value == "default_template"){
-      $("#header_image_uploadBtn").parent().parent().parent().parent().show();
+      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().show();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
       $("#edm_templ_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
@@ -470,7 +470,7 @@ function flightTime() {
     value = $("#custom_template_for_edm").val();
     if (value == "custom_template"){
       $(".ckeditor_custom").show();
-      $("#header_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().hide();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
       $(".without_social_icons").hide();
