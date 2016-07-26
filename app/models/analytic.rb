@@ -172,7 +172,7 @@ class Analytic < ActiveRecord::Base
       user_engagement.each do |engagement|
         (from_date.to_date..to_date.to_date).each do |dt|
           if engagement == 'Favorite'
-            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
             count = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) = ?', type, event_id, dt).count
             # count = analytics.where('Date(created_at) = ? and viewable_type IN (?) and action IN (?)', dt, type, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           elsif engagement == 'Rating'
@@ -226,7 +226,7 @@ class Analytic < ActiveRecord::Base
         (0..23).each do |hour|
           q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
           if engagement == 'Favorite'
-            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+            type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
             count = Favorite.where('favoritable_type IN (?) and event_id = ? and created_at >= ? and created_at <= ?', type, event_id, q_time.to_datetime, (q_time.to_datetime + 1.hour)).count
           elsif engagement == 'Rating'
             type = ['Agenda', 'Speaker']
@@ -303,7 +303,7 @@ class Analytic < ActiveRecord::Base
     hsh['Total active users'] = users_arr[1] if features.include? 'invitees'
     hsh['Page views'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'page view', start_date, end_date).count
     hsh['Conversations'] = Analytic.where('event_id = ? and viewable_type = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'Conversation', 'conversation post', start_date, end_date).count if features.include? 'conversations'
-    fav_type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+    fav_type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
     hsh['Favorites'] = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', fav_type, event_id, start_date, end_date).count
     hsh['Speaker Ratings'] = Analytic.where('event_id = ? and action = ? and viewable_type = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'rated', 'Speaker', start_date, end_date).count if features.include? 'speakers'
     hsh['Session Ratings'] = Analytic.where('event_id = ? and action = ? and viewable_type = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'rated', 'Agenda', start_date, end_date).count if features.include? 'agendas'
