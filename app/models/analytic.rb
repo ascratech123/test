@@ -304,7 +304,8 @@ class Analytic < ActiveRecord::Base
     hsh['Total active users'] = users_arr[1] if features.include? 'invitees'
     hsh['Page views'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'page view', start_date, end_date).count
     hsh['Conversations'] = Analytic.where('event_id = ? and viewable_type = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'Conversation', 'conversation post', start_date, end_date).count if features.include? 'conversations'
-    hsh['Favorites'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'favorite', start_date, end_date).count if features.include? 'favourites'
+    fav_type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers']
+    hsh['Favorites'] = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', fav_type, event_id, start_date, end_date).count
     hsh['Speaker Ratings'] = Analytic.where('event_id = ? and action = ? and viewable_type = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'rated', 'Speaker', start_date, end_date).count if features.include? 'speakers'
     hsh['Session Ratings'] = Analytic.where('event_id = ? and action = ? and viewable_type = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'rated', 'Agenda', start_date, end_date).count if features.include? 'agendas'
     hsh['Questions Asked'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'question asked', start_date, end_date).count if features.include? 'qnas'
@@ -378,4 +379,3 @@ class Analytic < ActiveRecord::Base
   end
 
 end
-
