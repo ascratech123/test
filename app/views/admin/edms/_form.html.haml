@@ -194,7 +194,7 @@
             .col-lg-7.p-h-12   
               = f.custom_radio_button_menu :need_social_icon, "yes","Yes", :id => "need_social_icon_yes_for_edm", :default_checked => (f.object.need_social_icon == 'yes' or f.object.need_social_icon.blank?) ? 'checked' : ''
               = f.custom_radio_button_menu :need_social_icon, "no","No", :id => "need_social_icon_no_for_edm", :default_checked => (f.object.need_social_icon == 'no') ? 'checked' : ''
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck.socialIconChkbox
           .form-group.mobiappstype
             .col-lg-4.mdl-typography--text-right
               %p.displayInlineBlock.multicitytxt
