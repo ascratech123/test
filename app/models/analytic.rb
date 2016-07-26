@@ -334,7 +334,7 @@ class Analytic < ActiveRecord::Base
     all_hsh['top_fav_exhibitors'] = Favorite.get_top_favorite(10, ['Exhibitor', 'Exhibitors'], event_id, start_date, end_date) if features.include? 'exhibitors' and features.include? 'favourites'
     all_hsh['top_viewed_exhibitors'] = Analytic.get_top_page_views(10, event_id, 'Exhibitor', start_date, end_date) if features.include? 'exhibitors'
     all_hsh['top_answered_quizzes'] = UserQuiz.get_most_answered(10, event_id, start_date, end_date) if features.include? 'quizzes'
-    all_hsh['top_fav_leaderboard'] = Invitee.unscoped.where("event_id =? and visible_status =? and points !=?", event_id, 'active', 0).order('points desc').first(10).map{|i| [i.id,i.points]} rescue [] if features.include? 'leaderboard'
+    all_hsh['top_fav_leaderboard'] = Invitee.unscoped.where("event_id =? and visible_status =? and points !=?", event_id, 'active', 0).order('points desc').first(10).map{|i| [i.id,i.points]} rescue [] if features.include? 'leaderboard' and features.include? 'invitees'
     [hsh, all_hsh]
   end
 
