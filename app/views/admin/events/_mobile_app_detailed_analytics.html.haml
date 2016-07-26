@@ -35,8 +35,7 @@
         .col-lg-2.mdl-color--light-blue-900.borderradius
           %span.publishBtn
             = submit_tag 'Filter'
-      - if !Rails.env.production?
-        %a.legend-item.btn.btn-sm.btn{:type => 'button', :href => admin_event_analytics_path(:event_id => @event.id, :print_preview => true, :detailed_analytics => params[:detailed_analytics], :analytics => params[:analytics], :start_date => params[:start_date], :end_date => params[:end_date], :token => @event.token ), :class => params[:detailed_analytics].present? ? 'btn-deactive' : 'mdl-color--light-blue-900', :target => '_blank'} Print Preview
+      %a.legend-item.btn.btn-sm.btn{:type => 'button', :href => admin_event_analytics_path(:event_id => @event.id, :print_preview => true, :detailed_analytics => params[:detailed_analytics], :analytics => params[:analytics], :start_date => params[:start_date], :end_date => params[:end_date], :token => @event.token ), :class => params[:detailed_analytics].present? ? 'btn-deactive' : 'mdl-color--light-blue-900', :target => '_blank'} Print Preview
 - if @date_filter_error.blank?
   .allcp-panels.fade-onload.clear.smallCard
     - @detailed_analytics_counts[0].each do |feature|
