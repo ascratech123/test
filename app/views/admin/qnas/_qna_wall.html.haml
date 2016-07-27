@@ -1,14 +1,11 @@
 %html{:lang => "en"}
   %head
     %title Hobnob
+    %meta{"http-equiv" => "refresh", :content => "60"}
     %link{:href => "https://fonts.googleapis.com/icon?family=Material+Icons", :rel => "stylesheet"}
-      %link{:href => "/assets/css/qna_wall.css", :rel => "stylesheet"}
-        %script{:src => "/assets/jquery-1.11.3.min.js"}
-        %script{:src => "/assets/bootstrap.js"}
-        
-          
-            
-            
+    %link{:href => "/assets/css/qna_wall.css", :rel => "stylesheet"}
+    %script{:src => "/assets/jquery-1.11.3.min.js"}
+    %script{:src => "/assets/bootstrap.js"}
   %body
     .main.QnaWall
       .top.qna_wall
@@ -37,34 +34,34 @@
                   %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
                     %tbody
                       %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
-                        %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
-                          %p.tabHead TimeStamp
+                        %td{:align => "center", :valign => "middle", :width => "15%"}
+                          %p.tabHead To
                         %td{:align => "center", :valign => "middle", :width => "15%"}
                           %p.tabHead From
                         %td{:align => "center", :valign => "middle", :width => "15%"}
-                          %p.tabHead To
+                          %p.tabHead Company
                         %td{:align => "center", :valign => "middle", :width => "40%"}
                           %p.tabHead Question
                         %td{:align => "center", :valign => "middle", :width => "15%"}
                           %p.tabHead Answer/Ignore
                       - unanswer_qnas.each do |qna|
                         %tr
-                          %td{:align => "center", :valign => "middle"}
-                            %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                          %td
+                            %p.userTxt= qna.get_receiver_user_name
                           %td
                             %p.userTxt= qna.get_user_name
                             %br
                               %p.companyTxt
                           %td
-                            %p.userTxt= qna.get_receiver_user_name
+                            %p.userTxt= qna.get_company_name
                           %td
                             %p.userTxt
                               = qna.question
                           %td{:align => "center", :valign => "middle"}
                             = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "approved"), :method => "put" do
-                              %img.cross{:alt => "check", :src => "/assets/check.PNG", :style => "float:none;"}
+                              %img.cross{:alt => "check", :src => "/assets/check.PNG", :style => ""}
                             = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "rejected"), :method => "put" do
-                              %img.cross{:alt => "check", :src => "/assets/cross.PNG", :style => "float:none;"}
+                              %img.cross{:alt => "check", :src => "/assets/cross.PNG", :style => ""}
           - answered_qnas = Qna.get_unanswer(objs,"approved")
           .panel.panel-default
             .panel-heading
@@ -79,25 +76,25 @@
                 %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
                   %tbody
                     %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
-                      %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
-                        %p.tabHead TimeStamp
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead To
                       %td{:align => "center", :valign => "middle", :width => "15%"}
                         %p.tabHead From
                       %td{:align => "center", :valign => "middle", :width => "15%"}
-                        %p.tabHead To
+                        %p.tabHead Company
                       %td{:align => "center", :valign => "middle", :width => "55%"}
                         %p.tabHead Question
                       / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                     - answered_qnas.each do |qna|
                       %tr
-                        %td{:align => "center", :valign => "middle"}
-                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                        %td
+                          %p.userTxt= qna.get_receiver_user_name
                         %td
                           %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.get_receiver_user_name
+                          %p.userTxt= qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question  
@@ -115,25 +112,25 @@
                 %table{:border => "0", :bordercolor => "#FF0000", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
                   %tbody
                     %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
-                      %td{:align => "center", :height => "45px", :valign => "middle", :width => "15%"}
-                        %p.tabHead TimeStamp
+                      %td{:align => "center", :valign => "middle", :width => "15%"}
+                        %p.tabHead To
                       %td{:align => "center", :valign => "middle", :width => "15%"}
                         %p.tabHead From
                       %td{:align => "center", :valign => "middle", :width => "15%"}
-                        %p.tabHead To
+                        %p.tabHead Company
                       %td{:align => "center", :valign => "middle", :width => "55%"}
                         %p.tabHead Question
                       / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                     - rejected_qnas.each do |qna|
                       %tr
-                        %td{:align => "center", :valign => "middle"}
-                          %p.userTxt= qna.created_at.strftime("%I:%M %p")
+                        %td
+                          %p.userTxt= qna.get_receiver_user_name
                         %td
                           %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.get_receiver_user_name
+                          %p.userTxt= qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question
