@@ -16,6 +16,9 @@
               .col-lg-7
                 %i.arrow.single
                 = f.select("qna", "receiver_id", @panels.collect{|p| [ p.name, p.id ]} , {:selected => "#{@qna.receiver_id}",:prompt => "#{f.object.receiver_id.present? ? f.object.receiver_id : "Please Select" }"}, {include_blank: 'None',:class=> 'select2-single form-control',:onclick =>"answers();"})
+                .field_with_errors
+                  .span{:class => "errorMessage"}
+                    = f.object.errors.messages[:receiver_id].join("") rescue nil
         =# render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "qna_generalInfo.jpg", :section_id => "qna_general_section"}
         = f.custom_text_field :question, "Question *","background" => "false"
         =# f.custom_text_field :answer, "Answer *"
