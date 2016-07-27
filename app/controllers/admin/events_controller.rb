@@ -133,10 +133,8 @@ class Admin::EventsController < ApplicationController
             redirect_to admin_client_event_path(:client_id => @event.client_id, :id => @event.id)
           end 
         elsif params[:feature] == "users"
-          if @event.present? and params[:role].present?
-            if params[:telecaller_logged_in].present?
-              redirect_to admin_event_telecaller_path(:event_id => @event.id,:id => current_user.id)
-            elsif params[:role] == "telecaller"
+          if @event.present? and params[:role].present? and params[:redirect_page] != "index"
+            if params[:role] == "telecaller"
               redirect_to new_admin_event_telecaller_path(:event_id => @event.id,:from_client => "true")
             else
               redirect_to new_admin_event_user_path(:event_id => @event.id, :role => params[:role])
