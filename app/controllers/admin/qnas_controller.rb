@@ -31,21 +31,31 @@ class Admin::QnasController < ApplicationController
   end
 
 	def new
-		@qna = @event.qnas.build
+	@qna = @event.qnas.build
+    @panels = Panel.where(:event_id => params[:event_id])
     @import = Import.new if params[:import].present?
-    redirect_to admin_event_qnas_path(:event_id => params[:event_id]) if @import.blank?
+    # redirect_to admin_event_qnas_path(:event_id => params[:event_id]) if @import.blank?
 	end
 
 	def create
+    if params[:qna].present? and params[:qna][:sender_email].present?
+      params[:qna].merge!(:sender_email => params[:qna][:sender_email].split('(').last.split(')').last) if params[:qna][:sender_email].present?
+      @invitee = Invitee.where(:email => params[:qna][:sender_email], :event_id => params[:event_id]).last
+      params[:qna].merge!(:sender_id => @invitee.id) if @invitee.present?
+    end
 		@qna = @event.qnas.build(qna_params)
     if @qna.save
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
     else
+      @panels = Panel.where(:event_id => params[:event_id])
+      @qna.errors.add :sender_email, 'This field is required' if params[:qna][:sender_email].blank?
+      @qna.errors.add :sender_email, 'Invalid email ID' if @qna.errors['sender_id'].present?
       render :action => 'new'
     end
 	end
 
 	def edit
+    @panels = Panel.where(:event_id => params[:event_id])
 	end
 
 	def update
@@ -64,6 +74,7 @@ class Admin::QnasController < ApplicationController
         @qna.save 
         redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
       else
+        @panels = Panel.where(:event_id => params[:event_id])
         @qna.update_attributes(qna_params) ? (redirect_to admin_event_qnas_path(:event_id => @qna.event_id)) : (render :action => "edit")
       end
     end

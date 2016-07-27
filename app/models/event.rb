@@ -511,5 +511,17 @@ class Event < ActiveRecord::Base
   #   end
   #   content_missing_arr
   # end
+
+  def name_with_email
+    users = []
+    self.invitees.each do |user|
+      if user.last_name.present?
+        users << "#{user.first_name.to_s + " " + user.last_name.to_s}(#{user.email})"
+      else
+        users << "#{user.first_name}(#{user.email})"
+      end
+    end
+    users
+  end
   
 end
