@@ -7,7 +7,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             General Information
-        = f.custom_text_field :sender_email, :value => @qna.sender_email, "Email *","background" => "false"
+        = f.custom_text_field :sender_email, "Email *","background" => "false"
         - if params[:event_id].present?  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
             .form-group{:class => "#{params[:action] == "new" ? "" : "has-success"}"}
