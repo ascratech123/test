@@ -2,7 +2,8 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :check_smtp_setting, :send_mail_to_all
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :check_smtp_setting
+  before_filter :send_mail_to_all, :only => [:index]
 
   def index
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
