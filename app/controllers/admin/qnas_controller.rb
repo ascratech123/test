@@ -39,6 +39,7 @@ class Admin::QnasController < ApplicationController
 
 	def create
     if params[:qna].present? and params[:qna][:sender_email].present?
+      params[:qna].merge!(:sender_email => params[:qna][:sender_email].split('(').last.split(')').last) if params[:qna][:sender_email].present?
       @invitee = Invitee.where(:email => params[:qna][:sender_email], :event_id => params[:event_id]).last
       params[:qna].merge!(:sender_id => @invitee.id) if @invitee.present?
     end
