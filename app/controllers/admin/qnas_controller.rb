@@ -47,7 +47,8 @@ class Admin::QnasController < ApplicationController
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
     else
       @panels = Panel.where(:event_id => params[:event_id])
-      @qna.errors.add :sender_email, 'Invitee Not Found' if @qna.errors['sender_id'].present?
+      @qna.errors.add :sender_email, 'This field is required' if params[:qna][:sender_email].blank?
+      @qna.errors.add :sender_email, 'Invalid email ID' if @qna.errors['sender_id'].present?
       render :action => 'new'
     end
 	end
