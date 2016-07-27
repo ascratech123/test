@@ -31,16 +31,23 @@ class Admin::QnasController < ApplicationController
   end
 
 	def new
-		@qna = @event.qnas.build
+	@qna = @event.qnas.build
+    @panels = Panel.where(:event_id => params[:event_id])
     @import = Import.new if params[:import].present?
-    redirect_to admin_event_qnas_path(:event_id => params[:event_id]) if @import.blank?
+    # redirect_to admin_event_qnas_path(:event_id => params[:event_id]) if @import.blank?
 	end
 
 	def create
-		@qna = @event.qnas.build(qna_params)
+    if params[:qna].present? and params[:qna][:sender_email].present?
+      @invitee = Invitee.where(:email => params[:qna][:sender_email], :event_id => params[:event_id]).last
+      params[:qna].merge!(:sender_id => @invitee.id) if @invitee.present?
+    end
+		@qna = @event.qnas.build(qna_params.except('sender_email'))
     if @qna.save
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
     else
+      @panels = Panel.where(:event_id => params[:event_id])
+      @qna.errors.add :sender_email, 'Invitee Not Found' if @qna.errors['sender_id'].present?
       render :action => 'new'
     end
 	end

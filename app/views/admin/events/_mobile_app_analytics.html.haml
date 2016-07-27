@@ -1,4 +1,4 @@
-- event_features_array = @event.event_features.where('name IN (?)', ["feedbacks", "polls", "quizzes", "e_kits", "qnas", "qr_code", "conversations", "favourites", "leaderboard"]).pluck(:name)
+- event_features_array = @event.event_features.where('name IN (?)', ["feedbacks", "polls", "quizzes", "e_kits", "qnas", "qr_code", "conversations", "favourites", "leaderboard", 'invitees']).pluck(:name)
 - arr = [0]
 - @live_analytics['user_engagements'].map{|q| arr += q[:data]} if @live_analytics.present? and @live_analytics['user_engagements'].present?
 - if arr.all? {|el| el.to_i == 0}
@@ -238,6 +238,5 @@
     time: false,
     maxDate : "#{Date.today.strftime("%d/%m/%Y") rescue nil}"
   })    
-
 
 

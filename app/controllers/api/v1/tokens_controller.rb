@@ -217,10 +217,13 @@ class Api::V1::TokensController < ApplicationController
   def check_invitee_first_login
     @invitees.where(:email => @user.email).each do |user|
       event = user.event
-      features = event.event_features.where(:name => "leaderboard") if event.present?
+      features = event.event_features.where(:name => "leaderboard") rescue nil if event.present?
       if features.present? and Analytic.where(:viewable_type => "Invitee", :viewable_id => user.id, :action => "Login", :invitee_id => user.id, :event_id => user.event_id, :points => 10).blank?
         Analytic.create(viewable_type: "Invitee", viewable_id: user.id, action: "Login", invitee_id: user.id, event_id: user.event_id, platform: params[:platform], :points => 10)
         @new_user = "true"
+      else
+        @new_user = "true" if Analytic.where(:viewable_type => "Invitee", :viewable_id => user.id, :action => "Login", :invitee_id => user.id, :event_id => user.event_id).blank?
+        Analytic.create(viewable_type: "Invitee", viewable_id: user.id, action: "Login", invitee_id: user.id, event_id: user.event_id, platform: params[:platform], :points => 0)
       end
     end
   end

@@ -7,9 +7,16 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             General Information
-            / %a{:href => 'javascript:void(0);', :class =>'helpTag testhelp'}
-            /   what's this?
-        = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "qna_generalInfo.jpg", :section_id => "qna_general_section"}
+        = f.custom_text_field :sender_email, :value => @qna.sender_email, "Email *","background" => "false"
+        - if params[:event_id].present?  
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+            .form-group{:class => "#{params[:action] == "new" ? "" : "has-success"}"}
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Select Panel
+              .col-lg-7
+                %i.arrow.single
+                = f.select("qna", "receiver_id", @panels.collect{|p| [ p.name, p.id ]} , {:selected => "#{@qna.receiver_id}"}, {include_blank: 'None',:class=> 'select2-single form-control',:onclick =>"answers();"})
+        =# render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "qna_generalInfo.jpg", :section_id => "qna_general_section"}
         = f.custom_text_field :question, "Question *","background" => "false"
         =# f.custom_text_field :answer, "Answer *"
       .fixed-activon-btn-new  

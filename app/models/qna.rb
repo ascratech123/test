@@ -1,6 +1,6 @@
 class Qna < ActiveRecord::Base
   include AASM
-  attr_accessor :platform
+  attr_accessor :platform, :sender_email
   belongs_to :event
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
