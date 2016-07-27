@@ -42,7 +42,7 @@ class Admin::QnasController < ApplicationController
       @invitee = Invitee.where(:email => params[:qna][:sender_email], :event_id => params[:event_id]).last
       params[:qna].merge!(:sender_id => @invitee.id) if @invitee.present?
     end
-		@qna = @event.qnas.build(qna_params.except('sender_email'))
+		@qna = @event.qnas.build(qna_params)
     if @qna.save
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
     else
