@@ -10,7 +10,7 @@
         = f.custom_text_field :sender_email, "Email *","background" => "false"
         - if params[:event_id].present?  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-            .form-group{:class => "#{params[:action] == "new" ? "" : "has-success"}"}
+            .form-group
               %label.col-lg-4.control-label.ml-color--shades-white
                 Select Panel
               .col-lg-7
