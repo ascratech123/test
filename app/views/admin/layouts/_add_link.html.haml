@@ -139,7 +139,7 @@
     - if !(current_user.has_role? :moderator)
       = link_to admin_event_panels_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Manage Panel
-    - if (current_user.has_role? :moderator) or true
+    - if (current_user.has_role? :moderator)
       = link_to new_admin_event_qnas_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Add Question
     - if @event.qna_auto_approve == "true"
