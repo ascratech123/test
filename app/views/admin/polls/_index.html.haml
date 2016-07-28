@@ -44,8 +44,8 @@
               = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/polls", :id => poll.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   =# will_paginate objs   
 
-:javascript
+/ :javascript
 
-  $('input[readonly]').dblclick(function() {
-    $(this).removeAttr('readonly');
-  });  
+/   $('input[readonly]').dblclick(function() {
+/     $(this).removeAttr('readonly');
+/   });  
