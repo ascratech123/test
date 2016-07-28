@@ -42,6 +42,7 @@
               - else
                 - count = objs.count  
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "")
+                - redirection = "" if (count == 0 and url == 'qnas' and !current_user.has_role? :moderator)
               - if ["poll_walls","conversation_walls","qna_walls"].include? (url)
                 - url1 = "polls" if url == "poll_walls"
                 - url1 = "conversations" if url == "conversation_walls"
@@ -218,7 +219,6 @@
         .mdl-card__menu
           %button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
             %i.material-icons more_vert   
-
 
 
 
