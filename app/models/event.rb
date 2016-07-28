@@ -81,7 +81,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level
+  after_save :update_login_at_for_app_level, :set_date
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
@@ -273,8 +273,8 @@ class Event < ActiveRecord::Base
     # end_event_date = self.end_event_date.to_date if self.end_event_date.present?
     start_event_time = "#{start_event_date} #{start_time_hour.gsub(':', "") rescue nil}:#{start_time_minute.gsub(':', "") rescue nil}:#{0} #{start_time_am}" if start_event_date.present?
     end_event_time = "#{end_event_date} #{end_time_hour.gsub(':', "") rescue nil}:#{end_time_minute.gsub(':', "") rescue nil}:#{0} #{end_time_am}" if end_event_date.present?
-    self.start_event_time = start_event_time.to_time if start_event_date.present?
-    self.end_event_time = end_event_time.to_time if end_event_date.present?
+    self.start_event_time = start_event_time if start_event_date.present?#.to_time if start_event_date.present?
+    self.end_event_time = end_event_time if end_event_date.present?#.to_time if end_event_date.present?
   end
 
   def end_event_time_is_after_start_event_time
@@ -516,6 +516,7 @@ class Event < ActiveRecord::Base
   def get_licensee_admin
     self.client.licensee rescue nil
   end
+
   def name_with_email
     users = []
     self.invitees.each do |user|
@@ -526,5 +527,11 @@ class Event < ActiveRecord::Base
       end
     end
     users
+  end
+
+  
+  def set_date
+    self.update_column(:start_event_date, self.start_event_time)
+    self.update_column(:end_event_date, self.end_event_time)
   end
 end
