@@ -150,9 +150,9 @@ module ApplicationHelper
 
 
   def event_type(event)
-    if event.start_event_date <= Date.today and event.end_event_date >= Date.today
+    if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
       "Ongoing"
-    elsif event.start_event_date > Date.today and event.end_event_date > Date.today
+    elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
       "Upcoming"
     else
       "Past"
