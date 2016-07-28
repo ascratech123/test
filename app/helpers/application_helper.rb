@@ -150,12 +150,22 @@ module ApplicationHelper
 
 
   def event_type(event)
-    if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
-      "Ongoing"
-    elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
-      "Upcoming"
+    if [345, 360, 367, 173, 165, 168].include? event.id
+      if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
+        "Ongoing"
+      elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
+        "Upcoming"
+      else
+        "Past"
+      end
     else
-      "Past"
+      if event.start_event_date <= Date.today and event.end_event_date >= Date.today
+        "Ongoing"
+      elsif event.start_event_date > Date.today and event.end_event_date > Date.today
+        "Upcoming"
+      else
+        "Past"
+      end
     end
   end
    
