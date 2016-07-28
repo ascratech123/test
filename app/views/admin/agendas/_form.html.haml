@@ -1,4 +1,4 @@
-= javascript_include_tag "jquery.fancybox"
+
 .save_button.mdl-card  
   = form_for [:admin, @event, @agenda],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     .mdl-grid.mdl-card.mdl-shadow--1dp
@@ -97,57 +97,11 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-:javascript
-  $("#agenda_speaker_id").change(function(){
-    value = $("#agenda_speaker_id").val();
-    if(value > 0){
-      $("#agenda_speaker_name").parent().parent().hide();
-    }else if(value == 0){
-      $("#agenda_speaker_name").parent().parent().show();
-    }
-  });
-  $("#agenda_agenda_type").click(function(){
-    value = $("#agenda_agenda_type").val();
-    if(value == "Add New Track")
-      $("#agenda_new_category").parent().parent().show();
-    else
-      $("#agenda_new_category").parent().parent().hide();
-    end
-  });
+  .strdate{:style => "display:none"}
+    = @event.start_event_date.strftime("%d/%m/%Y") rescue nil
+  .enddate{:style => "display:none"}
+    = @event.end_event_date.strftime("%d/%m/%Y") rescue nil
+= javascript_include_tag "jquery.fancybox"
+= javascript_include_tag "agenda_form"
 
-:javascript
-  $(window).load(function(){
-  $('#agenda_date-start1').bootstrapMaterialDatePicker
-      ({
-        weekStart: 0, 
-        format: 'DD/MM/YYYY',
-        time: false,
-        minDate : "#{@event.start_event_date.strftime("%d/%m/%Y") rescue nil}",
-        maxDate : "#{@event.end_event_date.strftime("%d/%m/%Y") rescue nil}"
-      }).on('change', function(e, date)
-      {
-        $('#date-end1').bootstrapMaterialDatePicker('setMinDate', date);
-        time: false
-      });
-  $('#date-end1').bootstrapMaterialDatePicker
-      ({
-        weekStart: 0, 
-        format: 'DD/MM/YYYY',
-        time: false,
-        minDate : "#{@event.start_event_date.strftime("%d/%m/%Y") rescue nil}",
-        maxDate : "#{@event.end_event_date.strftime("%d/%m/%Y") rescue nil}"
-      }).on('change', function(e, date)
-      {
-        $('#agenda_date-start1').bootstrapMaterialDatePicker('setMaxDate', date);
-        time: false
-      });  
-  flightTime();
-  minutes();
-  times();  
-  })
- 
-/ :javascript
-/   $('#agenda_start_time_hour,#agenda_start_time_minute,#agenda_end_time_hour,#agenda_end_time_minute').keyup(function(){
-/     var value = $(this).val();
-/     $(this).toFixed(2);
-/     });
+  

@@ -16,5 +16,5 @@ Rails.application.config.assets.precompile += %w(js/jquery.ui.widget.js js/jquer
 Rails.application.config.assets.precompile += %w(css/bootstrap.min.css css/blueimp-gallery.min.css css/jquery.fileupload.css css/jquery.fileupload-ui.css)
 Rails.application.config.assets.precompile += %w(jquery-ui.min-dash.js highcharts.js d3.min.js c3.min.js circles.js jquery.jvectormap.min.js jquery-jvectormap-us-lcc-en.js utility.js demo-dash.js main.js dash-widgets.js dash-widgets_sidebar.js dashboard.js)
 Rails.application.config.assets.precompile += %w(c3.css theme.css login_style.css login_page.js)
-Rails.application.config.assets.precompile += %w(theme_color_pick.js custom_page.js external_login.js external_login.css user_registration.js user_registration.css llqrcode.js webqr.js scanner.js scanner.css qr_code_scanner.js)
+Rails.application.config.assets.precompile += %w(theme_color_pick.js custom_page.js external_login.js external_login.css user_registration.js user_registration.css llqrcode.js webqr.js scanner.js scanner.css qr_code_scanner.js agenda_form.js)
 # Rails.application.config.assets.precompile += %w( jquery_ujs.js )
