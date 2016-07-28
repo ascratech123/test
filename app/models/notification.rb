@@ -94,8 +94,8 @@ class Notification < ActiveRecord::Base
     InviteeNotification.create(arr)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
-      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :email => invitees.pluck(:email))
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :email => invitees.pluck(:email))
       event = self.event
       title = push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : event.event_name
       if ios_devices.present? and push_pem_file.present?
