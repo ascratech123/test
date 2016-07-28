@@ -55,6 +55,7 @@ class Admin::QnasController < ApplicationController
 	end
 
 	def edit
+    @panels = Panel.where(:event_id => params[:event_id])
 	end
 
 	def update
@@ -73,6 +74,7 @@ class Admin::QnasController < ApplicationController
         @qna.save 
         redirect_to admin_event_qnas_path(:event_id => @qna.event_id)
       else
+        @panels = Panel.where(:event_id => params[:event_id])
         @qna.update_attributes(qna_params) ? (redirect_to admin_event_qnas_path(:event_id => @qna.event_id)) : (render :action => "edit")
       end
     end
