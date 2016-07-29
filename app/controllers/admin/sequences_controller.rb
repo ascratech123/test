@@ -20,6 +20,7 @@ class Admin::SequencesController < ApplicationController
     instance_variable_set("@"+ params[:feature_type], @features)
     respond_to do |format|
       format.js{}
+      # format.js{render :js => "window.location.href = '#{request.referer}'" }
       format.html{}
     end 
   end
