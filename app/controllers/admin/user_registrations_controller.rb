@@ -67,9 +67,10 @@ class Admin::UserRegistrationsController < ApplicationController
   end
 
   def update
-    @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
+    @user_registrations = @event.user_registrations
     @user_registration = @user_registrations.find_by_id(params[:id])
-    @user_registration.update_attributes(:status => params[:status]) if params[:status].present? and params[:manual_approve].present? and params[:manual_approve] == 'true'
+    @user_registrations = @user_registrations.paginate(page: params[:page], per_page: 10)
+    @user_registration.perform_event(params[:status]) if params[:status].present? and params[:manual_approve].present? and params[:manual_approve] == 'true'
     redirect_to :back
   end
 
