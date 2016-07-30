@@ -18,11 +18,11 @@
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Open with *
-          .col-lg-4.p-h-12
+          .col-lg-5.p-h-12
             - er = f.object.errors.messages[:open_with].join(',') rescue nil
             - f.object.errors.messages[:open_with].clear if f.object.errors.messages[:open_with].present?   
-            = f.custom_radio_button_menu :open_with, "mobile_browser","Mobile Browser", :id => "open_with_mobile_browser_custom3", :default_checked => (f.object.open_with == 'mobile_browser') ? 'checked' : ''
-            = f.custom_radio_button_menu :open_with, "in_app","in App", :id => "open_with_in_app_custom3", :default_checked => (f.object.open_with == 'in_app') ? 'checked' : ''
+            = f.custom_radio_button_menu :open_with, "mobile_browser","External Browser", :id => "open_with_mobile_browser_custom3", :default_checked => (f.object.open_with == 'mobile_browser') ? 'checked' : ''
+            = f.custom_radio_button_menu :open_with, "in_app","in App Browser", :id => "open_with_in_app_custom3", :default_checked => (f.object.open_with == 'in_app') ? 'checked' : ''
             .field_with_errors
               .span{:class => "errorMessage"}
                 = er
