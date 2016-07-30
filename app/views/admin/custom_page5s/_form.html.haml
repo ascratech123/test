@@ -21,7 +21,7 @@
             - er = f.object.errors.messages[:open_with].join(',') rescue nil
             - f.object.errors.messages[:open_with].clear if f.object.errors.messages[:open_with].present?   
             = f.custom_radio_button_menu :open_with, "mobile_browser","Mobile Browser", :id => "open_with_mobile_browser_custom5", :default_checked => (f.object.open_with == 'mobile_browser' or f.object.open_with.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :open_with, "mobile_app","Mobile App", :id => "open_with_mobile_app_custom5", :default_checked => (f.object.open_with == 'mobile_app') ? 'checked' : ''
+            = f.custom_radio_button_menu :open_with, "in_app","in App", :id => "open_with_in_app_custom5", :default_checked => (f.object.open_with == 'in_app') ? 'checked' : ''
             .field_with_errors
               .span{:class => "errorMessage"}
                 = er
