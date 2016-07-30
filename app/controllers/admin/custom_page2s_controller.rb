@@ -7,6 +7,8 @@ class Admin::CustomPage2sController < ApplicationController
     # @custom_pages = @custom_page2s.paginate(page: params[:page], per_page: 10)
     if @event.present? and @event.custom_page2s.present?
       redirect_to edit_admin_event_custom_page2_path(:event_id => params[:event_id],:id => @event.custom_page2s.last.id)
+    else
+      redirect_to new_admin_event_custom_page2_path(:event_id => params[:event_id])
     end
   end
 
