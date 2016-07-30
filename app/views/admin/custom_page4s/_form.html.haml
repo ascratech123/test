@@ -14,7 +14,19 @@
           .col-lg-3.p-h-12
             = f.custom_radio_button_menu :page_type, "url","URL", :id => "url_page_type_custom4", :default_checked => (f.object.page_type == 'url' or f.object.page_type.blank?) ? 'checked' : ''
             = f.custom_radio_button_menu :page_type, "build_new","Build New", :id => "build_new_page_type_custom4", :default_checked => (f.object.page_type == 'build_new') ? 'checked' : ''
-      = f.custom_text_field :site_url, "URL *",:message_display => (f.object.page_type == 'url' or f.object.page_type.blank?) ? "" : "none"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.show_hide_custome_page4
+        .mdl-grid.p-v-5
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Open with *
+          .col-lg-4.p-h-12
+            - er = f.object.errors.messages[:open_with].join(',') rescue nil
+            - f.object.errors.messages[:open_with].clear if f.object.errors.messages[:open_with].present?   
+            = f.custom_radio_button_menu :open_with, "mobile_browser","Mobile Browser", :id => "open_with_mobile_browser_custom4", :default_checked => (f.object.open_with == 'mobile_browser' or f.object.open_with.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :open_with, "mobile_app","Mobile App", :id => "open_with_mobile_app_custom4", :default_checked => (f.object.open_with == 'mobile_app') ? 'checked' : ''
+            .field_with_errors
+              .span{:class => "errorMessage"}
+                = er
+      = f.custom_text_field :site_url, "URL *",:message_display => (f.object.page_type == 'url' or f.object.page_type.blank?) ? "" : "none","background" => "false"
       .ckeditor_custom{:style => "display: #{(f.object.page_type == 'build_new') ? "" : "none"}"}
         = f.label "Create New Page *"
         = f.cktext_area :description
@@ -23,4 +35,7 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
+- if @custom_page4.present? and @custom_page4.page_type == "build_new"
+  :javascript
+    $(".show_hide_custome_page4").hide();
 = javascript_include_tag "custom_page"
