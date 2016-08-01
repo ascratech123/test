@@ -272,12 +272,12 @@ class Event < ActiveRecord::Base
     # end_event_date = self.end_event_date.to_date if self.end_event_date.present?
     start_event_time = "#{start_event_date} #{start_time_hour.gsub(':', "") rescue nil}:#{start_time_minute.gsub(':', "") rescue nil}:#{0} #{start_time_am}" if start_event_date.present?
     end_event_time = "#{end_event_date} #{end_time_hour.gsub(':', "") rescue nil}:#{end_time_minute.gsub(':', "") rescue nil}:#{0} #{end_time_am}" if end_event_date.present?
-    if start_event_date.present? and [345, 360, 367, 173, 165, 168].include? self.id
+    if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
       self.start_event_time = start_event_time.to_time
     end
-    if end_event_date.present? and [345, 360, 367, 173, 165, 168].include? self.id
+    if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
       self.end_event_time = end_event_time.to_time 
