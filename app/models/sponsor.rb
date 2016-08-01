@@ -52,7 +52,7 @@ class Sponsor < ActiveRecord::Base
   end 
 
   def set_sequence_no
-    self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
+    self.sequence = (Event.find(self.event_id).sponsors.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
   def image_dimensions
