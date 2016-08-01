@@ -7,16 +7,23 @@
 - else  
   %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
     %tr
+      %th Sequence
       %th Name 
       %th Panel 
       %th  
-    - objs.each do |panel|
+    - objs.each_with_index do |panel, index|
       %tr
+        %td.sortable
+          .orderseq
+            - if index != 0
+              %span= link_to "",admin_event_sequence_path(:event_id => panel.event_id, :id => panel.id, :seq_type => "up", :feature_type => "panels"),:class => "uparrow", :method => "put", :remote => true
+            - if panel.sequence.to_i != 0 and (@panels.length - 1) != index
+              %span= link_to "",admin_event_sequence_path(:event_id => panel.event_id, :id => panel.id, :type => "down", :feature_type => "panels"),:class => "downarrow", :method => "put", :remote => true
         %td.font16= panel.name rescue nil
         %td.font16= panel.panel_type rescue nil
         %td.IconDrp 
           = more_vert_button(panel.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{panel.id}"}
             = edit_link(params, panel.id)
-            =# delete_link(params, panel.id)
-  = will_paginate objs   
+            = delete_link(params, panel.id)
+  =# will_paginate objs   
