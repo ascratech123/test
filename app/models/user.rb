@@ -83,6 +83,11 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
 
+  def active_for_authentication?
+    licensee_admin = self.get_licensee_admin
+    super and licensee_admin.active? rescue nil
+  end
+
   def add_licensee_role
     if self.license == true
       self.add_role :licensee_admin
