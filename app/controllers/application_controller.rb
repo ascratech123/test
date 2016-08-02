@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_licensee_expiry
-    if user_signed_in?
+    if (current_user.present? and !current_user.has_role? :super_admin)
       licensee_admin = current_user.get_licensee_admin
       if licensee_admin.present?
         if licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today
