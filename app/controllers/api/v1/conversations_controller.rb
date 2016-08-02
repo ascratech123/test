@@ -9,7 +9,7 @@ class Api::V1::ConversationsController < ApplicationController
         conversation = event.conversations.new(:description => params[:description], :user_id => params[:user_id] ) 
       end
       if conversation.save
-        render :status=>406,:json=>{:status=>"Success",:message=>"Conversation Created Successfully." }
+        render :status=>406,:json=>{:status=>"Success",:message=>"Conversation Created Successfully.", :id => conversation.id, :status => conversation.status, :updated_at => conversation.updated_at }
       else
         render :status=>406,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{conversation.errors.full_messages.join(" , ")}" }
       end
