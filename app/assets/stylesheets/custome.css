@@ -14,6 +14,10 @@
 }
 /*=======================Nilam CSS Start=================================*/
 
+.titleQuestion{margin-left:15px;}
+
+
+
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
 .dtp-content .dtp-date-view + .dtp-buttons{background:#fff;}
@@ -1233,12 +1237,3 @@ i.incards {font-size: 60px}
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
 
 
-
-
-/*nitin*/
-.pick-a-color-markup .input-group-btn{bottom: 368px;top:auto;}
-.pick-a-color-markup .input-group-btn .color-dropdown{top:339px;position: absolute;}
-
-/*nilam*/
-.titleQuestion{margin-left:15px;}
-mdl-cell--5-col
