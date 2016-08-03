@@ -1,4 +1,4 @@
-.save_button.mdl-card.agendaHeight
+.save_button.mdl-card.agendaHeight.mdl-shadow--1dp.p-t-25
   = form_for(@manage_mobile_app, url: "javascript:void();", :html => {:class =>'form-horizontal' }, :builder => CustomFormBuilder) do |f|
     = f.custom_text_field_manage_mobile_app :mobile_application_id, "Mobile Application Id : "
     = f.custom_text_field_manage_mobile_app :is_android_app, "Is Android App : "
@@ -28,4 +28,4 @@
     = f.custom_text_field_manage_mobile_app :ios_password, "Demo Password : "
     
     = f.custom_file_browser_field_app :app_icon, "App Icon", :value => "#{@mobile_application.app_icon.present? ? @mobile_application.app_icon.url(:thumb) : "Image not present." }"
-    =# link_to 'download', new_admin_download_path(:url => f.object.android_app_icon.url(:thumb)), :target => '_blank' 
+    / = link_to 'download', new_admin_download_path(:url => f.object.android_app_icon.url(:thumb)), :target => '_blank' 
