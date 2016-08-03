@@ -317,5 +317,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+  def get_clients
+    clients = Client.with_roles(self.roles.pluck(:name), self)
+  end
+
+  def get_licensee_events_count
+    clients = get_clients
+    event_count = clients.map{|c| c.events.count}.sum
+  end
 end
