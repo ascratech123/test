@@ -447,6 +447,19 @@ function flightTime() {
     }
   });
 
+  /* Sponsor Form JS start*/
+
+  $("#sponsor_sponsor_type").click(function(){
+    value = $("#sponsor_sponsor_type").val();
+    if (value == "New Category"){
+      $("#new_category").show();
+    }else{
+      $("#new_category").hide();
+    }
+  }); 
+  
+  /* Sponsor Form JS end*/
+
   /* Event _Form  start */
     // $('#selectAll').click(function() {
     //   $(':checkbox').each(function() {

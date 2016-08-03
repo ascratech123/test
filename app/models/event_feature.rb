@@ -85,39 +85,44 @@ class EventFeature < ActiveRecord::Base
   def image_dimensions
     if ["event_highlights","contacts","venue"].exclude?(self.name)
       if (self.event.default_feature_icon != "owns" and self.event.default_feature_icon != "new_menu") and self.menu_icon_file_name_changed? 
-        event_dimension_height_menu_icon, event_dimension_width_menu_icon  = 72.0, 72.0
-        dimensions_menu_icon = Paperclip::Geometry.from_file(menu_icon.queued_for_write[:original].path)
-        if (dimensions_menu_icon.width != event_dimension_width_menu_icon or dimensions_menu_icon.height != event_dimension_height_menu_icon)
-          errors.add(:menu_icon, "Image size should be 72x72px only")
-        end
+        self.menu_icon_not_owns()
       end
       if self.event.default_feature_icon == "owns"
         if self.menu_icon.present? and self.menu_icon_file_name_changed?
-          event_dimension_height_menu_icon, event_dimension_width_menu_icon  = 72.0, 72.0
-          dimensions_menu_icon = Paperclip::Geometry.from_file(menu_icon.queued_for_write[:original].path)
-          if (dimensions_menu_icon.width != event_dimension_width_menu_icon or dimensions_menu_icon.height != event_dimension_height_menu_icon)
-            errors.add(:menu_icon, "Image size should be 72x72px only")
-          end
+          self.menu_icon_owns()
         end  
       end
       if (self.event.default_feature_icon != "owns" and self.event.default_feature_icon != "new_menu") and (self.main_icon_file_name_changed? and self.main_icon_file_name.present? )
-        event_dimension_height_main_icon, event_dimension_width_main_icon  = 288.0, 288.0
-        dimensions_main_icon = Paperclip::Geometry.from_file(main_icon.queued_for_write[:original].path)
-        if (dimensions_main_icon.width != event_dimension_width_main_icon or dimensions_main_icon.height != event_dimension_height_main_icon)
-          errors.add(:main_icon, "Image size should be 288x288px only")
-        end
+        self.main_icon_not_owns()
       end
-
       if (self.event.default_feature_icon == "owns")
         if self.main_icon.present? and self.main_icon_file_name_changed?
-          event_dimension_height_main_icon, event_dimension_width_main_icon  = 288.0, 288.0
-          dimensions_main_icon = Paperclip::Geometry.from_file(main_icon.queued_for_write[:original].path)
-          if (dimensions_main_icon.width != event_dimension_width_main_icon or dimensions_main_icon.height != event_dimension_height_main_icon)
-            errors.add(:main_icon, "Image size should be 288x288px only")
-          end
+          self.main_icon_owns()
         end  
       end
     end  
+  end
+
+  def menu_icon_not_owns()
+    event_dimension_height_menu_icon, event_dimension_width_menu_icon  = 72.0, 72.0
+    dimensions_menu_icon = Paperclip::Geometry.from_file(menu_icon.queued_for_write[:original].path)
+    errors.add(:menu_icon, "Image size should be 72x72px only") if (dimensions_menu_icon.width != event_dimension_width_menu_icon or dimensions_menu_icon.height != event_dimension_height_menu_icon)  
+  end
+
+  def menu_icon_owns()
+    event_dimension_height_menu_icon, event_dimension_width_menu_icon  = 72.0, 72.0
+    dimensions_menu_icon = Paperclip::Geometry.from_file(menu_icon.queued_for_write[:original].path)
+    errors.add(:menu_icon, "Image size should be 72x72px only") if (dimensions_menu_icon.width != event_dimension_width_menu_icon or dimensions_menu_icon.height != event_dimension_height_menu_icon)
+  end
+  def main_icon_not_owns()
+    event_dimension_height_main_icon, event_dimension_width_main_icon  = 288.0, 288.0
+    dimensions_main_icon = Paperclip::Geometry.from_file(main_icon.queued_for_write[:original].path)
+    errors.add(:main_icon, "Image size should be 288x288px only") if (dimensions_main_icon.width != event_dimension_width_main_icon or dimensions_main_icon.height != event_dimension_height_main_icon)
+  end
+  def main_icon_owns()
+    event_dimension_height_main_icon, event_dimension_width_main_icon  = 288.0, 288.0
+    dimensions_main_icon = Paperclip::Geometry.from_file(main_icon.queued_for_write[:original].path)
+    errors.add(:main_icon, "Image size should be 288x288px only") if (dimensions_main_icon.width != event_dimension_width_main_icon or dimensions_main_icon.height != event_dimension_height_main_icon)
   end
 
   def create_default_invitee_groups

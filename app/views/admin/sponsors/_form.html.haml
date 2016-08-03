@@ -46,20 +46,3 @@
 - else
   :javascript
     $("#new_category").hide();
-
-:javascript
-  $(window).load(function(){
-    $('.gui-file').change(function(){
-      filename = $(this)[0].files[0].name;
-      $(".gui-input").val(filename);
-    });
-  })
-
-  $("#sponsor_sponsor_type").click(function(){
-    value = $("#sponsor_sponsor_type").val();
-    if (value == "New Category"){
-      $("#new_category").show();
-    }else{
-      $("#new_category").hide();
-    }
-  }); 
