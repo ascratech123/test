@@ -635,7 +635,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
             end
           end
           str += @template.content_tag :span, class: "col-lg-1",id: "this_#{id[:id]}", :style => "display: #{(id[:value].present? and id[:value] != "Image not present.") ? "" : "none" }" do
-            @template.link_to("download" , "/admin/downloads/new?url=#{id[:value]}", :target => '_blank')
+            @template.link_to("Download" , "/admin/downloads/new?url=#{id[:value]}", :target => '_blank')
           end  
         end    
       end
