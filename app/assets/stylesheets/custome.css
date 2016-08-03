@@ -13,12 +13,17 @@
   .md-checkbox .help-tip a { right: -12px;}
 }
 /*=======================Nilam CSS Start=================================*/
-  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
-  .ckeditor_custom {text-align: left;}
 
+/* date calender  and color pick(dropdown) issues on staging nd platform  start here */
+.dtp-content .dtp-date-view{background:#fff;}
+.dtp-content .dtp-date-view + .dtp-buttons{background:#fff;}
+.dropdown-menu{position:absolute;top:-332px;z-index:1000;display:none;float:none;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:14px;list-style:none;background-color:#fff;border:1px solid #ccc;border:1px solid rgba(0,0,0,.15);border-radius:4px;-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);box-shadow:0 6px 12px rgba(0,0,0,.175)}
+/* date calender issues on staging nd platform ends here */
+
+.edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
+.ckeditor_custom {text-align: left;}
 .titleQuestion{margin-left:15px;}
 .mdl-grid.mdl-shadow--1dp{background:#fff;}
-
 .mdl-cell--12-col .mdl-cell--12-col-tablet .ml-color--shades-white.input_box_url{display:none; width:80%; vertical-align: top;}
 .chkbox_input_div .help-tip{width: 98px;}
 .chkbox_input_div{width:100%;}
@@ -1067,7 +1072,7 @@ i.incards {font-size: 60px}
 .dropdown-toggle:focus,.open>a{outline:0}
 .dropdown-menu,.popover{background-clip:padding-box}
 .dropdown{position:relative}
-.dropdown-menu{position:absolute;top:100%;z-index:1000;display:none;float:none;min-width:160px;padding:5px 0;margin:2px 0 0;font-size:14px;list-style:none;background-color:#fff;border:1px solid #ccc;border:1px solid rgba(0,0,0,.15);border-radius:4px;-webkit-box-shadow:0 6px 12px rgba(0,0,0,.175);box-shadow:0 6px 12px rgba(0,0,0,.175)}
+
 .dropdown-header,.dropdown-menu>li>a{display:block;padding:3px 20px;line-height:1.428571429}
 .dropdown-menu.pull-right{right:0;left:auto}
 .dropdown-menu .divider{height:1px;margin:9px 0;overflow:hidden;background-color:#e5e5e5}
