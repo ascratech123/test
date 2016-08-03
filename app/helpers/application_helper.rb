@@ -150,7 +150,7 @@ module ApplicationHelper
 
 
   def event_type(event)
-    if [345, 360, 367, 173, 165, 168, 364, 365, 368].include? event.id
+    if [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? event.id
       if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
         "Ongoing"
       elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
