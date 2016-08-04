@@ -217,6 +217,16 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .editsetting{width: 110px;}
 .editsetting a{color: #fff; text-align: center; display: block; font-size: 14px;}
 .editsetting .mdl-cell--12-col.mdl-cell--12-col-tablet{width: 100%;}
+
+/* nilam css start here */
+
+.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
+
+/* nilam css ends here */
+
+
+
+
 /*Azeem CSS Start*/
 
 .m12t{margin-top:12px;}

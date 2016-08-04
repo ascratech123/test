@@ -190,7 +190,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def custom_text_field(name, title, *args)
     args[0] ||= {}
     args.first[:col] ||= "12"
-    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-b-10" do
+    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8" do
       @template.content_tag :div, class: "bs-component", :style => "display: #{args[0][:message_display].present? ? args[0][:message_display] : ""}"do
         @template.content_tag :div, class: "form-group #{args[0][:admin_theme].present? ? args[0][:admin_theme] : "" rescue ""} #{args[0]["background"] == "false" ? "" : (args[0][:route].present? ? set_highlight_class1(name,args[0][:field_name]) : set_highlight_class(name))}" do
           str = @template.label("", "#{title}", class: "col-lg-4 control-label", id: "#{name}_label")
@@ -521,7 +521,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def custom_text_area_field(name, title, options = {}, *args)
     args[0] ||= {}
     args.first[:col] ||= "12"
-    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-b-10" do
+    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8" do
       (@template.content_tag :div, class: "bs-component", :style => "display: #{options[:message_display].present? ? options[:message_display] : ""}" do
         @template.content_tag :div, class: "form-group #{options["background"] == "false" ? "" : set_highlight_class(name)} #{name}", :style => "display: #{(options[:display] == "false") ? "none" : ""};" do
           str = @template.label("", "#{title}", class: "col-lg-4 control-label txtcase")
