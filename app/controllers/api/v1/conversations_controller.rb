@@ -30,7 +30,7 @@ class Api::V1::ConversationsController < ApplicationController
       end_event_date = Time.now.utc + 2.minutes
       conversations = event.conversations.where(:updated_at => start_event_date..end_event_date) rescue []
       data[:'conversations'] = conversations.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
-      conversation_ids = conversations.pluck(:id)
+      conversation_ids = conversations.pluck(:id) rescue []
       info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
       data[:'comments'] = info.as_json(:only => [:id, :commentable_id, :commentable_type, :user_id, :description, :created_at, :updated_at], :methods => [:user_name]) rescue []
       render :status => 200, :json => {:status => "Success", :conversation_sync_time => sync_time, :data => data}
