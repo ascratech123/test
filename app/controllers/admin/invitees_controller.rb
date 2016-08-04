@@ -12,8 +12,8 @@ class Admin::InviteesController < ApplicationController
       format.html  
       format.xls do
         only_columns = [:first_name, :last_name, :email, :designation, :company_name, :invitee_status]
-        method_allowed = []
-        send_data @invitees.to_xls(:only => only_columns, :filename => "asd.xls")
+        method_allowed = [:facebook, :google_plus, :linkedin, :twitter]
+        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end
