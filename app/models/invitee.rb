@@ -72,6 +72,20 @@ class Invitee < ActiveRecord::Base
   #   end
   # end
     
+  def facebook
+    self.facebook_id rescue ""
+  end
+  def google_plus
+    self.google_id rescue ""
+  end
+  def linkedin
+    self.linkedin_id rescue ""
+  end
+
+  def twitter
+    self.twitter_id rescue ""
+  end
+
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end
