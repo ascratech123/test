@@ -36,7 +36,7 @@ class Comment < ActiveRecord::Base
   end
 
   def user_name
-    self.user.name_of_the_invitee
+    self.user.name_of_the_invitee rescue nil
   end
 
   def name
