@@ -82,9 +82,9 @@ class Invitee < ActiveRecord::Base
     self.linkedin_id rescue ""
   end
 
-  def twitter
-    self.twitter_id rescue ""
-  end
+  # def twitter
+  #   self.twitter_id rescue ""
+  # end
 
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
