@@ -33,7 +33,7 @@
                     = f.object.errors.messages[:login_at].join("") rescue nil
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
-            .form-group
+            .form-group.timeZoneP-l-0
               %label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
               = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
@@ -56,7 +56,7 @@
         / = f.hidden_field :plugin_start_time, :class => 'plugin_start_time'
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
-            .form-group
+            .form-group.timeZoneP-l-0
               %label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
               = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
