@@ -312,5 +312,15 @@ class User < ActiveRecord::Base
     end
   end
 
-  
+  def get_roles_for_user(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+
+    # Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Event', @event.id, user.id).pluck(:name).map{|n| n.humanize}.join(', ')
+
+    # Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Event', @event.id, current_user.id).pluck(:name)
+
+    # Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Client', @client.id, current_user.id).pluck(:name)
+
+    # Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Client', @event.client_id, user.id).pluck(:name).map{|n| n.humanize}.join(', ')
+  end
 end

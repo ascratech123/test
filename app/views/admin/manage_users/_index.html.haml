@@ -21,7 +21,7 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{role}"}
               = link_to admin_clients_path(:feature => "users", :role => role, :redirect_page => "index"), :class => "mdl-menu__item" do
                 Manage Users
-    - else
+    - if false#else
       %tr
         %th Name
         %th Email

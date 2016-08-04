@@ -172,21 +172,3 @@
 - if @store_info.errors.present?
   :javascript
     $(".storeinfoform").show();
-:javascript
-  $(window).load(function(){
-    $('.gui-file').change(function(){
-      filename = $(this)[0].files[0].name;
-      file_id = $(this).attr("id")
-      $("#1" + file_id).val(filename);
-    });
-  })
-  $("#option1").click(function(){
-    $(".storeinfoform").show();
-    $(".selectedYes").show();
-    $(".selectedNo").hide();
-  });
-  $("#option2").click(function(){
-    $(".storeinfoform").hide();
-    $(".selectedYes").hide();
-    $(".selectedNo").show();
-  });
