@@ -54,8 +54,8 @@ class Admin::LicenseesController < ApplicationController
 
   def show
     @licensee = User.unscoped.find(params[:id])
-    @clients = Client.with_roles(@licensee.roles.pluck(:name), @licensee)
-    @event_count = @clients.map{|c| c.events.count}.sum
+    @clients = @licensee.get_clients
+    @event_count = @licensee.get_licensee_events_count
   end
 
   def destroy
