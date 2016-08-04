@@ -25,6 +25,7 @@ class Api::V1::ConversationsController < ApplicationController
     event = Event.find_by_id(params[:event_id])
     if event.present?
       data = {}
+      sync_time = Time.now.utc.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
       end_event_date = Time.now.utc + 2.minutes
       conversations = event.conversations.where(:updated_at => start_event_date..end_event_date) rescue []
@@ -32,7 +33,7 @@ class Api::V1::ConversationsController < ApplicationController
       conversation_ids = conversations.pluck(:id)
       info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
       data[:'comments'] = info.as_json(:only => [:id, :commentable_id, :commentable_type, :user_id, :description, :created_at, :updated_at], :methods => [:user_name]) rescue []
-      render :status => 200, :json => {:status => "Success", :data => data}
+      render :status => 200, :json => {:status => "Success", :conversation_sync_time => sync_time, :data => data}
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
     end
