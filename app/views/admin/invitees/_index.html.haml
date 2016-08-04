@@ -13,6 +13,7 @@
       %th Designation
       %th Status
       %th Visible Status
+      %th Logged In
       %th
         - objs.each do |invitee|
           %tr
@@ -22,6 +23,7 @@
             %td.font16= invitee.designation.capitalize rescue nil
             %td.font16= invitee.invitee_status.capitalize rescue nil
             %td.font16= invitee.visible_status.capitalize rescue nil
+            %td.font16= invitee.analytics.where(:action => 'Login').present? ? 'Yes' : 'No'
             %td.IconDrp
               = more_vert_button(invitee.id)
               %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{invitee.id}"}
