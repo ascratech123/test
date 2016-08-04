@@ -13,6 +13,7 @@ class Invitee < ActiveRecord::Base
   has_many :favorites, as: :favoritable, :dependent => :destroy
   has_many :ratings, :class_name => 'Rating', :foreign_key => 'rated_by'  
   has_one :my_travel, :dependent => :destroy
+  has_many :analytics, :dependent => :destroy
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?

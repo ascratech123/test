@@ -7,7 +7,7 @@ class Admin::InviteesController < ApplicationController
 
   def index
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
-    @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+    @invitees = @invitees.includes(:analytics).paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
