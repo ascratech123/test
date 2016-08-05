@@ -60,6 +60,14 @@
                 = builder.custom_radio_button_menu :status, "active","Active", :id => "option-1#{builder.object.id}", :default_checked => "#{builder.object.status == "active" ? "checked" : ""}",:class => "menu_status_active"
                 = builder.custom_radio_button_menu :status, "deactive", "Deactive", :id => "option-2#{builder.object.id}", :default_checked => "#{builder.object.status == "deactive" ? "checked" : ""}",:class => "menu_status_deactive"
           = builder.custom_text_area_field :description, "Message",:message_display => "#{custom_message_display(builder.object)}"
+          - if ['event_highlights', 'emergency_exits', "my_calendar","chats"].exclude?(builder.object.name)
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
+              .mdl-grid.p-v-5.form-group
+                .col-lg-4.mdl-typography--text-right
+                  %p.displayInlineBlock.multicitytxt Menu Icon Visibility
+                .col-lg-7.p-h-12.m-8
+                  = builder.custom_radio_button_menu :menu_visibilty, "active","Active", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
+                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Deactive", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive"
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
