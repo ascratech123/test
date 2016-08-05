@@ -44,6 +44,8 @@ gem 'whenever', :require => false
 gem 'rqrcode_png'
 gem 'vpim'
 gem 'ransack'
+gem 'rails4-autocomplete'
+gem 'jquery-ui-rails'
 
 # gem "bullet", :group => "development"
 

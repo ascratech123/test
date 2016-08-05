@@ -2,18 +2,37 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :check_smtp_setting
-  before_filter :send_mail_to_all, :only => [:index]
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:autocomplete_invitee_name_of_the_invitee]
+  
+  autocomplete :invitee, :name_of_the_invitee, :full => true
+  # admin_invitees_autocomplete_invitee_name_of_the_invitee_path
 
   def index
+    if params["send_mail"] == "true"
+      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
+        event_ids = @event.mobile_application.events.pluck(:id)
+        invitees = []
+        @invitees.each do |invitee|
+          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
+          invitees << invitee1
+        end
+        invitees = invitees.compact
+      else 
+        invitees = @invitees.where("email_send !=?", "true")
+      end
+      invitees.each do |invitee|
+        UserMailer.send_password_invitees(invitee).deliver_now 
+        invitee.update_column(:email_send, 'true')
+      end
+    end
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
-    @invitees = @invitees.includes(:analytics).paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+    @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
         only_columns = [:first_name, :last_name, :email, :designation, :company_name, :invitee_status]
-        method_allowed = [:facebook, :google_plus, :linkedin]
-        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
+        method_allowed = []
+        send_data @invitees.to_xls(:only => only_columns, :filename => "asd.xls")
       end
     end
   end
@@ -75,31 +94,5 @@ class Admin::InviteesController < ApplicationController
 
   def invitee_params
     params.require(:invitee).permit!
-  end
-
-  def send_mail_to_all
-    if params["send_mail"] == "true"
-      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
-        event_ids = @event.mobile_application.events.pluck(:id)
-        invitees = []
-        @invitees.each do |invitee|
-          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
-          invitees << invitee1
-        end
-        invitees = invitees.compact
-      else 
-        invitees = @invitees.where("email_send !=?", "true")
-      end
-      invitees.each do |invitee|
-        UserMailer.send_password_invitees(invitee).deliver_now 
-        invitee.update_column(:email_send, 'true')
-      end
-    end
-  end
-
-  def check_smtp_setting
-    if current_user.get_smtp_setting.blank? and ['index', 'show'].include? params[:action]
-      redirect_to new_admin_smtp_setting_path
-    end
   end
 end

@@ -225,7 +225,6 @@ module ApplicationHelper
     end    
   end 
 
-
   def show_field_newQuestion(label, obj)
     #mdl-cell--5-col mdl-cell--4-col-tablet m-8
     content_tag :div, class: "mdl-cell--12-col no-p-l no-p-t no-p-r no-p-b" do
@@ -238,8 +237,7 @@ module ApplicationHelper
       end
     end    
   end 
-  
-  
+
   # for advance search
   def custom_text_field_tag(name,title, params,*args)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
@@ -261,6 +259,15 @@ module ApplicationHelper
     end
   end
 
+  def custom_button_tag_eventsearch(title, label)
+    # content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
+      # content_tag :div, class: "moreBtn collapseminus" do
+        str = content_tag :a, "Hide", class: "f-right m-t-5 hvr-underline-from-center hvr-underline-from-centernew", href: "javascript:void(0);" 
+        str += content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 f-right m-r-35") 
+        str
+      # end
+  end
+
   def custom_button_tag_without_hide(title)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone m-8" do
       content_tag :div, class: "moreBtn collapseminus" do
@@ -270,8 +277,6 @@ module ApplicationHelper
     end
   end
 
-
-
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
     params1 = params.gsub(/[^0-9a-z]/, '')
@@ -279,14 +284,13 @@ module ApplicationHelper
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
-  end 
+  end
 
   def custom_basic_button_tag(title)
     content_tag :div, class: "mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--2-col-phone m-10" do
       content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600") 
     end  
   end  
-
 
   def custom_advance_search_link_tag(label)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone m-l-15 moreBtn mdl-typography--text-right" do
