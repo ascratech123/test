@@ -99,7 +99,7 @@ class Invitee < ActiveRecord::Base
     self.mobile_no rescue ""
   end
 
-  def log_in
+  def logged_in
     self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
   end
 
