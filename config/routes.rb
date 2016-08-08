@@ -67,6 +67,10 @@ namespace :admin do
       resources :invitee_datas
     end
     resources :registrations
+    
+    resources :campaigns do
+      resources :edms
+    end
 
   end
   # resources :imports
