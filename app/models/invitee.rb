@@ -101,7 +101,7 @@ class Invitee < ActiveRecord::Base
 
   def logged_in
     self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
-  end
+  end 
 
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
