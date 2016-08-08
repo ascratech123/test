@@ -18,7 +18,7 @@ class Admin::QnasController < ApplicationController
         render :layout => false
     else
       @qnas = Qna.search(params, @qnas) if params[:search].present?
-      @qnas = @qnas.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+      @qnas = @qnas.paginate(page: params[:page], per_page: 1000) if params["format"] != "xls"
       respond_to do |format|
         format.html  
         format.xls do

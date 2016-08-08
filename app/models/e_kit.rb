@@ -47,7 +47,7 @@ class EKit < ActiveRecord::Base
     value = {}
     tags.each do |tag|
       value["type"], value["tag"] = "folder", tag.name
-      value["list"] = EKit.tagged_with(tag.name).where(:event_id => event.first.id).as_json(:only => [:id,:event_id, :name], :methods => [:attachment_url,:attachment_type ]) rescue nil
+      value["list"] = EKit.tagged_with(tag.name).where(:event_id => event.first.id).as_json(:only => [:id, :event_id, :name], :methods => [:attachment_url,:attachment_type ]) rescue nil
       data << value rescue nil
       value = {}
     end
