@@ -99,9 +99,9 @@ class Invitee < ActiveRecord::Base
     self.mobile_no rescue ""
   end
 
-  # def password
-  #   self.invitee_password rescue ""
-  # end
+  def log_in
+    self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
+  end
 
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
