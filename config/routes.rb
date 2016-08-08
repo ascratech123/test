@@ -68,7 +68,7 @@ namespace :admin do
     resources :registrations
     
     resources :campaigns do
-      resources :edms
+      resources :edms 
     end
 
   end
