@@ -83,9 +83,25 @@ class Invitee < ActiveRecord::Base
     self.linkedin_id rescue ""
   end
 
-  # def twitter
-  #   self.twitter_id rescue ""
-  # end
+  def twitter
+    self.twitter_id rescue ""
+  end
+
+  def city
+    self.street rescue ""
+  end
+
+  def description
+    self.about rescue ""
+  end
+
+  def phone_number
+    self.mobile_no rescue ""
+  end
+
+  def password
+    self.invitee_password rescue ""
+  end
 
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
