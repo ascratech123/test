@@ -27,5 +27,3 @@
 //= require jquery-ui.min-dash
 //= require jquery.mCustomScrollbar.min
 //= require 'common'
-
-
