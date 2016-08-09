@@ -151,10 +151,13 @@ class Event < ActiveRecord::Base
     end
     # events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
     if end_date.present?
-      events = events.where("end_event_date =?",end_date.to_date)
+      # events = events.where("end_event_date =?",end_date.to_date)
+      events = events.where("end_event_date >=? and end_event_date <= ? ", end_date.to_datetime, (end_date.to_datetime.next_day - 1.minutes))
     end
     if start_date.present?
-      events = events.where("start_event_date =?",start_date.to_date)
+      # events = events.where("start_event_date =?",start_date.to_date)
+      events = events.where("start_event_date >=? and start_event_date <= ? ", start_date.to_datetime, (start_date.to_datetime.next_day - 1.minutes))
+
     end
     if order_by.present? and order_by == "upcoming"
       events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) 
