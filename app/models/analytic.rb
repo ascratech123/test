@@ -129,10 +129,11 @@ class Analytic < ActiveRecord::Base
   def self.get_unique_users(event_id, from_date, to_date)
     all_analytics = Analytic.where('viewable_type = ? and action = ? and event_id = ?', 'Invitee', 'Login', event_id)
     analytics = all_analytics.where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date)
+    invitee_ids = analytics.pluck(:invitee_id).uniq
+    unique_users_count = Invitee.where(:id => invitee_ids).count
     ios_analytics = analytics.where(:platform => 'Ios').pluck(:invitee_id).uniq.count
     android_analytics = analytics.where(:platform => 'Android').pluck(:invitee_id).uniq.count
-
-    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [analytics.count, all_analytics.count]]
+    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [unique_users_count, all_analytics.pluck(:invitee_id).uniq.count]]
   end
 
   def self.get_total_detail_users(event_id, from_date, to_date)
@@ -148,11 +149,11 @@ class Analytic < ActiveRecord::Base
     all_analytics = Analytic.where('viewable_type = ? and action = ? and event_id = ?', 'Invitee', 'Login', event_id)
     analytics = all_analytics.where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date)
     viewable_ids = analytics.pluck(:invitee_id).uniq
-    active_user_ids = Invitee.where('id IN (?) and last_interation >= ?', viewable_ids, (Time.now - 24.hours))
+    active_user_ids = Invitee.where('id IN (?) and last_interation >= ?', viewable_ids, (Time.now - 24.hours)).pluck(:id)
     analytics = analytics.where(:invitee_id => active_user_ids)
     ios_analytics = analytics.where(:platform => 'Ios').pluck(:viewable_id).count
     android_analytics = analytics.where(:platform => 'Android').pluck(:viewable_id).count
-    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [analytics.count, all_analytics.count]]
+    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [active_user_ids.count, all_analytics.pluck(:invitee_id).uniq.count]]
   end
 
   def self.get_user_engagements(event_id, from_date, to_date, filter_date)
