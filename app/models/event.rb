@@ -150,9 +150,9 @@ class Event < ActiveRecord::Base
     # events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
     events = events.where("end_event_date =?",end_date) if end_date.present?
     events = events.where("start_event_date =?",start_date) if start_date.present?
-    events = events.where('start_event_date > ?',Date.today) if order_by.present? and order_by == "upcoming"
-    events = events.where('start_event_date < ?',Date.today) if order_by.present? and order_by == "past"
-    events = events.where('start_event_date = ?',Date.today) if order_by.present? and order_by == "ongoing"
+    events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) if order_by.present? and order_by == "upcoming"
+    events = events.where('start_event_date < ? AND end_event_date < ?',Date.today, Date.today) if order_by.present? and order_by == "past"
+    events = events.where('start_event_date <= ? AND end_event_date >= ?',Date.today,Date.today) if order_by.present? and order_by == "ongoing"
     events = events.where("status = ?", order_by_status) if order_by_status.present?
     events = events.where("event_name like (?)", "%#{basic}%") if basic.present?
     events
