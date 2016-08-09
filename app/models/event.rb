@@ -146,15 +146,35 @@ class Event < ActiveRecord::Base
   def self.search(params, events)
     event_name, end_date, start_date, order_by, order_by_status = params[:search][:name], params[:search][:end_date], params[:search][:start_date], params[:search][:order_by], params[:search][:order_by_status] if params[:adv_search].present?
     basic = params[:search][:keyword]
-    events = events.where("event_name like (?)","%#{event_name}%") if event_name.present?
+    if event_name.present?
+      events = events.where("event_name like (?)","%#{event_name}%")
+    end
     # events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
-    events = events.where("end_event_date =?",end_date.to_date) if end_date.present?
-    events = events.where("start_event_date =?",start_date.to_date) if start_date.present?
-    events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) if order_by.present? and order_by == "upcoming"
-    events = events.where('start_event_date < ? AND end_event_date < ?',Date.today, Date.today) if order_by.present? and order_by == "past"
-    events = events.where('start_event_date <= ? AND end_event_date >= ?',Date.today,Date.today) if order_by.present? and order_by == "ongoing"
-    events = events.where("status = ?", order_by_status) if order_by_status.present?
-    events = events.where("event_name like (?)", "%#{basic}%") if basic.present?
+    if end_date.present?
+      events = events.where("end_event_date =?",end_date.to_date)
+    end
+    if start_date.present?
+      events = events.where("start_event_date =?",start_date.to_date)
+    end
+    if order_by.present? and order_by == "upcoming"
+      events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) 
+    end
+
+    if order_by.present? and order_by == "past"
+      events = events.where('start_event_date < ? AND end_event_date < ?',Date.today, Date.today) 
+    end
+
+    if order_by.present? and order_by == "ongoing"
+      events = events.where('start_event_date <= ? AND end_event_date >= ?',Date.today,Date.today)
+    end
+
+    if order_by_status.present?
+      events = events.where("status = ?", order_by_status) 
+    end
+    if basic.present?
+      events = events.where("event_name like (?)", "%#{basic}%") 
+    end
+    
     events
   end 
 
