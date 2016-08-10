@@ -4,7 +4,7 @@ class Admin::InviteesController < ApplicationController
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:autocomplete_invitee_name_of_the_invitee]
   
-  autocomplete :invitee, :name_of_the_invitee, :full => true
+  # autocomplete :invitee, :name_of_the_invitee, :full => true
   # admin_invitees_autocomplete_invitee_name_of_the_invitee_path
 
   def index
