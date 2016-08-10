@@ -12,6 +12,7 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
+<<<<<<< ours
 /*=======================Nilam CSS Start=================================*/
 
 .titleQuestion{margin-left:15px;}
@@ -41,6 +42,76 @@
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
+=======
+
+/* notification overlay css - Deepti*/
+.overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
+.loader-img{position: absolute;left: 0;margin: 0 auto;right: 0;top: 50%;transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);z-index: 9999;}
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  margin: 0 auto;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  z-index: 9999;
+}
+
+.spinner > div {
+  background-color: #00b1bb;
+  height: 100%;
+  width: 8px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+/*nilam*/
+.titleQuestion{margin-left:15px;}
+>>>>>>> theirs
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 
 /* notification overlay css - Deepti*/
@@ -1294,3 +1365,7 @@ i.incards {font-size: 60px}
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
 
 
+<<<<<<< ours
+=======
+
+>>>>>>> theirs

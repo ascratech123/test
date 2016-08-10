@@ -17,6 +17,8 @@ class Invitee < ActiveRecord::Base
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :downcase_email
+
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
   validates :email,
             :format => {
@@ -48,7 +50,8 @@ class Invitee < ActiveRecord::Base
   before_save :set_full_name
   after_save :clear_password, :update_favorite
   after_save :generate_qr_code
-  after_create :update_event_updated_at, :send_password_to_invitee
+  after_save :update_event_updated_at
+  # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
   
   aasm :column => :visible_status do  # defaults to aasm_state
@@ -106,7 +109,7 @@ class Invitee < ActiveRecord::Base
   def profile_picture
     self.profile_pic.url rescue ""
   end
-  
+
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end
@@ -536,5 +539,12 @@ class Invitee < ActiveRecord::Base
 
   def name_with_email
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
+  end
+
+
+  private
+
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
   end
 end

@@ -90,7 +90,6 @@ class Qna < ActiveRecord::Base
 
   def get_receiver_user_name
     Panel.find_by_id(self.receiver_id).name rescue ""
-    # Invitee.find_by_id(self.receiver_id).name_of_the_invitee rescue ""
   end
 
   def set_status_as_per_auto_approve

@@ -10,6 +10,7 @@
     displayText = ""
 - if @date_filter_error.blank?
   :javascript
+    var INTERVALYAXIS = #{arr.max > 100 ? (arr.max / 100) : 5}
     var LINECATEGORY = #{@detailed_analytics_counts[1]['xaxis_interval_labels_and_interval'][0]}
     var OVERALL_ENGAGEMENT = #{@detailed_analytics_counts[1]['user_engagements'].to_json}
     var DONUTCHART1ARRAY = #{[['ios', 20], ['and', 40]]}

@@ -90,7 +90,11 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
           .bs-component{:style => "display: #{(f.object.application_type == 'multi event' or params[:action] == "new") ? "" : "none"}"}
             .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+<<<<<<< ours
               %span.col-lg-4#listing_screen_background_label
+=======
+              .span.col-lg-4#listing_screen_background_label
+>>>>>>> theirs
                 = f.label "Listing Screen Background (960X1600px) only ",:class =>"control-label", style: "float: right;"
                 - if (current_user.has_role? :licensee_admin and @mobile_application.listing_screen_background.present? and ["edit","update"].include? params[:action])
                   %br
@@ -284,7 +288,11 @@
   $("#option2").click(function(){
     $("#listing_screen_background_label").show()
     $("#listing_screen_uploadBtn").parent().parent().parent().parent().show()
+<<<<<<< ours
     $("#1listing_screen_uploadBtn").parent().parent().parent().prev('label').show()
+=======
+    $("#listing_screen_uploadBtn").parent().parent().parent().prev('label').show()
+>>>>>>> theirs
     $("#this_listing_screen_uploadBtn").show();
     var assignedRoleId = new Array();
     $('#event_login_at option').each(function(){
