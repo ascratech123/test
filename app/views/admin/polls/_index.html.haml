@@ -11,6 +11,7 @@
       %th Question 
       %th Status
       %th On Wall
+      %th Result Status
       %th 
     - objs.each_with_index do |poll,index|
       %tr
@@ -29,7 +30,15 @@
           - if poll.on_wall == "yes" and poll.status != "rejected" 
             = "Pushed on Wall"
           - else 
-            = ""  
+            = "" 
+        %td.font16
+          .onoffswitch
+            %input#myonoffswitch.onoffswitch-checkbox{:checked => "checked", :name => "onoffswitch", :type => "checkbox"}/
+            %label.onoffswitch-label{:for => "myonoffswitch"}
+              %span.onoffswitch-inner
+              %span.onoffswitch-switch
+
+
         %td.IconDrp
           = more_vert_button(poll.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
@@ -42,7 +51,9 @@
                 = link_to "Push To Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"
             - poll.aasm.events.each do |eve|
               = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/polls", :id => poll.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
-  =# will_paginate objs   
+
+
+  =# will_paginate objs  
 
 :javascript
 

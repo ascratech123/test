@@ -34,9 +34,9 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
+              %label.col-lg-4.control-label.m-l-9{:for => "_Event Start Date"} Start date *
               = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
-              .col-lg-3.timeDropdown
+              .col-lg-3.timeDropdown.timedateBox
                 .timeTab
                   = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168].include? f.object.id) ? (f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'hour'))}", :col => '2',:maxlength => "2"
                   
@@ -57,9 +57,9 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
+              %label.col-lg-4.control-label.m-l-9{:for => "_Event End Date"} End Date *
               = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
-              .col-lg-3.timeDropdown
+              .col-lg-3.timeDropdown.timedateBox
                 .timeTab  
                   = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168].include? f.object.id) ? (f.object.end_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'hour'))}", :col => '2',:maxlength => "2"
                   = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168].include? f.object.id) ? (f.object.end_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'minute'))}", :col => '2',:maxlength => "2"
