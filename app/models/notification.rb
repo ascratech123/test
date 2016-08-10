@@ -37,25 +37,26 @@ class Notification < ActiveRecord::Base
 
   def push_notification
     if self.push_datetime.blank?
-      if self.group_ids.present?
-        groups = InviteeGroup.where("id IN(?)", self.group_ids)
-        invitee_ids = []
-        groups.each do |group|
-          invitee_ids = invitee_ids + group.get_invitee_ids
-        end  
-        invitee_ids = invitee_ids.uniq rescue []
-        invitees = Invitee.where("id IN(?)", invitee_ids)
-        mobile_application = self.event.mobile_application
-        push_pem_file = mobile_application.push_pem_file if mobile_application.present?
-      # invitees = Notification.get_action_based_invitees(invitees, self.action)
-        if mobile_application.present? and mobile_application.push_pem_file.present?
-          PushNotification.push_notification(self, invitees, mobile_application.id)
-        end
-      else
-        invitees = self.event.invitees
-        objects = event.invitees
-        self.send_to_all
-      end
+      self.update_column(:push_datetime, Time.now)
+      # if self.group_ids.present?
+      #   groups = InviteeGroup.where("id IN(?)", self.group_ids)
+      #   invitee_ids = []
+      #   groups.each do |group|
+      #     invitee_ids = invitee_ids + group.get_invitee_ids
+      #   end  
+      #   invitee_ids = invitee_ids.uniq rescue []
+      #   invitees = Invitee.where("id IN(?)", invitee_ids)
+      #   mobile_application = self.event.mobile_application
+      #   push_pem_file = mobile_application.push_pem_file if mobile_application.present?
+      # # invitees = Notification.get_action_based_invitees(invitees, self.action)
+      #   if mobile_application.present? and mobile_application.push_pem_file.present?
+      #     PushNotification.push_notification(self, invitees, mobile_application.id)
+      #   end
+      # else
+      #   invitees = self.event.invitees
+      #   objects = event.invitees
+      #   self.send_to_all
+      # end
     end
   end
 
