@@ -9,6 +9,7 @@
     displayText = ""
 - if @date_filter_error.blank?
   :javascript
+    var INTERVALYAXIS = #{arr.max > 100 ? (arr.max / 100) : 1}
     var LINECATEGORY = #{@live_analytics['xaxis_interval_labels_and_interval'][0]}
     var OVERALL_ENGAGEMENT = #{@live_analytics['user_engagements'].to_json}
     var DONUTCHART1ARRAY = #{@live_analytics['unique_users'][0]}
