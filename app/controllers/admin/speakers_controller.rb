@@ -17,9 +17,9 @@ class Admin::SpeakersController < ApplicationController
           method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :speaker_name, :user_rating, :user_comment]
           send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
         else
-          only_columns = [:first_name, :last_name, :designation, :email_address, :address, :speaker_info, :phone_no, :company]
-          method_allowed = []
-          send_data @speakers.to_xls(:only => only_columns)
+          only_columns = [:first_name, :last_name, :designation, :email_address, :speaker_info, :phone_no, :company,:rating_status]
+          method_allowed = [:profile_picture]
+          send_data @speakers.to_xls(:only => only_columns,:methods => method_allowed)
         end
       end
     end
@@ -27,6 +27,7 @@ class Admin::SpeakersController < ApplicationController
 
   def new
     @speaker = @event.speakers.build
+    @import = Import.new if params[:import].present?
   end
 
   def create

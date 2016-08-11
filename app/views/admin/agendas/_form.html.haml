@@ -1,102 +1,105 @@
-= javascript_include_tag "jquery.fancybox"
-.save_button.mdl-card  
-  = form_for [:admin, @event, @agenda],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
-    .mdl-grid.mdl-card.mdl-shadow--1dp
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        %h4.heading-border.p-t-10.m-b-15
-          General Information
-          / %a{:href => '/whats_this/agenda/general_information/agenda_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
-          /   what's this?
-          
-         
-      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "agenda_generalInfo.jpg", :section_id => "agenda_general_section"}
-      = f.custom_text_field :title, "Title *","background" => "false", :class => 'mdl-textfield__input'
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-        .form-group
-          %label.col-lg-4.control-label.ml-color--shades-white
-            Track
-          .col-lg-7
-            - default_agenda_type = ['Add New Track']
-            - default_agenda_type = default_agenda_type + @event.get_agenda
-            - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
-            %i.arrow.single
-            = f.select("agenda", "agenda_type", default_agenda_type, {:selected => f.object.agenda_type,:prompt => "#{(f.object.agenda_type.present? and f.object.agenda_type != "Add New Track") ? f.object.agenda_type : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-            .field_with_errors
-              .span{:class => "errorMessage"}
-                = f.object.errors.messages[:agenda_type].join("") rescue nil 
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-        #new_category
-
-          = f.custom_text_field_speaker :new_category, "Track Name *","background" => "false", :col => '12', :display_field => "#{f.object.agenda_type != "Add New Track" ? "none" : ""}"
-      - list_of_speakers = event_speakers_list(params[:event_id])
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-        .form-group
-          %label.col-lg-4.control-label.ml-color--shades-white
-            Speaker
-          .col-lg-7  
-            - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
-            - speaker_name << ["Add Speaker", 0]
-            %i.arrow.single
-            = f.select("agenda", "speaker_id", speaker_name, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-        #add_speaker
-          = f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }"
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .bs-component
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  = javascript_include_tag "jquery.fancybox"
+  .save_button.mdl-card  
+    = form_for [:admin, @event, @agenda],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => '/whats_this/agenda/general_information/agenda_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+            
+           
+        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "agenda_generalInfo.jpg", :section_id => "agenda_general_section"}
+        = f.custom_text_field :title, "Title *","background" => "false", :class => 'mdl-textfield__input'
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
-            %label.col-lg-4.control-label{:for => "Start Agenda Date"} Start Date/Time *
-            = f.custom_text_field_date :start_agenda_date, "Start Agenda Date", :id => "date-start1",:value => f.object.start_agenda_date.present? ? f.object.start_agenda_date.strftime('%d/%m/%Y') : ''
-            .col-lg-3.timeDropdown
-              .timeTab
-                = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .bs-component
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Track
+            .col-lg-7
+              - default_agenda_type = ['Add New Track']
+              - default_agenda_type = default_agenda_type + @event.get_agenda
+              - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
+              %i.arrow.single
+              = f.select("agenda", "agenda_type", default_agenda_type, {:selected => f.object.agenda_type,:prompt => "#{(f.object.agenda_type.present? and f.object.agenda_type != "Add New Track") ? f.object.agenda_type : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = f.object.errors.messages[:agenda_type].join("") rescue nil 
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          #new_category
+
+            = f.custom_text_field_speaker :new_category, "Track Name *","background" => "false", :col => '12', :display_field => "#{f.object.agenda_type != "Add New Track" ? "none" : ""}"
+        - list_of_speakers = event_speakers_list(params[:event_id])
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
-            %label.col-lg-4.control-label{:for => "End Agenda Date"} End Date/Time
-            = f.custom_text_field_date :end_agenda_date, "End Agenda Date", :id => "date-end1",:value => f.object.end_agenda_date.present? ? f.object.end_agenda_date.strftime('%d/%m/%Y ') : ''
-            .col-lg-3.timeDropdown
-              .timeTab
-                = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{f.object.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{f.object.end_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Speaker
+            .col-lg-7  
+              - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
+              - speaker_name << ["Add Speaker", 0]
+              %i.arrow.single
+              = f.select("agenda", "speaker_id", speaker_name, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          #add_speaker
+            = f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .bs-component
+            .form-group
+              %label.col-lg-4.control-label{:for => "Start Agenda Date"} Start Date/Time *
+              = f.custom_text_field_date :start_agenda_date, "Start Agenda Date", :id => "date-start1",:value => f.object.start_agenda_date.present? ? f.object.start_agenda_date.strftime('%d/%m/%Y') : ''
+              .col-lg-3.timeDropdown
+                .timeTab
+                  = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .bs-component
+            .form-group
+              %label.col-lg-4.control-label{:for => "End Agenda Date"} End Date/Time
+              = f.custom_text_field_date :end_agenda_date, "End Agenda Date", :id => "date-end1",:value => f.object.end_agenda_date.present? ? f.object.end_agenda_date.strftime('%d/%m/%Y ') : ''
+              .col-lg-3.timeDropdown
+                .timeTab
+                  = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{f.object.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{f.object.end_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
 
 
 
-      / = f.custom_text_field :start_agenda_date, "Start Agenda Date", :id => "date-start",:value => f.object.start_agenda_date.present? ? f.object.start_agenda_date.strftime('%d/%m/%Y') : '', :col => '8'
-      / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8.timeDropdown
-      /   .mdl-grid.timeTab  
-      /     = f.custom_text_fieldTime :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-      /     = f.custom_text_fieldTime :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-      /     = f.custom_text_fieldTime :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
-      / = f.custom_text_field :end_agenda_date, "End Agenda Date", :id => "date-end",:value => f.object.end_agenda_date.present? ? f.object.end_agenda_date.strftime('%d/%m/%Y ') : '', :col => '8'
-      / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8.timeDropdown
-      /   .mdl-grid.timeTab  
-      /     = f.custom_text_fieldTime :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-      /     = f.custom_text_fieldTime :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{f.object.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-      /     = f.custom_text_fieldTime :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{f.object.end_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
-      = f.custom_text_area_field :discription, "description", "background" => "false"
-      
-      =# f.custom_text_field :agenda_type, "Track", :class => 'mdl-textfield__input'
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        .mdl-grid.p-v-5
-          .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Session Rating
-          .col-lg-3.p-h-12   
-            = f.custom_radio_button :rating_status, "active","Active", :id => "option-1"
-            = f.custom_radio_button :rating_status, "deactive", "Deactive", :id => "option-2"
-          .col-lg-1.agenda_help
-            = link_to "?" ,"/whats_this/agenda/general_information/Help_agenda_sessionRating.jpg", rel: "agenda_image", title: "Session Rating", :class =>'fancybox whatsImg appwhatsthis'  
-      
+        / = f.custom_text_field :start_agenda_date, "Start Agenda Date", :id => "date-start",:value => f.object.start_agenda_date.present? ? f.object.start_agenda_date.strftime('%d/%m/%Y') : '', :col => '8'
+        / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8.timeDropdown
+        /   .mdl-grid.timeTab  
+        /     = f.custom_text_fieldTime :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+        /     = f.custom_text_fieldTime :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+        /     = f.custom_text_fieldTime :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+        / = f.custom_text_field :end_agenda_date, "End Agenda Date", :id => "date-end",:value => f.object.end_agenda_date.present? ? f.object.end_agenda_date.strftime('%d/%m/%Y ') : '', :col => '8'
+        / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8.timeDropdown
+        /   .mdl-grid.timeTab  
+        /     = f.custom_text_fieldTime :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+        /     = f.custom_text_fieldTime :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{f.object.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+        /     = f.custom_text_fieldTime :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{f.object.end_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+        = f.custom_text_area_field :discription, "description", "background" => "false"
+        
+        =# f.custom_text_field :agenda_type, "Track", :class => 'mdl-textfield__input'
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Session Rating
+            .col-lg-3.p-h-12   
+              = f.custom_radio_button :rating_status, "active","Active", :id => "option-1"
+              = f.custom_radio_button :rating_status, "deactive", "Deactive", :id => "option-2"
+            .col-lg-1.agenda_help
+              = link_to "?" ,"/whats_this/agenda/general_information/Help_agenda_sessionRating.jpg", rel: "agenda_image", title: "Session Rating", :class =>'fancybox whatsImg appwhatsthis'  
+        
 
-      = f.hidden_field :event_id, :value => params[:event_id]
-      = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
-    .fixed-activon-btn-new  
-      = f.custom_submit_button "SAVE"
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-          = back_button(:back)
+        = f.hidden_field :event_id, :value => params[:event_id]
+        = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
 :javascript
   $("#agenda_speaker_id").change(function(){
     value = $("#agenda_speaker_id").val();
