@@ -17,6 +17,14 @@
         = f.custom_text_field :option4, "Option4","background" => "false"
         = f.custom_text_field :option5, "Option5","background" => "false"
         = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Options Visible?
+            .col-lg-3.p-h-12   
+              = f.custom_radio_button_menu :option_visible, "yes","Yes", :id => "url_page_type", :default_checked => (f.object.option_visible == 'yes' or f.object.option_visible.blank?) ? 'checked' : ''
+              = f.custom_radio_button_menu :option_visible, "no","No", :id => "build_new_page_type", :default_checked => (f.object.option_visible == 'no') ? 'checked' : ''
+
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
