@@ -86,6 +86,8 @@
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
 }
+.result_statusdiv{width:75px;}
+
 /* nilam css ends here */
 
 
