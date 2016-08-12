@@ -222,7 +222,8 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 /* nilam css start here */
 
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
-
+.back_btn_header{display: inline-block; margin-top: 17px;}
+.search_header + div{width:85px;}
 /* nilam css ends here */
 
 
