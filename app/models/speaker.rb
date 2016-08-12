@@ -38,7 +38,7 @@ class Speaker < ActiveRecord::Base
     speakers = speakers.where("speaker_name like ?", "%#{speaker_name}%") if   speaker_name.present?
     speakers = speakers.where("email_address like ?", "%#{email_address}%") if  email_address.present?
     speakers = speakers.where("designation like ?", "%#{designation}%") if  designation.present?
-    speakers = speakers.where("speaker_name like ? or email_address like ? or designation like ?", "%#{basic}%","%#{basic}%","%#{basic}%") if basic.present?
+    speakers = speakers.where("speaker_name like ? or company like ? or designation like ?", "%#{basic}%","%#{basic}%","%#{basic}%") if basic.present?
     speakers
   end
 

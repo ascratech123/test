@@ -14,6 +14,7 @@
 }
 /*=======================Nilam CSS Start=================================*/
 
+.titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
 .dtp-content .dtp-date-view + .dtp-buttons{background:#fff;}
@@ -37,9 +38,6 @@
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
-
-
-/*nilam*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 
 /* notification overlay css - Deepti*/
@@ -268,6 +266,8 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
 }
+.back_btn_header{display: inline-block; margin-top: 17px;}
+.search_header + div{width:85px;}
 /* nilam css ends here */
 
 

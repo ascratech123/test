@@ -160,7 +160,7 @@ class Invitee < ActiveRecord::Base
 
   def self.search(params,invitees)
     keyword = params[:search][:keyword]
-     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")if keyword.present?
+     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
     invitees   
   end
 
