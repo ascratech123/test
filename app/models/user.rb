@@ -316,6 +316,9 @@ class User < ActiveRecord::Base
       errors.add(:assign_grouping, "This field is required.")
     end
   end
-
+  
+  def get_roles_for_user(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+  end
   
 end
