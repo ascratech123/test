@@ -32,11 +32,20 @@
           - else 
             = "" 
         %td.font16
-          .onoffswitch
-            %input#myonoffswitch.onoffswitch-checkbox{:checked => "checked", :name => "onoffswitch", :type => "checkbox"}/
-            %label.onoffswitch-label{:for => "myonoffswitch"}
-              %span.onoffswitch-inner
-              %span.onoffswitch-switch
+          - if poll.option_visible == 'yes'
+            = link_to admin_event_poll_path(:id => poll.id, :option_visible => "no"), :method => "patch", :data => { confirm: 'Are you sure, you want to hide result.'} do
+              .onoffswitch
+                %input#myonoffswitch.onoffswitch-checkbox{:checked => "checked", :name => "onoffswitch", :type => "checkbox"}/
+                %label.onoffswitch-label{:for => "myonoffswitch"}
+                  %span.onoffswitch-inner
+                  %span.onoffswitch-switch
+          - else
+            = link_to admin_event_poll_path(:id => poll.id, :option_visible => "yes"), :method => "patch", :data => { confirm: 'Are you sure, you want to display result.'} do
+              .onoffswitch
+                %input#myonoffswitch.onoffswitch-checkbox{:checked => false, :name => "onoffswitch", :type => "checkbox"}/
+                %label.onoffswitch-label{:for => "myonoffswitch"}
+                  %span.onoffswitch-inner
+                  %span.onoffswitch-switch
 
 
         %td.IconDrp
