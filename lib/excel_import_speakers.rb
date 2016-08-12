@@ -66,7 +66,7 @@ module ExcelImportSpeaker
           speaker.errors.add(:profile_pic, "Incorrect URL")
         end
       end
-      speaker.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company => objekt['company'], :designation => objekt['designation'], :phone_no => objekt["phone_no"],:speaker_info => objekt['speaker_info'], :rating_status => objekt['rating_status'])
+      speaker.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company => objekt['company'], :designation => objekt['designation'], :phone_no => objekt["phone_no"],:speaker_info => objekt['speaker_bio'], :rating_status => objekt['rating'])
       objekts << speaker
       File.delete("public/#{profile_url.split('/').last}") if profile_url.present? and File.exist?("public/#{profile_url.split('/').last}")
     end
