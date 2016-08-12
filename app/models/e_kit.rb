@@ -62,8 +62,8 @@ class EKit < ActiveRecord::Base
     data  
   end
 
-  def self.get_e_kits_all_events(event_ids)
-    tags = EKit.where(:event_id => event_ids).tag_counts_on(:tags) rescue []
+  def self.get_e_kits_all_events(event_ids, start_event_date, end_event_date)
+    tags = EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).tag_counts_on(:tags) rescue []
     data = []
     value = {}
     tags.each do |tag|
@@ -72,7 +72,7 @@ class EKit < ActiveRecord::Base
       data << value rescue nil
       value = {}
     end
-    EKit.where(:event_id => event_ids).each do |e_kit|
+    EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).each do |e_kit|
       if (e_kit.tags.count == 0)
         value["type"], value["tag"] = "non_folder", ""
         value["list"] = [e_kit.as_json(:only => [:id,:event_id, :name, :created_at, :updated_at], :methods => [:attachment_url,:attachment_type])] rescue []
