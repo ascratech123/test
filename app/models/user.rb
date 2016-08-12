@@ -340,6 +340,10 @@ class User < ActiveRecord::Base
   def get_clients
     clients = Client.with_roles(self.roles.pluck(:name), self)
   end
+  
+  def get_roles_for_user(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+  end
 
   def get_licensee_events_count
     clients = get_clients
