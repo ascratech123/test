@@ -4,150 +4,96 @@
 %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
   %section.tables-data.agendaPage
     .ml-header.relative.clear.mdl-color--light-blue-800
-      .p-t-10.p-l-40.p-r-40
-        %h3.mdl-color-text--white.m-t-20.m-b-5.agendatitle Manage Agenda
-        %span.agendalinks.m-t-20
-          = render :partial => 'admin/layouts/add_link'
-    - if !@agendas.present?
-      .mdl-typography--text-center.BlnkTxt.p-t-10
-        - page = params[:controller].split("/").second
-        - if page == "agendas"
-          - event_feature = @event.event_features.where(:name => page)
-          - page = page.titleize
-          - if event_feature.blank?
-            = "This feature is not available you need to "
-            - if @event.mobile_application.present?
-              = link_to "Enable it.", edit_admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application.id,:type => "event_edit") ,:class => " centerAlign"
-            - else
-              = link_to "Enable It.", new_admin_client_mobile_application_path(:client_id => @event.client_id) ,:class => " centerAlign"
-          - else
-            = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'agendas', :url => "/admin/events/#{params[:event_id]}/agendas/new", :msg => 'test'}
-    - else 
-      .mdl-tabs.mdl-js-tabs.ProfileTabLeft.is-upgraded{"data-upgraded" => ",MaterialTabs"}
-        .mdl-tabs__tab-bar.p-h-70
-          %a.mdl-tabs__tab.newtab{"data-target" => "agenda_timeline", :class => 'is-active', :href => "javascript:void(0);"}
-            = 'ALL'
-          .owl-carousel.owl-theme#owl-demo
-            - @agendas = agenda_group(@agendas)
-            - @agendas.keys.each_with_index do |date, index|
-              %a.mdl-tabs__tab.newtab{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
-                = date.strftime('%d %b %Y') rescue nil
       .mdl-grid.mdl-grid--no-spacing
-        %section.view-container.animate-fade-up{"data-ui-view" => ""}
-          .agendatimeline.ng-scope
-            .ui-timline-container
-              %section.ui-timeline
-                - count = 1
-                - count1 = 1
-                - @agendas.keys.each do |date|
-                  %div{:id => date, :class => "agenda_timeline newtab#{date}"}
-                    %article.tl-item
-                      .tl-body
-                        .tl-entry
-                          .tl-caption
-                            %a{:class => (count % 2 != 0) ? 'btn btn-block btn-primary' : 'btn btn-danger btn-block'} 
-                              = date.strftime('%d %b %Y') rescue nil
-                    - @agendas[date].each do |agenda|
-                      - count += 1
-                      %article{:class => (count % 2 != 0) ? 'tl-item alt' : 'tl-item'}
-                        .tl-body
-                          .tl-entry
-                            .tl-time
-                              = get_only_time_in_ampm(agenda.start_agenda_time)
-                              - if agenda.end_agenda_time.present? and  agenda.end_agenda_time.strftime("%H:%M") != "00:00"
-                                to
-                                = get_only_time_in_ampm(agenda.end_agenda_time)
-                              - else
-                                onwards
-                            - if (count1 % 4) == 1  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-info
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 2  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-warning
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 3  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-success
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 0 
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-danger
-                                %i.material-icons schedule            
-                            - count1 += 1    
-                            .tl-content
-                              %button.mdl-button.mdl-js-button.mdl-button--icon.agendaIcon.timelineTxt.f-right{:id => "demo-menu-lower-left#{agenda.id}"}
-                                %i.material-icons more_vert
-                              %ul{:for => "demo-menu-lower-left#{agenda.id}", :class => (count % 2 != 0) ? 'mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect' : 'mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect'}
-                                %li
-                                  = link_to edit_admin_event_agenda_path(@event.id, agenda.id),:class => "mdl-menu__item" do
-                                    Edit
-                                %li
-                                  = link_to admin_event_agenda_path(@event.id, agenda.id),:method => "delete",:class => "mdl-menu__item" do
-                                    Delete    
-                                / %li
-                                /   = link_to new_admin_event_agenda_path(:event_id => @event.id,:id => agenda.id),:class => "mdl-menu__item" do
-                                /     Add more
-                              %h4{:class => (count % 2 != 0) ? 'tl-tile text-primary mdl-typography--text-left' : 'tl-tile text-primary mdl-typography--text-left'}
-                                =# agenda.title rescue nil
-                                = show_link(params, agenda.id, agenda.title) rescue nil
-                              %p.description_adjust 
-                                = agenda.agenda_type 
-                                = agenda.speaker_name
-                                = agenda.discription 
-                  
-                - if @agenda_having_no_date.present?
-                  %div{:class => "agenda_timeline newtabdate"}
-                    %article.tl-item
-                      .tl-body
-                        .tl-entry
-                          .tl-caption
-                            %a{:class => (count % 2 != 0) ? 'btn btn-block btn-primary' : 'btn btn-danger btn-block'} 
-                              No Date
-                    - @agenda_having_no_date.each do |agenda|
-                      - count += 1
-                      %article{:class => (count % 2 != 0) ? 'tl-item alt' : 'tl-item'}
-                        .tl-body
-                          .tl-entry
-                            .tl-time
-                            - if (count1 % 4) == 1  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-info
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 2  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-warning
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 3  
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-success
-                                %i.material-icons schedule
-                            - elsif (count1 % 4) == 0 
-                              .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-danger
-                                %i.material-icons schedule            
-                            - count1 += 1    
-                            .tl-content
-                              %button.mdl-button.mdl-js-button.mdl-button--icon.agendaIcon.timelineTxt.f-right{:id => "demo-menu-lower-left#{agenda.id}"}
-                                %i.material-icons more_vert
-                              %ul{:for => "demo-menu-lower-left#{agenda.id}", :class => (count % 2 != 0) ? 'mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect' : 'mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect'}
-                                %li
-                                  = link_to edit_admin_event_agenda_path(@event.id, agenda.id),:class => "mdl-menu__item" do
-                                    Edit
-                                %li
-                                  = link_to admin_event_agenda_path(@event.id, agenda.id),:method => "delete",:class => "mdl-menu__item" do
-                                    Delete    
-                                / %li
-                                /   = link_to new_admin_event_agenda_path(:event_id => @event.id,:id => agenda.id),:class => "mdl-menu__item" do
-                                /     Add more
-                              %h4{:class => (count % 2 != 0) ? 'tl-tile text-primary mdl-typography--text-left' : 'tl-tile text-primary mdl-typography--text-left'}
-                                =# agenda.title rescue nil
-                                = show_link(params, agenda.id, agenda.title.capitalize) rescue nil
-                              %p.description_adjust 
-                                = agenda.discription rescue nil
+        .p-t-10.p-l-40.p-r-40
+          %h3.mdl-color-text--white.m-t-20.m-b-5.agendatitle Manage Agenda
+    .mdl-grid.mdl-grid--no-spacing
+      .mdl-cell.mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-phone
+        .p-35.ml-card-holder.ml-card-holder-first.HeaderHeight
+          .mdl-card.mdl-shadow--1dp.m-b-30.clients
+            .mdl-card__title.mdl-color--light-blue-600.mdl-typography--text-right.displayBlock
+              %h2.mdl-card__title-text.mdl-color-text--white.displayBlock.mdl-typography--text-right.displayBlock.mdl-typography--text-right.heightHeading
+                = render :partial => 'admin/layouts/add_link'
+            - if !@agendas.present?
+              .mdl-typography--text-center.BlnkTxt.p-t-10
+                - page = params[:controller].split("/").second
+                - if page == "agendas"
+                  - event_feature = @event.event_features.where(:name => page)
+                  - page = page.titleize
+                  - if event_feature.blank?
+                    = "This feature is not available you need to "
+                    - if @event.mobile_application.present?
+                      = link_to "Enable it.", edit_admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application.id,:type => "event_edit") ,:class => " centerAlign"
+                    - else
+                      = link_to "Enable It.", new_admin_client_mobile_application_path(:client_id => @event.client_id) ,:class => " centerAlign"
+                  - else
+                    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'agendas', :url => "/admin/events/#{params[:event_id]}/agendas/new", :msg => 'test'}
+            - else 
+              .mdl-tabs.mdl-js-tabs.ProfileTabLeft.agendasTab.is-upgraded{"data-upgraded" => ",MaterialTabs"}
+                .mdl-tabs__tab-bar.p-h-70
+                  / %a.mdl-tabs__tab.newtab{"data-target" => "agenda_timeline", :class => 'is-active', :href => "javascript:void(0);"}
+                  /   = 'ALL'
+                  .owl-carousel.owl-theme#owl-demo
+                    - @agendas = agenda_group(@agendas)
+                    - @agendas.keys.each_with_index do |date, index|
+                      %a.mdl-tabs__tab.newtab{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
+                        = date.strftime('%d %b %Y') rescue nil
+              .mdl-grid.mdl-grid--no-spacing
+                %section.view-container.animate-fade-up{"data-ui-view" => ""}
+                  .agendatimeline.ng-scope
+                    .ui-timline-container
+                      %section.ui-timeline
+                        - count = 1
+                        - count1 = 1
+                        - @agendas.keys.each do |date|
+                          %div{:id => date, :class => "agenda_timeline newtab#{date}"}
+                            .mdl-typography--text-center.BlnkTxt
+                              .sequence_update
+                                %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.font16.ng-scope.ng-table{"template-pagination" => "custom/pager"}
+                                  %tbody
+                                    %tr
+                                      %th Sequence
+                                      %th Title
+                                      %th Track
+                                      %th Speaker
+                                      %th Start Date/Time 
+                                      %th End Date/Time
+                                      %th Description
+                                      %th 
+                                    -@agendas[date].each do |agenda|
+                                      %tr
+                                        %td.font16
+                                        %td.font16= agenda.title
+                                        %td.font16= agenda.speaker_name
+                                        %td.font16= agenda.rating_status 
+                                        %td.font16= agenda.start_agenda_time
+                                        %td.font16= agenda.end_agenda_time
+                                        %td.font16= agenda.agenda_type
+                                        %td.IconDrp.agendtaIconDrp
+                                          = more_vert_button(agenda.id)
+                                          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
+                                            = edit_link(params, agenda.id)
+                                            = delete_link(params, agenda.id)
+                       
     - if @feedbacks.present?
       = render :partial => 'admin/layouts/more_links'
 :javascript                          
+
+  
+    $(window).load(function(){
+      $('.owl-wrapper').first().children().children().eq(0).addClass('first-date');
+      $('.first-date').trigger("click");
+    });
+    
+    
     $('.newtab').click(function(){
      var el = $(this).attr('data-target');
-     $('.agenda_timeline').fadeOut(1000);
+     $('.agenda_timeline').hide();
      $('.newtab').removeClass('is-active');
      $(this).addClass('is-active');
-     $('.'+el).fadeIn(1000);
+    /* $('.'+el).fadeIn(1000);*/
     });
+
     $(document).ready(function(){
       $('.owl-carousel').owlCarousel({
         margin:10,
@@ -171,3 +117,179 @@
         }
       })
     })  
+
+
+-if false
+  = javascript_include_tag "jquery-1.11.3.min", "owl.carousel.min"
+  = stylesheet_link_tag "owl.carousel","owl.theme"
+
+  %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
+    %section.tables-data.agendaPage
+      .ml-header.relative.clear.mdl-color--light-blue-800
+        .p-t-10.p-l-40.p-r-40
+          %h3.mdl-color-text--white.m-t-20.m-b-5.agendatitle Manage Agenda
+          %span.agendalinks.m-t-20
+            = render :partial => 'admin/layouts/add_link'
+      - if !@agendas.present?
+        .mdl-typography--text-center.BlnkTxt.p-t-10
+          - page = params[:controller].split("/").second
+          - if page == "agendas"
+            - event_feature = @event.event_features.where(:name => page)
+            - page = page.titleize
+            - if event_feature.blank?
+              = "This feature is not available you need to "
+              - if @event.mobile_application.present?
+                = link_to "Enable it.", edit_admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application.id,:type => "event_edit") ,:class => " centerAlign"
+              - else
+                = link_to "Enable It.", new_admin_client_mobile_application_path(:client_id => @event.client_id) ,:class => " centerAlign"
+            - else
+              = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => 'agendas', :url => "/admin/events/#{params[:event_id]}/agendas/new", :msg => 'test'}
+      - else 
+        .mdl-tabs.mdl-js-tabs.ProfileTabLeft.is-upgraded{"data-upgraded" => ",MaterialTabs"}
+          .mdl-tabs__tab-bar.p-h-70
+            %a.mdl-tabs__tab.newtab{"data-target" => "agenda_timeline", :class => 'is-active', :href => "javascript:void(0);"}
+              = 'ALL'
+            .owl-carousel.owl-theme#owl-demo
+              - @agendas = agenda_group(@agendas)
+              - @agendas.keys.each_with_index do |date, index|
+                %a.mdl-tabs__tab.newtab{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
+                  = date.strftime('%d %b %Y') rescue nil
+        .mdl-grid.mdl-grid--no-spacing
+          %section.view-container.animate-fade-up{"data-ui-view" => ""}
+            .agendatimeline.ng-scope
+              .ui-timline-container
+                %section.ui-timeline
+                  - count = 1
+                  - count1 = 1
+                  - @agendas.keys.each do |date|
+                    %div{:id => date, :class => "agenda_timeline newtab#{date}"}
+                      %article.tl-item
+                        .tl-body
+                          .tl-entry
+                            .tl-caption
+                              %a{:class => (count % 2 != 0) ? 'btn btn-block btn-primary' : 'btn btn-danger btn-block'} 
+                                = date.strftime('%d %b %Y') rescue nil
+                      - @agendas[date].each do |agenda|
+                        - count += 1
+                        %article{:class => (count % 2 != 0) ? 'tl-item alt' : 'tl-item'}
+                          .tl-body
+                            .tl-entry
+                              .tl-time
+                                = get_only_time_in_ampm(agenda.start_agenda_time)
+                                - if agenda.end_agenda_time.present? and  agenda.end_agenda_time.strftime("%H:%M") != "00:00"
+                                  to
+                                  = get_only_time_in_ampm(agenda.end_agenda_time)
+                                - else
+                                  onwards
+                              - if (count1 % 4) == 1  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-info
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 2  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-warning
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 3  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-success
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 0 
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-danger
+                                  %i.material-icons schedule            
+                              - count1 += 1    
+                              .tl-content
+                                %button.mdl-button.mdl-js-button.mdl-button--icon.agendaIcon.timelineTxt.f-right{:id => "demo-menu-lower-left#{agenda.id}"}
+                                  %i.material-icons more_vert
+                                %ul{:for => "demo-menu-lower-left#{agenda.id}", :class => (count % 2 != 0) ? 'mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect' : 'mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect'}
+                                  %li
+                                    = link_to edit_admin_event_agenda_path(@event.id, agenda.id),:class => "mdl-menu__item" do
+                                      Edit
+                                  %li
+                                    = link_to admin_event_agenda_path(@event.id, agenda.id),:method => "delete",:class => "mdl-menu__item" do
+                                      Delete    
+                                  / %li
+                                  /   = link_to new_admin_event_agenda_path(:event_id => @event.id,:id => agenda.id),:class => "mdl-menu__item" do
+                                  /     Add more
+                                %h4{:class => (count % 2 != 0) ? 'tl-tile text-primary mdl-typography--text-left' : 'tl-tile text-primary mdl-typography--text-left'}
+                                  =# agenda.title rescue nil
+                                  = show_link(params, agenda.id, agenda.title) rescue nil
+                                %p.description_adjust 
+                                  = agenda.agenda_type 
+                                  = agenda.speaker_name
+                                  = agenda.discription 
+                    
+                  - if @agenda_having_no_date.present?
+                    %div{:class => "agenda_timeline newtabdate"}
+                      %article.tl-item
+                        .tl-body
+                          .tl-entry
+                            .tl-caption
+                              %a{:class => (count % 2 != 0) ? 'btn btn-block btn-primary' : 'btn btn-danger btn-block'} 
+                                No Date
+                      - @agenda_having_no_date.each do |agenda|
+                        - count += 1
+                        %article{:class => (count % 2 != 0) ? 'tl-item alt' : 'tl-item'}
+                          .tl-body
+                            .tl-entry
+                              .tl-time
+                              - if (count1 % 4) == 1  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-info
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 2  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-warning
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 3  
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-success
+                                  %i.material-icons schedule
+                              - elsif (count1 % 4) == 0 
+                                .tl-icon.btn-icon-round.btn-icon.btn-icon-thin.btn-danger
+                                  %i.material-icons schedule            
+                              - count1 += 1    
+                              .tl-content
+                                %button.mdl-button.mdl-js-button.mdl-button--icon.agendaIcon.timelineTxt.f-right{:id => "demo-menu-lower-left#{agenda.id}"}
+                                  %i.material-icons more_vert
+                                %ul{:for => "demo-menu-lower-left#{agenda.id}", :class => (count % 2 != 0) ? 'mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect' : 'mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect'}
+                                  %li
+                                    = link_to edit_admin_event_agenda_path(@event.id, agenda.id),:class => "mdl-menu__item" do
+                                      Edit
+                                  %li
+                                    = link_to admin_event_agenda_path(@event.id, agenda.id),:method => "delete",:class => "mdl-menu__item" do
+                                      Delete    
+                                  / %li
+                                  /   = link_to new_admin_event_agenda_path(:event_id => @event.id,:id => agenda.id),:class => "mdl-menu__item" do
+                                  /     Add more
+                                %h4{:class => (count % 2 != 0) ? 'tl-tile text-primary mdl-typography--text-left' : 'tl-tile text-primary mdl-typography--text-left'}
+                                  =# agenda.title rescue nil
+                                  = show_link(params, agenda.id, agenda.title.capitalize) rescue nil
+                                %p.description_adjust 
+                                  = agenda.discription rescue nil
+      - if @feedbacks.present?
+        = render :partial => 'admin/layouts/more_links'
+  :javascript                          
+      $('.newtab').click(function(){
+       var el = $(this).attr('data-target');
+       $('.agenda_timeline').fadeOut(1000);
+       $('.newtab').removeClass('is-active');
+       $(this).addClass('is-active');
+       $('.'+el).fadeIn(1000);
+      });
+      $(document).ready(function(){
+        $('.owl-carousel').owlCarousel({
+          margin:10,
+          responsiveClass:true,
+           navigation : true,
+           pagination: false,
+          responsive:{
+              0:{
+                  items:1,
+                  nav:true
+              },
+              600:{
+                  items:2,
+                  nav:false
+              },
+              1000:{
+                  items:5,
+                  nav:true,
+                  loop:false
+              }
+          }
+        })
+      })  

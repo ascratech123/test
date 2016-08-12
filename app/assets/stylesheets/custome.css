@@ -86,8 +86,22 @@
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
 }
-.result_statusdiv{width:75px;}
 
+
+
+
+
+
+
+
+.agendasTab .owl-carousel.owl-theme .owl-prev{left: -21px; top: -42px;}
+.agendasTab .owl-carousel.owl-theme .owl-next{right: -21px; top: -42px;}
+
+
+.agendatimeline .agendtaIconDrp .material-icons{  color: #444444;
+    font-size: 24px;
+    margin-top: 0;}
+.result_statusdiv{width:75px;}
 /* nilam css ends here */
 
 
@@ -738,10 +752,10 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 .collapseminus .material-icons.f-left.p-r-15 {float: right;font-size: 25px;}
 .adminClick {color: #fff;display: block;font-size: 12px; line-height:21px;padding-top: 24px;opacity:0.76;font-weight:400;border-bottom: 1px solid}
 .adminClick:hover{opacity:1; color: #fff;}
-.agendaPage .ml-header{min-height:93px;}
-.agendaPage .agendatimeline{text-align:center;padding: 15px 30px;}
-.agendaPage .ui-timline-container {padding: 15px;}
-.agendaPage .ui-timeline:before {background-color:#d5d5d5;bottom: 0;content: "";left: 0;position: absolute;top: 30px;width: 1px;z-index: 0;}
+.agendaPage .ml-header{min-height:140px;}
+.agendaPage .agendatimeline{text-align:center;/*padding: 15px 30px;*/}
+.agendaPage .ui-timline-container {/*padding: 15px;*/}
+.agendaPage .ui-timeline:before {/*background-color:#d5d5d5;bottom: 0;content: "";left: 0;position: absolute;top: 30px;width: 1px;z-index: 0;*/}
 .agendaPage .ui-timeline {border-collapse: collapse;border-spacing: 0;display: table;position: relative;table-layout: fixed;width: 100%;}
 .agendaPage .ui-timeline:before {left: 50%;}
 .ui-timeline .tl-item.alt{text-align: right;}
@@ -782,6 +796,7 @@ border-color: rgba(255, 255, 255, 0.898) rgba(255, 255, 255, 0.898) transparent 
 .agendaPage p{text-align:justify; line-height:21px;}
 .agendaIcon{margin-top: 8px;}
 .view-container .agendatimeline .agenda_timeline{width: 100%; clear:both; display:table;transition: all 0.0.2s ease;}
+
 .galleryLayout li:nth-of-type(4n+4){margin-right: 0px;}
 .agendatimeline .material-icons {color: #fff;font-size: 14px;margin-top: 10px;vertical-align: middle;}
 input.mdl-button[type="submit"]{text-transform: capitalize;}
