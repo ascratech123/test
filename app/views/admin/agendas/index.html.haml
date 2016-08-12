@@ -51,10 +51,12 @@
                         .tl-body
                           .tl-entry
                             .tl-time
-                              = get_only_time_in_ampm(agenda.start_agenda_time)
+                              = agenda.start_agenda_time.strftime('%l:%M %p') rescue nil
+                              / = get_only_time_in_ampm(agenda.start_agenda_time)
                               - if agenda.end_agenda_time.present? and  agenda.end_agenda_time.strftime("%H:%M") != "00:00"
                                 to
-                                = get_only_time_in_ampm(agenda.end_agenda_time)
+                                = agenda.end_agenda_time.strftime('%l:%M %p') rescue nil
+                                / = get_only_time_in_ampm(agenda.end_agenda_time)
                               - else
                                 onwards
                             - if (count1 % 4) == 1  
