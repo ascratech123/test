@@ -34,17 +34,17 @@
                   / %a.mdl-tabs__tab.newtab{"data-target" => "agenda_timeline", :class => 'is-active', :href => "javascript:void(0);"}
                   /   = 'ALL'
                   .owl-carousel.owl-theme#owl-demo
-                    - @agendas = agenda_group(@agendas)
-                    - @agendas.keys.each_with_index do |date, index|
+                    - @agendas = agenda_group(@agendas)  
+                    - @agendas.keys.each_with_index do |date, index|  
                       %a.mdl-tabs__tab.newtab{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
                         = date.strftime('%d %b %Y') rescue nil
-              .mdl-grid.mdl-grid--no-spacing
+              .mdl-grid.mdl-grid--no-spacing 
                 %section.view-container.animate-fade-up{"data-ui-view" => ""}
-                  .agendatimeline.ng-scope
-                    .ui-timline-container
-                      %section.ui-timeline
-                        - count = 1
-                        - count1 = 1
+                  .agendatimeline.ng-scope 
+                    .ui-timline-container 
+                      %section.ui-timeline 
+                        - count = 1 
+                        - count1 = 1 
                         - @agendas.keys.each do |date|
                           %div{:id => date, :class => "agenda_timeline newtab#{date}"}
                             .mdl-typography--text-center.BlnkTxt
