@@ -58,7 +58,7 @@
     /         %i.fa.fa-bar-chart.fs22.text-default
     / -------------- /Topbar --------------
     / -------------- Content --------------
-    - if !current_user.has_role? :telecaller
+    - if !current_user.has_any_role?(:telecaller,:volunteer)
       %section#content.table-layout.animated.fadeIn
         / -------------- Column Center --------------
         .chute.chute-center

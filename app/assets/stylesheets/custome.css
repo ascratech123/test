@@ -79,6 +79,8 @@
   }
 }
 /*nilam*/
+.md-checkbox input[type="checkbox"] + .checkbox.venue_checkbox{margin-top: 0px;}
+.venue_chk_ml0 .md-checkbox{margin-left:0px;}
 .titleQuestion{margin-left:15px;}
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 .mdl-data-table .notiTabinfo{ width:44%;}

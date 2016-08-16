@@ -268,4 +268,8 @@
             %li
               - if @event.present?
                 = link_to new_admin_event_my_travel_path(:importable_type => 'my_travel', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                  Import   
+                  Import  
+          - when 'invitee_access'
+            %li
+              = link_to new_admin_event_invitee_access_path(:importable_type => 'invitee_access', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                Import Invitee Access 

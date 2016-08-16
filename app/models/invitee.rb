@@ -7,6 +7,7 @@ class Invitee < ActiveRecord::Base
   attr_accessor :password
   
   belongs_to :event
+  belongs_to :venue_section
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
   has_many :conversations, :class_name => 'Conversation', :foreign_key => 'user_id'  
   has_many :comments, :class_name => 'Comment', :foreign_key => 'user_id'  
@@ -497,6 +498,14 @@ class Invitee < ActiveRecord::Base
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
 
+  def venue_section_access
+    venue_sections = VenueSection.where(:event_id => self.event_id)
+    hsh = {}
+    venue_sections.each do |vs|
+      hsh[vs.name] = InviteeAccess.where(:invitee_id => self.id, :venue_section_id => vs.id).present? ? 'yes' : 'no'
+    end
+    hsh
+  end
 
   private
 
