@@ -64,11 +64,11 @@
                                       %tr
                                         %td.font16
                                         %td.font16= agenda.title
-                                        %td.font16= agenda.speaker_name
-                                        %td.font16= agenda.rating_status 
+                                        %td.font16= agenda.agenda_type
+                                        %td.font16= agenda.speaker_name 
                                         %td.font16= agenda.start_agenda_time
                                         %td.font16= agenda.end_agenda_time
-                                        %td.font16= agenda.agenda_type
+                                        %td.font16= agenda.discription
                                         %td.IconDrp.agendtaIconDrp
                                           = more_vert_button(agenda.id)
                                           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
