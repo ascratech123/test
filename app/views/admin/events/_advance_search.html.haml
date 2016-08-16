@@ -16,12 +16,12 @@
         = text_field_tag "search[end_date]", adv_search_value(params,"end_date"), :class => "mdl-textfield__input", :id => "date-end",  :type => "text"
         %label.mdl-textfield__label{:for => "select"} Search by End Date
         / ====================
-    .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
-      .mdl-textfield.mdl-js-textfield
-        = select_tag "search[order_by]",options_for_select([["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]], :selected => adv_search_value(params,"order_by")), :prompt => 'Search by Event Category'
-    .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
-      .mdl-textfield.mdl-js-textfield
-        = select_tag "search[order_by_status]",options_for_select([["Pending","pending"],["Rejected", "rejected"],["Published", "published"],["Approved", "approved"]], :selected => adv_search_value(params,"order_by_status")), :prompt => 'Search by Status'    
-        = hidden_field_tag :admin_search, "true"
-        = hidden_field_tag :adv_search, "true"
-      / ,["Active", "active"],["Deactive", "deactive"]
+    / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
+    /   .mdl-textfield.mdl-js-textfield
+    /     = select_tag "search[order_by]",options_for_select([["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]], :selected => adv_search_value(params,"order_by")), :prompt => 'Search by Event Category'
+    / .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
+    /   .mdl-textfield.mdl-js-textfield
+    /     = select_tag "search[order_by_status]",options_for_select([["Pending","pending"],["Rejected", "rejected"],["Published", "published"],["Approved", "approved"]], :selected => adv_search_value(params,"order_by_status")), :prompt => 'Search by Status'    
+    /     = hidden_field_tag :admin_search, "true"
+    /     = hidden_field_tag :adv_search, "true"
+    / ,["Active", "active"],["Deactive", "deactive"]
