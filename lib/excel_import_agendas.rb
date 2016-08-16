@@ -1,18 +1,17 @@
 require 'rubygems'
 require 'roo'
-require 'open-uri'
 # require 'zip/zipfilesystem'
 #include ActiveSupport::Inflector
 
-module ExcelInvitee
+module ExcelImportAgenda
 #options => {:start_row => 'start_row_number'}
   def self.save(file_path, klass_name, event_id,attributes=[], operation='add', options={})
-    attributes = Invitee.column_names
-    attributes -= ["id","event_name","event_id","created_at", "updated_at"]
+    attributes = Agenda.column_names
+    attributes -= ["id","event_id","created_at", "updated_at"]
     objekts = self.prepare_objekts(file_path, klass_name, event_id, attributes, operation, options)
-    errors = ExcelInvitee.validate_objekts(objekts)
+    errors = ExcelImportAgenda.validate_objekts(objekts)
     if errors.blank?
-      ExcelInvitee.save_objekts(objekts)
+      ExcelImportAgenda.save_objekts(objekts)
       return {:is_saved => true}
     else
       excel_errors = "Errors found at rows: #{errors.to_sentence}"
@@ -47,28 +46,17 @@ module ExcelInvitee
     start_row.upto(workbook.last_row) do |line|
       objekt = nil
       objekt = {} #klass_name.classify.constantize.new()
+
+      # speakers = Speaker.where("event_id =?", event_id) if event_id.present?
+      # speaker_id = speakers.find_by_speaker_name(objekt['speaker']).id rescue ""
+
       columns_in_worksheet.each_with_index do |attrib, index|
         # objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
-        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(Numeric) ? (workbook.cell(line, letters_array[index]).to_s.strip rescue '') : (workbook.cell(line, letters_array[index]).strip rescue '')
+        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(String) ? (workbook.cell(line, letters_array[index]).strip rescue '') : (workbook.cell(line, letters_array[index]))
       end
-      email = objekt['email'].downcase rescue nil
-      invitee = Invitee.find_or_initialize_by(:email => email, :event_id => event_id)
-      if objekt["password"].present?
-        password = objekt["password"]
-      else
-        password = nil
-      end
-      if objekt["profile_picture"].present?
-        profile_url = objekt["profile_picture"] rescue nil
-        data = open(profile_url).read rescue nil
-        write_file_content = File.open("public/#{profile_url.split('/').last}", 'wb') do |f|
-          f.write(data)
-        end
-        profile_picture = (File.open("public/#{profile_url.split('/').last}",'rb'))
-      end
-      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_link"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_link"], :twitter_id => objekt["twitter_link"],:invitee_password => password,:password => password, :profile_pic => profile_picture)
-      objekts << invitee
-      File.delete("public/#{profile_url.split('/').last}") if profile_url.present? and File.exist?("public/#{profile_url.split('/').last}")
+      agenda = Agenda.new
+      agenda.assign_attributes(:event_id => event_id,:title => objekt['title'], :agenda_type => objekt['track'],:speaker_name => objekt['speaker'], :start_agenda_date => objekt['start_date_dd_mm_yyyy'], :start_time_hour => objekt["start_time_hour"],:start_time_minute => objekt["start_time_minute"],:start_time_am => objekt["start_time_am_pm"], :end_agenda_date => objekt["end_date_dd_mm_yyyy"],:end_time_hour => objekt["end_time_hour"],:end_time_minute => objekt["end_time_minute"],:end_time_am => objekt["end_time_am_pm"], :discription => objekt["description"], :rating_status => objekt["session_rating"])
+      objekts << agenda
     end
     objekts.compact
   end

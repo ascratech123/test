@@ -106,6 +106,10 @@ class Invitee < ActiveRecord::Base
     self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
   end
 
+  def profile_picture
+    self.profile_pic.url rescue ""
+  end
+  
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end

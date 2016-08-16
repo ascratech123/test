@@ -51,6 +51,9 @@
               - if @event.present? and @speakers.present?
                 = link_to admin_event_speakers_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
+              - if @event.present?
+                = link_to new_admin_event_speaker_path(:importable_type => 'speaker', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                  Import
                 - if @feedbacks.present?
                   = link_to admin_event_speakers_path(:event_id => @event.id, :export_type => 'Feedback', :format => 'xls'),:class => "centerAlign" do
                     Export Feedback
@@ -70,6 +73,8 @@
               - if @event.present? and @feedbacks.present?
                 = link_to admin_event_agendas_path(:event_id => @event.id, :format => 'xls', :export_type => 'Feedback'),:class => "centerAlign" do
                   Export Session Feedback
+              = link_to new_admin_event_agenda_path(:importable_type => 'agenda', :importable_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                Import
           - when 'invitee'
             %li
               - if params[:show_history] != "true" and @event.present?

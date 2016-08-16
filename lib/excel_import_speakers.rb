@@ -4,15 +4,15 @@ require 'open-uri'
 # require 'zip/zipfilesystem'
 #include ActiveSupport::Inflector
 
-module ExcelInvitee
+module ExcelImportSpeaker
 #options => {:start_row => 'start_row_number'}
   def self.save(file_path, klass_name, event_id,attributes=[], operation='add', options={})
-    attributes = Invitee.column_names
-    attributes -= ["id","event_name","event_id","created_at", "updated_at"]
+    attributes = Speaker.column_names
+    attributes -= ["id","event_id","created_at", "updated_at"]
     objekts = self.prepare_objekts(file_path, klass_name, event_id, attributes, operation, options)
-    errors = ExcelInvitee.validate_objekts(objekts)
+    errors = ExcelImportSpeaker.validate_objekts(objekts)
     if errors.blank?
-      ExcelInvitee.save_objekts(objekts)
+      ExcelImportSpeaker.save_objekts(objekts)
       return {:is_saved => true}
     else
       excel_errors = "Errors found at rows: #{errors.to_sentence}"
@@ -51,23 +51,23 @@ module ExcelInvitee
         # objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
         objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(Numeric) ? (workbook.cell(line, letters_array[index]).to_s.strip rescue '') : (workbook.cell(line, letters_array[index]).strip rescue '')
       end
-      email = objekt['email'].downcase rescue nil
-      invitee = Invitee.find_or_initialize_by(:email => email, :event_id => event_id)
-      if objekt["password"].present?
-        password = objekt["password"]
-      else
-        password = nil
-      end
+      email = objekt['email_address'].downcase rescue nil
+      speaker = Speaker.find_or_initialize_by(:email_address => email, :event_id => event_id)
       if objekt["profile_picture"].present?
         profile_url = objekt["profile_picture"] rescue nil
         data = open(profile_url).read rescue nil
-        write_file_content = File.open("public/#{profile_url.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{profile_url.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          profile_picture = (File.open("public/#{profile_url.split('/').last}",'rb'))
+          speaker.profile_pic = profile_picture
+        else
+          speaker.errors.add(:profile_pic, "Incorrect URL")
         end
-        profile_picture = (File.open("public/#{profile_url.split('/').last}",'rb'))
       end
-      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_link"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_link"], :twitter_id => objekt["twitter_link"],:invitee_password => password,:password => password, :profile_pic => profile_picture)
-      objekts << invitee
+      speaker.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company => objekt['company'], :designation => objekt['designation'], :phone_no => objekt["phone_no"],:speaker_info => objekt['speaker_bio'], :rating_status => objekt['rating'])
+      objekts << speaker
       File.delete("public/#{profile_url.split('/').last}") if profile_url.present? and File.exist?("public/#{profile_url.split('/').last}")
     end
     objekts.compact
@@ -76,7 +76,11 @@ module ExcelInvitee
   def self.validate_objekts(objekts)
     error_rows = []
     objekts.each_with_index do |objekt, index|
-      error_rows << "row#{index + 2} :   #{objekt.errors.full_messages.join(", ")}\n" if objekt.invalid?
+      if objekt.errors.present?
+        error_rows << "row#{index + 2} :   #{objekt.errors.full_messages.join(", ")}\n"
+      else
+        error_rows << "row#{index + 2} :   #{objekt.errors.full_messages.join(", ")}\n" if objekt.invalid?
+      end  
       Rails.logger.info objekt.errors.inspect
     end
     error_rows
