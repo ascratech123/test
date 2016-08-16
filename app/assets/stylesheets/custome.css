@@ -278,14 +278,15 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .search_header + div{width:85px;}
 /* nilam css ends here */
 
-
-
-
+/*nilam*/
+.md-checkbox input[type="checkbox"] + .checkbox.venue_checkbox{margin-top: 0px;}
+.venue_chk_ml0 .md-checkbox{margin-left:0px;}
+.titleQuestion{margin-left:15px;}
+.col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 /*Azeem CSS Start*/
 
 .m12t{margin-top:12px;}
 .top6{position: relative; top:6px;}
-.top3{position: relative; top:3px;}
 .fixed-activon-btn-new.btn-bottom{text-align: center;position: static;background-color: #f5f5f5;}
 .scroller-sm.heightAuto{height: auto;max-height: none;}
 .btn-deactive{background-color:#4d4e4f;}

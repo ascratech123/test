@@ -284,3 +284,7 @@
               - if @event.present? and @user_registrations.present?
                 = link_to admin_event_user_registrations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
+          - when 'invitee_access'
+            %li
+              = link_to new_admin_event_invitee_access_path(:importable_type => 'invitee_access', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                Import Invitee Access 

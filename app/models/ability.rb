@@ -104,6 +104,11 @@ class Ability
       can :create, Edm
       can :manage, Edm, :campaign_id => campaign_ids
 
+      can :create, InviteeAccess
+      can :manage, InviteeAccess, :event_id => e_ids
+      can :create, VenueSection
+      can :manage, VenueSection, :event_id => e_ids
+
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
       can :manage, Feedback#, :speaker_id => s_ids

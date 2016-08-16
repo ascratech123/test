@@ -1,0 +1,36 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  .save_button.mdl-card
+    = form_for [:admin, @event ,@invitee_access], :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-t-8.m-b-15
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Invitee
+            .col-lg-7
+              - default_grouping = @invitees.collect{|p| [ p.name_of_the_invitee, p.id ]}
+              %i.arrow.single
+              = f.select("invitee_access", "invitee_id", default_grouping, {:selected => f.object.invitee_id,:prompt => "#{(f.object.invitee_id.present?) ? f.object.invitee_id : "Select Invitee" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck.venue_access_div
+          .form-group.mobiappstype.venue_chk_ml0
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt
+                Venue Access
+            .col-lg-7.p-h-12.socialchk
+              - @venue_sections.each do |venue_section|
+                .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                  %label.help-tip{:for => "venue_access_#{venue_section.id}"}
+                    = check_box_tag "invitee_access[venue_section_id][]",venue_section.id,(f.object.venue_section_id.present? and (f.object.venue_section_id.present? and f.object.venue_section_id == venue_section.id) ? "checked" : false), :id => "venue_access_#{venue_section.id}"
+                    %span.checkbox.venue_checkbox
+                    %span.top3
+                      = venue_section.name
+        = f.hidden_field :event_id, :value => @event.id rescue nil       
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)

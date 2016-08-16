@@ -19,7 +19,6 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-  
  $('.table tr').last().addClass('last-tr')
  $('.table tr:nth-last-child(2)').addClass('scndlast-tr')
  
@@ -536,6 +535,10 @@ function flightTime() {
 });
 /* EDM Form JS end */
 
+  /*Sponsor index page*/
+  $(document).ready(function() {
+    $(".edit_delete_td,.edit_delete_th").hide();
+  });
   /* Event _Form  start */
     // $('#selectAll').click(function() {
     //   $(':checkbox').each(function() {

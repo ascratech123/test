@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :venue_sections, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
@@ -132,8 +133,7 @@ class Event < ActiveRecord::Base
       self.mobile_application.update_column(:login_at, app_login)
       self.mobile_application.update_column(:updated_at, Time.now)
       self.mobile_application.events.each do |event|
-        login_at = self.login_at || mobile_application.events.first.login_at rescue 'Before Interaction'
-        event.update_column(:login_at, login_at)
+        event.update_column(:login_at, self.login_at)
         event.update_column(:updated_at, Time.now) rescue nil
       end
     end
