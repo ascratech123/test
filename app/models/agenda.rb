@@ -14,8 +14,10 @@ class Agenda < ActiveRecord::Base
   after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected
   before_save :check_category_present_if_new_category_select_from_dropdown
+  before_create :set_sequence_no
 
-  default_scope { order('start_agenda_time asc') }
+  # default_scope { order('start_agenda_time asc') }
+  default_scope { order("sequence") }
 
   def start_agenda_time_is_after_agenda_date
     return if self.start_agenda_time.blank? 
@@ -82,4 +84,9 @@ class Agenda < ActiveRecord::Base
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
     end
   end
+
+  def set_sequence_no
+    self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
 end
