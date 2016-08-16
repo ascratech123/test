@@ -21,7 +21,7 @@
         /   %img{:src => "/assets/funnel.png"}/
 
         = form_tag admin_client_events_url(:client_id => @client.id), :method => :get, :class=> "event_index_category_filter_form drop category_dropdown" do
-          = select_tag "search[order_by]",options_for_select([["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]], :selected => adv_search_value(params,"order_by")), :prompt => 'Event Category'
+          = select_tag "search[order_by]",options_for_select([["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]], :selected => adv_search_value(params,"order_by")), :prompt => ' Event Category'
           = hidden_field_tag :admin_search, "true"
           = hidden_field_tag :adv_search, "true"
       / - if !current_user.has_role? :moderator
