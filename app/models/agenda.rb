@@ -16,8 +16,8 @@ class Agenda < ActiveRecord::Base
   before_save :check_category_present_if_new_category_select_from_dropdown
   before_create :set_sequence_no
 
-  # default_scope { order('start_agenda_time asc') }
-  default_scope { order("sequence") }
+  default_scope { order('start_agenda_time asc') }
+  # default_scope { order("sequence") }
 
   def start_agenda_time_is_after_agenda_date
     return if self.start_agenda_time.blank? 
