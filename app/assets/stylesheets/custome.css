@@ -95,12 +95,8 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 }
 .category_dropdown {margin-bottom: 0px;}
 .category_dropdown .select2-container--default .select2-selection--single .select2-selection__arrow{
-background:url(/assets/funnel.png) no-repeat; height:17px; top:18px;}
+background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-20px;}
 
-@media screen and (-webkit-min-device-pixel-ratio:0)
-{ 
- .category_dropdown .select2-container--default .select2-selection--single .select2-selection__arrow{ right:-20px;}
-}
 
 
 .select2.select2-container.select2-container--default{width:auto !important;}
