@@ -6,13 +6,6 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-use Rack::Cors do
-  allow do
-    origins '*'
-    resource '*', headers: :any, methods: :any
-  end  
-end
-
 module Shobiz
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
