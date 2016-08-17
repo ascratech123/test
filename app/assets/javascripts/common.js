@@ -532,6 +532,36 @@ function flightTime() {
         $(this).parent().next('.input_box_url').css('display','none');
     }
   });
+  /* js for events/invitee/speakers listing filter */ 
+  $( document ).ready(function() {   
+    $('#search_order_by').on('change', function(){        
+      $(".event_index_category_filter_form").submit();            
+    });
+    $('#search_order_by_status').on('change', function(){        
+      $(".event_index_status_filter_form").submit();            
+    });
+    $('#search_company_name').on('change', function(){        
+      $("#search_invitee_by_cname").submit();            
+    });
+    $('#search_designation').on('change', function(){        
+      $("#search_invitee_by_designation").submit();            
+    });
+    $('#search_invitee_status').on('change', function(){        
+      $("#search_invitee_by_invitee_status").submit();            
+    });
+    $('#search_visible_status').on('change', function(){        
+      $("#search_invitee_by_visible_status").submit();            
+    });
+    $('#search_login_status').on('change', function(){        
+      $("#search_invitee_by_login_status").submit();            
+    });
+    $('#search_designation').on('change', function(){        
+      $("#search_speakers_by_designation").submit();            
+    });
+    $('#search_company_name').on('change', function(){        
+      $("#search_speakers_by_cname").submit();            
+    });
+  });   
 });
 /* EDM Form JS end */
 

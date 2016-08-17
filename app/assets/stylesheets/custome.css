@@ -90,6 +90,30 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
   -webkit-animation-delay: -0.8s;
   animation-delay: -0.8s;
 }
+.category_dropdown {margin-bottom: 0px;}
+.category_dropdown .select2-container--default .select2-selection--single .select2-selection__arrow{
+background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;}
+
+
+
+
+
+.category_dropdown .select2-container{box-shadow:none; padding:0px; width:130px !important;}
+
+.category_dropdown.search_status .select2-container{box-shadow:none; padding:0px; width:100px !important;}
+
+.category_dropdown .select2-container--default .select2-selection--single{border:0 none;}
+.category_dropdown .select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border:0 none;}
+.category_dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+  border:0 none;}
+.category_dropdown .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height:53px;color:#000;padding:0px}
+ 
+
+
+
+
 
 @-webkit-keyframes sk-stretchdelay {
   0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
@@ -104,6 +128,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }
+
 }
 
 /*rwd table css start - Deepti */    
@@ -914,9 +939,9 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 /*============================= menu active link  ======================================= */
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600{-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600:hover{box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);-webkit-transform: scale(0.9,0.9);transform: scale(0.9,0.9);opacity:1;-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
-.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
+.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
 /*============================= Agenda Start css   ======================================= */
 /*.HeaderUserName .mdl-menu__container.is-upgraded.is-visible{max-height: 300px !important; overflow-y:auto;} */ 
 .newRightsearch .mdl-textfield{display:block !important; width:calc(50% - 16px);text-align: right;}

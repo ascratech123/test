@@ -33,11 +33,12 @@ class Speaker < ActiveRecord::Base
   default_scope { order("sequence") }  
 
   def self.search(params, speakers)
-    speaker_name,email_address,designation = params[:search][:name],params[:search][:email_address],params[:search][:designation] if params[:adv_search].present?
+    speaker_name,email_address,designation,company_name = params[:search][:name],params[:search][:email_address],params[:search][:designation],params[:search][:company_name] if params[:adv_search].present?
     basic = params[:search_keyword]
     speakers = speakers.where("speaker_name like ?", "%#{speaker_name}%") if   speaker_name.present?
     speakers = speakers.where("email_address like ?", "%#{email_address}%") if  email_address.present?
-    speakers = speakers.where("designation like ?", "%#{designation}%") if  designation.present?
+    speakers = speakers.where(designation: designation) if designation.present?
+    speakers = speakers.where(company:  company_name) if company_name.present?    
     speakers = speakers.where("speaker_name like ? or company like ? or designation like ?", "%#{basic}%","%#{basic}%","%#{basic}%") if basic.present?
     speakers
   end
