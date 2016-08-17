@@ -25,7 +25,6 @@ class Agenda < ActiveRecord::Base
     end_event_date = self.event.end_event_time rescue nil
     start_agenda_time = self.start_agenda_time rescue nil
     end_agenda_time = self.end_agenda_time rescue nil
-    
     if start_event_date.present? and end_event_date.present? and start_agenda_time.present?
       if !start_agenda_time.between?(start_event_date, end_event_date)
         errors.add(:start_agenda_date, "Date must be between event dates")
