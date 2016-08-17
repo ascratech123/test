@@ -317,6 +317,15 @@ class Invitee < ActiveRecord::Base
     data
   end
 
+  def get_analytics(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids) rescue []
+    data = analytics.as_json() if analytics.present?
+    data
+  end
+
   def get_my_profile(mobile_app_code,submitted_app)
     data = {}
     data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url, :rank])
