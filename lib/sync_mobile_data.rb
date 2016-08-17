@@ -44,7 +44,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    ["CkeditorAsset" ,"UserRegistration","Analytic","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session'].each {|value| model_name.delete(value)}
+    ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session'].each {|value| model_name.delete(value)}
     model_name.each do |model|
       info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
@@ -166,6 +166,13 @@ module SyncMobileData
         when 'EKit' 
           info = EKit.get_e_kits_all_events(event_ids, start_event_date, end_event_date)
           data[:"#{name_table(model)}"] = info rescue []
+        when 'Analytic'  
+          if current_user.present?
+            user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, current_user.email).pluck(:id) rescue nil
+            analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids).where(:updated_at => start_event_date..end_event_date) rescue []
+            info = analytics.as_json() rescue []
+            data[:"#{name_table(model)}"] = info
+          end
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
