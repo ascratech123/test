@@ -1,5 +1,9 @@
 class LoggingObserver < ActiveRecord::Observer
+<<<<<<< HEAD
   observe Client, Event, Speaker, Attendee, Agenda, Invitee, Role, User, Poll, Feedback, Qna, Sponsor, Theme, Winner, Award, Comment, Conversation, EventFeature, Faq, Image, Like, Rating, HighlightImage,Favorite, Quiz,UserQuiz,Exhibitor, Panel, MyTravel
+=======
+  observe Client, Event, Speaker, Attendee, Agenda, Invitee, Role, User, Poll, Feedback, Qna, Sponsor, Theme, Winner, Award, Comment, Conversation, EventFeature, Faq, Image, Like, Rating, HighlightImage,Favorite, Quiz,UserQuiz,Exhibitor, Notification, InviteeNotification, MyTravel, Edm, Campaign, UserRegistration, Analytic, SmtpSetting, Grouping, StoreInfo, StoreScreenshot, EKit, PushPemFile, EventGroup, Import, InviteeDatum, InviteeStructure, InviteeGroup, TelecallerAccessibleColumn, EdmMailSent, Panel
+>>>>>>> send_password
 
   def after_validation(record)
   	if record.errors.present?

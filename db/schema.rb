@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160603094750) do
+ActiveRecord::Schema.define(version: 20160711050255) do
 
   create_table "abouts", force: :cascade do |t|
     t.text     "description", limit: 65535
@@ -101,6 +101,15 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   add_index "awards", ["event_id"], name: "index_awards_on_event_id", using: :btree
   add_index "awards", ["sequence"], name: "index_sequence_on_awards", using: :btree
   add_index "awards", ["title"], name: "index_title_on_awards", using: :btree
+
+  create_table "campaigns", force: :cascade do |t|
+    t.integer  "event_id",      limit: 4
+    t.string   "campaign_name", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
+  end
 
   create_table "chats", force: :cascade do |t|
     t.string   "chat_type",  limit: 255
@@ -285,6 +294,31 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   end
 
   add_index "e_kits", ["event_id"], name: "index_e_kits_on_event_id", using: :btree
+
+  create_table "edms", force: :cascade do |t|
+    t.integer  "campaign_id",               limit: 4
+    t.string   "subject_line",              limit: 255
+    t.datetime "edm_broadcast_time"
+    t.string   "template_type",             limit: 255
+    t.text     "custom_code",               limit: 65535
+    t.string   "default_template",          limit: 255
+    t.string   "edm_broadcast_value",       limit: 255
+    t.string   "header_image_file_name",    limit: 255
+    t.string   "header_image_content_type", limit: 255
+    t.integer  "header_image_file_size",    limit: 4
+    t.datetime "header_image_updated_at"
+    t.string   "footer_image_file_name",    limit: 255
+    t.string   "footer_image_content_type", limit: 255
+    t.integer  "footer_image_file_size",    limit: 4
+    t.datetime "footer_image_updated_at"
+    t.text     "body",                      limit: 65535
+    t.string   "flag",                      limit: 255,   default: "0"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.string   "group_type",                limit: 255
+    t.string   "group_id",                  limit: 255
+    t.string   "database_email_field",      limit: 255
+  end
 
   create_table "emergency_exits", force: :cascade do |t|
     t.string   "event_name",                  limit: 255
@@ -492,11 +526,12 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   add_index "feedbacks", ["question"], name: "index_question_on_feedbacks", using: :btree
 
   create_table "groupings", force: :cascade do |t|
-    t.integer  "event_id",   limit: 4
-    t.string   "name",       limit: 255
-    t.text     "condition",  limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "event_id",      limit: 4
+    t.string   "name",          limit: 255
+    t.text     "condition",     limit: 65535
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "default_group", limit: 255,   default: "false"
   end
 
   create_table "highlight_images", force: :cascade do |t|
@@ -578,6 +613,16 @@ ActiveRecord::Schema.define(version: 20160603094750) do
     t.text     "invitee_ids", limit: 65535
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+  end
+
+  create_table "invitee_notifications", force: :cascade do |t|
+    t.integer  "event_id",        limit: 4
+    t.integer  "invitee_id",      limit: 4
+    t.integer  "notification_id", limit: 4
+    t.string   "open",            limit: 255, default: "false"
+    t.string   "unread",          limit: 255, default: "true"
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   create_table "invitee_structures", force: :cascade do |t|
@@ -704,8 +749,8 @@ ActiveRecord::Schema.define(version: 20160603094750) do
     t.string   "name",                                   limit: 255
     t.string   "application_type",                       limit: 255
     t.integer  "client_id",                              limit: 4
-    t.datetime "created_at",                                                              null: false
-    t.datetime "updated_at",                                                              null: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
     t.string   "app_icon_file_name",                     limit: 255
     t.string   "app_icon_content_type",                  limit: 255
     t.integer  "app_icon_file_size",                     limit: 4
@@ -734,7 +779,7 @@ ActiveRecord::Schema.define(version: 20160603094750) do
     t.string   "login_button_color",                     limit: 255
     t.string   "login_button_text_color",                limit: 255
     t.string   "listing_screen_text_color",              limit: 255
-    t.string   "social_media_status",                    limit: 255,   default: "active"
+    t.string   "social_media_status",                    limit: 255
   end
 
   add_index "mobile_applications", ["application_type"], name: "index_on_application_type_in_mobile_applications", using: :btree
@@ -743,14 +788,36 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   add_index "mobile_applications", ["updated_at"], name: "index_on_updated_at_in_mobile_applications", using: :btree
 
   create_table "my_travels", force: :cascade do |t|
-    t.string   "invitee_id",               limit: 255
-    t.integer  "event_id",                 limit: 4
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "attach_file_file_name",    limit: 255
-    t.string   "attach_file_content_type", limit: 255
-    t.integer  "attach_file_file_size",    limit: 4
+    t.string   "invitee_id",                 limit: 255
+    t.integer  "event_id",                   limit: 4
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.string   "attach_file_file_name",      limit: 255
+    t.string   "attach_file_content_type",   limit: 255
+    t.integer  "attach_file_file_size",      limit: 4
     t.datetime "attach_file_updated_at"
+    t.string   "attach_file_1_name",         limit: 255
+    t.string   "attach_file_2_file_name",    limit: 255
+    t.string   "attach_file_2_content_type", limit: 255
+    t.integer  "attach_file_2_file_size",    limit: 4
+    t.datetime "attach_file_2_updated_at"
+    t.string   "attach_file_2_name",         limit: 255
+    t.string   "attach_file_3_file_name",    limit: 255
+    t.string   "attach_file_3_content_type", limit: 255
+    t.integer  "attach_file_3_file_size",    limit: 4
+    t.datetime "attach_file_3_updated_at"
+    t.string   "attach_file_3_name",         limit: 255
+    t.string   "attach_file_4_file_name",    limit: 255
+    t.string   "attach_file_4_content_type", limit: 255
+    t.integer  "attach_file_4_file_size",    limit: 4
+    t.datetime "attach_file_4_updated_at"
+    t.string   "attach_file_4_name",         limit: 255
+    t.string   "attach_file_5_file_name",    limit: 255
+    t.string   "attach_file_5_content_type", limit: 255
+    t.integer  "attach_file_5_file_size",    limit: 4
+    t.datetime "attach_file_5_updated_at"
+    t.string   "attach_file_5_name",         limit: 255
+    t.string   "comment_box",                limit: 255
   end
 
   add_index "my_travels", ["event_id"], name: "index_my_travels_on_event_id", using: :btree
@@ -768,8 +835,8 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   create_table "notifications", force: :cascade do |t|
     t.string   "action",             limit: 255
     t.integer  "sender_id",          limit: 4
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
     t.text     "description",        limit: 65535
     t.string   "push_page",          limit: 255
     t.integer  "page_id",            limit: 4
@@ -781,6 +848,9 @@ ActiveRecord::Schema.define(version: 20160603094750) do
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
+    t.string   "notification_type",  limit: 255
+    t.string   "open",               limit: 255,   default: "false"
+    t.string   "unread",             limit: 255,   default: "true"
   end
 
   add_index "notifications", ["event_id"], name: "index_faqs_on_event_id", using: :btree
@@ -924,6 +994,9 @@ ActiveRecord::Schema.define(version: 20160603094750) do
     t.text     "external_login_url",  limit: 65535
     t.text     "external_login_surl", limit: 65535
     t.string   "template",            limit: 255
+    t.string   "on_mobile_app",       limit: 255
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   create_table "registrations", force: :cascade do |t|
@@ -1106,6 +1179,15 @@ ActiveRecord::Schema.define(version: 20160603094750) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
+  create_table "telecaller_accessible_columns", force: :cascade do |t|
+    t.text     "accessible_attribute", limit: 65535
+    t.integer  "event_id",             limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "telecaller_accessible_columns", ["event_id"], name: "index_telecaller_accessible_columns_on_event_id", using: :btree
+
   create_table "themes", force: :cascade do |t|
     t.integer  "licensee_id",                         limit: 4
     t.string   "name",                                limit: 255
@@ -1173,31 +1255,32 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   add_index "user_quizzes", ["user_id"], name: "index_user_quizzes_on_user_id", using: :btree
 
   create_table "user_registrations", force: :cascade do |t|
-    t.integer  "registration_id", limit: 4
-    t.integer  "invitee_id",      limit: 4
-    t.integer  "event_id",        limit: 4
-    t.string   "field1",          limit: 255
-    t.string   "field2",          limit: 255
-    t.string   "field3",          limit: 255
-    t.string   "field4",          limit: 255
-    t.string   "field5",          limit: 255
-    t.string   "field6",          limit: 255
-    t.string   "field7",          limit: 255
-    t.string   "field8",          limit: 255
-    t.string   "field9",          limit: 255
-    t.string   "field10",         limit: 255
-    t.string   "field11",         limit: 255
-    t.string   "field12",         limit: 255
-    t.string   "field13",         limit: 255
-    t.string   "field14",         limit: 255
-    t.string   "field15",         limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.text     "field16",         limit: 65535
-    t.text     "field17",         limit: 65535
-    t.text     "field18",         limit: 65535
-    t.text     "field19",         limit: 65535
-    t.text     "field20",         limit: 65535
+    t.integer  "registration_id",                      limit: 4
+    t.integer  "invitee_id",                           limit: 4
+    t.integer  "event_id",                             limit: 4
+    t.string   "field1",                               limit: 255
+    t.string   "field2",                               limit: 255
+    t.string   "field3",                               limit: 255
+    t.string   "field4",                               limit: 255
+    t.string   "field5",                               limit: 255
+    t.string   "field6",                               limit: 255
+    t.string   "field7",                               limit: 255
+    t.string   "field8",                               limit: 255
+    t.string   "field9",                               limit: 255
+    t.string   "field10",                              limit: 255
+    t.string   "field11",                              limit: 255
+    t.string   "field12",                              limit: 255
+    t.string   "field13",                              limit: 255
+    t.string   "field14",                              limit: 255
+    t.string   "field15",                              limit: 255
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.text     "field16",                              limit: 65535
+    t.text     "field17",                              limit: 65535
+    t.text     "field18",                              limit: 65535
+    t.text     "field19",                              limit: 65535
+    t.text     "field20",                              limit: 65535
+    t.string   "text_box_for_checkbox_or_radiobutton", limit: 255
   end
 
   create_table "users", force: :cascade do |t|
@@ -1279,4 +1362,5 @@ ActiveRecord::Schema.define(version: 20160603094750) do
   add_foreign_key "invitees", "events"
   add_foreign_key "my_travels", "events"
   add_foreign_key "speakers", "events"
+  add_foreign_key "telecaller_accessible_columns", "events"
 end

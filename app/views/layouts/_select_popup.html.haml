@@ -32,7 +32,7 @@
     = hidden_field_tag :wall, params[:wall] if params[:wall] == "true"
     = hidden_field_tag :type, params[:type] if params[:feature] == 'mobile_application' and params[:type].present? and params[:type] == 'remove'
     = hidden_field_tag :type, params[:type] if params[:feature] == 'mobile_application' and params[:type].present? and params[:type] == 'remove'
-    
+    = hidden_field_tag :telecaller_logged_in, params[:telecaller_logged_in] if params[:telecaller_logged_in].present?
     .row.txtcenter.UserSubmit.m-t-40
       = submit_tag "Submit", :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 disbtn"
     .row.txtcenter.m-t-20

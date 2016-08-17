@@ -52,6 +52,8 @@ class Event < ActiveRecord::Base
   has_many :chats, :dependent => :destroy
   has_many :invitee_groups, :dependent => :destroy
   has_many :my_travels, :dependent => :destroy
+  has_many :telecaller_accessible_columns, :dependent => :destroy
+  has_many :campaigns, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
@@ -132,7 +134,10 @@ class Event < ActiveRecord::Base
       self.mobile_application.events.each do |event|
         login_at = self.login_at || mobile_application.events.first.login_at rescue 'Before Interaction'
         event.update_column(:login_at, login_at)
+<<<<<<< HEAD
         #event.update_column(:login_at, self.login_at)
+=======
+>>>>>>> send_password
         event.update_column(:updated_at, Time.now) rescue nil
       end
     end
@@ -143,16 +148,40 @@ class Event < ActiveRecord::Base
   end
 
   def self.search(params, events)
-    event_name, event_code, start_date, order_by, order_by_status = params[:search][:name], params[:search][:code], params[:search][:start_date], params[:search][:order_by], params[:search][:order_by_status] if params[:adv_search].present?
+    event_name, end_date, start_date, order_by, order_by_status = params[:search][:name], params[:search][:end_date], params[:search][:start_date], params[:search][:order_by], params[:search][:order_by_status] if params[:adv_search].present?
     basic = params[:search][:keyword]
-    events = events.where("event_name like (?)","%#{event_name}%") if event_name.present?
-    events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
-    events = events.where("start_event_date =?",start_date) if start_date.present?
-    events = events.where('start_event_date > ?',Date.today) if order_by.present? and order_by == "upcoming"
-    events = events.where('start_event_date < ?',Date.today) if order_by.present? and order_by == "past"
-    events = events.where('start_event_date = ?',Date.today) if order_by.present? and order_by == "ongoing"
-    events = events.where("status = ?", order_by_status) if order_by_status.present?
-    events = events.where("event_name like (?) or event_code like (?)", "%#{basic}%", "%#{basic}%") if basic.present?
+    if event_name.present?
+      events = events.where("event_name like (?)","%#{event_name}%")
+    end
+    # events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
+    if end_date.present?
+      # events = events.where("end_event_date =?",end_date.to_date)
+      events = events.where("end_event_date >=? and end_event_date <= ? ", end_date.to_datetime, (end_date.to_datetime.next_day - 1.minutes))
+    end
+    if start_date.present?
+      # events = events.where("start_event_date =?",start_date.to_date)
+      events = events.where("start_event_date >=? and start_event_date <= ? ", start_date.to_datetime, (start_date.to_datetime.next_day - 1.minutes))
+
+    end
+    if order_by.present? and order_by == "upcoming"
+      events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) 
+    end
+
+    if order_by.present? and order_by == "past"
+      events = events.where('start_event_date < ? AND end_event_date < ?',Date.today, Date.today) 
+    end
+
+    if order_by.present? and order_by == "ongoing"
+      events = events.where('start_event_date <= ? AND end_event_date >= ?',Date.today,Date.today)
+    end
+
+    if order_by_status.present?
+      events = events.where("status = ?", order_by_status) 
+    end
+    if basic.present?
+      events = events.where("event_name like (?)", "%#{basic}%") 
+    end
+    
     events
   end 
 
@@ -520,6 +549,13 @@ class Event < ActiveRecord::Base
   #   content_missing_arr
   # end
 
+<<<<<<< HEAD
+=======
+  def get_licensee_admin
+    self.client.licensee rescue nil
+  end
+
+>>>>>>> send_password
   def name_with_email
     users = []
     self.invitees.each do |user|
@@ -531,7 +567,12 @@ class Event < ActiveRecord::Base
     end
     users
   end
+<<<<<<< HEAD
  
+=======
+
+  
+>>>>>>> send_password
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)

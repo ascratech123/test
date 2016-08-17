@@ -1,0 +1,40 @@
+.save_button.mdl-card.agendaHeight
+  = form_for [:admin, @event, @campaign], :builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-shadow--1dp.p-b-25
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+      = f.custom_text_field :campaign_name, "Campaign Name *","background" => "false"
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
+      /   .bs-component.m-b-30
+      /     .form-group
+      /       %label.col-lg-4.control-label{:for => "Start Campaign Date"} Start Campaign Date/Time 
+      /       = f.custom_text_field_date :start_date_time, "Start Campaign Date", :id => "date-start",:value => f.object.start_date.present? ? f.object.start_date.to_time.in_time_zone('Kolkata').strftime('%d/%m/%Y') : ''
+      /       .col-lg-3.timeDropdown
+      /         .timeTab
+      /           = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.start_date, 'hour')}", :col => '2',:maxlength => "2"
+      /           = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.start_date, 'minute')}", :col => '2',:maxlength => "2"
+      /           = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{get_hour_minute_second_ampm(f.object.start_date, 'ampm')}", :col => '3',:maxlength => "2"
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
+      /   .bs-component.m-b-30
+      /     .form-group
+      /       %label.col-lg-4.control-label{:for => "End Campaign Date"} End Campaign Date/Time
+      /       = f.custom_text_field_date :end_date_time, "End Campaign Date", :id => "date-end",:value => f.object.end_date.present? ? f.object.end_date.to_time.in_time_zone('Kolkata').strftime('%d/%m/%Y') : ''
+      /       .col-lg-3.timeDropdown.timeHeight
+      /         .timeTab
+      /           = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{get_hour_minute_second_ampm(f.object.end_date, 'hour')}", :col => '2',:maxlength => "2"
+      /           = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.end_date, 'minute')}", :col => '2',:maxlength => "2"
+      /           = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{get_hour_minute_second_ampm(f.object.end_date, 'ampm')}", :col => '3',:maxlength => "2"
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+
+
+
+
+
+
+
+

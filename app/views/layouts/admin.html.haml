@@ -12,7 +12,8 @@
         .mdl-layout__header-row.mdl-color--light-blue-900
           = render :partial => 'layouts/admin_top_header'
 
-          .mdl-layout-spacer
+          .mdl-layout-spacer{:style => 'text-align:center;font-size:14px;color:#fff'}
+            = session[:licensee_expired] if session[:licensee_expired].present?
           -if false
             %span.mdl-layout-title.mdl-color-text--white.HeaderUserName
               - if get_current_user_role

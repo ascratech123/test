@@ -33,6 +33,8 @@
     - if @event.invitee_structures.present?
       = link_to edit_admin_event_invitee_structure_path(:event_id => @event.id, :id => @invitee_structure.id), :class => "rightBtn hvr-sweep-to-right" do
         Edit Database
+      = link_to new_admin_event_grouping_path(:event_id => @event.id), :class => "rightBtn hvr-sweep-to-right" do
+        Create Grouping
     - else
       = link_to new_admin_event_invitee_structure_path(:event_id => @event.id), :class => "rightBtn hvr-sweep-to-right" do
         New Database
@@ -78,8 +80,9 @@
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "true", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'telecaller'
-    = link_to new_admin_event_telecaller_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
-      New TeleCaller.
+    - if @event.invitee_structures.present?
+      = link_to new_admin_event_telecaller_accessible_column_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+        Telecaller Access Column
   - when 'my_travel'
     = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
       New My Travel
@@ -170,5 +173,12 @@
     = link_to new_admin_event_exhibitor_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Exhibitor
   - when 'registration_setting'
-    = link_to new_admin_event_registration_setting_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      New Registration Setting
+    - if @event.present? and @registration_settings.present? and @registration_settings.first.registration == 'hobnob'
+      = link_to admin_event_user_registrations_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Registered Users
+  - when 'campaign'
+    = link_to new_admin_event_campaign_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      New Campaign
+  - when 'edm'
+    = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
+      New eDM

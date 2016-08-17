@@ -41,7 +41,7 @@
           - count = count + 1
           = builder.custom_text_field :page_title, "Page Title",:view_popup => {:image_path => "event_menu/#{builder.object.name}_title/Help_Menu_PageTitle.jpg", :rel=> "#{builder.object.name}_title", :title => "Page title"}
           - if ["event_highlights"].exclude?(builder.object.name)
-            = builder.new_custom_file_browser_field_menu :menu_icon, "Drawer Icon (72x72px png only) ", :id => "drawerIcon_#{count}", :value => (get_menu_icon_display(@event,builder.object) == "yes") ? builder.object.menu_icon_file_name : "", :image_url => @event.default_feature_icon == "owns" ? builder.object.menu_icon_url(:thumb) : "/menu_icons/thumb/missing.png", :menu_class => "menuIconBg",:view_popup => {:image_path => "event_menu/#{builder.object.name}_menu/Help_Menu_DrawerIcon.jpg", :rel=> "#{builder.object.name}_menu", :title => "Page title"}, :display_icon => get_menu_icon_display(@event,builder.object), :add_class => builder.object.name
+            = builder.new_custom_file_browser_field_menu :menu_icon, "Drawer Icon (72x72px png only) ", :id => "drawerIcon_#{count}", :value => (get_menu_icon_display(@event,builder.object) == "yes") ? builder.object.menu_icon_file_name : "", :image_url => (@event.default_feature_icon == "owns" or (["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include?(builder.object.name) and builder.object.menu_icon.present?))? builder.object.menu_icon_url(:thumb) : "/menu_icons/thumb/missing.png", :menu_class => "menuIconBg",:view_popup => {:image_path => "event_menu/#{builder.object.name}_menu/Help_Menu_DrawerIcon.jpg", :rel=> "#{builder.object.name}_menu", :title => "Page title"}, :display_icon => get_menu_icon_display(@event,builder.object), :add_class => builder.object.name
             - if ["venue","contacts"].exclude?(builder.object.name)
               - if builder.object.name == "venue" or builder.object.name == "contacts"
                 .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
@@ -51,7 +51,7 @@
                     .col-lg-7.p-h-12    
                       = builder.custom_radio_button_menu :menu_icon_visibility, "yes","Yes", :id => "#{builder.object.name}_yes",:default_checked => (builder.object.menu_icon_visibility == "yes") ? "checked" : ""
                       = builder.custom_radio_button_menu :menu_icon_visibility, "no", "No", :id => "#{builder.object.name}_no",:default_checked => (builder.object.menu_icon_visibility == "no") ? "checked" : ""
-              = builder.new_custom_file_browser_field_menu :main_icon, "Menu Icons (288x288px png only)", :id => "#{builder.object.name}_main_icon", :value => (get_menu_icon_display(@event,builder.object) == "yes") ? builder.object.main_icon_file_name : "", :image_url => "#{@event.default_feature_icon == "owns" ? builder.object.main_icon_url(:thumb) : "/menu_icons/thumb/missing.png"}",:menu_class => "menuIconBg",:view_popup => {:image_path => "event_menu/#{builder.object.name}_main/Help_Menu_MenuIcon.jpg", :rel=> "#{builder.object.name}_main", :title => "Page title"}, :display_icon => get_menu_icon_display(@event,builder.object), :add_class => builder.object.name
+              = builder.new_custom_file_browser_field_menu :main_icon, "Menu Icons (288x288px png only)", :id => "#{builder.object.name}_main_icon", :value => (get_menu_icon_display(@event,builder.object) == "yes") ? builder.object.main_icon_file_name : "", :image_url => "#{(@event.default_feature_icon == "owns" or (["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include?(builder.object.name) and builder.object.menu_icon.present?)) ? builder.object.main_icon_url(:thumb) : "/menu_icons/thumb/missing.png"}",:menu_class => "menuIconBg",:view_popup => {:image_path => "event_menu/#{builder.object.name}_main/Help_Menu_MenuIcon.jpg", :rel=> "#{builder.object.name}_main", :title => "Page title"}, :display_icon => get_menu_icon_display(@event,builder.object), :add_class => builder.object.name
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
             .mdl-grid.p-v-5.form-group
               .col-lg-4.mdl-typography--text-right
@@ -60,6 +60,14 @@
                 = builder.custom_radio_button_menu :status, "active","Active", :id => "option-1#{builder.object.id}", :default_checked => "#{builder.object.status == "active" ? "checked" : ""}",:class => "menu_status_active"
                 = builder.custom_radio_button_menu :status, "deactive", "Deactive", :id => "option-2#{builder.object.id}", :default_checked => "#{builder.object.status == "deactive" ? "checked" : ""}",:class => "menu_status_deactive"
           = builder.custom_text_area_field :description, "Message",:message_display => "#{custom_message_display(builder.object)}"
+          - if ['event_highlights', 'emergency_exits', "my_calendar","chats"].exclude?(builder.object.name)
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
+              .mdl-grid.p-v-5.form-group
+                .col-lg-4.mdl-typography--text-right
+                  %p.displayInlineBlock.multicitytxt Menu Icon Visibility
+                .col-lg-7.p-h-12.m-8
+                  = builder.custom_radio_button_menu :menu_visibilty, "active","Active", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
+                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Deactive", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive"
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

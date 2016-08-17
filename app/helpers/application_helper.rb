@@ -101,6 +101,8 @@ module ApplicationHelper
       url = "/admin/events/#{params[:event_id]}/themes/new?step=event_theme" if (params[:id].blank? and params[:action] == "new")
     elsif params[:controller] == "admin/winners"
       url = "/admin/events/#{params[:event_id]}/awards/#{params[:award_id]}/winners"
+    elsif params[:controller] == "admin/edms"
+       url = "/admin/events/#{params[:event_id]}/campaigns/#{params[:campaign_id]}/edms" 
     elsif params[:event_id].present?
       url ="/admin/events/#{params[:event_id]}/#{feature}?role=all" if params[:role] == "all" || params[:get_role] == "all"
       url = "/admin/events/#{params[:event_id]}/#{feature}#{single_associate_redirect}" if params[:role] != "all" and params[:get_role] != "all"
@@ -223,7 +225,6 @@ module ApplicationHelper
     end    
   end 
 
-
   def show_field_newQuestion(label, obj)
     #mdl-cell--5-col mdl-cell--4-col-tablet m-8
     content_tag :div, class: "mdl-cell--12-col no-p-l no-p-t no-p-r no-p-b" do
@@ -236,8 +237,7 @@ module ApplicationHelper
       end
     end    
   end 
-  
-  
+
   # for advance search
   def custom_text_field_tag(name,title, params,*args)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
@@ -259,6 +259,15 @@ module ApplicationHelper
     end
   end
 
+  def custom_button_tag_eventsearch(title, label)
+    # content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
+      # content_tag :div, class: "moreBtn collapseminus" do
+        str = content_tag :a, "Hide", class: "f-right m-t-5 hvr-underline-from-center hvr-underline-from-centernew", href: "javascript:void(0);" 
+        str += content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 f-right m-r-35") 
+        str
+      # end
+  end
+
   def custom_button_tag_without_hide(title)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone m-8" do
       content_tag :div, class: "moreBtn collapseminus" do
@@ -268,8 +277,6 @@ module ApplicationHelper
     end
   end
 
-
-
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
     params1 = params.gsub(/[^0-9a-z]/, '')
@@ -277,14 +284,13 @@ module ApplicationHelper
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
-  end 
+  end
 
   def custom_basic_button_tag(title)
     content_tag :div, class: "mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--2-col-phone m-10" do
       content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600") 
     end  
   end  
-
 
   def custom_advance_search_link_tag(label)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone m-l-15 moreBtn mdl-typography--text-right" do
@@ -576,6 +582,16 @@ module ApplicationHelper
     end
   end
 
+  def get_last_user_registration_field_index(obj)
+    a = []
+    obj.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code').each_with_index do |t, index|
+      index = index + 1
+      a << ((t[1].present? and t[1]['label'].present? or t[1].present? and t[1]['option_type'].present?) ? index : nil)
+    end
+    a = a.compact
+    index = a.last
+    index
+  end
 end
 
 

@@ -29,10 +29,27 @@ class UserMailer < ActionMailer::Base
     end  
   end
 
+  def default_template(edm,email,smtp_setting)
+    set_credential(smtp_setting)
+    @campaign = edm.campaign
+    @event = @campaign.event
+    @smtp_setting = smtp_setting
+    @edm = edm
+    @email = email
+    mail(to: email,from: @edm.sender_email, :bcc => "shiv@ascratech.com",subject: @edm.subject_line) 
+  end
+  
+  def custom_template(edm,email,smtp_setting)
+    set_credential(smtp_setting)
+    @smtp_setting = smtp_setting
+    @edm = edm
+    mail(to: email,from: @edm.sender_email, :bcc => "shiv@ascratech.in",subject: @edm.subject_line)
+  end
+
   private
 
   def set_credential(smtp_setting)
-    hsh = {:user_name => smtp_setting.username, :password => smtp_setting.password, :domain => smtp_setting.domain, :address => smtp_setting.address, :port => 587, :authentication => :plain, :enable_starttls_auto => true}
+    hsh = {:user_name => smtp_setting.username, :password => smtp_setting.password, :domain => smtp_setting.domain, :address => smtp_setting.address, :port => smtp_setting.port, :authentication => :plain, :enable_starttls_auto => true}
     ActionMailer::Base.smtp_settings.merge!(hsh)
   end
 

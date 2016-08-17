@@ -83,21 +83,18 @@
         / = f.new_custom_file_browser_field :splash_screen, "Splash Screen (960X1600px) png only", :id => "splash_screen_uploadBtn", :value => f.object.splash_screen_file_name, :action=> params[:action], :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_SplashScreen.jpg", :rel=> "mobil_app_splash_screen", :title => "Splash Screen"}
         / - if (current_user.has_role? :licensee_admin and @mobile_application.splash_screen_file_name.present?)
         /   = link_to "(Download Splash Screen)",edit_admin_event_mobile_application_path(:event_id => params[:event_id],:id => params[:id],:download_image => "true",:image_name => @mobile_application.splash_screen_file_name,:image_url=>@mobile_application.splash_screen.url)
-        - if false #f.object.new_record? or f.object.events.count == 1
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.errorMess
-            .mdl-grid.p-v-5.form-group
-              .col-lg-4.mdl-typography--text-right.m-b-10
-                %p.displayInlineBlock.multicitytxt Do you need login after splash screen? * 
-              .col-lg-7.p-h-12  
-                = f.custom_radio_button :login_at, "Yes", "Yes", :id => "option4"
-                = f.custom_radio_button :login_at, "No", "No", :id => "option5"
+        
         
         =# f.new_custom_file_browser_field :listing_screen_background, "Listing Screen Background (960X1600px) only", :id => "listing_screen_uploadBtn", :value => f.object.listing_screen_background_file_name, :action=> params[:action], :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenBackground.jpg", :rel=> "mobil_app_listing_screen_background", :title => "Listing Screen Background"}
 
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
           .bs-component{:style => "display: #{(f.object.application_type == 'multi event' or params[:action] == "new") ? "" : "none"}"}
             .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+<<<<<<< HEAD
               .span.col-lg-4#listing_screen_background_label
+=======
+              %span.col-lg-4#listing_screen_background_label
+>>>>>>> send_password
                 = f.label "Listing Screen Background (960X1600px) only ",:class =>"control-label", style: "float: right;"
                 - if (current_user.has_role? :licensee_admin and @mobile_application.listing_screen_background.present? and ["edit","update"].include? params[:action])
                   %br
@@ -291,7 +288,11 @@
   $("#option2").click(function(){
     $("#listing_screen_background_label").show()
     $("#listing_screen_uploadBtn").parent().parent().parent().parent().show()
+<<<<<<< HEAD
     $("#listing_screen_uploadBtn").parent().parent().parent().prev('label').show()
+=======
+    $("#1listing_screen_uploadBtn").parent().parent().parent().prev('label').show()
+>>>>>>> send_password
     $("#this_listing_screen_uploadBtn").show();
     var assignedRoleId = new Array();
     $('#event_login_at option').each(function(){

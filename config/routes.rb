@@ -15,11 +15,12 @@ namespace :admin do
   get '/events/:event_id/success' => 'user_registrations#show'
   get 'bee_editor/token' => 'bee_editors#token'
   get 'bee_editor/template' => 'bee_editors#template'
+  get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login
   resources :licensees do
-    resources :clients    
+    resources :clients
   end
   resources :clients do
     resources :users
@@ -66,6 +67,10 @@ namespace :admin do
       resources :invitee_datas
     end
     resources :registrations
+    
+    resources :campaigns do
+      resources :edms
+    end
 
   end
   # resources :imports

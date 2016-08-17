@@ -24,7 +24,8 @@ class Conversation < ActiveRecord::Base
 
   after_create :set_status_as_per_auto_approve, :create_analytic_record
 
-  default_scope { order('created_at desc') }
+  scope :desc_ordered, -> { order('updated_at DESC') }
+  scope :asc_ordered, -> { order('updated_at ASC') }
 
   aasm :column => :status do
     state :pending, :initial => true
