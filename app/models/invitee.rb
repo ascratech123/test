@@ -152,10 +152,10 @@ class Invitee < ActiveRecord::Base
   end
 
   def self.search(params,invitees)
-    invitees = invitees.where("company_name like (?)", params[:search][:company_name]) if params[:search][:company_name].present?
-    invitees = invitees.where("designation like (?)", params[:search][:designation]) if params[:search][:designation].present?
-    invitees = invitees.where("invitee_status like (?)", params[:search][:invitee_status]) if params[:search][:invitee_status].present?        
-    invitees = invitees.where("visible_status like (?)", params[:search][:visible_status]) if params[:search][:visible_status].present?
+    invitees = invitees.where(company_name: params[:search][:company_name]) if params[:search][:company_name].present?
+    invitees = invitees.where(designation: params[:search][:designation]) if params[:search][:designation].present?
+    invitees = invitees.where(invitee_status: params[:search][:invitee_status]) if params[:search][:invitee_status].present?        
+    invitees = invitees.where(visible_status: params[:search][:visible_status]) if params[:search][:visible_status].present?
     if params[:search][:login_status].present?
       ids = []
       invitees.each do |invitee|
