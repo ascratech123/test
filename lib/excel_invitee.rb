@@ -58,8 +58,8 @@ module ExcelInvitee
       else
         password = nil
       end
-      if objekt["profile_picture"].present?
-        profile_url = objekt["profile_picture"] rescue nil
+      if objekt["profile_pic_url"].present?
+        profile_url = objekt["profile_pic_url"] rescue nil
         data = open(profile_url).read rescue nil
         write_file_content = File.open("public/#{profile_url.split('/').last}", 'wb') do |f|
           f.write(data)
