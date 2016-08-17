@@ -12,7 +12,6 @@
 @-moz-document url-prefix() {
   .md-checkbox .help-tip a { right: -12px;}
 }
-<<<<<<< HEAD
 
 /* notification overlay css - Deepti*/
 .overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
@@ -81,7 +80,6 @@
 }
 /*nilam*/
 .titleQuestion{margin-left:15px;}
-=======
 /*=======================Nilam CSS Start=================================*/
 
 .titleQuestion{margin-left:15px;}
@@ -111,7 +109,6 @@
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
->>>>>>> send_password
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
 
 /* notification overlay css - Deepti*/
@@ -1345,7 +1342,3 @@ i.incards {font-size: 60px}
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> send_password

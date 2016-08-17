@@ -134,10 +134,7 @@ class Event < ActiveRecord::Base
       self.mobile_application.events.each do |event|
         login_at = self.login_at || mobile_application.events.first.login_at rescue 'Before Interaction'
         event.update_column(:login_at, login_at)
-<<<<<<< HEAD
         #event.update_column(:login_at, self.login_at)
-=======
->>>>>>> send_password
         event.update_column(:updated_at, Time.now) rescue nil
       end
     end
@@ -549,13 +546,10 @@ class Event < ActiveRecord::Base
   #   content_missing_arr
   # end
 
-<<<<<<< HEAD
-=======
   def get_licensee_admin
     self.client.licensee rescue nil
   end
 
->>>>>>> send_password
   def name_with_email
     users = []
     self.invitees.each do |user|
@@ -567,12 +561,7 @@ class Event < ActiveRecord::Base
     end
     users
   end
-<<<<<<< HEAD
- 
-=======
 
-  
->>>>>>> send_password
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
