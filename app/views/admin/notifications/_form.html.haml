@@ -40,14 +40,6 @@
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Send to *
-<<<<<<< HEAD
-          .col-lg-3.p-h-12   
-            = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
-            = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
-          .col-lg-1.agenda_help
-            = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
-
-=======
           .col-lg-5.p-h-12
             .col-lg-7.p-h-12
               - er = f.object.errors.messages[:notification_type].join(',') rescue nil
@@ -59,7 +51,6 @@
             .field_with_errors.col-lg-10
               .span{:class => "errorMessage"}
                 = er
->>>>>>> send_password
       .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => ((f.object.notification_type == 'all' or f.object.notification_type.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px'), :id => 'group_check_boxes'}
         .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
