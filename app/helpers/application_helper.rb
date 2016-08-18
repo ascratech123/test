@@ -1,4 +1,12 @@
 module ApplicationHelper
+  
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
 
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
@@ -691,4 +699,5 @@ end
     end
     #all_arr = [['Group based', ['Group Notification']], ['Action based', action_arr], ['Logic based', logic_arr], ['Destination based', dest_arr]]
     all_arr = [['Group based', ['Group Notification']], ['Destination based', dest_arr]]
+
   end

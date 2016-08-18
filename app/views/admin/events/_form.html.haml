@@ -35,7 +35,7 @@
           .bs-component
             .form-group
               %label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
-              = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
+              = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.to_time.in_time_zone('Kolkata').strftime('%d/%m/%Y') : '' 
               .col-lg-3.timeDropdown
                 .timeTab
                   = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
@@ -58,7 +58,7 @@
           .bs-component
             .form-group
               %label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
-              = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
+              = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.to_time.in_time_zone('Kolkata').strftime('%d/%m/%Y') : '' 
               .col-lg-3.timeDropdown
                 .timeTab  
                   = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_event_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"

@@ -29,7 +29,7 @@
             - @agendas = agenda_group(@agendas)
             - @agendas.keys.each_with_index do |date, index|
               %a.mdl-tabs__tab.newtab{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
-                = date.strftime('%d %b %Y') rescue nil
+                = date_with_zone(@agendas[date].first.start_agenda_time, 'IST')
       .mdl-grid.mdl-grid--no-spacing
         %section.view-container.animate-fade-up{"data-ui-view" => ""}
           .agendatimeline.ng-scope
@@ -44,19 +44,19 @@
                         .tl-entry
                           .tl-caption
                             %a{:class => (count % 2 != 0) ? 'btn btn-block btn-primary' : 'btn btn-danger btn-block'} 
-                              = date.strftime('%d %b %Y') rescue nil
+                              = date_with_zone(@agendas[date].first.start_agenda_time, 'IST') rescue nil
                     - @agendas[date].each do |agenda|
                       - count += 1
                       %article{:class => (count % 2 != 0) ? 'tl-item alt' : 'tl-item'}
                         .tl-body
                           .tl-entry
                             .tl-time
-                              = agenda.start_agenda_time.strftime('%l:%M %p') rescue nil
-                              / = get_only_time_in_ampm(agenda.start_agenda_time)
+                              / = agenda.start_agenda_time.strftime('%l:%M %p') rescue nil
+                              = get_only_time_in_ampm(agenda.start_agenda_time)
                               - if agenda.end_agenda_time.present? and  agenda.end_agenda_time.strftime("%H:%M") != "00:00"
                                 to
-                                = agenda.end_agenda_time.strftime('%l:%M %p') rescue nil
-                                / = get_only_time_in_ampm(agenda.end_agenda_time)
+                                / = agenda.end_agenda_time.strftime('%l:%M %p') rescue nil
+                                = get_only_time_in_ampm(agenda.end_agenda_time)
                               - else
                                 onwards
                             - if (count1 % 4) == 1  
