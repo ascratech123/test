@@ -14,12 +14,12 @@
       %th
         = form_tag admin_event_speakers_path(:event_id => @event.id) , :method => :get , id: "search_speakers_by_designation" , :class => "category_dropdown" do
           -  @speaker_designation = Speaker.where( event_id: @event.id).pluck('DISTINCT designation').compact.delete_if(&:empty?)
-          = select_tag 'search[designation]', options_for_select(@speaker_designation, :selected => params[:adv_search].present? ? params[:search][:designation] : ""), :prompt => 'DESIGNATION'
+          = select_tag 'search[designation]', options_for_select(['All'] + @speaker_designation), :prompt => 'DESIGNATION'
           = hidden_field_tag :adv_search, true  
       %th 
         = form_tag admin_event_speakers_path(:event_id => @event.id) , :method => :get , id: "search_speakers_by_cname" , :class => "category_dropdown" do
           -  @comanies_list = Speaker.where( event_id: @event.id).pluck('DISTINCT company').compact.delete_if(&:empty?)
-          = select_tag 'search[company_name]', options_for_select(@comanies_list, :selected => params[:adv_search].present? ? params[:search][:company_name] : ""), :prompt => 'COMPANY NAME'
+          = select_tag 'search[company_name]', options_for_select(['All'] + @comanies_list), :prompt => 'COMPANY NAME'
           = hidden_field_tag :adv_search, true            
       %th
         - objs.each_with_index do |speaker, index|

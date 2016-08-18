@@ -247,7 +247,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 /* nilam css start here */
 
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
-.back_btn_header{display: inline-block; margin-top: 17px;}
+.back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
 /* nilam css ends here */
 

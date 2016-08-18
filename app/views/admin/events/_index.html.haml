@@ -21,14 +21,14 @@
         /   %img{:src => "/assets/funnel.png"}/
 
         = form_tag admin_client_events_url(:client_id => @client.id), :method => :get, :class=> "event_index_category_filter_form drop category_dropdown" do
-          = select_tag "search[order_by]",options_for_select([["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]], :selected => adv_search_value(params,"order_by")), :prompt => ' Event Category'
+          = select_tag "search[order_by]",options_for_select([['All','All'],["Upcoming","upcoming"],["Ongoing", "ongoing"], ["Past", "past"]]), :prompt => ' Event Category'
           = hidden_field_tag :admin_search, "true"
           = hidden_field_tag :adv_search, "true"
       / - if !current_user.has_role? :moderator
       /   %th 
       %th
         = form_tag admin_client_events_url(:client_id => @client.id), :method => :get, :class=> "event_index_status_filter_form category_dropdown search_status" do
-          = select_tag "search[order_by_status]",options_for_select([["Pending","pending"],["Rejected", "rejected"],["Published", "published"],["Approved", "approved"]], :selected => adv_search_value(params,"order_by_status")), :prompt => 'Status'    
+          = select_tag "search[order_by_status]",options_for_select([['All','All'],["Pending","pending"],["Rejected", "rejected"],["Published", "published"],["Approved", "approved"]]), :prompt => 'Status'    
           = hidden_field_tag :admin_search, "true"
           = hidden_field_tag :adv_search, "true"
       %th
