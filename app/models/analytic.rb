@@ -18,7 +18,7 @@ class Analytic < ActiveRecord::Base
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
     error << false if self.action == 'feedback given' and Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :invitee_id => self.invitee_id, :event_id => self.event_id).present?
-    error << false if self.action == 'page view' and Analytic.where(:action => 'page view', :viewable_type => 'E-Kit', :invitee_id => self.invitee_id, :event_id => self.event_id).present?
+    error << false if self.action == 'page view' and Analytic.where(:action => 'page view', :viewable_type => 'E-Kit', :invitee_id => self.invitee_id, :viewable_id => self.viewable_id, :event_id => self.event_id).present?
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
     if feature.present?
