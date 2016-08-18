@@ -22,7 +22,7 @@ class Conversation < ActiveRecord::Base
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone
 
   default_scope { order('created_at desc') }
 
@@ -132,6 +132,10 @@ class Conversation < ActiveRecord::Base
     analytic.save rescue nil
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
   def self.get_export_object(conversations)
     object = []
     conversation_without_comment = []
@@ -188,5 +192,13 @@ class Conversation < ActiveRecord::Base
 
   def post_id
     self.id
+  end
+
+  def created_at_with_timezone
+    self.created_at.in_time_zone(self.event_timezone)
+  end
+
+  def updated_at_with_timezone
+    self.updated_at.in_time_zone(self.event_timezone)
   end
 end

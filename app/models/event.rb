@@ -76,10 +76,11 @@ class Event < ActiveRecord::Base
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :on => :create
+  validates_presence_of :timezone
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
@@ -520,6 +521,32 @@ class Event < ActiveRecord::Base
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "user_polls", "ratings"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone)
+        end
+      end   
+    end
+  end
+
+  def start_event_date_with_timezone
+    self.start_event_date.in_time_zone(self.timezone)
+  end
+
+  def end_event_date_with_timezone
+    self.end_event_date.in_time_zone(self.timezone)
+  end
+
+  def start_event_time_with_timezone
+    self.start_event_time.in_time_zone(self.timezone)
+  end
+
+  def end_event_time_with_timezone
+    self.end_event_time.in_time_zone(self.timezone)
   end
   
 end

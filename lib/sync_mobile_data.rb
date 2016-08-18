@@ -45,12 +45,12 @@ module SyncMobileData
       info = info.where(:event_id => event_ids) rescue []
       case model
         when 'Conversation'
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :created_at_with_timezone, :updated_at_with_timezone])
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:icon_updated_at,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :emergency_exit_updated_at, :uber_link], :methods => [:emergency_exit_url,:icon_url])
         when 'Event'
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url]) rescue []
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url, :start_event_date_with_timezone, :end_event_date_with_timezone, :start_event_time_with_timezone, end_event_time_with_timezone]) rescue []
         when 'EventFeature'
           data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
@@ -148,6 +148,8 @@ module SyncMobileData
             info = MobileApplication.where(:id => mobile_application_ids, :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json(:only => [:name,:application_type,:client_id,:id,:login_background_color,:message_above_login_page,:registration_message,:registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url ]) rescue []
           end
+        when "Agenda"
+          data[:"#{name_table(model)}"] = info.as_json(:methods =>[:start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone]) rescue []
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  

@@ -12,7 +12,7 @@ class Agenda < ActiveRecord::Base
   
   before_validation :set_time
   after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected
+  after_save :set_end_date_if_end_date_not_selected, :set_event_timezone
   before_save :check_category_present_if_new_category_select_from_dropdown
   before_create :set_sequence_no
 
@@ -68,6 +68,10 @@ class Agenda < ActiveRecord::Base
     end
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
   def check_category_present_if_new_category_select_from_dropdown
     if self.agenda_type == "Add New Track" and self.new_category.present?
       self.agenda_type = self.new_category
@@ -89,4 +93,11 @@ class Agenda < ActiveRecord::Base
     self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
+  def start_agenda_time_with_event_timezone
+    self.start_agenda_time.in_time_zone(self.event_timezone)
+  end
+
+  def end_agenda_time_with_event_timezone
+    self.end_agenda_time.in_time_zone(self.event_timezone)
+  end
 end

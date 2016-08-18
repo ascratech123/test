@@ -13,7 +13,6 @@ class UserFeedback < ActiveRecord::Base
     self.feedback.event_id rescue nil
   end
 
-  
   def Timestamp
     self.feedback.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %T') rescue ""
   end
@@ -50,5 +49,13 @@ class UserFeedback < ActiveRecord::Base
       analytic = Analytic.new(viewable_type: "Feedback", viewable_id: self.feedback_id, action: "feedback given", invitee_id: self.user_id, event_id: event_id, platform: platform)
       analytic.save rescue nil
     end
+  end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.feedback.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.feedback.event_timezone)
   end
 end

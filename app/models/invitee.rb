@@ -241,7 +241,7 @@ class Invitee < ActiveRecord::Base
     user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     user_feedback = UserFeedback.where(:user_id => user_ids, :feedback_id => feedback_ids) rescue []
-    data = user_feedback.as_json(:methods => [:get_event_id]) if user_feedback.present?
+    data = user_feedback.as_json(:methods => [:get_event_id, :created_at_with_timezone, :updated_at_with_timezone]) if user_feedback.present?
     data
   end
 
