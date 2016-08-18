@@ -63,7 +63,7 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now), (Time.now - 15.minutes))
+    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 5.minutes).utc.to_formatted_s(:db))
     if notifications.present?
       notifications.each do |notification|
         event = notification.event
@@ -95,8 +95,8 @@ class Notification < ActiveRecord::Base
     InviteeNotification.create(arr)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id)
-      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id)
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
       event = self.event
       title = push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : event.event_name
       if ios_devices.present? and push_pem_file.present?
@@ -194,6 +194,4 @@ class Notification < ActiveRecord::Base
   #   event_features.each do |feature|
 
   # end
-
-
 end
