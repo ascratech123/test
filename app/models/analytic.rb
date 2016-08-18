@@ -10,21 +10,15 @@ class Analytic < ActiveRecord::Base
   # validates_uniqueness_of :user_id, :scope => [:quiz_id], :message => 'Quiz already answered'
 
   belongs_to :event
-  # validate :check_ekit_viewed
   before_create :update_points
   after_create :update_points_to_invitee
 
-  def check_ekit_viewed
-    if Analytic.where(:action => 'page view', :viewable_type => "E-Kit", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
-      self.errors.add :viewable_type 'already viewed and got points'
-    end
-    self.errors.present? ? return false : return true
-  end
 
   def update_points
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
     error << false if self.action == 'feedback given' and Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :invitee_id => self.invitee_id, :event_id => self.event_id).present?
+    error << false if self.action == 'page view' and Analytic.where(:action => 'page view', :viewable_type => 'E-Kit', :invitee_id => self.invitee_id, :event_id => self.event_id).present?
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
     if feature.present?
