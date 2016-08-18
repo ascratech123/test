@@ -16,9 +16,9 @@ class Analytic < ActiveRecord::Base
 
   def check_ekit_viewed
     if Analytic.where(:action => 'page view', :viewable_type => "E-Kit", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
-      self.errors.add :viewable_type 'already viewed and got points'
+      self.errors.add :viewable_type, 'already viewed and got points'
     end
-    self.errors.present? ? return false : return true
+    self.errors.present? ? false : true
   end
 
   def update_points
