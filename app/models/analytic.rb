@@ -30,7 +30,7 @@ class Analytic < ActiveRecord::Base
     else
       self.points = 0
     end  
-  end
+  end  
 
   def update_points_to_invitee
     event = self.event
