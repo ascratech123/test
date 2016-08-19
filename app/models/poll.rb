@@ -117,5 +117,11 @@ class Poll < ActiveRecord::Base
   def self.set_auto_approve(value,event)
     event.update_column(:poll_auto_approve, value)
   end
+
+  def update_event_timezone
+    event = self.event
+    self.update_column("event_timezone", event.timezone.capitalize)
+    self.event_timezone
+  end
   
 end

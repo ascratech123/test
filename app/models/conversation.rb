@@ -133,7 +133,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
+    self.update_column("event_timezone", self.event.timezone.capitalize)
   end
 
   def self.get_export_object(conversations)
@@ -195,10 +195,10 @@ class Conversation < ActiveRecord::Base
   end
 
   def created_at_with_timezone
-    self.created_at.in_time_zone(self.event_timezone)
+    self.created_at.in_time_zone(self.event_timezone.capitalize)
   end
 
   def updated_at_with_timezone
-    self.updated_at.in_time_zone(self.event_timezone)
+    self.updated_at.in_time_zone(self.event_timezone.capitalize)
   end
 end
