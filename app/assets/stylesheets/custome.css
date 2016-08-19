@@ -1081,6 +1081,8 @@ i.incards {font-size: 60px}
 .agendalinks{display: inline-block;float: right;}
 .tl-content .timelineTxt{margin-top:0px;}
 .tl-content .timelineTxt i{font-size:24px; color:#444; margin-top:0px;}
+
+.agendatimeline .material-icons{font-size:24px; color:#444; margin-top:0px;}
 .mdl-button.forminfo-tab{padding: 0px}
 .description_adjust{white-space: pre-line; padding-top:0px; margin-top:0px;}
 .headingInfo{display:inline-block; vertical-align:top; width:auto;}
