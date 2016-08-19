@@ -969,10 +969,10 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 .collapseminus .material-icons.f-left.p-r-15 {float: right;font-size: 25px;}
 .adminClick {color: #fff;display: block;font-size: 12px; line-height:21px;padding-top: 24px;opacity:0.76;font-weight:400;border-bottom: 1px solid}
 .adminClick:hover{opacity:1; color: #fff;}
-.agendaPage .ml-header{min-height:93px;}
+.agendaPage .ml-header{min-height:140px;}
 .agendaPage .agendatimeline{text-align:center;padding: 15px 30px;}
 .agendaPage .ui-timline-container {padding: 15px;}
-.agendaPage .ui-timeline:before {background-color:#d5d5d5;bottom: 0;content: "";left: 0;position: absolute;top: 30px;width: 1px;z-index: 0;}
+/*.agendaPage .ui-timeline:before {background-color:#d5d5d5;bottom: 0;content: "";left: 0;position: absolute;top: 30px;width: 1px;z-index: 0;}*/
 .agendaPage .ui-timeline {border-collapse: collapse;border-spacing: 0;display: table;position: relative;table-layout: fixed;width: 100%;}
 .agendaPage .ui-timeline:before {left: 50%;}
 .ui-timeline .tl-item.alt{text-align: right;}
