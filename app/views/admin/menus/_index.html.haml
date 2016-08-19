@@ -64,10 +64,10 @@
             .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
               .mdl-grid.p-v-5.form-group
                 .col-lg-4.mdl-typography--text-right
-                  %p.displayInlineBlock.multicitytxt Menu Icon Visibility
+                  %p.displayInlineBlock.multicitytxt Hide this Icon
                 .col-lg-7.p-h-12.m-8
-                  = builder.custom_radio_button_menu :menu_visibilty, "active","Active", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
-                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Deactive", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive"
+                  = builder.custom_radio_button_menu :menu_visibilty, "active","Yes", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
+                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "No", :id => "option_2#{builder.object.id}", :default_checked => "#{(builder.object.menu_visibilty == "inactive" or builder.object.menu_visibilty.blank?) ? "checked" : ""}",:class => "menu_status_deactive"
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

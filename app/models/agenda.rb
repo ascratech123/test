@@ -69,7 +69,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
+    self.update_column("event_timezone", self.event.timezone.capitalize)
   end
 
   def check_category_present_if_new_category_select_from_dropdown
@@ -94,11 +94,11 @@ class Agenda < ActiveRecord::Base
   end
 
   def start_agenda_time_with_event_timezone
-    self.start_agenda_time.in_time_zone(self.event_timezone)
+    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize)
   end
 
   def end_agenda_time_with_event_timezone
-    self.end_agenda_time.in_time_zone(self.event_timezone)
+    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize)
   end
 
   def agenda_type

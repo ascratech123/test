@@ -24,7 +24,7 @@ class Chat < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column(:event_timezone, self.event.timezone)
+    self.update_column(:event_timezone, self.event.timezone.capitalize)
   end
 
   def send_puch_notification
@@ -80,7 +80,7 @@ class Chat < ActiveRecord::Base
   end
 
   def date_time_with_event_timezone
-    self.date_time.in_time_zone(self.event_timezone)
+    self.date_time.in_time_zone(self.event_timezone.capitalize)
   end
 
 end
