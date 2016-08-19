@@ -94,10 +94,10 @@ class Agenda < ActiveRecord::Base
   end
 
   def start_agenda_time_with_event_timezone
-    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize)
+    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.start_agenda_time.present?
   end
 
   def end_agenda_time_with_event_timezone
-    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize)
+    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.end_agenda_time.present?
   end
 end
