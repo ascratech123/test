@@ -40,22 +40,11 @@
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Send to *
-<<<<<<< HEAD
           .col-lg-3.p-h-12   
             = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
             = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
           .col-lg-1.agenda_help
             = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
-=======
->>>>>>> user_feedback_validations
-          .col-lg-5.p-h-12
-            .col-lg-7.p-h-12
-              - er = f.object.errors.messages[:notification_type].join(',') rescue nil
-              - f.object.errors.messages[:notification_type].clear if f.object.errors.messages[:notification_type].present? 
-              = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
-              = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
-            .col-lg-1.agenda_help
-              = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
             .field_with_errors.col-lg-10
               .span{:class => "errorMessage"}
                 = er
