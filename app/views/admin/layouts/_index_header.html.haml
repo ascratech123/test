@@ -9,23 +9,27 @@
             -if display_page_name.keys.include?(page)
               Manage 
               = display_page_name[page]
+            - elsif page == "edms"
+              Manage eDMs
             - elsif page == "invitee_structures"
               Manage Database Group
+            - elsif page == "invitee_datas"
+              Manage Invitee Data 
             - elsif page == "manage_users"
               Manage Users
             -else
               Manage
               = page.humanize.titleize == "E Kits" ? "e-KIT" : page.humanize.titleize
-        - if ["panels", "highlight_images", "event_highlights", "abouts", "groupings", 'invitee_structures', 'analytics', "manage_users", "leaderboards","events","chats", "invitee_groups"].exclude?(page)
+        - if ["panels", "highlight_images", "event_highlights", "abouts", "groupings", 'invitee_structures', 'analytics', "manage_users", "leaderboards", "chats", "invitee_groups"].exclude?(page)
           = render :partial => 'search'
-    - if ["admin/attendees","admin/licensees","admin/speakers"].include? (params[:controller])
+    - if ["admin/attendees","admin/licensees","admin/speakers", "admin/events"].include? (params[:controller])
       .mdl-grid.HideSearchBlog
         .p-h-25.ml-card-holder
           = render :partial => 'advance_search'
     .mdl-grid.mdl-grid--no-spacing
       .mdl-cell.mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-phone
         .p-35.ml-card-holder.ml-card-holder-first.HeaderHeight
-          .mdl-card.mdl-shadow--1dp.m-b-30.clients
+          .mdl-card.mdl-shadow--1dp.m-b-30.clients.index_mdl
             .mdl-card__title.mdl-color--light-blue-600.mdl-typography--text-right.displayBlock
               %h2.mdl-card__title-text.mdl-color-text--white.displayBlock.mdl-typography--text-right.displayBlock.mdl-typography--text-right.heightHeading
                 -if false
@@ -42,6 +46,8 @@
                       = objs.count rescue nil
                     -if page == "qnas"
                       Q&A
+                    - elsif page == "edms"
+                      eDM
                     - elsif page == "feedbacks"
                       Feedback
                     - elsif page == "contacts"
@@ -58,6 +64,8 @@
                       = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
                   -elsif (page == "polls" or page == "faqs")
                     No Questions
+                  -elsif (page == "edms")
+                    No eDMs
                   -else 
                     - if @invitee_structures.present?
                       = '1'
@@ -109,4 +117,4 @@
                   - if page == "manage_mobile_apps" and params[:action] == "index"
                     = render :partial => 'index', :locals => {:objs => objs, :objs_paginate => objs_paginate}
                   -else
-                    = render :partial => 'index', :locals => {:objs => objs}   
+                    = render :partial => 'index', :locals => {:objs => objs}

@@ -378,7 +378,7 @@ var demoHighCharts = function () {
                     },
                     yAxis: {
                         min: 0,
-                        tickInterval: 5,
+                        tickInterval: INTERVALYAXIS,
                         gridLineColor: '#EEE',
                         title: {
                             text: null
@@ -1253,7 +1253,6 @@ var demoHighCharts = function () {
         }
     }
 }();
-
 
 
 

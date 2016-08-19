@@ -15,12 +15,14 @@ class PushPemFile < ActiveRecord::Base
   #validates_attachment_content_type :pem_file, :content_type => ["application/x-x509-ca-cert", "application/x-x509-ca-cert", "application/cert", "application/pem", "text/plain"]
   do_not_validate_attachment_file_type :pem_file
   validates_attachment_presence :pem_file,:message => "This field is required."
-  validates :mobile_application_id, :title, :pass_phrase, :push_url, :android_push_key, presence: { :message => "This field is required." }
+  validates :mobile_application_id, :pass_phrase, :push_url, :android_push_key, presence: { :message => "This field is required." }
 
   default_scope { order('created_at desc') }
 
   def rename_pem_file_name
-    extension = File.extname(pem_file_file_name).downcase
-    self.pem_file_file_name = "#{Time.now.to_i.to_s}#{extension}"
+    if self.pem_file_updated_at_changed?
+      extension = File.extname(pem_file_file_name).downcase
+      self.pem_file_file_name = "#{Time.now.to_i.to_s}#{extension}"
+    end
   end
 end

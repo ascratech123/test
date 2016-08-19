@@ -8,11 +8,13 @@ class Admin::AgendasController < ApplicationController
   def index
     @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_time)")
     @agenda_having_no_date = @agendas.where("start_agenda_time is null")
+    @page = params[:controller].split("/").second
+    @event_feature = @event.event_features.where(:name => @page)
     respond_to do |format|
       format.html  
       format.xls do
         only_columns = []
-        method_allowed = [:Timestamp, :email_id, :name, :session_name, :speaker_name,:star_rating,:user_comment]
+        method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :session_name, :speaker_name,:star_rating,:user_comment]
         send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
       end
     end
@@ -22,6 +24,7 @@ class Admin::AgendasController < ApplicationController
     agenda_data = Agenda.find(params[:id]) rescue Agenda.new
     @agenda = @event.agendas.build(agenda_data.attributes.except('id', 'created_at', 'updated_at', 'start_agenda_time', 'end_agenda_time'))
     @spearkers = @event.speakers
+    @import = Import.new if params[:import].present?
   end
   
   def create

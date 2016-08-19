@@ -9,7 +9,9 @@
   :javascript
     displayText = ""
 - if @date_filter_error.blank?
+  - max_val = arr.compact.max
   :javascript
+    var INTERVALYAXIS = #{(max_val.present? and max_val > 100) ? (max_val / 100) : 5}
     var LINECATEGORY = #{@detailed_analytics_counts[1]['xaxis_interval_labels_and_interval'][0]}
     var OVERALL_ENGAGEMENT = #{@detailed_analytics_counts[1]['user_engagements'].to_json}
     var DONUTCHART1ARRAY = #{[['ios', 20], ['and', 40]]}
@@ -35,8 +37,7 @@
         .col-lg-2.mdl-color--light-blue-900.borderradius
           %span.publishBtn
             = submit_tag 'Filter'
-      - if !Rails.env.production?
-        %a.legend-item.btn.btn-sm.btn{:type => 'button', :href => admin_event_analytics_path(:event_id => @event.id, :print_preview => true, :detailed_analytics => params[:detailed_analytics], :analytics => params[:analytics], :start_date => params[:start_date], :end_date => params[:end_date], :token => @event.token ), :class => params[:detailed_analytics].present? ? 'btn-deactive' : 'mdl-color--light-blue-900', :target => '_blank'} Print Preview
+      %a.legend-item.btn.btn-sm.btn{:type => 'button', :href => admin_event_analytics_path(:event_id => @event.id, :print_preview => true, :detailed_analytics => params[:detailed_analytics], :analytics => params[:analytics], :start_date => params[:start_date], :end_date => params[:end_date], :token => @event.token ), :class => params[:detailed_analytics].present? ? 'btn-deactive' : 'mdl-color--light-blue-900', :target => '_blank'} Print Preview
 - if @date_filter_error.blank?
   .allcp-panels.fade-onload.clear.smallCard
     - @detailed_analytics_counts[0].each do |feature|

@@ -24,7 +24,8 @@ class Conversation < ActiveRecord::Base
 
   after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone
 
-  default_scope { order('created_at desc') }
+  scope :desc_ordered, -> { order('updated_at DESC') }
+  scope :asc_ordered, -> { order('updated_at ASC') }
 
   aasm :column => :status do
     state :pending, :initial => true
@@ -148,8 +149,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.each do |comment|
-      comment_obj << comment[0]
+    comments.first.each do |comment|
+      comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment
     object
@@ -183,6 +184,15 @@ class Conversation < ActiveRecord::Base
   def name
     Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
   end
+  
+  def first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+  
+  def last_name
+    Invitee.find_by_id(self.user_id).last_name rescue ""
+  end
+
   def comment
     ""
   end

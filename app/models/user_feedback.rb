@@ -4,8 +4,9 @@ class UserFeedback < ActiveRecord::Base
   belongs_to :feedback
   belongs_to :user
 
-  validates :user_id, :feedback_id, :answer, presence: true
+  validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
+  validate :check_answer_or_description_present
   after_create :create_analytic_record
   default_scope { order('created_at desc') }
   
@@ -23,6 +24,14 @@ class UserFeedback < ActiveRecord::Base
 
   def name
     Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+  end
+
+  def first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+
+  def last_name
+    Invitee.find_by_id(self.user_id).last_name rescue ""
   end
 
 	def Question

@@ -51,12 +51,16 @@ body {
   font-size-adjust: 100%;
 }
 body.login-body{
-  background:url('/assets/Login-page-min_new.jpg');
+  /*background:url('/assets/Login-page-min_new.jpg');*/
   font-family:'helvetica_ceregular';
-  background-repeat: no-repeat;
-  background-position: center;
+/*  background-repeat: no-repeat;
+  background-position: center;*/
   position: relative;
+  overflow: hidden;
+
+  
 }
+.loginlogo img{width:100%;}
 /* .login-wrap{
   background:url('/assets/Login-page.png');
   background-repeat: no-repeat;
@@ -177,10 +181,13 @@ body.login-body{
     position: absolute;
     right: 0;text-align:center;
     top: 50%;
-    -webkit-transform: translateY(-50%);-moz-transform: translateY(-50%);-ms-transform: translateY(-50%);-ms-transform: translateY(-50%);transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 #login h1{margin:0;}
+
 
 #login h1{
   background:#00cad6;
@@ -287,10 +294,16 @@ body.login-body{
   height: 44px;
   background: url("/assets/fancybox_loading.gif") center center no-repeat;
   }
-@media screen and (max-width: 767px){
-  body.login-body{
-    background-size: 100% 100%;
-  }
+  .logincontail{overflow: hidden;position: relative;}
+  @media only screen and (min-width:480px) and (max-width: 640px){
+  .login-logo{ width: 15%;}
+  .loginlogo img{width: 125%;}
 }
+ 
 
-
+@media only screen and (min-width:360px) and (max-width: 640px){
+  .loginlogo img{width: 108%;}
+}
+@media only screen and (max-width: 800px){
+  body.login-body{overflow: inherit;}
+}

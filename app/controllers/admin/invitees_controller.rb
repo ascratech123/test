@@ -2,8 +2,10 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:autocomplete_invitee_name_of_the_invitee]
   
+  # autocomplete :invitee, :name_of_the_invitee, :full => true
+  # admin_invitees_autocomplete_invitee_name_of_the_invitee_path
 
   def index
     if params["send_mail"] == "true"
@@ -24,13 +26,13 @@ class Admin::InviteesController < ApplicationController
       end
     end
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
-    @invitees = @invitees.includes(:analytics).paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+    @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
-        only_columns = [:first_name, :last_name, :email, :designation, :company_name, :invitee_status]
-        method_allowed = []
-        send_data @invitees.to_xls(:only => only_columns, :filename => "asd.xls")
+        only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
+        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL]
+        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end

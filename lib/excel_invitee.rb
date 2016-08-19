@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'roo'
+require 'open-uri'
 # require 'zip/zipfilesystem'
 #include ActiveSupport::Inflector
 
@@ -47,12 +48,27 @@ module ExcelInvitee
       objekt = nil
       objekt = {} #klass_name.classify.constantize.new()
       columns_in_worksheet.each_with_index do |attrib, index|
-        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
+        # objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
+        objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(Numeric) ? (workbook.cell(line, letters_array[index]).to_s.strip rescue '') : (workbook.cell(line, letters_array[index]).strip rescue '')
       end
       email = objekt['email'].downcase rescue nil
       invitee = Invitee.find_or_initialize_by(:email => email, :event_id => event_id)
-      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_id"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_id"], )
+      if objekt["password"].present?
+        password = objekt["password"]
+      else
+        password = nil
+      end
+      if objekt["profile_pic_url"].present?
+        profile_url = objekt["profile_pic_url"] rescue nil
+        data = open(profile_url).read rescue nil
+        write_file_content = File.open("public/#{profile_url.split('/').last}", 'wb') do |f|
+          f.write(data)
+        end
+        profile_picture = (File.open("public/#{profile_url.split('/').last}",'rb'))
+      end
+      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_link"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_link"], :twitter_id => objekt["twitter_link"],:invitee_password => password,:password => password, :profile_pic => profile_picture)
       objekts << invitee
+      File.delete("public/#{profile_url.split('/').last}") if profile_url.present? and File.exist?("public/#{profile_url.split('/').last}")
     end
     objekts.compact
   end

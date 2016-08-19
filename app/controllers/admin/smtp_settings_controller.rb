@@ -2,14 +2,14 @@ class Admin::SmtpSettingsController < ApplicationController
   layout 'admin'
 
   before_filter :authenticate_user, :find_smtp_setting
-
+  before_filter :set_back_url, :only => [:new,:edit]
   def index
 
   end
 
   def new
     if @smtp_setting.id.present?
-      redirect_to edit_admin_smtp_setting_path(:id => @smtp_setting.id)
+      redirect_to edit_admin_smtp_setting_path(:id => @smtp_setting.id,:smtp_url => params[:smtp_url])
     else
       @smtp_setting = @licensee_admin.build_smtp_setting
     end  
@@ -18,7 +18,9 @@ class Admin::SmtpSettingsController < ApplicationController
   def create
     @smtp_setting = SmtpSetting.new(smtp_setting_params)
     if @smtp_setting.save
-      redirect_to edit_admin_smtp_setting_path(:id => @smtp_setting.id)
+      @url = session[:smtp_url]
+      session[:smtp_url] = nil
+      redirect_to (@url || "/")
     else
       render :action => 'new'
     end
@@ -29,7 +31,9 @@ class Admin::SmtpSettingsController < ApplicationController
 
   def update
     if @smtp_setting.update_attributes(smtp_setting_params)
-      redirect_to edit_admin_smtp_setting_path(:id => @smtp_setting.id)
+      @url = session[:smtp_url]
+      session[:smtp_url] = nil
+      redirect_to (@url || "/")
     else
       render :action => "edit"
     end
@@ -55,5 +59,10 @@ class Admin::SmtpSettingsController < ApplicationController
 
   def smtp_setting_params
     params.require(:smtp_setting).permit!
+  end
+
+  def set_back_url
+    session[:smtp_url] = request.referer 
+    @url = session[:smtp_url] 
   end
 end

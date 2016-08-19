@@ -119,7 +119,7 @@ border-radius: 4px;
 	
 	
  @media all and ( max-width:1024px){
-	 .left_arrow{ width:3%;}
+	 .left_arrow{ width:5%;}
 	 .bannerArrow_left{ right:8px;}
  .bannerArrow_right{ left:8px;}
  }
@@ -129,5 +129,14 @@ border-radius: 4px;
  .bannerArrow_left{ right:8px;}
  .bannerArrow_right{ left:8px;}
   }
+  
+ .productBanner1{ display:block !important; }
+.productBanner2{ display:none !important;}
+
+@media all and ( max-width:767px){
+.productBanner1{ display:none !important;}
+.productBanner2{ display:block !important; }
+}
+
   
  

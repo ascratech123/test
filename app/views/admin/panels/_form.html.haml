@@ -32,9 +32,9 @@
     $("#add_speaker").hide();
   }
   
-  $("#selected_speaker").click(function(){
-    value = $("#selected_speaker").val();
-    if (value == 0){
+  $('#selected_speaker').on('change', function() {
+    value = $(this).val();
+    if(value == 0){
       $("#add_speaker").show();
     }else{
       $("#add_speaker").hide();
