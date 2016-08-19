@@ -2,10 +2,8 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:autocomplete_invitee_name_of_the_invitee]
+  before_filter :authenticate_user, :authorize_event_role, :find_features
   
-  # autocomplete :invitee, :name_of_the_invitee, :full => true
-  # admin_invitees_autocomplete_invitee_name_of_the_invitee_path
 
   def index
     if params["send_mail"] == "true"
@@ -26,7 +24,7 @@ class Admin::InviteesController < ApplicationController
       end
     end
     @invitees = Invitee.search(params, @invitees) if params[:search].present?
-    @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+    @invitees = @invitees.includes(:analytics).paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do

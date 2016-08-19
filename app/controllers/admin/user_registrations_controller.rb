@@ -5,29 +5,7 @@ class Admin::UserRegistrationsController < ApplicationController
   skip_before_filter :authenticate_user, :load_filter
     
   def index
-   # redirect_to new_admin_event_user_registration_path(:event_id => @event.id) 
-   @registration = @event.registrations.first
-    if @registration.blank?
-      redirect_to :back
-    else
-      @user_registrations = @event.user_registrations.paginate(page: params[:page], per_page: 10)
-      respond_to do |format|
-        format.html do
-          @user_registrations = @user_registrations.paginate(page: params[:page], per_page: 10)
-          render :layout => 'admin'
-        end  
-        format.xls do
-          @export_array = [@registration.selected_column_values]
-          method_allowed = []
-          @only_columns = @registration.selected_columns
-          for invitee in @user_registrations
-            arr = @only_columns.map{|c| invitee.attributes[c]}
-            @export_array << arr
-          end
-          send_data @export_array.to_reports_xls, filename: "registered_user_#{@registration.id}.xls"
-        end
-      end
-    end
+   redirect_to new_admin_event_user_registration_path(:event_id => @event.id) 
   end
 
   def new
@@ -64,14 +42,6 @@ class Admin::UserRegistrationsController < ApplicationController
   end
 
   def show
-  end
-
-  def update
-    @user_registrations = @event.user_registrations
-    @user_registration = @user_registrations.find_by_id(params[:id])
-    @user_registrations = @user_registrations.paginate(page: params[:page], per_page: 10)
-    @user_registration.perform_event(params[:status]) if params[:status].present? and params[:manual_approve].present? and params[:manual_approve] == 'true'
-    redirect_to :back
   end
 
 

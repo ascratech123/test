@@ -22,8 +22,6 @@ class Admin::AnalyticsController < ApplicationController
     end
   end
 
-  protected
-  
   def find_event
     @event = Event.find_by_id(params[:event_id])
   end

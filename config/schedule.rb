@@ -14,12 +14,12 @@ set :output, "log/cron_log.log"
 #   rake "some:great:rake:task"
 # end
 #
-every 1.minute do
-  runner "Notification.push_notification_time_basis", :environment => :staging
-end
+#every 1.minute do
+#  runner "Notification.push_notification_time_basis", :environment => :staging
+#end
 
 # Learn more: http://github.com/javan/whenever
 
-every 30.minutes do
-  runner "Notification.push_notification_time_basis", :environment => :staging
+every 5.minutes do
+  runner "Notification.push_notification_time_basis", :environment => :production
 end

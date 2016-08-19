@@ -27,9 +27,7 @@ class Admin::RegistrationsController < ApplicationController
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
       else
-        # redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
-        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
-
+        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
       end
     else
       render :action => 'new'
@@ -53,10 +51,9 @@ class Admin::RegistrationsController < ApplicationController
   def update
     if params[:change_code].present?
       @registration.update_attributes(registration_params)
-      redirect_to admin_event_registration_settings_path(:event_id => @event.id)
+      redirect_to edit_admin_event_registration_path(:event_id => @event.id,:id => @registration.id,:change_code => "true")
     elsif @registration.update_attributes(registration_params)
-      # redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
-      redirect_to admin_event_registration_settings_path(:event_id => @event.id)
+      redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration.event_id)
     else
       render :action => "edit"
     end

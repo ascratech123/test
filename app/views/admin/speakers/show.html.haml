@@ -13,7 +13,7 @@
               %i.material-icons edit  
   .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-phone.m-t-75
     .p-40
-      .save_button.mdl-card.mdl-shadow--1dp.agendaheight.p-b-10.bgWhite
+      .save_button.mdl-card.mdl-shadow--1dp.agendaheight.p-b-10
         .mdl-tabs.mdl-js-tabs.ProfileTabLeft
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
@@ -34,7 +34,7 @@
                     = show_field("Phone No : ", @speaker.phone_no)
                     = show_field("Rating Status : ", @speaker.rating_status)
                     = show_field("Info : ", @speaker.speaker_info)
-                    .mdl-cell--4-col.mdl-cell--4-col-tablet
+                    .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
                       %p.no-m-b
                         %strong Profile Picture:
                         %span
@@ -81,7 +81,7 @@
               .ml-card-holder
                 %div
                   %form.ng-pristine.ng-valid{:action => "#"}
-                    .mdl-grid.feedbackInfo       
+                    .mdl-grid       
                       - if @speaker.ratings.present?
                         - @speaker.ratings.each do |rating|
                           = show_field("Comment : ", rating.comments)
