@@ -19,11 +19,10 @@
             %label.col-lg-4.control-label.ml-color--shades-white
               Track
             .col-lg-7
-              - default_agenda_type = ['Add New Track']
-              - default_agenda_type = default_agenda_type + @event.get_agenda
-              - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
+              - agenda_tracks = @event.get_event_agenda_tracks.collect {|p| [ p.track_name, p.track_name ] }.uniq
+              - agenda_tracks = agenda_tracks.unshift(["Add New Track", 0])
               %i.arrow.single
-              = f.select("agenda", "agenda_type", default_agenda_type, {:selected => f.object.agenda_type,:prompt => "#{(f.object.agenda_type.present? and f.object.agenda_type != "Add New Track") ? f.object.agenda_type : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              = f.select("agenda", "agenda_track_id", agenda_tracks, {:selected => f.object.agenda_track.present? ? f.object.agenda_track.track_name : "",:prompt => "#{(f.object.agenda_track.present? and f.object.agenda_track.track_name != "Add New Track") ? f.object.agenda_track : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:agenda_type].join("") rescue nil 
@@ -110,8 +109,8 @@
       $("#agenda_speaker_name").parent().parent().show();
     }
   });
-  $("#agenda_agenda_type").click(function(){
-    value = $("#agenda_agenda_type").val();
+  $("#agenda_agenda_track_id").click(function(){
+    value = $('#agenda_agenda_track_id').find(":selected").text();
     if(value == "Add New Track")
       $("#agenda_new_category").parent().parent().show();
     else

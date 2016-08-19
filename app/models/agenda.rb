@@ -3,6 +3,7 @@ class Agenda < ActiveRecord::Base
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category
   belongs_to :event
   belongs_to :speaker
+  belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
@@ -98,5 +99,17 @@ class Agenda < ActiveRecord::Base
 
   def end_agenda_time_with_event_timezone
     self.end_agenda_time.in_time_zone(self.event_timezone)
+  end
+
+  def agenda_type
+    self.agenda_track.present? ? self.agenda_track.track_name : ""
+  end
+
+  def agenda_track_name
+    self.agenda_track.track_name
+  end
+
+  def track_sequence
+    self.agenda_track.sequence
   end
 end

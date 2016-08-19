@@ -174,7 +174,7 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info
           end
         when "Agenda"
-          data[:"#{name_table(model)}"] = info.as_json(:methods =>[:start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone]) rescue []
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:sequence], :methods =>[:start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone, :agenda_track_name, :track_sequence])
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
