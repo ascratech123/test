@@ -1,7 +1,7 @@
 class Import < ActiveRecord::Base
   attr_accessor :event_id, :client_id
   has_attached_file :import_file,
-                    {}.merge(IMPORT_STORAGE)
+                     {}.merge(IMPORT_STORAGE)
   validates_attachment_presence :import_file,:message => "This field is required."
   # validates_attachment :import_file, content_type: { content_type: "application/*" }
 

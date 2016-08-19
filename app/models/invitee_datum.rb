@@ -4,7 +4,8 @@ class InviteeDatum < ActiveRecord::Base
   attr_accessor :callback_time_hour, :callback_time_minute ,:callback_time_am,:callback_date,:check_remark_and_status_present, :skip_status_update
   validates :invitee_structure_id, :presence => true
   # validates :attr1,:attr2,:attr3,:attr4,:attr5,:attr6,:attr7,:attr8,:attr9,:attr10,:attr11,:attr12,:attr13,:attr14,:attr15, presence:{ :message => "This field is required." }
-  validates :attr1,:attr2,:attr3,:attr4,:attr6,:attr11,:attr12, presence:{ :message => "This field is required." }, :if => Proc.new{|p| p.check_remark_and_status_present == "true"}
+  
+  # validates :attr1,:attr2,:attr3,:attr4,:attr6,:attr11,:attr12, presence:{ :message => "This field is required." }, :if => Proc.new{|p| p.check_remark_and_status_present == "true"}
   validates :callback_date, presence:{ :message => "This field is required." }, :on => :update, :if => Proc.new{|p| p.status == "CALL BACK" || p.status == "FOLLOW UP"} 
   validates :status, :remark, presence:{ :message => "This field is required." }, :on => :update, :if => Proc.new{|p| p.skip_status_update != "true"}
   validate :validate_uniq_identifier

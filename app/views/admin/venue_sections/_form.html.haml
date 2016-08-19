@@ -1,0 +1,27 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+-else
+  .save_button.mdl-card
+    = form_for [:admin, @event ,@venue_section], :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+        = f.custom_text_field :name, "Name","background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck.venue_access_div
+          .form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt
+                Default Access
+            .col-lg-7.p-h-12.socialchk
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                %label.help-tip{:for => "venue_section_#{f.object.id}"}
+                  = check_box_tag "venue_section[default_access][]","yes",(f.object.default_access.present? and f.object.default_access == "yes" ? "checked" : false), :id => "venue_section_#{f.object.id}"
+                  %span.checkbox.venue_checkbox
+                  %span.top3
+                    Yes
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)

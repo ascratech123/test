@@ -5,3 +5,5 @@
 <% else %>
   $(".sequence_update").html('<%= escape_javascript(render :partial => "admin/#{@redirect_feature}/index", :locals => {:objs => @features}) %>');
 <% end %>
+$(".edit_delete_td,.edit_delete_th").show();
+$(".IconDrp, .icon_drop").hide();

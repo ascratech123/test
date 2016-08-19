@@ -32,8 +32,11 @@
                     = obj[0].attributes[obj[1]].truncate(80) rescue '' if feature[0] != 'top_pages'
                     = feature_arr[0] if feature[0] == 'top_pages' and @event_feature_names.include? Analytic::VIEWABLE_TYPE_TO_FEATURE[feature_arr[0]]
                   %td
-                    = feature_arr[1].round(1) if feature[0] == 'top_rated_speakers'
-                    - if feature[0] != 'top_rated_speakers' and feature[0] != 'top_pages'
+                    - if feature[0] == 'top_rated_speakers'
+                      = feature_arr[1].round(1) if feature[0] == 'top_rated_speakers'
+                    - elsif feature[0] == 'top_rated_agendas' and feature[0] != 'top_pages'
+                      = feature_arr[1].round(1) if feature[0] == 'top_rated_agendas'
+                    - elsif feature[0] != 'top_rated_speakers' and feature[0] != 'top_pages'
                       = feature_arr[1] if feature[0] != 'top_rated_speakers'
                     - elsif feature[0] != 'top_rated_speakers' and feature[0] == 'top_pages' and @event_feature_names.include? Analytic::VIEWABLE_TYPE_TO_FEATURE[feature_arr[0]]
                       = feature_arr[1]

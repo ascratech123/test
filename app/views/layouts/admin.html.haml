@@ -12,7 +12,8 @@
         .mdl-layout__header-row.mdl-color--light-blue-900
           = render :partial => 'layouts/admin_top_header'
 
-          .mdl-layout-spacer
+          .mdl-layout-spacer{:style => 'text-align:center;font-size:14px;color:#fff'}
+            = session[:licensee_expired] if session[:licensee_expired].present?
           -if false
             %span.mdl-layout-title.mdl-color-text--white.HeaderUserName
               - if get_current_user_role
@@ -59,8 +60,9 @@
                 My Profile
             - if (current_user.has_role? "licensee_admin" or current_user.has_role? "client_admin" or current_user.has_role? "event_admin")
               %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
-                %a{:href =>"/admin/smtp_settings/new", :class => "logoutwieght"}
-                  Smtp Setting
+                = link_to "Smtp Setting", new_admin_smtp_setting_path(),:class =>'logoutwieght'
+                / %a{:href =>"/admin/smtp_settings/new",:class => "logoutwieght"}
+                /   Smtp Setting
             %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
               = link_to "Logout", destroy_user_session_path, :method => :get, :class =>'logoutwieght', :id => 'hdrbtn' 
             

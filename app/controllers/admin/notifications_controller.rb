@@ -2,7 +2,8 @@ class Admin::NotificationsController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features, :find_groups
+  before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :find_groups, :only => [:new, :create, :edit, :update]
   def index
     @notifications = @notifications.paginate(:page => params[:page], :per_page => 10)
   end
@@ -57,5 +58,7 @@ class Admin::NotificationsController < ApplicationController
 
   def find_groups
     @groups = @event.invitee_groups
+    @default_groups = @groups.where(:name => ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'])
+    @other_groups = @groups.where('name NOT IN (?)', ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'])
   end
 end

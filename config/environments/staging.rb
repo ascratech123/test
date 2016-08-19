@@ -86,8 +86,8 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  # :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
  :email => {
    :email_prefix => "Staging Shobiz Error Notifier",
-   :sender_address => %{"Error notifier" <error@ascratech.com>},
-   :exception_recipients => %w{shiv@ascratech.com sandeep@ascratech.com sushil@ascratech.in}
+   :sender_address => %{"Error notifier" <info@hobnobspace.com>},
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in}
  }
 
 
@@ -110,9 +110,21 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         :s3_credentials => S3_CREDENTIALS,
                         :bucket => S3_bucket
                         }
-ATTACH_FILE_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-
+HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+                     
+ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment2/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_3_PATH =   {:path => "my_travel/attachment3/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment3/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 

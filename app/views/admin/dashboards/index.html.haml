@@ -58,7 +58,7 @@
     /         %i.fa.fa-bar-chart.fs22.text-default
     / -------------- /Topbar --------------
     / -------------- Content --------------
-    - if !current_user.has_role? :telecaller
+    - if !current_user.has_any_role?(:telecaller,:volunteer)
       %section#content.table-layout.animated.fadeIn
         / -------------- Column Center --------------
         .chute.chute-center
@@ -233,35 +233,31 @@
 
 
                       
-          - if @clients.blank? or @mobile_applications.blank? or @events.blank?  
-            - if @mobile_applications.blank? 
-              - title = "Mobile App" 
-              - description = ""
-              - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "mobile_application")
-            - if @events.blank? and check_curent_user_role("event")
-              - title = "Event" 
-              - description = ""
-              - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "event")
-            - if @clients.blank? and check_curent_user_role("client")
-              - title = "Client"
-              - description = ""
-              - url = new_admin_client_path
-            .row
-              .CreateDashLayout
-                %h2
-                  Create your first 
-                  %span.AppName
-                    = title + "."
-                %p
-                  - if false
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, a galley of type and scrambled it to make a type specimen book.
-                .appBtn
-                  %a{:href => url, :class => 'DashAddIcon mdl-color--light-blue-600'}
-                    %i.material-icons
-                      added
-                    = "New #{title}"   
-          
-:javascript
-  var OVERALL_ENGAGEMENT = [{name: 'Event Listing', data: [40.0, 6, 9, 14, 18, 21.5, 25.2, 66.5, 23.3, 18.3, 13.9, 9.6]}, {name: 'Conversations',data: [3.9, 4.2, 5.7, 8.5, 11.9,19.6, 18.9, 17.3, 60.0, 5.9, 6.0]}, {name: 'Speakers',data: [3, 1, 3.5, 8.4, 13.5, 77.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]}]
-  var DONUTCHART1ARRAY = [['Android', 30],['Ios', 70]]
-  var DONUTCHART2ARRAY = [['Android', 60],['Ios', 40]]
+          - if (current_user.present? and !current_user.has_role? :super_admin)
+            - if @clients.blank? or @mobile_applications.blank? or @events.blank?  
+              - if @mobile_applications.blank? 
+                - title = "Mobile App" 
+                - description = ""
+                - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "mobile_application")
+              - if @events.blank? and check_curent_user_role("event")
+                - title = "Event" 
+                - description = ""
+                - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "event")
+              - if @clients.blank? and check_curent_user_role("client")
+                - title = "Client"
+                - description = ""
+                - url = new_admin_client_path
+              .row
+                .CreateDashLayout
+                  %h2
+                    Create your first 
+                    %span.AppName
+                      = title + "."
+                  %p
+                    - if false
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, a galley of type and scrambled it to make a type specimen book.
+                  .appBtn
+                    %a{:href => url, :class => 'DashAddIcon mdl-color--light-blue-600'}
+                      %i.material-icons
+                        added
+                      = "New #{title}"   

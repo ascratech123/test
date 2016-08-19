@@ -1,10 +1,10 @@
 .save_button.mdl-card.agendaheight 
   = form_for [:admin, @client, @mobile_application, @push_pem_file], :builder => CustomFormBuilder do |f|
-    .mdl-grid.emegencyUpload.p-b-35
+    .mdl-grid.emegencyUpload.p-b-35.bgwhite
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           General Information
-      = f.custom_text_field :title, "Push Title *"
+      = f.custom_text_field :title, "Push Title"
       = f.custom_text_field :pass_phrase, "Push Phrase *"
       = f.custom_text_field :push_url, "Push Url *"
       = f.custom_text_field :android_push_key, "Android Pem Key *"

@@ -8,7 +8,7 @@ class Admin::UserPollsController < ApplicationController
     respond_to do |format|
       format.html  
       format.xls do
-        method_allowed = [:Timestamp, :email_id, :name, :question, :user_answer]
+        method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :question, :user_answer]
         send_data @user_polls.to_xls(:methods => method_allowed)
       end
     end

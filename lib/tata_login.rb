@@ -15,7 +15,7 @@ module TataLogin
     end
     str = `curl -X POST -H "Content-Type:text/xml" --header "SOAPAction:https://www.tataworld.com/authencryptuserdet" --data @"#{Rails.root}/public/external_login/#{email}_login_details.xml" https://www.tataworld.com/TWvalidateuser.asmx`
     `rm -f "#{Rails.root}/public/external_login/#{email}_login_details.xml"`
-    @status = str.split("<authencryptuserdetResult>").last.split("</authencryptuserdetResult>").first
+    @status = str.split("<authencryptuserdetResult>").last.split("</authencryptuserdetResult>").first rescue 'Invalid User'
   end
 
 end

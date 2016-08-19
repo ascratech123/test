@@ -16,7 +16,7 @@
               %i.material-icons edit
   .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--12-col-phone.m-t-75
     .p-40
-      .save_button.mdl-card.mdl-shadow--1dp.agendaheight.p-b-10
+      .save_button.mdl-card.mdl-shadow--1dp.agendaheight.p-b-10.bgWhite
         .mdl-tabs.mdl-js-tabs.ProfileTabLeft
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
@@ -38,7 +38,7 @@
                       = show_field("Likes Count : ", obj.likes.count) rescue nil
                       = show_field("Company Name : ", obj.user.company_name) rescue nil
                       
-                      .mdl-cell--5-col.mdl-cell--4-col-tablet.m-8
+                      .mdl-cell--5-col.mdl-cell--4-col-tablet
                         %p.no-m-b
                           %strong Picture:
                           %span

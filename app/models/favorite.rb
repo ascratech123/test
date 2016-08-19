@@ -22,7 +22,7 @@ class Favorite < ActiveRecord::Base
   end
 
   def self.get_top_favorite(count, type, event_id, from_date, to_date)
-    favorites = Favorite.where('favoritable_type = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', type, event_id, from_date, to_date)
+    favorites = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', type, event_id, from_date, to_date)
     favorites.group(:favoritable_id).count.sort_by{|k, v| v}.last(count).reverse
   end
 end

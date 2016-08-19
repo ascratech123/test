@@ -22,7 +22,7 @@
             %td.font16= licensee.company.capitalize rescue nil
             %td.font16= link_to "#{licensee.email}", admin_licensee_path(licensee.id)
             %td.font16= licensee.status.capitalize rescue nil
-            %td.font16= licensee.no_of_event
+            %td.font16= licensee.get_licensee_events_count
             %td.font16= licensee.licensee_start_date.strftime('%d-%m-%Y') rescue nil
             %td.font16= licensee.licensee_end_date.strftime('%d-%m-%Y') rescue nil
             %td.IconDrp
@@ -34,4 +34,3 @@
                   = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/licensees", :id => licensee.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
                 = link_to "Delete",{:action=>"update", :controller=>"admin/licensees", :id => licensee.id, :deleted => "true", :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want Delete the Licensee.'},:class => "mdl-menu__item"
   = will_paginate objs
-

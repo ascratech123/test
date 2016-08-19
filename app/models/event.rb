@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
-
+  FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
 
   belongs_to :client
   belongs_to :theme
@@ -27,14 +27,14 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :feedbacks, :dependent => :destroy
   has_many :images, as: :imageable, :dependent => :destroy
-  has_many :panels
+  has_many :panels, :dependent => :destroy
   has_many :event_features, :dependent => :destroy
-  has_many :feedbacks
-  has_many :e_kits
-  has_many :contacts 
+  has_many :feedbacks, :dependent => :destroy
+  has_many :e_kits, :dependent => :destroy
+  has_many :contacts, :dependent => :destroy 
   has_many :notifications, :dependent => :destroy
-  has_many :highlight_images
-  has_many :groupings
+  has_many :highlight_images, :dependent => :destroy
+  has_many :groupings, :dependent => :destroy
   has_many :quizzes, :dependent => :destroy
   has_many :invitee_structures, :dependent => :destroy
   has_many :favorites, :dependent => :destroy
@@ -49,9 +49,12 @@ class Event < ActiveRecord::Base
   has_many :custom_page3s, :dependent => :destroy
   has_many :custom_page4s, :dependent => :destroy
   has_many :custom_page5s, :dependent => :destroy
-  has_many :chats
-  has_many :invitee_groups
+  has_many :chats, :dependent => :destroy
+  has_many :invitee_groups, :dependent => :destroy
   has_many :my_travels, :dependent => :destroy
+  has_many :telecaller_accessible_columns, :dependent => :destroy
+  has_many :campaigns, :dependent => :destroy
+  has_many :venue_sections, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
@@ -142,16 +145,40 @@ class Event < ActiveRecord::Base
   end
 
   def self.search(params, events)
-    event_name, event_code, start_date, order_by, order_by_status = params[:search][:name], params[:search][:code], params[:search][:start_date], params[:search][:order_by], params[:search][:order_by_status] if params[:adv_search].present?
+    event_name, end_date, start_date, order_by, order_by_status = params[:search][:name], params[:search][:end_date], params[:search][:start_date], params[:search][:order_by], params[:search][:order_by_status] if params[:adv_search].present?
     basic = params[:search][:keyword]
-    events = events.where("event_name like (?)","%#{event_name}%") if event_name.present?
-    events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
-    events = events.where("start_event_date =?",start_date) if start_date.present?
-    events = events.where('start_event_date > ?',Date.today) if order_by.present? and order_by == "upcoming"
-    events = events.where('start_event_date < ?',Date.today) if order_by.present? and order_by == "past"
-    events = events.where('start_event_date = ?',Date.today) if order_by.present? and order_by == "ongoing"
-    events = events.where("status = ?", order_by_status) if order_by_status.present?
-    events = events.where("event_name like (?) or event_code like (?)", "%#{basic}%", "%#{basic}%") if basic.present?
+    if event_name.present?
+      events = events.where("event_name like (?)","%#{event_name}%")
+    end
+    # events = events.where("event_code like (?)","%#{event_code}%") if event_code.present?
+    if end_date.present?
+      # events = events.where("end_event_date =?",end_date.to_date)
+      events = events.where("end_event_date >=? and end_event_date <= ? ", end_date.to_datetime, (end_date.to_datetime.next_day - 1.minutes))
+    end
+    if start_date.present?
+      # events = events.where("start_event_date =?",start_date.to_date)
+      events = events.where("start_event_date >=? and start_event_date <= ? ", start_date.to_datetime, (start_date.to_datetime.next_day - 1.minutes))
+
+    end
+    if order_by.present? and order_by == "upcoming"
+      events = events.where('start_event_date > ? AND end_event_date > ?',Date.today,Date.today) 
+    end
+
+    if order_by.present? and order_by == "past"
+      events = events.where('start_event_date < ? AND end_event_date < ?',Date.today, Date.today) 
+    end
+
+    if order_by.present? and order_by == "ongoing"
+      events = events.where('start_event_date <= ? AND end_event_date >= ?',Date.today,Date.today)
+    end
+
+    if order_by_status.present?
+      events = events.where("status = ?", order_by_status) 
+    end
+    if basic.present?
+      events = events.where("event_name like (?)", "%#{basic}%") 
+    end
+    
     events
   end 
 
@@ -159,7 +186,7 @@ class Event < ActiveRecord::Base
     style.present? ? self.logo.url(style) : self.logo.url
   end
 
-  def inside_logo_url(style=:small)
+  def inside_logo_url(style=:original)
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 
@@ -254,8 +281,7 @@ class Event < ActiveRecord::Base
   end
   
   def set_features_default_list()
-    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s"]
-    default_features += ["chats", "my_travels"] if !Rails.env.production?
+    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings"]
     default_features
   end
 
@@ -272,12 +298,12 @@ class Event < ActiveRecord::Base
     # end_event_date = self.end_event_date.to_date if self.end_event_date.present?
     start_event_time = "#{start_event_date} #{start_time_hour.gsub(':', "") rescue nil}:#{start_time_minute.gsub(':', "") rescue nil}:#{0} #{start_time_am}" if start_event_date.present?
     end_event_time = "#{end_event_date} #{end_time_hour.gsub(':', "") rescue nil}:#{end_time_minute.gsub(':', "") rescue nil}:#{0} #{end_time_am}" if end_event_date.present?
-    if start_event_date.present? and [345, 360, 367, 173, 165, 168].include? self.id
+    if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
       self.start_event_time = start_event_time.to_time
     end
-    if end_event_date.present? and [345, 360, 367, 173, 165, 168].include? self.id
+    if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
       self.end_event_time = end_event_time.to_time 
@@ -294,7 +320,7 @@ class Event < ActiveRecord::Base
   end
 
   def check_event_content_status
-    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s']
+    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
     #features += ['contacts', 'emergency_exit', 'event_highlights', 'highlight_images']
     count = 0
@@ -302,7 +328,7 @@ class Event < ActiveRecord::Base
     content_missing_arr = []
     features.each do |feature|
       feature = 'images' if feature == 'galleries'
-      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue') and (feature != 'emergency_exits' and feature != 'emergency_exit')
+      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings') and (feature != 'emergency_exits' and feature != 'emergency_exit')
       condition, feature = EmergencyExit.where(:event_id => self.id).blank?, 'emergency_exits' if feature == 'emergency_exits' or feature == 'emergency_exit'
       if (condition or (feature == 'abouts' and self.about.blank? or ((feature == 'event_highlights' and self.description.blank?) )))
         count += 1
@@ -346,7 +372,7 @@ class Event < ActiveRecord::Base
     #percentage
     total = 0
     features = self.event_features
-    features = features.where("name NOT IN (?)", ["event_highlights","my_calendar","chats"])
+    features = features.where("name NOT IN (?)", ["event_highlights","my_calendar","chats","social_sharings"])
     feature_length = features.length
     total = feature_length * 2 if feature_length.present?
     count = 0
@@ -392,11 +418,11 @@ class Event < ActiveRecord::Base
 
   def image_dimensions
     if self.inside_logo_file_name_changed?  
-      inside_logo_dimension_height  = 140.0
-      inside_logo_dimension_width = 600.0
+      inside_logo_dimension_height  = 300.0
+      inside_logo_dimension_width = 1280.0
       dimensions = Paperclip::Geometry.from_file(inside_logo.queued_for_write[:original].path)
       if (dimensions.width != inside_logo_dimension_width or dimensions.height != inside_logo_dimension_height)
-        errors.add(:inside_logo, "Image size should be 600x140px only") if self.errors['inside_logo'].blank?
+        errors.add(:inside_logo, "Image size should be 1280x300px only") if self.errors['inside_logo'].blank?
       else
         self.errors.delete(:inside_logo)
       end
@@ -441,9 +467,11 @@ class Event < ActiveRecord::Base
 
   def chage_updated_at
     self.theme.update_column(:updated_at, Time.now)
-    ["contacts","speakers","invitees","agendas","faqs","qnas","conversations","polls","awards","sponsors","feedbacks","panels","event_features","e_kits","quizzes","favorites","exhibitors"].each do |t|
-      query = "UPDATE #{t} SET updated_at = '#{Time.now.strftime("%Y-%m-%d %T")}' WHERE event_id = #{self.id};"
-      ActiveRecord::Base.connection.execute(query)
+    ["contacts","speakers","invitees","agendas","faqs","qnas","conversations","polls","awards","sponsors","feedbacks","panels","event_features","e_kits","quizzes","favorites","exhibitors",'galleries', 'emergency_exits', 'attendees', 'my_travels', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s'].each do |t|
+      # query = "UPDATE #{t} SET updated_at = '#{Time.now.strftime("%Y-%m-%d %T")}' WHERE event_id = #{self.id};"
+      # ActiveRecord::Base.connection.execute(query)
+      FEATURE_TO_MODEL[t].constantize.where(:event_id => self.id).update_all(:updated_at => Time.now) if t != 'galleries'
+      FEATURE_TO_MODEL[t].constantize.where(:imageable_id => self.id, :imageable_type => 'Event').update_all(:updated_at => Time.now) if t == 'galleries'
     end
     #query = "UPDATE contacts,speakers,invitees,agendas,faqs,qnas,conversations,polls,awards,sponsors,feedbacks,panels,event_features,e_kits,quizzes,favorites,exhibitors SET contacts.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  speakers.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  invitees.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  agendas.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  faqs.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  qnas.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  conversations.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  polls.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  awards.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  sponsors.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  feedbacks.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  panels.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  event_features.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  e_kits.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  quizzes.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  favorites.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}',  exhibitors.updated_at =  '#{Time.now.strftime("%Y-%M-%d %T")}' WHERE contacts.event_id = #{self.id} AND speakers.event_id = #{self.id} AND invitees.event_id = #{self.id} AND agendas.event_id = #{self.id} AND faqs.event_id = #{self.id} AND qnas.event_id = #{self.id} AND conversations.event_id = #{self.id} AND polls.event_id = #{self.id} AND awards.event_id = #{self.id} AND sponsors.event_id = #{self.id} AND feedbacks.event_id = #{self.id} AND panels.event_id = #{self.id} AND event_features.event_id = #{self.id} AND e_kits.event_id = #{self.id} AND quizzes.event_id = #{self.id} AND favorites.event_id = #{self.id} AND exhibitors.event_id = #{self.id};"
     #ActiveRecord::Base.connection.execute(query)
@@ -517,6 +545,22 @@ class Event < ActiveRecord::Base
   #   end
   #   content_missing_arr
   # end
+
+  def get_licensee_admin
+    self.client.licensee rescue nil
+  end
+
+  def name_with_email
+    users = []
+    self.invitees.each do |user|
+      if user.last_name.present?
+        users << "#{user.first_name.to_s + " " + user.last_name.to_s}(#{user.email})"
+      else
+        users << "#{user.first_name}(#{user.email})"
+      end
+    end
+    users
+  end
 
   def set_date
     self.update_column(:start_event_date, self.start_event_time)

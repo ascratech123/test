@@ -1,0 +1,30 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "edms", :url => "/admin/events/#{params[:event_id]}/campaigns/#{params[:campaign_id]}/edms/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("edms")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Subject
+      %th Template
+      %th eDM Broadcast Date
+      %th
+    - objs.each do |edm|
+      %tr
+        %td.font16= edm.subject_line
+        %td.font16= (edm.template_type == "default_template" ? "Default Template" : "Custom Template")
+        %td.font16= time_with_zone(edm.edm_broadcast_time,"IST")
+        %td.IconDrp
+          = more_vert_button(edm.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{edm.id}"}
+            = link_to edit_admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),:class => "mdl-menu__item" do
+              Edit
+            / = link_to edit_admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id, :next => 'NEXT'), :class => "mdl-menu__item" do
+            /   Broadcast
+            = link_to admin_event_campaign_edm_path(edm.campaign.event_id, edm.campaign_id,edm.id),method: :delete,data: { confirm: 'Are you sure?' },:class =>"mdl-menu__item" do
+              Delete
+            / = link_to admin_event_campaign_edm_path(edm.campaign.event_id,edm.campaign_id,edm.id),target:"_blank", :class => "mdl-menu__item" do
+            /   Preview eDM
+  = will_paginate objs

@@ -7,6 +7,7 @@ class Invitee < ActiveRecord::Base
   attr_accessor :password
   
   belongs_to :event
+  belongs_to :venue_section
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
   has_many :conversations, :class_name => 'Conversation', :foreign_key => 'user_id'  
   has_many :comments, :class_name => 'Comment', :foreign_key => 'user_id'  
@@ -17,6 +18,8 @@ class Invitee < ActiveRecord::Base
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :downcase_email
+
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
   validates :email,
             :format => {
@@ -48,7 +51,8 @@ class Invitee < ActiveRecord::Base
   before_save :set_full_name
   after_save :clear_password, :update_favorite
   after_save :generate_qr_code
-  after_create :update_event_updated_at, :send_password_to_invitee
+  after_save :update_event_updated_at
+  # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
   
   aasm :column => :visible_status do  # defaults to aasm_state
@@ -73,6 +77,40 @@ class Invitee < ActiveRecord::Base
   #   end
   # end
     
+  def facebook
+    self.facebook_id rescue ""
+  end
+  def google_plus
+    self.google_id rescue ""
+  end
+  def linkedin
+    self.linkedin_id rescue ""
+  end
+
+  def twitter
+    self.twitter_id rescue ""
+  end
+
+  def city
+    self.street rescue ""
+  end
+
+  def description
+    self.about rescue ""
+  end
+
+  def phone_number
+    self.mobile_no rescue ""
+  end
+
+  def logged_in
+    self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
+  end 
+
+  def Profile_pic_URL
+    self.profile_pic.url.present? and self.profile_pic.url != "/profile_pics/original/missing.png" ? self.profile_pic.url : ""
+  end
+
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end
@@ -122,8 +160,23 @@ class Invitee < ActiveRecord::Base
   end
 
   def self.search(params,invitees)
+    invitees = invitees.where(company_name: params[:search][:company_name]) if params[:search][:company_name].present?
+    invitees = invitees.where(designation: params[:search][:designation]) if params[:search][:designation].present?
+    invitees = invitees.where(invitee_status: params[:search][:invitee_status]) if params[:search][:invitee_status].present?        
+    invitees = invitees.where(visible_status: params[:search][:visible_status]) if params[:search][:visible_status].present?
+    if params[:search][:login_status].present?
+      ids = []
+      invitees.each do |invitee|
+        if  params[:search][:login_status] == "yes"  
+          ids << invitee.id if invitee.analytics.where(:action => 'Login').present?
+        else 
+          ids << invitee.id if invitee.analytics.where(:action => 'Login').blank?
+        end
+      end
+      invitees = invitees.where("id IN (?)",ids)  
+    end  
     keyword = params[:search][:keyword]
-     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")if keyword.present?
+     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
     invitees   
   end
 
@@ -177,7 +230,7 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       events = mobile_app.events.where(:status => event_status)
       events.each do |event|
-        event_id << event.id if event.invitees.where(:visible_status => "active").pluck(:email).include?(self.email)
+        event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
       end if events.present?
     end
     event_id
@@ -192,7 +245,7 @@ class Invitee < ActiveRecord::Base
       if change_events.present?
         events = mobile_app.events.where(:status => event_status)
         events.each do |event|
-          event_id << event.id if event.invitees.where(:visible_status => "active").pluck(:email).include?(self.email)
+          event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
         end if events.present?
       end  
     end
@@ -255,6 +308,24 @@ class Invitee < ActiveRecord::Base
     data
   end
 
+  def get_my_travels(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    my_travels = MyTravel.where(:invitee_id => user_ids, :event_id => event_ids) rescue []
+    data = my_travels.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_2_updated_at, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_3_updated_at, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_4_updated_at, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size, :attach_file_5_updated_at], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) if my_travels.present?
+    data
+  end
+
+  def get_analytics(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids) rescue []
+    data = analytics.as_json() if analytics.present?
+    data
+  end
+
   def get_my_profile(mobile_app_code,submitted_app)
     data = {}
     data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url, :rank])
@@ -265,7 +336,7 @@ class Invitee < ActiveRecord::Base
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url, :rank]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank]) if invitees.present?
     invitees
   end
 
@@ -425,7 +496,7 @@ class Invitee < ActiveRecord::Base
           user.save
         end
         new_user = user
-      end   
+      end
     end
     new_user
   end
@@ -434,11 +505,9 @@ class Invitee < ActiveRecord::Base
     notification_ids = []
     notifications = notifications.where(:pushed => true)
     notifications.each do |notification|
+      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?
-        groups = InviteeGroup.where("id IN(?)", notification.group_ids)
-        invitee_ids = []
-        groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
-        notification_ids << notification.id if user.present? and invitee_ids.include? user.id.to_s
+        notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
       else
         notification_ids << notification.id
       end
@@ -457,8 +526,25 @@ class Invitee < ActiveRecord::Base
       groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
         notification_ids << notification.id if invitee_ids.include? self.id.to_s
     end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids])
+    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
     notifications.present? ? notifications : []
+  end
+
+  def get_read_notification(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
+  end
+
+  def self.get_read_notification(info, event_ids, user)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
+    data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
+    data
   end
   
   def get_licensee_admin
@@ -468,9 +554,30 @@ class Invitee < ActiveRecord::Base
   def self.get_invitee_name(id)
     Invitee.find(id).name_of_the_invitee
   end
-
-  def name_with_email
-    user = "#{self.first_name.to_s + " " + self.last_name.to_s}(#{self.email})"
+  def self.get_invitee_email(id)
+    Invitee.find(id).email
   end
 
+  def get_invitee_name
+    self.name_of_the_invitee
+  end
+
+  def name_with_email
+    user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
+  end
+
+  def venue_section_access
+    venue_sections = VenueSection.where(:event_id => self.event_id)
+    hsh = {}
+    venue_sections.each do |vs|
+      hsh[vs.name] = InviteeAccess.where(:invitee_id => self.id, :venue_section_id => vs.id).present? ? 'yes' : 'no'
+    end
+    hsh
+  end
+
+  private
+
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
+  end
 end

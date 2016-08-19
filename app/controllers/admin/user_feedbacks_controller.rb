@@ -8,7 +8,7 @@ class Admin::UserFeedbacksController < ApplicationController
     respond_to do |format|
       format.html  
       format.xls do
-        method_allowed = [:Timestamp, :email, :name, :Question, :user_answer, :Description]
+        method_allowed = [:Timestamp, :email, :first_name, :last_name, :Question, :user_answer, :Description]
         send_data @user_feedbacks.to_xls(:methods => method_allowed)
       end
     end

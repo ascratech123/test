@@ -32,6 +32,14 @@ module ApplicationHelper
       datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
     end
   end
+  
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
 
   def get_hour_minute_second_ampm(time, format)
     case format
@@ -73,7 +81,7 @@ module ApplicationHelper
   end
 
   def get_analytic_details(type, id)
-    hsh = {'top_fav_agendas' => ['Agenda', 'title'], 'top_rated_agendas' => ['Agenda', 'title'], 'top_viewed_ekits' => ['EKit', 'name'], 'top_liked_conversations' => ['Conversation', 'description'], 'top_commented_conversations' => ['Conversation', 'description'], 'top_answered_polls' => ['Poll', 'question'], 'top_fav_invitees' => ['Invitee', 'name_of_the_invitee'], 'top_fav_sponsors' => ['Sponsor', 'name'], 'top_viewed_sponsors' => ['Sponsor', 'name'], 'top_fav_exhibitors' => ['Exhibitor', 'name'], 'top_viewed_exhibitors' => ['Exhibitor', 'name'], 'top_answered_quizzes' => ['Quiz', 'question'], 'top_rated_speakers' => ['Speaker', 'speaker_name'], 'top_fav_speakers' => ['Speaker', 'speaker_name'], 'top_question_speakers' => ['Speaker', 'speaker_name'], 'top_fav_leaderboard' => ['Invitee', 'name_of_the_invitee']}
+    hsh = {'top_fav_agendas' => ['Agenda', 'title'], 'top_rated_agendas' => ['Agenda', 'title'], 'top_viewed_ekits' => ['EKit', 'name'], 'top_liked_conversations' => ['Conversation', 'description'], 'top_commented_conversations' => ['Conversation', 'description'], 'top_answered_polls' => ['Poll', 'question'], 'top_fav_invitees' => ['Invitee', 'name_of_the_invitee'], 'top_fav_sponsors' => ['Sponsor', 'name'], 'top_viewed_sponsors' => ['Sponsor', 'name'], 'top_fav_exhibitors' => ['Exhibitor', 'name'], 'top_viewed_exhibitors' => ['Exhibitor', 'name'], 'top_answered_quizzes' => ['Quiz', 'question'], 'top_rated_speakers' => ['Speaker', 'speaker_name'], 'top_fav_speakers' => ['Speaker', 'speaker_name'], 'top_question_speakers' => ['Panel', 'name'], 'top_fav_leaderboard' => ['Invitee', 'name_of_the_invitee']}
     obj = hsh[type][0].singularize.constantize.find_by_id(id)
     [obj, hsh[type][1]]
   end
@@ -101,6 +109,8 @@ module ApplicationHelper
       url = "/admin/events/#{params[:event_id]}/themes/new?step=event_theme" if (params[:id].blank? and params[:action] == "new")
     elsif params[:controller] == "admin/winners"
       url = "/admin/events/#{params[:event_id]}/awards/#{params[:award_id]}/winners"
+    elsif params[:controller] == "admin/edms"
+       url = "/admin/events/#{params[:event_id]}/campaigns/#{params[:campaign_id]}/edms" 
     elsif params[:event_id].present?
       url ="/admin/events/#{params[:event_id]}/#{feature}?role=all" if params[:role] == "all" || params[:get_role] == "all"
       url = "/admin/events/#{params[:event_id]}/#{feature}#{single_associate_redirect}" if params[:role] != "all" and params[:get_role] != "all"
@@ -150,18 +160,18 @@ module ApplicationHelper
 
 
   def event_type(event)
-    if [345, 360, 367, 173, 165, 168].include? event.id
-      if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
+    if [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? event.id
+      if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
         "Ongoing"
-      elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
+      elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
         "Upcoming"
       else
         "Past"
       end
     else
-      if event.start_event_date <= Date.today and event.end_event_date >= Date.today
+      if event.start_event_date <= Time.now and event.end_event_date >= Time.now
         "Ongoing"
-      elsif event.start_event_date > Date.today and event.end_event_date > Date.today
+      elsif event.start_event_date > Time.now and event.end_event_date > Time.now
         "Upcoming"
       else
         "Past"
@@ -223,7 +233,6 @@ module ApplicationHelper
     end    
   end 
 
-
   def show_field_newQuestion(label, obj)
     #mdl-cell--5-col mdl-cell--4-col-tablet m-8
     content_tag :div, class: "mdl-cell--12-col no-p-l no-p-t no-p-r no-p-b" do
@@ -236,8 +245,7 @@ module ApplicationHelper
       end
     end    
   end 
-  
-  
+
   # for advance search
   def custom_text_field_tag(name,title, params,*args)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
@@ -259,6 +267,15 @@ module ApplicationHelper
     end
   end
 
+  def custom_button_tag_eventsearch(title, label)
+    # content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet m-8" do
+      # content_tag :div, class: "moreBtn collapseminus" do
+        str = content_tag :a, "Hide", class: "f-right m-t-5 hvr-underline-from-center hvr-underline-from-centernew", href: "javascript:void(0);" 
+        str += content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 f-right m-r-35") 
+        str
+      # end
+  end
+
   def custom_button_tag_without_hide(title)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phone m-8" do
       content_tag :div, class: "moreBtn collapseminus" do
@@ -268,8 +285,6 @@ module ApplicationHelper
     end
   end
 
-
-
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
     params1 = params.gsub(/[^0-9a-z]/, '')
@@ -277,14 +292,13 @@ module ApplicationHelper
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
-  end 
+  end
 
   def custom_basic_button_tag(title)
     content_tag :div, class: "mdl-cell--2-col mdl-cell--1-col-tablet mdl-cell--2-col-phone m-10" do
       content_tag(:input, nil, :type => 'submit', :value => title, :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600") 
     end  
   end  
-
 
   def custom_advance_search_link_tag(label)
     content_tag :div, class: "mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--2-col-phone m-l-15 moreBtn mdl-typography--text-right" do
@@ -348,7 +362,7 @@ module ApplicationHelper
   end  
 
   def send_mail_to_invitee(params,id)
-    content_tag :a , class: "mdl-menu__item mdl-js-ripple-effect", href: "/admin/events/#{params[:event_id]}/invitees/#{id}?send_mail=true" , class: "mdl-menu__item"  do
+    content_tag :a , class: "mdl-menu__item mdl-js-ripple-effect", href: "/admin/events/#{params[:event_id]}/invitees/#{id}?send_mail=true" , class: "mdl-menu__item send-password-btn"  do
       "Send Password"
     end
   end
@@ -450,7 +464,7 @@ module ApplicationHelper
     if user_quizzes.present?
       count = 0
       user_quizzes.each do |ans|
-        count = count + 1 if ans.answer.split(',').include?(option)
+        count = count + 1 if ans.answer.split(',').include?(quiz.attributes[option])
       end
     end
     return count
@@ -576,6 +590,16 @@ module ApplicationHelper
     end
   end
 
+  def get_last_user_registration_field_index(obj)
+    a = []
+    obj.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css', 'custom_js', 'custom_source_code').each_with_index do |t, index|
+      index = index + 1
+      a << ((t[1].present? and t[1]['label'].present? or t[1].present? and t[1]['option_type'].present?) ? index : nil)
+    end
+    a = a.compact
+    index = a.last
+    index
+  end
 end
 
 
@@ -722,16 +746,20 @@ end
     # destination_based = {'event_highlights' => [['Event Highlight', 'event_highlights']], 'quizzes' => [['Quiz', 'quizzes']], 'qnas' => [['Q&A', 'qnas']], 'speakers' => [['Speaker', 'speakers']], 'invitees' => [['Invitee', 'invitees']], 'my_profile' => [['My Profile', 'my_profile']], 'feedbacks' => [['Feedback', 'feedbacks']], 'agendas' => [['Agenda', 'agendas']], 'polls' => [['Poll', 'polls']], 'leaderboard' => [['Leaderboard', 'leaderboard']], 'faqs' => [['FAQ', 'faqs']], 'abouts' => [['About', 'abouts']], 'conversations' => [['Conversation', 'conversations']], 'e_kits' => [['E-Kit', 'e_kits']], 'awards' => [['Award', 'awards']], 'contacts' => [['Contact', 'contacts']], 'sponsors' => [['Sponsors', 'sponsors']], 'galleries' => [['Gallery', 'galleries']], 'emergency_exits' => [['Emergency Exit', 'emergency_exits']], 'notes' => [['Note', 'notes']], 'venue' => [['Venue', 'venue']], 'custom_page1s' => [['Custom Page1', 'custom_page1s']], 'custom_page2s' => [['Custom Page2', 'custom_page2s']], 'custom_page3s' => [['Custom Page3', 'custom_page3s']], 'custom_page4s' => [['Custom Page4', 'custom_page4s']], 'custom_page5s' => [['Custom Page5', 'custom_page5s']]}
     #action_based = {'agendas' => [['Agenda Rating', 'Agenda Rating']], 'speakers' => [['Speaker Rating', 'Speaker Rating']], 'favourites' => [['Agenda Favorite', 'Agenda Favorite'], ['Speaker Favorite', 'Speaker Favorite'], ['Invitee Favorite', 'Invitee Favorite'], ['Sponsor Favorite', 'Sponsor Favorite'], ['Exhibitors Favorite', 'Exhibitors Favorite']]}
     #logic_based = {'polls' => [['Polls Taken', 'Polls Taken']], 'feedbacks' => [['Feedback Submitted', 'Feedback Submitted']], 'quizzes' => [['Quiz Answered', 'Quiz Answered']], 'qnas' => [['Question Asked', 'Question Asked']], 'qr_code' => [['QR Code Scanned', 'QR Code Scanned']]}
-    destination_based = {'event_highlights' => [['Event Highlight', 'Event Highlight']], 'quizzes' => [['Quiz', 'Quiz']], 'qnas' => [['Q&A', 'Q&A']], 'Q&A' => [['Speaker', 'Speaker']], 'invitees' => [['Invitee', 'Invitee']], 'my_profile' => [['My Profile', 'Profile']], 'feedbacks' => [['Feedback', 'Feedback']], 'agendas' => [['Agenda', 'Agenda']], 'polls' => [['Poll', 'Poll']], 'leaderboard' => [['Leaderboard', 'Leaderboard']], 'faqs' => [['FAQ', 'FAQ']], 'abouts' => [['About', 'About']], 'conversations' => [['Conversation', 'Conversation']], 'e_kits' => [['E-Kit', 'E-Kit']], 'awards' => [['Award', 'Award']], 'contacts' => [['Contact', 'Contact']], 'sponsors' => [['Sponsors', 'Sponsors']], 'galleries' => [['Gallery', 'Gallery']], 'emergency_exits' => [['Emergency Exit', 'Emergency Exit']], 'notes' => [['Note', 'Note']], 'venue' => [['Venue', 'Venue']], 'custom_page1s' => [['Custom Page1', 'Custom Page1']], 'custom_page2s' => [['Custom Page2', 'Custom Page2']], 'custom_page3s' => [['Custom Page3', 'Custom Page3']], 'custom_page4s' => [['Custom Page4', 'Custom Page4']], 'custom_page5s' => [['Custom Page5', 'Custom Page5']]}
-    all_arr = []
-    action_arr = []
-    logic_arr = []
+    # destination_based = {'event_highlights' => [['Event Highlight', 'Event Highlight']], 'quizzes' => [['Quiz', 'Quiz']], 'qnas' => [['Q&A', 'Q&A']], 'Q&A' => [['Speaker', 'Speaker']], 'invitees' => [['Invitee', 'Invitee']], 'my_profile' => [['My Profile', 'Profile']], 'feedbacks' => [['Feedback', 'Feedback']], 'agendas' => [['Agenda', 'Agenda']], 'polls' => [['Poll', 'Poll']], 'leaderboard' => [['Leaderboard', 'Leaderboard']], 'faqs' => [['FAQ', 'FAQ']], 'abouts' => [['About', 'About']], 'conversations' => [['Conversation', 'Conversation']], 'e_kits' => [['E-Kit', 'E-Kit']], 'awards' => [['Award', 'Award']], 'contacts' => [['Contact', 'Contact']], 'sponsors' => [['Sponsors', 'Sponsors']], 'galleries' => [['Gallery', 'Gallery']], 'emergency_exits' => [['Emergency Exit', 'Emergency Exit']], 'notes' => [['Note', 'Note']], 'venue' => [['Venue', 'Venue']], 'custom_page1s' => [['Custom Page1', 'Custom Page1']], 'custom_page2s' => [['Custom Page2', 'Custom Page2']], 'custom_page3s' => [['Custom Page3', 'Custom Page3']], 'custom_page4s' => [['Custom Page4', 'Custom Page4']], 'custom_page5s' => [['Custom Page5', 'Custom Page5']]}
+    destination_based = {'event_highlights' => ['Event Highlights', 'Event Highlight'], 'quizzes' => ['Quiz', 'Quiz'], 'qnas' => ['Q&A', 'Q&A'], 'speakers' => ['Speakers', 'Speaker'], 'invitees' => ['Invitees', 'Invitee'], 'my_profile' => ['My Profile', 'Profile'], 'feedbacks' => ['Feedback', 'Feedback'], 'agendas' => ['Agenda', 'Agenda'], 'polls' => ['Polls', 'Poll'], 'leaderboard' => ['Leaderboard', 'Leaderboard'], 'faqs' => ['FAQ', 'FAQ'], 'abouts' => ['About', 'About'], 'conversations' => ['Conversations', 'Conversation'], 'e_kits' => ['E-Kit', 'E-Kit'], 'awards' => ['Awards', 'Award'], 'contacts' => ['Contact', 'Contact'], 'sponsors' => ['Sponsors', 'Sponsor'], 'galleries' => ['Gallery', 'Gallery'], 'emergency_exits' => ['Emergency Exit', 'Emergency Exit'], 'exhibitors' => ['Exhibitors', 'Exhibitor'], 'my_travels' => ['My Travel', 'My Travel'], 'notes' => ['Notes', 'Note'], 'venue' => ['Venue', 'Venue'], 'custom_page1s' => ['Custom Page1', 'Custom Page1'], 'custom_page2s' => ['Custom Page2', 'Custom Page2'], 'custom_page3s' => ['Custom Page3', 'Custom Page3'], 'custom_page4s' => ['Custom Page4', 'Custom Page4'], 'custom_page5s' => ['Custom Page5', 'Custom Page5'], 'qr_code' => ['QR code', 'QR code'], 'favourites' => ['My Favorites', 'My Favorite']}
+    # all_arr = []
+    # action_arr = []
+    # logic_arr = []
     dest_arr = []
     event.event_features.each do |feature|
       #action_arr += action_based[feature.name] if action_based[feature.name].present?
       #logic_arr += logic_based[feature.name] if logic_based[feature.name].present?
-      dest_arr += destination_based[feature.name] if destination_based[feature.name].present?
+      dest_arr << destination_based[feature.name] if destination_based[feature.name].present?
     end
     #all_arr = [['Group based', ['Group Notification']], ['Action based', action_arr], ['Logic based', logic_arr], ['Destination based', dest_arr]]
-    all_arr = [['Group based', ['Group Notification']], ['Destination based', dest_arr]]
+    # all_arr = [['Group based', ['Group Notification']], ['Destination based', dest_arr]]
+    # all_arr = [['Destination pages', dest_arr]]
+    dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
+    dest_arr
   end

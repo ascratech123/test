@@ -6,6 +6,13 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   include ActionView::Helpers::AssetTagHelper
 
 
+  def custom_radio_button_menu_regis(method, tag_value,options = {}, *args)
+    @template.content_tag :label, class: "col-lg-4 mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}" do
+     str = @template.radio_button(@object_name, method, tag_value, :checked => args.first[:default_checked], id: "#{args[0].values[0]}", class: "#{args[0][:class].present? ? "#{args[0][:class]} mdl-radio__button": "mdl-radio__button"}")
+      str += label(options)   
+    end
+  end
+  
   def custom_radio_button1(method, tag_value, options = {})
     @template.radio_button(@object_name, method, tag_value, objectify_options(options)) + 
     @template.label(@object_name, options[:label], objectify_options(options))
@@ -14,6 +21,13 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   
   def custom_radio_button(method, tag_value, options = {}, *args)
     @template.content_tag :label, class: "mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}"  do
+     str = @template.radio_button(@object_name, method, tag_value, id: "#{args[0].values[0]}", class: "mdl-radio__button")
+      str += label(options)   
+    end
+  end
+
+  def custom_radio_button_edm(method, tag_value, options = {}, *args)
+    @template.content_tag :label, class: "mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}", :style => "#{args[0][:width]}" do
      str = @template.radio_button(@object_name, method, tag_value, id: "#{args[0].values[0]}", class: "mdl-radio__button")
       str += label(options)   
     end
@@ -106,7 +120,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def custom_submit_button(value=nil, options={})
     @template.content_tag :div, class: "mdl-button mdl-js-button mdl-button--raised mdl-color--light-blue-600 mdl-js-ripple-effect btnsubmit floatRight m-l-18" do
       @template.content_tag :div, class: "mdl-cell--12-col mdl-cell--12-col-tablet" do
-        str = submit_tag(value, options={:onClick =>'showSuccessToast();'})
+        str = submit_tag(value, options={:onClick =>'showSuccessToast();', :class => options[:class]})
       end  
     end 
   end
@@ -181,6 +195,33 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
         @template.content_tag :div, class: "form-group #{args[0][:admin_theme].present? ? args[0][:admin_theme] : "" rescue ""} #{args[0]["background"] == "false" ? "" : (args[0][:route].present? ? set_highlight_class1(name,args[0][:field_name]) : set_highlight_class(name))}" do
           str = @template.label("", "#{title}", class: "col-lg-4 control-label", id: "#{name}_label")
           str += @template.content_tag :div, class: "col-lg-7" do
+            @template.content_tag :span, class: "append-icon right" do
+              @template.content_tag :i, :class => "fa fa-gear"
+            end
+            if args.first[:class].blank?
+              args.first[:class] = "form-control"
+            else
+              args.first[:class] = "form-control #{args.first[:class]}"
+            end
+            text_field(name, args.first)
+          end
+          str += @template.content_tag :span, class: "col-lg-1" do
+            @template.link_to(" ? " ,"/whats_this/#{args.first[:view_popup][:image_path] rescue ""}", rel: "#{args.first[:view_popup][:rel] rescue "#{name}"}", title: "#{args.first[:view_popup][:title] rescue ""}", :class =>"fancybox whatsImg") if args.first[:view_popup].present?
+          end
+          str
+        end
+      end      
+    end
+  end
+
+  def custom_text_field_for_edm_social_icon(name, title, id_match_with_checkbox=nil, *args)
+    args[0] ||= {}
+    args.first[:col] ||= "12"
+    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white  input_box_url", id: "edm_check_#{id_match_with_checkbox}" do
+      @template.content_tag :div, class: "bs-component", :style => "display: #{args[0][:message_display].present? ? args[0][:message_display] : ""}"do
+        @template.content_tag :div, class: " #{args[0][:admin_theme].present? ? args[0][:admin_theme] : "" rescue ""} #{args[0]["background"] == "false" ? "" : (args[0][:route].present? ? set_highlight_class1(name,args[0][:field_name]) : set_highlight_class(name))}" do
+          str = @template.label("", "#{title}", class: "col-lg-1 control-label", id: "#{name}_label")
+          str += @template.content_tag :div, class: "col-lg-11" do
             @template.content_tag :span, class: "append-icon right" do
               @template.content_tag :i, :class => "fa fa-gear"
             end
@@ -525,17 +566,17 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   #   end
   # end
 
-   def custom_text_area_field1(name, title, *args)
+  def custom_text_area_field1(name, title, *args)
     args[0] ||= {}
     args.first[:col] ||= "12"
-    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8", :style => "display: #{args[0][:display] == "true" ? "true" : "none"}" do
+    @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8 #{args[0][:klass]}", :style => "display: #{args[0][:display] == "true" ? "true" : "none"}" do
       (@template.content_tag :div, class: "bs-component", :style => "display: #{options[:message_display].present? ? options[:message_display] : ""}" do
         @template.content_tag :div, class: "form-group" do
           str = @template.label("", "#{title}", class: "col-lg-4 control-label")
           str += @template.content_tag :div, class: "col-lg-7" do
             @template.content_tag :div, class: "bs-component" do 
               args[0] ||= {}
-              args.first[:class] ||= "form-control textarea-grow"
+              args.first[:class] = "form-control textarea-grow"
               args.first[:rows] ||= 4 
               args.first[:id] ||= "sample5"
               str = text_area(name, *args)
@@ -594,7 +635,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
             end
           end
           str += @template.content_tag :span, class: "col-lg-1",id: "this_#{id[:id]}", :style => "display: #{(id[:value].present? and id[:value] != "Image not present.") ? "" : "none" }" do
-            @template.link_to("download" , "/admin/downloads/new?url=#{id[:value]}", :target => '_blank')
+            @template.link_to("Download" , "/admin/downloads/new?url=#{id[:value]}", :target => '_blank')
           end  
         end    
       end
