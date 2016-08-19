@@ -208,22 +208,45 @@
                                                 %span= link_to "",admin_event_sequence_path(:event_id => agenda.event_id, :id => agenda.agenda_track.id, :seq_type => "down", :feature_type => "agenda_tracks"),:class => "downarrow", :method => "put", :remote => true
                                         %td.font16= agenda.agenda_track.track_name if agenda.agenda_track.present?
                                         - if agenda.agenda_track.present?
-                                          %td.font16= agenda.agenda_track.agendas.pluck(:title).join(', ') 
-                                          %td.font16= agenda.agenda_track.agendas.pluck(:speaker_name).join(', ') 
-                                          %td.font16= agenda.agenda_track.agendas.pluck(:start_agenda_time).join(', ')
-                                          %td.font16= agenda.agenda_track.agendas.pluck(:end_agenda_time).join(', ')
-                                          %td.font16= agenda.agenda_track.agendas.pluck(:discription).join(', ')
+                                          %td.font16
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = track_agenda.title
+                                              = break_line.html_safe
+                                          %td.font16
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = track_agenda.speaker_name.present? ? track_agenda.speaker_name : '-'
+                                              = break_line.html_safe                            
+                                          %td.font16
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = track_agenda.start_agenda_time
+                                              = break_line.html_safe                              
+                                          %td.font16
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = track_agenda.end_agenda_time
+                                              = break_line.html_safe                           
+                                          %td.font16
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = track_agenda.discription.present? ? track.discription : '-'
+                                              = break_line.html_safe
+                                          %td.IconDrp.agendtaIconDrp
+                                            - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
+                                              = more_vert_button(track_agenda.id)
+                                              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
+                                                = edit_link(params, track_agenda.id)
+                                                = delete_link(params, track_agenda.id)     
+                                              %br
+                                              %br      
                                         - else
                                           %td.font16= agenda.title
                                           %td.font16= agenda.speaker_name 
                                           %td.font16= agenda.start_agenda_time
                                           %td.font16= agenda.end_agenda_time
                                           %td.font16= agenda.discription                                          
-                                        %td.IconDrp.agendtaIconDrp
-                                          = more_vert_button(agenda.id)
-                                          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
-                                            = edit_link(params, agenda.id)
-                                            = delete_link(params, agenda.id)
+                                          %td.IconDrp.agendtaIconDrp
+                                            = more_vert_button(agenda.id)
+                                            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
+                                              = edit_link(params, agenda.id)
+                                              = delete_link(params, agenda.id)
                        
     - if @feedbacks.present?
       = render :partial => 'admin/layouts/more_links'
