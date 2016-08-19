@@ -1,5 +1,9 @@
 module ApplicationHelper
 
+  def break_line
+    str = "<br><br><br>"
+  end
+
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
     html_content = content_tag(:i, icon_name, :class => "material-icons center")
