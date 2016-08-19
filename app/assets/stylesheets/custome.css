@@ -44,10 +44,11 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
+/*test*/
+.test{position:relative;}
+.event_select123{position:absolute;top:16px;z-index:99999999999;}
+.select2-search_order_by-container{color:#eee;}
+.manage-event .category_dropdown .select2-container--default .select2-selection--single .select2-selection__rendered{color:#eee ;}
 
 .spinner .rect3 {
   -webkit-animation-delay: -1.0s;
@@ -312,7 +313,9 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 /* nilam css start here */
 
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
-.timedateBox div.col-lg-4{padding-right:3px; width:31%;}
+.back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
+.search_header + div{width:85px;}
+/* nilam css ends here */
 
 .onoffswitch {
     position: relative; width: 75px;

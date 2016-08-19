@@ -25,7 +25,11 @@ class Admin::InviteesController < ApplicationController
         invitee.update_column(:email_send, 'true')
       end
     end
-    @invitees = Invitee.search(params, @invitees) if params[:search].present?
+    if (params[:search].present? && params[:search][:company_name].present? && params[:search][:company_name] == "All") || (params[:search].present? && params[:search][:designation].present? && params[:search][:designation] == "All") || (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "All") || (params[:search].present? && params[:search][:invitee_status].present? && params[:search][:invitee_status] == "All") || (params[:search].present? && params[:search][:visible_status].present? && params[:search][:visible_status] == "All") || (params[:search].present? && params[:search][:login_status].present? && params[:search][:login_status] == "All")
+      @invitees
+    else  
+      @invitees = Invitee.search(params, @invitees) if params[:search].present?
+    end
     @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
