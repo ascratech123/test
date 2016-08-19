@@ -26,6 +26,11 @@ class UserPoll < ActiveRecord::Base
     self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
   end
 
+  def event_timezone
+    poll = self.poll
+    (poll.event_timezone.present? ? poll.event_timezone.capitalize : poll.update_event_timezone)
+  end
+
   def email_id
     Invitee.find(self.user_id).email rescue nil
 	end

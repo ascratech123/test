@@ -571,26 +571,26 @@ class Event < ActiveRecord::Base
     if self.timezone_changed?
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
-          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone", self.timezone.capitalize)
         end
       end   
     end
   end
 
   def start_event_date_with_timezone
-    self.start_event_date.in_time_zone(self.timezone)
+    self.start_event_date.in_time_zone(self.timezone.capitalize)
   end
 
   def end_event_date_with_timezone
-    self.end_event_date.in_time_zone(self.timezone)
+    self.end_event_date.in_time_zone(self.timezone.capitalize)
   end
 
   def start_event_time_with_timezone
-    self.start_event_time.in_time_zone(self.timezone)
+    self.start_event_time.in_time_zone(self.timezone.capitalize)
   end
 
   def end_event_time_with_timezone
-    self.end_event_time.in_time_zone(self.timezone)
+    self.end_event_time.in_time_zone(self.timezone.capitalize)
   end
   
 end
