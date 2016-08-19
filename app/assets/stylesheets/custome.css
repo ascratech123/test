@@ -16,6 +16,11 @@
 
 .titleQuestion{margin-left:15px;}
 
+/*test*/
+.test{position:relative;}
+.event_select123{position:absolute;top:16px;z-index:99999999999;}
+.select2-search_order_by-container{color:#eee;}
+.manage-event .category_dropdown .select2-container--default .select2-selection--single .select2-selection__rendered{color:#eee ;}
 
 
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
