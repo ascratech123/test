@@ -2,7 +2,7 @@ class Analytic < ActiveRecord::Base
 
   VIEWABLE_TYPE_TO_ACTION = {'Conversation' => ['conversation post', 'like', 'comment'], 'Favorite' => ['favorite'], 'Ratings' => ['rated'], 'Rating' => ['rated'], 'Q&A' => ['question asked'], 'Poll' => ['poll answered'], 'Feedback' => ['feedback given'], 'E-Kit' => ['page view'], 'Quiz' => ['played'], 'QR code scan' => ['qr code scan']}
 
-  ACTION_TO_VIEWABLE_TYPE = {"favorite" => 'Favorite', "rated" => 'Rating', "qr code scan" => 'QR Code Scan', "comment" => 'Conversation', "conversation post" => 'Conversation', "like" => 'Conversation', "played" => 'Quiz', "question asked" => 'Q&A', "login" => 'Login', "Login" => 'Login', "poll answered" => 'Poll', "feedback given" => 'Feedback', 'continue' => 'Event Highlight', 'profile_pic' => 'Profile Pic Update', 'Add To Calender' => 'Add To Calender', 'one_on_one' => 'Chat', 'group_chat' => 'Chat'}
+  ACTION_TO_VIEWABLE_TYPE = {"favorite" => 'Favorite', "rated" => 'Rating', "qr code scan" => 'QR Code Scan', "comment" => 'Comment', "conversation post" => 'Conversation', "like" => 'Like', "played" => 'Quiz', "question asked" => 'Q&A', "login" => 'Login', "Login" => 'Login', "poll answered" => 'Poll', "feedback given" => 'Feedback', 'continue' => 'Event Highlight', 'profile_pic' => 'Profile Pic Update', 'Add To Calender' => 'Add To Calender', 'one_on_one' => 'Chat', 'group_chat' => 'Chat', 'share' => 'Share'}
   ACTION_POINTS = {"favorite" => 5, "rated" => 5, "comment" => 2, "conversation post" => 5, "like" => 2, "quiz correct answer" => 5, "quiz incorrect answer" => 2, "question asked" => 5, "poll answered" => 5, "feedback given" => 10, 'e_kits' => 5, 'Login' => 10, 'profile_pic' => 5, 'page view' => 5, "played" => 5, 'Add To Calender' => 10, 'one_on_one' => 0, 'group chat' => 0, 'share' => 5}
   TOP_PAGE_LIST_TO_FEATURES = {'top_pages' => 'pages', 'top_fav_agendas' => 'agendas', 'top_rated_agendas' => 'agendas', 'top_rated_speakers' => 'speakers', 'top_fav_speakers' => 'speakers', 'top_question_speakers' => 'speakers', 'top_commented_conversations' => 'conversations', 'top_liked_conversations' => 'conversations', 'top_viewed_ekits' => 'e_kits', 'top_answered_quizzes' => 'quizzes', 'top_answered_polls' => 'polls', 'top_fav_invitees' => 'invitees', 'top_fav_sponsors' => 'sponsors', 'top_viewed_sponsors' => 'sponsors', 'top_fav_exhibitors' => 'exhibitors', 'top_viewed_exhibitors' => 'exhibitors', 'top_fav_leaderboard' => 'leaderboard'}
   VIEWABLE_TYPE_TO_FEATURE = {"Invitee" => 'invitees', "Event Highlight" => 'event_highlights', "Gallery listing" => 'galleries', "Speaker" => 'speakers', "Exhibitors" => 'exhibitors', "My Favorite" => 'favourites', "Exhibitors listing" => 'exhibitors', "About" => 'abouts', "Agenda" => 'agendas', "Sessions" => 'agendas', "Conversation" => 'conversations', "Quiz" => 'quizzes', "Poll" => 'polls', "Sponsor" => 'sponsors', "Speakers" => 'speakers', "Q&A" => 'qnas', "My Profile" => 'my_profile', "Sponsors" => 'sponsors', "E-Kit" => 'e_kits', "Event" => 'event_highlights', "Highlights" => 'event_highlights', "Contacts" => 'contacts', "Gallery" => 'galleries', "Feedback" => 'feedbacks', "FAQ" => 'faqs', "Venue" => 'venue', "Notes" => 'notes', "Exhibitor" => 'exhibitors', "Quiz listing" => 'quizzes', "Emergency Exit" => 'emergency_exits', "Edit" => 'my_profile', "Edit Profile" => 'my_profile', "Event Listing" => 'event_highlights', "Contact" => 'contacts', "Note" => 'notes', "Attendee" => 'invitees', 'top_fav_leaderboard' => 'Top Favorited Leader Boards'}
@@ -13,10 +13,18 @@ class Analytic < ActiveRecord::Base
   before_create :update_points
   after_create :update_points_to_invitee
 
+  def check_ekit_viewed
+    if Analytic.where(:action => 'page view', :viewable_type => "E-Kit", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
+      self.errors.add :viewable_type, 'already viewed and got points'
+    end
+    self.errors.present? ? false : true
+  end
+
   def update_points
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
     error << false if self.action == 'feedback given' and Analytic.where(:action => 'feedback given', :viewable_type => 'Feedback', :invitee_id => self.invitee_id, :event_id => self.event_id).present?
+    error << false if self.action == 'page view' and Analytic.where(:action => 'page view', :viewable_type => 'E-Kit',:viewable_id => self.viewable_id, :invitee_id => self.invitee_id, :event_id => self.event_id).present?
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
     if feature.present?
@@ -129,10 +137,11 @@ class Analytic < ActiveRecord::Base
   def self.get_unique_users(event_id, from_date, to_date)
     all_analytics = Analytic.where('viewable_type = ? and action = ? and event_id = ?', 'Invitee', 'Login', event_id)
     analytics = all_analytics.where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date)
+    invitee_ids = analytics.pluck(:invitee_id).uniq
+    unique_users_count = Invitee.where(:id => invitee_ids).count
     ios_analytics = analytics.where(:platform => 'Ios').pluck(:invitee_id).uniq.count
     android_analytics = analytics.where(:platform => 'Android').pluck(:invitee_id).uniq.count
-
-    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [analytics.count, all_analytics.count]]
+    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [unique_users_count, all_analytics.pluck(:invitee_id).uniq.count]]
   end
 
   def self.get_total_detail_users(event_id, from_date, to_date)
@@ -148,11 +157,11 @@ class Analytic < ActiveRecord::Base
     all_analytics = Analytic.where('viewable_type = ? and action = ? and event_id = ?', 'Invitee', 'Login', event_id)
     analytics = all_analytics.where('Date(created_at) >= ? and Date(created_at) <= ?', from_date, to_date)
     viewable_ids = analytics.pluck(:invitee_id).uniq
-    active_user_ids = Invitee.where('id IN (?) and last_interation >= ?', viewable_ids, (Time.now - 24.hours))
+    active_user_ids = Invitee.where('id IN (?) and last_interation >= ?', viewable_ids, (Time.now - 24.hours)).pluck(:id)
     analytics = analytics.where(:invitee_id => active_user_ids)
     ios_analytics = analytics.where(:platform => 'Ios').pluck(:viewable_id).count
     android_analytics = analytics.where(:platform => 'Android').pluck(:viewable_id).count
-    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [analytics.count, all_analytics.count]]
+    arr = [[['Android', android_analytics], ['Ios', ios_analytics]], [active_user_ids.count, all_analytics.pluck(:invitee_id).uniq.count]]
   end
 
   def self.get_user_engagements(event_id, from_date, to_date, filter_date)
@@ -303,7 +312,7 @@ class Analytic < ActiveRecord::Base
     hsh['Total unique users'] = users_arr[0] if features.include? 'invitees'
     hsh['Total active users'] = users_arr[1] if features.include? 'invitees'
     hsh['Page views'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'page view', start_date, end_date).count
-    hsh['Conversations'] = Analytic.where('event_id = ? and viewable_type = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'Conversation', 'conversation post', start_date, end_date).count if features.include? 'conversations'
+    hsh['Conversations'] = Analytic.where('event_id = ? and viewable_type = ? and action IN (?) and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'Conversation', ['conversation post', 'like', 'comment'], start_date, end_date).count if features.include? 'conversations'
     fav_type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
     hsh['Favorites'] = Favorite.where('favoritable_type IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', fav_type, event_id, start_date, end_date).count if features.include? 'favourites'
     hsh['Speaker Ratings'] = Analytic.where('event_id = ? and action = ? and viewable_type = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'rated', 'Speaker', start_date, end_date).count if features.include? 'speakers'

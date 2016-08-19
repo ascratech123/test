@@ -7,6 +7,7 @@ class Invitee < ActiveRecord::Base
   attr_accessor :password
   
   belongs_to :event
+  belongs_to :venue_section
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
   has_many :conversations, :class_name => 'Conversation', :foreign_key => 'user_id'  
   has_many :comments, :class_name => 'Comment', :foreign_key => 'user_id'  
@@ -17,6 +18,8 @@ class Invitee < ActiveRecord::Base
 
   
   before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :downcase_email
+
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
   validates :email,
             :format => {
@@ -48,7 +51,8 @@ class Invitee < ActiveRecord::Base
   before_save :set_full_name
   after_save :clear_password, :update_favorite
   after_save :generate_qr_code
-  after_create :update_event_updated_at, :send_password_to_invitee
+  after_save :update_event_updated_at
+  # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
   
   aasm :column => :visible_status do  # defaults to aasm_state
@@ -102,6 +106,10 @@ class Invitee < ActiveRecord::Base
   def logged_in
     self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
   end 
+
+  def Profile_pic_URL
+    self.profile_pic.url.present? and self.profile_pic.url != "/profile_pics/original/missing.png" ? self.profile_pic.url : ""
+  end
 
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
@@ -286,7 +294,7 @@ class Invitee < ActiveRecord::Base
     user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     user_feedback = UserFeedback.where(:user_id => user_ids, :feedback_id => feedback_ids) rescue []
-    data = user_feedback.as_json(:methods => [:get_event_id]) if user_feedback.present?
+    data = user_feedback.as_json(:methods => [:get_event_id, :created_at_with_timezone, :updated_at_with_timezone]) if user_feedback.present?
     data
   end
 
@@ -306,6 +314,15 @@ class Invitee < ActiveRecord::Base
     data = []
     my_travels = MyTravel.where(:invitee_id => user_ids, :event_id => event_ids) rescue []
     data = my_travels.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_2_updated_at, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_3_updated_at, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_4_updated_at, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size, :attach_file_5_updated_at], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) if my_travels.present?
+    data
+  end
+
+  def get_analytics(mobile_app_code,submitted_app)
+    event_ids = get_event_id(mobile_app_code,submitted_app)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids) rescue []
+    data = analytics.as_json() if analytics.present?
     data
   end
 
@@ -547,5 +564,20 @@ class Invitee < ActiveRecord::Base
 
   def name_with_email
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
+  end
+
+  def venue_section_access
+    venue_sections = VenueSection.where(:event_id => self.event_id)
+    hsh = {}
+    venue_sections.each do |vs|
+      hsh[vs.name] = InviteeAccess.where(:invitee_id => self.id, :venue_section_id => vs.id).present? ? 'yes' : 'no'
+    end
+    hsh
+  end
+
+  private
+
+  def downcase_email
+    self.email = self.email.downcase if self.email.present?
   end
 end

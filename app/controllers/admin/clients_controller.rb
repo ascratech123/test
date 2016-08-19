@@ -20,6 +20,9 @@ class Admin::ClientsController < ApplicationController
 
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role], :redirect_page => "index",:wall => "#{params[:wall].present?  ? params[:wall] : ""}") if params[:feature] == "users" and params[:role] == 'event_admin' or params[:role] == 'moderator' and params[:redirect_page] == "index"
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :redirect_page => "index", :dashboard => "true") if  params[:feature] == "users" and params[:redirect_page] == "index" and params[:role].blank?
+
+        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'event_admin' or params[:role] == 'volunteer') and params[:redirect_page] != "index"
+        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role], :redirect_page => "index",:wall => "#{params[:wall].present?  ? params[:wall] : ""}") if params[:feature] == "users" and params[:role] == 'event_admin' or params[:role] == 'volunteer' and params[:redirect_page] == "index"
       else
         @select = true
       end

@@ -20,7 +20,8 @@ class EventFeature < ActiveRecord::Base
   validates_attachment_content_type :main_icon, :content_type => ["image/png"],:message => "please select valid format."
   validate :image_dimensions
   before_save :set_interpolate_time_stamp
-  after_create :update_visibility, :create_default_invitee_groups
+  after_create :create_default_invitee_groups
+  # after_create :update_visibility
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
@@ -154,7 +155,7 @@ class EventFeature < ActiveRecord::Base
   # end
 
   def self.for_sequence_get_model_name
-    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award", 'panels' => 'Panel'}
+    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award", 'panels' => 'Panel', 'agenda_tracks' => "AgendaTrack"}
   end
 
   def update_menu_saved_field_when_no_feature_selected

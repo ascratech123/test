@@ -3,6 +3,7 @@ class Agenda < ActiveRecord::Base
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category
   belongs_to :event
   belongs_to :speaker
+  belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
@@ -12,10 +13,12 @@ class Agenda < ActiveRecord::Base
   
   before_validation :set_time
   after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected
+  after_save :set_end_date_if_end_date_not_selected, :set_event_timezone
   before_save :check_category_present_if_new_category_select_from_dropdown
+  before_create :set_sequence_no
 
   default_scope { order('start_agenda_time asc') }
+  # default_scope { order("sequence") }
 
   def start_agenda_time_is_after_agenda_date
     return if self.start_agenda_time.blank? 
@@ -23,7 +26,6 @@ class Agenda < ActiveRecord::Base
     end_event_date = self.event.end_event_time rescue nil
     start_agenda_time = self.start_agenda_time rescue nil
     end_agenda_time = self.end_agenda_time rescue nil
-    
     if start_event_date.present? and end_event_date.present? and start_agenda_time.present?
       if !start_agenda_time.between?(start_event_date, end_event_date)
         errors.add(:start_agenda_date, "Date must be between event dates")
@@ -66,6 +68,10 @@ class Agenda < ActiveRecord::Base
     end
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone.capitalize)
+  end
+
   def check_category_present_if_new_category_select_from_dropdown
     if self.agenda_type == "Add New Track" and self.new_category.present?
       self.agenda_type = self.new_category
@@ -81,5 +87,29 @@ class Agenda < ActiveRecord::Base
     if self.agenda_type == "Add New Track"
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
     end
+  end
+
+  def set_sequence_no
+    self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def start_agenda_time_with_event_timezone
+    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize)
+  end
+
+  def end_agenda_time_with_event_timezone
+    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize)
+  end
+
+  def agenda_type
+    self.agenda_track.present? ? self.agenda_track.track_name : ""
+  end
+
+  def agenda_track_name
+    self.agenda_track.track_name
+  end
+
+  def track_sequence
+    self.agenda_track.sequence
   end
 end

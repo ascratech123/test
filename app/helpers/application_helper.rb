@@ -32,6 +32,14 @@ module ApplicationHelper
       datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
     end
   end
+  
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
 
   def get_hour_minute_second_ampm(time, format)
     case format
@@ -152,18 +160,18 @@ module ApplicationHelper
 
 
   def event_type(event)
-    if [345, 360, 367, 173, 165, 168].include? event.id
-      if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') <= Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') >= Time.now.strftime('%d/%m/%Y %H:%M:%S')
+    if [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? event.id
+      if event.start_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
         "Ongoing"
-      elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S') and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S') > Time.now.strftime('%d/%m/%Y %H:%M:%S')
+      elsif event.start_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.strftime('%d/%m/%Y %H:%M:%S').to_time > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
         "Upcoming"
       else
         "Past"
       end
     else
-      if event.start_event_date <= Date.today and event.end_event_date >= Date.today
+      if event.start_event_date <= Time.now and event.end_event_date >= Time.now
         "Ongoing"
-      elsif event.start_event_date > Date.today and event.end_event_date > Date.today
+      elsif event.start_event_date > Time.now and event.end_event_date > Time.now
         "Upcoming"
       else
         "Past"

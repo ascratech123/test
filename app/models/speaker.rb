@@ -43,6 +43,10 @@ class Speaker < ActiveRecord::Base
     speakers
   end
 
+  def profile_picture
+    self.profile_pic.url rescue ""
+  end
+  
   def set_full_name
     self.speaker_name = self.first_name + " " + self.last_name
   end
