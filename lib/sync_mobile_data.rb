@@ -173,6 +173,8 @@ module SyncMobileData
             info = analytics.as_json() rescue []
             data[:"#{name_table(model)}"] = info
           end
+        when "Agenda"
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:sequence], :methods =>[:agenda_track_name, :track_sequence])
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  

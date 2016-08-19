@@ -82,4 +82,16 @@ class Agenda < ActiveRecord::Base
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
     end
   end
+
+  def agenda_type
+    self.agenda_track.present? ? self.agenda_track.track_name : ""
+  end
+
+  def agenda_track_name
+    self.agenda_track.track_name
+  end
+
+  def track_sequence
+    self.agenda_track.sequence
+  end
 end
