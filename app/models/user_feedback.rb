@@ -14,7 +14,6 @@ class UserFeedback < ActiveRecord::Base
     self.feedback.event_id rescue nil
   end
 
-  
   def Timestamp
     self.feedback.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %T') rescue ""
   end
@@ -66,5 +65,13 @@ class UserFeedback < ActiveRecord::Base
       errors.add(:answer, "This field is required.") if self.answer.blank?
       errors.add(:description, "This field is required.") if self.description.blank?
     end
+  end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.feedback.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.feedback.event_timezone)
   end
 end

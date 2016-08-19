@@ -38,3 +38,6 @@ module Shobiz
                                           }
   end
 end
+
+
+DEFAULT_TIMEZONE = "Mumbai"
