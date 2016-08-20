@@ -13,33 +13,48 @@
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = get_search_data("invitees")
 - else  
-  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.manage-event{"template-pagination" => "custom/pager"}
     %tr
       %th Invitee Name 
       %th Email id
-      %th 
-        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_cname" , :class => "category_dropdown" do
-          -  @invitee_comanies = Invitee.where( event_id: @event.id).pluck('DISTINCT company_name').compact.delete_if(&:empty?)
-          = select_tag 'search[company_name]', options_for_select(@invitee_comanies, :selected => params[:search].present? ? params[:search][:company_name] : ""), :prompt => 'COMPANY NAME'
-          = hidden_field_tag :admin_search, "true"
-          = hidden_field_tag :adv_search, "true"
+      %th.test
+        .event_select123
+          COMPANY NAME
+        .invitee_com12
+          = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_cname" , :class => "category_dropdown" do
+            -  @invitee_comanies = Invitee.where( event_id: @event.id).pluck('DISTINCT company_name').compact.delete_if(&:empty?)
+            = select_tag 'search[company_name]', options_for_select(['All'] + @invitee_comanies), :prompt => 'COMPANY NAME'
+            = hidden_field_tag :admin_search, "true"
+            = hidden_field_tag :adv_search, "true"
 
-      %th 
+      %th.test
+        .event_select123
+          DESIGNATION
+        .invitee_com12
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_designation" , :class => "category_dropdown" do
           -  @invitee_designation = Invitee.where( event_id: @event.id).pluck('DISTINCT designation').compact.delete_if(&:empty?)
-          = select_tag 'search[designation]', options_for_select(@invitee_designation, :selected => params[:search].present? ? params[:search][:designation] : ""), :prompt => 'DESIGNATION'
+          = select_tag 'search[designation]', options_for_select(['All'] + @invitee_designation), :prompt => 'DESIGNATION'
           = hidden_field_tag :admin_search, "true"      
-      %th 
+      %th.test
+        .event_select123
+          STATUS
+        .invitee_com12
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_invitee_status" , :class => "category_dropdown" do
-          = select_tag "search[invitee_status]",options_for_select([["Yes","yes"],["No", "no"]], :selected => params[:search].present? ? params[:search][:invitee_status] : ""),:prompt => 'STATUS' 
+          = select_tag "search[invitee_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]]),:prompt => 'STATUS' 
           = hidden_field_tag :admin_search, "true"
-      %th 
+      %th.test
+        .event_select123
+          VISIBLE STATUS
+        .invitee_com12
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_visible_status" , :class => "category_dropdown" do
-          = select_tag "search[visible_status]",options_for_select([["Active","active"],["Deactive", "deactive"]], :selected => params[:search].present? ? params[:search][:visible_status] : ""),:prompt => 'VISIBLE STATUS'
+          = select_tag "search[visible_status]",options_for_select([['All','All'],["Active","active"],["Deactive", "deactive"]]),:prompt => 'VISIBLE STATUS'
           = hidden_field_tag :admin_search, "true"  
-      %th 
+      %th.test
+        .event_select123
+          LOGGED IN
+        .invitee_com12
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_login_status" , :class => "category_dropdown" do
-          = select_tag "search[login_status]",options_for_select([["Yes","yes"],["No", "no"]], :selected => params[:search].present? ? params[:search][:login_status] : ""),:prompt => 'LOGGED IN'       
+          = select_tag "search[login_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]]),:prompt => 'LOGGED IN'
           = hidden_field_tag :admin_search, "true"
       %th
         - objs.each do |invitee|

@@ -419,11 +419,11 @@ class Event < ActiveRecord::Base
 
   def image_dimensions
     if self.inside_logo_file_name_changed?  
-      inside_logo_dimension_height  = 140.0
-      inside_logo_dimension_width = 600.0
+      inside_logo_dimension_height  = 300.0
+      inside_logo_dimension_width = 1280.0
       dimensions = Paperclip::Geometry.from_file(inside_logo.queued_for_write[:original].path)
       if (dimensions.width != inside_logo_dimension_width or dimensions.height != inside_logo_dimension_height)
-        errors.add(:inside_logo, "Image size should be 600x140px only") if self.errors['inside_logo'].blank?
+        errors.add(:inside_logo, "Image size should be 1280x300px only") if self.errors['inside_logo'].blank?
       else
         self.errors.delete(:inside_logo)
       end

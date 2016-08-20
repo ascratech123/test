@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   #protect_from_forgery with: :exception
-  before_action :load_filter, :check_licensee_expiry, :except => [:mobile_current_user]
+  before_action :load_filter, :except => [:mobile_current_user]
   #before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_url_history, :except => :back
   before_action :set_current_user,:find_clients
-  # before_filter :telecaller_is_login
+  before_filter :telecaller_is_login
   #before_action :redirect_show_to_edit , :only => :show
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -29,23 +29,6 @@ class ApplicationController < ActionController::Base
     else
       session['invitee_id'] = nil  
       authenticate_user!
-    end
-  end
-
-  def check_licensee_expiry
-    if (current_user.present? and !current_user.has_role? :super_admin)
-      licensee_admin = current_user.get_licensee_admin
-      if licensee_admin.present?
-        if licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today
-          session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
-          redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
-        elsif licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today
-          session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
-          redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
-        elsif session[:licensee_expired].present?
-          session[:licensee_expired] = nil
-        end
-      end
     end
   end
 
@@ -149,6 +132,8 @@ class ApplicationController < ActionController::Base
       admin_dashboards_path
     elsif resource.has_role? :super_admin
       admin_licensees_path
+    elsif resource.has_role? :telecaller
+      admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
       admin_dashboards_path
     end
@@ -201,11 +186,11 @@ class ApplicationController < ActionController::Base
     # end
   end
 
-  # def telecaller_is_login
-  #   if (current_user.present? and current_user.has_role? :telecaller) #and (params[:controller] != "admin/telecallers" and params[:action] != "show"))
-  #   #   redirect_to destroy_user_session_path, :method => :get
-  #   end #if (params[:controller] != "admin/invitee_datas" and params[:action] != "update")
-  # end
+  def telecaller_is_login
+    if (current_user.present? and current_user.has_role? :telecaller) #and (params[:controller] != "admin/telecallers" and params[:action] != "show"))
+    #   redirect_to destroy_user_session_path, :method => :get
+    end #if (params[:controller] != "admin/invitee_datas" and params[:action] != "update")
+  end
 
   protected
 

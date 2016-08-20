@@ -15,11 +15,11 @@
         = f.custom_text_field :email, "Email id *", :value => f.object.email.present? ? f.object.email : ''
         - if f.object.new_record?
           = f.custom_text_field :password, "Password *"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-t-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.m-t-15
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
               Assign Grouping *
-            .col-lg-7.m-8
+            .col-lg-7
               - default_grouping = @event.groupings.collect{|p| [ p.name, p.id ]}
               %i.arrow.single
               = f.select("user", "assign_grouping", default_grouping, {:selected => f.object.assign_grouping,:prompt => "#{(f.object.assign_grouping.present? and f.object.assign_grouping != "Add New Group") ? f.object.assign_grouping : "Select Group" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
@@ -28,8 +28,6 @@
                   = f.object.errors.messages[:assign_grouping].join("") rescue nil
         = f.hidden_field :telecaller, :value => true
         = f.hidden_field_tag :get_role, params[:get_role] if params[:get_role].present?
-        = f.hidden_field_tag :telecaller_index, true if (params[:telecaller_index].present? or (Rails.application.routes.recognize_path(request.referrer)[:controller] == "admin/telecallers" and ["index","new","edit"].include?(Rails.application.routes.recognize_path(request.referrer)[:action])))
-
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

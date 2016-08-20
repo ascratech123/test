@@ -7,9 +7,6 @@ class Admin::InviteeDatasController < ApplicationController
   def index
     @invitee_structure = @event.invitee_structures.first
     @invitee_data = @invitee_structure.invitee_datum#InviteeStructure.search(params, @invitee_structures) if params[:search].present?
-    @grouping = Grouping.find_by_id(params[:grouping_id]) if params[:grouping_id].present?
-    @invitee_data = @grouping.get_search_data_count(@invitee_data) if @grouping.present?
-    @invitee_data = @invitee_data.paginate(page: params[:page], per_page: 10)
     respond_to do |format|
       format.html  
       format.xls do
@@ -49,7 +46,6 @@ class Admin::InviteeDatasController < ApplicationController
         @telecaller = User.unscoped.find(current_user.id)
         @grouping = Grouping.find(@telecaller.assign_grouping) 
         @data = @invitee_data
-        @telecaller_accessible_columns = @event.telecaller_accessible_columns.first.accessible_attribute if @event.telecaller_accessible_columns.present?
         render 'admin/telecallers/show'
       end
     else
