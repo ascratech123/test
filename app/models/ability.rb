@@ -96,13 +96,6 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
-      can :create, TelecallerAccessibleColumn
-      can :manage, TelecallerAccessibleColumn, :event_id => e_ids
-      can :create, Campaign
-      can :manage, Campaign, :event_id => e_ids
-      campaign_ids = Campaign.where(:event_id => e_ids).pluck(:id).uniq
-      can :create, Edm
-      can :manage, Edm, :campaign_id => campaign_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'

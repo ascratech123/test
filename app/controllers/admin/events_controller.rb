@@ -10,7 +10,11 @@ class Admin::EventsController < ApplicationController
     if params["type"].present?
       @events = Event.sort_by_type(params["type"], @events)
     end
-    @events = Event.search(params, @events) if params[:search].present?
+    if (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "All") || (params[:search].present? && params[:search][:order_by_status].present? && params[:search][:order_by_status] == "All")
+    	@events
+    else 
+    	@events = Event.search(params, @events) if params[:search].present?
+    end
     @events = @events.ordered.paginate(page: params[:page], per_page: 10) if @select != true
     mobile_application_ids = @events.pluck(:mobile_application_id)
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)

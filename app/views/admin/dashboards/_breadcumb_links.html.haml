@@ -47,9 +47,8 @@
           - elsif page == "Features"
             = params[:feature] == "my_calender" ? "Calender" : page
           - else
-            = "#{page.humanize.titleize}" if params[:controller] != "admin/events" and "#{page}" != "e-KIT" and params[:controller] != "admin/faqs" and params[:controller] != "admin/edms"
+            = "#{page.humanize.titleize}" if params[:controller] != "admin/events" and "#{page}" != "e-KIT" and params[:controller] != "admin/faqs"
             = "e-KIT" if "#{page}" == "e-KIT"
-            = "#{page}" if params[:controller] == "admin/edms"
             = "#{page}" if params[:controller] == "admin/faqs"
             = "#{page}" if params[:controller] == "admin/events"
           - if params[:action] == "show" and params[:controller] != "admin/mobile_applications" and params[:controller] != "admin/manage_mobile_apps" and params[:controller] != "admin/telecallers"

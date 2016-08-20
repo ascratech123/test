@@ -120,13 +120,9 @@ class MobileApplication < ActiveRecord::Base
 
   def self.search(params, mobileapplications)
     keyword = params[:search][:keyword]
-    mobileapplications = mobileapplications.where("name like (?) or preview_code like (?) or application_type like (?) or status like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")if keyword.present?
-    mobileapplications
+    mobileapplications = mobileapplications.where("name like (?)", "%#{keyword}%")if keyword.present?
+    mobileapplications 
   end
-  # invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")if keyword.present?
-  # preview_code
-  # status
-  # application_type
 
   def set_preview_submitted_code
     new_preview_code = ""

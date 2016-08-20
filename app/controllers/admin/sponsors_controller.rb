@@ -11,7 +11,6 @@ class Admin::SponsorsController < ApplicationController
 
 	def new
 		@sponsor = @event.sponsors.build
-    @default_sponsor_type = Sponsor.where(:event_id => @event.id).pluck(:sponsor_type).uniq
     # @sponsor.images.build
 	end
 
@@ -21,14 +20,12 @@ class Admin::SponsorsController < ApplicationController
       redirect_to admin_event_sponsors_path(:event_id => @sponsor.event_id)
     else
         # @sponsor.images.build if @sponsor.images.count == 0
-      @default_sponsor_type = Sponsor.where(:event_id => @event.id).pluck(:sponsor_type).uniq
       render :action => 'new'
     end
 	end
 
 	def edit
     # @sponsor.images.build if @sponsor.images.count == 0
-    @default_sponsor_type = Sponsor.where(:event_id => @event.id).pluck(:sponsor_type).uniq
 	end
 
 	def update
@@ -36,7 +33,6 @@ class Admin::SponsorsController < ApplicationController
       redirect_to admin_event_sponsors_path(:event_id => @sponsor.event_id)
     else
       # @sponsor.images.build if @sponsor.images.count == 0
-      @default_sponsor_type = Sponsor.where(:event_id => @event.id).pluck(:sponsor_type).uniq
       render :action => "edit"
     end
 	end
