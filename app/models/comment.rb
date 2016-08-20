@@ -32,7 +32,10 @@ class Comment < ActiveRecord::Base
   end
 
   def email
-    self.user.email rescue ""
+    # self.user.email rescue ""
+    user_id = Conversation.find_by_id(self.commentable_id)
+    email = Invitee.find_by_id(user_id.user_id).email
+    return email
   end
 
   def user_name
@@ -45,11 +48,17 @@ class Comment < ActiveRecord::Base
 
 
   def first_name
-    Invitee.find_by_id(self.user_id).first_name rescue ""
+    # Invitee.find_by_id(self.user_id).first_name rescue ""
+    user_id = Conversation.find_by_id(self.commentable_id)
+    first_name = Invitee.find_by_id(user_id.user_id).first_name
+    return first_name
   end
   
   def last_name
-    Invitee.find_by_id(self.user_id).last_name rescue ""
+    user_id = Conversation.find_by_id(self.commentable_id)
+    last_name = Invitee.find_by_id(user_id.user_id).last_name
+    return last_name
+    # Invitee.find_by_id(self.user_id).last_name rescue ""
   end
   
   def conversation
