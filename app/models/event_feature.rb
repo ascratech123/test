@@ -20,7 +20,7 @@ class EventFeature < ActiveRecord::Base
   validates_attachment_content_type :main_icon, :content_type => ["image/png"],:message => "please select valid format."
   validate :image_dimensions
   before_save :set_interpolate_time_stamp
-  after_create :create_default_invitee_groups
+  after_create :update_visibility,:create_default_invitee_groups
   # after_create :update_visibility
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
