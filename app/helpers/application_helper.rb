@@ -50,6 +50,14 @@ module ApplicationHelper
     end
   end
 
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
+  
   def get_only_time_in_ampm(time)
     time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
   end

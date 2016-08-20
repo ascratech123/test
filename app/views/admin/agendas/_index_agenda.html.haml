@@ -34,7 +34,8 @@
                     - @agendas = agenda_group(@agendas)  
                     - @agendas.keys.each_with_index do |date, index|  
                       %a.mdl-tabs__tab.newtab#date_agenda{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
-                        = date.strftime('%d %b %Y') rescue nil
+                        / = date.strftime('%d %b %Y') rescue nil
+                        = date_with_zone(@agendas[date].first.start_agenda_time, 'IST')
               .mdl-grid.mdl-grid--no-spacing 
                 %section.view-container.animate-fade-up{"data-ui-view" => ""}
                   .agendatimeline.ng-scope 
