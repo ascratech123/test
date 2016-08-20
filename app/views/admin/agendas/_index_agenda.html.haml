@@ -35,7 +35,8 @@
                     - @agendas.keys.each_with_index do |date, index|  
                       %a.mdl-tabs__tab.newtab#date_agenda{"data-target" => "newtab#{date}", :class => "newtab#{date}", :href => "javascript:void(0);"}
                         / = date.strftime('%d %b %Y') rescue nil
-                        = date_with_zone(@agendas[date].first.start_agenda_time, 'IST')
+                        =# date_with_zone(@agendas[date].first.start_agenda_time, 'IST')
+                        = date.strftime("%d-%m-%Y")
               .mdl-grid.mdl-grid--no-spacing 
                 %section.view-container.animate-fade-up{"data-ui-view" => ""}
                   .agendatimeline.ng-scope 
@@ -89,11 +90,13 @@
                                               = break_line.html_safe                            
                                           %td.font16
                                             - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
-                                              = track_agenda.start_agenda_time
+                                              / = track_agenda.start_agenda_time
+                                              = get_datetime_with_ist_timezone(track_agenda.start_agenda_time)
                                               = break_line.html_safe                              
                                           %td.font16
                                             - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
-                                              = track_agenda.end_agenda_time
+                                              / = track_agenda.end_agenda_time
+                                              = get_datetime_with_ist_timezone(track_agenda.end_agenda_time)
                                               = break_line.html_safe                           
                                           %td.font16
                                             - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
@@ -110,8 +113,10 @@
                                         - else
                                           %td.font16= agenda.title
                                           %td.font16= agenda.speaker_name 
-                                          %td.font16= agenda.start_agenda_time
-                                          %td.font16= agenda.end_agenda_time
+                                          / %td.font16= agenda.start_agenda_time
+                                          %td.font16= get_datetime_with_ist_timezone(agenda.start_agenda_time)
+                                          / %td.font16= agenda.end_agenda_time
+                                          %td.font16= get_datetime_with_ist_timezone(agenda.end_agenda_time)
                                           %td.font16= agenda.discription                                          
                                           %td.IconDrp.agendtaIconDrp
                                             = more_vert_button(agenda.id)
@@ -162,7 +167,4 @@
           }
       }
     })
-    $( document ).on( "click", "#date_agenda", function() {
-      var date =  $(this).attr('data-target');
-    });
   })  
