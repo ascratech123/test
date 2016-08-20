@@ -5,6 +5,9 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             Registration   
+        //= f.custom_text_area_field1 :custom_css, "Custom CSS", :value => f.object[:custom_css].present? ? f.object[:custom_css] : "", :display => "true"
+        //= f.custom_text_area_field1 :custom_js, "Custom JS", :value => f.object[:custom_js].present? ? f.object[:custom_js] : "", :display => "true"
+        / = f.custom_text_area_field1 :custom_source_code, "Custom Source Code", :value => f.object[:custom_source_code].present? ? f.object.custom_source_code : "", :display => "true"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.textareaFeid
           .bs-component
             .form-group
@@ -19,29 +22,22 @@
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
             .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
               = back_button(:back)
+          - if !f.object.new_record?
+            .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+              .mdl-cell--12-col.mdl-cell--12-col-tablet
+                = link_to "Preview",new_admin_event_user_registration_path(:event_id => @event.id),:target => "_blank"
     - else
       - default_fields = ["field1","field2","field3","field4","field5","field6","field7","field8","field9","field10","field11","field12","field13","field14","field15","field16","field17","field18","field19","field20"]
       - count = 0
-      - last_index = get_last_user_registration_field_index(f.object)
-      - last_index = 5 if last_index.blank?
-      - last_index = (last_index.present? and last_index < 5) ? 5 : last_index
       - default_fields.each do |default_field|
-        - count += 1 
-        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp{:class => "registration_field_#{count}", :style => "#{(count > 5 and ((count) > last_index)) ? 'display:none' : ''}"}  
+        .m-t-40.mdl-grid.mdl-card.pollInfo.mdl-shadow--1dp
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
-              = "Registration Field #{count}"
-          - if (@registration.new_record? or @registration.user_registrations.blank?) and count == 1
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-              .form-group
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  Which One Is Email Field?
-                .col-lg-7
-                  %i.arrow.single
-                  = f.select("registrations", "email_field", [["Field 1", 'attr1'], ["Field 2", 'attr2'], ["Field 3", 'attr3'], ["Field 4", 'attr4'], ["Field 5", 'attr5'], ["Field 6", 'attr6'], ["Field 7", 'attr7'], ["Field 8", 'attr8'], ["Field 9", 'attr9'], ["Field 10", 'attr10'], ["Field 11", 'attr11'], ["Field 12", 'attr12'], ["Field 13", 'attr13'], ["Field 14", 'attr14'], ["Field 15", 'attr15'], ["Field 16", 'attr16'], ["Field 17", 'attr17'], ["Field 18", 'attr18'], ["Field 19", 'attr19'], ["Field 20", 'attr20']], {:selected => @registration.email_field}, {include_blank: 'None',:class=> 'select2-single form-control' })
+              = "Registartion Field #{count + 1}"
+          - count += 1 
           = f.fields_for default_field do |field|
             - if !(f.object.new_record?)
-              = field.custom_text_field :label, "Question #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
+              = field.custom_text_field :label, "Label #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:label].present? ? @registration.attributes[default_field][:label] : "", :field_name => default_field, :route => Rails.application.routes.recognize_path(request.original_url),"background" => "false"
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
@@ -49,7 +45,7 @@
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:label].join("") rescue nil if count <= 1
             - else
-              = field.custom_text_field :label, "Question #{count <= 1 ? '*' : ''}",:value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:label] : ""
+              = field.custom_text_field :label, "Label #{count <= 1 ? '*' : ''}",:value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:label] : ""
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
@@ -59,190 +55,86 @@
             .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
               .form-group
                 %label.col-lg-4.control-label.ml-color--shades-white
-                  ="#{count <= 1 ? 'Answer Type *' : 'Answer Type'}"
+                  ="#{count <= 1 ? 'Option Type *' : 'Option Type'}"
                 .col-lg-7
                   %i.arrow.single
-                  = field.select("registration[#{default_field}]", "option_type", [["Radio Buttons (for one option selection)","Radio Button"], ["Check Boxes (for multiple option selection)","Check Box"], ["Drop-down list","Drop-Down list"], ["Text box - single line","Text Box"], ["Text box - multiple lines","Text Area"], ["Date Picker","Date Picker"]], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:option_type].present?) ? f.object.attributes[default_field][:option_type] : "",:prompt => 'Select type'}, { include_blank: true,:class=> 'show_hide select2-single form-control', check_field: "#{default_field}_for_text_area", check_field_for_opt: "#{default_field}_for_opt"})
+                  = field.select("registration[#{default_field}]", "option_type", ["Check Box", "Radio Button", "Text Box", "Text Area", "Date Picker","Drop-Down list"], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:option_type].present?) ? f.object.attributes[default_field][:option_type] : "",:prompt => 'option Type'}, { include_blank: true,:class=> 'show_hide select2-single form-control'})
                   .field_with_errors
                     .span{:class => "errorMessage"}
                       = f.object.errors.messages[:option_type].join("") rescue nil if count <= 1
             .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-              .form-group.text_area_form_group{:class => "#{default_field}_for_text_area",:style => (@registration.attributes[default_field].present? and (@registration.attributes[default_field]["validation_type"].present? or f.object.errors.keys.include?(:"#{default_field}[validation_type]").present?)) ? '' : 'display:none;'}
+              .form-group
                 %label.col-lg-4.control-label.ml-color--shades-white
                   ="#{count <= 1 ? 'Validation Type *' : 'Validation Type'}"
                 .col-lg-7
                   %i.arrow.single
-                  = field.select("registration[#{default_field}]", "validation_type", [["Email address","Email Validation"], ["Numeric only","Numeric only"]], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:validation_type].present?) ?  f.object.attributes[default_field][:validation_type] : "",:prompt => 'Validation Type'}, { include_blank: true,:class=> 'select2-single form-control'})
+                  = field.select("registration[#{default_field}]", "validation_type", ["Mandatory", "Email Validation", "Numeric only","Non Mandatory"], {:selected => (f.object.attributes[default_field].present? and f.object.attributes[default_field][:validation_type].present?) ?  f.object.attributes[default_field][:validation_type] : "",:prompt => 'Validation Type'}, { include_blank: true,:class=> 'select2-single form-control'})
                   .field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:"#{default_field}[validation_type]"].join("") rescue nil if count <= 1
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-b-10
-              .mdl-grid.p-v-5
-                .col-lg-4.mdl-typography--text-right
-                  %p.displayInlineBlock.multicitytxt Mandatory
-                .col-lg-3.p-h-12.m-8
-                  = field.custom_radio_button_menu :mandatory_field, "yes","Yes", :id => "option-1_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["mandatory_field"] == "yes") ? 'checked' : ''
-                  = field.custom_radio_button_menu :mandatory_field, "no", "No", :id => "option-2_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["mandatory_field"] == "no") ? 'checked' : ''
-            
-            - if true
-              = field.custom_text_area_field1 :option_1, "Option 1 #{count <= 1 ? '*' : ''}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_1] : "", :display => "true", klass: (['new','create', 'edit', 'update'].include?(params[:action]) or f.object.errors.keys.include?(:"#{default_field}[:option_1]").present?) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
+                      = f.object.errors.messages[:validation_type].join("") rescue nil if count <= 1
+            - if !(f.object.new_record?)
+              = field.custom_text_area_field1 :option_1, "Option 1 #{count <= 1 ? '*' : ''}", :value => f.object.attributes[default_field][:option_1].present? ? f.object.attributes[default_field][:option_1] : "", :field_name => default_field, :display => "#{(@registration.attributes[default_field][:option_type].blank? or ["Check Box","Radio Button","Drop-Down list"].include? @registration.attributes[default_field][:option_type]) ? "true" : "none"}"
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
                   .col-lg-7.field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:"#{default_field}[option_1]"].join("") rescue nil if count <= 1
-              = field.custom_text_area_field1 :option_2, "Option 2 #{count <= 1 ? '*' : ''}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_2] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
+                      = f.object.errors.messages[:option_1].join("") rescue nil if count <= 1
+              = field.custom_text_area_field1 :option_2, "Option 2 #{count <= 1 ? '*' : ''}", :value => @registration.attributes[default_field][:option_2], :field_name => default_field, :display => "#{(@registration.attributes[default_field][:option_type].blank? or ["Check Box","Radio Button","Drop-Down list"].include? @registration.attributes[default_field][:option_type]) ? "true" : "none"}"
               .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
                 .form-group
                   %label.col-lg-4.control-label  
                   .col-lg-7.field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:"#{default_field}[option_2]"].join("") rescue nil if count <= 1
-              = field.custom_text_area_field1 :option_3, "Option 3", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_3] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : ''
-              - display_cond = ((f.object.attributes[default_field].present? and f.object.attributes[default_field][:option_4].blank?)) ? true : false
-              .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
-                .bs-component
-                  .form-group  
-                    %label.col-lg-4.control-label.ml-color--shades-white
-                    .col-lg-7.addmoretext
-                      - if f.object.id.present?
-                        = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : ''} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
-                          %i.material-icons.mdl-color-text--white
-                            add
-                      - elsif f.object.errors.present?
-                        = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : ''} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
-                          %i.material-icons.mdl-color-text--white
-                            add
-                      - else
-                        = link_to 'javascript:void(0)', :class => "#{display_cond ? 'options_form_tag_for_new' : 'options_form_tag_for_new'} #{default_field}_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900", :for => "registration_field_#{default_field}_option_4", :style => "#{display_cond ? '' : 'display:none'}" do
-                          %i.material-icons.mdl-color-text--white
-                            add
-              - glob = 0
-              - ['option_4', 'option_5', 'option_6', 'option_7', 'option_8', 'option_9', 'option_10'].each_with_index do |op, index|
-                - op_count = op.split('_').last.to_i
-                - op_next = op_count + 1
-                - op_n = "option_#{op_next}"
-                
-                .optionsDiv.col-lg-12{:style => "#{((f.object.attributes[default_field].present? and f.object.attributes[default_field][op].present?) and index <= 6) ? '' : 'display:none'}", :class => "registration_field_#{default_field}_option_#{op_count} #{default_field}_for_opt"}
-                  = field.custom_text_area_field1 op, "Option #{op_count}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][op] : "", :display => "true", klass: ['new','create', 'edit', 'update'].include?(params[:action]) ? "options_form_tag_for_new #{default_field}_for_text_area" : '', :class => "registration_field_#{default_field}_option_#{op_count}"
-                  .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
-                    .bs-component
-                      .form-group  
-                        %label.col-lg-4.control-label.ml-color--shades-white
-                        .col-lg-7.addmoretext
-                          - d = (f.object.attributes[default_field].present? and ["Radio Button", "Check Box", "Drop-Down list"].include? f.object.attributes[default_field][:option_type]) ? true : false
-                          = link_to 'javascript:void(0)', :class => ((index < 6) ? "#{default_field}_for_opt add_more_optionlink registration_field_#{default_field}_option_#{op_count} link_to_add_more_option mdl-color--light-blue-900" : '#{default_field}_for_opt link_to_add_more_option mdl-color--light-blue-900'), :for => "registration_field_#{default_field}_option_#{op_next}", :style => "#{(((f.object.attributes[default_field].present? and f.object.attributes[default_field][op].present? and f.object.attributes[default_field][op_n].blank?) and index < 6) and d) ? '' : 'display:none'}", default_val: "#{op_count}", check_field_for_opt: "#{default_field}_for_opt" do
-                            %i.material-icons.mdl-color-text--white
-                              add
-                - if f.object.attributes[default_field].present? and f.object.attributes[default_field][op].present? and f.object.attributes[default_field][op_n].blank?  
-                  .maxoption{:id => "maxoption_#{default_field}", class: "#{default_field}_for_opt registration_field_#{default_field}", check_field_for_opt_maxoption: "#{default_field}_for_opt", :style => 'display:none'}
-                    = op_count
-                  - glob = op_count
-              - if glob == 0
-                .maxoption{:id => "maxoption_#{default_field}", class: "registration_field_#{default_field} #{default_field}_for_opt", check_field_for_opt_maxoption: "#{default_field}_for_opt", :style => 'display:none'}
-                  = glob
-              
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.textboxrequired{:class => "#{default_field}_for_text_area",:style => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"].present?) ? '' : 'display:none;'}
-              .mdl-grid.p-v-5
-                .col-lg-4.mdl-typography--text-right
-                  %p.displayInlineBlock.multicitytxt  
-                  = "Text box required after options?"
-                .col-lg-3.p-h-12
-                  = field.custom_radio_button_menu :text_box_required_after_options, "yes","Yes", :id => "option_1_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "yes") ? 'checked' : ''
-                  = field.custom_radio_button_menu :text_box_required_after_options, "no", "No", :id => "option_2_#{field.object_name}",:default_checked => (@registration.attributes[default_field].present? and @registration.attributes[default_field]["text_box_required_after_options"] == "no") ? 'checked' : ''
-                  .field_with_errors
+                      = f.object.errors.messages[:option_2].join("") rescue nil if count <= 1
+              = field.custom_text_area_field1 :option_3, "Option 3", :value => @registration.attributes[default_field][:option_3], :field_name => default_field, :display => "#{(@registration.attributes[default_field][:option_type].blank? or ["Check Box","Radio Button","Drop-Down list"].include? @registration.attributes[default_field][:option_type]) ? "true" : "none"}"
+              = field.custom_text_area_field1 :option_4, "Option 4", :value => @registration.attributes[default_field][:option_4], :field_name => default_field, :display => "#{(@registration.attributes[default_field][:option_type].blank? or ["Check Box","Radio Button","Drop-Down list"].include? @registration.attributes[default_field][:option_type]) ? "true" : "none"}"
+            - else
+              = field.custom_text_area_field1 :option_1, "Option 1 #{count <= 1 ? '*' : ''}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_1] : "", :display => "true"
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
+                .form-group
+                  %label.col-lg-4.control-label  
+                  .col-lg-7.field_with_errors
                     .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:"#{default_field}[text_box_required_after_options]"].join("") rescue nil if count <= 2
-        = link_to 'Add More', 'javascript:void(0)', :class => (count < 20 ? "link_to_add_more registration_field_#{count}" : 'link_to_add_more'), :for => "registration_field_#{count + 1}", :style => "#{(count == last_index and count < 20) ? '' : 'display:none'}"
+                      = f.object.errors.messages[:option_1].join("") rescue nil if count <= 1
+              = field.custom_text_area_field1 :option_2, "Option 2 #{count <= 1 ? '*' : ''}", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_2] : "", :display => "true"
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.errorm-t-14
+                .form-group
+                  %label.col-lg-4.control-label  
+                  .col-lg-7.field_with_errors
+                    .span{:class => "errorMessage"}
+                      = f.object.errors.messages[:option_2].join("") rescue nil if count <= 1
+              = field.custom_text_area_field1 :option_3, "Option 3", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_3] : "", :display => "true"
+              = field.custom_text_area_field1 :option_4, "Option 4", :value => f.object.attributes[default_field].present? ? f.object.attributes[default_field][:option_4] : "", :display => "true"
       .fixed-activon-btn-new 
         = f.custom_submit_button "SAVE"
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn.registcancel
-            = link_to admin_event_registration_settings_path(:event_id => @event.id),:class => "waves-effect waves-light btn" do
-              Cancel
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+        - if @event.registration_settings.present?
+          .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+            .mdl-cell--12-col.mdl-cell--12-col-tablet
+              = link_to "Edit Setting",edit_admin_event_registration_setting_path(:event_id => @event.id, :id => @event.registration_settings.last.id)
+        - if @event.registration_settings.present? and !f.object.new_record?
+          .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.fleft.editsetting
+            .mdl-cell--12-col.mdl-cell--12-col-tablet
+              = link_to "QR Scanner", admin_event_qr_code_scanners_path(:event_id => @event.id), :target => '_blank'
+
 
 :javascript
-  var selected_option_text_field = ["Check Box","Radio Button","Drop-Down list"], check_field;
-  $(document).on('ready', function(){
-    $('select.show_hide').each(function(){
-      check_field = $(this).attr('check_field');
-      flag = false;
-      value = $('select.show_hide[check_field='+ check_field +'] option:selected').val();
-      check_field_for_opt = $(this).attr('check_field_for_opt');
-      max_val = $('.maxoption.'+check_field_for_opt).html().trim();
-
-      if(value !== undefined && selected_option_text_field.indexOf(value) > -1){
-        show_text_field_on_select(check_field);
-        show_hide_add_more_option(check_field_for_opt, max_val);
-        
-      }else{
-        hide_text_field_on_select(check_field);
-      }
-      form_field_group(value, check_field);
-     
-      console.log("max_val "+max_val)
-
-
-    })
-    
-  });
-
   $(".show_hide").change(function(){
     value = $(this).val();
-    check_field = $(this).attr('check_field');
-    check_field_for_opt = $(this).attr('check_field_for_opt');
-    check_field_for_opt = $(this).attr('check_field_for_opt');
-    max_val = $('.maxoption.'+check_field_for_opt).html().trim();
-    
     if(value == "Check Box" || value == "Radio Button" || value == "Drop-Down list"){
-      show_text_field_on_select(check_field);
-      show_hide_add_more_option(check_field_for_opt, max_val);
+      $(this).parent().parent().parent().next().next().show();
+      $(this).parent().parent().parent().next().next().next().next().show();
+      $(this).parent().parent().parent().next().next().next().next().next().next().show();
+      $(this).parent().parent().parent().next().next().next().next().next().next().next().show();
     }else{
-      hide_text_field_on_select(check_field);
-      $('a.'+check_field_for_opt).hide();
+      $(this).parent().parent().parent().next().next().hide();
+      $(this).parent().parent().parent().next().next().next().next().hide();
+      $(this).parent().parent().parent().next().next().next().next().next().next().hide();
+      $(this).parent().parent().parent().next().next().next().next().next().next().next().hide();
      }
-
-    value = $(this).val();
-    form_field_group(value, check_field);
-    
   });
 
-  $(".link_to_add_more_option").click(function(){
-    var next_div = $(this).attr('for');
-    $('.'+next_div).show();
-    $(this).hide();
-    $(this).parent('.addmoretext').parent('.form-group').parent('.bs-component').parent('.addnew').hide(); 
-  });
  
-  function show_hide_add_more_option(check_field_for_opt, max_val){
-    $('a.'+check_field_for_opt).hide();
-    console.log($('a.'+check_field_for_opt).filter("[default_val='"+ max_val +"']").show())
-    $('a.'+check_field_for_opt).filter("[default_val='"+ max_val +"']").show();
-  }
-
-  function show_text_field_on_select(check_field){
-    $('.options_form_tag_for_new.'+check_field).show();
-    $('.textboxrequired.'+check_field).show();
-  }
-
-  function hide_text_field_on_select(check_field){
-    console.log(check_field);
-    $('.options_form_tag_for_new.'+check_field).hide();
-    $('.textboxrequired.'+check_field).hide();
-  }
-
-  function form_field_group(value, check_field){
-    if(value == "Text Box" || value == "Text Area"){
-      // $(this).parent().parent().parent().next().show();
-      $('.text_area_form_group.'+check_field).show();
-    }else{
-      // $(this).parent().parent().parent().next().hide();
-      $('.text_area_form_group.'+check_field).hide();
-     }
-  }
-  $('.link_to_add_more').click(function(){
-    div_show = $(this).attr('for');
-    $('.'+div_show).show();
-    $(this).hide();
-  })

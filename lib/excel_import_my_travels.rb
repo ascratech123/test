@@ -1,8 +1,11 @@
 require 'rubygems'
 require 'roo'
 require 'open-uri'
+# require 'zip/zipfilesystem'
+#include ActiveSupport::Inflector
 
 module ExcelImportMyTravel
+#options => {:start_row => 'start_row_number'}
   def self.save(file_path, klass_name, event_id,attributes=[], operation='add', options={})
     attributes = MyTravel.column_names
     attributes -= ["id","created_at", "updated_at"]
@@ -23,6 +26,7 @@ module ExcelImportMyTravel
   end
 
   def self.prepare_objekts(file_path, klass_name, event_id, attributes, operation, options)
+    # ENV['ROO_TMP'] = "#{Rails.root}/tmp"
     ext = File.extname(file_path)
     puts ext
     workbook = nil
@@ -50,7 +54,7 @@ module ExcelImportMyTravel
       invitee_id = event.invitees.find_by_email(objekt["invitee_email"]).id rescue nil
       if objekt["file_1_url"].present?
         url1 = objekt["file_1_url"] rescue nil
-        data = open(url1).read rescue nil
+        data = open(url1).read
         write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
           f.write(data)
         end
@@ -58,7 +62,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_2_url"].present?
         url2 = objekt["file_2_url"] rescue nil
-        data = open(url2).read rescue nil
+        data = open(url2).read
         write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
           f.write(data)
         end
@@ -66,7 +70,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_3_url"].present?
         url3 = objekt["file_3_url"] rescue nil
-        data = open(url3).read rescue nil
+        data = open(url3).read
         write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
           f.write(data)
         end
@@ -74,7 +78,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_4_url"].present?
         url4 = objekt["file_4_url"] rescue nil
-        data = open(url4).read rescue nil
+        data = open(url4).read
         write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
           f.write(data)
         end
@@ -82,12 +86,13 @@ module ExcelImportMyTravel
       end
       if objekt["file_5_url"].present?
         url5 = objekt["file_5_url"] rescue nil
-        data = open(url5).read rescue nil
+        data = open(url5).read
         write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
           f.write(data)
         end
         attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
       end
+      # my_travel = MyTravel.new(:event_id => event_id,:invitee_id => invitee_id,:attach_file => attach_file_1,:attach_file_1_name => objekt["file_name_1"],:attach_file_2 => attach_file_2,:attach_file_2_name => objekt["file_name_2"],:attach_file_3 => attach_file_3,:attach_file_3_name => objekt["file_name_3"],:attach_file_4 => attach_file_4,:attach_file_4_name => objekt["file_name_4"],:attach_file_5 => attach_file_5,:attach_file_5_name => objekt["file_name_5"])
       my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
       my_travel.attach_file = attach_file_1 
       my_travel.attach_file_1_name = objekt["file_name_1"]
@@ -115,14 +120,7 @@ module ExcelImportMyTravel
     objekts.each_with_index do |objekt, index|
       if objekt.invalid?
         error_message = objekt.errors.full_messages.join(", ")
-        error_message = "File name This field is required., Attach file This field is required." if error_message.split(", ").include?("Attach file 1 name This field is required.") and error_message.split(", ").include?("Attach file This field is required.")
-        error_message = "File name This field is required., " if error_message.split(", ").include?("Attach file 1 name This field is required.")
-
-        # error_message << "Attach file 1 please select valid format" if error_messages.split("., ").include?("Attach file please select valid format")
-        # error_message << "., Attach file 2 please select valid format" if error_messages.split("., ").include?("Attach file 2 please select valid format")
-        # error_message << "., Attach file 3 please select valid format" if error_messages.split("., ").include?("Attach file 3 please select valid format")
-        # error_message << "., Attach file 4 please select valid format" if error_messages.split("., ").include?("AAttach file 4 please select valid format")
-        # error_message << "., Attach file 5 please select valid format" if error_messages.split("., ").include?("Attach file 5 please select valid format.")
+        error_message = "receiver not present in panel or speaker" if error_message == "Receiver can't be blank"
         error_rows << "row#{index + 2} :   #{error_message}\n"
       end  
       Rails.logger.info objekt.errors.inspect

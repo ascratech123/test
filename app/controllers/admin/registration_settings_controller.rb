@@ -5,12 +5,11 @@ class Admin::RegistrationSettingsController < ApplicationController
 
 
   def index
-    # if @registration_settings.present?
-    #   redirect_to edit_admin_event_registration_setting_path(:event_id => params[:event_id], :id => @event.registration_settings.last.id)
-    # else
-    #   redirect_to new_admin_event_registration_setting_path(:event_id => params[:event_id])
-    # end
-    @registration_settings = @event.registration_settings.paginate(page: params[:page], per_page: 10)
+    if @registration_settings.present?
+      redirect_to edit_admin_event_registration_setting_path(:event_id => params[:event_id], :id => @event.registration_settings.last.id)
+    else
+      redirect_to new_admin_event_registration_setting_path(:event_id => params[:event_id])
+    end
   end
 
   def new
@@ -25,10 +24,9 @@ class Admin::RegistrationSettingsController < ApplicationController
     @registration_setting = @event.registration_settings.build(regi_setting_params)
     if @registration_setting.save
       if @registration_setting.registration == "hobnob"
-        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id) if @event.registrations.blank?
-        redirect_to admin_event_registration_settings_path(:event_id => @event.id) if @event.registrations.present?
+        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id)
       else
-        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
+        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration_setting.event_id,:analytics=>true)
       end
     else
       render :action => 'new'
@@ -41,10 +39,13 @@ class Admin::RegistrationSettingsController < ApplicationController
   def update
     if @registration_setting.update_attributes(regi_setting_params)
       if @registration_setting.registration == "hobnob"
-        redirect_to admin_event_registration_settings_path(:event_id => @event.id) if @event.registrations.present?
-        redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id) if @event.registrations.blank?
+        if @event.registrations.present?
+          redirect_to edit_admin_event_registration_path(:event_id => @registration_setting.event_id,:id => @event.registrations.last.id)
+        else
+          redirect_to new_admin_event_registration_path(:event_id => @registration_setting.event_id)
+        end
       else
-        redirect_to admin_event_registration_settings_path(:event_id => @event.id)
+        redirect_to admin_client_event_path(:client_id => @event.client_id,:id => @registration_setting.event_id,:analytics=>true)
       end
     else
       render :action => "edit"

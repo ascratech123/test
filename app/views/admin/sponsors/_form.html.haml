@@ -10,11 +10,11 @@
         .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
             Category *
-          .col-lg-7
-            / - default_sponsor_type = Sponsor.where(:event_id => params[:event_id]).pluck(:sponsor_type).uniq#['Gold','Silver','Platinum','Diamond']
-            - @default_sponsor_type << 'New Category'
+          .col-lg-7  
+            - default_sponsor_type = Sponsor.where(:event_id => params[:event_id]).pluck(:sponsor_type).uniq#['Gold','Silver','Platinum','Diamond']
+            - default_sponsor_type << 'New Category'
             %i.arrow.single
-            = f.select("sponsor", "sponsor_type", @default_sponsor_type, {:selected => f.object.sponsor_type,:prompt => "#{(f.object.sponsor_type.present?) ? f.object.sponsor_type : "Sponsor Category" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+            = f.select("sponsor", "sponsor_type", default_sponsor_type, {:selected => f.object.sponsor_type,:prompt => "#{(f.object.sponsor_type.present?) ? f.object.sponsor_type : "Sponsor Category" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
             .field_with_errors
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:sponsor_type].join("") rescue nil 

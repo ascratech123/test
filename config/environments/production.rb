@@ -97,7 +97,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Production Shobiz Error Notifier",
    :sender_address => %w{info@hobnobspace.com},
-   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in atul@ascratech.com}
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com}
  }
 
 
@@ -125,10 +125,6 @@ PAPERCLIP_SETTINGS =  {
                         }
 
 
-HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
