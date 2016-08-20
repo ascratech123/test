@@ -96,7 +96,7 @@
                                               = break_line.html_safe                           
                                           %td.font16
                                             - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
-                                              = track_agenda.discription.present? ? track.discription : '-'
+                                              = track_agenda.discription.present? ? track_agenda.discription : '-'
                                               = break_line.html_safe
                                           %td.IconDrp.agendtaIconDrp
                                             - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
