@@ -149,7 +149,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.first.each do |comment|
+    # binding.pry
+    comments.each do |comment|
       comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment
@@ -173,10 +174,19 @@ class Conversation < ActiveRecord::Base
   #use for conversation export remove blank values
   def commented_user_name
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # name_of_the_invitee = Invitee.find_by_id(comment_by).name_of_the_invitee
+    # return name_of_the_invitee
+    # binding.pry
   end
+
   def commented_user_email
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # email = Invitee.find_by_id(comment_by).email
+    # return email
   end
+
   def email
     Invitee.find_by_id(self.user_id).email rescue ""
   end

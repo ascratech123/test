@@ -12,7 +12,8 @@ class Comment < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   def commented_user_name
-    Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+    # Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+    self.user.name_of_the_invitee rescue ""
   end
 
   def update_conversation
@@ -33,8 +34,9 @@ class Comment < ActiveRecord::Base
 
   def email
     # self.user.email rescue ""
-    user_id = Conversation.find_by_id(self.commentable_id)
-    email = Invitee.find_by_id(user_id.user_id).email
+    # binding.pry 
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    email = Invitee.find_by_id(user_id).email rescue ""
     return email
   end
 
@@ -48,14 +50,14 @@ class Comment < ActiveRecord::Base
 
   def first_name
     # Invitee.find_by_id(self.user_id).first_name rescue ""
-    user_id = Conversation.find_by_id(self.commentable_id)
-    first_name = Invitee.find_by_id(user_id.user_id).first_name
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    first_name = Invitee.find_by_id(user_id).first_name rescue ""
     return first_name
   end
   
   def last_name
-    user_id = Conversation.find_by_id(self.commentable_id)
-    last_name = Invitee.find_by_id(user_id.user_id).last_name
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    last_name = Invitee.find_by_id(user_id).last_name rescue ""
     return last_name
     # Invitee.find_by_id(self.user_id).last_name rescue ""
   end
