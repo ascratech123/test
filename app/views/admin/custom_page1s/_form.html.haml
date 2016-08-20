@@ -4,8 +4,9 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           General Information
-          %span.titleQuestion
-            = link_to("?" ,"/whats_this/custom_pages/general_information/Custom_Pages.png", rel: "custom_pages", title: "Custom Page1", :class =>"fancybox whatsImg") 
+          / %a{:href =>'/whats_this/contact_us/general_information/contact_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+          /   what's this?
+      = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "contact_generalInfo.jpg", :section_id => "contact_general_section"}
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         .mdl-grid.p-v-5
           .col-lg-4.mdl-typography--text-right

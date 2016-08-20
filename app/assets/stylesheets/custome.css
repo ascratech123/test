@@ -82,8 +82,11 @@
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
 
-.titleQuestion{margin-left:15px;}
-
+/*test*/
+.test{position:relative;}
+.event_select123{position:absolute;top:16px;z-index:99999999999;}
+.select2-search_order_by-container{color:#eee;}
+.manage-event .category_dropdown .select2-container--default .select2-selection--single .select2-selection__rendered{color:#eee ;}
 
 
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
@@ -315,7 +318,8 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 /* nilam css start here */
 
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
-.back_btn_header{display: inline-block; margin-top: 17px;}
+/*.back_btn_header{display: inline-block; margin-top: 17px;}*/
+.back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
 /* nilam css ends here */
 
@@ -1342,4 +1346,5 @@ i.incards {font-size: 60px}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
+
 

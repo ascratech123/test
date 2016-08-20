@@ -87,7 +87,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Staging Shobiz Error Notifier",
    :sender_address => %{"Error notifier" <error@ascratech.com>},
-   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in}
+   :exception_recipients => %w{shiv@ascratech.com sandeep@ascratech.com sushil@ascratech.in}
  }
 
 
@@ -110,11 +110,6 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         :s3_credentials => S3_CREDENTIALS,
                         :bucket => S3_bucket
                         }
-HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-                     
 ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
@@ -125,6 +120,7 @@ ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 

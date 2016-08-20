@@ -4,8 +4,9 @@ class UserFeedback < ActiveRecord::Base
   belongs_to :feedback
   belongs_to :user
 
-  validates :user_id, :feedback_id, :answer, presence: true
+  validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
+  validate :check_answer_or_description_present
   after_create :create_analytic_record
   default_scope { order('created_at desc') }
   
@@ -57,6 +58,13 @@ class UserFeedback < ActiveRecord::Base
     if Analytic.where(viewable_type: "Feedback", action: "feedback given", invitee_id: self.user_id, event_id: event_id).blank?
       analytic = Analytic.new(viewable_type: "Feedback", viewable_id: self.feedback_id, action: "feedback given", invitee_id: self.user_id, event_id: event_id, platform: platform)
       analytic.save rescue nil
+    end
+  end
+
+  def check_answer_or_description_present
+    if self.answer.blank? and self.description.blank?
+      errors.add(:answer, "This field is required.") if self.answer.blank?
+      errors.add(:description, "This field is required.") if self.description.blank?
     end
   end
 end

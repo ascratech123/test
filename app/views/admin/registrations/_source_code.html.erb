@@ -45,7 +45,7 @@
     <div class="formInfo">
       <%= form_for [:admin, @event, @user_registration] do |f| %>
         <p>Registration</p>
-        <% @registration.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css','custom_js', 'custom_source_code','email_field').map{|key, value| (value['label'].present? and value['option_type'].present?) ? [key,value] : nil}.compact!.each do |key,hsh| %>
+        <% @registration.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_css','custom_js', 'custom_source_code').map{|key, value| (value['label'].present? and value['option_type'].present?) ? [key,value] : nil}.compact!.each do |key,hsh| %>
           <% if hsh['label'].present? and hsh['option_type'] == 'Radio Button' %>
             <div class="field">
               <%= f.label "#{hsh['label']}" %>
