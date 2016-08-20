@@ -81,7 +81,7 @@
               .ml-card-holder
                 %div
                   %form.ng-pristine.ng-valid{:action => "#"}
-                    .mdl-grid.feedbackInfo       
+                    .mdl-grid       
                       - if @speaker.ratings.present?
                         - @speaker.ratings.each do |rating|
                           = show_field("Comment : ", rating.comments)
