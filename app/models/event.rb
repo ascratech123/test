@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :agenda_tracks, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
@@ -446,23 +447,40 @@ class Event < ActiveRecord::Base
     elsif featue_type == Image
       event = feature.imageable
       objects = featue_type.where(:imageable_id => event.id)
+    elsif featue_type == AgendaTrack
+      event = feature.event
+      objects = featue_type.where(:event_id => event.id,:agenda_date =>feature.agenda_date.to_date).uniq.order(:sequence)
     else
       event = feature.event
       objects = featue_type.where(:event_id => event.id)
     end
     ids = objects.pluck(:id) 
     position = ids.index(feature.id)
-    if seq_type == "up"
-      previous_sp = objects.find_by_id(ids[position.to_i - 1])
-      old_seq = previous_sp.sequence
-      previous_sp.update(:sequence => feature.sequence)
-      feature.update(:sequence => old_seq)
+    if featue_type == AgendaTrack
+      if seq_type == "up"
+        previous_sp = objects.find_by_id(ids[position.to_i - 1])
+        old_seq = previous_sp.sequence
+        previous_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => old_seq)
+      else
+        next_sp = objects.find_by_id(ids[position.to_i + 1])
+        next_seq = next_sp.sequence
+        next_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => next_seq)
+      end if ids.length > 1
     else
-      next_sp = objects.find_by_id(ids[position.to_i + 1])
-      next_seq = next_sp.sequence
-      next_sp.update(:sequence => feature.sequence)
-      feature.update(:sequence => next_seq)
-    end if ids.length > 1 
+      if seq_type == "up"
+        previous_sp = objects.find_by_id(ids[position.to_i - 1])
+        old_seq = previous_sp.sequence
+        previous_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => old_seq)
+      else
+        next_sp = objects.find_by_id(ids[position.to_i + 1])
+        next_seq = next_sp.sequence
+        next_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => next_seq)
+      end if ids.length > 1 
+    end
   end
 
   def chage_updated_at
@@ -488,6 +506,10 @@ class Event < ActiveRecord::Base
 
   def get_agenda
     Agenda.where(:event_id => self.id).pluck(:agenda_type).uniq.compact rescue []
+  end
+
+  def get_event_agenda_tracks
+    AgendaTrack.where(:event_id => self.id)
   end
   
   def event_count_within_limit

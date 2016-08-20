@@ -1,5 +1,18 @@
 module ApplicationHelper
 
+  def break_line
+    str = "<br><br><br>"
+  end
+
+  def get_only_time_in_ampm(time)
+    time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
+  end
+
+  def get_datetime_with_ist_timezone(datetime)
+    datetime.in_time_zone('Kolkata') if datetime.present?
+  end
+
+
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
     html_content = content_tag(:i, icon_name, :class => "material-icons center")
@@ -46,6 +59,14 @@ module ApplicationHelper
     end
   end
 
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
+  
   def get_only_time_in_ampm(time)
     time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
   end
