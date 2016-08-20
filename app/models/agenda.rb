@@ -95,10 +95,10 @@ class Agenda < ActiveRecord::Base
   end  
 
   def agenda_track_name
-    self.agenda_track.track_name
+    self.agenda_track.track_name if self.agenda_track.id.to_i > 0
   end
 
   def track_sequence
-    self.agenda_track.sequence
+    self.agenda_track.sequence if self.agenda_track.id.to_i > 0
   end
 end
