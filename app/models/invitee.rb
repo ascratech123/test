@@ -106,6 +106,10 @@ class Invitee < ActiveRecord::Base
     self.analytics.where(:action => 'Login').present? ? 'Yes' : 'No' rescue ""
   end 
 
+  def Profile_pic_URL
+    self.profile_pic.url.present? and self.profile_pic.url != "/profile_pics/original/missing.png" ? self.profile_pic.url : ""
+  end
+
   def profile_picture
     self.profile_pic.url rescue ""
   end
