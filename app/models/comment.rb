@@ -63,7 +63,8 @@ class Comment < ActiveRecord::Base
   end
   
   def conversation
-    self.commentable.description
+    conversation = self.commentable.description
+    return conversation.gsub(/[\r\n]/, '')
   end
 
   def comment
