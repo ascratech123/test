@@ -105,6 +105,13 @@ class Agenda < ActiveRecord::Base
     self.agenda_track.present? ? self.agenda_track.track_name : ""
   end
 
+  def get_agenda_type_name
+    self.agenda_type
+    id = []
+    id <<  self.id
+    Agenda.where("id IN (?)",id).pluck(:agenda_type).join
+  end  
+
   def agenda_track_name
     self.agenda_track.track_name
   end
