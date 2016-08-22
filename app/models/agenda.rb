@@ -82,4 +82,36 @@ class Agenda < ActiveRecord::Base
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
     end
   end
+
+  def set_sequence_no
+    self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def start_agenda_time_with_event_timezone
+    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.start_agenda_time.present?
+  end
+
+  def end_agenda_time_with_event_timezone
+    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.end_agenda_time.present?
+  end
+
+  def agenda_type
+    self.agenda_track.present? ? self.agenda_track.track_name : ""
+  end
+
+  def get_agenda_type_name
+    self.agenda_type
+    id = []
+    id <<  self.id
+    Agenda.where("id IN (?)",id).pluck(:agenda_type).join
+  end  
+
+  def agenda_track_name
+    self.agenda_track.track_name if self.agenda_track_id.to_i > 0
+  end
+
+  def track_sequence
+    self.agenda_track.sequence if self.agenda_track_id.to_i > 0
+  end
 end
+

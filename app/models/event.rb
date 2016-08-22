@@ -190,6 +190,9 @@ class Event < ActiveRecord::Base
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 
+  def get_event_agenda_tracks
+    AgendaTrack.where(:event_id => self.id)
+  end
 
   def perform_event(event)
     self.approve! if event== "approve"
@@ -566,4 +569,31 @@ class Event < ActiveRecord::Base
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
   end
+
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone.capitalize)
+        end
+      end   
+    end
+  end
+
+  def start_event_date_with_timezone
+    self.start_event_date.in_time_zone(self.timezone.capitalize)
+  end
+
+  def end_event_date_with_timezone
+    self.end_event_date.in_time_zone(self.timezone.capitalize)
+  end
+
+  def start_event_time_with_timezone
+    self.start_event_time.in_time_zone(self.timezone.capitalize)
+  end
+
+  def end_event_time_with_timezone
+    self.end_event_time.in_time_zone(self.timezone.capitalize)
+  end
+  
 end
