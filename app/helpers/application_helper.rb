@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def get_datetime_with_ist_timezone(datetime)
-    datetime.in_time_zone('Kolkata') if datetime.present?
+    datetime.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
   end
 
 
