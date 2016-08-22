@@ -9,7 +9,8 @@ module ApplicationHelper
   end
 
   def get_datetime_with_ist_timezone(datetime)
-    datetime.in_time_zone('Kolkata') if datetime.present?
+    #datetime.in_time_zone('Kolkata') if datetime.present?
+    datetime.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
   end
 
 
@@ -166,7 +167,7 @@ module ApplicationHelper
     data =  {}
     keys = @agenda_group_by_start_agenda_time.count
     keys.each do |key,value|
-      data[key] = @agendas.where('Date(start_agenda_time) = ?', key) if key.present?
+      data[key] = @agendas.where('Date(start_agenda_date) = ?', key) if key.present?
     end
     data
   end 

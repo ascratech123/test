@@ -462,11 +462,17 @@ class Event < ActiveRecord::Base
         old_seq = previous_sp.sequence
         previous_sp.update(:sequence => feature.sequence)
         feature.update(:sequence => old_seq)
+        for agenda in feature.agendas
+          agenda.update_attribute(:updated_at, Time.now.in_time_zone('UTC'))
+        end
       else
         next_sp = objects.find_by_id(ids[position.to_i + 1])
         next_seq = next_sp.sequence
         next_sp.update(:sequence => feature.sequence)
         feature.update(:sequence => next_seq)
+        for agenda in feature.agendas
+          agenda.update_attribute(:updated_at, Time.new.in_time_zone('UTC'))
+        end
       end if ids.length > 1
     else
       if seq_type == "up"
