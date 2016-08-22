@@ -12,9 +12,9 @@ module QRCode
   def self.generate_qr_code(app_id, invitee_id)
     str = app_id.to_s + ',' + invitee_id.to_s
 
-    qr = RQRCode::QRCode.new(str, :size => 4, :level => :h )
+    qr = RQRCode::QRCode.new(str, :size => 2, :level => :l )
     png = qr.to_img
-    png.resize(200, 200).save("public/qr_code/user#{app_id.to_s}_#{invitee_id}.png")
+    png.resize(400, 400).save("public/qr_code/user#{app_id.to_s}_#{invitee_id}.png")
     z = File.open("public/qr_code/user#{app_id.to_s}_#{invitee_id}.png")#, 'wb') do |f|
     # self.qr_code = z
     # system "sudo rm public/user#{self.id}_#{self.email}.png"
