@@ -12,7 +12,7 @@ body {
 	margin: 0
 }
 .main.QnaWall .panel {
-    background-color: #fff;
+    /* background-color: #fff; */
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -33,6 +33,10 @@ body,html{
   height:100%;
   /*background:#f0f;*/
   position:absolute;
+}
+.main.QnaWall.bg-wall {
+  background: url('/assets/bg2.jpg') no-repeat;
+  background-size: cover;
 }
 .QnaWall .tabDiv{
   width:100%;

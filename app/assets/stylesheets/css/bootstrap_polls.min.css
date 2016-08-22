@@ -29,7 +29,10 @@ img {vertical-align: middle;}
     padding: 4px;
     transition: all 0.2s ease-in-out 0s;
 }
-
+.main-events.poll-bg{
+  background: url('/assets/bg2.jpg') no-repeat;
+  background-size: cover;
+}
 .gauge {
     text-align: left;
     width: 670px;
