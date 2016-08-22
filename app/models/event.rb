@@ -190,6 +190,9 @@ class Event < ActiveRecord::Base
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 
+  def get_event_agenda_tracks
+    AgendaTrack.where(:event_id => self.id)
+  end
 
   def perform_event(event)
     self.approve! if event== "approve"
