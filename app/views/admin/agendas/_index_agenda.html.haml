@@ -60,7 +60,7 @@
                                       %th Description
                                       %th   
                                     - without_track = @agendas[date].where("agenda_track_id is null")
-                                    - with_track = @agendas[date].unscoped.where('Date(start_agenda_time) = ? and agenda_track_id is not null and agendas.event_id = ?', date,params[:event_id]).order(:agenda_track_id)
+                                    - with_track = @agendas[date].unscoped.where('Date(start_agenda_date) = ? and agenda_track_id is not null and agendas.event_id = ?', date,params[:event_id]).order(:agenda_track_id)
                                     - with_track = with_track.joins(:agenda_track).sort_by { |obj| obj.agenda_track.sequence}
                                     - @agendas[date] = without_track + with_track.uniq { |obj| obj.agenda_track}
                                     - @agendas[date].each_with_index do |agenda, index|
@@ -124,7 +124,6 @@
                                             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
                                               = edit_link(params, agenda.id)
                                               = delete_link(params, agenda.id)
-                       
     / - if @feedbacks.present?
     = render :partial => 'admin/layouts/more_links'
 :javascript                          
