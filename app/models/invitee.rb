@@ -7,7 +7,6 @@ class Invitee < ActiveRecord::Base
   attr_accessor :password
   
   belongs_to :event
-  belongs_to :venue_section
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
   has_many :conversations, :class_name => 'Conversation', :foreign_key => 'user_id'  
   has_many :comments, :class_name => 'Comment', :foreign_key => 'user_id'  
@@ -111,6 +110,15 @@ class Invitee < ActiveRecord::Base
     self.profile_pic.url.present? and self.profile_pic.url != "/profile_pics/original/missing.png" ? self.profile_pic.url : ""
   end
 
+  def profile_picture
+    self.profile_pic.url rescue ""
+  end
+
+  def poll_answer_last_updated_at
+    user_polls = UserPoll.unscoped.where(:user_id => self.id).order("updated_at")
+    user_polls.last.updated_at if user_polls.present?
+  end
+  
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end
@@ -294,7 +302,7 @@ class Invitee < ActiveRecord::Base
     user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     user_feedback = UserFeedback.where(:user_id => user_ids, :feedback_id => feedback_ids) rescue []
-    data = user_feedback.as_json(:methods => [:get_event_id, :created_at_with_timezone, :updated_at_with_timezone]) if user_feedback.present?
+    data = user_feedback.as_json(:methods => [:get_event_id]) if user_feedback.present?
     data
   end
 
@@ -336,7 +344,7 @@ class Invitee < ActiveRecord::Base
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :poll_answer_last_updated_at]) if invitees.present?
     invitees
   end
 
@@ -566,14 +574,6 @@ class Invitee < ActiveRecord::Base
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
 
-  def venue_section_access
-    venue_sections = VenueSection.where(:event_id => self.event_id)
-    hsh = {}
-    venue_sections.each do |vs|
-      hsh[vs.name] = InviteeAccess.where(:invitee_id => self.id, :venue_section_id => vs.id).present? ? 'yes' : 'no'
-    end
-    hsh
-  end
 
   private
 
