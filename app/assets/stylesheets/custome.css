@@ -180,8 +180,22 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
   line-height:53px;color:#000;padding:0px}
  
 
+/*.event_status_title{left:45px;}
+.invitee_status_title{left: 74px;}
+.invitee_logged_in{left: }
+*/
+
+.category_dropdown.invitee_status_title .select2-container--default .select2-selection--single .select2-selection__arrow{right:45px;}
+
+.category_dropdown.event_status_title .select2-container--default .select2-selection--single .select2-selection__arrow{right:20px;}
+
+.category_dropdown.speaker_designation_title .select2-container--default .select2-selection--single .select2-selection__arrow{right:8px;}
 
 
+
+.category_dropdown.invitee_designation .select2-container--default .select2-selection--single .select2-selection__arrow{right:15px;}
+
+.category_dropdown.invitee_loggegIn .select2-container--default .select2-selection--single .select2-selection__arrow{right:27px;}
 
 
 @-webkit-keyframes sk-stretchdelay {
@@ -1011,9 +1025,9 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 /*============================= menu active link  ======================================= */
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600{-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600:hover{box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);-webkit-transform: scale(0.9,0.9);transform: scale(0.9,0.9);opacity:1;-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
-.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
+.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
 /*============================= Agenda Start css   ======================================= */
 /*.HeaderUserName .mdl-menu__container.is-upgraded.is-visible{max-height: 300px !important; overflow-y:auto;} */ 
 .newRightsearch .mdl-textfield{display:block !important; width:calc(50% - 16px);text-align: right;}
@@ -1081,8 +1095,6 @@ i.incards {font-size: 60px}
 .agendalinks{display: inline-block;float: right;}
 .tl-content .timelineTxt{margin-top:0px;}
 .tl-content .timelineTxt i{font-size:24px; color:#444; margin-top:0px;}
-
-.agendatimeline .material-icons{font-size:24px; color:#444; margin-top:0px;}
 .mdl-button.forminfo-tab{padding: 0px}
 .description_adjust{white-space: pre-line; padding-top:0px; margin-top:0px;}
 .headingInfo{display:inline-block; vertical-align:top; width:auto;}

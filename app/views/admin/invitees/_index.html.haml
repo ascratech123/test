@@ -31,7 +31,7 @@
         .event_select123
           DESIGNATION
         .invitee_com12
-        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_designation" , :class => "category_dropdown" do
+        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_designation" , :class => "category_dropdown invitee_designation" do
           -  @invitee_designation = Invitee.where( event_id: @event.id).pluck('DISTINCT designation').compact.delete_if(&:empty?)
           = select_tag 'search[designation]', options_for_select(['All'] + @invitee_designation, selected: (params[:search][:designation] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"      
@@ -39,7 +39,7 @@
         .event_select123
           STATUS
         .invitee_com12
-        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_invitee_status" , :class => "category_dropdown" do
+        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_invitee_status" , :class => "category_dropdown invitee_status_title" do
           = select_tag "search[invitee_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]], selected: (params[:search][:invitee_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"
       %th.test
@@ -50,10 +50,10 @@
           = select_tag "search[visible_status]",options_for_select([['All','All'],["Active","active"],["Deactive", "deactive"]], selected: (params[:search][:visible_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"  
       %th.test
-        .event_select123
+        .event_select123.invitee_logged_in
           LOGGED IN
         .invitee_com12
-        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_login_status" , :class => "category_dropdown" do
+        = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_login_status" , :class => "category_dropdown invitee_loggegIn" do
           = select_tag "search[login_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]], selected: (params[:search][:login_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"
       %th

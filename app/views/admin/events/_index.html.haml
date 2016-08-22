@@ -29,10 +29,10 @@
       / - if !current_user.has_role? :moderator
       /   %th 
       %th.test
-        .event_select123
+        .event_select123.event_status_title
           Status
         .event_stat
-          = form_tag admin_client_events_url(:client_id => @client.id), :method => :get, :class=> "event_index_status_filter_form category_dropdown search_status" do
+          = form_tag admin_client_events_url(:client_id => @client.id), :method => :get, :class=> "event_index_status_filter_form category_dropdown search_status event_status_title" do
             = select_tag "search[order_by_status]",options_for_select([['All','All'],["Pending","pending"],["Rejected", "rejected"],["Published", "published"],["Approved", "approved"]], selected: (params[:search][:order_by_status] if params[:search].present?))
             = hidden_field_tag :admin_search, "true"
             = hidden_field_tag :adv_search, "true"
