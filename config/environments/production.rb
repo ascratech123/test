@@ -106,6 +106,7 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 
 
 APP_URL = "http://platform.hobnobspace.com"
+SAPP_URL = "https://platform.hobnobspace.com"
 S3_url = "http://s3-ap-southeast-1.amazonaws.com/shobiz-production"
 S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
 S3_secret_access_key = "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"
