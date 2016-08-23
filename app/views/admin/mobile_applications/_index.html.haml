@@ -14,6 +14,7 @@
         .event_cate
           = form_tag admin_client_mobile_applications_url(:client_id => @client.id), :method => :get, :class=> "event_index_category_filter_form_for_mobile_application drop category_dropdown" do
             = select_tag "search[order_by]",options_for_select([['All','All'],["Single Event","single event"],["Multi Event", "multi event"]], selected: (params[:search][:order_by] if params[:search].present?)), :id => 'search_application_type_by'
+            = hidden_field_tag :adv_search, true
       %th Preview ID
       %th.mobileEventsWidth Events
       %th Add Events
