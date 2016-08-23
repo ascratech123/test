@@ -187,7 +187,7 @@ class Event < ActiveRecord::Base
     style.present? ? self.logo.url(style) : self.logo.url
   end
 
-  def inside_logo_url(style=:small)
+  def inside_logo_url(style=:original)
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 

@@ -25,7 +25,7 @@ class Speaker < ActiveRecord::Base
             :numericality => true,
             :length => { :minimum => 10, :maximum => 12,
             :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
-  validates :event_id, :presence => true
+  validates :event_id,:rating_status, :presence => true
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no

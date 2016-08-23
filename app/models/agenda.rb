@@ -7,7 +7,7 @@ class Agenda < ActiveRecord::Base
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
-  validates :title,:start_agenda_date, presence: { :message => "This field is required." }
+  validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
   validate :check_speaker_and_track_is_present
   
