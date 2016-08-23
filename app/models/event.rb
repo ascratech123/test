@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :agenda_tracks, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
@@ -186,13 +187,10 @@ class Event < ActiveRecord::Base
     style.present? ? self.logo.url(style) : self.logo.url
   end
 
-  def inside_logo_url(style=:small)
+  def inside_logo_url(style=:original)
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 
-  def get_event_agenda_tracks
-    AgendaTrack.where(:event_id => self.id)
-  end
 
   def perform_event(event)
     self.approve! if event== "approve"
@@ -421,11 +419,11 @@ class Event < ActiveRecord::Base
 
   def image_dimensions
     if self.inside_logo_file_name_changed?  
-      inside_logo_dimension_height  = 140.0
-      inside_logo_dimension_width = 600.0
+      inside_logo_dimension_height  = 300.0
+      inside_logo_dimension_width = 1280.0
       dimensions = Paperclip::Geometry.from_file(inside_logo.queued_for_write[:original].path)
       if (dimensions.width != inside_logo_dimension_width or dimensions.height != inside_logo_dimension_height)
-        errors.add(:inside_logo, "Image size should be 600x140px only") if self.errors['inside_logo'].blank?
+        errors.add(:inside_logo, "Image size should be 1280x300px only") if self.errors['inside_logo'].blank?
       else
         self.errors.delete(:inside_logo)
       end
@@ -449,23 +447,46 @@ class Event < ActiveRecord::Base
     elsif featue_type == Image
       event = feature.imageable
       objects = featue_type.where(:imageable_id => event.id)
+    elsif featue_type == AgendaTrack
+      event = feature.event
+      objects = featue_type.where(:event_id => event.id,:agenda_date =>feature.agenda_date.to_date).uniq.order(:sequence)
     else
       event = feature.event
       objects = featue_type.where(:event_id => event.id)
     end
     ids = objects.pluck(:id) 
     position = ids.index(feature.id)
-    if seq_type == "up"
-      previous_sp = objects.find_by_id(ids[position.to_i - 1])
-      old_seq = previous_sp.sequence
-      previous_sp.update(:sequence => feature.sequence)
-      feature.update(:sequence => old_seq)
+    if featue_type == AgendaTrack
+      if seq_type == "up"
+        previous_sp = objects.find_by_id(ids[position.to_i - 1])
+        old_seq = previous_sp.sequence
+        previous_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => old_seq)
+        for agenda in feature.agendas
+          agenda.update_attribute(:updated_at, Time.now.in_time_zone('UTC'))
+        end
+      else
+        next_sp = objects.find_by_id(ids[position.to_i + 1])
+        next_seq = next_sp.sequence
+        next_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => next_seq)
+        for agenda in feature.agendas
+          agenda.update_attribute(:updated_at, Time.new.in_time_zone('UTC'))
+        end
+      end if ids.length > 1
     else
-      next_sp = objects.find_by_id(ids[position.to_i + 1])
-      next_seq = next_sp.sequence
-      next_sp.update(:sequence => feature.sequence)
-      feature.update(:sequence => next_seq)
-    end if ids.length > 1 
+      if seq_type == "up"
+        previous_sp = objects.find_by_id(ids[position.to_i - 1])
+        old_seq = previous_sp.sequence
+        previous_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => old_seq)
+      else
+        next_sp = objects.find_by_id(ids[position.to_i + 1])
+        next_seq = next_sp.sequence
+        next_sp.update(:sequence => feature.sequence)
+        feature.update(:sequence => next_seq)
+      end if ids.length > 1 
+    end
   end
 
   def chage_updated_at
@@ -491,6 +512,10 @@ class Event < ActiveRecord::Base
 
   def get_agenda
     Agenda.where(:event_id => self.id).pluck(:agenda_type).uniq.compact rescue []
+  end
+
+  def get_event_agenda_tracks
+    AgendaTrack.where(:event_id => self.id)
   end
   
   def event_count_within_limit
@@ -569,31 +594,4 @@ class Event < ActiveRecord::Base
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
   end
-
-  def set_timezone_on_associated_tables
-    if self.timezone_changed?
-      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes"]
-        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
-          obj.update_column("event_timezone", self.timezone.capitalize)
-        end
-      end   
-    end
-  end
-
-  def start_event_date_with_timezone
-    self.start_event_date.in_time_zone(self.timezone.capitalize)
-  end
-
-  def end_event_date_with_timezone
-    self.end_event_date.in_time_zone(self.timezone.capitalize)
-  end
-
-  def start_event_time_with_timezone
-    self.start_event_time.in_time_zone(self.timezone.capitalize)
-  end
-
-  def end_event_time_with_timezone
-    self.end_event_time.in_time_zone(self.timezone.capitalize)
-  end
-  
 end
