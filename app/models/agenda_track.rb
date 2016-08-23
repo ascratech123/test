@@ -7,6 +7,14 @@ class AgendaTrack < ActiveRecord::Base
   belongs_to :event
   has_many :agendas, :dependent => :destroy
 
+  after_save :save_agendas
+
+  def save_agendas
+    for agenda in self.agendas
+      agenda.update_column(:updated_at, Time.now.in_time_zone("UTC"))
+    end 
+  end 
+
   def self.set_agenda_track(params)
     agendas = Agenda.where(event_id: params[:event_id],start_agenda_date: params[:agenda][:start_agenda_date].to_date)
     if agendas.present?

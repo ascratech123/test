@@ -1,5 +1,5 @@
 .save_button.mdl-card.agendaHeight{:style => "margin-top: #{(@error_import.present? or @error_import == " ") ? "5%" : ""}"}
-  = form_for [:admin, @event, @import], :builder => CustomFormBuilder do |f|
+  = form_for [:admin, @event, Import.new], :builder => CustomFormBuilder do |f|
     .mdl-grid.mdl-shadow--1dp.p-b-25
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
@@ -31,10 +31,10 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-:javascript
-  $(window).load(function(){
-  $('.gui-file').change(function(){
-    var filename = $(this)[0].files[0].name;
-    $('.gui-input').val(filename);
-    });
-  })
+/ :javascript
+/   $(window).load(function(){
+/   $('.gui-file').change(function(){
+/     var filename = $(this)[0].files[0].name;
+/     $('.gui-input').val(filename);
+/     });
+/   })
