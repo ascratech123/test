@@ -19,6 +19,7 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+  
  $('.table tr').last().addClass('last-tr')
  $('.table tr:nth-last-child(2)').addClass('scndlast-tr')
  
@@ -446,96 +447,13 @@ function flightTime() {
     }
   });
 
-/* EDM Form JS start */
-
-  $("#default_template_for_edm").click(function(){
-    value = $("#default_template_for_edm").val();
-    if (value == "default_template"){
-      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().show();
-      $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
-      $("#edm_templ_select").parent().parent().parent().show();
-      $(".ckeditor_custom").hide();
-      $(".without_social_icons").show();
-      $(".custome_hide").parent().parent().parent().parent().show();
-      $(".ckeditor_custome_hide").show();
-      checked = document.getElementById("need_social_icon_yes_for_edm").checked;
-      if (checked == "true"){
-        $(".md-checkboxsocialcheck").show();    
-      }
-    $(".custome_hide").parent().parent().parent().parent().parent().show();
-    }
-  }); 
-  $("#custom_template_for_edm").click(function(){
-    value = $("#custom_template_for_edm").val();
-    if (value == "custom_template"){
-      $(".ckeditor_custom").show();
-      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().hide();
-      $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
-      $("#edm_templ_select").parent().parent().parent().hide();
-      $(".without_social_icons").hide();
-      $(".custome_hide").parent().parent().parent().parent().hide();
-      $(".ckeditor_custome_hide").hide();
-      checked = document.getElementById("need_social_icon_no_for_edm").checked;
-      if (checked == "true"){
-        $(".md-checkboxsocialcheck").hide();    
-      }
-    }
-  });
-  $("#edm_broadcast_time_now").click(function(){
-    value = $("#edm_broadcast_time_now").val();
-    if (value == "now"){
-      $("#date-start").parent().parent().parent().parent().hide();
-    }
-  }); 
-  $("#edm_broadcast_time_scheduled").click(function(){
-    value = $("#edm_broadcast_time_scheduled").val();
-    if (value == "scheduled"){
-      $("#date-start").parent().parent().parent().parent().show();
-    }
-  });
-  $("#group_type_all_option").click(function(){
-    value = $("#group_type_all_option").val();
-    if (value == "all"){
-      // $("#edm_group_id").parent().parent().parent().hide();
-    }
-  });
-  $("#group_type_group_option").click(function(){
-    value = $("#group_type_group_option").val();
-    if (value == "group"){
-      // $("#edm_group_id").parent().parent().parent().show();
-    }
-  }); 
-  $("#group_type_group_option").click(function(){
-    $(".apply_filterCls").show();
-  });
-  $("#group_type_all_option").click(function(){
-    $(".apply_filterCls").hide();
-  });
-  $("#need_social_icon_yes_for_edm").click(function(){
-    $(".md-checkboxsocialcheck").show();
-  });
-  $("#need_social_icon_no_for_edm").click(function(){
-    $(".md-checkboxsocialcheck").hide();
-  });
-  $("#custom_template_for_edm").click(function(){
-    $(".md-checkboxsocialcheck").hide();
-  });
-  $('input,textarea').attr('autocomplete', 'off');
-  $('input[type="radio"][checked="checked"]').prop('checked', true);
-
-
-  $(document).ready(function (){
-   $('.chkbox_input_div  input[type="checkbox"]').click(function() { 
-    if ($(this).is(':checked')) {
-        $(this).parent().next('.input_box_url').css('display','inline-block');
-    } else {
-        $(this).parent().next('.input_box_url').css('display','none');
-    }
-  });
-  /* js for events/invitee/speakers listing filter */ 
+    /* js for events/invitee/speakers listing filter */ 
   $( document ).ready(function() {   
     $('#search_order_by').on('change', function(){        
       $(".event_index_category_filter_form").submit();            
+    });
+    $('#search_application_type_by').on('change', function(){  
+      $(".event_index_category_filter_form_for_mobile_application").submit();            
     });
     $('#search_order_by_status').on('change', function(){        
       $(".event_index_status_filter_form").submit();            
@@ -561,14 +479,8 @@ function flightTime() {
     $('#search_company_name').on('change', function(){        
       $("#search_speakers_by_cname").submit();            
     });
-  });   
-});
-/* EDM Form JS end */
-
-  /*Sponsor index page*/
-  $(document).ready(function() {
-    $(".edit_delete_td,.edit_delete_th").hide();
   });
+
   /* Event _Form  start */
     // $('#selectAll').click(function() {
     //   $(':checkbox').each(function() {
