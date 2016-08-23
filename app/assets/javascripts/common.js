@@ -452,6 +452,9 @@ function flightTime() {
     $('#search_order_by').on('change', function(){        
       $(".event_index_category_filter_form").submit();            
     });
+    $('#search_application_type_by').on('change', function(){  
+      $(".event_index_category_filter_form_for_mobile_application").submit();            
+    });
     $('#search_order_by_status').on('change', function(){        
       $(".event_index_status_filter_form").submit();            
     });

@@ -5,10 +5,15 @@
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = get_search_data("mobile applications")
 - else 
-  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.font16.ng-scope.ng-table{"template-pagination" => "custom/pager"}
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.font16.ng-scope.ng-table.manage-event{"template-pagination" => "custom/pager"}
     %tr
       %th Application Name
-      %th Application Type
+      %th.test
+        .event_select123
+          Application Type
+        .event_cate
+          = form_tag admin_client_mobile_applications_url(:client_id => @client.id), :method => :get, :class=> "event_index_category_filter_form_for_mobile_application drop category_dropdown" do
+            = select_tag "search[order_by]",options_for_select([['All','All'],["Single Event","single event"],["Multi Event", "multi event"]], selected: (params[:search][:order_by] if params[:search].present?)), :id => 'search_application_type_by'
       %th Preview ID
       %th.mobileEventsWidth Events
       %th Add Events
@@ -53,3 +58,7 @@
                   - if mob_application.store_info.present? and mob_application.store_info.published_by_hobnob == "no"
                     = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/mobile_applications", :id =>mob_application.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   = will_paginate objs
+:javascript
+  $( document ).ready(function() {   
+    $('#search_application_type_by').select2();
+  });
