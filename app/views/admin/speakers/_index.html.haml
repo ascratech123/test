@@ -17,7 +17,7 @@
         .invitee_com12
         = form_tag admin_event_speakers_path(:event_id => @event.id) , :method => :get , id: "search_speakers_by_designation" , :class => "category_dropdown speaker_designation_title" do
           -  @speaker_designation = Speaker.where( event_id: @event.id).pluck('DISTINCT designation').compact.delete_if(&:empty?)
-          = select_tag 'search[designation]', options_for_select(['All'] + @speaker_designation, selected: (params[:search][:designation] if params[:search].present?))
+          = select_tag 'search[designation]', options_for_select(['All'] + @speaker_designation, selected: (params[:search][:designation] if params[:search].present? and not params[:search_keyword].present?))
           = hidden_field_tag :adv_search, true  
       %th.test
         .event_select123
@@ -25,7 +25,7 @@
         .invitee_com12
         = form_tag admin_event_speakers_path(:event_id => @event.id) , :method => :get , id: "search_speakers_by_cname" , :class => "category_dropdown" do
           -  @comanies_list = Speaker.where( event_id: @event.id).pluck('DISTINCT company').compact.delete_if(&:empty?)
-          = select_tag 'search[company_name]', options_for_select(['All'] + @comanies_list, selected: (params[:search][:company_name] if params[:search].present?))
+          = select_tag 'search[company_name]', options_for_select(['All'] + @comanies_list, selected: (params[:search][:company_name] if params[:search].present? and not params[:search_keyword].present?))
           = hidden_field_tag :adv_search, true            
       %th
         - objs.each_with_index do |speaker, index|
