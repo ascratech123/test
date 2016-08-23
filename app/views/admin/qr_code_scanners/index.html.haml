@@ -1,41 +1,77 @@
-#main
-  #header
-    %div{:style => "position:relative;top:+20px;left:0px;"}
-      %g:plusone{:size => "medium"}
-    %p#mp1
-      Hobnob Scanner
-    %ul
-  #mainbody
-    %table.tsel{:border => "0", :width => "100%"}
-      %tr
-        %td{:align => "center", :valign => "top", :width => "50%"}
-          %table.tsel{:border => "0"}
-            %tr
-              %td{:align => "center", :colspan => "2"}
-                #outdiv
-      %tr
-        %td{:align => "center", :colspan => "3"}
-      %tr
-        %td{:align => "center", :colspan => "3"}
-          #result
-          %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
-  #footer
-    %br
-      %h5{:align => "center"}
-        Copyright &copy; 2016
-        %a{:href => "http://www.hobnobspace.com", :target => "_blank"} Hobnobspace
-%canvas#qr-canvas{:height => "600", :width => "800"}
-:javascript
-  load();
-  var APP_URL = "#{APP_URL}"
-  var EVENT_ID = "#{@event.id}"
-  $("#btnPrint").on("click", function () {
-    var divContents = $("#result").html();
-    var printWindow = window.open('', '', 'height=400,width=800');
-    printWindow.document.write('<html><head><title>Invitee Profile</title>');
-    printWindow.document.write('</head><body >');
-    printWindow.document.write(divContents);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-  });
+- if params[:page] == 'thank_you'
+  / .container
+  /   .wrapper
+  /     .thankyou-text
+  /       %p.welcomeText Thank you for visiting Hindustan Unilever E-Commerce Warehouse.
+  /     .tableDiv{:style => "overflow-x:auto;"}
+  /       %table
+  /         %thead
+  /           %tr
+  /             %th Id
+  /             %th Name
+  /             %th CompnayName
+  /             %th Designation
+  /             %th Email
+  /         %tbody
+  /           %tr
+  /             %td 01
+  /             %td
+  /               %a{:href => "javascript:void(0);"} Abc
+  /             %td abc
+  /             %td abc
+  /             %td abc@gmail.com
+  /       .btnDiv
+  /         %button Print
+  /         %button.scanAgain Scan again
+  .container
+    .title
+      %p Introduction
+      %p.title-border
+    .description
+      %p.welcomeText Welcome to Hindustan Unilever E-Commerce Warehouse.
+      %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
+    .scanbtn
+      %button Scan
+
+- else
+  #main
+    #header
+      %div{:style => "position:relative;top:+20px;left:0px;"}
+        %g:plusone{:size => "medium"}
+      %p#mp1
+        Hobnob Scanner
+      %ul
+    #mainbody
+      %table.tsel{:border => "0", :width => "100%"}
+        %tr.camera
+          %td{:align => "center", :valign => "top", :width => "50%"}
+            %table.tsel{:border => "0"}
+              %tr
+                %td{:align => "center", :colspan => "2"}
+                  #outdiv
+        %tr
+          %td{:align => "center", :colspan => "3"}
+        %tr
+          %td{:align => "center", :colspan => "3"}
+            #result
+            %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
+    / #footer
+    /   %br
+    /     %h5{:align => "center"}
+    /       Copyright &copy; 2016
+    /       %a{:href => "http://www.hobnobspace.com", :target => "_blank"} Hobnobspace
+  %canvas#qr-canvas{:height => "600", :width => "800"}
+  :javascript
+    load();
+    var APP_URL = "#{APP_URL}"
+    var EVENT_ID = "#{@event.id}"
+    $("#btnPrint").on("click", function () {
+      var divContents = $("#result").html();
+      var printWindow = window.open('', '', 'height=400,width=800');
+      printWindow.document.write('<html><head><title>Invitee Profile</title>');
+      printWindow.document.write('</head><body >');
+      printWindow.document.write(divContents);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    });
