@@ -301,8 +301,16 @@ module ApplicationHelper
 
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
-    params1 = params.gsub(/[^0-9a-zA-Z]/, " ")
-    params = params1.slice!(0..12)
+    params1 = params.delete('\\{}"')#params.gsub(/[^0-9a-zA-Z]/, " ")
+    if params["selected"].present?
+      params = params1.slice!(0..10)
+    elsif params["invitee_status"].present? or params["visible_status"].present?
+      params = params1.slice!(0..15)
+    elsif params["login_status"].present?
+      params = params1.slice!(0..13)
+    else
+      params = params1.slice!(0..8)
+    end
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
