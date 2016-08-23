@@ -9,8 +9,10 @@ module ApplicationHelper
   end
 
   def get_datetime_with_ist_timezone(datetime)
+    #datetime.in_time_zone('Kolkata') if datetime.present?
     datetime.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
   end
+
 
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
@@ -58,6 +60,14 @@ module ApplicationHelper
     end
   end
 
+  def date_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
+    else
+      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
+    end
+  end
+  
   def get_only_time_in_ampm(time)
     time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
   end
@@ -157,7 +167,7 @@ module ApplicationHelper
     data =  {}
     keys = @agenda_group_by_start_agenda_time.count
     keys.each do |key,value|
-      data[key] = @agendas.where('Date(start_agenda_time) = ?', key) if key.present?
+      data[key] = @agendas.where('Date(start_agenda_date) = ?', key) if key.present?
     end
     data
   end 
@@ -291,8 +301,16 @@ module ApplicationHelper
 
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
-    params1 = params.gsub(/[^0-9a-z]/, '')
-    params = params1.slice!(0..6)
+    params1 = params.delete('\\{}"')#params.gsub(/[^0-9a-zA-Z]/, " ")
+    if params["selected"].present?
+      params = params1.slice!(0..10)
+    elsif params["invitee_status"].present? or params["visible_status"].present?
+      params = params1.slice!(0..15)
+    elsif params["login_status"].present?
+      params = params1.slice!(0..13)
+    else
+      params = params1.slice!(0..8)
+    end
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
