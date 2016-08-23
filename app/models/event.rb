@@ -449,7 +449,7 @@ class Event < ActiveRecord::Base
       objects = featue_type.where(:imageable_id => event.id)
     elsif featue_type == AgendaTrack
       event = feature.event
-      objects = featue_type.where(:event_id => event.id,:agenda_date =>feature.agenda_date.to_date).uniq.order(:sequence)
+       objects = featue_type.joins(:agendas).where(:event_id => event.id,:agenda_date =>feature.agenda_date.to_date).uniq.order(:sequence)
     else
       event = feature.event
       objects = featue_type.where(:event_id => event.id)
@@ -515,7 +515,7 @@ class Event < ActiveRecord::Base
   end
 
   def get_event_agenda_tracks
-    AgendaTrack.where(:event_id => self.id)
+    AgendaTrack.joins(:agendas).where(:event_id => self.id)
   end
   
   def event_count_within_limit
