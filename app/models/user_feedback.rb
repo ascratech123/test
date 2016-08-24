@@ -12,8 +12,11 @@ class UserFeedback < ActiveRecord::Base
   default_scope { order('created_at desc') }
 
   def update_invitee_updated_at
-    invitee_updated_at = Invitee.find_by_id(self.user_id).updated_at
-    invitee_updated_at = self.updated_at
+    invitee = Invitee.find_by_id(self.user_id) if self.user_id.present?
+    if invitee.present?
+      invitee.updated_at = self.updated_at
+      invitee.save
+    end
   end
   
   def get_event_id
