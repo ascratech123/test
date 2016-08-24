@@ -23,17 +23,17 @@ input:focus::-moz-placeholder {color: transparent;}
 .tableDiv tr th{font-weight:bold;}
 .tableDiv tr td{padding:10px 0;}
 .btnDiv{width:100%; padding:7% 0;}
-.btnDiv button{width:10%; padding:10px 10px; text-transform:capitalize; border:0 none;
+.btnDiv .linkBtn{width:10%; padding:10px 10px; text-transform:capitalize; border:0 none;
   margin:0 15px 0 0; cursor:pointer; font-size: 17px;}
-.btnDiv button:last-child{margin:0;}
+.btnDiv .linkBtn:last-child{margin:0;}
 .tableDiv td,.tableDiv th{border:1px solid #a4a2a2; color:#000;}
-button{background-color: #397639;color:#fff;border:0 none;}
-button:hover, button:active ,.submitBtn:hover ,.submitBtn:active{background-color: #fff;
+.linkBtn{background-color: #397639;color:#fff;border:0 none; text-decoration:none;}
+.linkBtn:hover, .linkBtn:active ,.submitBtn:hover ,.submitBtn:active{background-color: #fff;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); color:#272727;}
-button:hover, button:active,.submitBtn:hover ,.submitBtn:active {background-color: #6ddd6d;
+.linkBtn:hover, .linkBtn:active,.submitBtn:hover ,.submitBtn:active {background-color: #6ddd6d;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);color:#272727;}
-.scanbtn button{width:250px; padding:10px 0;  text-transform:uppercase; font-size:18px; 
-  cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);letter-spacing:2px;}
+.scanbtn .linkBtn{width:250px; padding:10px 0;  text-transform:uppercase; font-size:18px; 
+  cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);letter-spacing:2px; display: inline-block; text-decoration: none;}
 .wrapper{ padding: 7% 0;}
 .wrapper .tableDiv {padding: 72px 0;}
  .tableDiv table tr th{background-color: #397639;}
@@ -42,18 +42,18 @@ button:hover, button:active,.submitBtn:hover ,.submitBtn:active {background-colo
   0 1px   2px rgba(0, 0, 0, 0.24); color: #ffffff; cursor: pointer; font-size: 17px; padding: 10px 0; text-transform: uppercase; width: 15%;  letter-spacing:1px;}  
 .popupDiv{width:30%; position:absolute; top:40%;  transform: translateY(-50%); background:#e4e3d5; left:0; right:0; margin:0 auto; text-align:center; display:none; z-index:99999; color:#272727; padding:15px 30px 25px 30px; }
 .popup-content p{font-size:16px;}
-.popup-content button{}
+.popup-content .linkBtn{}
 .overlay {background: none 0 0 repeat scroll rgba(15,7,4,0.9); display:none; height:100%;
     left:0; position:fixed; top:0; width:100%; z-index:99;}
 .popupBtn{padding:15px 0 0 0;}
 .popup-content{margin-top:50px;}
-.popup-content button {font-size: 17px; margin: 10px 0; padding: 10px 15px; cursor:pointer;}
-.popup-content button:first-child{margin-right:15px;}
+.popup-content .linkBtn {font-size: 17px; margin: 10px 0; padding: 10px 15px; cursor:pointer;}
+.popup-content .linkBtn:first-child{margin-right:15px;}
 .popupDiv p.cross {color: #272727; padding:0; text-align:right; cursor:pointer; font-size:15px;display:inline-block; float:right;}
-.welcomeText{ font-size: 34px;}
+.welcomeText{ font-size: 50px;}
 .subText{ font-size: 19px;     margin-top: 52px;}
 .bottomText{margin:20px 0; font-size:16px;}
-button:focus {outline:none;}
+.linkBtn:focus {outline:none;}
 submitBtn:focus{outline:none;}
 cross:focus{outline:none; }
 .qr-scanner-page{background:url("/assets/background-disha.jpg") no-repeat; margin: 0px; background-size:100% auto;}
@@ -61,8 +61,8 @@ cross:focus{outline:none; }
 .qr-scanner-page #header{background:none;}
 .qr-scanner-page #footer{background:none;}
 .qr-scanner-page #main{background:none; }
-.camera{padding:5% 0; display:inline-block;}
-
+.camera{padding:2% 0; display:inline-block;}
+.thanktest{font-size: 40px;}
 /*nilam ends here*/
 
 
@@ -120,7 +120,7 @@ body{
   #mp1{
       text-align:center;
       font-size:35px;
-      margin:9% 0 0;
+      margin: 6% 0 0;
   }
   #imghelp{
       position:relative;
@@ -193,7 +193,3 @@ body{
       padding:0;
   }
 
-.thankYouWrapper{padding-top: 17%;}
-.wrapper.thankYouWrapper .tableDiv{ padding: 38px 0;}
-.wrapper.submitWrapper{padding-top:21%;}
-.wrapper.submitWrapper .tableDiv{ padding: 45px 0;}

@@ -2,7 +2,10 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   load_and_authorize_resource
-  before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :authenticate_user, :authorize_event_role#, :find_features
+  before_filter :find_features, if: :not_qr_code_scan?
+  before_filter :find_invitee, if: :qr_code_scan?
+
   
 
   def index
@@ -66,7 +69,10 @@ class Admin::InviteesController < ApplicationController
       redirect_to admin_event_invitees_path(:event_id => @event.id)
     else
       respond_to do |format|
-        format.js
+        message = @invitee.present? ? "valid" : 'invalid'
+        # format.js{render :js => "window.location.href = #{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :meassge => message)}" }
+        invitee_id = @invitee.id rescue ''
+        format.js { render :js => "window.location.href = '#{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :meassge => message, :invitee_id => invitee_id)}'" }
         format.html
       end
     end
@@ -82,5 +88,17 @@ class Admin::InviteesController < ApplicationController
 
   def invitee_params
     params.require(:invitee).permit!
+  end
+
+  def not_qr_code_scan?
+    !(params[:format].present? and params[:format] == 'js')
+  end
+
+  def qr_code_scan?
+    (params[:format].present? and params[:format] == 'js')
+  end
+
+  def find_invitee
+    @invitee = @event.invitees.where(:id => params[:id]).last
   end
 end

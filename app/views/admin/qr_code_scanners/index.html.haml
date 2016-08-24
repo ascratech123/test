@@ -23,41 +23,42 @@
                 %a{:href => "javascript:void(0);"} xyz
               %td xyz@gmail.com
         %p.bottomText "Can't find yourself? Please contact the helpdesk for more assistance. Thank you."
-  / .container
-  /   .wrapper.thankYouWrapper
-  /     .thankyou-text
-  /       %p.welcomeText Thank you for visiting Hindustan Unilever E-Commerce Warehouse.
-  /     .tableDiv{:style => "overflow-x:auto;"}
-  /       %table
-  /         %thead
-  /           %tr
-  /             %th Id
-  /             %th Name
-  /             %th CompnayName
-  /             %th Designation
-  /             %th Email
-  /         %tbody
-  /           %tr
-  /             %td 01
-  /             %td
-  /               %a{:href => "javascript:void(0);"} Abc
-  /             %td abc
-  /             %td abc
-  /             %td abc@gmail.com
-  /       .btnDiv
-  /         %button Print
-  /         %button.scanAgain Scan again
-  / .container
-  /   .title
-  /     %p Introduction
-  /     %p.title-border
-  /   .description
-  /     %p.welcomeText Welcome to Hindustan Unilever E-Commerce Warehouse.
-  /     %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
-  /   .scanbtn
-  /     %button Scan
-
-- else
+  .container
+    .wrapper.thankYouWrapper
+      .thankyou-text
+        %p.thanktest 
+          = "Thank you for visiting #{@event.event_name}"
+      .tableDiv{:style => "overflow-x:auto;"}
+        - if @invitee.present?
+          %table
+            %thead
+              %tr
+                %th Id
+                %th Name
+                %th CompnayName
+                %th Designation
+                %th Email
+            %tbody
+              %tr
+                %td
+                  = @invitee.id
+                %td
+                  -#%a{:href => "javascript:void(0);"} Abc
+                  = @invitee.name_of_the_invitee
+                %td
+                  = @invitee.company_name
+                %td
+                  = @invitee.designation
+                %td
+                  = @invitee.email
+        - else
+          %p.subText
+            = "We are sorry, we couldn’t verify your QR code."
+        .btnDiv
+          - if @invitee.present?
+            %a.linkBtn Print
+          %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} Scan again
+- elsif params[:page] == 'scanning'
   #main
     #header
       %div{:style => "position:relative;top:+20px;left:0px;"}
@@ -68,7 +69,7 @@
     #mainbody
       %table.tsel{:border => "0", :width => "100%"}
         %tr.camera
-          %td{:align => "center", :valign => "top", :width => "50%"}
+          %td{:align => "center", :valign => "top"}
             %table.tsel{:border => "0"}
               %tr
                 %td{:align => "center", :colspan => "2"}
@@ -87,7 +88,7 @@
   %canvas#qr-canvas{:height => "600", :width => "800"}
   :javascript
     load();
-    var APP_URL = "#{APP_URL}"
+    var APP_URL = "#{SAPP_URL}"
     var EVENT_ID = "#{@event.id}"
     $("#btnPrint").on("click", function () {
       var divContents = $("#result").html();
@@ -99,3 +100,15 @@
       printWindow.document.close();
       printWindow.print();
     });
+
+- else
+  .container
+    .title
+      %p Introduction
+      %p.title-border
+    .description
+      %p.welcomeText 
+        = "Welcome to #{@event.event_name}."
+      %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
+    .scanbtn
+      %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} Scan
