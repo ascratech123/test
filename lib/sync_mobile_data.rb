@@ -63,9 +63,9 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
         when 'Image'
           images = Image.where(:updated_at => start_event_date..end_event_date) rescue []
-          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type, :image_updated_at], :methods => [:image_url]) rescue []  
         when 'HighlightImage'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id], :methods => [:highlight_image_url]) rescue []    
+          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id, :highlight_image_updated_at], :methods => [:highlight_image_url]) rescue []    
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
@@ -94,7 +94,7 @@ module SyncMobileData
         when 'Invitee'
           arr = []
           leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
-          event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}
+          event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points, :profile_pic_updated_at], :methods => [:profile_pic_url])}
           data[:"leaderboard"] = arr#event_ids.map{|id| {'id' => id, 'data'=> leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}}
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil
@@ -161,7 +161,7 @@ module SyncMobileData
           if current_user.present?
             invitee_ids = Invitee.where(:event_id => event_ids, :email => current_user.email).pluck(:id)
             info = info.where(:invitee_id => invitee_ids)
-            data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_2_updated_at, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_3_updated_at, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_4_updated_at, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size, :attach_file_5_updated_at], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
           end
         when 'EKit' 
           info = EKit.get_e_kits_all_events(event_ids, start_event_date, end_event_date)
