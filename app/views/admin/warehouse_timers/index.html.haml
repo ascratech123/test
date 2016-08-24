@@ -1,0 +1,32 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title QR Code Scanner
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+    = stylesheet_link_tag "warehouse_main"
+  %body
+    .container
+      .title
+        %p
+          HUL - E Commerce
+          %br/
+          Warehouse
+      .description
+        %p Order Details
+      .totalOrder
+        .received.order
+          %p Total Order Received
+          %p.value 
+            = @invitees_count
+        .picked.order
+          %p Total Order Picked
+          %p.value 
+            = @order_picked 
+        .dispatched.order
+          %p Total Order Dispatched
+          %p.value 
+            = @order_dispatched
