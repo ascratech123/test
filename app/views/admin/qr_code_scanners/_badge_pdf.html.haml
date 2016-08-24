@@ -1,0 +1,25 @@
+= stylesheet_link_tag "scanner", :media => 'screen, print'
+= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()"
+%title Disha
+%body.qr-scanner-page#print
+  .container.printPage
+    .title
+      %img{:src => 'http://s3-ap-southeast-1.amazonaws.com/shobiz-production/event/inside_logo/original/368-Event_Logo1_%282%29.png'}
+    .description
+      %p.welcomeText 
+        = "Shiv Kumar"
+      %p.subText 31st Aug - 2nd Sept 2016
+      %p.subText.place Mumbai
+  :javascript
+    function printpage() {
+      //Get the print button and put it into a variable
+      var printButton = document.getElementById("prnt");
+      //Set the print button visibility to 'hidden' 
+      printButton.style.visibility = 'hidden';
+      //Print the page content
+      window.print()
+      //Set the print button to 'visible' again 
+      //[Delete this line if you want it to stay hidden after printing]
+      printButton.style.visibility = 'visible';
+    }
+
