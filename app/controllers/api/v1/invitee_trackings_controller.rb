@@ -30,9 +30,10 @@ class Api::V1::InviteeTrackingsController < ApplicationController
     invitee = Invitee.find_by_id(params[:invitee_id])
     if (invitee.present? and params[:status].present?)
       if (params[:status] == "true" and invitee.successful_scan == false)
-        invitee.update_attributes(:previous_scan => true,:successful_scan => true)
+        invitee.update_attributes(:successful_scan => true)
         render :status => 200, :json => {:status => 'First time user',:invitee => invitee.as_json() }
       elsif (params[:status] == "true" and invitee.successful_scan == true)
+        invitee.update_attributes(:previous_scan => true)
         render :status => 200, :json => {:status => 'Repeated user',:invitee => invitee.as_json() }
       elsif (params[:status] == "false")
         invitee.update_attributes(:previous_scan => false,:successful_scan => false)
