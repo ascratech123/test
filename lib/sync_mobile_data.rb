@@ -10,8 +10,9 @@ module SyncMobileData
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       elsif model_name == 'UserFeedback'
-        update_data = (model_name.constantize).find_or_initialize_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
-        update_data.update(params_data(value)) if update_data.present?
+        update_data = (model_name.constantize).find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        params = params_data(value)
+        update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       elsif ids.include?(value["id"].to_i)
@@ -192,7 +193,11 @@ module SyncMobileData
   end
 
   def self.params_data(value)
-    return value.except(:id,:created_at,:updated_at).permit!
+    # if value.key?(:feedback_id) and value.key?(:user_id)
+    #   return value.except(:id,:created_at).permit!
+    # else
+      return value.except(:id,:created_at,:updated_at).permit!
+    # end
   end
 
   def self.select_model(key,value,platform)
