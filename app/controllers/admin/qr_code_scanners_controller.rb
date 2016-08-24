@@ -5,5 +5,6 @@ class Admin::QrCodeScannersController < ApplicationController
 
   def index
     @invitee = @event.invitees.where(:id => params[:invitee_id]).last
+    @invitees = @event.invitees.where(:email => params[:email])
   end
 end
