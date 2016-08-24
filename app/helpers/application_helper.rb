@@ -306,8 +306,10 @@ module ApplicationHelper
       params = params1.slice!(0..10)
     elsif params["invitee_status"].present? or params["visible_status"].present?
       params = params1.slice!(0..15)
-    elsif params["login_status"].present?
+    elsif params["login_status"].present? or params["company_name"].present?
       params = params1.slice!(0..13)
+    elsif params["designation"].present?
+      params = params1.slice!(0..12)
     else
       params = params1.slice!(0..8)
     end
