@@ -58,7 +58,7 @@ module SyncMobileData
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
           data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url]) rescue []
         when 'EventFeature'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
+          data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility, :main_icon_updated_at, :menu_icon_updated_at], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
         when 'Image'
@@ -99,11 +99,11 @@ module SyncMobileData
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil
             my_profiles = my_profiles.where(:updated_at => start_event_date..end_event_date) if my_profiles.present?
-          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank])
+          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank])
             invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
             ids = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date).pluck(:favoritable_id) rescue [] 
             info = Invitee.where(:id => ids) rescue []
-            data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id], :methods => [:qr_code_url,:profile_pic_url]) rescue []
+            data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url]) rescue []
           end
         when 'Quiz'
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_correct_answer_percentage, :get_total_answer, :get_correct_answer_count]) rescue []  
@@ -155,7 +155,7 @@ module SyncMobileData
           if start_event_date != "01/01/1990 13:26:58".to_time.utc
             mobile_application_ids = events.pluck(:mobile_application_id) rescue nil
             info = MobileApplication.where(:id => mobile_application_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:only => [:name,:application_type,:client_id,:id,:login_background_color,:message_above_login_page,:registration_message,:registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url ]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:only => [:name,:application_type,:client_id,:id,:login_background_color,:message_above_login_page,:registration_message,:registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status, :login_background_updated_at, :listing_screen_background_updated_at], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url ]) rescue []
           end
         when 'MyTravel'  
           if current_user.present?
