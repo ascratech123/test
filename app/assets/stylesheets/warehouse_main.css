@@ -1,0 +1,14 @@
+body{font-family: 'Roboto', sans-serif; color:#000; font-size:16px; position:relative; margin:0px;
+	background:url(/assets/background_warehouse_new.png) no-repeat;}
+.container{width:80%; margin:0 auto; text-align:center;}
+.title {color: #000; font-size: 50px; padding:6% 0 0; width:100%;}
+.description{text-align:center; padding:20px; margin:6% 0;}
+.description p{ line-height:30px;}
+.title p{margin:0px;}
+.welcomeText{ font-size: 34px;}
+.subText{ font-size: 19px;     margin-top: 52px;}
+.totalOrder{}
+.totalOrder div {display:inline-block; margin:0 auto; text-align:center; width:28%;}
+.order p{font-size:25px;}
+.order p.value {border:1px solid #b9beb9; font-size:50px; margin:0 auto; padding:20px 0; width:165px; background:#fff;}
+
