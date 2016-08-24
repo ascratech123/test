@@ -9,6 +9,11 @@ module SyncMobileData
         update_data.update(params_data(value)) if update_data.present?
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
+      elsif model_name == 'UserFeedback'
+        update_data = (model_name.constantize).find_or_initialize_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        update_data.update(params_data(value)) if update_data.present?
+        message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
+        message[:data] =  update_data.as_json() rescue nil
       elsif ids.include?(value["id"].to_i)
         update_data = (model_name.constantize).find_by_id(value["id"])
         update_data.update(params_data(value)) if update_data.present?
@@ -197,7 +202,7 @@ module SyncMobileData
       value.each do |v|
         v[:platform] = platform
       end if allow_analytics.exclude?(key)
-    end  
+    end
     case key
       when "Note"
         chanages_done << SyncMobileData.create_record(value,"Note")
