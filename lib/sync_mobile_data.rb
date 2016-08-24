@@ -9,6 +9,12 @@ module SyncMobileData
         update_data.update(params_data(value)) if update_data.present?
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
+      elsif model_name == 'UserFeedback'
+        update_data = (model_name.constantize).find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        params = params_data(value)
+        update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
+        message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
+        message[:data] =  update_data.as_json() rescue nil
       elsif ids.include?(value["id"].to_i)
         update_data = (model_name.constantize).find_by_id(value["id"])
         update_data.update(params_data(value)) if update_data.present?
@@ -50,7 +56,7 @@ module SyncMobileData
       info = info.where(:event_id => event_ids) rescue []
       case model
         when 'Conversation'
-          info = info.where(:status => 'approved')
+          # info = info.where(:status => 'approved')
           data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:icon_updated_at,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :emergency_exit_updated_at, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
@@ -99,7 +105,7 @@ module SyncMobileData
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil
             my_profiles = my_profiles.where(:updated_at => start_event_date..end_event_date) if my_profiles.present?
-          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank])
+          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at])
             invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
             ids = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date).pluck(:favoritable_id) rescue [] 
             info = Invitee.where(:id => ids) rescue []
@@ -187,7 +193,11 @@ module SyncMobileData
   end
 
   def self.params_data(value)
-    return value.except(:id,:created_at,:updated_at).permit!
+    # if value.key?(:feedback_id) and value.key?(:user_id)
+    #   return value.except(:id,:created_at).permit!
+    # else
+      return value.except(:id,:created_at,:updated_at).permit!
+    # end
   end
 
   def self.select_model(key,value,platform)
@@ -197,7 +207,7 @@ module SyncMobileData
       value.each do |v|
         v[:platform] = platform
       end if allow_analytics.exclude?(key)
-    end  
+    end
     case key
       when "Note"
         chanages_done << SyncMobileData.create_record(value,"Note")

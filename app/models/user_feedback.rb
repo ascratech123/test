@@ -3,12 +3,21 @@ class UserFeedback < ActiveRecord::Base
 
   belongs_to :feedback
   belongs_to :user
+  after_save :update_invitee_updated_at
 
   validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
   validate :check_answer_or_description_present
   after_create :create_analytic_record
   default_scope { order('created_at desc') }
+
+  def update_invitee_updated_at
+    invitee = Invitee.find_by_id(self.user_id) if self.user_id.present?
+    if invitee.present?
+      invitee.updated_at = self.updated_at
+      invitee.save
+    end
+  end
   
   def get_event_id
     self.feedback.event_id rescue nil
