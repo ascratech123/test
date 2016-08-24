@@ -1,12 +1,63 @@
+
+arr = []
+def generate_qr_code(invitee_id1, invitee_id2)
+  arr = []
+  Invitee.unscoped.where('id > ? and id < ?', invitee_id1, invitee_id2).each do |n|
+    puts "**********************************************#{n.id}************#{n.event_id}*********************************"
+    begin
+      n.qr_code = QRCode.generate_qr_code(n.event.mobile_application.id, n.id)
+      n.save
+    rescue Exception => e
+      arr << n.id
+    end
+  end 
+  arr
+end
+
+
+
+
+
+
+
+
+
+
+
+arr = []
+def generate_qr_code(invitee_id1, invitee_id2)
+  arr = []
+  Invitee.unscoped.where('id > ? and id < ?', invitee_id1, invitee_id2).each do |n|
+    puts "**********************************************#{n.id}************#{n.event_id}*********************************"
+    begin
+      app_id = n.event.mobile_application_id
+      n.qr_code = QRCode.generate_qr_code(app_id, n.id)
+      n.save
+      system "sudo rm public/qr_code/user#{app_id.to_s}_#{n.id}.png"
+    rescue Exception => e
+      arr << n.id
+    end
+  end 
+  arr
+end
+
+
+generate_qr_code(10584, 12300)
+
+
+
+
+
 /*nilam*/
 
 body{font-family: 'Roboto', sans-serif; color:#272727; font-size:16px; margin:0px;}
 .container{width:80%; margin:0 auto; text-align:center;}
 .title {color: #272727; font-size: 50px; padding:19% 0 0; text-transform: uppercase; width:100%;}
-
+.printPage .title{ font-size:0px; padding:18% 0 0; }
 .title p{margin:0px;}
 .title p.title-border {border-bottom: 2px solid #272727; margin: 0 auto; text-align: center; width: 12%;}
 .description{text-align:center; padding:20px; margin:3% 0;}
+.printPage .description{margin: 1% 0;}
 .description p{ line-height:30px;}
 .scanbtn{}
 .title p{margin:0px;}
@@ -96,7 +147,7 @@ body{
       margin: 15px auto;
       background:white;
       overflow: auto;
-  	width: 100%;
+    width: 100%;
   }
   #header{
       background:white;
@@ -105,14 +156,14 @@ body{
   #mainbody{
       background: white;
       width:100%;
-  	display:none;
+    display:none;
   }
   #footer{
       background:white;
   }
   #v{
-      width:320px;
-      height:240px;
+      width:100%;
+      height:auto;
   }
   #qr-canvas{
       display:none;
@@ -124,7 +175,7 @@ body{
   #mp1{
       text-align:center;
       font-size:35px;
-      margin: 6% 0 0;
+      margin: 8% 0 0;
   }
   #imghelp{
       position:relative;
@@ -133,11 +184,11 @@ body{
       z-index:100;
       font:18px arial,sans-serif;
       background:#f0f0f0;
-  	margin-left:35px;
-  	margin-right:35px;
-  	padding-top:10px;
-  	padding-bottom:10px;
-  	border-radius:20px;
+    margin-left:35px;
+    margin-right:35px;
+    padding-top:10px;
+    padding-bottom:10px;
+    border-radius:20px;
   }
   .selector{
       margin:0;
@@ -147,22 +198,20 @@ body{
   }
   #outdiv
   {
-      width:320px;
-      height:240px;
-  	border: solid;
-  	border-width: 3px 3px 3px 3px;
+      width:95%;
+      height:auto;
+  
   }
   #result {
     border: 1px solid;
     margin: 25px 0 0 0;
     padding: 10px 0;
     width: 22%;
-    background-color: #e68318;
+    
     border: 0 none;
-    color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    cursor: pointer;
-    font-size: 18px;
+
+   
+    font-size: 22px;
     letter-spacing: 2px;
     padding: 10px 0;
     text-transform: uppercase;
@@ -170,8 +219,8 @@ body{
   }
 
   #result:hover, #result:active{
-    background-color: #ffffff;
-    color: #272727;
+   /* background-color: #ffffff;
+    color: #272727;*/
   }
 
   ul{
@@ -191,9 +240,21 @@ body{
   }
   
   #footer a{
-  	color: black;
+    color: black;
   }
   .tsel{
       padding:0;
   }
 
+@media print{
+/*.title{width:45%; text-align: center; margin: 0 auto;}
+.title img{width:100%; max-width:100%;}
+.welcomeText{font-size:40px;}*/
+.qr-scanner-page{background-image:none;}
+.title img{display:none;}
+.welcomeText{margin-top: 60%; font-size: 30px;}
+.subText.place{display:none;}
+}
+
+
+}
