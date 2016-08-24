@@ -41,7 +41,7 @@ class Analytic < ActiveRecord::Base
   def update_points_to_invitee
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
-    if feature.present? and self.points > 0
+    if feature.present? and feature.status.to_s == "active" and self.points > 0
       if self.invitee_id.present? and (["favorite", "rated", "comment", "conversation post", "like", "played", "question asked", "poll answered", "feedback given", 'profile_pic', 'Login', 'Add To Calender', 'share'].include? self.action or (self.viewable_type == 'E-Kit' and self.viewable_id.present?) )
         invitee = Invitee.find_by_id(self.invitee_id)
         invitee.update_column(:points, invitee.points.to_i + self.points.to_i) if invitee.present?
