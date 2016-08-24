@@ -39,8 +39,6 @@
                           = invitee.email
           - elsif @invitees.blank? and params[:search] == 'manual'
             %p.bottomText Can't find yourself? Please contact the helpdesk for more assistance. Thank you.
-            .btnDiv
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :target => '_blank')} Search Manually 
   - elsif params[:page] == 'thank_you'
     .container
       .wrapper.thankYouWrapper
@@ -74,7 +72,7 @@
             %p.subText
               = "We are sorry, we couldn’t verify your QR code."
             .btnDiv
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :target => '_blank')} Search Manually 
+              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search'), :target => '_blank'} Search Manually 
           .btnDiv
             - if @invitee.present?
               %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'} Preview Badge
@@ -102,7 +100,7 @@
               #result
               %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
       .btnDiv
-        %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :target => '_blank')} Search Manually 
+        %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search'), :target => '_blank'} Search Manually 
       / #footer
       /   %br
       /     %h5{:align => "center"}

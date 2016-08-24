@@ -8,8 +8,10 @@
     .description
       %p.welcomeText 
         = @invitee.name_of_the_invitee rescue nil
-      %p.subText 31st Aug - 2nd Sept 2016
-      %p.subText.place Mumbai
+      %p.subText
+        = "#{@event.start_event_date.strftime('%d %b')} - #{@event.end_event_date.strftime('%d %b %Y')}"
+      %p.subText.place
+        = @event.cities rescue nil
   :javascript
     function printpage() {
       //Get the print button and put it into a variable
