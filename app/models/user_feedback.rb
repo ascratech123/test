@@ -3,17 +3,24 @@ class UserFeedback < ActiveRecord::Base
 
   belongs_to :feedback
   belongs_to :user
+  after_save :update_invitee_updated_at
 
   validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
   validate :check_answer_or_description_present
   after_create :create_analytic_record
   default_scope { order('created_at desc') }
+
+  def update_invitee_updated_at
+    invitee_updated_at = Invitee.find_by_id(self.user_id).updated_at
+    invitee_updated_at = self.updated_at
+  end
   
   def get_event_id
     self.feedback.event_id rescue nil
   end
 
+  
   def Timestamp
     self.feedback.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %T') rescue ""
   end
@@ -58,14 +65,6 @@ class UserFeedback < ActiveRecord::Base
       analytic = Analytic.new(viewable_type: "Feedback", viewable_id: self.feedback_id, action: "feedback given", invitee_id: self.user_id, event_id: event_id, platform: platform)
       analytic.save rescue nil
     end
-  end
-
-  def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.feedback.event_timezone.capitalize)
-  end
-
-  def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.feedback.event_timezone.capitalize)
   end
 
   def check_answer_or_description_present
