@@ -1,6 +1,30 @@
 - if params[:page] == 'thank_you'
+  .container
+    .wrapper.submitWrapper
+      .textDiv
+        %input.inputType{:placeholder => "Please Enter QR Code", :type => "text", :value => ""}/
+        %input.submitBtn{:type => "submit", :value => "submit"}/
+      .tableDiv{:style => "overflow-x:auto;"}
+        %table
+          %thead
+            %tr
+              %th Id
+              %th Name
+              %th Email
+          %tbody
+            %tr
+              %td 01
+              %td
+                %a{:href => "javascript:void(0);"} Abc
+              %td abc@gmail.com
+            %tr
+              %td 02
+              %td
+                %a{:href => "javascript:void(0);"} xyz
+              %td xyz@gmail.com
+        %p.bottomText "Can't find yourself? Please contact the helpdesk for more assistance. Thank you."
   / .container
-  /   .wrapper
+  /   .wrapper.thankYouWrapper
   /     .thankyou-text
   /       %p.welcomeText Thank you for visiting Hindustan Unilever E-Commerce Warehouse.
   /     .tableDiv{:style => "overflow-x:auto;"}
@@ -23,15 +47,15 @@
   /       .btnDiv
   /         %button Print
   /         %button.scanAgain Scan again
-  .container
-    .title
-      %p Introduction
-      %p.title-border
-    .description
-      %p.welcomeText Welcome to Hindustan Unilever E-Commerce Warehouse.
-      %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
-    .scanbtn
-      %button Scan
+  / .container
+  /   .title
+  /     %p Introduction
+  /     %p.title-border
+  /   .description
+  /     %p.welcomeText Welcome to Hindustan Unilever E-Commerce Warehouse.
+  /     %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
+  /   .scanbtn
+  /     %button Scan
 
 - else
   #main
