@@ -185,7 +185,7 @@ body{
   .tsel{
       padding:0;
   }
-
+.subText.place{margin-top:0px; line-height:0px;}
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
@@ -193,7 +193,8 @@ body{
 .qr-scanner-page{background-image:none;}
 .title img{display:none;}
 .welcomeText{margin-top: 60%; font-size: 30px;}
-.subText.place{display:none;}
+.subText.place{margin-top:0px; line-height:0px;}
+
 }
 
 

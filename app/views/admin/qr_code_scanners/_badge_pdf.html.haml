@@ -4,10 +4,10 @@
 %body.qr-scanner-page#print
   .container.printPage
     .title
-      %img{:src => 'http://s3-ap-southeast-1.amazonaws.com/shobiz-production/event/inside_logo/original/368-Event_Logo1_%282%29.png'}
+      %img{:src => @event.logo.url}
     .description
       %p.welcomeText 
-        = "Shiv Kumar"
+        = @invitee.name_of_the_invitee rescue nil
       %p.subText 31st Aug - 2nd Sept 2016
       %p.subText.place Mumbai
   :javascript
