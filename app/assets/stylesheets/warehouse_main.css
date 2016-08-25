@@ -1,5 +1,5 @@
 body{font-family: 'Roboto', sans-serif; color:#000; font-size:16px; position:relative; margin:0px;
-	background:url(/assets/background_warehouse_new.png) no-repeat;}
+	background:url(/assets/bg_1600.jpg) no-repeat; background-size:100% auto;}
 .container{width:80%; margin:0 auto; text-align:center;}
 .title {color: #000; font-size: 50px; padding:6% 0 0; width:100%;}
 .description{text-align:center; padding:20px; margin:6% 0;}
