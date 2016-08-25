@@ -62,7 +62,7 @@ input:focus::-moz-placeholder {color: transparent;}
 .qr-scanner-page #header{background:none;}
 .qr-scanner-page #footer{background:none;}
 .qr-scanner-page #main{background:none; }
-.camera{padding:2% 0; display:inline-block;}
+.camera{padding:7% 0 0 0; display:inline-block;}
 .thanktest{font-size: 40px;}
 .wrapper.thankYouWrapper{padding-top:17%;}
 .wrapper.thankYouWrapper .tableDiv{padding:22px 0;}
@@ -86,7 +86,7 @@ body{
   #main{
       margin: 15px auto;
       background:white;
-      overflow: auto;
+    
     width: 100%;
   }
   #header{
@@ -197,6 +197,10 @@ body{
 #print .subText.place{line-height:0px; margin-top: 0px;}
 #prnt.printBtn {float: right; position: absolute; right: 20px; top: 13px;}
 #print .welcomeText{line-height: 50px;}
+
+.btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
+
+
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
