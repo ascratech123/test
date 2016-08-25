@@ -103,7 +103,7 @@
             %td{:align => "center", :colspan => "3"}
               #result
               %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
-      .btnDiv
+      .btnDiv.searchManuallyBtn
         %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search'), :target => '_blank'} Search Manually 
       / #footer
       /   %br
