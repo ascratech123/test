@@ -776,7 +776,7 @@ end
     # action_arr = []
     # logic_arr = []
     dest_arr = []
-    event.event_features.each do |feature|
+    event.event_features.not_hidden_icon.each do |feature|
       #action_arr += action_based[feature.name] if action_based[feature.name].present?
       #logic_arr += logic_based[feature.name] if logic_based[feature.name].present?
       dest_arr << destination_based[feature.name] if destination_based[feature.name].present?
