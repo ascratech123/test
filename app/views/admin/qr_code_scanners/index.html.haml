@@ -10,7 +10,7 @@
             = form_tag(admin_event_qr_code_scanners_path(:event_id => @event.id), method: :get) do |f|
               = hidden_field_tag :page, params[:page].present? ? params[:page] : 'manual_search'
               = hidden_field_tag :search, 'manual'
-              = text_field_tag :email, params[:email], placeholder: 'Enter your email', :class => 'inputType'
+              = text_field_tag :email, params[:email], placeholder: 'Enter your email or name', :class => 'inputType'
               %input.submitBtn{:type => "submit", :value => "submit"}/
           - if @invitees.present?
             .tableDiv{:style => "overflow-x:auto;"}
@@ -19,7 +19,7 @@
                   %tr
                     %th Id
                     %th Name
-                    %th CompnayName
+                    %th Company Name
                     %th Designation
                     %th Email
                 %tbody
@@ -52,7 +52,7 @@
                 %tr
                   %th Id
                   %th Name
-                  %th CompnayName
+                  %th Company Name
                   %th Designation
                   %th Email
               %tbody
@@ -88,8 +88,6 @@
       #header
         %div{:style => "position:relative;top:+20px;left:0px;"}
           %g:plusone{:size => "medium"}
-        %p#mp1
-          Hobnob Scanner
         %ul
       #mainbody
         %table.tsel{:border => "0", :width => "100%"}
@@ -130,9 +128,7 @@
 
   - else
     .container
-      .title
-        %p Introduction
-        %p.title-border
+      .title     
       .description
         %p.welcomeText 
           = "Welcome to #{@event.event_name}."

@@ -2,8 +2,8 @@
 
 body{font-family: 'Roboto', sans-serif; color:#272727; font-size:16px; margin:0px;}
 .container{width:80%; margin:0 auto; text-align:center;}
-.title {color: #272727; font-size: 50px; padding:19% 0 0; text-transform: uppercase; width:100%;}
-.printPage .title{ font-size:0px; padding:18% 0 0; }
+.title {color: #272727; font-size: 50px; padding:17% 0 0; text-transform: uppercase; width:100%;}
+.printPage .title{ font-size:0px; padding:40% 0 0; }
 .title p{margin:0px;}
 .title p.title-border {border-bottom: 2px solid #272727; margin: 0 auto; text-align: center; width: 12%;}
 .description{text-align:center; padding:20px; margin:3% 0;}
@@ -38,7 +38,7 @@ input:focus::-moz-placeholder {color: transparent;}
 .wrapper{ padding: 7% 0;}
 .wrapper .tableDiv {padding: 72px 0;}
  .tableDiv table tr th{background-color: #397639;}
- .tableDiv table tr a{color:#000; text-decoration:none;}
+/* .tableDiv table tr a{color:#000; text-decoration:none;}*/
 .submitBtn {background-color: #397639; border: 0 none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 
   0 1px   2px rgba(0, 0, 0, 0.24); color: #ffffff; cursor: pointer; font-size: 17px; padding: 10px 0; text-transform: uppercase; width: 15%;  letter-spacing:1px;}  
 .popupDiv{width:30%; position:absolute; top:40%;  transform: translateY(-50%); background:#e4e3d5; left:0; right:0; margin:0 auto; text-align:center; display:none; z-index:99999; color:#272727; padding:15px 30px 25px 30px; }
@@ -186,6 +186,17 @@ body{
       padding:0;
   }
 .subText.place{margin-top:0px; line-height:0px;}
+.qr-scanner-page#print{background:none;}
+#print .container.printPage{background: url("/assets/background-disha.jpg") no-repeat scroll center center / 397px 566px rgba(0, 0, 0, 0);
+    margin:7.7% auto; text-align: center; width:397px; height:566px;}
+#print .description{padding:10px;}
+#print .printPage .title{width:28%; margin:0 auto;}
+#print .printPage .title img{width:100%; max-width:100%;}
+.description p.welcomeText{margin:20px 0 0 0;}
+#print .subText{margin-top:25px; line-height:15px;}
+#print .subText.place{line-height:0px; margin-top: 0px;}
+#prnt.printBtn {float: right; position: absolute; right: 20px; top: 13px;}
+#print .welcomeText{line-height: 50px;}
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
@@ -195,7 +206,11 @@ body{
 .welcomeText{margin-top: 60%; font-size: 30px;}
 .subText.place{margin-top:0px; line-height:0px;}
 #prnt{display: none}
-
+.description .subText{display:none;}
+#print .welcomeText {margin-bottom: 0; margin-top: 12px; }
+.subText{margin-top:10px;}
+#print .description p.welcomeText{margin-top:25%;}
+#print .container.printPage{background:none;}
 }
 
 
