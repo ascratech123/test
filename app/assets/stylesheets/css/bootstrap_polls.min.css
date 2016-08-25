@@ -2,6 +2,7 @@ body{height:inherit;}
 .heightpoll{height:85px;}
 .heightpoll img{width:auto;}
 .pollHeading{position:relative;top:50%; transform:translateY(-50%); -webkit-transform: translateY(-50%); }
+.poll-bg .pollHeading{visibility: hidden;}
 .main-events .pollHeading h3{padding-top:0px;}
 img {vertical-align: middle;}
 .poll-container .progress.progress-bar-xl{height: 32px;}
@@ -29,7 +30,11 @@ img {vertical-align: middle;}
     padding: 4px;
     transition: all 0.2s ease-in-out 0s;
 }
-
+.main-events.poll-bg{
+  background: url('/assets/bg2.jpg') no-repeat;
+  background-size: cover;
+  background-size: 100% 100%;
+}
 .gauge {
     text-align: left;
     width: 670px;
