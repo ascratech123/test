@@ -11,6 +11,7 @@
 body {
 	margin: 0
 }
+.bg-wall .QnaImg{visibility: hidden;}
 .main.QnaWall .panel {
     /* background-color: #fff; */
     border: 1px solid transparent;
@@ -37,6 +38,7 @@ body,html{
 .main.QnaWall.bg-wall {
   background: url('/assets/bg2.jpg') no-repeat;
   background-size: cover;
+  background-size: 100% 100%;
 }
 .QnaWall .tabDiv{
   width:100%;
