@@ -60,23 +60,29 @@
                   %td
                     = @invitee.id
                   %td
-                    -#%a{:href => "javascript:void(0);"} Abc
-                    = @invitee.name_of_the_invitee
+                    %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'}
+                      = @invitee.name_of_the_invitee
                   %td
                     = @invitee.company_name
                   %td
                     = @invitee.designation
                   %td
-                    = @invitee.email
+                    %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'}
+                      = @invitee.email
+            .btnDiv
+              - if @invitee.present?
+                %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'} Preview Badge
+              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search'), :target => '_blank'} Search Manually 
+              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} New Scan
+
           - else
             %p.subText
               = "We are sorry, we couldn’t verify your QR code."
             .btnDiv
               %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search'), :target => '_blank'} Search Manually 
-          .btnDiv
-            - if @invitee.present?
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'} Preview Badge
-            %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} New Scan
+              - if @invitee.present?
+                %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview'), :target => '_blank'} Preview Badge
+              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} New Scan
   - elsif params[:page] == 'scanning'
     #main
       #header
