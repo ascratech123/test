@@ -194,6 +194,7 @@ body{
 .title img{display:none;}
 .welcomeText{margin-top: 60%; font-size: 30px;}
 .subText.place{margin-top:0px; line-height:0px;}
+#prnt{display: none}
 
 }
 
