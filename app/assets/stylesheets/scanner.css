@@ -193,9 +193,10 @@ body{
 #print .printPage .title{width:28%; margin:0 auto;}
 #print .printPage .title img{width:100%; max-width:100%;}
 .description p.welcomeText{margin:20px 0 0 0;}
-#print .subText{margin-top:20px; line-height:15px;}
+#print .subText{margin-top:25px; line-height:15px;}
 #print .subText.place{line-height:0px; margin-top: 0px;}
 #prnt.printBtn {float: right; position: absolute; right: 20px; top: 13px;}
+#print .welcomeText{line-height: 50px;}
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
@@ -206,9 +207,10 @@ body{
 .subText.place{margin-top:0px; line-height:0px;}
 #prnt{display: none}
 .description .subText{display:none;}
-#prnt .welcomeText {margin-bottom: 0; margin-top: 12px;}
+#print .welcomeText {margin-bottom: 0; margin-top: 12px; }
 .subText{margin-top:10px;}
-#print .description p.welcomeText{margin-top:40%;}
+#print .description p.welcomeText{margin-top:25%;}
+#print .container.printPage{background:none;}
 }
 
 

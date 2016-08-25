@@ -7,7 +7,7 @@ class Admin::QrCodeScannersController < ApplicationController
 
   def index
     @invitee = @event.invitees.where(:id => params[:invitee_id]).last
-    @invitees = @event.invitees.where('email like ? or name_of_the_invitee like ?', "%#{params[:email]}%", "%#{params[:email]}%")
+    @invitees = @event.invitees.where('email like ? or name_of_the_invitee like ?', "%#{params[:email]}%", "%#{params[:email]}%") if params[:email].present?
   end
 
   def show
