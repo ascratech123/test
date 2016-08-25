@@ -29,7 +29,7 @@ class EventFeature < ActiveRecord::Base
   after_destroy :delete_default_invitee_groups
 
   default_scope { order("sequence") }
-  scope :not_hiddened_icon, -> { where(menu_visibilty: "active") }
+  scope :not_hidden_icon, -> { where(menu_visibilty: "active") }
 
   aasm :column => :status do  # defaults to aasm_state
     state :active, :initial => true
