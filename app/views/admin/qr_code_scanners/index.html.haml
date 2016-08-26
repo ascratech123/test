@@ -39,7 +39,7 @@
                           = invitee.email
           - elsif @invitees.blank? and params[:search] == 'manual'
             %p.bottomText Can't find yourself? Please contact the helpdesk for more assistance. Thank you.
-          .btnDiv
+          .btnDiv.newScanBtn
             %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning')} New Scan
   - elsif params[:page] == 'thank_you'
     .container

@@ -199,7 +199,7 @@ body{
 #print .welcomeText{line-height:44px; margin-top:64%; font-size:35px;}
 
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
-
+.btnDiv.newScanBtn{margin:5% 0; padding:0;}
 
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
@@ -213,7 +213,7 @@ body{
 .description .subText{display:none;}
 #print .welcomeText {margin-bottom: 0; margin-top: 12px; }
 .subText{margin-top:10px;}
-#print .description p.welcomeText{margin-top:60%;}
+#print .description p.welcomeText{margin-top:40%;}
 #print .container.printPage{background:none;}
 }
 
