@@ -13,7 +13,7 @@
               = text_field_tag :email, params[:email], placeholder: 'Enter your email or name', :class => 'inputType'
               %input.submitBtn{:type => "submit", :value => "submit"}/
           - if @invitees.present?
-            .tableDiv{:style => "overflow-x:auto;"}
+            .tableDiv
               %table
                 %thead
                   %tr
@@ -47,7 +47,7 @@
         .thankyou-text
           %p.thanktest 
             = "Thank you for visiting #{@event.event_name}"
-        .tableDiv{:style => "overflow-x:auto;"}
+        .tableDiv
           - if @invitee.present?
             %table
               %thead
