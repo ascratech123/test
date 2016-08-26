@@ -1,4 +1,4 @@
-class Admin::ConversationsController < ApplicationController
+class Admin::ConversationsController < ApplicationController 
   layout 'admin'
 
   #load_and_authorize_resource
