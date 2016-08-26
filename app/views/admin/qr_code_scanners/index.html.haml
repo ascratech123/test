@@ -18,7 +18,8 @@
               %table
                 %thead
                   %tr
-                    %th Id
+                    - if false
+                      %th Id
                     %th Name
                     %th Company Name
                     %th Designation
@@ -27,8 +28,9 @@
                 %tbody
                   - @invitees.each do |invitee|
                     %tr
-                      %td
-                        = invitee.id
+                      - if false
+                        %td
+                          = invitee.id
                       %td
                         / %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview'), :target => '_blank'}
                         = invitee.name_of_the_invitee
@@ -59,38 +61,43 @@
             %table
               %thead
                 %tr
-                  %th Id
+                  - if false
+                    %th Id
                   %th Name
                   %th Company Name
                   %th Designation
                   %th Email
               %tbody
                 %tr
+                  - if false
+                    %td
+                      = @invitee.id
                   %td
-                    = @invitee.id
-                  %td
-                    %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'}
-                      = @invitee.name_of_the_invitee
+                    -#%a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'}
+                    = @invitee.name_of_the_invitee
                   %td
                     = @invitee.company_name
                   %td
                     = @invitee.designation
                   %td
-                    %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'}
-                      = @invitee.email
-            .btnDiv
-              - if false#@invitee.present?
-                %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview])} Preview Badge
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
+                    -#%a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'}
+                    = @invitee.email
+            .btnDiv.thankyouPage
+              - if @invitee.present?
+                %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'} Print Badge
               %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} New Scan
+            .searchManuallyDiv
+              %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
           - else
             %p.subText
               = "We are sorry, we couldn’t verify your QR code."
-            .btnDiv
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
+            .btnDiv.thankyouPage
+              / %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
               - if @invitee.present?
                 %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'} Preview Badge
               %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} New Scan
+            .searchManuallyDiv
+              %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
   - elsif params[:page] == 'scanning'
     #main
       #header
@@ -111,8 +118,8 @@
             %td{:align => "center", :colspan => "3"}
               #result
               %a{:id => 'btnPrint', :style => 'float:center;display:none', :href => 'javascript:void(0)'} Print
-      .btnDiv.searchManuallyBtn
-        %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
+      .searchManuallyDiv.searchManuallyBtn
+        %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
       / #footer
       /   %br
       /     %h5{:align => "center"}
