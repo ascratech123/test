@@ -28,7 +28,7 @@ class UserPoll < ActiveRecord::Base
 
   def event_timezone
     poll = self.poll
-    (poll.event_timezone.present? ? poll.event_timezone.capitalize : poll.update_event_timezone)
+    (poll.event_timezone.present? ? poll.event_timezone : poll.update_event_timezone)
   end
 
   def email_id

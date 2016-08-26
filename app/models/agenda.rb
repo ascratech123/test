@@ -16,6 +16,7 @@ class Agenda < ActiveRecord::Base
   after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected
   before_save :check_category_present_if_new_category_select_from_dropdown
+  after_create :set_dates_with_event_timezone
 
   default_scope { order('start_agenda_time asc') }
 
@@ -101,6 +102,10 @@ class Agenda < ActiveRecord::Base
     end
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
   def check_category_present_if_new_category_select_from_dropdown
     if self.agenda_type == "Add New Track" and self.new_category.present?
       self.agenda_type = self.new_category
@@ -135,5 +140,18 @@ class Agenda < ActiveRecord::Base
 
   def track_sequence
     self.agenda_track.sequence if self.agenda_track_id.to_i > 0
+
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
+    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone))
+  end
+
+  def start_agenda_time_with_event_timezone
+    self.start_agenda_time.in_time_zone(self.event_timezone) if self.start_agenda_time.present?
+  end
+
+  def end_agenda_time_with_event_timezone
+    self.end_agenda_time.in_time_zone(self.event_timezone) if self.end_agenda_time.present?
   end
 end

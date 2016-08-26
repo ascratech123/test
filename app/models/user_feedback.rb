@@ -76,4 +76,12 @@ class UserFeedback < ActiveRecord::Base
       errors.add(:description, "This field is required.") if self.description.blank?
     end
   end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.feedback.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.feedback.event_timezone)
+  end
 end

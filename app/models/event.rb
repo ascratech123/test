@@ -594,4 +594,47 @@ class Event < ActiveRecord::Base
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
   end
+
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      self.update_column("timezone", self.timezone.titleize)
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes"]
+        table_name.classify.constantize.where(:event_id => self.id).each{|obj| obj.update_column("event_timezone", self.timezone)}
+      end   
+      for table_name in ["analytics", "chats", "conversations", "e_kits", "faqs", "highlight_images", "qnas"]
+        for obj in table_name.classify.constantize.where(:event_id => self.id)
+          obj.update_column("created_at_with_event_timezone", obj.created_at.in_time_zone(self.timezone))
+          obj.update_column("updated_at_with_event_timezone", Time.now.in_time_zone(self.timezone))
+        end
+      end
+      for poll in self.polls
+        poll.update_column("poll_start_date_time_with_event_timezone", poll.poll_start_date_time.in_time_zone(self.timezone))
+        poll.update_column("poll_end_date_time_with_event_timezone", poll.poll_end_date_time.in_time_zone(self.timezone))
+      end
+      for agenda in self.agendas
+        agenda.update_column("start_agenda_time_with_event_timezone", agenda.start_agenda_time.in_time_zone(self.timezone))
+        agenda.update_column("end_agenda_time_with_event_timezone", agenda.end_agenda_time.in_time_zone(self.timezone))
+      end
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "polls", "analytics", "e_kits", "highlight_images"]
+        table_name.classify.constantize.where(:event_id => self.id).each{|obj| obj.update_column("updated_at", Time.now)}
+      end
+    end
+  end
+
+  def start_event_date_with_timezone
+    self.start_event_date.in_time_zone(self.timezone)
+  end
+
+  def end_event_date_with_timezone
+    self.end_event_date.in_time_zone(self.timezone)
+  end
+
+  def start_event_time_with_timezone
+    self.start_event_time.in_time_zone(self.timezone)
+  end
+
+  def end_event_time_with_timezone
+    self.end_event_time.in_time_zone(self.timezone)
+  end
+  
 end

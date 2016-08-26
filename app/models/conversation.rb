@@ -22,7 +22,7 @@ class Conversation < ActiveRecord::Base
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone, :set_dates_with_event_timezone
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -134,8 +134,14 @@ class Conversation < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone.capitalize)
+    self.update_column("event_timezone", self.event.timezone)
   end
+
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+  end  
 
   def self.get_export_object(conversations)
     object = []
@@ -215,10 +221,10 @@ class Conversation < ActiveRecord::Base
   end
 
   def created_at_with_timezone
-    self.created_at.in_time_zone(self.event_timezone.capitalize)
+    self.created_at.in_time_zone(self.event_timezone)
   end
 
   def updated_at_with_timezone
-    self.updated_at.in_time_zone(self.event_timezone.capitalize)
+    self.updated_at.in_time_zone(self.event_timezone)
   end
 end

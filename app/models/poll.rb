@@ -13,7 +13,7 @@ class Poll < ActiveRecord::Base
   before_save :set_time
   after_save :push_notification, :check_push_to_wall_status
   before_create :set_sequence_no
-  after_create :set_status_as_per_auto_approve
+  after_create :set_status_as_per_auto_approve, :set_dates_with_event_timezone
 
   default_scope { order("sequence") }
 
@@ -114,13 +114,19 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("poll_start_date_time_with_event_timezone", self.poll_start_date_time.in_time_zone(event.timezone))
+    self.update_column("poll_end_date_time_with_event_timezone", self.poll_end_date_time.in_time_zone(event.timezone))    
+  end
+
   def self.set_auto_approve(value,event)
     event.update_column(:poll_auto_approve, value)
   end
 
   def update_event_timezone
     event = self.event
-    self.update_column("event_timezone", event.timezone.capitalize)
+    self.update_column("event_timezone", event.timezone)
     self.event_timezone
   end
   
