@@ -140,7 +140,8 @@ class Agenda < ActiveRecord::Base
 
   def track_sequence
     self.agenda_track.sequence if self.agenda_track_id.to_i > 0
-
+  end
+  
   def set_dates_with_event_timezone
     event = self.event
     self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
