@@ -61,10 +61,10 @@ class UserFeedback < ActiveRecord::Base
   end
 
   def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.feedback.event_timezone.capitalize)
+    self.created_at.in_time_zone(self.feedback.event_timezone)
   end
 
   def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.feedback.event_timezone.capitalize)
+    self.updated_at.in_time_zone(self.feedback.event_timezone)
   end
 end

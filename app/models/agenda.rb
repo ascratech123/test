@@ -15,6 +15,7 @@ class Agenda < ActiveRecord::Base
   after_save :set_end_date_if_end_date_not_selected, :set_event_timezone
   before_save :check_category_present_if_new_category_select_from_dropdown
   before_create :set_sequence_no
+  after_create :set_dates_with_event_timezone
 
   default_scope { order('start_agenda_time asc') }
   # default_scope { order("sequence") }
@@ -68,7 +69,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone.capitalize)
+    self.update_column("event_timezone", self.event.timezone)
   end
 
   def check_category_present_if_new_category_select_from_dropdown
@@ -92,11 +93,17 @@ class Agenda < ActiveRecord::Base
     self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
+    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone))
+  end
+
   def start_agenda_time_with_event_timezone
-    self.start_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.start_agenda_time.present?
+    self.start_agenda_time.in_time_zone(self.event_timezone) if self.start_agenda_time.present?
   end
 
   def end_agenda_time_with_event_timezone
-    self.end_agenda_time.in_time_zone(self.event_timezone.capitalize) if self.end_agenda_time.present?
+    self.end_agenda_time.in_time_zone(self.event_timezone) if self.end_agenda_time.present?
   end
 end

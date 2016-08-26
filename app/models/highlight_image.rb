@@ -11,7 +11,14 @@ class HighlightImage < ActiveRecord::Base
                                          }.merge(HIGHLIGHT_IMAGE_PATH)
   
   validates_attachment_content_type :highlight_image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
-	
+  after_create :set_dates_with_event_timezone
+
+  def set_dates_with_event_timezone	
+    event = self.event
+    self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+  end
+
   def highlight_image_url(style=:large)
   	style.present? ? self.highlight_image.url(style) : self.highlight_image.url
 	end
