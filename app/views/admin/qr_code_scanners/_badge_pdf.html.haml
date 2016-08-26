@@ -1,5 +1,5 @@
 = stylesheet_link_tag "scanner", :media => 'screen, print'
-= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and [368].include? @event.id
+= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and [368, 165, 168].include? @event.id
 %title Disha
 %body.qr-scanner-page#print
   - if @event.present? and [368, 165, 168].include? @event.id
