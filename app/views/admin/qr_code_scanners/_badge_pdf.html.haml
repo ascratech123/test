@@ -14,12 +14,12 @@
         %p.subText.place
           = @event.cities rescue nil
   - else
-    .container
-      .title
+    .container.barcodePage
+      .barcode.title
         - if @invitee.present?
-          %img{:src => @invitee.qr_code.url} 
+          %img{:src => @invitee.qr_code.url}
       .description
-        %p{:style => 'font-size:34px;margin:0px'} 
+        %p{:style => 'margin:0px'} 
           = @invitee.name_of_the_invitee rescue nil
   :javascript
     function printpage() {
