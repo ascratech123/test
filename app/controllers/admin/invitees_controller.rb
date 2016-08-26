@@ -3,7 +3,6 @@ class Admin::InviteesController < ApplicationController
 
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
-
   
 
   def index
@@ -34,7 +33,7 @@ class Admin::InviteesController < ApplicationController
       format.html  
       format.xls do
         only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
-        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL]
+        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
         send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end

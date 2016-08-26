@@ -27,10 +27,11 @@ class Invitee < ActiveRecord::Base
   validates :email, uniqueness: {scope: [:event_id]}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
   
-  has_attached_file :qr_code, {:styles => {:large => "200x200>",
-                                         :small => "60x60>", 
-                                         :thumb => "54x54>"}}.merge(INVITEE_QR_CODE_PATH)
+  #has_attached_file :qr_code, {:styles => {:large => "200x200>",
+  #                                       :small => "60x60>", 
+  #                                       :thumb => "54x54>"}}.merge(INVITEE_QR_CODE_PATH)
 
+  has_attached_file :qr_code, {:styles => {}}.merge(INVITEE_QR_CODE_PATH)
   has_attached_file :profile_pic, {:styles => {:large => "640x640>",
                                          :small => "200x200>", 
                                          :thumb => "60x60>"},
@@ -112,6 +113,10 @@ class Invitee < ActiveRecord::Base
 
   def profile_picture
     self.profile_pic.url rescue ""
+  end
+
+  def Remark
+    self.remark
   end
 
   def feedback_last_updated_at
