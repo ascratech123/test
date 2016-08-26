@@ -15,9 +15,8 @@ class Admin::ClientsController < ApplicationController
         redirect_to admin_client_users_path(:client_id => client_id) if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] == "index"
         redirect_to new_admin_client_user_path(:client_id => client_id, :role => "client_admin") if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] != "index"
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'event_admin' or params[:role] == 'moderator') and params[:redirect_page] != "index"
-        #redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role =>"telecaller") if (params[:feature] == "users" and params[:role] == 'telecaller' )
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role =>"telecaller",:telecaller_logged_in => params[:telecaller_logged_in].present? ? "true" : "") if (params[:feature] == "users" and params[:role] == 'telecaller') 
-
+        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'db_manager') and params[:redirect_page] != "index"
+        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role =>"telecaller") if params[:feature] == "users" and (params[:role] == 'telecaller') 
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role], :redirect_page => "index",:wall => "#{params[:wall].present?  ? params[:wall] : ""}") if params[:feature] == "users" and params[:role] == 'event_admin' or params[:role] == 'moderator' and params[:redirect_page] == "index"
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :redirect_page => "index", :dashboard => "true") if  params[:feature] == "users" and params[:redirect_page] == "index" and params[:role].blank?
 

@@ -102,7 +102,7 @@ class Admin::EventsController < ApplicationController
 
   def feature_redirect_on_condition
     if params[:feature].present? and params[:feature]  != "events"
-      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller") ? @events.count("events.id") : @events.count
+      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller" or current_user.has_role? :db_manager) ? @events.count("events.id") : @events.count
       if params[:event_id].present? or (@events.present? and event_count == 1 and params[:feature] != "mobile_application" and params[:feature] != "mobile_applications")
         @event = (event_count == 1) ? @events.first : @events.find(params[:event_id])
         if params[:feature] == "mobile_application"
