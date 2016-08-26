@@ -6,7 +6,7 @@ body{font-family: 'Roboto', sans-serif; color:#272727; font-size:16px; margin:0p
 .printPage .title{ font-size:0px; padding:40% 0 0; }
 .title p{margin:0px;}
 .title p.title-border {border-bottom: 2px solid #272727; margin: 0 auto; text-align: center; width: 12%;}
-.description{text-align:center; padding:20px; margin:3% 0;}
+.description{text-align:center; padding:20px; margin:5% 0;}
 .printPage .description{margin: 1% 0;}
 .description p{ line-height:30px;}
 .scanbtn{}
@@ -194,7 +194,8 @@ body{
 .description p.welcomeText{margin:20px 0 0 0;}
 #print .subText{margin-top:25px; line-height:15px; display:none;}
 #print .subText.place{line-height:0px; margin-top: 0px;}
-#prnt.printBtn {float: right; position: absolute; right: 20px; top: 13px;}
+#prnt.printBtn {color:#ffffff; float:right; font-size:22px; padding:3px 10px; position:absolute;
+    right:20px; text-decoration: none; top: 13px; background:#9ec73d;}
 #print .welcomeText{line-height:44px; margin-top:64%; font-size:35px;}
 
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
