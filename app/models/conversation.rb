@@ -2,7 +2,7 @@ class Conversation < ActiveRecord::Base
   include AASM
   attr_accessor :platform
   @@auto_approve = nil
-  belongs_to :event
+  belongs_to :event 
   belongs_to :user
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
   has_many :comments, as: :commentable, :dependent => :destroy
