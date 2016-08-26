@@ -2,5 +2,4 @@
   = render :partial => 'qna_wall', :locals => {:objs => @qnas}
 - else
   = render :partial => 'admin/layouts/index_header', :locals => {:objs => @qnas}
-  -if current_user.has_role? :db_manager
-    = render :partial => 'admin/layouts/more_links'
+  = render :partial => 'admin/layouts/more_links'

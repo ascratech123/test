@@ -96,7 +96,7 @@ class Admin::InviteesController < ApplicationController
   protected
 
   def check_user_role
-    if (!current_user.has_role? :db_manager) 
+    if (!current_user.has_role? :db_manager) and (!current_user.has_role? :licensee_admin)
       redirect_to admin_dashboards_path
     end  
   end
