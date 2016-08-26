@@ -51,7 +51,16 @@ class UserFeedback < ActiveRecord::Base
 	def user_answer
     correct_answer = ""
     correct_answer = self.feedback.attributes[self.answer.downcase] rescue ""
-    correct_answer = self.answer.downcase if correct_answer.blank? and self.answer.downcase.present?
+    if correct_answer.blank? and self.answer.downcase.present?
+      # correct_answer = Feedback.find_by_id(self.feedback_id)
+      # binding.pry 
+      # correct_answer = correct_answer.option1 + "," + correct_answer.option2 +  "," + correct_answer.option3 + "," + correct_answer.option4 + "," + correct_answer.option5 + "," + correct_answer.option6 + "," + correct_answer.option7 + "," + correct_answer.option8 + "," + correct_answer.option9 + "," + correct_answer.option10
+      # correct_answer = self.answer.downcase 
+      values = self.answer.split(',')
+      correct_answer = values.map{|value| self.feedback.attributes[value]}.join(',')
+      # correct_answer = correct_answer.split(',').join(',')
+      # correct_answer = correct_answer.map {|x| x[/\d+/]}.join(',')
+    end
     correct_answer.to_s
     # self.answer.downcase rescue ""
   end
