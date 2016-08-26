@@ -42,6 +42,10 @@ class Qna < ActiveRecord::Base
     name
   end
 
+  def get_panel_name
+    Panel.find_by_id(self.receiver_id).present? ? Panel.find_by_id(self.receiver_id).name : "" 
+  end 
+
   def get_user_name
     Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
   end
