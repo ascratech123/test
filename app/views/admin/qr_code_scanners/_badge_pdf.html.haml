@@ -16,7 +16,8 @@
   - else
     .container
       .title
-        %img{:src => 'http://s3-ap-southeast-1.amazonaws.com/shobiz-production/invitees/qr_code/original/1-user10_1.png?1471878299'}
+        - if @invitee.present?
+          %img{:src => @invitee.qr_code.url} 
       .description
         %p{:style => 'font-size:34px;margin:0px'} 
           = @invitee.name_of_the_invitee rescue nil
