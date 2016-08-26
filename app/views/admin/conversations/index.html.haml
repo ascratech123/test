@@ -2,4 +2,5 @@
   = render :partial => 'conversation_wall', :locals => {:@conversations => @conversations}
 - else
   = render :partial => 'admin/layouts/index_header', :locals => {:objs => @conversations}
-  = render :partial => 'admin/layouts/more_links'
+  - if current_user.has_role? :db_manager
+    = render :partial => 'admin/layouts/more_links'

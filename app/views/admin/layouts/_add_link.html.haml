@@ -73,10 +73,10 @@
     = link_to new_admin_licensee_path ,:class => "rightBtn hvr-sweep-to-right" do
       New Licensee
   - when 'conversation'
-    - if @event.conversation_auto_approve == "true"
+    - if @event.conversation_auto_approve == "true" and (!current_user.has_role? :db_manager)
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "false", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Disable Auto Approve
-    -elsif @event.conversation_auto_approve == "false"
+    -elsif @event.conversation_auto_approve == "false" and (!current_user.has_role? :db_manager)
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "true", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'telecaller'
@@ -146,10 +146,10 @@
     - if (current_user.has_role? :moderator)
       = link_to new_admin_event_qna_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Add Question
-    - if @event.qna_auto_approve == "true"
+    - if @event.qna_auto_approve == "true" and (!current_user.has_role? :db_manager)
       = link_to admin_event_qnas_path(:event_id => @event.id, :auto_approve => "false", :feature => "QNA"),:class => "rightBtn hvr-sweep-to-right" do
         Disable Auto Approve
-    -elsif @event.qna_auto_approve == "false"
+    -elsif @event.qna_auto_approve == "false" and (!current_user.has_role? :db_manager)
       = link_to admin_event_qnas_path(:event_id => @event.id, :auto_approve => "true", :feature => "QNA"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'panel'
