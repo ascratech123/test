@@ -48,13 +48,13 @@
                 /   Show History     
           - when 'speaker'
             %li
-              - if @event.present? and @speakers.present? and current_user.has_role? :db_manager
+              - if @event.present? and @speakers.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_speakers_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
               - if @event.present?
                 = link_to new_admin_event_speaker_path(:importable_type => 'speaker', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import
-                - if @feedbacks.present? and current_user.has_role? :db_manager
+                - if @feedbacks.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                   = link_to admin_event_speakers_path(:event_id => @event.id, :export_type => 'Feedback', :format => 'xls'),:class => "centerAlign" do
                     Export Feedback
               - if false #@event.present?
@@ -70,7 +70,7 @@
                 /   Show History     
           - when 'agenda'
             %li
-              - if @event.present? and @feedbacks.present? and current_user.has_role? :db_manager
+              - if @event.present? and @feedbacks.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_agendas_path(:event_id => @event.id, :format => 'xls', :export_type => 'Feedback'),:class => "centerAlign" do
                   Export Session Feedback
               - if (!current_user.has_role? :db_manager)
@@ -79,7 +79,7 @@
           - when 'invitee'
             %li
               - if params[:show_history] != "true" and @event.present? 
-                - if params[:action] != "new" and @event.invitees.present? and current_user.has_role? :db_manager 
+                - if params[:action] != "new" and @event.invitees.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                   = link_to admin_event_invitees_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                     Export
                 = link_to new_admin_event_invitee_path(:importable_type => 'invitee', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
@@ -89,7 +89,7 @@
                 /   Show History
           - when 'leaderboard'
             %li
-              - if @invitees.present? and (current_user.has_role? :db_manager)
+              - if @invitees.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_leaderboards_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export      
           - when 'user'
@@ -141,7 +141,7 @@
                 Add Licensee
           - when 'conversation'
             %li
-              - if @conversations.present? and current_user.has_role? :db_manager
+              - if @conversations.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_conversations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
               - if false
@@ -163,7 +163,7 @@
               - if ["index", "new"].include?(params[:action]) and (!current_user.has_role? :db_manager)
                 = link_to new_admin_event_feedback_path(:importable_type => 'feedback', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import
-              - if params[:action] == "index" and @feedbacks.present? and current_user.has_role? :db_manager
+              - if params[:action] == "index" and @feedbacks.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_feedbacks_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export  
                 - if false
@@ -201,12 +201,12 @@
                 - if false
                   = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'user_polls', :import => "xls") ,:class => "centerAlign" do
                     Import Answer
-                - if @user_polls.present? and (current_user.has_role? :db_manager)
-                  = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
-                    Export Answer
+              - if @user_polls.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
+                = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
+                  Export Answer
           - when 'qna'
             %li
-              - if @qnas.present? and current_user.has_role? :db_manager
+              - if @qnas.present? and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_qnas_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export 
               - if false
