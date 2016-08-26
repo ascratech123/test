@@ -115,6 +115,10 @@ class Invitee < ActiveRecord::Base
     self.profile_pic.url rescue ""
   end
 
+  def Remark
+    self.remark
+  end
+
   def feedback_last_updated_at
     feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
     feedbacks.last.updated_at if feedbacks.present?
