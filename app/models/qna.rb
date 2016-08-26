@@ -79,9 +79,10 @@ class Qna < ActiveRecord::Base
   end
   
   def speaker_name
-    name = Panel.find_by_id(self.receiver_id).name rescue nil
-    name = Speaker.find_by_id(self.receiver_id).speaker_name if name.nil? rescue ""
-    name
+    Panel.find_by_id(self.receiver_id).present? ? Panel.find_by_id(self.receiver_id).name : "" 
+    # name = Panel.find_by_id(self.receiver_id).name rescue nil
+    # name = Speaker.find_by_id(self.receiver_id).speaker_name if name.nil? rescue ""
+    # name
   end
 
   def qna_status
