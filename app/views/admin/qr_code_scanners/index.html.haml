@@ -47,7 +47,7 @@
           - elsif @invitees.blank? and params[:search] == 'manual'
             %p.bottomText Can't find yourself? Please contact the helpdesk for more assistance. Thank you.
           .btnDiv.newScanBtn
-            %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning', :qr_code_preview => params[:qr_code_preview])} New Scan
+            %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} New Scan
   - elsif params[:page] == 'thank_you'
     .container
       .wrapper.thankYouWrapper
@@ -82,8 +82,7 @@
               - if false#@invitee.present?
                 %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview])} Preview Badge
               %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning', :qr_code_preview => params[:qr_code_preview])} New Scan
-
+              %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} New Scan
           - else
             %p.subText
               = "We are sorry, we couldn’t verify your QR code."
@@ -91,7 +90,7 @@
               %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'manual_search', :qr_code_preview => params[:qr_code_preview])} Search Manually 
               - if @invitee.present?
                 %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => @invitee.id, :page => 'print_preview', :qr_code_preview => params[:qr_code_preview]), :target => '_blank'} Preview Badge
-              %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning', :qr_code_preview => params[:qr_code_preview])} New Scan
+              %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} New Scan
   - elsif params[:page] == 'scanning'
     #main
       #header
@@ -143,4 +142,4 @@
           = "Welcome to #{@event.event_name}."
         %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
       .scanbtn
-        %a.linkBtn{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'scanning', :qr_code_preview => params[:qr_code_preview])} Scan
+        %a.linkBtn{:href => "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?page=scanning&qr_code_preview=#{params[:qr_code_preview]}"} Scan

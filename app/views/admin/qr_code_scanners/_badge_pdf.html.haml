@@ -2,7 +2,7 @@
 = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and [368, 165, 168].include? @event.id
 %title Disha
 %body.qr-scanner-page#print
-  - if @event.present? and params[:qr_code_preview].blank?#[368, 165, 168].include? @event.id
+  - if @event.present? and [368, 165, 168].include? @event.id
     .container.printPage
       .title
         %img{:src => @event.logo.url}
@@ -14,12 +14,12 @@
         %p.subText.place
           = @event.cities rescue nil
   - else
-    .container.barcodePage
-      .barcode.title
+    .container
+      .title
         - if @invitee.present?
-          %img{:src => @invitee.qr_code.url}
+          %img{:src => @invitee.qr_code.url} 
       .description
-        %p{:style => 'margin:0px'} 
+        %p{:style => 'font-size:34px;margin:0px'} 
           = @invitee.name_of_the_invitee rescue nil
   :javascript
     function printpage() {

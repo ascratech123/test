@@ -67,8 +67,7 @@ input:focus::-moz-placeholder {color: transparent;}
 .wrapper.thankYouWrapper{padding-top:17%;}
 .wrapper.thankYouWrapper .tableDiv{padding:22px 0;}
 .wrapper.submitWrapper{padding:21% 0 0 0;}
-.wrapper.submitWrapper .tableDiv{padding:60px 0;/* overflow-x: scroll;*/}
-/*.tableDiv table{width:100%;}*/
+.wrapper.submitWrapper .tableDiv{padding:60px 0;}
 /*nilam ends here*/
 
 
@@ -202,10 +201,6 @@ body{
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
 .btnDiv.newScanBtn{margin:5% 0; padding:0;}
 
-.barcodePage .description p{font-size:34px;}
-.barcode.title{width:28%; margin:0 auto;}
-.barcode.title img{width:100%; max-width:100%;}
-
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
@@ -223,11 +218,3 @@ body{
 }
 
 
-@media only screen and (max-width:1024px){
-  .barcode.title{width:40%;}
-}
-
-@media only screen and (max-width:639px){
-  .barcode.title{width:88%;}
-  .barcodePage .description p{font-size:23px;}
-}
