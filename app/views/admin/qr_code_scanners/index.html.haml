@@ -13,7 +13,7 @@
               = hidden_field_tag :search, 'manual'
               = text_field_tag :email, params[:email], placeholder: 'Enter your email or name', :class => 'inputType'
               %input.submitBtn{:type => "submit", :value => "submit"}/
-          - if @invitees.present?
+          - if @invitees.present? and params[:qr_code_preview].blank?
             .tableDiv
               %table
                 %thead
@@ -49,6 +49,46 @@
                         - else
                           =# link_to "Print", admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview'), :target => '_new'
                           %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview'), :onclick => "window.open('#{admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview')}','Print','width=1000,height=800'); return false;", :target => "popup"} Print
+          - elsif @invitees.present? and params[:qr_code_preview].present?
+            .qrcodediv
+              %p
+                %span.label Name : 
+                %span.answer ABC
+              %p
+                %span.label Email : 
+                %span.answer abc@gmail.com
+              %p
+                %span.label view Link : 
+                %span.answer View QR Code
+
+            .qrcodediv
+              %p
+                %span.label Name : 
+                %span.answer ABC
+              %p
+                %span.label Email : 
+                %span.answer abc@gmail.com
+              %p
+                %span.label view Link : 
+                %span.answer View QR Code
+
+            .qrcodediv
+              %p
+                %span.label Name : 
+                %span.answer ABC
+              %p
+                %span.label Email : 
+                %span.answer abc@gmail.com
+              %p
+                %span.label view Link : 
+                %span.answer View QR Code
+              
+
+
+
+
+
+
 
           - elsif @invitees.blank? and params[:search] == 'manual'
             %p.bottomText Can't find yourself? Please contact the helpdesk for more assistance. Thank you.
