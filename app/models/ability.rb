@@ -22,6 +22,8 @@ class Ability
       can :manage, StoreScreenshot#, :client_id => c_ids
       can :create, EventGroup
       can :manage, EventGroup#, :client_id => c_ids
+      can :create, Microsite
+      can :manage, Microsite#, :client_id => c_ids
       c_ids += Event.with_role(:licensee_admin, user).pluck(:client_id)
       c_ids = c_ids.uniq
       can :create, Event
