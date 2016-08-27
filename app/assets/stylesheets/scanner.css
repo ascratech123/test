@@ -228,9 +228,19 @@ body{
 
 @media only screen and (max-width:1024px){
   .barcode.title{width:40%;}
+  .container{width:100%;}
+  .inputType{width:55%;}
+  .submitBtn{width:24%; font-size:16px;} 
+  .qrcodediv{ box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); display:block; width:100%; padding:10px 8px; margin-bottom:5%;}
+  .qrcodediv p{display:block; width: 100%;}
+  .qrcodediv .label {display:inline-block; float:left; text-align:right; width:25%; font-weight:bold; font-size:14px;}
+  .qrcodediv .answer {display:inline-block; text-align:left;  width:68%; font-size:14px;}
+  .btnDiv.newScanBtn{display:inline-block;}
 }
+
 
 @media only screen and (max-width:639px){
   .barcode.title{width:88%;}
   .barcodePage .description p{font-size:23px;}
 }
+
