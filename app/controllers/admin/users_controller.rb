@@ -11,7 +11,6 @@ class Admin::UsersController < ApplicationController
       @role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
     elsif @source.present?
       @role = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', @source.class.name, @source.id, current_user.id).uniq.last
-      #@role = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? ', @source.class.name, @source.id).uniq.last if current_user.has_role? :event_admin
       @role = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', @client.class.name, @client.id, current_user.id).uniq.last if @role.blank? and @client.present?
     end
     if @role.present?
@@ -66,7 +65,6 @@ class Admin::UsersController < ApplicationController
       else
         redirect_to admin_client_users_path(:client_id => @client.id)
       end
-      #redirect_to params["redirect_url"]
     else
       @url = params["redirect_url"]
       render :action => 'new'
