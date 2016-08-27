@@ -221,3 +221,11 @@ body{
 }
 
 
+@media only screen and (max-width:1024px){
+  .barcode.title{width:40%;}
+}
+
+@media only screen and (max-width:639px){
+  .barcode.title{width:88%;}
+  .barcodePage .description p{font-size:23px;}
+}
