@@ -13,21 +13,22 @@
     .container
       .title
         %p
+          %br
           HUL - E Commerce
           %br/
           Warehouse
       .description
-        %p Order Details
+      /   %p Order Details
       .totalOrder
         .received.order
-          %p Total Order Received
+          %p Orders Received
           %p.value 
             = @invitees_count
         .picked.order
-          %p Total Order Picked
+          %p Orders Picked
           %p.value 
             = @order_picked 
         .dispatched.order
-          %p Total Order Dispatched
+          %p Orders Dispatched
           %p.value 
             = @order_dispatched
