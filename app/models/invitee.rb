@@ -121,7 +121,7 @@ class Invitee < ActiveRecord::Base
 
   def feedback_last_updated_at
     feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
-    feedbacks.last.updated_at if feedbacks.present?
+    feedbacks.last.updated_at.in_timezone(self.event.timezone) if feedbacks.present?
   end
   
   def self.get_invitee_by_id(id)
