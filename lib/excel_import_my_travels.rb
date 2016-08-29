@@ -1,8 +1,11 @@
 require 'rubygems'
 require 'roo'
 require 'open-uri'
+# require 'zip/zipfilesystem'
+#include ActiveSupport::Inflector
 
 module ExcelImportMyTravel
+#options => {:start_row => 'start_row_number'}
   def self.save(file_path, klass_name, event_id,attributes=[], operation='add', options={})
     attributes = MyTravel.column_names
     attributes -= ["id","created_at", "updated_at"]
@@ -23,6 +26,7 @@ module ExcelImportMyTravel
   end
 
   def self.prepare_objekts(file_path, klass_name, event_id, attributes, operation, options)
+    # ENV['ROO_TMP'] = "#{Rails.root}/tmp"
     ext = File.extname(file_path)
     puts ext
     workbook = nil
@@ -48,57 +52,79 @@ module ExcelImportMyTravel
       end
       event = Event.find_by_id(event_id)
       invitee_id = event.invitees.find_by_email(objekt["invitee_email"]).id rescue nil
+      my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
       if objekt["file_1_url"].present?
         url1 = objekt["file_1_url"] rescue nil
         data = open(url1).read rescue nil
-        write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          attach_file_1 = (File.open("public/#{url1.split('/').last}",'rb'))
+          my_travel.attach_file = attach_file_1 
+          my_travel.attach_file_1_name = objekt["file_name_1"]
+        else
+          my_travel.errors.add(:attach_file, "Incorrect URL")
         end
-        attach_file_1 = (File.open("public/#{url1.split('/').last}",'rb'))
       end
       if objekt["file_2_url"].present?
         url2 = objekt["file_2_url"] rescue nil
         data = open(url2).read rescue nil
-        write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          attach_file_2 = (File.open("public/#{url2.split('/').last}",'rb'))
+          my_travel.attach_file_2 = attach_file_2 if attach_file_2.present?
+          my_travel.attach_file_2_name = objekt["file_name_2"] if objekt["file_name_2"].present?
+        else
+          my_travel.errors.add(:attach_file_2, "Incorrect URL")
         end
-        attach_file_2 = (File.open("public/#{url2.split('/').last}",'rb'))
       end
       if objekt["file_3_url"].present?
         url3 = objekt["file_3_url"] rescue nil
         data = open(url3).read rescue nil
-        write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          attach_file_3 = (File.open("public/#{url3.split('/').last}",'rb'))
+          my_travel.attach_file_3 = attach_file_3 if attach_file_3.present?
+          my_travel.attach_file_3_name = objekt["file_name_3"] if objekt["file_name_3"].present?
+        else
+          my_travel.errors.add(:attach_file_3, "Incorrect URL")
         end
-        attach_file_3 = (File.open("public/#{url3.split('/').last}",'rb'))
       end
       if objekt["file_4_url"].present?
         url4 = objekt["file_4_url"] rescue nil
         data = open(url4).read rescue nil
-        write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          attach_file_4 = (File.open("public/#{url4.split('/').last}",'rb'))
+          my_travel.attach_file_4 = attach_file_4 if attach_file_4.present?
+          my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
+        else
+          my_travel.errors.add(:attach_file_4, "Incorrect URL")
         end
-        attach_file_4 = (File.open("public/#{url4.split('/').last}",'rb'))
       end
       if objekt["file_5_url"].present?
         url5 = objekt["file_5_url"] rescue nil
         data = open(url5).read rescue nil
-        write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
-          f.write(data)
+        if data.present?
+          write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
+            f.write(data)
+          end
+          attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
+          my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
+          my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
+        else
+          my_travel.errors.add(:attach_file_5, "Incorrect URL")
         end
-        attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
       end
-      my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
-      my_travel.attach_file = attach_file_1 
-      my_travel.attach_file_1_name = objekt["file_name_1"]
-      my_travel.attach_file_2 = attach_file_2 if attach_file_2.present?
-      my_travel.attach_file_2_name = objekt["file_name_2"] if objekt["file_name_2"].present?
-      my_travel.attach_file_3 = attach_file_3 if attach_file_3.present?
-      my_travel.attach_file_3_name = objekt["file_name_3"] if objekt["file_name_3"].present?
-      my_travel.attach_file_4 = attach_file_4 if attach_file_4.present?
-      my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
-      my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
-      my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
+      # my_travel = MyTravel.new(:event_id => event_id,:invitee_id => invitee_id,:attach_file => attach_file_1,:attach_file_1_name => objekt["file_name_1"],:attach_file_2 => attach_file_2,:attach_file_2_name => objekt["file_name_2"],:attach_file_3 => attach_file_3,:attach_file_3_name => objekt["file_name_3"],:attach_file_4 => attach_file_4,:attach_file_4_name => objekt["file_name_4"],:attach_file_5 => attach_file_5,:attach_file_5_name => objekt["file_name_5"])
+      
       my_travel.comment_box = objekt["comment_box"]
       objekts << my_travel
       File.delete("public/#{url1.split('/').last}") if url1.present? and File.exist?("public/#{url1.split('/').last}")
@@ -113,18 +139,14 @@ module ExcelImportMyTravel
   def self.validate_objekts(objekts)
     error_rows = []
     objekts.each_with_index do |objekt, index|
-      if objekt.invalid?
+      if objekt.errors.present?
         error_message = objekt.errors.full_messages.join(", ")
         error_message = "File name This field is required., Attach file This field is required." if error_message.split(", ").include?("Attach file 1 name This field is required.") and error_message.split(", ").include?("Attach file This field is required.")
         error_message = "File name This field is required., " if error_message.split(", ").include?("Attach file 1 name This field is required.")
-
-        # error_message << "Attach file 1 please select valid format" if error_messages.split("., ").include?("Attach file please select valid format")
-        # error_message << "., Attach file 2 please select valid format" if error_messages.split("., ").include?("Attach file 2 please select valid format")
-        # error_message << "., Attach file 3 please select valid format" if error_messages.split("., ").include?("Attach file 3 please select valid format")
-        # error_message << "., Attach file 4 please select valid format" if error_messages.split("., ").include?("AAttach file 4 please select valid format")
-        # error_message << "., Attach file 5 please select valid format" if error_messages.split("., ").include?("Attach file 5 please select valid format.")
-        error_rows << "row#{index + 2} :   #{error_message}\n"
-      end  
+        error_rows << "row#{index + 2} :   #{objekt.errors.full_messages.join(", ")}\n"
+      else
+        error_rows << "row#{index + 2} :   #{objekt.errors.full_messages.join(", ")}\n" if objekt.invalid?
+      end   
       Rails.logger.info objekt.errors.inspect
     end
     error_rows
