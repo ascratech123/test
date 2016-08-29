@@ -1,8 +1,10 @@
+
+
 class Conversation < ActiveRecord::Base
   include AASM
   attr_accessor :platform
   @@auto_approve = nil
-  belongs_to :event 
+  belongs_to :event
   belongs_to :user
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
   has_many :comments, as: :commentable, :dependent => :destroy
@@ -22,9 +24,10 @@ class Conversation < ActiveRecord::Base
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone, :set_dates_with_event_timezone
 
-  default_scope { order('created_at desc') }
+  scope :desc_ordered, -> { order('updated_at DESC') }
+  scope :asc_ordered, -> { order('updated_at ASC') }
 
   aasm :column => :status do
     state :pending, :initial => true
@@ -132,6 +135,16 @@ class Conversation < ActiveRecord::Base
     analytic.save rescue nil
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+  end  
+
   def self.get_export_object(conversations)
     object = []
     conversation_without_comment = []
@@ -144,7 +157,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.first.each do |comment|
+    # binding.pry
+    comments.each do |comment|
       comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment
@@ -168,10 +182,19 @@ class Conversation < ActiveRecord::Base
   #use for conversation export remove blank values
   def commented_user_name
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # name_of_the_invitee = Invitee.find_by_id(comment_by).name_of_the_invitee
+    # return name_of_the_invitee
+    # binding.pry
   end
+
   def commented_user_email
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # email = Invitee.find_by_id(comment_by).email
+    # return email
   end
+
   def email
     Invitee.find_by_id(self.user_id).email rescue ""
   end
@@ -198,4 +221,22 @@ class Conversation < ActiveRecord::Base
   def post_id
     self.id
   end
+
+  def created_at_with_timezone
+    self.created_at.in_time_zone(self.event_timezone)
+  end
+
+  def updated_at_with_timezone
+    self.updated_at.in_time_zone(self.event_timezone)
+  end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event.timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event.timezone)
+  end
+
 end
+
