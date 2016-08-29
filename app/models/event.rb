@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features

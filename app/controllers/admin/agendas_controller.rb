@@ -6,7 +6,7 @@ class Admin::AgendasController < ApplicationController
   before_filter :find_ratings, :only => [:index, :new]
 
   def index
-    @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_date)")
+    @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_time_with_event_timezone)")
     @agenda_having_no_date = @agendas.where("start_agenda_time is null")
     @page = params[:controller].split("/").second
     @event_feature = @event.event_features.where(:name => @page)

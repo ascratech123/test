@@ -127,6 +127,10 @@ class Agenda < ActiveRecord::Base
     self.agenda_track.present? ? self.agenda_track.track_name : ""
   end
 
+  def set_sequence_no
+    self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
   def get_agenda_type_name
     self.agenda_type
     id = []
@@ -145,7 +149,7 @@ class Agenda < ActiveRecord::Base
   def set_dates_with_event_timezone
     event = self.event
     self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
-    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone))
+    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone)) if self.end_agenda_time.present?
   end
 
   def start_agenda_time_with_event_timezone
