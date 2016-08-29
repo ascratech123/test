@@ -1,6 +1,6 @@
 class Admin::SequencesController < ApplicationController
   layout 'admin'
-
+  before_filter :check_user_role
   before_filter :authenticate_user, :authorize_event_role
 
   def update
@@ -19,9 +19,21 @@ class Admin::SequencesController < ApplicationController
     @redirect_feature = params[:feature_type]
     instance_variable_set("@"+ params[:feature_type], @features)
     respond_to do |format|
-      format.js{}
-      # format.js{render :js => "window.location.href = '#{request.referer}'" }
+      if @redirect_feature == "agenda_tracks"
+        date = feature.agenda_date.strftime('%Y-%m-%d')
+        path = "/admin/events/#{feature.event_id}/agendas"
+        format.js{render :js => "window.location.href = '#{path}?d=#{date}'" }
+      else  
+        format.js{}
+      end
       format.html{}
     end 
   end
+
+  protected
+    def check_user_role
+      if current_user.has_role? :db_manager 
+        redirect_to admin_dashboards_path
+      end  
+    end
 end

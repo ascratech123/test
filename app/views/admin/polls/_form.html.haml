@@ -7,15 +7,31 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             General Information
-            / %a{:href => '/whats_this/poll/general_information/poll_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
-            /   what's this?
-        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "poll_generalInfo.jpg", :section_id => "poll_general_section"}
         = f.custom_text_field :question, "Question *","background" => "false"
-        = f.custom_text_field :option1, "Option1 *","background" => "false"
-        = f.custom_text_field :option2, "Option2 *","background" => "false"
-        = f.custom_text_field :option3, "Option3","background" => "false"
-        = f.custom_text_field :option4, "Option4","background" => "false"
-        = f.custom_text_field :option5, "Option5","background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Select Option Type*
+            .col-lg-7
+              %i.arrow.single
+              = f.select("poll", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
+              - if @poll.present? and @poll.errors.present? and @poll.errors.messages.include? :option_type
+                .field_with_errors{:style => 'color:red'}
+                  %span{:for => "poll_option2", :class => "errorMessage"} 
+                  = "This field is required."
+        - @show_options = (f.object.option_type == "Radio" or f.object.option_type == "Checkbox") ? true : false
+        = f.custom_text_field :option1, "Option1 *","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option2, "Option2 *","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option3, "Option3","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option4, "Option4","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option5, "Option5","background" => "false", class: "poll_hide_field"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.p-b-5
+          .mdl-grid.p-v-5.form-group.poll_hide_field1
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Text box to be shown after options?
+            .col-lg-7.p-h-12  
+              = f.custom_radio_button :description, true, "Yes", :id => "option-1"
+              = f.custom_radio_button :description, false, "No", :id => "option-2"
         = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
@@ -28,3 +44,35 @@
     minutes();
     times();  
   })
+- if params[:action] == "new" and @show_options == true
+  :javascript
+    $('.poll_hide_field').parent().parent().show()
+    $(".poll_hide_field1").show();   
+- elsif @show_options == false
+  :javascript
+    $('input.poll_hide_field').parent().parent().hide();
+    $(".poll_hide_field1").hide();
+
+:javascript
+  $('input.col-lg-7.p-h-12').parent().parent().hide();
+  $('#poll_option_type').on('change', function() {
+    val = $(this).val();
+    if(val == "Checkbox" || val == "Radio"){
+      $('.poll_hide_field').parent().parent().show()
+      $(".poll_hide_field1").show();
+    }
+    if(val == "Textbox"){
+      $('input.poll_hide_field').parent().parent().hide();
+      $(".poll_hide_field1").hide();
+    }
+  });
+
+  if ("#{params[:action]}" == "edit")
+    $(window).load(function(){
+      if ("#{@poll.option_type}" == "Textbox"){
+        $('input.poll_hide_field').parent().parent().hide();
+        $(".poll_hide_field1").hide();
+      } 
+    }) 
+      
+        

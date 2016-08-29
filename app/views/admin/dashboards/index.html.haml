@@ -169,6 +169,8 @@
                             %a{:href => admin_clients_path(:feature => 'mobile_applications', :redirect_page => "new"), :class => "displayBlock"}
                               = 'Add One' if @mobile_applications.count <= 0
                               = 'New Mobile App' if @mobile_applications.count > 0
+                              
+              - if !(current_user.has_role? :db_manager)                
                 .col-sm-3.col-xl-3
                   .panel.panel-tile.manageusers
                     .panel-body

@@ -87,7 +87,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Staging Shobiz Error Notifier",
    :sender_address => %{"Error notifier" <info@hobnobspace.com>},
-   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in}
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in gayatri@ascratech.com}
  }
 
 
@@ -97,6 +97,7 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 
 
 APP_URL = "http://beta.hobnobspace.com"
+SAPP_URL = "https://beta.hobnobspace.com"
 S3_url = "https://s3-ap-southeast-1.amazonaws.com/hobnobspace-staging"
 S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
 S3_secret_access_key = "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"

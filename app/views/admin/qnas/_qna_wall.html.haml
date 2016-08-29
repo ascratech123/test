@@ -7,7 +7,7 @@
     %script{:src => "/assets/jquery-1.11.3.min.js"}
     %script{:src => "/assets/bootstrap.js"}
   %body
-    .main.QnaWall
+    .main.QnaWall{:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "bg-wall" : ""}"}
       .top.qna_wall
         -if @event.inside_logo.present?
           .QnaImg 

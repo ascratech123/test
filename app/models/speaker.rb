@@ -21,11 +21,11 @@ class Speaker < ActiveRecord::Base
             :format => {
             :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
             :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
-  validates :phone_no,
-            :numericality => true,
-            :length => { :minimum => 10, :maximum => 12,
-            :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
-  validates :event_id, :presence => true
+  # validates :phone_no,
+  #           :numericality => true,
+  #           :length => { :minimum => 10, :maximum => 12,
+  #           :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
+  validates :event_id,:rating_status, :presence => true
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no

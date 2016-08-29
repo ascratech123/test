@@ -26,6 +26,9 @@ class Admin::MobileApplicationsController < ApplicationController
       @mobile_applications = MobileApplication.search(params, @mobile_applications) if params[:search].present?
       @mobile_applications = @mobile_applications.paginate(page: params[:page], per_page: 10)
     end
+    if ((params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "single event") or (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "multi event"))
+      @mobile_applications = @mobile_applications.where("application_type = ? and client_id = ?", params[:search][:order_by], params[:client_id])
+    end
   end
 
   def new
@@ -117,7 +120,9 @@ class Admin::MobileApplicationsController < ApplicationController
     end
     if params[:analytics].present?
       hsh = {'Today' => (Date.today..Date.today), 'last 7 days' => (Date.today - 7.days)..Date.today}
-      params[:start_date], params[:end_date] = hsh[params[:filter_date]].first.strftime("%Y/%m/%d"), hsh[params[:filter_date]].last.strftime("%Y/%m/%d") if params[:filter_date].present? and params[:filter_date] != 'date range'
+      params[:start_date] = hsh[params[:filter_date]].first.strftime("%Y/%m/%d") if params[:filter_date].present? and params[:filter_date] != 'date range'
+      params[:end_date] = hsh[params[:filter_date]].last.strftime("%Y/%m/%d") if params[:filter_date].present? and params[:filter_date] != 'date range'
+      # @speaker_ids = Analytic.get_top_three_speaker_ids(@event.id, params[:start_date], params[:end_date])
       @speaker_ids = Rating.get_top_three_speaker_ids(@event.id, params[:start_date], params[:end_date])
       @pages = Analytic.get_top_three_pages(@event.id, params[:start_date], params[:end_date])
       @actions = Analytic.get_top_three_actions(@event.id, params[:start_date], params[:end_date])
@@ -130,7 +135,13 @@ class Admin::MobileApplicationsController < ApplicationController
         @user_engagements = Analytic.get_user_engagements(@event.id, params[:start_date], params[:end_date], params[:filter_date])
       end
       @feature_count = Analytic.get_features_count(@event.id, params[:start_date], params[:end_date])
+      
+      # @xaxis_interval_labels = Analytic.get_x_axis_labels(@event.id, params[:start_date], params[:end_date])
+      # @xaxis_interval_labels = Analytic.get_x_axis_labels(@event.id, params[:start_date], params[:end_date])
       @xaxis_interval_labels_and_interval = Analytic.get_x_axis_labels_and_interval(params)
+      # @xaxis_time_splot = (params[:start_date].present? and params[:end_date].present? and (params[:end_date].to_date - params[:start_date].to_date).to_i > 30) ? (params[:end_date].to_date - params[:start_date].to_date).to_i / 30 : 1
+      # @xaxis_time_splot = 1 if params[:filter_date].present? and params[:filter_date] == 'Today'
+      # @xaxis_interval_labels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'] if params[:filter_date].present? and params[:filter_date] == 'Today'
     end
   end
 
@@ -185,7 +196,6 @@ protected
     end
     if params[:add_existing].present? or params[:old_one].present?
       @event.update_column(:mobile_application_id , @mobile_application.id)
-      @event.update_login_at_for_app_level
       @event.add_default_invitee
       redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id)
     elsif params[:event_id].present?

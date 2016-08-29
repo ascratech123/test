@@ -6,7 +6,10 @@ class Admin::SpeakersController < ApplicationController
   before_filter :find_ratings, :only => [:index, :new]
     
   def index
-    @speakers = Speaker.search(params, @speakers) if params[:search].present?
+    if not params[:search_keyword].present? and (params[:search].present? and params[:search][:designation].present? and params[:search][:designation] == "All") || (params[:search].present? and params[:search][:company_name].present? and params[:search][:company_name] == "All")
+    else
+      @speakers = Speaker.search(params, @speakers) if params[:search].present?
+    end
     respond_to do |format|
       format.html  
       format.xls do
