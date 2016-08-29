@@ -14,9 +14,8 @@ class Agenda < ActiveRecord::Base
   before_validation :set_attr_accessor
   before_validation :set_time
   after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected, :set_event_timezone
+  after_save :set_end_date_if_end_date_not_selected
   before_save :check_category_present_if_new_category_select_from_dropdown
-  before_create :set_sequence_no
   after_create :set_dates_with_event_timezone
 
   default_scope { order('start_agenda_time asc') }

@@ -12,7 +12,8 @@ class Comment < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   def commented_user_name
-    Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+    # Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
+    self.user.name_of_the_invitee rescue ""
   end
 
   def update_conversation
@@ -32,7 +33,11 @@ class Comment < ActiveRecord::Base
   end
 
   def email
-    self.user.email rescue ""
+    # self.user.email rescue ""
+    # binding.pry 
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    email = Invitee.find_by_id(user_id).email rescue ""
+    return email
   end
 
   def user_name
@@ -43,17 +48,23 @@ class Comment < ActiveRecord::Base
     self.user.name_of_the_invitee rescue ""
   end
 
-
   def first_name
-    Invitee.find_by_id(self.user_id).first_name rescue ""
+    # Invitee.find_by_id(self.user_id).first_name rescue ""
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    first_name = Invitee.find_by_id(user_id).first_name rescue ""
+    return first_name
   end
   
   def last_name
-    Invitee.find_by_id(self.user_id).last_name rescue ""
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    last_name = Invitee.find_by_id(user_id).last_name rescue ""
+    return last_name
+    # Invitee.find_by_id(self.user_id).last_name rescue ""
   end
   
   def conversation
-    self.commentable.description
+    conversation = self.commentable.description
+    return conversation.gsub(/[\r\n]/, '')
   end
 
   def comment

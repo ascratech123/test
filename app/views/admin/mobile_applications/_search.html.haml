@@ -6,3 +6,6 @@
         = hidden_field_tag :admin_search, "true"
       
       = custom_basic_button_tag "SEARCH"
+      = link_to admin_client_mobile_applications_path(:client_id => params[:client_id]), :class => "back_btn_header mobile_application_back_button" do
+        Back
+        

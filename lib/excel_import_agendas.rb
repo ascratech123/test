@@ -55,7 +55,22 @@ module ExcelImportAgenda
         objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(String) ? (workbook.cell(line, letters_array[index]).strip rescue '') : (workbook.cell(line, letters_array[index]))
       end
       agenda = Agenda.new
-      agenda.assign_attributes(:event_id => event_id,:title => objekt['title'], :agenda_type => objekt['track'],:speaker_name => objekt['speaker'], :start_agenda_date => objekt['start_date_dd_mm_yyyy'], :start_time_hour => objekt["start_time_hour"],:start_time_minute => objekt["start_time_minute"],:start_time_am => objekt["start_time_am_pm"], :end_agenda_date => objekt["end_date_dd_mm_yyyy"],:end_time_hour => objekt["end_time_hour"],:end_time_minute => objekt["end_time_minute"],:end_time_am => objekt["end_time_am_pm"], :discription => objekt["description"], :rating_status => objekt["session_rating"])
+      if objekt["track"].present?
+        agendas = Agenda.where(event_id: event_id ,start_agenda_date: objekt['start_date_dd_mm_yyyy'].to_date)
+        sequence = 1
+        if agendas.present?
+          agenda_tack_ids = agendas.pluck(:agenda_track_id).compact
+          if agenda_tack_ids.present?
+            agenda_tracks = AgendaTrack.where("id IN (?)",agenda_tack_ids).pluck(:sequence).compact
+            sequence = agenda_tracks.max + 1 if agenda_tracks.present?
+          end
+        end
+        agenda_track = AgendaTrack.find_or_initialize_by(track_name: objekt["track"], event_id: event_id,agenda_date: objekt['start_date_dd_mm_yyyy'].to_date)
+        agenda_track.sequence = sequence if agenda_track.new_record?
+        agenda_track.save
+      end
+      agenda_track_id = agenda_track.present? ? agenda_track.id : nil
+      agenda.assign_attributes(:event_id => event_id,:title => objekt['title'],:speaker_name => objekt['speaker'], :start_agenda_date => objekt['start_date_dd_mm_yyyy'], :start_time_hour => objekt["start_time_hour"],:start_time_minute => objekt["start_time_minute"],:start_time_am => objekt["start_time_am_pm"], :end_agenda_date => objekt["end_date_dd_mm_yyyy"],:end_time_hour => objekt["end_time_hour"],:end_time_minute => objekt["end_time_minute"],:end_time_am => objekt["end_time_am_pm"], :discription => objekt["description"], :rating_status => objekt["session_rating"],:agenda_track_id => agenda_track_id)
       objekts << agenda
     end
     objekts.compact

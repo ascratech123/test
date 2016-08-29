@@ -10,7 +10,11 @@ class Admin::EventsController < ApplicationController
     if params["type"].present?
       @events = Event.sort_by_type(params["type"], @events)
     end
-    @events = Event.search(params, @events) if params[:search].present?
+    if (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "All") || (params[:search].present? && params[:search][:order_by_status].present? && params[:search][:order_by_status] == "All")
+    	@events
+    else 
+    	@events = Event.search(params, @events) if params[:search].present?
+    end
     @events = @events.ordered.paginate(page: params[:page], per_page: 10) if @select != true
     mobile_application_ids = @events.pluck(:mobile_application_id)
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)
@@ -98,7 +102,7 @@ class Admin::EventsController < ApplicationController
 
   def feature_redirect_on_condition
     if params[:feature].present? and params[:feature]  != "events"
-      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller") ? @events.count("events.id") : @events.count
+      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller" or current_user.has_role? :db_manager) ? @events.count("events.id") : @events.count
       if params[:event_id].present? or (@events.present? and event_count == 1 and params[:feature] != "mobile_application" and params[:feature] != "mobile_applications")
         @event = (event_count == 1) ? @events.first : @events.find(params[:event_id])
         if params[:feature] == "mobile_application"

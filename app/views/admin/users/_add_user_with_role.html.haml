@@ -1,5 +1,8 @@
 %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect.mdl-color--blue-grey-900.droplisttab.Mangeuserdroplisttab{:for => page_id} 
   - if current_user.has_role? :licensee_admin
+    %li.mdl-menu__item
+      = link_to admin_clients_path(:feature => 'users', :role => 'db_manager'), :class => "mdl-color-text--white" do
+        Add DB Manager
     - if (params[:client_id].present? and params[:action] != "show") #(params[:client_id].present? or @event.present?) and params[:action] != "show" 
       %li.mdl-menu__item
         - @client = @event.client if @event.present?

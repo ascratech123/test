@@ -80,11 +80,10 @@ class Event < ActiveRecord::Base
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :on => :create
-  validates_presence_of :timezone
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
+  after_save :update_login_at_for_app_level, :set_date
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
