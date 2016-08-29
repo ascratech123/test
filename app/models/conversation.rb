@@ -9,15 +9,15 @@ class Conversation < ActiveRecord::Base
   has_many :likes, as: :likable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
-	has_attached_file :image, {:styles => {:large => "640x640>",
+  has_attached_file :image, {:styles => {:large => "640x640>",
                                          :small => "200x200>", 
                                          :thumb => "60x60>"},
                              :convert_options => {:large => "-strip -quality 90", 
                                          :small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(CONVERSATION_IMAGE_PATH)
-	
-	validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+  
+  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
   validates :description, presence: { :message => "This field is required." }
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
@@ -48,7 +48,7 @@ class Conversation < ActiveRecord::Base
       self.reject!
     end
   end
-	
+  
   def check_image_and_description
     if self.image.blank? and self.description.blank?
       self.error.add :description, 'You need to pass atleast one description or image'
@@ -144,7 +144,7 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.each do |comment|
+    comments.first.each do |comment|
       comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment

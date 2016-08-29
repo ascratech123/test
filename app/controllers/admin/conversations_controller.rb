@@ -26,25 +26,25 @@ class Admin::ConversationsController < ApplicationController
     end
   end
 
-	def new
-		@conversation = @event.conversations.build
+  def new
+    @conversation = @event.conversations.build
     @import = Import.new if params[:import].present?
     redirect_to admin_event_conversations_path(:event_id => params[:event_id]) if @import.blank?
-	end
+  end
 
-	def create
-		@conversation = @event.conversations.build(conversation_params)
+  def create
+    @conversation = @event.conversations.build(conversation_params)
     if @conversation.save
       redirect_to admin_event_conversations_path(:event_id => @conversation.event_id)
     else
       render :action => 'new'
     end
-	end
+  end
 
-	def edit
-	end
+  def edit
+  end
       
-	def update
+  def update
     if params[:status].present? or params[:on_wall].present?
       @conversation.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @conversation.perform_conversation(params[:status]) if params[:status].present?
@@ -54,9 +54,9 @@ class Admin::ConversationsController < ApplicationController
     else
       render :action => "edit"
     end
-	end
+  end
 
-	def show
+  def show
   end
 
   def destroy
@@ -65,7 +65,7 @@ class Admin::ConversationsController < ApplicationController
     end
   end
 
-	protected
+  protected
 
   def find_likes_and_comments
     @conversations = @event.conversations
