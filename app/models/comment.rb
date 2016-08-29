@@ -105,4 +105,14 @@ class Comment < ActiveRecord::Base
     self.commentable.status rescue ""
   end
 
+  def created_at_with_event_timezone
+    timezone = Conversation.joins(:event).select("conversations.id as conversation_id, events.id as event_id, events.timezone as timezone").where("conversations.id = ?", self.commentable_id).first.timezone
+    self.created_at.in_time_zone(timezone)
+  end
+
+  def updated_at_with_event_timezone
+    timezone = Conversation.joins(:event).select("conversations.id as conversation_id, events.id as event_id, events.timezone as timezone").where("conversations.id = ?", self.commentable_id).first.timezone
+    self.updated_at.in_time_zone(timezone)
+  end
+
 end
