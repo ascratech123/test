@@ -47,7 +47,7 @@ Rails.application.configure do
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
-
+#  config.log_level = :debug
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
@@ -80,7 +80,8 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  config.logger = Logger.new(STDOUT)
+#  config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new('log/production.log')
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   config.action_mailer.default_url_options = { :host => 'platform.hobnobspace.com' }
@@ -95,8 +96,8 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  # :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
  :email => {
    :email_prefix => "Production Shobiz Error Notifier",
-   :sender_address => %{"Error notifier" <error@ascratech.com>},
-   :exception_recipients => %w{shiv@ascratech.com sandeep@ascratech.com sushil@ascratech.in atul@ascratech.com}
+   :sender_address => %w{info@hobnobspace.com},
+   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com}
  }
 
 
@@ -125,8 +126,16 @@ PAPERCLIP_SETTINGS =  {
                         }
 
 
-ATTACH_FILE_PATH =   {:path => "my_travel/:style/:id-:filename",
-                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment2/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_3_PATH =   {:path => "my_travel/attachment3/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment3/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)

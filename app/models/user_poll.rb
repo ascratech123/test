@@ -23,7 +23,7 @@ class UserPoll < ActiveRecord::Base
 	end
 
   def Timestamp
-    self.created_at.strftime("%d/%m/%Y %T")
+    self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
   end
 
   def email_id
@@ -31,7 +31,15 @@ class UserPoll < ActiveRecord::Base
 	end
 
   def name
-    Invitee.find(self.user_id).name_of_the_invitee rescue nil
+    Invitee.find(self.user_id).name_of_the_invitee rescue nil  
+  end
+
+  def first_name
+    Invitee.find(self.user_id).first_name rescue nil
+  end
+
+  def last_name
+    Invitee.find(self.user_id).last_name rescue nil
   end
 
   def question

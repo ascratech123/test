@@ -1,4 +1,4 @@
-class Admin::ConversationsController < ApplicationController
+class Admin::ConversationsController < ApplicationController 
   layout 'admin'
 
   #load_and_authorize_resource
@@ -11,7 +11,7 @@ class Admin::ConversationsController < ApplicationController
 
   def index
     @conversations = @conversations.paginate(page: params[:page], per_page: 10) if params["format"] != "xls" and params[:conversations_wall].blank?
-    @conversations = Conversation.get_conversations_by_status(@conversations, params[:type]) if params[:type].present?
+    @conversations = Conversation.get_conversations_by_status(@conversations, params[:type]) if params[:type].present? and params[:type] != 'dashboard_new'
     Conversation.set_auto_approve(params[:auto_approve],@event) if params[:auto_approve].present?
     respond_to do |format|
       @conversations = @conversations.where(:on_wall => "yes",:status => "approved").last(12) if params[:conversations_wall].present?
@@ -19,7 +19,7 @@ class Admin::ConversationsController < ApplicationController
       format.html if params[:conversations_wall].blank?
       format.xls do
         only_columns = []
-        method_allowed = [:post_id, :timestamp, :email, :name, :conversation, :image_url, :Status, :like_count, :comment, :commented_user_email, :commented_user_name]
+        method_allowed = [:post_id, :timestamp, :email, :first_name, :last_name, :conversation, :image_url, :Status, :like_count, :comment, :commented_user_email, :commented_user_name]
         object = Conversation.get_export_object(@conversations)
         send_data object.to_xls(:only => only_columns, :methods => method_allowed)
       end

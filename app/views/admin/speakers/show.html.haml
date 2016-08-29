@@ -32,7 +32,6 @@
                     = show_field("Designation : ", @speaker.designation.capitalize)
                     = show_field("Email id : ", @speaker.email_address)
                     = show_field("Phone No : ", @speaker.phone_no)
-                    = show_field("Address : ", @speaker.address)
                     = show_field("Rating Status : ", @speaker.rating_status)
                     = show_field("Info : ", @speaker.speaker_info)
                     .mdl-cell--4-col.mdl-cell--4-col-tablet.m-8
@@ -86,7 +85,7 @@
                       - if @speaker.ratings.present?
                         - @speaker.ratings.each do |rating|
                           = show_field("Comment : ", rating.comments)
-                          = show_field("date : ", rating.created_at.strftime("%d %b %Y %l:%M %p"))
+                          = show_field("date : ", rating.created_at.in_time_zone('Kolkata').strftime("%d %b %Y %l:%M %p"))
                           = show_field("Name : ", rating.get_user_name)
                           
                       - else

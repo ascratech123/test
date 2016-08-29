@@ -21,11 +21,11 @@ class Speaker < ActiveRecord::Base
             :format => {
             :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
             :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
-  validates :phone_no,
-            :numericality => true,
-            :length => { :minimum => 10, :maximum => 12,
-            :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
-  validates :event_id, :presence => true
+  # validates :phone_no,
+  #           :numericality => true,
+  #           :length => { :minimum => 10, :maximum => 12,
+  #           :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
+  validates :event_id,:rating_status, :presence => true
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
@@ -33,15 +33,20 @@ class Speaker < ActiveRecord::Base
   default_scope { order("sequence") }  
 
   def self.search(params, speakers)
-    speaker_name,email_address,designation = params[:search][:name],params[:search][:email_address],params[:search][:designation] if params[:adv_search].present?
+    speaker_name,email_address,designation,company_name = params[:search][:name],params[:search][:email_address],params[:search][:designation],params[:search][:company_name] if params[:adv_search].present?
     basic = params[:search_keyword]
     speakers = speakers.where("speaker_name like ?", "%#{speaker_name}%") if   speaker_name.present?
     speakers = speakers.where("email_address like ?", "%#{email_address}%") if  email_address.present?
-    speakers = speakers.where("designation like ?", "%#{designation}%") if  designation.present?
-    speakers = speakers.where("speaker_name like ? or email_address like ? or designation like ?", "%#{basic}%","%#{basic}%","%#{basic}%") if basic.present?
+    speakers = speakers.where(designation: designation) if designation.present?
+    speakers = speakers.where(company:  company_name) if company_name.present?    
+    speakers = speakers.where("speaker_name like ? or company like ? or designation like ?", "%#{basic}%","%#{basic}%","%#{basic}%") if basic.present?
     speakers
   end
 
+  def profile_picture
+    self.profile_pic.url rescue ""
+  end
+  
   def set_full_name
     self.speaker_name = self.first_name + " " + self.last_name
   end

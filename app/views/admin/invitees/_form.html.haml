@@ -29,6 +29,7 @@
         = f.custom_text_field :linkedin_id, "LinkedIn link ","background" => "false"
         = f.custom_text_field :street, "City ","background" => "false"
         = f.custom_text_field :country, "Country ","background" => "false"
+        = f.custom_text_area_field :remark,"Remark", "background" => "false"
         = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
         - if false
           .mdl-cell--12-col.mdl-cell--4-col-tablet.ml-color--shades-white.m-8

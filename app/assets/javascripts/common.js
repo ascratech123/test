@@ -361,6 +361,7 @@ function flightTime() {
       });
   }
 
+
   /* Event Feature and emergency exit form file upload name */
   $(window).load(function(){
     $('.gui-file').change(function(){
@@ -370,6 +371,13 @@ function flightTime() {
     });
   }) 
   
+  /*telecaller show page */
+    $(window).load(function(){
+      flightTime();
+      minutes();
+      times(); 
+   })
+    
   /* EKit Form */
 
   $("#tag_select").click(function() {
@@ -426,6 +434,69 @@ function flightTime() {
     $('.ClientPopup').hide();
     $('.popup-overlay').hide();
   })
+
+  /* Telecaller show page */
+  
+  $('#invitee_datum_status').on('change', function() {
+    val = $(this).val();
+    if(val == "CALL BACK" || val == "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().show();
+    }
+    if(val != "CALL BACK" && val != "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().hide();
+    }
+  });
+
+    /* js for events/invitee/speakers listing filter */ 
+  $( document ).ready(function() {   
+    $('#search_order_by').on('change', function(){        
+      $(".event_index_category_filter_form").submit();            
+    });
+    $('#search_application_type_by').on('change', function(){  
+      $(".event_index_category_filter_form_for_mobile_application").submit();            
+    });
+    $('#search_order_by_status').on('change', function(){        
+      $(".event_index_status_filter_form").submit();            
+    });
+    $('#search_company_name').on('change', function(){        
+      $("#search_invitee_by_cname").submit();            
+    });
+    $('#search_designation').on('change', function(){        
+      $("#search_invitee_by_designation").submit();            
+    });
+    $('#search_invitee_status').on('change', function(){        
+      $("#search_invitee_by_invitee_status").submit();            
+    });
+    $('#search_visible_status').on('change', function(){        
+      $("#search_invitee_by_visible_status").submit();            
+    });
+    $('#search_login_status').on('change', function(){        
+      $("#search_invitee_by_login_status").submit();            
+    });
+    $('#search_designation').on('change', function(){        
+      $("#search_speakers_by_designation").submit();            
+    });
+    $('#search_company_name').on('change', function(){        
+      $("#search_speakers_by_cname").submit();            
+    });
+  });
+
+  /* Event _Form  start */
+    // $('#selectAll').click(function() {
+    //   $(':checkbox').each(function() {
+    //     this.checked = true;                        
+    //   });
+    // });  
+
+    // $('#unSelectAll').click(function() {
+    //   $(':checkbox').each(function() {
+    //     this.checked = false;                        
+    //   });
+    // });
+  /* Event _Form  End */
+
+
+
     // $('.owl-carousel').owlCarousel({
     //   margin:10,
     //   responsiveClass:true,

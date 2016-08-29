@@ -21,7 +21,7 @@
         
 
   = f.fields_for :event_features do |builder|
-    - if ['chats', 'my_calendar', 'my_travels','event_highlights'].exclude? builder.object.name
+    - if ['chats', 'my_calendar','event_highlights','social_sharings'].exclude? builder.object.name
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-b-10.agendaheight.menuSubCard
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.heading-border.menuEventList
           %h4.p-t-10.displayInlineBlock
@@ -60,6 +60,14 @@
                 = builder.custom_radio_button_menu :status, "active","Active", :id => "option-1#{builder.object.id}", :default_checked => "#{builder.object.status == "active" ? "checked" : ""}",:class => "menu_status_active"
                 = builder.custom_radio_button_menu :status, "deactive", "Deactive", :id => "option-2#{builder.object.id}", :default_checked => "#{builder.object.status == "deactive" ? "checked" : ""}",:class => "menu_status_deactive"
           = builder.custom_text_area_field :description, "Message",:message_display => "#{custom_message_display(builder.object)}"
+          - if ['event_highlights', 'emergency_exits', "my_calendar","chats"].exclude?(builder.object.name)
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
+              .mdl-grid.p-v-5.form-group
+                .col-lg-4.mdl-typography--text-right
+                  %p.displayInlineBlock.multicitytxt Hide this Icon
+                .col-lg-7.p-h-12.m-8
+                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Yes", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive"
+                  = builder.custom_radio_button_menu :menu_visibilty, "active","No", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

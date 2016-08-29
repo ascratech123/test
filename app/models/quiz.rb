@@ -8,7 +8,7 @@ class Quiz < ActiveRecord::Base
   
   validates :correct_answer,:question,:option1,:option2, presence: { :message => "This field is required." }
   
-  before_validation :set_correct_answer
+  before_validation :set_correct_answer, :if => Proc.new{|p| p.correct_ans_option1.present? or p.correct_ans_option2.present? or p.correct_ans_option3.present? or p.correct_ans_option4.present? or p.correct_ans_option5.present?} 
   before_create :set_sequence_no
   after_save :push_notification
 

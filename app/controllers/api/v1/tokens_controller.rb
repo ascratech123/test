@@ -48,10 +48,10 @@ class Api::V1::TokensController < ApplicationController
     @user.ensure_authentication_token
     if @user and (@user.get_secret_key.present? and params[:secret_key].present? and @user.get_secret_key.bytesize == params[:secret_key].bytesize ) and @user.authentication_token.present?
       session['invitee_id'] = @user.id
-      new_user = "false"
+      @new_user = "false"
       event = @user.event rescue nil
       check_invitee_first_login
-      render :status=>200, :json=>{:status=>"Success", :authentication_token=> @user.authentication_token, :user_id => @user.id, :user_name => @user.name_of_the_invitee, :new_user => new_user, :event_ids => @user.get_event_id(@mobile_application.submitted_code,@submitted_app), :likes => @user.get_like(@mobile_application.submitted_code,@submitted_app), :user_polls => @user.get_user_poll(@mobile_application.submitted_code,@submitted_app), :ratings => @user.get_rating(@mobile_application.submitted_code,@submitted_app), :user_feedbacks => @user.get_user_feedback(@mobile_application.submitted_code,@submitted_app), :my_profile => @user.get_all_mobile_app_users(@mobile_application.submitted_code,@submitted_app), :my_network_invitee =>@user.get_my_network_users(@mobile_application.submitted_code,@submitted_app), :favorites => @user.get_favorites(@mobile_application.submitted_code,@submitted_app), :user_quizzes => @user.get_user_quizzes(@mobile_application.submitted_code,@submitted_app), :notifications => @user.get_notification(@mobile_application.submitted_code,@submitted_app)} and return
+      render :status=>200, :json=>{:status=>"Success", :authentication_token=> @user.authentication_token, :user_id => @user.id, :user_name => @user.name_of_the_invitee, :new_user => @new_user, :event_ids => @user.get_event_id(@mobile_application.submitted_code,@submitted_app), :likes => @user.get_like(@mobile_application.submitted_code,@submitted_app), :user_polls => @user.get_user_poll(@mobile_application.submitted_code,@submitted_app), :ratings => @user.get_rating(@mobile_application.submitted_code,@submitted_app), :user_feedbacks => @user.get_user_feedback(@mobile_application.submitted_code,@submitted_app), :my_profile => @user.get_all_mobile_app_users(@mobile_application.submitted_code,@submitted_app), :my_network_invitee =>@user.get_my_network_users(@mobile_application.submitted_code,@submitted_app), :favorites => @user.get_favorites(@mobile_application.submitted_code,@submitted_app), :user_quizzes => @user.get_user_quizzes(@mobile_application.submitted_code,@submitted_app), :notifications => @user.get_notification(@mobile_application.submitted_code,@submitted_app), :invitee_notifications => @user.get_read_notification(@mobile_application.submitted_code,@submitted_app), :my_travels => @user.get_my_travels(@mobile_application.submitted_code,@submitted_app), :analytics => @user.get_analytics(@mobile_application.submitted_code,@submitted_app)} and return
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Invalid Scecret Key."} and return
     end
@@ -205,9 +205,9 @@ class Api::V1::TokensController < ApplicationController
     if (params[:token].present? and params[:platform].present?) and @mobile_application.present?
       device = Device.where(:token => params[:token]).first
       if device.present?
-        device.update(:invitee_id =>  @user.id,:email => @user.email, :mobile_application_id => @mobile_application.id)
+        device.update(:invitee_id =>  @user.id,:email => @user.email, :mobile_application_id => @mobile_application.id, :enabled => 'true')
       else
-        Device.create(:invitee_id => @user.id, :token => params[:token], :platform => params[:platform], :email => @user.email,:mobile_application_id => @mobile_application.id)
+        Device.create(:invitee_id => @user.id, :token => params[:token], :platform => params[:platform], :email => @user.email,:mobile_application_id => @mobile_application.id, :enabled => 'true')
       end
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Mobile Application Code Invalid and device token cant be blank."} and return
@@ -220,7 +220,10 @@ class Api::V1::TokensController < ApplicationController
       features = event.event_features.where(:name => "leaderboard") rescue nil if event.present?
       if features.present? and Analytic.where(:viewable_type => "Invitee", :viewable_id => user.id, :action => "Login", :invitee_id => user.id, :event_id => user.event_id, :points => 10).blank?
         Analytic.create(viewable_type: "Invitee", viewable_id: user.id, action: "Login", invitee_id: user.id, event_id: user.event_id, platform: params[:platform], :points => 10)
-        new_user = "true"
+        @new_user = "true"
+      else
+        @new_user = "true" if Analytic.where(:viewable_type => "Invitee", :viewable_id => user.id, :action => "Login", :invitee_id => user.id, :event_id => user.event_id).blank?
+        Analytic.create(viewable_type: "Invitee", viewable_id: user.id, action: "Login", invitee_id: user.id, event_id: user.event_id, platform: params[:platform], :points => 0)
       end
     end
   end

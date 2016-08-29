@@ -33,6 +33,8 @@
     - if @event.invitee_structures.present?
       = link_to edit_admin_event_invitee_structure_path(:event_id => @event.id, :id => @invitee_structure.id), :class => "rightBtn hvr-sweep-to-right" do
         Edit Database
+      = link_to new_admin_event_grouping_path(:event_id => @event.id), :class => "rightBtn hvr-sweep-to-right" do
+        Create Grouping
     - else
       = link_to new_admin_event_invitee_structure_path(:event_id => @event.id), :class => "rightBtn hvr-sweep-to-right" do
         New Database
@@ -47,6 +49,8 @@
     - if @event.present?
       = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Invitee Group
+      = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Notification
   - when 'attendee'
     = link_to new_admin_event_attendee_path(:event_id => @event.id) ,:class => " rightBtn hvr-sweep-to-right" do
       New Attendee
@@ -59,7 +63,7 @@
   - when 'invitee'
     = link_to new_admin_event_invitee_path(:event_id => @event.id) ,:class => "rightBtn hvr-sweep-to-right" do
       New Invitee
-    = link_to admin_event_invitees_path(:event_id => @event.id, :send_mail => true) ,:class => "rightBtn hvr-sweep-to-right", data: { confirm: "Are you sure you want to send passwords to all new invitees?"} do
+    = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
       Send Password To All
   - when 'user'
     = link_to 'javascript:void(0);',:class => "rightBtn hvr-sweep-to-right", :id => 'add_user_popup' do
@@ -76,8 +80,9 @@
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "true", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'telecaller'
-    = link_to new_admin_event_telecaller_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
-      New TeleCaller.
+    - if @event.invitee_structures.present?
+      = link_to new_admin_event_telecaller_accessible_column_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+        Telecaller Access Column
   - when 'my_travel'
     = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
       New My Travel
@@ -132,13 +137,15 @@
     - if @event.present?
       = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Notification
-      - if !Rails.env.production?
-        = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-          New Group 
+      = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Invitee Groups 
   - when 'qna'
     - if !(current_user.has_role? :moderator)
       = link_to admin_event_panels_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Manage Panel
+    - if (current_user.has_role? :moderator)
+      = link_to new_admin_event_qna_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Add Question
     - if @event.qna_auto_approve == "true"
       = link_to admin_event_qnas_path(:event_id => @event.id, :auto_approve => "false", :feature => "QNA"),:class => "rightBtn hvr-sweep-to-right" do
         Disable Auto Approve
@@ -166,5 +173,12 @@
     = link_to new_admin_event_exhibitor_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Exhibitor
   - when 'registration_setting'
-    = link_to new_admin_event_registration_setting_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      New Registration Setting
+    - if @event.present? and @registration_settings.present? and @registration_settings.first.registration == 'hobnob'
+      = link_to admin_event_user_registrations_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Registered Users
+  - when 'campaign'
+    = link_to new_admin_event_campaign_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      New Campaign
+  - when 'edm'
+    = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
+      New eDM

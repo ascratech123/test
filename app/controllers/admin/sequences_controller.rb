@@ -19,7 +19,13 @@ class Admin::SequencesController < ApplicationController
     @redirect_feature = params[:feature_type]
     instance_variable_set("@"+ params[:feature_type], @features)
     respond_to do |format|
-      format.js{}
+      if @redirect_feature == "agenda_tracks"
+        date = feature.agenda_date.strftime('%Y-%m-%d')
+        path = "/admin/events/#{feature.event_id}/agendas"
+        format.js{render :js => "window.location.href = '#{path}?d=#{date}'" }
+      else  
+        format.js{}
+      end
       format.html{}
     end 
   end

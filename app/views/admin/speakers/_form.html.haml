@@ -1,39 +1,43 @@
-= javascript_include_tag "jquery.fancybox"
-.save_button.mdl-card
-  = form_for [:admin, @event ,@speaker], :builder => CustomFormBuilder do |f|
-    .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-        %h4.heading-border.p-t-10.m-b-15
-          General Information
-          / %a{:href => '/whats_this/speaker/general_information/speaker_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
-          /   what's this?
-      = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "speaker_generalInfo.jpg", :section_id => "speaker_general_section"}
-      =# f.custom_text_field :speaker_name, "Full Name *","background" => "false"
-      = f.custom_text_field :first_name, "First Name *","background" => "false"
-      = f.custom_text_field :last_name, "Last Name *","background" => "false"
-      = f.custom_text_field :designation, "Designation *","background" => "false"
-      = f.custom_text_field :phone_no, "Phone No","background" => "false"
-      = f.custom_text_field :email_address, "Email Address","background" => "false"
-      = f.custom_text_field :company, "Company","background" => "false"
-      =# f.custom_text_field :sequence, "Sequence"
-      = f.new_custom_file_browser_field :profile_pic, "Profile picture (400x400px) (png/jpg) only", :id => "uploadBtn", :value => f.object.profile_pic_file_name, :action=> params[:action], "background" => "false"
-      = f.custom_text_area_field :speaker_info, "Speaker bio", "background" => "false"
-      =# f.custom_text_area_field :address, "address"
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
-        .mdl-grid.p-v-5.form-group
-          .col-lg-4.mdl-typography--text-right
-            %p.displayInlineBlock.multicitytxt Speaker rating
-          .col-lg-3.p-h-12    
-            = f.custom_radio_button :rating_status, "active","Active", :id => "option-1"
-            = f.custom_radio_button :rating_status, "deactive", "Deactive", :id => "option-2"
-          .col-lg-1.speaker_Help
-            = link_to "?" ,"/whats_this/speaker/general_information/Help_speaker_speakerRating.jpg", rel: "speaker_image", title: "Speaker rating", :class =>'fancybox whatsImg appwhatsthis'
-      = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
-    .fixed-activon-btn-new  
-      = f.custom_submit_button "SAVE"
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-          = back_button(:back)
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  = javascript_include_tag "jquery.fancybox"
+  .save_button.mdl-card
+    = form_for [:admin, @event ,@speaker], :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+            / %a{:href => '/whats_this/speaker/general_information/speaker_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+        = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "speaker_generalInfo.jpg", :section_id => "speaker_general_section"}
+        =# f.custom_text_field :speaker_name, "Full Name *","background" => "false"
+        = f.custom_text_field :first_name, "First Name *","background" => "false"
+        = f.custom_text_field :last_name, "Last Name *","background" => "false"
+        = f.custom_text_field :designation, "Designation *","background" => "false"
+        = f.custom_text_field :phone_no, "Phone No","background" => "false"
+        = f.custom_text_field :email_address, "Email Address","background" => "false"
+        = f.custom_text_field :company, "Company","background" => "false"
+        =# f.custom_text_field :sequence, "Sequence"
+        = f.new_custom_file_browser_field :profile_pic, "Profile picture (400x400px) (png/jpg) only", :id => "uploadBtn", :value => f.object.profile_pic_file_name, :action=> params[:action], "background" => "false"
+        = f.custom_text_area_field :speaker_info, "Speaker bio", "background" => "false"
+        =# f.custom_text_area_field :address, "address"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+          .mdl-grid.p-v-5.form-group
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Speaker rating *
+            .col-lg-3.p-h-12    
+              = f.custom_radio_button :rating_status, "active","Active", :id => "option-1"
+              = f.custom_radio_button :rating_status, "deactive", "Deactive", :id => "option-2"
+            .col-lg-1.speaker_Help
+              = link_to "?" ,"/whats_this/speaker/general_information/Help_speaker_speakerRating.jpg", rel: "speaker_image", title: "Speaker rating", :class =>'fancybox whatsImg appwhatsthis'
+        = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+  = render :partial => 'admin/layouts/more_links'   
 :javascript
   
   $(window).load(function(){

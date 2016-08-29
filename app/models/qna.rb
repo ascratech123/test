@@ -1,6 +1,6 @@
 class Qna < ActiveRecord::Base
   include AASM
-  attr_accessor :platform
+  attr_accessor :platform, :sender_email
   belongs_to :event
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
@@ -51,7 +51,7 @@ class Qna < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.strftime("%d/%m/%Y %T")
+    self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
   end
   
   def email_id
@@ -60,6 +60,14 @@ class Qna < ActiveRecord::Base
 
   def name
     Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+  end
+  
+  def first_name
+    Invitee.find_by_id(self.sender_id).first_name rescue ""
+  end
+
+  def last_name
+    Invitee.find_by_id(self.sender_id).last_name rescue ""
   end
 
   def question_ask
@@ -82,7 +90,6 @@ class Qna < ActiveRecord::Base
 
   def get_receiver_user_name
     Panel.find_by_id(self.receiver_id).name rescue ""
-    # Invitee.find_by_id(self.receiver_id).name_of_the_invitee rescue ""
   end
 
   def set_status_as_per_auto_approve

@@ -11,6 +11,9 @@ class Admin::ImportsController < ApplicationController
   require 'excel_import_qna'
   require 'excel_import_conversation'
   require 'excel_import_invitee_data'
+  require 'excel_import_speakers'
+  require 'excel_import_agendas'
+  require 'excel_import_my_travels'
 
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role#, :find_features
@@ -62,7 +65,10 @@ class Admin::ImportsController < ApplicationController
       "comments" => { "url" => admin_event_conversations_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' },
       "likes" => { "url" => admin_event_conversations_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' },
       "qna" => { "url" => admin_event_qnas_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' },
-      "feedback" => { "url" => admin_event_feedbacks_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' }                
+      "feedback" => { "url" => admin_event_feedbacks_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' },
+      "speaker" => { "url" => admin_event_speakers_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' },
+      "agenda" => { "url" => admin_event_agendas_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' }, 
+      "my_travel" => { "url" => admin_event_my_travels_path(:event_id => params[:import][:importable_id].to_i), "template" => '/admin/imports/new' }              
     }
     hsh[model_name]
   end
@@ -80,6 +86,9 @@ class Admin::ImportsController < ApplicationController
     import_result = ExcelImportUserFeedback.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'user_feedbacks'
     import_result = ExcelImportUserComment.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'comments'
     import_result = ExcelImportUserLike.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'likes'
+    import_result = ExcelImportSpeaker.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'speaker'
+    import_result = ExcelImportAgenda.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'agenda'
+    import_result = ExcelImportMyTravel.save(file_url, type, importable_id, import_attribs, 'add', import_options) if type == 'my_travel'
     import_result
   end
 end

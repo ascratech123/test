@@ -20,11 +20,13 @@ class EventFeature < ActiveRecord::Base
   validates_attachment_content_type :main_icon, :content_type => ["image/png"],:message => "please select valid format."
   validate :image_dimensions
   before_save :set_interpolate_time_stamp
-  after_create :update_visibility
+  after_create :update_visibility,:create_default_invitee_groups
+  # after_create :update_visibility
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
   after_save :venue_menu_icon_selection
+  after_destroy :delete_default_invitee_groups
 
   default_scope { order("sequence") }
   
@@ -76,7 +78,7 @@ class EventFeature < ActiveRecord::Base
   end
 
   def set_menu_icon_visibility
-    if ["contacts","venue","event_highlights", 'chats'].include?(self.name)
+    if ["contacts","venue","event_highlights", 'chats','social_sharings'].include?(self.name)
       self.menu_icon_visibility = "no"
     end
   end
@@ -119,13 +121,27 @@ class EventFeature < ActiveRecord::Base
     end  
   end
 
+  def create_default_invitee_groups
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A Participation', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    if invitee_groups[self.name].present? and InviteeGroup.where(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name]).blank?
+      invitee_group = InviteeGroup.new(:event_id => self.event_id, :invitee_ids => ['0'], :name => invitee_groups[self.name])
+      invitee_group.save
+    end
+  end
+
+  def delete_default_invitee_groups
+    invitee_groups = {'polls' => 'No Polls taken', 'feedbacks' => 'No Feedback given', 'quizzes' => 'No Quiz taken', 'qnas' => 'No Q&A Participation', 'conversations' => 'No Participation in Conversations', 'favourites' => 'No Favorites added'}
+    invitee_group = InviteeGroup.where(:event_id => self.event_id, :name => invitee_groups[self.name]).first
+    invitee_group.destroy if invitee_group.present?
+  end
+
   def set_status(event_feature)
     self.active! if event_feature== "active"
     self.deactive! if event_feature== "deactive"
   end
 
   def update_visibility
-    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats"]
+    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats","social_sharings"]
     if disable_features.include? self.name
       self.update_column(:menu_visibilty, 'inactive')
     else
@@ -139,7 +155,7 @@ class EventFeature < ActiveRecord::Base
   # end
 
   def self.for_sequence_get_model_name
-    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor"}
+    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award", 'panels' => 'Panel', 'agenda_tracks' => "AgendaTrack"}
   end
 
   def update_menu_saved_field_when_no_feature_selected

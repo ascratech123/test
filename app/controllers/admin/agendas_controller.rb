@@ -6,13 +6,15 @@ class Admin::AgendasController < ApplicationController
   before_filter :find_ratings, :only => [:index, :new]
 
   def index
-    @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_time)")
+    @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_date)")
     @agenda_having_no_date = @agendas.where("start_agenda_time is null")
+    @page = params[:controller].split("/").second
+    @event_feature = @event.event_features.where(:name => @page)
     respond_to do |format|
       format.html  
       format.xls do
         only_columns = []
-        method_allowed = [:Timestamp, :email_id, :name, :session_name, :speaker_name,:star_rating,:user_comment]
+        method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :session_name, :speaker_name,:star_rating,:user_comment]
         send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
       end
     end
@@ -22,12 +24,17 @@ class Admin::AgendasController < ApplicationController
     agenda_data = Agenda.find(params[:id]) rescue Agenda.new
     @agenda = @event.agendas.build(agenda_data.attributes.except('id', 'created_at', 'updated_at', 'start_agenda_time', 'end_agenda_time'))
     @spearkers = @event.speakers
+    @import = Import.new if params[:import].present?
   end
   
   def create
     # params[:agenda][:speaker_id] = nil if params[:agenda][:speaker_id] == "add_speaker"
     @agenda = @event.agendas.build(agenda_params)
-    @agenda.agenda_type = params[:agenda][:new_category] if params[:agenda][:agenda_type].present? and params[:agenda][:agenda_type] == 'New Category' and params[:agenda][:new_category].present?
+    # @agenda.agenda_type = params[:agenda][:new_category] if params[:agenda][:agenda_type].present? and params[:agenda][:agenda_type] == 'New Category' and params[:agenda][:new_category].present?
+#    if params[:agenda][:agenda_track_id].present? and params[:agenda][:agenda_track_id] == '0'
+      @agenda_track_new = AgendaTrack.set_agenda_track(params)
+      @agenda.agenda_track_id = @agenda_track_new.id if @agenda_track_new.present?
+#    end
     if @agenda.save
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
@@ -46,7 +53,9 @@ class Admin::AgendasController < ApplicationController
   def update
     # params[:agenda][:speaker_id] = nil if params[:agenda][:speaker_id].to_i == 0
     @agenda.update_column(:end_agenda_time, nil) if params[:agenda][:end_time_hour].blank? and params[:agenda][:end_time_minute].blank? and params[:agenda][:end_time_am].blank?
+      @agenda_track_new = AgendaTrack.set_agenda_track(params)
     if @agenda.update_attributes(agenda_params)
+       @agenda.update_column('agenda_track_id',@agenda_track_new.id) if @agenda_track_new.present? 
       redirect_to admin_event_agendas_path(:event_id => @agenda.event_id)
     else
       render :action => "edit"

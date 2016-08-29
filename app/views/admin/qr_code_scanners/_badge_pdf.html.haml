@@ -1,8 +1,8 @@
 = stylesheet_link_tag "scanner", :media => 'screen, print'
-= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?  and params[:qr_code_preview].blank? and [368, 165, 168].exclude? @event.id
+=# link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?  and params[:qr_code_preview].blank?# and [368, 165, 168].include? @event.id
 %title Disha
 %body.qr-scanner-page#print
-  - if @event.present? and [368, 165, 168].include? @event.id
+  - if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
     .container.printPage
       .title
         %img{:src => @event.logo.url}
@@ -13,7 +13,7 @@
           = "#{@event.start_event_date.strftime('%d %b')} - #{@event.end_event_date.strftime('%d %b %Y')}"
         %p.subText.place
           = @event.cities rescue nil
-    = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and [368, 165, 168].include? @event.id
+    = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
   - else
     .container
       .title
@@ -36,4 +36,3 @@
     function refreshParent() {
       window.opener.location.href = "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=#{params[:qr_code_preview]}"
     }
-

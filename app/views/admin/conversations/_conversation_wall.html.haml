@@ -3,8 +3,9 @@
     %title Hobnob
     %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0", :name => "viewport"}
+    %meta{"http-equiv" => "refresh", :content => "60"}
     %link{:href => "/assets/conversations_wall_style.css", :rel => "stylesheet", :type => "text/css"}
-  %body.newcoversationwallImg
+  %body.newcoversationwallImg{:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "conv-bg" : ""}"}  
     %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
       %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
         %p.conv-logo

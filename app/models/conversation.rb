@@ -2,7 +2,7 @@ class Conversation < ActiveRecord::Base
   include AASM
   attr_accessor :platform
   @@auto_approve = nil
-  belongs_to :event
+  belongs_to :event 
   belongs_to :user
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
   has_many :comments, as: :commentable, :dependent => :destroy
@@ -94,7 +94,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def timestamp
-    self.created_at.strftime('%m/%d/%Y %H:%M')
+    self.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes
@@ -144,8 +144,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.each do |comment|
-      comment_obj << comment[0]
+    comments.first.each do |comment|
+      comment_obj << comment
     end
     object = object + comment_obj + conversation_without_comment
     object
@@ -179,6 +179,15 @@ class Conversation < ActiveRecord::Base
   def name
     Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
   end
+  
+  def first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+  
+  def last_name
+    Invitee.find_by_id(self.user_id).last_name rescue ""
+  end
+
   def comment
     ""
   end

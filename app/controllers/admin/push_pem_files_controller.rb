@@ -21,7 +21,7 @@ class Admin::PushPemFilesController < ApplicationController
   def create
     @push_pem_file = PushPemFile.new(push_pem_file_params)
     if @push_pem_file.save
-      redirect_to edit_admin_client_mobile_application_push_pem_file_path(:client_id => @mobile_application.client_id, :mobile_application_id => @mobile_application.id, :id => @push_pem_file.id)
+      redirect_to admin_client_mobile_applications_path(:client_id => @mobile_application.client_id) if params[:client_id].present?
     else
       render :action => 'new'
     end
@@ -32,7 +32,9 @@ class Admin::PushPemFilesController < ApplicationController
 
   def update
     if @push_pem_file.update_attributes(push_pem_file_params)
-      redirect_to edit_admin_client_mobile_application_push_pem_file_path(:client_id => @mobile_application.client_id, :mobile_application_id => @mobile_application.id, :id => @push_pem_file.id)
+      redirect_to admin_client_mobile_applications_path(:client_id => @mobile_application.client_id) if params[:client_id].present?
+      # admin_mobile_applications_path //
+      # redirect_to admin_event_mobile_applications_path(:event_id => @mobile_application.event_id) if params[:event_id].present?
     else
       render :action => "edit"
     end

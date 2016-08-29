@@ -6,7 +6,10 @@ class Admin::SpeakersController < ApplicationController
   before_filter :find_ratings, :only => [:index, :new]
     
   def index
-    @speakers = Speaker.search(params, @speakers) if params[:search].present?
+    if not params[:search_keyword].present? and (params[:search].present? and params[:search][:designation].present? and params[:search][:designation] == "All") || (params[:search].present? and params[:search][:company_name].present? and params[:search][:company_name] == "All")
+    else
+      @speakers = Speaker.search(params, @speakers) if params[:search].present?
+    end
     respond_to do |format|
       format.html  
       format.xls do
@@ -14,11 +17,11 @@ class Admin::SpeakersController < ApplicationController
           #only_columns = [:comments]
           #method_allowed = [:speaker_name, :star_rating, :attendee_email, :attendee_name]
           only_columns = []
-          method_allowed = [:Timestamp, :email_id, :name, :speaker_name, :user_rating, :user_comment]
+          method_allowed = [:Timestamp, :email_id, :first_name, :last_name, :speaker_name, :user_rating, :user_comment]
           send_data @feedbacks.to_xls(:only => only_columns, :methods => method_allowed)
         else
-          only_columns = [:speaker_name, :designation, :email_address, :address, :speaker_info, :phone_no, :company]
-          method_allowed = []
+          only_columns = [:first_name, :last_name, :designation, :email_address, :speaker_info, :phone_no, :company,:rating_status]
+          # method_allowed = [:profile_picture]
           send_data @speakers.to_xls(:only => only_columns)
         end
       end
@@ -27,6 +30,7 @@ class Admin::SpeakersController < ApplicationController
 
   def new
     @speaker = @event.speakers.build
+    @import = Import.new if params[:import].present?
   end
 
   def create

@@ -1,5 +1,5 @@
 class LoggingObserver < ActiveRecord::Observer
-  observe Client, Event, Speaker, Attendee, Agenda, Invitee, Role, User, Poll, Feedback, Qna, Sponsor, Theme, Winner, Award, Comment, Conversation, EventFeature, Faq, Image, Like, Rating, HighlightImage,Favorite, Quiz,UserQuiz,Exhibitor
+  observe Client, Event, Speaker, Attendee, Agenda, Invitee, Role, User, Poll, Feedback, Qna, Sponsor, Theme, Winner, Award, Comment, Conversation, EventFeature, Faq, Image, Like, Rating, HighlightImage,Favorite, Quiz,UserQuiz,Exhibitor, Panel, MyTravel, EKit
 
   def after_validation(record)
   	if record.errors.present?

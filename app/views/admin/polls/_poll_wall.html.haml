@@ -2,15 +2,14 @@
   %head
     %title Hobnob
     %meta{:charset => "utf-8"}
-      <meta http-equiv='refresh' content='60;url='index.php'>
-      %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
-        %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
-          %meta{:content => "", :name => "description"}
-            %meta{:content => "Arun Agarwal", :name => "author"}
-              %title Polls Wall
-              = stylesheet_link_tag "theme.css"
-              = stylesheet_link_tag "css/bootstrap_polls.min.css"
-  %body.main-events{:role => "document"}
+    %meta{'http-equiv'=>'refresh', :content => '60'}
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
+    %meta{:content => "", :name => "description"}
+    %title Polls Wall
+    = stylesheet_link_tag "theme.css"
+    = stylesheet_link_tag "css/bootstrap_polls.min.css"
+  %body.main-events{:role => "document",:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "poll-bg" : ""}"}   
     .container.poll-container{:role => "main"}
       .col-xs-12.col-lg-12
         .row
@@ -26,7 +25,8 @@
                 %hr
                   - @polls.each do |poll|
                     %p.poll-question 
-                      = poll.question
+                      %strong
+                        = poll.question
                     - if poll.option1.present?
                       %p 
                         = poll.option1

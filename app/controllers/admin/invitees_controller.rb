@@ -8,20 +8,34 @@ class Admin::InviteesController < ApplicationController
 
   def index
     if params["send_mail"] == "true"
-      invitees = @invitees.where("email_send !=?", "true")
+      if @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
+        event_ids = @event.mobile_application.events.pluck(:id)
+        invitees = []
+        @invitees.each do |invitee|
+          invitee1 = Invitee.where("event_id IN (?) AND email_send =? AND email =?", event_ids, "true", invitee.email).blank? ? invitee : nil
+          invitees << invitee1
+        end
+        invitees = invitees.compact
+      else 
+        invitees = @invitees.where("email_send !=?", "true")
+      end
       invitees.each do |invitee|
-        UserMailer.send_password_invitees(invitee).deliver_now
+        UserMailer.send_password_invitees(invitee).deliver_now 
         invitee.update_column(:email_send, 'true')
       end
     end
-    @invitees = Invitee.search(params, @invitees) if params[:search].present?
+    if (params[:search].present? && params[:search][:company_name].present? && params[:search][:company_name] == "All") || (params[:search].present? && params[:search][:designation].present? && params[:search][:designation] == "All") || (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "All") || (params[:search].present? && params[:search][:invitee_status].present? && params[:search][:invitee_status] == "All") || (params[:search].present? && params[:search][:visible_status].present? && params[:search][:visible_status] == "All") || (params[:search].present? && params[:search][:login_status].present? && params[:search][:login_status] == "All")
+      @invitees
+    else  
+      @invitees = Invitee.search(params, @invitees) if params[:search].present?
+    end
     @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
-        only_columns = [:first_name, :last_name, :email, :designation, :company_name, :invitee_status]
-        method_allowed = []
-        send_data @invitees.to_xls(:only => only_columns, :filename => "asd.xls")
+        only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
+        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
+        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end

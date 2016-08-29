@@ -26,6 +26,9 @@ class Admin::MobileApplicationsController < ApplicationController
       @mobile_applications = MobileApplication.search(params, @mobile_applications) if params[:search].present?
       @mobile_applications = @mobile_applications.paginate(page: params[:page], per_page: 10)
     end
+    if ((params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "single event") or (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "multi event"))
+      @mobile_applications = @mobile_applications.where("application_type = ? and client_id = ?", params[:search][:order_by], params[:client_id])
+    end
   end
 
   def new
