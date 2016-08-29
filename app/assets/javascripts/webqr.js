@@ -103,7 +103,7 @@ function htmlEntities(str) {
 
 function ajax_request(ids) {
     var invitee_id = ids.split(',')[1]
-    var url = APP_URL + '/admin/events/'+ EVENT_ID +'/invitees/' + invitee_id +'.js'
+    var url = APP_URL + '/admin/events/'+ EVENT_ID +'/qr_code_scanners/' + invitee_id +'.js'
     var result = $.ajax({url: url,
     success: function(data) {
     }
@@ -157,7 +157,7 @@ function load()
 
 function setwebcam()
 {
-    document.getElementById("result").innerHTML="- scanning -";
+    document.getElementById("result").innerHTML="scanning...";
     if(stype==1)
     {
         setTimeout(captureToCanvas, 500);    
