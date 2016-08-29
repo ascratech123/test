@@ -123,4 +123,13 @@ class Qna < ActiveRecord::Base
   def self.get_top_question_speakers(count, event_id, type, start_date, end_date)
     pids = Qna.where('event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, start_date, end_date).group(:receiver_id).count.sort_by{|k, v| v}.last(count)
   end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event.timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event.timezone)
+  end
+  
 end

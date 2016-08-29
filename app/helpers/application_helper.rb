@@ -13,6 +13,10 @@ module ApplicationHelper
       end
     end
 
+    def formatted_time(datetime, format)
+      datetime.strftime(format) if datetime.present?
+    end
+
   def break_line
     str = "<br><br><br>"
   end
@@ -188,7 +192,7 @@ module ApplicationHelper
     data =  {}
     keys = @agenda_group_by_start_agenda_time.count
     keys.each do |key,value|
-      data[key] = @agendas.where('Date(start_agenda_date) = ?', key) if key.present?
+      data[key] = @agendas.where('Date(start_agenda_time_with_event_timezone) = ?', key) if key.present?
     end
     data
   end 
