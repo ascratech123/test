@@ -19,11 +19,10 @@
             %label.col-lg-4.control-label.ml-color--shades-white
               Track
             .col-lg-7
-              - default_agenda_type = ['Add New Track']
-              - default_agenda_type = default_agenda_type + @event.get_agenda
-              - default_agenda_type = default_agenda_type.reject { |c| c.empty? }
+              - agenda_tracks = @event.get_event_agenda_tracks.collect {|p| [ p.track_name, p.track_name ] }.uniq
+              - agenda_tracks = agenda_tracks.unshift(["Add New Track", 0])
               %i.arrow.single
-              = f.select("agenda", "agenda_type", default_agenda_type, {:selected => f.object.agenda_type,:prompt => "#{(f.object.agenda_type.present? and f.object.agenda_type != "Add New Track") ? f.object.agenda_type : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+              = f.select("agenda", "agenda_track_id", agenda_tracks, {:selected => f.object.agenda_track.present? ? f.object.agenda_track.track_name : "",:prompt => "#{(f.object.agenda_track.present? and f.object.agenda_track.track_name != "Add New Track") ? f.object.agenda_track : "Select Track" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:agenda_type].join("") rescue nil 
@@ -51,9 +50,9 @@
               = f.custom_text_field_date :start_agenda_date, "Start Agenda Date", :id => "date-start1",:value => f.object.start_agenda_date.present? ? f.object.start_agenda_date.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab
-                  = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => get_hour_minute_second_ampm(f.object.start_agenda_time, 'hour'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => get_hour_minute_second_ampm(f.object.start_agenda_time, 'minute'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => get_hour_minute_second_ampm(f.object.start_agenda_time, 'ampm'), :col => '3',:maxlength => "2"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group
@@ -61,9 +60,9 @@
               = f.custom_text_field_date :end_agenda_date, "End Agenda Date", :id => "date-end1",:value => f.object.end_agenda_date.present? ? f.object.end_agenda_date.strftime('%d/%m/%Y ') : ''
               .col-lg-3.timeDropdown
                 .timeTab
-                  = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{f.object.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{f.object.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{f.object.end_agenda_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => get_hour_minute_second_ampm(f.object.end_agenda_time, 'hour'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => get_hour_minute_second_ampm(f.object.end_agenda_time, 'minute'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => get_hour_minute_second_ampm(f.object.end_agenda_time, 'ampm'), :col => '3',:maxlength => "2"
 
 
 
@@ -85,7 +84,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5
             .col-lg-4.mdl-typography--text-right
-              %p.displayInlineBlock.multicitytxt Session Rating
+              %p.displayInlineBlock.multicitytxt Session Rating *
             .col-lg-3.p-h-12   
               = f.custom_radio_button :rating_status, "active","Active", :id => "option-1"
               = f.custom_radio_button :rating_status, "deactive", "Deactive", :id => "option-2"
@@ -110,8 +109,8 @@
       $("#agenda_speaker_name").parent().parent().show();
     }
   });
-  $("#agenda_agenda_type").click(function(){
-    value = $("#agenda_agenda_type").val();
+  $("#agenda_agenda_track_id").click(function(){
+    value = $('#agenda_agenda_track_id').find(":selected").text();
     if(value == "Add New Track")
       $("#agenda_new_category").parent().parent().show();
     else

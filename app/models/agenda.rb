@@ -3,13 +3,15 @@ class Agenda < ActiveRecord::Base
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category
   belongs_to :event
   belongs_to :speaker
+  belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
-  validates :title,:start_agenda_date, presence: { :message => "This field is required." }
+  validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
   validate :check_speaker_and_track_is_present
   
+  before_validation :set_attr_accessor
   before_validation :set_time
   after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected, :set_event_timezone
@@ -18,7 +20,39 @@ class Agenda < ActiveRecord::Base
   after_create :set_dates_with_event_timezone
 
   default_scope { order('start_agenda_time asc') }
-  # default_scope { order("sequence") }
+
+  def set_attr_accessor
+    if self.start_time_hour.blank?
+      prev_start_time_hour = self.start_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil
+      self.start_time_hour = prev_start_time_hour.blank? ? "00" : prev_start_time_hour
+    end
+    
+    if self.start_time_minute.blank?
+      prev_start_time_minute = self.start_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil
+      self.start_time_minute = prev_start_time_minute.blank? ? "00" : prev_start_time_minute
+    end
+
+    if self.start_time_am.blank?
+      prev_start_time_am = self.start_agenda_time.strftime('%p') rescue "AM"
+      self.start_time_am = prev_start_time_am.blank? ? "AM" : prev_start_time_am
+    end
+
+    if self.end_time_hour.blank?
+      prev_end_time_hour = self.end_agenda_time.strftime('%l').strip.rjust(2, '0') rescue nil
+      self.end_time_hour = prev_end_time_hour.blank? ? "" : prev_end_time_hour
+    end
+
+    if self.end_time_minute.blank?
+      prev_end_time_minute = self.end_agenda_time.strftime('%M').strip.rjust(2, '0') rescue nil
+      self.end_time_minute = prev_end_time_minute.blank? ? "" : prev_end_time_minute
+    end
+
+    if self.end_time_am.blank?
+      prev_end_time_am = self.end_agenda_time.strftime('%p') rescue "PM"
+      self.end_time_am = prev_end_time_am.blank? ? "" : prev_end_time_am
+    end    
+
+  end
 
   def start_agenda_time_is_after_agenda_date
     return if self.start_agenda_time.blank? 
@@ -26,6 +60,7 @@ class Agenda < ActiveRecord::Base
     end_event_date = self.event.end_event_time rescue nil
     start_agenda_time = self.start_agenda_time rescue nil
     end_agenda_time = self.end_agenda_time rescue nil
+    
     if start_event_date.present? and end_event_date.present? and start_agenda_time.present?
       if !start_agenda_time.between?(start_event_date, end_event_date)
         errors.add(:start_agenda_date, "Date must be between event dates")
@@ -62,8 +97,8 @@ class Agenda < ActiveRecord::Base
   def set_end_date_if_end_date_not_selected
     end_agenda_time = "#{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if self.end_agenda_time.blank? and self.end_time_hour.present? and self.end_time_minute.present? and self.end_time_am.present?
     if self.start_agenda_time.to_date.present? and end_agenda_time.present?
-      time = "#{self.start_agenda_time.strftime('%d/%m/%Y')} #{end_agenda_time}"
-      self.end_agenda_time = time.to_time rescue nil
+#    if self.start_agenda_date.present? and end_agenda_time.present?
+      self.end_agenda_time = "#{self.start_agenda_time.strftime('%d/%m/%Y')} #{end_agenda_time}"
       self.save
     end
   end
@@ -89,14 +124,33 @@ class Agenda < ActiveRecord::Base
     end
   end
 
+  def agenda_type
+    self.agenda_track.present? ? self.agenda_track.track_name : ""
+  end
+
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
+  def get_agenda_type_name
+    self.agenda_type
+    id = []
+    id <<  self.id
+    Agenda.where("id IN (?)",id).pluck(:agenda_type).join
+  end  
+
+  def agenda_track_name
+    self.agenda_track.track_name if self.agenda_track_id.to_i > 0
+  end
+
+  def track_sequence
+    self.agenda_track.sequence if self.agenda_track_id.to_i > 0
+  end
+  
   def set_dates_with_event_timezone
     event = self.event
     self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
-    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone))
+    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone)) if self.end_agenda_time.present?
   end
 
   def start_agenda_time_with_event_timezone

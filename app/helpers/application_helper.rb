@@ -1,5 +1,85 @@
 module ApplicationHelper
+  
+  #timezone methods
+    def time_with_zone(datetime, zone=nil,format)
+      if zone.present? and zone == 'IST' and format == "%Y-%m-%d %H:%M"
+        datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
+      elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %H:%M"
+        datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if datetime.present?
+      elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %I:%M %p"
+        datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') if datetime.present?
+      else
+        datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') if datetime.present?
+      end
+    end
 
+    def formatted_time(datetime, format)
+      datetime.strftime(format) if datetime.present?
+    end
+
+  def break_line
+    str = "<br><br><br>"
+  end
+
+    def get_hour_minute_second_ampm(time, format)
+      case format
+      when 'hour'
+        time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') if time.present?
+      when 'minute'
+        time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') if time.present?
+      when 'second'
+        time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') if time.present?
+      when 'ampm'
+        time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') if time.present?
+      end
+    end
+
+  # BELOW 5 METHODS NOT CALL FROM ANYWHERE
+    # def get_datetime(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if time.present?
+    # end
+
+    # def get_datetime_in_ampm(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') if time.present?
+    # end
+
+    # def get_only_time_in_ampm(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') if time.present?
+    # end
+    
+    # def date_with_zone(datetime, zone=nil)
+    #   if zone.present? and zone == 'IST'
+    #     datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') if datetime.present?
+    #   else
+    #     datetime.to_time.utc.strftime('%d %b %Y') if datetime.present?
+    #   end
+    # end
+    
+    # def set_end_agenda_time_am(am)
+    #   if am.strftime("%p") != "AM" or am.strftime("%p") != "PM" and (am.strftime("%H:%M") == "00:00")
+    #     return nil
+    #   else
+    #     return am.strftime("%p")
+    #   end if am.present?
+    # end
+
+    # def set_end_agenda_time_hour(hour)
+    #   if hour.strftime("%H") == "00"
+    #     return nil
+    #   else
+    #     return hour.strftime("%I")
+    #   end if hour.present?
+    # end
+
+    # def set_end_agenda_time_minute(minute)
+    #   if minute.strftime("%M") == "00"
+    #     return nil
+    #   else
+    #     return minute.strftime("%M")
+    #   end if minute.present?
+    # end
+  #----------------------------------------------------#
+  
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
     html_content = content_tag(:i, icon_name, :class => "material-icons center")
@@ -23,47 +103,6 @@ module ApplicationHelper
     url = back_path if url == :back
     html_content = content_tag(:span, "Cancel", :class => "waves-effect waves-light btn")
     link_to html_content, url, :confirm =>'Are you sure?'#,:style => "float:right;width:120px"
-  end
-
-  def time_with_zone(datetime, zone=nil)
-    if zone.present? and zone == 'IST'
-      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
-    else
-      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
-    end
-  end
-  
-  def date_with_zone(datetime, zone=nil)
-    if zone.present? and zone == 'IST'
-      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
-    else
-      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
-    end
-  end
-
-  def get_hour_minute_second_ampm(time, format)
-    case format
-    when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') rescue nil
-    when 'minute'
-      time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') rescue nil
-    when 'second'
-      time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') rescue nil
-    when 'ampm'
-      time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') rescue nil
-    end
-  end
-
-  def get_only_time_in_ampm(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
-  end
-
-  def get_datetime(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') rescue nil
-  end
-
-  def get_datetime_in_ampm(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') rescue nil
   end
 
   def back_button_detailed_page(url = :back)
@@ -153,7 +192,7 @@ module ApplicationHelper
     data =  {}
     keys = @agenda_group_by_start_agenda_time.count
     keys.each do |key,value|
-      data[key] = @agendas.where('Date(start_agenda_time) = ?', key) if key.present?
+      data[key] = @agendas.where('Date(start_agenda_time_with_event_timezone) = ?', key) if key.present?
     end
     data
   end 
@@ -287,8 +326,18 @@ module ApplicationHelper
 
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
-    params1 = params.gsub(/[^0-9a-z]/, '')
-    params = params1.slice!(0..6)
+    params1 = params.delete('\\{}"')#params.gsub(/[^0-9a-zA-Z]/, " ")
+    if params["selected"].present?
+      params = params1.slice!(0..10)
+    elsif params["invitee_status"].present? or params["visible_status"].present?
+      params = params1.slice!(0..15)
+    elsif params["login_status"].present? or params["company_name"].present?
+      params = params1.slice!(0..13)
+    elsif params["designation"].present?
+      params = params1.slice!(0..12)
+    else
+      params = params1.slice!(0..8)
+    end
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
@@ -663,36 +712,12 @@ end
     end
   end
 
-  def set_end_agenda_time_hour(hour)
-    if hour.strftime("%H") == "00"
-      return nil
-    else
-      return hour.strftime("%I")
-    end if hour.present?
-  end
-
-  def set_end_agenda_time_minute(minute)
-    if minute.strftime("%M") == "00"
-      return nil
-    else
-      return minute.strftime("%M")
-    end if minute.present?
-  end
-
   def get_login_at(event,object)
     if object.errors.present?
       (params[:event][:login_at] == "After Splash") ? "" : "none" 
     else
       (event.login_at == 'Before Interaction'or event.login_at == 'After Highlight') ? "none" : "" if event.present?
     end
-  end
-
-  def set_end_agenda_time_am(am)
-    if am.strftime("%p") != "AM" or am.strftime("%p") != "PM" and (am.strftime("%H:%M") == "00:00")
-      return nil
-    else
-      return am.strftime("%p")
-    end if am.present?
   end
 
   def get_highlight_class1(object)
@@ -752,7 +777,7 @@ end
     # action_arr = []
     # logic_arr = []
     dest_arr = []
-    event.event_features.each do |feature|
+    event.event_features.not_hidden_icon.each do |feature|
       #action_arr += action_based[feature.name] if action_based[feature.name].present?
       #logic_arr += logic_based[feature.name] if logic_based[feature.name].present?
       dest_arr << destination_based[feature.name] if destination_based[feature.name].present?
