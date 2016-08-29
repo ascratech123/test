@@ -7,7 +7,7 @@
     %script{:src => "/assets/jquery-1.11.3.min.js"}
     %script{:src => "/assets/bootstrap.js"}
   %body
-    .main.QnaWall{:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "bg-wall" : ""}"}
+    .main.QnaWall{:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "bg-wall" : ""}"}  
       .top.qna_wall
         -if @event.inside_logo.present?
           .QnaImg 
@@ -49,11 +49,11 @@
                           %td
                             %p.userTxt= qna.get_receiver_user_name
                           %td
-                            %p.userTxt= qna.get_user_name
+                            %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_user_name
                             %br
                               %p.companyTxt
                           %td
-                            %p.userTxt= qna.get_company_name
+                            %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_company_name 
                           %td
                             %p.userTxt
                               = qna.question
@@ -90,11 +90,11 @@
                         %td
                           %p.userTxt= qna.get_receiver_user_name
                         %td
-                          %p.userTxt= qna.get_user_name
+                          %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.get_company_name
+                          %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question  
@@ -126,11 +126,11 @@
                         %td
                           %p.userTxt= qna.get_receiver_user_name
                         %td
-                          %p.userTxt= qna.get_user_name
+                          %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.get_company_name
+                          %p.userTxt= qna.anonymous_on_wall == "true" ? "Anonymous" : qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question

@@ -5,7 +5,6 @@ class Admin::QnasController < ApplicationController
   skip_before_filter :authenticate_user, :authorize_event_role, :find_features, :only => [:index]
   skip_before_action :load_filter, :only => [:index] 
   before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:index]
-  before_filter :check_user_role, :except => [:index]
   before_filter :qna_wall_present, :only => [:index]
   # before_action :authenticate_user, :authorize_event_role, :find_features, unless: :abc
   before_filter :find_qna_wall, :only => :index
@@ -19,7 +18,7 @@ class Admin::QnasController < ApplicationController
         render :layout => false
     else
       @qnas = Qna.search(params, @qnas) if params[:search].present?
-      @qnas = @qnas.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+      @qnas = @qnas.paginate(page: params[:page], per_page: 1000) if params["format"] != "xls"
       respond_to do |format|
         format.html  
         format.xls do
@@ -60,13 +59,13 @@ class Admin::QnasController < ApplicationController
 	end
 
 	def update
-    if params[:status].present? or params[:on_wall].present?
+    if params[:status].present? or params[:on_wall].present? or params[:anonymous_on_wall].present?
+      @qna.update_column(:anonymous_on_wall, params[:anonymous_on_wall]) if params[:anonymous_on_wall].present?
       @qna.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @qna.change_status(params[:status]) if params[:status].present?
       @qna.update_column(:wall_answer, nil) if @qna.on_wall == "no"
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id, :page => params[:page])
-    elsif params[:wall_answer].present? or params[:on_wall].present?
-      @qna.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
+    elsif params[:wall_answer].present? 
       @qna.update_column(:wall_answer, params[:wall_answer]) if params[:wall_answer].present?
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id, :page => params[:page])  
     else
@@ -109,12 +108,6 @@ class Admin::QnasController < ApplicationController
       authorize_event_role
       find_features
     end
-  end
-  
-  def check_user_role
-    if current_user.has_role? :db_manager 
-      redirect_to admin_dashboards_path
-    end  
   end
 
   def qna_params
