@@ -387,4 +387,12 @@ class Analytic < ActiveRecord::Base
     result_hsh
   end
 
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event.timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event.timezone)
+  end
+
 end
