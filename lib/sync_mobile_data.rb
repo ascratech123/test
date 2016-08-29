@@ -181,6 +181,8 @@ module SyncMobileData
           end
         when "Agenda"
           data[:"#{name_table(model)}"] = info.as_json(:methods =>[:agenda_track_name, :track_sequence, :start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone])
+        when "Feedback"
+          data[:"#{name_table(model)}"] = info.as_json(:methods =>[:created_at_with_event_timezone, :updated_at_with_event_timezone])
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
