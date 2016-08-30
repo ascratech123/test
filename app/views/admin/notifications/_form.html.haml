@@ -88,6 +88,7 @@
           .col-lg-7
             %i.arrow.single
             - grouped_options = get_notification_type_group_array(@event)
+            - grouped_options = grouped_options.insert(0, ['HomePage','HomePage'])
             = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
           .span.col-lg-1
             = link_to("?" ,"/whats_this/notification/general_information/select_root_destination.png", rel: "selecte_template", title: "Destination", :class =>"fancybox whatsImg")
