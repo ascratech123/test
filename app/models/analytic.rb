@@ -3,7 +3,7 @@ class Analytic < ActiveRecord::Base
   VIEWABLE_TYPE_TO_ACTION = {'Conversation' => ['conversation post', 'like', 'comment'], 'Favorite' => ['favorite'], 'Ratings' => ['rated'], 'Rating' => ['rated'], 'Q&A' => ['question asked'], 'Poll' => ['poll answered'], 'Feedback' => ['feedback given'], 'E-Kit' => ['page view'], 'Quiz' => ['played'], 'QR code scan' => ['qr code scan']}
 
   ACTION_TO_VIEWABLE_TYPE = {"favorite" => 'Favorite', "rated" => 'Rating', "qr code scan" => 'QR Code Scan', "comment" => 'Comment', "conversation post" => 'Conversation', "like" => 'Like', "played" => 'Quiz', "question asked" => 'Q&A', "login" => 'Login', "Login" => 'Login', "poll answered" => 'Poll', "feedback given" => 'Feedback', 'continue' => 'Event Highlight', 'profile_pic' => 'Profile Pic Update', 'Add To Calender' => 'Add To Calender', 'one_on_one' => 'Chat', 'group_chat' => 'Chat', 'share' => 'Share'}
-  ACTION_POINTS = {"favorite" => 5, "rated" => 5, "comment" => 2, "conversation post" => 5, "like" => 2, "quiz correct answer" => 5, "quiz incorrect answer" => 2, "question asked" => 5, "poll answered" => 5, "feedback given" => 10, 'e_kits' => 5, 'Login' => 10, 'profile_pic' => 5, 'page view' => 5, "played" => 5, 'Add To Calender' => 10, 'one_on_one' => 0, 'group chat' => 0, 'share' => 5}
+  ACTION_POINTS = {"favorite" => 5, "rated" => 5, "comment" => 2, "conversation post" => 5, "like" => 2, "quiz correct answer" => 5, "quiz incorrect answer" => 2, "question asked" => 5, "poll answered" => 5, "feedback given" => 10, 'e_kits' => 5, 'Login' => 10, 'profile_pic' => 5, 'page view' => 5, "played" => 5, 'Add To Calender' => 10, 'one_on_one' => 0, 'group chat' => 0, 'share' => 5, 'scan qr code' => 5}
   TOP_PAGE_LIST_TO_FEATURES = {'top_pages' => 'pages', 'top_fav_agendas' => 'agendas', 'top_rated_agendas' => 'agendas', 'top_rated_speakers' => 'speakers', 'top_fav_speakers' => 'speakers', 'top_question_speakers' => 'speakers', 'top_commented_conversations' => 'conversations', 'top_liked_conversations' => 'conversations', 'top_viewed_ekits' => 'e_kits', 'top_answered_quizzes' => 'quizzes', 'top_answered_polls' => 'polls', 'top_fav_invitees' => 'invitees', 'top_fav_sponsors' => 'sponsors', 'top_viewed_sponsors' => 'sponsors', 'top_fav_exhibitors' => 'exhibitors', 'top_viewed_exhibitors' => 'exhibitors', 'top_fav_leaderboard' => 'leaderboard'}
   VIEWABLE_TYPE_TO_FEATURE = {"Invitee" => 'invitees', "Event Highlight" => 'event_highlights', "Gallery listing" => 'galleries', "Speaker" => 'speakers', "Exhibitors" => 'exhibitors', "My Favorite" => 'favourites', "Exhibitors listing" => 'exhibitors', "About" => 'abouts', "Agenda" => 'agendas', "Sessions" => 'agendas', "Conversation" => 'conversations', "Quiz" => 'quizzes', "Poll" => 'polls', "Sponsor" => 'sponsors', "Speakers" => 'speakers', "Q&A" => 'qnas', "My Profile" => 'my_profile', "Sponsors" => 'sponsors', "E-Kit" => 'e_kits', "Event" => 'event_highlights', "Highlights" => 'event_highlights', "Contacts" => 'contacts', "Gallery" => 'galleries', "Feedback" => 'feedbacks', "FAQ" => 'faqs', "Venue" => 'venue', "Notes" => 'notes', "Exhibitor" => 'exhibitors', "Quiz listing" => 'quizzes', "Emergency Exit" => 'emergency_exits', "Edit" => 'my_profile', "Edit Profile" => 'my_profile', "Event Listing" => 'event_highlights', "Contact" => 'contacts', "Note" => 'notes', "Attendee" => 'invitees', 'top_fav_leaderboard' => 'Top Favorited Leader Boards'}
 
@@ -41,7 +41,7 @@ class Analytic < ActiveRecord::Base
   def update_points_to_invitee
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
-    if feature.present? and feature.status.to_s == "active" and self.points > 0
+    if feature.present? and feature.first.status.to_s == "active" and self.points > 0
       if self.invitee_id.present? and (["favorite", "rated", "comment", "conversation post", "like", "played", "question asked", "poll answered", "feedback given", 'profile_pic', 'Login', 'Add To Calender', 'share'].include? self.action or (self.viewable_type == 'E-Kit' and self.viewable_id.present?) )
         invitee = Invitee.find_by_id(self.invitee_id)
         invitee.update_column(:points, invitee.points.to_i + self.points.to_i) if invitee.present?
@@ -391,14 +391,6 @@ class Analytic < ActiveRecord::Base
     result_hsh['feature_count'] = Analytic.get_features_count(params[:id], params[:start_date], params[:end_date])
     result_hsh['xaxis_interval_labels_and_interval'] = Analytic.get_x_axis_labels_and_interval(params)
     result_hsh
-  end
-
-  def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event.timezone)
-  end
-
-  def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event.timezone)
   end
 
 end
