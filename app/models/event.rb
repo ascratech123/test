@@ -83,7 +83,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
