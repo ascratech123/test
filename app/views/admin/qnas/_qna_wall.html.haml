@@ -11,7 +11,7 @@
       .top.qna_wall
         -if @event.inside_logo.present?
           .QnaImg 
-            %img.logo{:alt => "LOGO", :src => "#{@event.inside_logo_url}"}
+            %img.logo{:alt => "LOGO", :src => "#{@event.inside_logo_url(:small)}"}
             -#%img.logo{:alt => "LOGO", :src => "/assets/hob_nob_web.png"}
         %p.qa.ref-icon
           %a{:href => "", :onclick => "window.location.reload();"}
@@ -49,11 +49,11 @@
                           %td
                             %p.userTxt= qna.get_receiver_user_name
                           %td
-                            %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                            %p.userTxt= qna.get_user_name
                             %br
                               %p.companyTxt
                           %td
-                            %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name 
+                            %p.userTxt= qna.get_company_name
                           %td
                             %p.userTxt
                               = qna.question
@@ -90,11 +90,11 @@
                         %td
                           %p.userTxt= qna.get_receiver_user_name
                         %td
-                          %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                          %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                          %p.userTxt= qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question  
@@ -126,11 +126,11 @@
                         %td
                           %p.userTxt= qna.get_receiver_user_name
                         %td
-                          %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                          %p.userTxt= qna.get_user_name
                           %br
                             %p.companyTxt
                         %td
-                          %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                          %p.userTxt= qna.get_company_name
                         %td
                           %p.userTxt
                             = qna.question
