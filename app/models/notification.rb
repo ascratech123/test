@@ -207,4 +207,8 @@ class Notification < ActiveRecord::Base
   def updated_at_with_event_timezone
     self.updated_at.in_time_zone(self.event_timezone)
   end
+
+  def push_datetime_with_event_timezone
+    self.push_datetime.in_time_zone(self.event_timezone)
+  end
 end
