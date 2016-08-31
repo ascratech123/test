@@ -6,6 +6,10 @@ class Admin::QrCodeScannersController < ApplicationController
   before_filter :authorize_event_role
 
   def index
+    if params[:page].present? && params[:page]=="print_preview"
+      invitee_registration = Invitee.find_by_id(params[:invitee_id])
+      invitee_registration.update_column('qr_code_registration',true) if invitee_registration.present?
+    end  
     @invitee = @event.invitees.where(:id => params[:invitee_id]).last
     @invitees = @event.invitees.where('email like ? or name_of_the_invitee like ?', "%#{params[:email]}%", "%#{params[:email]}%") if params[:email].present?
   end
