@@ -6,6 +6,10 @@ module ApplicationHelper
     link_to html_content, url, :class => "col-md-6 btn back_button", :confirm =>'Are you sure?', :style => "float:right;width:80px"
   end
 
+  def editable_field(field_name, event)
+    (Invitee.where("event_id = ? and #{field_name} IS NOT NULL", event.id).present? and MyProfile.where(:event_id => event.id).present?) ? true : false
+  end
+
   def admin_event_color(event)
     date = "" 
     if event.start_event_date.present? and event.end_event_date.present? and event.start_event_date > Date.today

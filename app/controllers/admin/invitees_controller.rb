@@ -3,7 +3,8 @@ class Admin::InviteesController < ApplicationController
 
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
-  
+  before_filter :find_my_profiles, :only => [:edit, :new, :index]
+  before_filter :find_invitee_visible_columns, :only => [:index]
 
   def index
     if params["send_mail"] == "true"
@@ -28,9 +29,16 @@ class Admin::InviteesController < ApplicationController
     respond_to do |format|
       format.html  
       format.xls do
-        only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
-        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in]
-        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
+        for invitee in @invitees
+          arr = @only_columns.map{|c| invitee.attributes[c]}
+          method_allowed = 
+          arr += @methods.map{|c| invitee.logged_in}
+          @export_array << arr
+        end if params[:sample_download].blank?
+
+        send_data @export_array.to_reports_xls
+        # method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in]
+        # send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end
@@ -92,5 +100,31 @@ class Admin::InviteesController < ApplicationController
 
   def invitee_params
     params.require(:invitee).permit!
+  end
+
+  def find_my_profiles
+    @my_profile_attributes = @event.get_invitee_my_profile_attributes
+  end
+
+  def find_invitee_visible_columns
+    if params[:format].present?
+      @my_profile = MyProfile.where(:event_id => @event.id).last
+      columns = @my_profile.enabled_attr rescue {}
+      if @my_profile.present? and columns.present?
+        @only_columns = columns.map{|column| column[1] == 'yes' ? column[0] : nil}.compact
+        header_columns = @only_columns.map{ |x| (['attr1','attr2','attr3','attr4','attr5'].include? x) ? @my_profile.attributes[x] : x }
+        @export_array = [header_columns + ['Logged In', 'profile_picture']]
+      else
+        @only_columns = ["email", "first_name", "last_name", "company_name", "designation", "mobile_no", "website", "street", "locality", "location", "country", "about", "interested_topics", "twitter_id", "facebook_id", "google_id", "linkedin_id"]
+        @export_array = [@only_columns + ['Logged In', 'profile_picture']]
+      end
+      if params[:sample_download].present?
+        @only_columns += ['password', 'profile_picture']
+        @only_columns = @only_columns.map{|column| Invitee::COLUMN_FOR_IMPORT_SAMPLE[column]}.compact
+
+        @only_columns = @only_columns.map{ |x| (['attr1','attr2','attr3','attr4','attr5'].include? x) ? @my_profile.attributes[x] : x }
+        @export_array = [@only_columns]
+      end
+    end  
   end
 end

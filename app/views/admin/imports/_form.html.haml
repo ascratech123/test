@@ -18,6 +18,10 @@
           %a{:href => "/admin/events/#{params[:event_id]}/invitee_structures.xls?sample_download=invitee_structure", :target => "_blank"}
             %i.fa.fa-plus-square
             %span Download Sample File
+        - elsif import_type == 'invitee'
+          %a{:href => "/admin/events/#{params[:event_id]}/invitees.xls?sample_download=invitee", :target => "_blank"}
+            %i.fa.fa-plus-square
+            %span Download Sample File
         - else
           %a{:href => "/admin/events/#{params[:event_id]}/imports/new?importable_type_sample=#{import_type}_sample.xlsx", :target => "_blank"}
             %i.fa.fa-plus-square

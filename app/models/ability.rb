@@ -96,6 +96,8 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
+      can :create, MyProfile
+      can :manage, MyProfile, :event_id => e_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -190,6 +192,8 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
+      can :create, MyProfile
+      can :manage, MyProfile, :event_id => e_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -294,7 +298,9 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
-
+      can :create, MyProfile
+      can :manage, MyProfile, :event_id => e_ids
+      
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
       can :manage, Feedback#, :speaker_id => s_ids

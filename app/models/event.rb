@@ -14,6 +14,7 @@ class Event < ActiveRecord::Base
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_many :my_profiles, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
@@ -535,5 +536,21 @@ class Event < ActiveRecord::Base
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def extra_invitee_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    ['attr1', 'attr2', 'attr3', 'attr4', 'attr5'].each do |t|
+      h[t] = my_profile.attributes[t] if my_profile.attributes[t].present? and my_profile.attributes['enabled_attr'][t] == 'yes'
+    end if my_profile.present?
+    h
+  end
+
+  def get_invitee_my_profile_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    h = my_profile.attributes['enabled_attr'] rescue {}
+    h
   end
 end

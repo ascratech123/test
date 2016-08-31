@@ -12,23 +12,42 @@
         = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "invitee_generalInfo.jpg", :section_id => "invitee_general_section"}
         = f.new_custom_file_browser_field :profile_pic, "Profile picture (png/jpg) only", :id => "uploadBtn", :value => f.object.profile_pic_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
         =# f.custom_text_field :name_of_the_invitee, "Full Name *","background" => "false"
-        = f.custom_text_field :first_name, "First Name *","background" => "false"
-        = f.custom_text_field :last_name, "Last Name *","background" => "false"
-        = f.custom_text_field :email, "Email Address *","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'first_name' and @my_profile_attributes['first_name'] == 'no') 
+          = f.custom_text_field :first_name, "First Name *","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'last_name' and @my_profile_attributes['last_name'] == 'no') 
+          = f.custom_text_field :last_name, "Last Name *","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'email' and @my_profile_attributes['email'] == 'no') 
+          = f.custom_text_field :email, "Email Address *","background" => "false"
         / - if f.object.id.blank?
         /   = f.custom_text_field :password, "Password", :type => 'password'
         / = f.hidden_field :password, :value => "password"
-        = f.custom_text_field :designation, "Designation","background" => "false"
-        = f.custom_text_field :company_name, "Company Name","background" => "false"
-        = f.custom_text_area_field :about,"Description", "background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'designation' and @my_profile_attributes['designation'] == 'no') 
+          = f.custom_text_field :designation, "Designation","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'company_name' and @my_profile_attributes['company_name'] == 'no') 
+          = f.custom_text_field :company_name, "Company Name","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'about' and @my_profile_attributes['about'] == 'no') 
+          = f.custom_text_area_field :about,"Description", "background" => "false"
         / = f.custom_text_field :interested_topics, "Interested Topics"
-        = f.custom_text_field :mobile_no, "Mobile No.","background" => "false"
-        = f.custom_text_field :website, "Website ","background" => "false"
-        = f.custom_text_field :facebook_id, "Facebook link ","background" => "false"
-        = f.custom_text_field :google_id, "Google+ link ","background" => "false"
-        = f.custom_text_field :linkedin_id, "LinkedIn link ","background" => "false"
-        = f.custom_text_field :street, "City ","background" => "false"
-        = f.custom_text_field :country, "Country ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'mobile_no' and @my_profile_attributes['mobile_no'] == 'no') 
+          = f.custom_text_field :mobile_no, "Mobile No.","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'website' and @my_profile_attributes['website'] == 'no') 
+          = f.custom_text_field :website, "Website ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'facebook_id' and @my_profile_attributes['facebook_id'] == 'no') 
+          = f.custom_text_field :facebook_id, "Facebook link ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'google_id' and @my_profile_attributes['google_id'] == 'no') 
+          = f.custom_text_field :google_id, "Google+ link ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'linkedin_id' and @my_profile_attributes['linkedin_id'] == 'no') 
+          = f.custom_text_field :linkedin_id, "LinkedIn link ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'street' and @my_profile_attributes['street'] == 'no') 
+          = f.custom_text_field :street, "City ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'country' and @my_profile_attributes['country'] == 'no') 
+          = f.custom_text_field :country, "Country ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'remark' and @my_profile_attributes['remark'] == 'no')
+          = f.custom_text_area_field :remark,"Remark", "background" => "false"
+        - extra_attr = @event.extra_invitee_attributes
+        - extra_attr.each do |attrs_arr|
+          = f.custom_text_field attrs_arr[0], attrs_arr[1], "background" => "false"
+        
         = hidden_field_tag "type","#{params[:type]}" if params[:type].present?
         - if false
           .mdl-cell--12-col.mdl-cell--4-col-tablet.ml-color--shades-white.m-8
