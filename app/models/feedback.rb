@@ -42,7 +42,7 @@ class Feedback < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column(:event_timezone, :self.event.timezone)
+    self.update_column(:event_timezone, self.event.timezone)
   end
 
   def created_at_with_event_timezone

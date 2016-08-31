@@ -599,7 +599,7 @@ class Event < ActiveRecord::Base
   def set_timezone_on_associated_tables
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize)
-      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes"]
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications"]
         table_name.classify.constantize.where(:event_id => self.id).each{|obj| obj.update_column("event_timezone", self.timezone)}
       end   
       for table_name in ["analytics", "chats", "conversations", "e_kits", "faqs", "highlight_images", "qnas"]
