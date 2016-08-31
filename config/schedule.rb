@@ -24,6 +24,6 @@ every 5.minutes do
   runner "Notification.push_notification_time_basis", :environment => :production
 end
 
-every 1.minute do
+every 15.minutes do
   runner "Event.set_event_category", :environment => :staging
 end
