@@ -121,6 +121,11 @@ class Invitee < ActiveRecord::Base
 
   def feedback_last_updated_at
     feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
+    feedbacks.last.updated_at if feedbacks.present?
+  end
+  
+  def feedback_last_updated_at_with_event_timezone
+    feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
     feedbacks.last.updated_at.in_timezone(self.event.timezone) if feedbacks.present?
   end
   
@@ -349,7 +354,7 @@ class Invitee < ActiveRecord::Base
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone]) if invitees.present?
     invitees
   end
 
