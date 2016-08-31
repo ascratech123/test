@@ -45,18 +45,7 @@
             = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
           .col-lg-1.agenda_help
             = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
-          - if false
-            .col-lg-5.p-h-12
-              .col-lg-7.p-h-12
-                - er = f.object.errors.messages[:notification_type].join(',') rescue nil
-                - f.object.errors.messages[:notification_type].clear if f.object.errors.messages[:notification_type].present? 
-                = f.custom_radio_button :notification_type, "all", "All", :id => "option1"
-                = f.custom_radio_button :notification_type, "group", "Group", :id => "option2"
-              .col-lg-1.agenda_help
-                = link_to "?" ,"/whats_this/notification/general_information/send_push_notifications.png", rel: "agenda_image", title: "Send Push Notification", :class =>'fancybox whatsImg appwhatsthis'
-              .field_with_errors.col-lg-10
-                .span{:class => "errorMessage"}
-                  = er
+
       .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => ((f.object.notification_type == 'all' or f.object.notification_type.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px'), :id => 'group_check_boxes'}
         .form-group
           %label.col-lg-4.control-label.ml-color--shades-white
@@ -99,6 +88,7 @@
           .col-lg-7
             %i.arrow.single
             - grouped_options = get_notification_type_group_array(@event)
+            - grouped_options = grouped_options.insert(0, ['Home Page','Home Page'])
             = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
           .span.col-lg-1
             = link_to("?" ,"/whats_this/notification/general_information/select_root_destination.png", rel: "selecte_template", title: "Destination", :class =>"fancybox whatsImg")
@@ -142,7 +132,7 @@
         $("#notification_notify_to").parent().parent().parent().hide();
       }  
     });
-  });
+  })
   $("#option1").click(function(){
     $("#group_check_boxes").hide();
   });

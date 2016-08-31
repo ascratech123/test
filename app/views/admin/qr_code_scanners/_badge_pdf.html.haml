@@ -1,5 +1,5 @@
 = stylesheet_link_tag "scanner", :media => 'screen, print'
-= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?  and params[:qr_code_preview].blank?# and [368, 165, 168].include? @event.id
+= link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?  and params[:qr_code_preview].blank? and [368, 165, 168].exclude? @event.id
 %title Disha
 %body.qr-scanner-page#print
   - if @event.present? and [368, 165, 168].include? @event.id
@@ -26,15 +26,14 @@
           
   :javascript
     function printpage() {
-      //Get the print button and put it into a variable
       var printButton = document.getElementById("prnt");
-      //Set the print button visibility to 'hidden' 
       printButton.style.visibility = 'hidden';
-      //Print the page content
       window.print()
-      //Set the print button to 'visible' again 
-      //[Delete this line if you want it to stay hidden after printing]
       printButton.style.visibility = 'visible';
       window.close();
+      window.onunload = refreshParent;
+    }
+    function refreshParent() {
+      window.opener.location.href = "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=#{params[:qr_code_preview]}"
     }
 

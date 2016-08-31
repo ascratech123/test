@@ -43,7 +43,8 @@ class Qna < ActiveRecord::Base
   end
 
   def get_panel_name
-    Panel.find_by_id(self.receiver_id).present? ? Panel.find_by_id(self.receiver_id).name : "" 
+    @panel = Panel.find_by_id(self.receiver_id)
+    @panel.present? ? @panel.name : "" 
   end 
 
   def get_user_name
