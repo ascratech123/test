@@ -28,7 +28,7 @@ class Analytic < ActiveRecord::Base
     event = self.event
     feature = event.event_features.where(:name => "leaderboard") rescue nil
     if feature.present?
-      if error.exclude? false and ((self.points.blank? or (self.points.present? and self.points == 0)) and ["favorite", "rated", "comment", "conversation post", "like", "question asked", "played", "poll answered", "feedback given", 'profile_pic', 'Login', 'Add To Calender', 'share'].include? self.action or (self.viewable_type == 'E-Kit' and self.viewable_id.present?))
+      if error.exclude? false and ((self.points.blank? or (self.points.present? and self.points == 0)) and ["favorite", "rated", "comment", "conversation post", "like", "question asked", "played", "poll answered", "feedback given", 'profile_pic', 'Login', 'Add To Calender', 'share', 'scan qr code'].include? self.action or (self.viewable_type == 'E-Kit' and self.viewable_id.present?))
         self.points = Analytic::ACTION_POINTS[self.action]
       elsif self.points.blank?
         self.points = 0
