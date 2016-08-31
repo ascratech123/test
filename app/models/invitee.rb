@@ -46,6 +46,7 @@ class Invitee < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   before_create :ensure_authentication_token, :generate_key
+  after_create :set_event_timezone
   before_save :encrypt_password
   
   before_save :set_full_name
@@ -209,6 +210,10 @@ class Invitee < ActiveRecord::Base
     self.assign_secret_key
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
   def assign_secret_key
     self.secret_key = self.get_secret_key
   end
@@ -354,7 +359,7 @@ class Invitee < ActiveRecord::Base
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) if invitees.present?
     invitees
   end
 
@@ -584,6 +589,13 @@ class Invitee < ActiveRecord::Base
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
 
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event_timezone)
+  end
 
   private
 
