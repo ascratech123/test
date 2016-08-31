@@ -21,9 +21,9 @@ set :output, "log/cron_log.log"
 # Learn more: http://github.com/javan/whenever
 
 every 5.minutes do
-  runner "Notification.push_notification_time_basis", :environment => :staging
+  runner "Notification.push_notification_time_basis", :environment => :production
 end
 
-every 1.minutes do
-  runner "Edm.send_email_time_basis", :environment => :staging
+every 1.minute do
+  runner "Event.set_event_category", :environment => :staging
 end

@@ -638,4 +638,15 @@ class Event < ActiveRecord::Base
     self.end_event_time.in_time_zone(self.timezone)
   end
   
+  def self.set_event_category
+    Event.find_each do |event|
+      if event.start_event_date.in_time_zone(event.timezone) <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
+        event.update_column("event_category","Ongoing")
+      elsif event.start_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
+        event.update_column("event_category","Upcoming")
+      else
+        event.update_column("event_category","Past")
+      end
+    end
+  end
 end

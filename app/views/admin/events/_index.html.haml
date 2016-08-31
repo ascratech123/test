@@ -50,7 +50,7 @@
                   = link_to event.event_name, admin_client_event_path(event.client_id, event.id)
               - else
                 = event.event_name  
-            %td.font16= event_type(event) rescue nil
+            %td.font16= event.event_category #event_type(event) rescue nil
             %td.font16
               - if event.status != 'published' or event.status == 'published'
                 %button{:class => get_status_class(event)}
