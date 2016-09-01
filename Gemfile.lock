@@ -59,6 +59,9 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
+    bullet (5.0.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.9.0)
     byebug (8.2.4)
     cancancan (1.13.1)
     chronic (0.10.2)
@@ -89,6 +92,7 @@ GEM
       actionmailer (~> 4.0)
       activesupport (~> 4.0)
     execjs (2.6.0)
+    flamegraph (0.9.5)
     gcm (0.1.1)
       httparty
       json
@@ -159,6 +163,8 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.6.4)
+    rack-mini-profiler (0.10.1)
+      rack (>= 1.2.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
@@ -251,6 +257,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
+    uniform_notifier (1.9.0)
     vpim (13.11.11)
     warden (1.2.6)
       rack (>= 1.0)
@@ -271,6 +278,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 3.4)
   aws-sdk (< 2.0)
   bcrypt-ruby
+  bullet
   byebug
   cancancan
   ckeditor!
@@ -278,6 +286,7 @@ DEPENDENCIES
   devise
   exception_notification
   execjs
+  flamegraph
   gcm
   grocer
   haml
@@ -292,6 +301,7 @@ DEPENDENCIES
   nested_form
   paperclip (~> 4.3)
   pry
+  rack-mini-profiler
   rails (= 4.2.1)
   rails-observers
   ransack

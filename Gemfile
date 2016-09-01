@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 
 
+group :development do
+  gem 'flamegraph'
+	gem 'rack-mini-profiler'
+	gem 'bullet'
+end
 gem 'rails', '4.2.1'
 gem 'mysql2', '~> 0.3.18'
 gem 'execjs'
