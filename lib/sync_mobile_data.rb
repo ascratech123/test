@@ -50,28 +50,34 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack'].each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session']#.each {|value| model_name.delete(value)}
+    model_name = model_name - models_array
     model_name.each do |model|
-      info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
-      info = info.where(:event_id => event_ids) rescue []
+
+      # info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
+      # info = info.where(:event_id => event_ids) rescue []
+
+      #info = model.constantize.includes(:event).where(:updated_at => start_event_date..end_event_date , :event_id => event_ids)
+
+      info = model.constantize.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)
       case model
         when 'Conversation'
-          info = info.where(:status => 'approved')
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
+          # info = info.where(:status => 'approved')
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
         when 'EmergencyExit'
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url, :start_event_date_with_timezone, :end_event_date_with_timezone, :start_event_time_with_timezone, :end_event_time_with_timezone])
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url]) rescue []
         when 'EventFeature'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility, :main_icon_updated_at, :menu_icon_updated_at], :methods => [:main_icon_url, :menu_icon_url]) rescue []
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
         when 'Image'
           images = Image.where(:updated_at => start_event_date..end_event_date) rescue []
-          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type, :image_updated_at], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type], :methods => [:image_url]) rescue []  
         when 'HighlightImage'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id, :highlight_image_updated_at], :methods => [:highlight_image_url]) rescue []    
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:only => [:id, :name,:event_id], :methods => [:highlight_image_url]) rescue []    
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
@@ -86,9 +92,9 @@ module SyncMobileData
           #info = Comment.get_comments(conversation_ids,start_event_date, end_event_date) rescue []
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:user_name, :created_at_with_event_timezone, :updated_at_with_event_timezone]) rescue []
         when 'Sponsor'
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:updated_at, :created_at], :methods => [:image_url]) rescue []  
         when 'Exhibitor'
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url]) rescue []  
         when 'Notification'
           info = Invitee.get_notification(info, current_user)
           data[:"notifications"] = info
@@ -96,7 +102,7 @@ module SyncMobileData
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:methods => [:option_percentage]) rescue []
         when 'Invitee'
           arr = []
           leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
@@ -112,7 +118,7 @@ module SyncMobileData
             data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url]) rescue []
           end
         when 'Quiz'
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_correct_answer_percentage, :get_total_answer, :get_correct_answer_count]) rescue []  
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:methods => [:get_correct_answer_percentage, :get_total_answer, :get_correct_answer_count]) rescue []  
         when 'LogChange'
           if not (start_event_date == "01/01/1990 13:26:58".to_time.utc)
             info = LogChange.where(:created_at => start_event_date..end_event_date , :action => "destroy")
@@ -180,7 +186,7 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info
           end
         when "Agenda"
-          data[:"#{name_table(model)}"] = info.as_json(:methods =>[:agenda_track_name, :track_sequence, :start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone])
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:methods =>[:agenda_track_name, :track_sequence, :start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone])
         when "Feedback"
           data[:"#{name_table(model)}"] = info.as_json(:methods =>[:created_at_with_event_timezone, :updated_at_with_event_timezone])
         else
