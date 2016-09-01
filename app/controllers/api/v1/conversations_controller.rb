@@ -12,7 +12,7 @@ class Api::V1::ConversationsController < ApplicationController
         conversation = event.conversations.new(:description => params[:description], :user_id => params[:user_id] ) 
       end
       if conversation.save
-        render :status=>406,:json=>{:status=>"Success",:message=>"Conversation Created Successfully.", :id => conversation.id, :visible_status => conversation.status, :updated_at => conversation.updated_at, :image_url => conversation.image_url, :company_name => conversation.company_name, :user_name => conversation.user_name, :created_at_with_event_timezone => conversation.created_at_with_event_timezone, :updated_at_with_event_timezone => conversation.updated_at_with_event_timezone }
+        render :status=>406,:json=>{:status=>"Success",:message=>"Conversation Created Successfully.", :id => conversation.id, :visible_status => conversation.status, :updated_at => conversation.updated_at, :image_url => conversation.image_url, :company_name => conversation.company_name, :user_name => conversation.user_name }
       else
         render :status=>406,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{conversation.errors.full_messages.join(" , ")}" }
       end
@@ -32,11 +32,20 @@ class Api::V1::ConversationsController < ApplicationController
       data[:'conversations'] = conversations.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count])
       conversation_ids = conversations.pluck(:id) rescue []
       info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
-      data[:'comments'] = info.as_json(:only => [:id, :commentable_id, :commentable_type, :user_id, :description, :created_at, :updated_at], :methods => [:user_name, :created_at_with_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) rescue []
+      data[:'comments'] = info.as_json(:only => [:id, :commentable_id, :commentable_type, :user_id, :description, :created_at, :updated_at], :methods => [:user_name]) rescue []
       render :status => 200, :json => {:status => "Success", :conversation_sync_time => sync_time, :data => data}
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
     end
   end
 
+  def show
+    conversation = Conversation.find_by_id(params[:id])
+    if conversation.present?
+      likes_data = conversation.likes.as_json(:methods => [:user_name])
+      render :json=>{:status=>200, :data=>likes_data,:likes_count=>conversation.likes.count}
+    else
+      render :json=>{:status=>401, :message=>"invalid conversation id"}
+    end  
+  end  
 end
