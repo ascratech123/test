@@ -39,4 +39,13 @@ class Api::V1::ConversationsController < ApplicationController
     end
   end
 
+  def show
+    conversation = Conversation.find_by_id(params[:id])
+    if conversation.present?
+      likes_data = conversation.likes.as_json(:methods => [:user_name])
+      render :json=>{:status=>200, :data=>likes_data,:likes_count=>conversation.likes.count}
+    else
+      render :json=>{:status=>401, :message=>"invalid conversation id"}
+    end  
+  end  
 end
