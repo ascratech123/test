@@ -80,7 +80,10 @@
               - if params[:show_history] != "true" and @event.present?
                 - if params[:action] != "new" and @event.invitees.present?  
                   = link_to admin_event_invitees_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
-                    Export
+                    Export       
+                - if @registered_invitees.present?
+                  = link_to admin_event_invitees_path(:event_id => @event.id, :format => 'xls',:qr_code_registered => 'true'),:class => "centerAlign" do
+                    Qr scan data
                 = link_to new_admin_event_invitee_path(:importable_type => 'invitee', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import
               - else

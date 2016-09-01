@@ -30,12 +30,19 @@ class Admin::InviteesController < ApplicationController
       @invitees = Invitee.search(params, @invitees) if params[:search].present?
     end
     @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
+    @registered_invitees = @invitees.where(qr_code_registration: true)
     respond_to do |format|
       format.html  
       format.xls do
-        only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
-        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
-        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
+        if params[:qr_code_registered].present? && params[:qr_code_registered] == "true"           
+          only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
+          method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
+          send_data @registered_invitees.to_xls(:only => only_columns, :methods => method_allowed, :filename => "asd.xls")
+        else
+          only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status,:qr_code_registration]
+          method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
+          send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")        
+        end  
       end
     end
   end
