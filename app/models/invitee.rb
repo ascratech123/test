@@ -253,7 +253,7 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       events = mobile_app.events.where(:status => event_status)
       events.each do |event|
-        event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
+        event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
       end if events.present?
     end
     event_id
@@ -268,7 +268,7 @@ class Invitee < ActiveRecord::Base
       if change_events.present?
         events = mobile_app.events.where(:status => event_status)
         events.each do |event|
-          event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
+          event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
         end if events.present?
       end  
     end
