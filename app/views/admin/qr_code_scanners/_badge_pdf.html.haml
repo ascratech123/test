@@ -1,5 +1,5 @@
 = stylesheet_link_tag "scanner", :media => 'screen, print'
-=# link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?  and params[:qr_code_preview].blank?# and [368, 165, 168].include? @event.id
+=# link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? # and [368, 165, 168].include? @event.id
 %title Disha
 %body.qr-scanner-page#print
   - if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
@@ -22,7 +22,7 @@
       .description
         %p{:style => 'font-size:34px;margin:0px'} 
           = @invitee.name_of_the_invitee rescue nil
-   
+    = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?
           
   :javascript
     function printpage() {
@@ -31,8 +31,4 @@
       window.print()
       printButton.style.visibility = 'visible';
       window.close();
-      window.onunload = refreshParent;
-    }
-    function refreshParent() {
-      window.opener.location.href = "#{SAPP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=#{params[:qr_code_preview]}"
     }

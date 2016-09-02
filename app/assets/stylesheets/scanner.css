@@ -204,7 +204,7 @@ body{
 .btnDiv.newScanBtn{margin:5% 0; padding:0;}
 .btnDiv.thankyouPage{padding: 7% 0 2% 0}
 .searchManuallyDiv a{font-size:15px; }
-
+#print .description{margin-top: 0px;}
 .barcodePage .description p{font-size:34px;}
 .barcode.title{width:28%; margin:0 auto;}
 .barcode.title img{width:100%; max-width:100%;}
@@ -223,6 +223,8 @@ body{
 .subText{margin-top:10px;}
 #print .description p.welcomeText{margin-top:40%;}
 #print .container.printPage{background:none;}
+#print .description{margin-top: 50%;}
+
 }
 
 
