@@ -3,15 +3,15 @@ class Admin::InviteeSearchesController < ApplicationController
 
   def index
     @invitees = @event.invitees
-    @attendees = @event.invitees.where(:qr_code_registration => true)
-    @attendance = @event.invitees.where(:qr_code_registration => true)
+    @attendees = @event.invitees.unscoped.where(:qr_code_registration => true).order('updated_at desc')
+    @attendance = @event.invitees.unscoped.where(:qr_code_registration => true).order('updated_at desc')
     @comapny_names = @event.invitees.pluck(:company_name)
 
     @invitees = Invitee.search(params, @invitees) if params[:search].present? and ( params[:value].present? and params[:value] == "printBadge")
-    @invitees = @invitees.paginate(page: params[:page], per_page: 10)
+    @invitees = @invitees.paginate(page: params[:invitees_page], per_page: 10)
     
-    @attendees = Invitee.search(params, @attendance) if params[:search].present? and ( params[:value].present? and params[:value] == "attendee")
-    @attendees = @attendees.paginate(page: params[:page], per_page: 10)
+    @attendees = Invitee.search(params, @attendance) if (params[:search].present? and ( params[:value].present? and params[:value] == "attendee"))
+    @attendees = @attendees.paginate(page: params[:attendees_page], per_page: 10)
     
     respond_to do |format|
       format.html  

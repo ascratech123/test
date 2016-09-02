@@ -47,13 +47,12 @@
                     %td=invitee.mobile_no
                     %td=invitee.email
                     %td
-                      / %a{:href => "javasscript:void(0);"} Print 
-                      = link_to "Print", admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview', :qr_code_preview => true), :target => '_blank'
+                      %a{:href => "javascript:void(0);", :invitee_id =>invitee.id, :class => "newWindow"} Print 
             %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
               %tbody
                 %tr
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
-                    = will_paginate @invitees 
+                    = will_paginate @invitees, :param_name => 'invitees_page'
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
         #tab-2.tab-content
           #successMsg
@@ -75,7 +74,8 @@
                   %tr
                     %td
                       %strong Access
-                    %td= 700 - (@attendance.count.to_i)
+                    %td 0
+                    / = 700 - (@attendance.count.to_i)
 
         #tab-3.tab-content
           .excelDownload
@@ -105,12 +105,11 @@
                     %td=attendee.email
                     %td
                       / %a{:href => "javasscript:void(0);"} Print
-                      = link_to "Print", admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => attendee.id, :page => 'print_preview', :qr_code_preview => true), :target => '_blank'
             %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
               %tbody
                 %tr
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
-                    = will_paginate @attendees
+                    = will_paginate @attendees, :param_name => 'attendees_page'
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
         #tab-4.tab-content
           %table{:width => "100%"}
@@ -184,3 +183,14 @@
             = image_tag("footer-logo.jpg", border: 0)
 #params_value{:params_value => params[:value]}
 #params_registration_value{:params_registration_value => params[:params_value]}
+
+:javascript
+$(document).ready(function(){
+  $('.newWindow').click(function(){
+    var invitee_id = $(this).attr('invitee_id')
+
+    var link = "#{APP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=true&page=print_preview&invitee_id=" + invitee_id
+
+    window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=400,height=800");
+  })
+})
