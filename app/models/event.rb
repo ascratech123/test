@@ -594,4 +594,8 @@ class Event < ActiveRecord::Base
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
   end
+
+  def about_date
+    "#{self.start_event_date.strftime('%d %b')} - #{self.start_event_date.strftime('%d %b %Y')}"
+  end
 end

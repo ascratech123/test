@@ -62,13 +62,13 @@ module ApplicationHelper
   def get_hour_minute_second_ampm(time, format)
     case format
     when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') rescue nil
+      time.strftime('%l').strip.rjust(2, '0') rescue nil
     when 'minute'
-      time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') rescue nil
+      time.strftime('%M').strip.rjust(2, '0') rescue nil
     when 'second'
-      time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') rescue nil
+      time.strftime('%S').strip.rjust(2, '0') rescue nil
     when 'ampm'
-      time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') rescue nil
+      time.strftime('%p').strip.rjust(2, '0') rescue nil
     end
   end
 

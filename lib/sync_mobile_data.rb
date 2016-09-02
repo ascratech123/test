@@ -62,7 +62,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:icon_updated_at,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :emergency_exit_updated_at, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url]) rescue []
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url, :about_date]) rescue []
         when 'EventFeature'
           data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
@@ -180,7 +180,7 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info
           end
         when "Agenda"
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:sequence], :methods =>[:agenda_track_name, :track_sequence])
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:sequence], :methods =>[:agenda_track_name, :track_sequence, :formatted_start_date_detail, :formatted_time, :formatted_start_date_listing])
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
