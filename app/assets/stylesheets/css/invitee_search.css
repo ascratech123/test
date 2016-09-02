@@ -14,7 +14,7 @@ ul.tabs li.current{background:#516161;	color:#fff;}
 #searchFrm .tab1-searchDiv{margin-right:10px;}
 #searchFrm .tab1-selectDiv{margin:0px 10px;}
 #searchFrm .tab1-searchBtn{margin:0px 5px;}
-.table-grid th{background:#00b1bb; padding:5px 0; color:#fff; font-weight:normal;}
+.table-grid th{background:#00b1bb; padding:5px 0; color:#fff; font-weight:normal; text-align:center;}
 .tableHeading {background:#00b1bb;}
 .tbl-border {border: 1px solid; padding: 2px;}
 .table-grid {border-collapse: collapse;}
