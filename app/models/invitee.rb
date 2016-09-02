@@ -514,7 +514,7 @@ class Invitee < ActiveRecord::Base
     new_user
   end
 
-  def self.get_notification(notifications, user)
+  def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
     notifications = notifications.where(:pushed => true)
     notifications.each do |notification|
@@ -525,22 +525,29 @@ class Invitee < ActiveRecord::Base
         notification_ids << notification.id
       end
     end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids])
+    notification_ids << get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
+    notifications = notifications.where(:id => notification_ids.flatten).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :created_at_with_event_timezone, :updated_at_with_event_timezone, :push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 
   def get_notification(mobile_app_code, submitted_app)
+    # event_ids = get_event_id(mobile_app_code,submitted_app)
+    # notification_ids = []
+    # notifications = Notification.where(:pushed => true, :event_id => event_ids).where('group_ids IS NOT NULL')
+    # notifications.each do |notification|
+    #   groups = InviteeGroup.where("id IN(?)", notification.group_ids)
+    #   invitee_ids = []
+    #   groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
+    #     notification_ids << notification.id if invitee_ids.include? self.id.to_s
+    # end
+    # notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :ima$
+    # notifications.present? ? notifications : []
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    notification_ids = []
-    notifications = Notification.where(:pushed => true, :event_id => event_ids).where('group_ids IS NOT NULL')
-    notifications.each do |notification|
-      groups = InviteeGroup.where("id IN(?)", notification.group_ids)
-      invitee_ids = []
-      groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
-        notification_ids << notification.id if invitee_ids.include? self.id.to_s
-    end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
-    notifications.present? ? notifications : []
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+    data = []
+    invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
+    notifications = Notification.where(:id => invitee_notifications.pluck(:notification_id))
+    notifications.as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
   end
 
   def get_read_notification(mobile_app_code,submitted_app)
@@ -560,6 +567,14 @@ class Invitee < ActiveRecord::Base
     data
   end
   
+  def self.get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
+    start_event_date = start_event_date - 5.minutes
+    info = InviteeNotification.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)    
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
+    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
+    invitee_notifications.pluck(:notification_id) rescue []
+  end
+
   def get_licensee_admin
     self.event.client.licensee rescue nil
   end

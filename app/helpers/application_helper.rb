@@ -51,13 +51,13 @@ module ApplicationHelper
     link_to html_content, url, :confirm =>'Are you sure?'#,:style => "float:right;width:120px"
   end
 
-  def time_with_zone(datetime, zone=nil)
-    if zone.present? and zone == 'IST'
-      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
-    else
-      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
-    end
-  end
+  #def time_with_zone(datetime, zone=nil)
+  #  if zone.present? and zone == 'IST'
+  #    datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
+  #  else
+  #    datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
+  #  end
+  #end
 
   def get_hour_minute_second_ampm(time, format)
     case format

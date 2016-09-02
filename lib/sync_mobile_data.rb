@@ -52,6 +52,7 @@ module SyncMobileData
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
     ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session'].each {|value| model_name.delete(value)}
     model_name.each do |model|
+      start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') if start_event_date.present?
       info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
       case model
@@ -90,7 +91,7 @@ module SyncMobileData
         when 'Exhibitor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url]) rescue []  
         when 'Notification'
-          info = Invitee.get_notification(info, current_user)
+          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
           data[:"notifications"] = info
         when 'InviteeNotification'
           info = Invitee.get_read_notification(info, event_ids, current_user)
