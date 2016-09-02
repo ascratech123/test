@@ -1,0 +1,152 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title QR Code Scanner
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+    = stylesheet_link_tag "css/invitee_search"
+    = javascript_include_tag "js/invitee_search"
+    / %link{:href => "invitee_search.css", :rel => "stylesheet", :type => "text/css"}/
+    / %script{:src => "js/jquery-1.11.3.min.js"}
+    / %script{:src => "js/common.js"}
+  %body
+    .container
+      %header
+        .logo
+          %p
+            %a{:href => "javasscript:void(0);"}
+              / %img{:src => "assets/hewlett-logo.png"}/
+        .logout
+      .wrapper
+        %ul.tabs
+          %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
+          %li.tab-link{"data-tab" => "tab-2"} Score card
+          %li.tab-link.attendee#attendee{"data-tab" => "tab-3"} Attendeee
+          %li.tab-link{"data-tab" => "tab-4"} Onsite Registration
+        #tab-1.tab-content.current
+          .searchDiv.tab1
+            = render :partial => "admin/invitees/search", :locals => {:invitee => true}
+            %table.table-grid{:align => "center", :border => "0", :width => "100%"}
+              %thead
+                %tr.tableHeading
+                  %th Full Name
+                  %th Company
+                  %th Designation
+                  %th Mobile Phone
+                  %th Email Id
+                  %th
+              %tbody{:align => "center"}
+                - @invitees.each do |invitee|
+                  %tr
+                    %td= invitee.name_of_the_invitee
+                    %td=invitee.company_name
+                    %td=invitee.designation
+                    %td=invitee.mobile_no
+                    %td=invitee.email
+                    %td
+                      %a{:href => "javasscript:void(0);"} 
+            %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
+              %tbody
+                %tr
+                  %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
+                    = will_paginate @invitees 
+                  %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
+        #tab-2.tab-content
+          #successMsg
+            #scorecard
+              %table{:border => "0", :cellpadding => "6", :cellspacing => "0", :width => "50%"}
+                %tbody
+                  %tr
+                    %td
+                      %strong Target
+                    %td 700
+                  %tr
+                    %td
+                      %strong Attendance
+                    %td= @attendance.count
+                  %tr
+                    %td
+                      %strong Uniq Companies count
+                    %td= @comapny_names.uniq.count
+                  %tr
+                    %td
+                      %strong Access
+                    %td= 700 - (@attendance.count.to_i)
+
+        #tab-3.tab-content
+          .excelDownload
+            %p
+              / %img{:src => "assets/excel.png"}/
+              = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}#, class: 'dock-item'  
+          .searchDiv.tab3
+            = render :partial => "admin/invitees/search", :locals => {:attendee => true}
+            %table.table-grid{:align => "center", :border => "0", :width => "100%"}
+              %thead
+                %tr.tableHeading
+                  %th Full Name
+                  %th Company
+                  %th Designation
+                  %th Mobile Phone
+                  %th Email Id
+                  %th
+              %tbody{:align => "center"}
+                - @attendees.each do |attendee|
+                  %tr
+                    %td=attendee.name_of_the_invitee
+                    %td=attendee.company_name
+                    %td=attendee.designation
+                    %td=attendee.mobile_no
+                    %td=attendee.email
+                    %td
+                    %a{:href => "javasscript:void(0);"} 
+            %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
+              %tbody
+                %tr
+                  %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
+                    = will_paginate @attendees
+                  %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
+
+        #tab-4.tab-content
+          %table{:width => "100%"}
+            %tr
+              %td
+                %form
+                  %table{:cellspacing => "7"}
+                    %tr
+                      %td
+                        Full Name
+                        %span> *
+                        \:
+                      %td.onsiteForm
+                        %input{:placeholder => "Name", :type => "text"}/
+                    %tr
+                      %td
+                        Company
+                        %span> *
+                        \:
+                      %td.onsiteForm
+                        %input{:placeholder => "Company", :type => "text"}/
+                    %tr
+                      %td Designation:
+                      %td.onsiteForm
+                        %input{:placeholder => "Designation", :type => "text"}/
+                    %tr
+                      %td Email Address:
+                      %td.onsiteForm
+                        %input{:placeholder => "Email Address", :type => "text"}/
+                    %tr{:align => "center"}
+                      %td.tab4Btn{:align => "center", :colspan => "6"}
+                        %input{:name => "submit", :type => "submit", :value => "Submit"}/
+                        %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
+      / container
+      %footer
+        .footerLogo
+          %p POWERED BY
+          %p
+            / %img{:src => "assets/images/footer-logo.jpg"}
+            = image_tag("footer-logo.jpg", border: 0)
+#params_value{:params_value => params[:value]}
+
