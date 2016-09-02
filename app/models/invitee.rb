@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password
+  attr_accessor :password, :invitee_searches_page
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -46,7 +46,6 @@ class Invitee < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   before_create :ensure_authentication_token, :generate_key
-  after_create :set_event_timezone
   before_save :encrypt_password
   
   before_save :set_full_name
@@ -125,11 +124,6 @@ class Invitee < ActiveRecord::Base
     feedbacks.last.updated_at if feedbacks.present?
   end
   
-  def feedback_last_updated_at_with_event_timezone
-    feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
-    feedbacks.last.updated_at.in_timezone(self.event.timezone) if feedbacks.present?
-  end
-  
   def self.get_invitee_by_id(id)
     Invitee.find_by_id(id)
   end
@@ -195,7 +189,11 @@ class Invitee < ActiveRecord::Base
       invitees = invitees.where("id IN (?)",ids)  
     end  
     keyword = params[:search][:keyword]
-     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
+      if params[:full_search].present?
+        invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?) or mobile_no like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}", "%#{keyword}")if keyword.present? and params[:full_search].present?
+      else
+        invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
+      end
     invitees   
   end
 
@@ -208,10 +206,6 @@ class Invitee < ActiveRecord::Base
   def generate_key
     self.key = Digest::SHA1.hexdigest(BCrypt::Engine.generate_salt)
     self.assign_secret_key
-  end
-
-  def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
   end
 
   def assign_secret_key
@@ -253,7 +247,7 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       events = mobile_app.events.where(:status => event_status)
       events.each do |event|
-        event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
+        event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
       end if events.present?
     end
     event_id
@@ -268,7 +262,7 @@ class Invitee < ActiveRecord::Base
       if change_events.present?
         events = mobile_app.events.where(:status => event_status)
         events.each do |event|
-          event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
+          event_id << event.id if event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
         end if events.present?
       end  
     end
@@ -359,7 +353,7 @@ class Invitee < ActiveRecord::Base
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at]) if invitees.present?
     invitees
   end
 
@@ -535,7 +529,7 @@ class Invitee < ActiveRecord::Base
         notification_ids << notification.id
       end
     end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :created_at_with_event_timezone, :updated_at_with_event_timezone, :push_datetime_with_event_timezone])
+    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids])
     notifications.present? ? notifications : []
   end
 
@@ -589,13 +583,6 @@ class Invitee < ActiveRecord::Base
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
 
-  def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event_timezone)
-  end
-
-  def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event_timezone)
-  end
 
   private
 

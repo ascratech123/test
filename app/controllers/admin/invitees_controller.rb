@@ -1,8 +1,7 @@
 class Admin::InviteesController < ApplicationController
   layout 'admin'
 
-  #load_and_authorize_resource
-  before_filter :check_user_role, :except => [:index]
+  load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
 
   
@@ -31,19 +30,12 @@ class Admin::InviteesController < ApplicationController
       @invitees = Invitee.search(params, @invitees) if params[:search].present?
     end
     @invitees = @invitees.paginate(page: params[:page], per_page: 10) if params["format"] != "xls"
-    @registered_invitees = @invitees.where(qr_code_registration: true)
     respond_to do |format|
       format.html  
       format.xls do
-        if params[:qr_code_registered].present? && params[:qr_code_registered] == "true"           
-          only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
-          method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
-          send_data @registered_invitees.to_xls(:only => only_columns, :methods => method_allowed), filename: 'qr_scan_data.xls'
-        else
-          only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status,:qr_code_registration]
-          method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
-          send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")        
-        end  
+        only_columns = [:email, :first_name, :last_name, :company_name,:designation, :country, :website, :invitee_status]
+        method_allowed = [:city, :description, :phone_number,:facebook, :google_plus, :linkedin, :twitter, :logged_in, :Profile_pic_URL,:Remark]
+        send_data @invitees.to_xls(:only => only_columns,:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end
@@ -58,9 +50,18 @@ class Admin::InviteesController < ApplicationController
     if @invitee.save
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
+      elsif params[:invitee][:invitee_searches_page].present?
+        @invitee.update_column('onsite_registration',true)
+        session[:invitee_serach_msg] = "Invitee created succsessfully"
+        redirect_to admin_event_invitee_searches_path(:event_id => @event.id,:params_value => "onsite_registration")
       else
         redirect_to admin_event_invitees_path(:event_id => @invitee.event_id)
       end
+    elsif params[:invitee][:invitee_searches_page].present?
+      session[:invitee_serach_fname] = @invitee.errors[:first_name].join(" ")
+      session[:invitee_serach_lname] = @invitee.errors[:last_name].join(" ")
+      session[:invitee_serach_email] = @invitee.errors[:email].join(" ")
+      redirect_to admin_event_invitee_searches_path(:event_id => @event.id,:params_value => "onsite_registration")  
     else
       render :action => 'new'
     end
@@ -102,12 +103,6 @@ class Admin::InviteesController < ApplicationController
   end
 
   protected
-  
-  def check_user_role
-    if (!current_user.has_role? :db_manager) and (!current_user.has_role? :licensee_admin)
-      redirect_to admin_dashboards_path
-    end  
-  end
 
   def invitee_params
     params.require(:invitee).permit!

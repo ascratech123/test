@@ -25,7 +25,7 @@
           %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
           %li.tab-link{"data-tab" => "tab-2"} Score card
           %li.tab-link.attendee#attendee{"data-tab" => "tab-3"} Attendee
-          %li.tab-link{"data-tab" => "tab-4"} Onsite Registration
+          %li.tab-link#registration_tab{"data-tab" => "tab-4"} Onsite Registration
         #tab-1.tab-content.current
           .searchDiv.tab1
             = render :partial => "admin/invitees/search", :locals => {:invitee => true}
@@ -112,39 +112,69 @@
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
                     = will_paginate @attendees
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
-
         #tab-4.tab-content
           %table{:width => "100%"}
             %tr
               %td
-                %form
-                  %table{:cellspacing => "7"}
+                - @event = Event.find(params[:event_id])
+                - @invitee = @event.invitees.build
+                = form_for @invitee,:url => admin_event_invitees_path, :method => "post" do |f|
+                  %table.tab4-table{:cellspacing => "7"}
                     %tr
                       %td
-                        Full Name
+                        First Name
                         %span> *
                         \:
                       %td.onsiteForm
-                        %input{:placeholder => "Name", :type => "text"}/
+                        / %input{:placeholder => "Name", :type => "text"}/
+                        = f.text_field :first_name,:placeholder => "First Name"
+                        %span.error
+                          - if params[:params_value].present? && session[:invitee_serach_fname].present?
+                            #{session[:invitee_serach_fname]}
+                            #{session[:invitee_serach_fname] = nil}
+
+                    %tr
+                      %td
+                        Last Name
+                        %span> *
+                        \:
+                      %td.onsiteForm
+                        / %input{:placeholder => "Name", :type => "text"}/
+                        = f.text_field :last_name,:placeholder => " Last Name"
+                        %span.error
+                          - if params[:params_value].present? && session[:invitee_serach_lname].present?
+                            #{session[:invitee_serach_lname]}                                            
+                            #{session[:invitee_serach_lname] = nil}
                     %tr
                       %td
                         Company
-                        %span> *
-                        \:
+                        
                       %td.onsiteForm
-                        %input{:placeholder => "Company", :type => "text"}/
+                        / %input{:placeholder => "Company", :type => "text"}/
+                        = f.text_field :company_name,:placeholder => "Company"
                     %tr
                       %td Designation:
                       %td.onsiteForm
-                        %input{:placeholder => "Designation", :type => "text"}/
+                        / %input{:placeholder => "Designation", :type => "text"}/
+                        = f.text_field :designation, :placeholder => "Designation"
                     %tr
                       %td Email Address:
                       %td.onsiteForm
-                        %input{:placeholder => "Email Address", :type => "text"}/
+                        / %input{:placeholder => "Email Address", :type => "text"}/
+                        = f.text_field :email, :placeholder => "Email Address"
+                        = f.hidden_field :invitee_searches_page, :value =>"true"
+                        %span.error
+                          - if params[:params_value].present? && session[:invitee_serach_email].present?
+                            #{session[:invitee_serach_email]}
+                            #{session[:invitee_serach_email] = nil}                         
                     %tr{:align => "center"}
                       %td.tab4Btn{:align => "center", :colspan => "6"}
                         %input{:name => "submit", :type => "submit", :value => "Submit"}/
                         %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
+                      %span.success-error
+                        - if params[:params_value].present? && session[:invitee_serach_msg].present?
+                          #{session[:invitee_serach_msg] }                                            
+                          #{session[:invitee_serach_msg] = nil}
       / container
       %footer
         .footerLogo
@@ -153,4 +183,4 @@
             / %img{:src => "assets/images/footer-logo.jpg"}
             = image_tag("footer-logo.jpg", border: 0)
 #params_value{:params_value => params[:value]}
-
+#params_registration_value{:params_registration_value => params[:params_value]}

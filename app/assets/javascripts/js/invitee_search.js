@@ -22,3 +22,8 @@ $(document).ready(function(){
     $("#printBadge").trigger("click");
   }
 });
+$(document).ready(function(){
+  if ($("#params_registration_value").attr("params_registration_value") == "onsite_registration"){
+    $("#registration_tab").trigger("click");
+  }
+});
