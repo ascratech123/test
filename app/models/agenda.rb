@@ -16,7 +16,7 @@ class Agenda < ActiveRecord::Base
   after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected
   before_save :check_category_present_if_new_category_select_from_dropdown
-  after_create :set_dates_with_event_timezone
+  after_create :set_event_timezone
 
   default_scope { order('start_agenda_time asc') }
 
@@ -89,8 +89,8 @@ class Agenda < ActiveRecord::Base
     end_date = self.end_agenda_date rescue nil
     start_time = "#{start_date.strftime('%d/%m/%Y')} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.start_time_am}" if start_date.present?
     end_time = "#{end_date.strftime('%d/%m/%Y')} #{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if end_date.present?
-    self.start_agenda_time = start_time.to_time if start_date.present?
-    self.end_agenda_time = end_time.to_time if end_date.present?
+    self.start_agenda_time = start_time.to_datetime if start_date.present?
+    self.end_agenda_time = end_time.to_datetime if end_date.present?
   end
 
   def set_end_date_if_end_date_not_selected
@@ -145,18 +145,17 @@ class Agenda < ActiveRecord::Base
   def track_sequence
     self.agenda_track.sequence if self.agenda_track_id.to_i > 0
   end
-  
-  def set_dates_with_event_timezone
-    event = self.event
-    self.update_column("start_agenda_time_with_event_timezone", self.start_agenda_time.in_time_zone(event.timezone))
-    self.update_column("end_agenda_time_with_event_timezone", self.end_agenda_time.in_time_zone(event.timezone)) if self.end_agenda_time.present?
+
+  def formatted_start_date_detail
+    "#{self.start_agenda_time.strftime('%d %B %Y')}"
   end
 
-  def start_agenda_time_with_event_timezone
-    self.start_agenda_time.in_time_zone(self.event_timezone) if self.start_agenda_time.present?
+  def formatted_time
+    time_str = "#{self.start_agenda_time.strftime('%H:%M %p')} "
+    time_str += (self.end_agenda_time.present? ? " - #{self.start_agenda_time.strftime('%H:%M %p')}" : "Onwards")
   end
 
-  def end_agenda_time_with_event_timezone
-    self.end_agenda_time.in_time_zone(self.event_timezone) if self.end_agenda_time.present?
+  def formatted_start_date_listing
+    "#{self.start_agenda_time.strftime('%d-%b-%y')}"
   end
 end

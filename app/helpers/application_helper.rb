@@ -21,19 +21,6 @@ module ApplicationHelper
     str = "<br><br><br>"
   end
 
-    def get_hour_minute_second_ampm(time, format)
-      case format
-      when 'hour'
-        time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') if time.present?
-      when 'minute'
-        time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') if time.present?
-      when 'second'
-        time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') if time.present?
-      when 'ampm'
-        time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') if time.present?
-      end
-    end
-
   # BELOW 5 METHODS NOT CALL FROM ANYWHERE
     # def get_datetime(time)
     #   time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if time.present?
@@ -103,6 +90,27 @@ module ApplicationHelper
     url = back_path if url == :back
     html_content = content_tag(:span, "Cancel", :class => "waves-effect waves-light btn")
     link_to html_content, url, :confirm =>'Are you sure?'#,:style => "float:right;width:120px"
+  end
+
+  def time_with_zone(datetime, zone=nil)
+    if zone.present? and zone == 'IST'
+      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
+    else
+      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
+    end
+  end
+
+  def get_hour_minute_second_ampm(time, format)
+    case format
+    when 'hour'
+      time.strftime('%l').strip.rjust(2, '0') rescue nil
+    when 'minute'
+      time.strftime('%M').strip.rjust(2, '0') rescue nil
+    when 'second'
+      time.strftime('%S').strip.rjust(2, '0') rescue nil
+    when 'ampm'
+      time.strftime('%p').strip.rjust(2, '0') rescue nil
+    end
   end
 
   def back_button_detailed_page(url = :back)
@@ -192,7 +200,7 @@ module ApplicationHelper
     data =  {}
     keys = @agenda_group_by_start_agenda_time.count
     keys.each do |key,value|
-      data[key] = @agendas.where('Date(start_agenda_time_with_event_timezone) = ?', key) if key.present?
+      data[key] = @agendas.where('Date(start_agenda_date) = ?', key) if key.present?
     end
     data
   end 

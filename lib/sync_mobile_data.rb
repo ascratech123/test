@@ -68,7 +68,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url]) rescue []
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size, :logo_updated_at,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size,:inside_logo_updated_at], :methods => [:logo_url,:inside_logo_url, :about_date]) rescue []
         when 'EventFeature'
           data[:"#{name_table(model)}"] = info.includes(:event).as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
@@ -90,7 +90,7 @@ module SyncMobileData
           conversation_ids = Conversation.where(:event_id => event_ids) rescue nil
           info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
           #info = Comment.get_comments(conversation_ids,start_event_date, end_event_date) rescue []
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:user_name, :created_at_with_event_timezone, :updated_at_with_event_timezone]) rescue []
+          data[:"#{name_table(model)}"] = info.as_json(:methods => [:user_name]) rescue []
         when 'Sponsor'
           data[:"#{name_table(model)}"] = info.includes(:event).as_json(:except => [:updated_at, :created_at], :methods => [:image_url]) rescue []  
         when 'Exhibitor'
@@ -111,7 +111,7 @@ module SyncMobileData
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil
             my_profiles = my_profiles.where(:updated_at => start_event_date..end_event_date) if my_profiles.present?
-          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone])
+          data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at])
             invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
             ids = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date).pluck(:favoritable_id) rescue [] 
             info = Invitee.where(:id => ids) rescue []
@@ -186,9 +186,7 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info
           end
         when "Agenda"
-          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:methods =>[:agenda_track_name, :track_sequence, :start_agenda_time_with_event_timezone, :end_agenda_time_with_event_timezone])
-        when "Feedback"
-          data[:"#{name_table(model)}"] = info.as_json(:methods =>[:created_at_with_event_timezone, :updated_at_with_event_timezone])
+          data[:"#{name_table(model)}"] = info.includes(:event).as_json(:methods =>[:agenda_track_name, :track_sequence, :formatted_start_date_detail, :formatted_time, :formatted_start_date_listing])
         else
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
