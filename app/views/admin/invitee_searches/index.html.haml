@@ -24,7 +24,7 @@
         %ul.tabs
           %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
           %li.tab-link{"data-tab" => "tab-2"} Score card
-          %li.tab-link.attendee#attendee{"data-tab" => "tab-3"} Attendeee
+          %li.tab-link.attendee#attendee{"data-tab" => "tab-3"} Attendee
           %li.tab-link{"data-tab" => "tab-4"} Onsite Registration
         #tab-1.tab-content.current
           .searchDiv.tab1
@@ -47,7 +47,8 @@
                     %td=invitee.mobile_no
                     %td=invitee.email
                     %td
-                      %a{:href => "javasscript:void(0);"} Print 
+                      / %a{:href => "javasscript:void(0);"} Print 
+                      = link_to "Print", admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview', :qr_code_preview => true), :target => '_blank'
             %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
               %tbody
                 %tr
@@ -79,8 +80,10 @@
         #tab-3.tab-content
           .excelDownload
             %p
-              / %img{:src => "assets/excel.png"}/
-              = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}#, class: 'dock-item'  
+              - if @attendees.present?
+                = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}
+              - else 
+                = image_tag("excel.png", border: 0)
           .searchDiv.tab3
             = render :partial => "admin/invitees/search", :locals => {:attendee => true}
             %table.table-grid{:align => "center", :border => "0", :width => "100%"}
@@ -101,7 +104,8 @@
                     %td=attendee.mobile_no
                     %td=attendee.email
                     %td
-                      %a{:href => "javasscript:void(0);"} Print
+                      / %a{:href => "javasscript:void(0);"} Print
+                      = link_to "Print", admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => attendee.id, :page => 'print_preview', :qr_code_preview => true), :target => '_blank'
             %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
               %tbody
                 %tr
