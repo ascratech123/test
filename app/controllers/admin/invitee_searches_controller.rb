@@ -3,8 +3,8 @@ class Admin::InviteeSearchesController < ApplicationController
 
   def index
     @invitees = @event.invitees
-    @attendees = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
-    @attendance = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
+    @attendees = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id).order('updated_at desc')
+    @attendance = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id).order('updated_at desc')
     # @comapny_names = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id).pluck(:company_name)
     @comapny_names = @event.invitees.unscoped.where("qr_code_registration = ? and event_id = ? and company_name != ?",true,@event.id,"").pluck(:company_name)
 
