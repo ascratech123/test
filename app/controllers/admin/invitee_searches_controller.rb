@@ -5,7 +5,7 @@ class Admin::InviteeSearchesController < ApplicationController
     @invitees = @event.invitees
     @attendees = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
     @attendance = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
-    @comapny_names = @event.invitees.pluck(:company_name)
+    @comapny_names = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id).pluck(:company_name)
 
     @invitees = Invitee.search(params, @invitees) if params[:search].present? and ( params[:value].present? and params[:value] == "printBadge")
     @invitees = @invitees.paginate(page: params[:invitees_page], per_page: 10)
