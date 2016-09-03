@@ -50,9 +50,18 @@ class Admin::InviteesController < ApplicationController
     if @invitee.save
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
+      elsif params[:invitee][:invitee_searches_page].present?
+        @invitee.update_column('onsite_registration',true)
+        session[:invitee_serach_msg] = "Invitee created succsessfully"
+        redirect_to admin_event_invitee_searches_path(:event_id => @event.id,:params_value => "onsite_registration")
       else
         redirect_to admin_event_invitees_path(:event_id => @invitee.event_id)
       end
+    elsif params[:invitee][:invitee_searches_page].present?
+      session[:invitee_serach_fname] = @invitee.errors[:first_name].join(" ")
+      session[:invitee_serach_lname] = @invitee.errors[:last_name].join(" ")
+      session[:invitee_serach_email] = @invitee.errors[:email].join(" ")
+      redirect_to admin_event_invitee_searches_path(:event_id => @event.id,:params_value => "onsite_registration")  
     else
       render :action => 'new'
     end

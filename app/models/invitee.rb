@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password
+  attr_accessor :password, :invitee_searches_page
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -189,7 +189,11 @@ class Invitee < ActiveRecord::Base
       invitees = invitees.where("id IN (?)",ids)  
     end  
     keyword = params[:search][:keyword]
-     invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
+      if params[:full_search].present?
+        invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?) or mobile_no like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}", "%#{keyword}")if keyword.present? and params[:full_search].present?
+      else
+        invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
+      end
     invitees   
   end
 
