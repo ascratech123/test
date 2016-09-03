@@ -188,7 +188,7 @@ body{
 .subText.place{margin-top:0px; line-height:0px;}
 .qr-scanner-page#print{background:none;}
 #print .container.printPage{background: url("/assets/delegate-blank.jpg") no-repeat; width:396px; height: 566px;
- margin:2% auto 4%; text-align: center; }
+ margin:2% auto 4%; text-align: left; }
 #print .description{padding:10px; text-align:left;}
 #print .printPage .title{width:28%; margin:0 auto; display:none}
 #print .printPage .title img{width:100%; max-width:100%;}
@@ -197,7 +197,7 @@ body{
 #print .subText.place{line-height:0px; margin-top: 0px;}
 #prnt.printBtn {color:#ffffff;  font-size:22px; padding:3px 10px; margin-bottom: 2%;
     right:20px; text-decoration: none; top: 13px; background:#00b1bb;}
-#print .welcomeText{line-height:44px; margin-top:64%; font-size:35px;}
+#print .welcomeText{line-height:44px; margin-top:60%; font-size:35px;}
 
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
 .btnDiv.newScanBtn{margin:5% 0; padding:0;}
@@ -210,10 +210,13 @@ body{
 .company{margin-bottom: 4%;}
 #print .description{margin-bottom:0;}
 
+#print .company{font-size:22px;}
+
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}
 .title img{width:100%; max-width:100%;}
 .welcomeText{font-size:40px;}*/
+#print .description{text-align:left;}
 .qr-scanner-page{background-image:none;}
 .title img{display:none;}
 .welcomeText{margin-top: 40%; font-size: 30px;}
@@ -227,6 +230,7 @@ body{
 #print .description{margin-top: 50%;}
 #print .welcomeText{  line-height: 50px;}
 .company {font-size: 28px;}
+
 }
 
 

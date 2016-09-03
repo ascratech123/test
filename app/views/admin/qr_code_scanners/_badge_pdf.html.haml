@@ -17,15 +17,15 @@
           = @event.cities rescue nil
     = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
   - else
-    .container
+    .container.printPage
       .title
         - if @invitee.present?
           %img{:src => @invitee.qr_code.url} 
       .description
-        %p{:style => 'font-size:34px;margin:0px'} 
+        %p.welcomeText 
           = @invitee.name_of_the_invitee rescue nil
-      .company
-        = @invitee.company_name     
+        .company
+          = @invitee.company_name     
     = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present?
           
   :javascript
