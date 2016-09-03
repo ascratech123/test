@@ -5,15 +5,15 @@ class Admin::InviteeSearchesController < ApplicationController
     @invitees = @event.invitees
     @attendees = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
     @attendance = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
-    @comapny_names = @event.invitees.pluck(:company_name)
+    @comapny_names = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id).pluck(:company_name)
 
     @invitees = Invitee.search(params, @invitees) if params[:search].present? and ( params[:value].present? and params[:value] == "printBadge")
     @invitees = @invitees.paginate(page: params[:invitees_page], per_page: 10)
     
     @attendees = Invitee.search(params, @attendance) if (params[:search].present? and ( params[:value].present? and params[:value] == "attendee"))
-    @attendees = @attendees.paginate(page: params[:attendees_page], per_page: 10)
+    @attendees = @attendees.paginate(page: params[:attendees_page], per_page: 10)if params["format"] != "xls"
     
-    respond_to do |format|
+    respond_to do |format| 
       format.html  
       format.xls do
         only_columns = [:name_of_the_invitee, :company_name, :designation, :mobile_no, :email]
