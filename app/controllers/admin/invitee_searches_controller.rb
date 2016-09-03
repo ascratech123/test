@@ -3,8 +3,8 @@ class Admin::InviteeSearchesController < ApplicationController
 
   def index
     @invitees = @event.invitees
-    @attendees = @event.invitees.unscoped.where(:qr_code_registration => true).order('updated_at desc')
-    @attendance = @event.invitees.unscoped.where(:qr_code_registration => true).order('updated_at desc')
+    @attendees = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
+    @attendance = @event.invitees.unscoped.where(:qr_code_registration => true, :event_id => @event.id)
     @comapny_names = @event.invitees.pluck(:company_name)
 
     @invitees = Invitee.search(params, @invitees) if params[:search].present? and ( params[:value].present? and params[:value] == "printBadge")
