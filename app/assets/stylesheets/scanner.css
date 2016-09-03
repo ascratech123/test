@@ -227,7 +227,7 @@ body{
 .subText{margin-top:10px;}
 #print .description p.welcomeText{margin-top:20%;}
 #print .container.printPage{background:none;}
-#print .description{margin-top: 30%;}
+#print .description{margin-top: 30%;}  
 #print .welcomeText{  line-height: 50px;}
 .company {font-size: 28px;}
 
