@@ -13,7 +13,7 @@
               = hidden_field_tag :search, 'manual'
               = text_field_tag :email, params[:email], placeholder: 'Enter your email or name', :class => 'inputType'
               %input.submitBtn{:type => "submit", :value => "submit"}/
-          - if @invitees.present? and params[:qr_code_preview].blank?
+          - if @invitees.present?# and params[:qr_code_preview].blank?
             .tableDiv
               %table
                 %thead
