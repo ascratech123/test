@@ -21,9 +21,8 @@
                     - if false
                       %th Id
                     %th Name
-                    - if params[:qr_code_preview].blank?
-                      %th Company Name
-                      %th Designation
+                    %th Company Name
+                    %th Designation
                     %th Email
                     %th 
                 %tbody
@@ -35,11 +34,10 @@
                       %td
                         / %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview'), :target => '_blank'}
                         = invitee.name_of_the_invitee
-                      - if params[:qr_code_preview].blank?                        
-                        %td
-                          = invitee.company_name
-                        %td
-                          = invitee.designation
+                      %td
+                        = invitee.company_name
+                      %td
+                        = invitee.designation
                       %td
                         / %a{:href => admin_event_qr_code_scanners_path(:event_id => @event.id, :invitee_id => invitee.id, :page => 'print_preview'), :target => '_blank'}
                         = invitee.email
