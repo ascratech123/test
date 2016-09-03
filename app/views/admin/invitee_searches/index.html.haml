@@ -22,38 +22,38 @@
         .logout
       .wrapper
         %ul.tabs
-          %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
+          / %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
+          %li.tab-link.current.attendee#attendee{"data-tab" => "tab-3"} Attendee
           %li.tab-link{"data-tab" => "tab-2"} Score card
-          %li.tab-link.attendee#attendee{"data-tab" => "tab-3"} Attendee
-          %li.tab-link#registration_tab{"data-tab" => "tab-4"} Onsite Registration
-        #tab-1.tab-content.current
-          .searchDiv.tab1
-            = render :partial => "admin/invitees/search", :locals => {:invitee => true}
-            %table.table-grid{:align => "center", :border => "0", :width => "100%"}
-              %thead
-                %tr.tableHeading
-                  %th Full Name
-                  %th Company
-                  %th Designation
-                  %th Mobile Phone
-                  %th Email Id
-                  %th
-              %tbody{:align => "center"}
-                - @invitees.each do |invitee|
-                  %tr
-                    %td= invitee.name_of_the_invitee
-                    %td=invitee.company_name
-                    %td=invitee.designation
-                    %td=invitee.mobile_no
-                    %td=invitee.email
-                    %td
-                      %a{:href => "javascript:void(0);", :invitee_id =>invitee.id, :class => "newWindow"} Print 
-            %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
-              %tbody
-                %tr
-                  %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
-                    = will_paginate @invitees, :param_name => 'invitees_page'
-                  %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
+          / %li.tab-link#registration_tab{"data-tab" => "tab-4"} Onsite Registration
+        / #tab-1.tab-content.current
+        /   .searchDiv.tab1
+        /     = render :partial => "admin/invitees/search", :locals => {:invitee => true}
+        /     %table.table-grid{:align => "center", :border => "0", :width => "100%"}
+        /       %thead
+        /         %tr.tableHeading
+        /           %th Full Name
+        /           %th Company
+        /           %th Designation
+        /           %th Mobile Phone
+        /           %th Email Id
+        /           %th
+        /       %tbody{:align => "center"}
+        /         - @invitees.each do |invitee|
+        /           %tr
+        /             %td= invitee.name_of_the_invitee
+        /             %td=invitee.company_name
+        /             %td=invitee.designation
+        /             %td=invitee.mobile_no
+        /             %td=invitee.email
+        /             %td
+        /               %a{:href => "javascript:void(0);", :invitee_id =>invitee.id, :class => "newWindow"} Print 
+        /     %table.table-grid-foot{:border => "0", :style => "border-collapse:collapse;", :width => "100%"}
+        /       %tbody
+        /         %tr
+        /           %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
+        /             = will_paginate @invitees, :param_name => 'invitees_page'
+        /           %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
         #tab-2.tab-content
           #successMsg
             #scorecard
@@ -77,7 +77,7 @@
                     %td 0
                     / = 700 - (@attendance.count.to_i)
 
-        #tab-3.tab-content
+        #tab-3.tab-content.current
           .excelDownload
             %p
               - if @attendees.present?
@@ -111,69 +111,69 @@
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
                     = will_paginate @attendees, :param_name => 'attendees_page'
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
-        #tab-4.tab-content
-          %table{:width => "100%"}
-            %tr
-              %td
-                - @event = Event.find(params[:event_id])
-                - @invitee = @event.invitees.build
-                = form_for @invitee,:url => admin_event_invitees_path, :method => "post" do |f|
-                  %table.tab4-table{:cellspacing => "7"}
-                    %tr
-                      %td
-                        First Name
-                        %span> *
-                        \:
-                      %td.onsiteForm
-                        / %input{:placeholder => "Name", :type => "text"}/
-                        = f.text_field :first_name,:placeholder => "First Name"
-                        %span.error
-                          - if params[:params_value].present? && session[:invitee_serach_fname].present?
-                            #{session[:invitee_serach_fname]}
-                            #{session[:invitee_serach_fname] = nil}
+        / #tab-4.tab-content
+        /   %table{:width => "100%"}
+        /     %tr
+        /       %td
+        /         - @event = Event.find(params[:event_id])
+        /         - @invitee = @event.invitees.build
+        /         = form_for @invitee,:url => admin_event_invitees_path, :method => "post" do |f|
+        /           %table.tab4-table{:cellspacing => "7"}
+        /             %tr
+        /               %td
+        /                 First Name
+        /                 %span> *
+        /                 \:
+        /               %td.onsiteForm
+        /                 / %input{:placeholder => "Name", :type => "text"}/
+        /                 = f.text_field :first_name,:placeholder => "First Name"
+        /                 %span.error
+        /                   - if params[:params_value].present? && session[:invitee_serach_fname].present?
+        /                     #{session[:invitee_serach_fname]}
+        /                     #{session[:invitee_serach_fname] = nil}
 
-                    %tr
-                      %td
-                        Last Name
-                        %span> *
-                        \:
-                      %td.onsiteForm
-                        / %input{:placeholder => "Name", :type => "text"}/
-                        = f.text_field :last_name,:placeholder => " Last Name"
-                        %span.error
-                          - if params[:params_value].present? && session[:invitee_serach_lname].present?
-                            #{session[:invitee_serach_lname]}                                            
-                            #{session[:invitee_serach_lname] = nil}
-                    %tr
-                      %td
-                        Company
+        /             %tr
+        /               %td
+        /                 Last Name
+        /                 %span> *
+        /                 \:
+        /               %td.onsiteForm
+        /                 / %input{:placeholder => "Name", :type => "text"}/
+        /                 = f.text_field :last_name,:placeholder => " Last Name"
+        /                 %span.error
+        /                   - if params[:params_value].present? && session[:invitee_serach_lname].present?
+        /                     #{session[:invitee_serach_lname]}                                            
+        /                     #{session[:invitee_serach_lname] = nil}
+        /             %tr
+        /               %td
+        /                 Company
                         
-                      %td.onsiteForm
-                        / %input{:placeholder => "Company", :type => "text"}/
-                        = f.text_field :company_name,:placeholder => "Company"
-                    %tr
-                      %td Designation:
-                      %td.onsiteForm
-                        / %input{:placeholder => "Designation", :type => "text"}/
-                        = f.text_field :designation, :placeholder => "Designation"
-                    %tr
-                      %td Email Address:
-                      %td.onsiteForm
-                        / %input{:placeholder => "Email Address", :type => "text"}/
-                        = f.text_field :email, :placeholder => "Email Address"
-                        = f.hidden_field :invitee_searches_page, :value =>"true"
-                        %span.error
-                          - if params[:params_value].present? && session[:invitee_serach_email].present?
-                            #{session[:invitee_serach_email]}
-                            #{session[:invitee_serach_email] = nil}                         
-                    %tr{:align => "center"}
-                      %td.tab4Btn{:align => "center", :colspan => "6"}
-                        %input{:name => "submit", :type => "submit", :value => "Submit"}/
-                        %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
-                      %span.success-error
-                        - if params[:params_value].present? && session[:invitee_serach_msg].present?
-                          #{session[:invitee_serach_msg] }                                            
-                          #{session[:invitee_serach_msg] = nil}
+        /               %td.onsiteForm
+        /                 / %input{:placeholder => "Company", :type => "text"}/
+        /                 = f.text_field :company_name,:placeholder => "Company"
+        /             %tr
+        /               %td Designation:
+        /               %td.onsiteForm
+        /                 / %input{:placeholder => "Designation", :type => "text"}/
+        /                 = f.text_field :designation, :placeholder => "Designation"
+        /             %tr
+        /               %td Email Address:
+        /               %td.onsiteForm
+        /                 / %input{:placeholder => "Email Address", :type => "text"}/
+        /                 = f.text_field :email, :placeholder => "Email Address"
+        /                 = f.hidden_field :invitee_searches_page, :value =>"true"
+        /                 %span.error
+        /                   - if params[:params_value].present? && session[:invitee_serach_email].present?
+        /                     #{session[:invitee_serach_email]}
+        /                     #{session[:invitee_serach_email] = nil}                         
+        /             %tr{:align => "center"}
+        /               %td.tab4Btn{:align => "center", :colspan => "6"}
+        /                 %input{:name => "submit", :type => "submit", :value => "Submit"}/
+        /                 %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
+        /               %span.success-error
+        /                 - if params[:params_value].present? && session[:invitee_serach_msg].present?
+        /                   #{session[:invitee_serach_msg] }                                            
+        /                   #{session[:invitee_serach_msg] = nil}
       / container
       %footer
         .footerLogo
@@ -183,14 +183,17 @@
             = image_tag("footer-logo.jpg", border: 0)
 #params_value{:params_value => params[:value]}
 #params_registration_value{:params_registration_value => params[:params_value]}
+/ #get_page{:page => params[:attendees_page].present? ? 'attendees' : 'printbadge'}
+/ #get_page{:for => ''}
+
 
 :javascript
-$(document).ready(function(){
-  $('.newWindow').click(function(){
-    var invitee_id = $(this).attr('invitee_id')
+  $(document).ready(function(){
+    $('.newWindow').click(function(){
+      var invitee_id = $(this).attr('invitee_id')
 
-    var link = "#{APP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=true&page=print_preview&invitee_id=" + invitee_id
+      var link = "#{APP_URL}/admin/events/#{@event.id}/qr_code_scanners?qr_code_preview=true&page=print_preview&invitee_id=" + invitee_id
 
-    window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=400,height=800");
+      window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=400,height=800");
+    })
   })
-})

@@ -27,3 +27,40 @@ $(document).ready(function(){
     $("#registration_tab").trigger("click");
   }
 });
+
+// $(document).ready(function(){
+//   $('#printBadge').click(function(){
+//     $('#get_page').attr( 'for', 'printBadge' )
+//   })
+
+//   $('#attendee').click(function(){
+//     $('#get_page').attr( 'for', 'attendee' )
+//   })  
+// });
+
+// $(document).on('click', '#printBadge', function(){
+//   var value = $('#get_page').attr('for')
+//   alert(value)
+// });
+
+// $(document).on('click', '#printBadge', function(){
+//   var value = $('#get_page').attr('for')
+//   alert(value)
+// });
+
+$(document).ready(function(){
+  var value = $("#get_page").attr("page")
+  if(value == 'attendees'){
+    $("#attendee").trigger("click");
+  }
+  else if (value == 'printbadge')
+  {
+    $("#printBadge").trigger("click");
+  }
+});
+
+// $(document).ready(function(){
+//   var attr = ($("#params_invitee_page").attr("params_invitee_page") == "invitees_page"){
+//     $("#printBadge").trigger("click");
+//   }
+// });

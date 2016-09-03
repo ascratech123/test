@@ -28,18 +28,17 @@ input:focus::-moz-placeholder {color: transparent;}
   margin:0 15px 0 0; cursor:pointer; font-size: 17px;}
 .btnDiv .linkBtn:last-child{margin:0;}
 .tableDiv td,.tableDiv th{border:1px solid #a4a2a2; color:#000;}
-.linkBtn{background-color: #397639;color:#fff;border:0 none; text-decoration:none;}
-.linkBtn:hover, .linkBtn:active ,.submitBtn:hover ,.submitBtn:active{background-color: #fff;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); color:#272727;}
-.linkBtn:hover, .linkBtn:active,.submitBtn:hover ,.submitBtn:active {background-color: #6ddd6d;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);color:#272727;}
+.linkBtn{background-color: #00b1bb;color:#fff;border:0 none; text-decoration:none;}
+.linkBtn:hover, .linkBtn:active ,.submitBtn:hover ,.submitBtn:active{background-color: #00b1bb;box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); color:#fff;}
+.linkBtn:hover, .linkBtn:active,.submitBtn:hover ,.submitBtn:active {background-color: #00b1bb;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);color:#fff;}
 .scanbtn .linkBtn{width:250px; padding:10px 0;  text-transform:uppercase; font-size:18px; 
   cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);letter-spacing:2px; display: inline-block; text-decoration: none;}
 .wrapper{ padding: 7% 0;}
 .wrapper .tableDiv {padding: 72px 0;}
- .tableDiv table tr th{background-color: #397639;}
+ .tableDiv table tr th{background-color: #00b1bb;}
 /* .tableDiv table tr a{color:#000; text-decoration:none;}*/
-.submitBtn {background-color: #397639; border: 0 none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 
+.submitBtn {background-color: #00b1bb; border: 0 none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 
   0 1px   2px rgba(0, 0, 0, 0.24); color: #ffffff; cursor: pointer; font-size: 17px; padding: 10px 0; text-transform: uppercase; width: 15%;  letter-spacing:1px;}  
 .popupDiv{width:30%; position:absolute; top:40%;  transform: translateY(-50%); background:#e4e3d5; left:0; right:0; margin:0 auto; text-align:center; display:none; z-index:99999; color:#272727; padding:15px 30px 25px 30px; }
 .popup-content p{font-size:16px;}
@@ -72,7 +71,7 @@ input:focus::-moz-placeholder {color: transparent;}
 /*nilam ends here*/
 
 
-
+.description p.welcomeText{line-height: 55px;}
 
 
 
@@ -197,7 +196,7 @@ body{
 #print .subText{margin-top:25px; line-height:15px; display:none;}
 #print .subText.place{line-height:0px; margin-top: 0px;}
 #prnt.printBtn {color:#ffffff;  font-size:22px; padding:3px 10px; margin-bottom: 2%;
-    right:20px; text-decoration: none; top: 13px; background:#9ec73d;}
+    right:20px; text-decoration: none; top: 13px; background:#00b1bb;}
 #print .welcomeText{line-height:44px; margin-top:64%; font-size:35px;}
 
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
