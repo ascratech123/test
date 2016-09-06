@@ -25,6 +25,7 @@
           / %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
           %li.tab-link.current.attendee#attendee{"data-tab" => "tab-3"} Attendee
           %li.tab-link{"data-tab" => "tab-2"} Score card
+          %li.tab-link{"data-tab" => "tab-5"} QR Code Scanner
           / %li.tab-link#registration_tab{"data-tab" => "tab-4"} Onsite Registration
         / #tab-1.tab-content.current
         /   .searchDiv.tab1
@@ -111,6 +112,18 @@
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
                     = will_paginate @attendees, :param_name => 'attendees_page'
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
+        #tab-5.tab-content
+          .container
+            .title
+              .description
+                %p.welcomeText
+                  Welcome to HobNob event unplugged2.
+                %p.subText Please scan your QR Code from the My Profile feature in the App to continue.
+              .scanbtn
+                / %a.linkBtn{:href => "https://beta.hobnobspace.com/admin/events/168/qr_code_scanners?page=scanning&qr_code_preview="} Scan
+                %a.linkBtn{:href => "javascript:void(0)"} Scan
+
+          
         / #tab-4.tab-content
         /   %table{:width => "100%"}
         /     %tr
