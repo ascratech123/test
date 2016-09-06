@@ -194,4 +194,9 @@ class Notification < ActiveRecord::Base
   #   event_features.each do |feature|
 
   # end
+
+  def formatted_push_datetime_with_event_timezone
+    self.push_datetime.in_event_timezone(self.event_timezone).strftime("%b %d at %H:%M %p")
+  end
+
 end
