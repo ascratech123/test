@@ -37,7 +37,7 @@ validates_length_of :comment_box, :maximum => 100 , :message => "Comment is upto
   end
 
   def Invitee_email
-    self.invitee_id.present? ? Invitee.find_by_id(self.invitee_id).name_of_the_invitee : ''
+    self.invitee_id.present? ? Invitee.find_by_id(self.invitee_id).email : ''
   end
   def File_Name_1
     self.attach_file_1_name.present? ? self.attach_file_1_name : ''
