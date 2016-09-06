@@ -539,7 +539,7 @@ class Invitee < ActiveRecord::Base
         notification_ids << notification.id
       end
     end
-     notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :created_at_with_event_timezone, :updated_at_with_event_timezone, :push_datetime_with_event_timezone])
+     notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 
@@ -553,7 +553,7 @@ class Invitee < ActiveRecord::Base
       groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
         notification_ids << notification.id if invitee_ids.include? self.id.to_s
     end
-    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
+    notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 

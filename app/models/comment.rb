@@ -115,4 +115,13 @@ class Comment < ActiveRecord::Base
     self.updated_at.in_time_zone(timezone)
   end
 
+  def formatted_created_at_with_event_timezone
+    self.created_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
+  end
+
+  def formatted_updated_at_with_event_timezone
+    self.updated_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
+  end
+
 end
+

@@ -9,20 +9,20 @@ class Conversation < ActiveRecord::Base
   has_many :likes, as: :likable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
-	has_attached_file :image, {:styles => {:large => "640x640>",
+  has_attached_file :image, {:styles => {:large => "640x640>",
                                          :small => "200x200>", 
                                          :thumb => "60x60>"},
                              :convert_options => {:large => "-strip -quality 90", 
                                          :small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(CONVERSATION_IMAGE_PATH)
-	
-	validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+  
+  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
   validates :description, presence: { :message => "This field is required." }
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone, :set_dates_with_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -49,7 +49,7 @@ class Conversation < ActiveRecord::Base
       self.reject!
     end
   end
-	
+  
   def check_image_and_description
     if self.image.blank? and self.description.blank?
       self.error.add :description, 'You need to pass atleast one description or image'
@@ -220,20 +220,21 @@ class Conversation < ActiveRecord::Base
     self.id
   end
 
-  def created_at_with_timezone
+  def created_at_with_event_timezone
     self.created_at.in_time_zone(self.event_timezone)
   end
 
-  def updated_at_with_timezone
+  def updated_at_with_event_timezone
     self.updated_at.in_time_zone(self.event_timezone)
   end
 
-  def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event.timezone)
+  def formatted_created_at_with_event_timezone
+    self.created_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
   end
 
-  def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event.timezone)
+  def formatted_updated_at_with_event_timezone
+    self.updated_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
   end
 
 end
+
