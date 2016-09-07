@@ -54,6 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
@@ -593,6 +594,22 @@ class Event < ActiveRecord::Base
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      self.update_column("timezone", self.timezone.titleize)
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("updated_at", Time.now)
+        end
+      end   
+    end
+  end  
+ 
+  def about_date
+    "#{self.start_event_date.strftime('%d %b')} - #{self.start_event_date.strftime('%d %b %Y')}"
   end
 
   def self.set_event_category
