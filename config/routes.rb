@@ -15,6 +15,7 @@ namespace :admin do
   get '/events/:event_id/success' => 'user_registrations#show'
   get 'bee_editor/token' => 'bee_editors#token'
   get 'bee_editor/template' => 'bee_editors#template'
+  get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login
@@ -38,7 +39,7 @@ namespace :admin do
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
-    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:venue_sections,:invitee_accesses
+    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:venue_sections,:invitee_accesses,:telecaller_accessible_columns, :invitee_searches
     
     resources :polls do
       resources :user_polls
@@ -66,6 +67,10 @@ namespace :admin do
       resources :invitee_datas
     end
     resources :registrations
+
+    resources :campaigns do
+      resources :edms
+    end
 
   end
   # resources :imports

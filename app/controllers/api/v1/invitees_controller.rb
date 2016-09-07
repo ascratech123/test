@@ -84,8 +84,8 @@ class Api::V1::InviteesController < ApplicationController
     if (params["qr_code_scan"] == "true") and mobile_application.present?
       event = favoritable_invitee.event
       mobile_app = event.mobile_application.submitted_code if favoritable_invitee.present? rescue nil
-      if mobile_app != mobile_application.submitted_code or params[:event_id] != event.id
-        render :status => 200, :json => {:status => "Failure", :message => "Favoritable invitee does not belong to this event."}
+      if mobile_app != mobile_application.submitted_code or params[:event_id].to_i != event.id
+        render :status => 200, :json => {:status => "Failure", :message => "Invitee does not belong to this event."}
       end
     elsif (params["qr_code_scan"] == "true") and mobile_application.blank?
       render :status => 200, :json => {:status => "Failure", message: "Mobile application not found."}  

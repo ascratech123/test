@@ -116,8 +116,8 @@ class Poll < ActiveRecord::Base
 
   def set_dates_with_event_timezone
     event = self.event
-    self.update_column("poll_start_date_time_with_event_timezone", self.poll_start_date_time.in_time_zone(event.timezone))
-    self.update_column("poll_end_date_time_with_event_timezone", self.poll_end_date_time.in_time_zone(event.timezone))    
+    self.update_column("poll_start_date_time_with_event_timezone", self.poll_start_date_time.to_datetime.in_time_zone(event.timezone))
+    self.update_column("poll_end_date_time_with_event_timezone", self.poll_end_date_time.to_datetime.in_time_zone(event.timezone))    
   end
 
   def poll_start_date_time_with_event_timezone
