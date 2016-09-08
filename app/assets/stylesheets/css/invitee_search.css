@@ -1,5 +1,5 @@
 body{margin:0; padding:0;  font-family: 'Roboto';}
-.container{width: 90%; margin: 0 auto;}
+.container{width:100%; margin: 0 auto;}
 .logo{visibility:hidden;}
 ul.tabs{margin: 0px;	padding:0px;	list-style:none;}
 ul.tabs li{background:#00b1bb; color:#fff;	display:inline-block; padding:10px 4%;	cursor:pointer; font-size:18px;}
@@ -11,14 +11,14 @@ ul.tabs li.current{background:#516161;	color:#fff;}
 .pagenav a{color:#fff;}
 #searchFrm{margin:10px 0;}
 #searchFrm div{display:inline-block;}
-#searchFrm .tab1-searchDiv{margin-right:10px;}
+/*#searchFrm .tab1-searchDiv{margin-right:10px;}*/
 #searchFrm .tab1-selectDiv{margin:0px 10px;}
 #searchFrm .tab1-searchBtn{margin:0px 5px;}
-.table-grid th{background:#00b1bb; padding:5px 0; color:#fff; font-weight:normal; text-align:center;}
+.table-grid th{background:#00b1bb; padding:5px 0 5px 8px; color:#fff; font-weight:normal; text-align:left;}
 .tableHeading {background:#00b1bb;}
 .tbl-border {border: 1px solid; padding: 2px;}
 .table-grid {border-collapse: collapse;}
-.table-grid td {font-size: 14px; padding: 8px 0;}
+.table-grid td {font-size: 14px; padding: 8px 0 8px 8px; text-align:left;}
 .footerLogo{margin:0 auto; text-align:center;}
 .footerLogo  p:first-child{margin:0;}
 .footerLogo  p{margin:2px 0;}
@@ -33,7 +33,7 @@ ul.tabs li.current{background:#516161;	color:#fff;}
 input:focus::-webkit-input-placeholder{color:transparent;}
 input:focus::-moz-placeholder{color:transparent;}
 footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0;}
-.table-grid th{background:#00b1bb; padding:5px 0; color:#fff; font-weight:normal; text-align:center;}
+.table-grid th{background:#00b1bb; padding:5px 0 5px 8px; color:#fff; font-weight:normal; text-align:left;}
 .tab4-table td{padding-bottom: 15px;}
 #tab-4 .tab4-table span.error{display:block; font-size:13px; margin-top: 5px;}
 #tab-4  span.success-error{color:#4F8A10; font-size:16px;}
@@ -42,107 +42,48 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
 
 /*tab 5 -qr code scanner */
 
-.description {
-    margin: 5% 0 3% 0;
-    padding: 20px;
-    text-align: center;
-}
-.description p {
-    line-height: 30px;
-}
-.welcomeText {
-    font-size:45px;
-}
-.subText {
-    font-size: 19px;
-    margin-top: 52px;
-}
-
-.scanbtn .linkBtn {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    cursor: pointer;
-    display: inline-block;
-    font-size: 18px;
-    letter-spacing: 2px;
-    padding: 4px 0;
-    text-decoration: none;
-    text-transform: uppercase;
-    width: 210px;
-}
-.linkBtn {
-    background-color: #00b1bb;
-    border: 0 none;
-    color: #ffffff;
-    text-decoration: none;
-}
-.scanbtn {
-    margin: 0 auto 4% auto;
-    text-align: center;
-}
+.description {margin:5% 0 3% 0; padding:20px; text-align:center;}
+.description p {line-height: 30px;}
+.welcomeText {font-size:45px;}
+.subText {font-size:19px; margin-top:52px;}
+.scanbtn .linkBtn {box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    cursor:pointer; display:inline-block; font-size:18px; letter-spacing:2px;
+    padding:4px 0; text-decoration:none; text-transform:uppercase; width:210px;}
+.linkBtn {background-color:#00b1bb; border:0 none; color:#ffffff; text-decoration:none;}
+.scanbtn {margin:0 auto 4% auto; text-align:center;}
 #qr-canvas{display:none;}
-
-#tab-5{
-    padding-bottom:150px;
-}
+#tab-5{padding-bottom:150px;}
 .searchManuallyBtn{text-align: center;}
-.thanktest {
-    font-size: 40px;
-}
-.wrapper.thankYouWrapper .tableDiv {
-    padding: 22px 0;
-}
-.tableDiv table {
-    width: 80%;
-    margin: 0 auto;
-    background: #f2f2f2;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.12);
-    border-collapse:collapse;
-    text-align:center;
-}
-.btnDiv.thankyouPage {
-    padding: 7% 0 2% 0;
-    margin:0 auto;
-    text-align: center;
-}
-.searchManuallyDiv{
-    text-align: center;
-}
-.btnDiv .linkBtn {
-    width: 10%;
-    padding: 10px 10px;
-    text-transform: capitalize;
-    border: 0 none;
-    margin: 0 15px 0 0;
-    cursor: pointer;
-    font-size: 17px;
-}
-.btnDiv .linkBtn:last-child {
-    margin: 0;
-}
-.searchManuallyDiv a {
-    font-size: 15px;
-}
-.tableDiv table tr th {
-    background-color: #00b1bb;
-    text-align: center;
-}
-.tableDiv tr th {
-    font-weight: bold;
-}
-.tableDiv table th {
-    padding: 10px 0;
-    background: #ccc;
-    color: #fff;
-}
-
-
-.tableDiv tr td {
-    padding: 10px 0;
-}
-
-.tableDiv td, .tableDiv th {
-    border: 1px solid #a4a2a2;
-    color: #000;
-}
+.thanktest {font-size: 40px;}
+.wrapper.thankYouWrapper .tableDiv {padding: 22px 0;}
+.tableDiv table {width: 80%; margin: 0 auto; background: #f2f2f2; box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.12);
+    border-collapse:collapse; text-align:center;}
+.btnDiv.thankyouPage {padding: 7% 0 2% 0; margin:0 auto; text-align: center;}
+.searchManuallyDiv{text-align: center;}
+.btnDiv .linkBtn {width: 10%; padding: 10px 10px; text-transform: capitalize; border: 0 none;
+    margin: 0 15px 0 0; cursor: pointer; font-size: 17px;}
+.btnDiv .linkBtn:last-child {margin: 0;}
+.searchManuallyDiv a {font-size: 15px;}
+.tableDiv table tr th {background-color: #00b1bb; text-align: left;}
+.tableDiv tr th {font-weight: bold;}
+.tableDiv table th {padding: 10px 0; background: #ccc; color: #fff;}
+.tableDiv tr td {padding: 10px 0;}
+.tableDiv td, .tableDiv th {border: 1px solid #a4a2a2; color: #000;}
 .thankyou-text{margin-top:7%; margin-bottom: 5%; }
 .newScanBtn{margin: 3% auto; text-align: center;}
+#search_keyword{border: 1px solid #808080; padding: 5px; width: 350px;}
+.tab1-searchBtn input[type="submit"]{border-radius:0; border: 1px solid #808080; padding: 5px;  background: #fff;}
+.tab1-searchDiv .searchText{font-size:17px;}
+#searchFrm{position:relative;}
+#searchFrm .back{position:absolute; right:5px; top:6px; font-size: 15px;}
+#searchFrm .back {background:#00b1bb; border:0 none; font-size:15px; padding:0 12px; position:absolute;
+    right:5px; top:0;}
+#searchFrm .back a{color: #fff;}
+#email{border: 1px solid #808080; padding: 5px; width: 350px; margin-right:5px;}
+.submitBtn{border-radius:0; border: 1px solid #808080; padding: 5px;  background: #fff;}
+.tab1-searchDiv .searchText{font-size:17px;}
+.qrcodetextDiv form{position:relative;}
+.qrcodetextDiv .back{background:#00b1bb; border:0 none; font-size:15px; padding:0 12px; position:absolute;
+    right:5px; top:0;}
+.qrcodetextDiv .back a{color: #fff;}
+.qrcodetextDiv span{font-size:17px; margin-right:5px;}

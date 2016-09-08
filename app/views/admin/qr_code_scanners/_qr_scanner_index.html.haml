@@ -6,7 +6,7 @@
     - if true
       .container
         .wrapper.submitWrapper
-          .textDiv
+          .textDiv.qrcodetextDiv
             = form_tag(admin_event_invitee_searches_path(:event_id => @event.id), method: :get) do |f|
               %span Search:
               = hidden_field_tag :qr_code_preview, params[:qr_code_preview]
@@ -14,7 +14,8 @@
               = hidden_field_tag :search, 'manual'
               = text_field_tag :email, params[:email], placeholder: 'Enter your email or name', :class => 'inputType'
               %input.submitBtn{:type => "submit", :value => "Search"}/
-              = link_to "Back", admin_event_invitee_searches_path(:event_id => @event.id,:page=>"manual_search")
+              .back
+                = link_to "Back", admin_event_invitee_searches_path(:event_id => @event.id,:page=>"manual_search")
           - if @invitee_searches.present?# and params[:qr_code_preview].blank?
             .searchDiv.tab3
               %table.table-grid{:align => "center", :border => "0", :width => "100%"}
