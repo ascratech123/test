@@ -2,22 +2,24 @@ module SyncMobileData
 
   def self.create_record(values, model_name)
     message = {}
-    ids = (model_name.constantize).pluck(:id)
     values.each do |value|
+      update_data = nil
       if model_name == 'InviteeNotification'
         update_data = (model_name.constantize).where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
-        update_data.update(params_data(value)) if update_data.present?
-        message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
-        message[:data] =  update_data.as_json() rescue nil
       elsif model_name == 'UserFeedback'
         update_data = (model_name.constantize).find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
-        params = params_data(value)
-        update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
-        message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
-        message[:data] =  update_data.as_json() rescue nil
-      elsif ids.include?(value["id"].to_i)
+      else
         update_data = (model_name.constantize).find_by_id(value["id"])
-        update_data.update(params_data(value)) if update_data.present?
+      end
+      if !update_data.blank?
+        if model_name == 'InviteeNotification'
+          update_data.update(params_data(value)) if update_data.present?
+        elsif model_name == 'UserFeedback'
+          params = params_data(value)
+          update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
+        else
+          update_data.update(params_data(value)) if update_data.present?
+        end
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       else
@@ -25,7 +27,7 @@ module SyncMobileData
         create_data.save
         message[:message] = (create_data.errors.messages.blank? ? "Created" : "#{create_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  create_data.as_json() rescue nil
-      end
+      end      
     end if values.present?
     return message
   end
