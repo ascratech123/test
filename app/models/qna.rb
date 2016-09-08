@@ -5,7 +5,7 @@ class Qna < ActiveRecord::Base
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
   validates :question, :receiver_id,:sender_id, presence: { :message => "This field is required." }
-  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_dates_with_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record#, :set_dates_with_event_timezone
 
   default_scope { order('created_at desc') }
 

@@ -151,8 +151,8 @@ class Agenda < ActiveRecord::Base
   end
 
   def formatted_time
-    time_str = "#{self.start_agenda_time.strftime('%H:%M %p')} "
-    time_str += (self.end_agenda_time.present? ? " - #{self.start_agenda_time.strftime('%H:%M %p')}" : "Onwards")
+    time_str = "#{self.start_agenda_time.strftime('%I:%M %p')} "
+    time_str += (self.end_agenda_time.present? ? " - #{self.end_agenda_time.strftime('%I:%M %p')}" : "Onwards")
   end
 
   def formatted_start_date_listing

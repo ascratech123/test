@@ -7,7 +7,7 @@ class Faq < ActiveRecord::Base
   validates :question, :answer,  presence: { :message => "This field is required." }
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   before_create :set_sequence_no
-  after_create :set_dates_with_event_timezone
+  #after_create :set_dates_with_event_timezone
 
   default_scope { order("sequence") } 
 

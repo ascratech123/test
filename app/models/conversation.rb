@@ -229,11 +229,11 @@ class Conversation < ActiveRecord::Base
   end
 
   def formatted_created_at_with_event_timezone
-    self.created_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
+    self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
   end
 
   def formatted_updated_at_with_event_timezone
-    self.updated_at_with_event_timezone.strftime("%b %d at %H:%M %p (GMT %:z)")
+    self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
   end
 
 end
