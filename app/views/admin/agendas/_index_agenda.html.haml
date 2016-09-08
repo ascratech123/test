@@ -58,7 +58,7 @@
                                       %th Description
                                       %th   
                                     - without_track = @agendas[date].where("agenda_track_id is null")
-                                    - with_track = @agendas[date].unscoped.where('Date(start_agenda_time_with_event_timezone) = ? and agenda_track_id is not null and agendas.event_id = ?', date,params[:event_id]).order(:agenda_track_id)
+                                    - with_track = @agendas[date].unscoped.where('Date(start_agenda_date) = ? and agenda_track_id is not null and agendas.event_id = ?', date,params[:event_id]).order(:agenda_track_id)
                                     - with_track = with_track.joins(:agenda_track).sort_by { |obj| obj.agenda_track.sequence}
                                     - @agendas[date] = without_track + with_track.uniq { |obj| obj.agenda_track}
                                     / %td.font16= agenda.title
@@ -70,10 +70,10 @@
                                         %td.font16= agenda.speaker_name 
                                         %td.font16
                                           =# time_with_zone(agenda.start_agenda_time, 'IST', '%Y-%m-%d %H:%M')
-                                          = formatted_time(agenda.start_agenda_time_with_event_timezone, '%Y-%m-%d %H:%M')
+                                          = formatted_time(agenda.start_agenda_time, '%Y-%m-%d %H:%M')
                                         %td.font16
                                           =# time_with_zone(agenda.end_agenda_time, 'IST','%Y-%m-%d %H:%M')
-                                          = formatted_time(agenda.end_agenda_time_with_event_timezone, '%Y-%m-%d %H:%M')
+                                          = formatted_time(agenda.end_agenda_time, '%Y-%m-%d %H:%M')
                                         %td.font16= agenda.discription                                          
                                         %td.IconDrp.agendtaIconDrp
                                           = more_vert_button(agenda.id)
@@ -100,10 +100,10 @@
                                             = track_agenda.speaker_name.present? ? track_agenda.speaker_name : '-'
                                           %td.font16
                                             =# time_with_zone(track_agenda.start_agenda_time, 'IST', '%Y-%m-%d %H:%M')
-                                            = formatted_time(agenda.start_agenda_time_with_event_timezone, '%Y-%m-%d %H:%M')
+                                            = formatted_time(agenda.start_agenda_time, '%Y-%m-%d %H:%M')
                                           %td.font16
                                             =# time_with_zone(track_agenda.end_agenda_time, 'IST','%Y-%m-%d %H:%M')
-                                            = formatted_time(agenda.end_agenda_time_with_event_timezone, '%Y-%m-%d %H:%M')
+                                            = formatted_time(agenda.end_agenda_time, '%Y-%m-%d %H:%M')
                                           %td.font16
                                             = track_agenda.discription.present? ? track_agenda.discription : '-'
                                           %td.IconDrp.agendtaIconDrp
