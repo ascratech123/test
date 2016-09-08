@@ -19,6 +19,8 @@
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "agenda.png", :objs => @event.agendas, :url => "agendas", :@count => @count}
         - if show_card("invitees")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "invitees.png", :objs => @event.invitees, :url => "invitees", :@count => @count}
+        - if show_card("my_travels")
+          = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "travel.png", :objs => @event.my_travels, :url => "my_travels", :@count => 0}
       -elsif !(current_user.has_role? "db_manager")  
         - if show_card("abouts")  
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "about.png", :objs => @event, :url => "abouts"}

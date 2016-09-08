@@ -212,7 +212,7 @@ class MobileApplication < ActiveRecord::Base
   end
 
   def get_events(user,events)
-    if user.has_role? :moderator or user.has_role? :event_admin
+    if user.has_role? :moderator or user.has_role? :event_admin or user.has_role? :db_manager
       apps = self.events.where(:id => events.pluck(:id)).order(start_event_date: :desc) rescue []
     else
       apps = self.events.order(start_event_date: :desc) rescue []

@@ -27,6 +27,9 @@ class Client < ActiveRecord::Base
     elsif user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+    elsif user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
+      events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     else
       client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     end
@@ -39,6 +42,9 @@ class Client < ActiveRecord::Base
     elsif user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+    elsif user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
+      events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     else
       client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     end
@@ -50,6 +56,9 @@ class Client < ActiveRecord::Base
       events.where('end_event_date < ?',Date.today)
     elsif user.has_role? :moderator
       events = Event.with_roles("moderator", user)
+      events.where('end_event_date < ?',Date.today)
+    elsif user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
       events.where('end_event_date < ?',Date.today)
     else
       client.events.where('end_event_date < ?',Date.today)

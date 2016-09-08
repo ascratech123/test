@@ -22,7 +22,10 @@
               %span= link_to "",admin_event_sequence_path(:event_id => poll.event_id, :id => poll.id, :seq_type => "up", :feature_type => "polls"),:class => "uparrow", :method => "put", :remote => true
             - if poll.sequence.to_i != 0 and (@polls.length - 1) != index
               %span= link_to "",admin_event_sequence_path(:event_id => poll.event_id, :id => poll.id, :type => "down", :feature_type => "polls"),:class => "downarrow", :method => "put", :remote => true
-        %td.description_adjust.font16= show_link(params, poll.id, poll.question) rescue nil
+        - if !(current_user.has_role? :db_manager)
+          %td.description_adjust.font16= show_link(params, poll.id, poll.question) rescue nil
+        - else
+          %td.font16= poll.question
         %td.font16
           = poll.status.capitalize rescue nil
         %td.font16
@@ -31,17 +34,18 @@
           - else 
             = ""  
         %td.IconDrp
-          = more_vert_button(poll.id)
-          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
-            = edit_link(params, poll.id)
-            = delete_link(params, poll.id)
-            - if poll.on_wall == "yes" 
-              = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
-            - elsif ((poll.on_wall == "no" or poll.on_wall == nil ) and poll.event.polls.pluck(:on_wall).exclude?("yes"))
-              - if poll.status != "deactivate"
-                = link_to "Push To Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"
-            - poll.aasm.events.each do |eve|
-              = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/polls", :id => poll.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
+          - if !(current_user.has_role? :db_manager)
+            = more_vert_button(poll.id)
+            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
+              = edit_link(params, poll.id)
+              = delete_link(params, poll.id)
+              - if poll.on_wall == "yes" 
+                = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
+              - elsif ((poll.on_wall == "no" or poll.on_wall == nil ) and poll.event.polls.pluck(:on_wall).exclude?("yes"))
+                - if poll.status != "deactivate"
+                  = link_to "Push To Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"
+              - poll.aasm.events.each do |eve|
+                = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/polls", :id => poll.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   =# will_paginate objs   
 
 :javascript

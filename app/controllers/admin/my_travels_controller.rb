@@ -6,7 +6,14 @@ class Admin::MyTravelsController < ApplicationController
   #before_filter :get_invitee_name, :only => [:index]
 
   def index
-    @my_travels = @my_travels.paginate(:page => params[:page], :per_page => 10)
+    @my_travels = @my_travels.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
+    respond_to do |format|
+      format.html  
+      format.xls do
+        method_allowed = [:Invitee_email, :File_Name_1, :File_1_URL, :File_Name_2, :File_2_URL, :File_Name_3, :File_3_URL, :File_Name_4, :File_4_URL,:File_Name_5,:File_5_URL,:Comment_box]
+        send_data @my_travels.to_xls(:methods => method_allowed, :filename => "asd.xls")
+      end
+    end
   end
   def new
     @my_travel = @event.my_travels.build

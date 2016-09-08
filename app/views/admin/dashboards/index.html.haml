@@ -70,6 +70,9 @@
           - if current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)
+          - elsif current_user.has_role? :db_manager
+            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
+            - @mobile_applications = MobileApplication.where(:id => ids)
           - else
             - @mobile_applications = MobileApplication.where(:client_id => client_ids)
           - event_ids = @events.pluck(:id)
@@ -129,6 +132,9 @@
                               - if current_user.has_role? :event_admin
                                 - length = @count.pluck(:id).compact.uniq.count rescue 0
                                 = link_to length, admin_clients_path(:feature => 'events')
+                              - elsif current_user.has_role? :db_manager
+                                - length = @count.pluck(:id).compact.uniq.count rescue 0
+                                = link_to length, admin_clients_path(:feature => 'events')
                               - else  
                                 = link_to @events.length, admin_clients_path(:feature => 'events')
                             =# @events.count
@@ -169,30 +175,7 @@
                             %a{:href => admin_clients_path(:feature => 'mobile_applications', :redirect_page => "new"), :class => "displayBlock"}
                               = 'Add One' if @mobile_applications.count <= 0
                               = 'New Mobile App' if @mobile_applications.count > 0
-                - if !(current_user.has_role? :db_manager)
-                  .col-sm-3.col-xl-3
-                    .panel.panel-tile.manageusers
-                      .panel-body
-                        .row.pv5
-                          .col-xs-5.ph10
-                            = image_tag("coloured_icons/user_3.png")
-                          .col-xs-7.pl5
-                            - if @users.count == 0
-                              %h6.text-muted Manage Users
-                              %h2.fs30.mt5.mbn
-                                = '0'
-                            - else
-                              %h6.text-muted Manage Users
-                              %h2.fs30.mt5.mbn
-                                = link_to @users.count, admin_clients_path(:feature => 'users',:redirect_page => 'index')
-                                =# @events.count
-                        .row.pv5.AddmoreCard
-                          .col-xs-12.ph5
-                            -if true#check_curent_user_role("mobile_application")
-                              %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
-                                = 'Add One' if @users.count <= 0
-                                = 'New User' if @users.count > 0
-                              = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
+                              
               - if !(current_user.has_role? :db_manager)                
                 .col-sm-3.col-xl-3
                   .panel.panel-tile.manageusers
@@ -217,22 +200,22 @@
                               = 'Add One' if @users.count <= 0
                               = 'New User' if @users.count > 0
                             = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
-
-              .col-sm-3.col-xl-3
-                .panel.panel-tile
-                  .panel-body
-                    .row.pv5
-                      .col-xs-5.ph10
-                        = image_tag("coloured_icons/analytics.png")
-                      .col-xs-7.pl5
-                        %h6.text-muted
-                          = link_to 'Analytics', admin_clients_path(:feature => 'analytics')
-                          
-                    .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application") ? "0px" : "23px"}" }
-                      .col-xs-12.ph5
-                        - if true#check_curent_user_role("mobile_application")
-                          %a{:href => admin_clients_path(:feature => 'analytics'), :class => "displayBlock"}
-                            = 'View Analytics'
+              -if !(current_user.has_role? :db_manager)              
+                .col-sm-3.col-xl-3
+                  .panel.panel-tile
+                    .panel-body
+                      .row.pv5
+                        .col-xs-5.ph10
+                          = image_tag("coloured_icons/analytics.png")
+                        .col-xs-7.pl5
+                          %h6.text-muted
+                            = link_to 'Analytics', admin_clients_path(:feature => 'analytics')
+                            
+                      .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application") ? "0px" : "23px"}" }
+                        .col-xs-12.ph5
+                          - if true#check_curent_user_role("mobile_application")
+                            %a{:href => admin_clients_path(:feature => 'analytics'), :class => "displayBlock"}
+                              = 'View Analytics'
               =# render :partial => 'admin/layouts/card_event', :locals => {:image_path => "coloured_icons/analytics.png", :page_title => "Analytics", :feature_count => "" }
 
 

@@ -68,7 +68,10 @@
                                       %tr                                 
                                         %td
                                         %td
-                                        %td.font16= link_to agenda.title, edit_admin_event_agenda_path(agenda.event_id,agenda.id)
+                                        - if !(current_user.has_role? :db_manager)
+                                          %td.font16= link_to agenda.title, edit_admin_event_agenda_path(agenda.event_id,agenda.id)
+                                        - else
+                                          %td.font16= agenda.title
                                         %td.font16= agenda.speaker_name 
                                         / %td.font16= agenda.start_agenda_time
                                         %td.font16= get_datetime_with_ist_timezone(agenda.start_agenda_time)
@@ -76,10 +79,11 @@
                                         %td.font16= get_datetime_with_ist_timezone(agenda.end_agenda_time)
                                         %td.font16= agenda.discription                                          
                                         %td.IconDrp.agendtaIconDrp
-                                          = more_vert_button(agenda.id)
-                                          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
-                                            = edit_link(params, agenda.id)
-                                            = delete_link(params, agenda.id)
+                                          - if !(current_user.has_role? :db_manager)
+                                            = more_vert_button(agenda.id)
+                                            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
+                                              = edit_link(params, agenda.id)
+                                              = delete_link(params, agenda.id)
                                     - with_track = with_track.uniq { |obj| obj.agenda_track} 
                                     - with_track.each_with_index do |agenda, index|          
                                       %tr
@@ -94,8 +98,11 @@
                                         %tr
                                           %td
                                           %td
-                                          %td.font16
-                                            = link_to track_agenda.title, edit_admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
+                                          - if !(current_user.has_role? :db_manager)
+                                            %td.font16
+                                              = link_to track_agenda.title, edit_admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
+                                          - else
+                                            %td.font16= track_agenda.title 
                                           %td.font16
                                             = track_agenda.speaker_name.present? ? track_agenda.speaker_name : '-'
                                           %td.font16
@@ -105,10 +112,11 @@
                                           %td.font16
                                             = track_agenda.discription.present? ? track_agenda.discription : '-'
                                           %td.IconDrp.agendtaIconDrp
-                                            = more_vert_button(track_agenda.id)
-                                            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
-                                              = edit_link(params, track_agenda.id)
-                                              = delete_link(params, track_agenda.id)        
+                                            - if !(current_user.has_role? :db_manager)
+                                              = more_vert_button(track_agenda.id)
+                                              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
+                                                = edit_link(params, track_agenda.id)
+                                                = delete_link(params, track_agenda.id)        
 
     / - if @feedbacks.present?
     = render :partial => 'admin/layouts/more_links'

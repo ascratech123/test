@@ -36,4 +36,40 @@ validates_length_of :comment_box, :maximum => 100 , :message => "Comment is upto
     file_type
   end
 
+  def Invitee_email
+    self.invitee_id.present? ? Invitee.find_by_id(self.invitee_id).email : ''
+  end
+  def File_Name_1
+    self.attach_file_1_name.present? ? self.attach_file_1_name : ''
+  end
+  def File_1_URL
+    self.attach_file.present? ? self.attach_file.url : ''
+  end
+  def File_Name_2
+    self.attach_file_2_name.present? ? self.attach_file_2_name : ''
+  end
+  def File_2_URL
+    self.attach_file_2.present? ? self.attach_file_2.url : ''
+  end
+  def File_Name_3
+    self.attach_file_3_name.present? ? self.attach_file_3_name : ''
+  end
+  def File_3_URL
+    self.attach_file_3.present? ? self.attach_file_3.url : ''
+  end
+  def File_Name_4
+    self.attach_file_4_name.present? ? self.attach_file_4_name : ''
+  end
+  def File_4_URL
+    self.attach_file_4.present? ? self.attach_file_4.url : '' 
+  end
+  def File_Name_5
+    self.attach_file_5_name.present? ? self.attach_file_5_name : '' 
+  end
+  def File_5_URL
+    self.attach_file_5.present? ? self.attach_file_5.url : ''
+  end
+  def Comment_box
+    self.comment_box.present? ? self.comment_box : ''
+  end
 end
