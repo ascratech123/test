@@ -302,12 +302,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_time
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_time 
+      self.end_event_time = end_event_time.to_datetime 
     end
   end
 
