@@ -13,7 +13,7 @@ module ApplicationHelper
     else
       datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') if datetime.present?
     end
-
+  end
     def formatted_time(datetime, format)
       datetime.strftime(format) if datetime.present?
     end
