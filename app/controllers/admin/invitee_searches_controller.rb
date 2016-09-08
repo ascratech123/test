@@ -14,7 +14,14 @@ class Admin::InviteeSearchesController < ApplicationController
     
     @attendees = Invitee.search(params, @attendance) if (params[:search].present? and ( params[:value].present? and params[:value] == "attendee"))
     @attendees = @attendees.paginate(page: params[:attendees_page], per_page: 10)if params["format"] != "xls"
-    
+    if params[:page] == "thank_you"
+      @invitee = @event.invitees.where(:id => params[:invitee_id]).last
+    end  
+    if params[:page] == "manual_search"
+      @invitee = @event.invitees.where(:id => params[:invitee_id]).last
+      @invitee_searches = @event.invitees.where('email like ? or name_of_the_invitee like ?', "%#{params[:email]}%", "%#{params[:email]}%").paginate(page: params[:qr_scanner_page], per_page: 10) if params[:email].present?
+    end
+
     respond_to do |format| 
       format.html  
       format.xls do
