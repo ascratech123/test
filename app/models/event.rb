@@ -608,6 +608,10 @@ class Event < ActiveRecord::Base
   end
 
   def about_date
-    "#{self.start_event_date.strftime('%d %b')} - #{self.start_event_date.strftime('%d %b %Y')}"
+    if self.start_event_date.to_date != self.end_event_date.to_date
+      "#{self.start_event_date.strftime('%d %b')} - #{self.start_event_date.strftime('%d %b %Y')}"
+    else
+      self.start_event_date.strftime('%A, %d %b %Y')
+    end
   end
 end
