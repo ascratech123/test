@@ -25,8 +25,14 @@ class Admin::QrCodeScannersController < ApplicationController
       message = @invitee.present? ? "valid" : 'invalid'
       # format.js{render :js => "window.location.href = #{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :meassge => message)}" }
       invitee_id = @invitee.id rescue ''
-      format.js { render :js => "window.location.href = '#{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :qr_code_preview => 'true', :meassge => message, :invitee_id => invitee_id)}'" }
-      format.html
+      path = request.referer.include?('invitee_searches')
+      if path
+        format.js { render :js => "window.location.href = '#{admin_event_invitee_searches_path(:event_id => @event.id, :page => 'thank_you', :qr_code_preview => 'true', :meassge => message, :invitee_id => invitee_id)}'" }
+        format.html
+      else
+        format.js { render :js => "window.location.href = '#{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :qr_code_preview => 'true', :meassge => message, :invitee_id => invitee_id)}'" }
+        format.html
+      end
     end
   end
 
