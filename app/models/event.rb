@@ -636,7 +636,7 @@ class Event < ActiveRecord::Base
           event.update_column("event_category","Past")
         end
         event.update_column("sequence",(i+1))
-        event.update_column("updated_at",Time.now) if (prev_event_seq != event.sequence or prev_event_category != event.event_category)
+        event.update_column("updated_at",Time.now) if (prev_event_seq != event.sequence or prev_event_category != event.event_category)   
       end
     end
   end
