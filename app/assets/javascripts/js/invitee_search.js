@@ -27,6 +27,26 @@ $(document).ready(function(){
     $("#registration_tab").trigger("click");
   }
 });
+$(document).ready(function(){
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "scanning"){
+    $("#qr_scaner").trigger("click");
+  }
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "manual_search"){
+     $("#qr_scaner").trigger("click");
+  }
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "invitee_search_qr"){
+    $("#qr_scaner").trigger("click");
+  }
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "thank_you"){
+    $("#qr_scaner").trigger("click");
+  }
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "scanning"){
+    $("#tab-5").trigger("click");
+  }
+  if ($("#invitee_search_tab").attr("invitee_search_tab") == "home_qr_scanner"){
+    $("#qr_scaner").trigger("click");
+  }
+});
 
 // $(document).ready(function(){
 //   $('#printBadge').click(function(){

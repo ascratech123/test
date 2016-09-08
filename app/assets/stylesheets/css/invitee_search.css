@@ -79,3 +79,70 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
     margin: 0 auto 4% auto;
     text-align: center;
 }
+#qr-canvas{display:none;}
+
+#tab-5{
+    padding-bottom:150px;
+}
+.searchManuallyBtn{text-align: center;}
+.thanktest {
+    font-size: 40px;
+}
+.wrapper.thankYouWrapper .tableDiv {
+    padding: 22px 0;
+}
+.tableDiv table {
+    width: 80%;
+    margin: 0 auto;
+    background: #f2f2f2;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.12);
+    border-collapse:collapse;
+    text-align:center;
+}
+.btnDiv.thankyouPage {
+    padding: 7% 0 2% 0;
+    margin:0 auto;
+    text-align: center;
+}
+.searchManuallyDiv{
+    text-align: center;
+}
+.btnDiv .linkBtn {
+    width: 10%;
+    padding: 10px 10px;
+    text-transform: capitalize;
+    border: 0 none;
+    margin: 0 15px 0 0;
+    cursor: pointer;
+    font-size: 17px;
+}
+.btnDiv .linkBtn:last-child {
+    margin: 0;
+}
+.searchManuallyDiv a {
+    font-size: 15px;
+}
+.tableDiv table tr th {
+    background-color: #00b1bb;
+    text-align: center;
+}
+.tableDiv tr th {
+    font-weight: bold;
+}
+.tableDiv table th {
+    padding: 10px 0;
+    background: #ccc;
+    color: #fff;
+}
+
+
+.tableDiv tr td {
+    padding: 10px 0;
+}
+
+.tableDiv td, .tableDiv th {
+    border: 1px solid #a4a2a2;
+    color: #000;
+}
+.thankyou-text{margin-top:7%; margin-bottom: 5%; }
+.newScanBtn{margin: 3% auto; text-align: center;}
