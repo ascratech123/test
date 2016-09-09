@@ -33,6 +33,7 @@ class Poll < ActiveRecord::Base
   def set_status
     if self.status.blank?
       self.status = "activate"
+      self.save
     end
   end
 
