@@ -6,14 +6,14 @@ class Poll < ActiveRecord::Base
   has_many :user_polls, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
-  #validate :time_format
-  validates :question,:option1,:option2, presence: { :message => "This field is required." }
-  #validates :sequence, uniqueness: {scope: :event_id}, :allow_blank => true#, presence: true
+  validates :option_type,  presence: { :message => "This field is required." }, unless: Proc.new { |object| object.description == true }
+  validates :question, presence: { :message => "This field is required." }
+  validates :option1, :option2, presence: { :message => "This field is required." }, if: Proc.new { |object| object.option_type == "Radio" || object.option_type == "Checkbox"}
   
   before_save :set_time
   after_save :push_notification, :check_push_to_wall_status
   before_create :set_sequence_no
-  after_create :set_status_as_per_auto_approve
+  after_create :set_status, #:set_status_as_per_auto_approve
 
   default_scope { order("sequence") }
 
@@ -27,6 +27,12 @@ class Poll < ActiveRecord::Base
     end 
     event :deactivate do
       transitions :from => [:activate], :to => [:deactivate]
+    end
+  end
+
+  def set_status
+    if self.status.blank?
+      self.status = "activate"
     end
   end
 
@@ -106,16 +112,16 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def set_status_as_per_auto_approve
-    if Event.find(self.event_id).poll_auto_approve == "true"
-      self.update_column(:status, "activate") 
-    elsif Event.find(self.event_id).poll_auto_approve == "false"
-      self.update_column(:status, "deactivate")
-    end
-  end
+  # def set_status_as_per_auto_approve
+  #   if Event.find(self.event_id).poll_auto_approve == "true"
+  #     self.update_column(:status, "activate") 
+  #   elsif Event.find(self.event_id).poll_auto_approve == "false"
+  #     self.update_column(:status, "deactivate")
+  #   end
+  # end
 
-  def self.set_auto_approve(value,event)
-    event.update_column(:poll_auto_approve, value)
-  end
+  # def self.set_auto_approve(value,event)
+  #   event.update_column(:poll_auto_approve, value)
+  # end
   
 end
