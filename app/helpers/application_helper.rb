@@ -1,15 +1,17 @@
 module ApplicationHelper
 
   def time_with_zone(datetime, zone=nil,format)
-    if zone.present? and zone == 'IST' and format == "%Y-%m-%d %H:%M"
-      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
-    elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %H:%M"
-      datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if datetime.present?
-    elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %I:%M %p"
-      datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') if datetime.present?
+    if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
+      datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
+    elsif zone.present?
+      datetime.to_time.in_time_zone(zone).strftime(format) if datetime.present?
     else
       datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') if datetime.present?
     end
+  end
+
+  def formatted_time(datetime, date_format)
+    datetime.strftime(date_format) if datetime.present?
   end
 
   def break_line
@@ -62,13 +64,13 @@ module ApplicationHelper
   def get_hour_minute_second_ampm(time, format)
     case format
     when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') rescue nil
+      time.strftime('%l').strip.rjust(2, '0') rescue nil
     when 'minute'
-      time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') rescue nil
+      time.strftime('%M').strip.rjust(2, '0') rescue nil
     when 'second'
-      time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') rescue nil
+      time.strftime('%S').strip.rjust(2, '0') rescue nil
     when 'ampm'
-      time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') rescue nil
+      time.strftime('%p').strip.rjust(2, '0') rescue nil
     end
   end
 

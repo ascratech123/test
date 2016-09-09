@@ -302,12 +302,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_time
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_time 
+      self.end_event_time = end_event_time.to_datetime 
     end
   end
 
@@ -590,8 +590,28 @@ class Event < ActiveRecord::Base
     users
   end
 
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      self.update_column("timezone", self.timezone.titleize)
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("updated_at", Time.now)
+        end
+      end   
+    end
+  end  
+
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def about_date
+    if self.start_event_date.to_date != self.end_event_date.to_date
+      "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
+    else
+      self.start_event_date.strftime('%A, %d %b %Y')
+    end
   end
 end

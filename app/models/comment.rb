@@ -1,5 +1,3 @@
-
-
 class Comment < ActiveRecord::Base
   
   attr_accessor :platform
@@ -78,7 +76,8 @@ class Comment < ActiveRecord::Base
   end
   
   def timestamp
-    self.commentable.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M') rescue ""
+    commentable_rec = self.commentable
+    commentable_rec.created_at.in_time_zone(commentable_rec.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
   end
   def image_url
     conversation = Conversation.find_by_id(self.commentable_id)
@@ -115,6 +114,14 @@ class Comment < ActiveRecord::Base
   def updated_at_with_event_timezone
     timezone = Conversation.joins(:event).select("conversations.id as conversation_id, events.id as event_id, events.timezone as timezone").where("conversations.id = ?", self.commentable_id).first.timezone
     self.updated_at.in_time_zone(timezone)
+  end
+
+  def formatted_created_at_with_event_timezone
+    self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+  end
+
+  def formatted_updated_at_with_event_timezone
+    self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
   end
 
 end

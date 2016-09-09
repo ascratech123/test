@@ -21,7 +21,7 @@
               = push_page[notification.push_page].present? ? push_page[notification.push_page] : notification.push_page
             %td.font16= notification.page_id rescue nil
             / %td.font16= time_with_zone(notification.push_datetime, 'IST')
-            %td.font16= time_with_zone(notification.push_datetime, 'IST', '%Y-%m-%d %H:%M')
+            %td.font16= time_with_zone(notification.push_datetime, notification.event_timezone, '%Y-%m-%d %H:%M')
             %td.font16= notification.pushed rescue nil
             %td.IconDrp
               = more_vert_button(notification.id)
