@@ -3,10 +3,6 @@ module ApplicationHelper
   def time_with_zone(datetime, zone=nil,format)
     if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
       datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
-    # elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %H:%M"
-    #   datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if datetime.present?
-    # elsif zone.present? and zone == 'IST' and format == "%d-%m-%Y %I:%M %p"
-    #   datetime.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') if datetime.present?
     elsif zone.present?
       datetime.to_time.in_time_zone(zone).strftime(format) if datetime.present?
     else

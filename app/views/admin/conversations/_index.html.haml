@@ -39,7 +39,7 @@
         %td.description_adjust.font16{:width => "300px;"}= show_link(params, conversation.id, conversation.description) rescue nil
         %td.font16= conversation.user_name
         %td.font16= conversation.get_company_name
-        %td.font16= conversation.created_at.to_s.gsub("UTC", "") rescue nil
+        %td.font16= time_with_zone(conversation.created_at, conversation.event_timezone,"%Y-%m-%d %H:%M")
         %td.font16= conversation.status.capitalize rescue nil
         %td.font16
           - if conversation.on_wall == "yes" and conversation.status != "rejected" 

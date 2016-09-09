@@ -25,7 +25,8 @@ class UserFeedback < ActiveRecord::Base
 
   
   def Timestamp
-    self.feedback.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %T') rescue ""
+    feedback = self.feedback
+    feedback.created_at.in_time_zone(feedback.event_timezone).strftime('%m/%d/%Y %T') rescue ""
   end
 
 	def email
@@ -69,7 +70,7 @@ class UserFeedback < ActiveRecord::Base
     self.description rescue ""
   end
   def Timestamp
-    self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
+    self.created_at.in_time_zone(self.feedback.event_timezone).strftime("%d/%m/%Y %T")
   end
   def create_analytic_record
     event_id = Invitee.find_by_id(self.user_id).event_id rescue nil
