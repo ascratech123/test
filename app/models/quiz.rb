@@ -10,6 +10,7 @@ class Quiz < ActiveRecord::Base
   
   before_validation :set_correct_answer, :if => Proc.new{|p| p.correct_ans_option1.present? or p.correct_ans_option2.present? or p.correct_ans_option3.present? or p.correct_ans_option4.present? or p.correct_ans_option5.present?} 
   before_create :set_sequence_no
+  after_create :set_event_timezone
   after_save :push_notification
 
   default_scope { order("sequence") }
@@ -101,6 +102,10 @@ class Quiz < ActiveRecord::Base
       count = count + 1 if self.correct_answer.include?(ans.answer)
     end
     count
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
   end
 
 end

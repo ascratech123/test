@@ -23,12 +23,7 @@ class UserPoll < ActiveRecord::Base
 	end
 
   def Timestamp
-    self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
-  end
-
-  def event_timezone
-    poll = self.poll
-    (poll.event_timezone.present? ? poll.event_timezone : poll.update_event_timezone)
+    self.created_at.in_time_zone(self.poll.event_timezone).strftime("%d/%m/%Y %T")
   end
 
   def email_id

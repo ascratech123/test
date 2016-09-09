@@ -76,7 +76,8 @@ class Comment < ActiveRecord::Base
   end
   
   def timestamp
-    self.commentable.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M') rescue ""
+    commentable_rec = self.commentable
+    commentable_rec.created_at.in_time_zone(commentable_rec.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
   end
   def image_url
     conversation = Conversation.find_by_id(self.commentable_id)
