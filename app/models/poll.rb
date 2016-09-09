@@ -13,7 +13,7 @@ class Poll < ActiveRecord::Base
   before_save :set_time
   after_save :push_notification, :check_push_to_wall_status
   before_create :set_sequence_no
-  after_create :set_status, #:set_status_as_per_auto_approve
+  after_create :set_status#, :set_status_as_per_auto_approve
 
   default_scope { order("sequence") }
 
