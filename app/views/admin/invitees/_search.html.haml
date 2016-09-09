@@ -12,16 +12,17 @@
   %form#searchFrm
     = form_tag admin_event_invitee_searches_path(:event_id => @event.id) , :method => :get , id: "search-form" do |f|
       .tab1-searchDiv
-        %span Search:
+        %span.searchText Search:
         = text_field_tag "search""[keyword]"#, "", basic_search_value(params)
         = hidden_field_tag :admin_search, "true"
         -if local_assigns[:invitee].present?
           = hidden_field_tag :value, "printBadge"
         -if local_assigns[:attendee].present?  
           = hidden_field_tag :value, "attendee"
-        = hidden_field_tag :full_search, "true"
+        = hidden_field_tag :full_search, "true" 
       .tab1-searchBtn
         = submit_tag "Search"
+      .back
         = link_to "Back", admin_event_invitee_searches_path(:event_id => @event.id)
         / %input#searchBtn.search-butt{:name => "searchBtn", :type => "button", :value => "Search"}/
 
