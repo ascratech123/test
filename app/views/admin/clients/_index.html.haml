@@ -24,6 +24,11 @@
           %td.font16= Client.upcoming_event(client,current_user).length
           %td.font16= Client.ongoing_event(client,current_user).length
           %td.font16= Client.past_event(client,current_user).length
+        - elsif current_user.has_role? :db_manager
+          %td.font16= client.name
+          %td.font16= Client.upcoming_event(client,current_user).length
+          %td.font16= Client.ongoing_event(client,current_user).length
+          %td.font16= Client.past_event(client,current_user).length
         - else
           %td.font16= link_to "#{client.name} ", admin_client_events_path(:client_id => client.id),:class => "collection-item"
           %td.font16= link_to "#{Client.upcoming_event(client,current_user).length} ", admin_client_events_path(:client_id => client.id,:type => "upcoming_event"),:class => "collection-item"

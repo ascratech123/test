@@ -54,7 +54,7 @@
                 - url1 = "leaderboards" if url == "leaderboard"
                 = link_to "#{count}","/admin/events/#{@event.id}/#{url1}#{redirection}"
 
-      - if show_card(url) and (@resource_role.blank? or @resource_role.present?)
+      - if show_card(url) and (@resource_role.blank? or @resource_role.present?) and !(current_user.has_role? :db_manager)
         .row.pv5.AddmoreCard
           .col-xs-12.ph5
             - single_associated = ["qnas","conversations"]
@@ -99,7 +99,7 @@
               = link_to "Go to Wall", admin_event_qnas_path(:event_id => @event.id, :qnas_wall => true),:class => " centerAlign", :target => "_blank"
             - elsif url == "conversations"
               = link_to "Go to Wall", admin_event_conversations_path(:event_id => @event.id, :conversations_wall => true),:class => " centerAlign", :target => "_blank"
-      - elsif true#(@resource_role.blank? or (@resource_role.present? and @resource_role.name != 'moderator'))
+      - elsif !(current_user.has_role? :db_manager) #true#(@resource_role.blank? or (@resource_role.present? and @resource_role.name != 'moderator'))
         .row.pv5.AddmoreCard
           .col-xs-12.ph5
             = link_to "Enable", admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id,:enable_event => "#{url}", :type => params[:type]), :method => "put" ,:class => " centerAlign", :remote => true

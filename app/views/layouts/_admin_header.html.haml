@@ -96,7 +96,7 @@
         %a.mdl-navigation__link.menuclick{:href => 'javascript:void(0);'}
           = image_tag("black_&_white_icons/leads_img.png")
           Leads
-      - if true#!current_user.has_role? "moderator"
+      - if !(current_user.has_role? :db_manager)
         -if @event.present? #params[:id].present?
           - url = "/admin/clients/#{@event.client_id}/events/#{@event.id}?analytics=true"
         - elsif @client.present? #params[:client_id].present? 

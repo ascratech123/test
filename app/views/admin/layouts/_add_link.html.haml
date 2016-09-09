@@ -26,7 +26,7 @@
       =link_to new_admin_event_event_highlight_path(:event_id => @event.id),:class=>"rightBtn hvr-sweep-to-right" do
         New Highlight 
   - when 'mobile_application'
-    - if !current_user.has_role? :moderator
+    - if !(current_user.has_any_role? :moderator, :db_manager)
       = link_to admin_client_events_path(:client_id => @client.id, :feature => 'mobile_applications'), :class => "rightBtn hvr-sweep-to-right" do
         New Mobile Application 
   - when 'invitee_structure'
@@ -42,7 +42,7 @@
     = link_to new_admin_theme_path ,:class => "rightBtn hvr-sweep-to-right" do
       New Theme
   - when 'speaker'
-    - if @event.present?
+    - if @event.present? and !(current_user.has_role? :db_manager)
       = link_to new_admin_event_speaker_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Speaker
   - when 'invitee_group'
@@ -55,7 +55,7 @@
     = link_to new_admin_event_attendee_path(:event_id => @event.id) ,:class => " rightBtn hvr-sweep-to-right" do
       New Attendee
   - when 'agenda'
-    - if @event.present?
+    - if @event.present? and !(current_user.has_role? :db_manager)
       = link_to new_admin_event_agenda_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Session
       = link_to new_admin_event_event_feature_path(:event_id => @event.id, :feature => "my_calender"),:class => "rightBtn hvr-sweep-to-right" do
@@ -63,8 +63,9 @@
   - when 'invitee'
     = link_to new_admin_event_invitee_path(:event_id => @event.id) ,:class => "rightBtn hvr-sweep-to-right" do
       New Invitee
-    = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
-      Send Password To All
+    - if !(current_user.has_role? :db_manager)
+      = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
+        Send Password To All
   - when 'user'
     = link_to 'javascript:void(0);',:class => "rightBtn hvr-sweep-to-right", :id => 'add_user_popup' do
       New User
@@ -84,8 +85,9 @@
       = link_to new_admin_event_telecaller_accessible_column_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
         Telecaller Access Column
   - when 'my_travel'
-    = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
-      New My Travel
+    - if !(current_user.has_role? :db_manager)
+      = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+        New My Travel
 
     / = link_to admin_event_manage_feature_status_index_path(:event_id => @event.id, :status => "approved", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
     /   Approve All
@@ -96,8 +98,9 @@
     = link_to new_admin_event_faq_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New FAQ
   - when 'feedback'
-    = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      New Feedback
+    - if !(current_user.has_role? :db_manager)
+      = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Feedback
   - when 'image'   
     - if @event.present?
       = link_to  new_admin_event_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
@@ -107,7 +110,7 @@
       = link_to  new_admin_event_highlight_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Highlight Image        
   - when 'poll'
-    - if true#!(current_user.has_role? "moderator")
+    - if !(current_user.has_role? :db_manager)
       = link_to new_admin_event_poll_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Question
   - when 'sponsor'
@@ -140,7 +143,7 @@
       = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Invitee Groups 
   - when 'qna'
-    - if !(current_user.has_role? :moderator)
+    - if !(current_user.has_any_role? :moderator, :db_manager)
       = link_to admin_event_panels_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Manage Panel
     - if (current_user.has_role? :moderator)

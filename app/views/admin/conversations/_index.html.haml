@@ -36,7 +36,10 @@
           %td.font16= image_tag conversation.image_url(:thumb)
         -else
           %td.font16= ""
-        %td.description_adjust.font16{:width => "300px;"}= show_link(params, conversation.id, conversation.description) rescue nil
+        - if !(current_user.has_role? :db_manager)
+          %td.description_adjust.font16{:width => "300px;"}= show_link(params, conversation.id, conversation.description) rescue nil
+        - else
+          %td.font16= conversation.description  
         %td.font16= conversation.user_name
         %td.font16= conversation.get_company_name
         %td.font16= conversation.created_at.to_s.gsub("UTC", "") rescue nil
@@ -47,15 +50,16 @@
           - else 
             = ""
         %td.IconDrp
-          = more_vert_button(conversation.id)
-          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{conversation.id}"}
-            = edit_link(params, conversation.id)
-            = delete_link(params, conversation.id)
-            - if conversation.on_wall == "yes" and conversation.status == "approved" 
-              = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
-            - elsif ((conversation.on_wall == "no" or conversation.on_wall.blank?) and (conversation.status == "approved"))
-              = link_to "Push To Wall",{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item" 
-            - conversation.aasm.events.each do |eve|
-              = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :status => eve.name.to_s,:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item" 
+          - if !(current_user.has_role? :db_manager)
+            = more_vert_button(conversation.id)
+            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{conversation.id}"}
+              = edit_link(params, conversation.id)
+              = delete_link(params, conversation.id)
+              - if conversation.on_wall == "yes" and conversation.status == "approved" 
+                = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
+              - elsif ((conversation.on_wall == "no" or conversation.on_wall.blank?) and (conversation.status == "approved"))
+                = link_to "Push To Wall",{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item" 
+              - conversation.aasm.events.each do |eve|
+                = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/conversations", :id => conversation.id, :status => eve.name.to_s,:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item" 
   = will_paginate objs 
   

@@ -43,47 +43,47 @@
             %td.font16
               - if event.status != "rejected"
                 - @resource_role = current_user.get_role_on_resource(event)
-                - if @resource_role.present? and @resource_role.name == 'moderator'
+                - if @resource_role.present? and @resource_role.name == 'moderator' 
                   = link_to event.event_name, admin_client_event_path(:id => event.id, :client_id => event.client_id, :analytics => true) if event.mobile_application.present?
                   = link_to event.event_name, 'javascript:void(0)' if event.mobile_application.blank?
                 - else
                   = link_to event.event_name, admin_client_event_path(event.client_id, event.id)
               - else
                 = event.event_name  
-            %td.font16= event.event_category #event_type(event) rescue nil
+            %td.font16= event_type(event) rescue nil
             %td.font16
               - if event.status != 'published' or event.status == 'published'
                 %button{:class => get_status_class(event)}
                   = event.status.capitalize rescue nil
-            - if !current_user.has_role? :moderator or !(@resource_role.present? and @resource_role.name == 'moderator')
               %td.IconDrp
-                = more_vert_button(event.id)
-                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{event.id}"}
-                  - if event.status != "rejected"
-                    = link_to edit_admin_client_event_path(event.client_id, event.id, :type => "general"),:class => "mdl-menu__item" do
-                      Edit
-                    - if ['approved','published'].include?(event.status) and event.mobile_application.present?
-                      = link_to admin_event_mobile_application_path(:event_id => event.id, :id => event.mobile_application_id), :class => "mdl-menu__item" do
-                        Manage Mobile Application
-                    - elsif ['approved','published'].include?(event.status) and event.mobile_application.blank?
-                      = link_to new_admin_client_mobile_application_path(:client_id => event.client_id, :event_id => event.id, :old_one => true), :class => "mdl-menu__item" do
-                        New Mobile Applications
-                    - if ['approved','published'].include?(event.status) and @multi_mobile_applications.present? and !event.mobile_application.present?
-                      = link_to admin_client_mobile_applications_path(:client_id => event.client_id, :feature => 'events', :event_id => event.id), :class => "mdl-menu__item" do
-                        Add Existing Mobile Applications
-                    - if (event.start_event_date == Date.today rescue false) 
-                      = link_to admin_client_event_path(event.client_id, event.id,:schedule_type => "upcoming"), :method => "put", :class => "mdl-menu__item" do
-                        Change to upcoming
-                    - elsif (event.start_event_date > Date.today rescue false)  
-                      = link_to admin_client_event_path(event.client_id, event.id,:schedule_type => "ongoing"), :method => "put", :class => "mdl-menu__item" do
-                        Change to ongoing
-                  - if user_signed_in? and (current_user.has_any_role?(:super_admin,:licensee_admin, :client_admin, :event_admin))
-                    = link_to "/admin/events/#{event.id}/users", :class =>"mdl-menu__item" do
-                      Manage Users
-                  - if user_signed_in? and (current_user.has_role?(:licensee_admin))
-                    - event.aasm.events.each do |eve|
-                      - if ['publish', 'unpublish'].exclude? eve.name.to_s
-                        = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/events", :id => event.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
+                - if !current_user.has_role? :moderator or !(@resource_role.present? and @resource_role.name == 'moderator') and !(current_user.has_role? :db_manager)
+                  = more_vert_button(event.id)
+                  %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{event.id}"}
+                    - if event.status != "rejected"
+                      = link_to edit_admin_client_event_path(event.client_id, event.id, :type => "general"),:class => "mdl-menu__item" do
+                        Edit
+                      - if ['approved','published'].include?(event.status) and event.mobile_application.present?
+                        = link_to admin_event_mobile_application_path(:event_id => event.id, :id => event.mobile_application_id), :class => "mdl-menu__item" do
+                          Manage Mobile Application
+                      - elsif ['approved','published'].include?(event.status) and event.mobile_application.blank?
+                        = link_to new_admin_client_mobile_application_path(:client_id => event.client_id, :event_id => event.id, :old_one => true), :class => "mdl-menu__item" do
+                          New Mobile Applications
+                      - if ['approved','published'].include?(event.status) and @multi_mobile_applications.present? and !event.mobile_application.present?
+                        = link_to admin_client_mobile_applications_path(:client_id => event.client_id, :feature => 'events', :event_id => event.id), :class => "mdl-menu__item" do
+                          Add Existing Mobile Applications
+                      - if (event.start_event_date == Date.today rescue false) 
+                        = link_to admin_client_event_path(event.client_id, event.id,:schedule_type => "upcoming"), :method => "put", :class => "mdl-menu__item" do
+                          Change to upcoming
+                      - elsif (event.start_event_date > Date.today rescue false)  
+                        = link_to admin_client_event_path(event.client_id, event.id,:schedule_type => "ongoing"), :method => "put", :class => "mdl-menu__item" do
+                          Change to ongoing
+                    - if user_signed_in? and (current_user.has_any_role?(:super_admin,:licensee_admin, :client_admin, :event_admin))
+                      = link_to "/admin/events/#{event.id}/users", :class =>"mdl-menu__item" do
+                        Manage Users
+                    - if user_signed_in? and (current_user.has_role?(:licensee_admin))
+                      - event.aasm.events.each do |eve|
+                        - if ['publish', 'unpublish'].exclude? eve.name.to_s
+                          = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/events", :id => event.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
                                    
   = will_paginate objs
 :javascript

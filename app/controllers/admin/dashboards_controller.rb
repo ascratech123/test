@@ -3,6 +3,9 @@ class Admin::DashboardsController < ApplicationController
   before_filter :authenticate_user
   
   def index
+    if current_user.has_role? :db_manager
+      @count = Event.with_role(:db_manager, current_user)
+    end
     if current_user.has_role? :moderator
       @count = Event.with_role(:moderator, current_user)
     elsif current_user.has_role? :telecaller
