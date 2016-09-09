@@ -618,6 +618,7 @@ class Event < ActiveRecord::Base
 
   def self.set_event_category
     Event.find_each do |event|
+      prev_event_category  = event.event_category
       if event.start_event_date.in_time_zone(event.timezone) <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
         event.update_column("event_category","Ongoing")
       elsif event.start_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
@@ -625,6 +626,7 @@ class Event < ActiveRecord::Base
       else
         event.update_column("event_category","Past")
       end
+      event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
     end
   end
 end
