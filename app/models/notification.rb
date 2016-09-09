@@ -168,7 +168,7 @@ class Notification < ActiveRecord::Base
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
       time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
-      time = time.to_time rescue nil
+      time = time.to_datetime rescue nil
       self.push_datetime = time
     end
   end
