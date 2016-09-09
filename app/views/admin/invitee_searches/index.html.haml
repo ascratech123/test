@@ -76,14 +76,14 @@
                     / = 700 - (@attendance.count.to_i)
 
         #tab-3.tab-content.current
-          .excelDownload
-            %p
-              - if @attendees.present?
-                = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}
-              - else 
-                = image_tag("excel.png", border: 0)
           .searchDiv.tab3
             = render :partial => "admin/invitees/search", :locals => {:attendee => true}
+            .excelDownload
+              %p
+                - if @attendees.present?
+                  = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}
+                - else 
+                  = image_tag("excel.png", border: 0)
             %table.table-grid{:align => "center", :border => "0", :width => "100%"}
               %thead
                 %tr.tableHeading

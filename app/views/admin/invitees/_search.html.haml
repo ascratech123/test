@@ -22,8 +22,8 @@
         = hidden_field_tag :full_search, "true"
       .tab1-searchBtn
         = submit_tag "Search"
-      .back
-        = link_to "Back", admin_event_invitee_searches_path(:event_id => @event.id)  
-        / %input#searchBtn.search-butt{:name => "searchBtn", :type => "button", :value => "Search"}/
+  .back
+    = link_to "Back", admin_event_invitee_searches_path(:event_id => @event.id)  
+    / %input#searchBtn.search-butt{:name => "searchBtn", :type => "button", :value => "Search"}/
 
 
