@@ -28,7 +28,8 @@ class Speaker < ActiveRecord::Base
   validates :event_id,:rating_status, :presence => true
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
-  before_create :set_sequence_no, :set_event_timezone
+  before_create :set_sequence_no 
+  after_create :set_event_timezone
   before_save :set_full_name
   default_scope { order("sequence") }  
 

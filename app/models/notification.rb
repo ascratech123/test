@@ -26,7 +26,7 @@ class Notification < ActiveRecord::Base
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
   validates :push_datetime, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.push_timing == 'later' }
   validates :notification_type, presence: true
-  before_create :set_event_timezone
+  after_create :set_event_timezone
   before_save :update_details
   after_save :push_notification
 
