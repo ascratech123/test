@@ -16,6 +16,7 @@ class Agenda < ActiveRecord::Base
   after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected
   before_save :check_category_present_if_new_category_select_from_dropdown
+  after_create :set_event_timezone
 
   default_scope { order('start_agenda_time asc') }
 
@@ -99,6 +100,10 @@ class Agenda < ActiveRecord::Base
       self.end_agenda_time = "#{self.start_agenda_time.strftime('%d/%m/%Y')} #{end_agenda_time}"
       self.save
     end
+  end
+
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
   end
 
   def check_category_present_if_new_category_select_from_dropdown

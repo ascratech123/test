@@ -26,6 +26,7 @@ class Notification < ActiveRecord::Base
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
   validates :push_datetime, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.push_timing == 'later' }
   validates :notification_type, presence: true
+  after_create :set_event_timezone
   before_save :update_details
   after_save :push_notification
 
@@ -167,7 +168,7 @@ class Notification < ActiveRecord::Base
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
       time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
-      time = time.to_time rescue nil
+      time = time.to_datetime rescue nil
       self.push_datetime = time
     end
   end
@@ -196,7 +197,11 @@ class Notification < ActiveRecord::Base
   # end
 
   def formatted_push_datetime_with_event_timezone
-    self.push_datetime.in_event_timezone(self.event_timezone).strftime("%b %d at %H:%M %p")
+    self.push_datetime.in_event_timezone(self.event_timezone).strftime("%b %d at %I:%M %p")
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
   end
 
 end

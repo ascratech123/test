@@ -23,7 +23,7 @@ class Conversation < ActiveRecord::Base
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record#, :set_event_timezone, :set_dates_with_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
