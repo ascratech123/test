@@ -41,10 +41,8 @@
                 = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "no",:anonymous_on_wall => "false",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
               - elsif (ques_answer.on_wall == "no" or ques_answer.on_wall.blank?) and ques_answer.status == "approved"
                 = link_to "Push To Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"
-              / - if (ques_answer.anonymous_on_wall == "true" and ques_answer.status == "approved")
-              /   = link_to "Remove Anonymous Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "no",:anonymous_on_wall => "false",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove Anonymous Wall.'},:class => "mdl-menu__item"
-            - if (ques_answer.anonymous_on_wall == "false" and ques_answer.status == "approved" and ques_answer.on_wall != "yes")
-              = link_to "Anonymous Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "yes",:anonymous_on_wall => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push Anonymous Wall.'},:class => "mdl-menu__item"
+              - if (ques_answer.anonymous_on_wall == "false" and ques_answer.status == "approved" and ques_answer.on_wall != "yes")
+                = link_to "Anonymous Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "yes",:anonymous_on_wall => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push Anonymous Wall.'},:class => "mdl-menu__item"
               - ques_answer.aasm.events.each do |eve|
                 = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   = will_paginate objs
