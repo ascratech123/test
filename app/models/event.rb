@@ -54,7 +54,7 @@ class Event < ActiveRecord::Base
   has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
-  has_many :venue_sections, :dependent => :destroy   
+  has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
@@ -303,14 +303,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_datetime   
-      # self.start_event_time = start_event_time.to_time
+      self.start_event_time = start_event_time.to_time
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_datetime    
-      # self.end_event_time = end_event_time.to_time 
+      self.end_event_time = end_event_time.to_time 
     end
   end
 
@@ -598,45 +596,30 @@ class Event < ActiveRecord::Base
     self.update_column(:end_event_date, self.end_event_time)
   end
 
-  def set_timezone_on_associated_tables    
+  def set_timezone_on_associated_tables
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize)
-      for table_name in ["agendas", "attendees", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
-         obj.update_column("event_timezone", self.timezone)
-         obj.update_column("updated_at", Time.now)
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("updated_at", Time.now)
         end
       end   
     end
-  end  
-  
-  def about_date   
-    if self.start_event_date.to_date != self.end_event_date.to_date
-      "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
-    else
-      self.start_event_date.strftime('%A, %d %b %Y')
-    end
+  end 
+
+  def about_date
+    "#{self.start_event_date.strftime('%d %b')} - #{self.start_event_date.strftime('%d %b %Y')}"
   end
 
   def self.set_event_category
-    client_ids = Event.pluck("distinct client_id")
-    for client_id in client_ids
-      ongoing = Event.unscoped.where(:client_id => client_id, :event_category => "Ongoing").order("start_event_time asc")
-      upcoming = Event.unscoped.where(:client_id => client_id, :event_category => "Upcoming").order("start_event_time asc")
-      past = Event.unscoped.where(:client_id => client_id, :event_category => "Past").order("start_event_time desc")
-      final = ongoing + upcoming + past
-      final.flatten.each_with_index do |event, i|
-        prev_event_category  = event.event_category
-        prev_event_seq = event.sequence
-        if event.start_event_date.in_time_zone(event.timezone) <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
-          event.update_column("event_category","Ongoing")  
-        elsif event.start_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
-          event.update_column("event_category","Upcoming")
-        else
-          event.update_column("event_category","Past")
-        end
-        event.update_column("sequence",(i+1))
-        event.update_column("updated_at",Time.now) if (prev_event_seq != event.sequence or prev_event_category != event.event_category)
+    Event.find_each do |event|
+      if event.start_event_date.in_time_zone(event.timezone) <= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) >= Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
+        event.update_column("event_category","Ongoing")
+      elsif event.start_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time and event.end_event_date.in_time_zone(event.timezone) > Time.now.strftime('%d/%m/%Y %H:%M:%S').to_time
+        event.update_column("event_category","Upcoming")
+      else
+        event.update_column("event_category","Past")
       end
     end
   end

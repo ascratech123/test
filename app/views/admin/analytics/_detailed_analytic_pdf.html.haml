@@ -9,7 +9,7 @@
           %p
             = link_to "Print", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()"
           %span.imgcenter
-            = image_tag(@event.inside_logo_url)
+            = image_tag(@event.inside_logo_url(:small))
           %h3.m-l-10{:style => "font-weight: 100"}
             = @event.event_name
         .row.box
