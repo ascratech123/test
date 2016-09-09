@@ -56,7 +56,7 @@ module SyncMobileData
     model_name = model_name - models_array
     model_name.each do |model|
       start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') if start_event_date.present?
-      info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
+      info = self.get_model_class(model).where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
       case model
         when 'Conversation'
@@ -194,6 +194,74 @@ module SyncMobileData
 
   def self.name_table(model)
     return model == "Agenda" ? model.constantize.table_name.singularize : model.constantize.table_name
+  end
+
+  def self.get_model_class(model)
+    case model
+      when 'Conversation'
+        Conversation
+      when 'EmergencyExit'
+        EmergencyExit
+      when 'Event'
+        Event
+      when 'EventFeature'
+        EventFeature
+      when 'Speaker'
+        Speaker
+      when 'Image'
+        Image  
+      when 'HighlightImage'
+        HighlightImage
+      when 'Theme'
+        Theme
+      when 'Winner'
+        Winner
+      when 'Comment'
+        Comment
+      when 'Sponsor'
+        Sponsor
+      when 'Exhibitor'
+        Exhibitor
+      when 'Notification'
+        Notification
+      when 'InviteeNotification'
+        InviteeNotification
+      when 'Poll'
+        Poll
+      when 'Invitee'
+        Invitee
+      when 'Quiz'
+        Quiz
+      when 'LogChange'
+        LogChange
+      when 'Favorite'
+        Favorite
+      when 'Like'
+        Like
+      when 'UserPoll'
+        UserPoll
+      when 'UserQuiz'
+        UserQuiz
+      when 'Rating'
+        Rating
+      when 'Qna'
+        Qna
+      when 'UserFeedback'  
+        UserFeedback
+      when "MobileApplication"  
+        MobileApplication
+      when 'MyTravel'  
+        MyTravel
+      when 'EKit' 
+        EKit
+      when 'Analytic'  
+        Analytic
+      when "Agenda"
+        Agenda
+      else
+        model.constantize
+    end  
+
   end
 
   def self.params_data(value)
