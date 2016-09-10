@@ -1,6 +1,6 @@
 class Agenda < ActiveRecord::Base
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category, :agenda_track_name_import
   belongs_to :event
   belongs_to :speaker
   belongs_to :agenda_track
