@@ -127,6 +127,10 @@ class Agenda < ActiveRecord::Base
     self.agenda_track.present? ? self.agenda_track.track_name : ""
   end
 
+  def set_sequence_no
+    self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+  
   def get_agenda_type_name
     self.agenda_type
     id = []
