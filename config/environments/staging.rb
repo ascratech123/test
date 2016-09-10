@@ -206,3 +206,5 @@ EXHIBITOR_IMAGE_PATH=   {:path => "exhibitor/image/:style/:id-:filename",
 
 NOTIFICATION_IMAGE_PATH  = {:path => "notifications/image/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+BADGE_IMAGE_PATH  = {:path => "badge_pdfs/image/:style/:id-:filename",
+                     :url => "#{S3_url}/badge_pdfs/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                        

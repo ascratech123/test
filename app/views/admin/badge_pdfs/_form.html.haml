@@ -1,0 +1,72 @@
+.save_button.mdl-card
+  = form_for [:admin, @event, @badge_pdf], :builder => CustomFormBuilder, :html => { :multipart => true } do |f|
+    .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-35
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+      = f.new_custom_file_browser_field :badge_image, "Badge Image picture(396x554px)only", :id => "uploadBtn", :value => f.object.badge_image_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+        .mdl-grid.p-v-5.form-group
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Show Fields
+          .col-lg-3.p-h-12    
+            / = f.custom_radio_button :column1, "active","Active", :id => "option-1"
+            / = f.custom_radio_button :column1, "deactive", "Deactive", :id => "option-2"
+            = f.check_box :column1, {}, "active", "Deactive"
+            %label
+              Name         
+            = f.check_box :column2, {}, "active", "Deactive"        
+            %label
+              Company
+            = f.check_box :column3, {}, "active", "Deactive"      
+            %label
+              Designation
+            = f.hidden_field :event_id,:value => params[:event_id]
+            %br
+            .field_with_errors
+              .span{:class => "errorMessage"}
+                = f.object.errors.messages[:event_id].join("") rescue nil
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+
+/ .save_button.mdl-card
+/   = form_for [:admin, @event, @badge_pdf], :builder => CustomFormBuilder, :html => { :multipart => true } do |f|
+/     .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-35
+/       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+/         %h4.heading-border.p-t-10.m-b-15
+/           General Information
+/       = f.new_custom_file_browser_field :badge_image, "Badge Image picture(396x554px)only", :id => "uploadBtn", :value => f.object.badge_image_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
+/       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+/         .mdl-grid.p-v-5.form-group
+/           .col-lg-4.mdl-typography--text-right
+/             %p.displayInlineBlock.multicitytxt Name
+/           .col-lg-3.p-h-12    
+/             = f.custom_radio_button :column1, "active","Active", :id => "option-1"
+/             = f.custom_radio_button :column1, "deactive", "Deactive", :id => "option-2"
+/       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+/         .mdl-grid.p-v-5.form-group
+/           .col-lg-4.mdl-typography--text-right
+/             %p.displayInlineBlock.multicitytxt Company
+/           .col-lg-3.p-h-12    
+/             = f.custom_radio_button :column2, "active","Active", :id => "option-3"
+/             = f.custom_radio_button :column2, "deactive", "Deactive", :id => "option-4"
+/       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+/         .mdl-grid.p-v-5.form-group
+/           .col-lg-4.mdl-typography--text-right
+/             %p.displayInlineBlock.multicitytxt Designation
+/           .col-lg-3.p-h-12    
+/             = f.custom_radio_button :column3, "active","Active", :id => "option-5"
+/             = f.custom_radio_button :column3, "deactive", "Deactive", :id => "option-6"
+/             = f.hidden_field :event_id,:value => params[:event_id]          
+/             %br
+/             .field_with_errors
+/               .span{:class => "errorMessage"}
+/                 = f.object.errors.messages[:event_id].join("") rescue nil
+/       .fixed-activon-btn-new  
+/         = f.custom_submit_button "SAVE"
+/         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+/           .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+/             = back_button(:back)
