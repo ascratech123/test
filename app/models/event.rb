@@ -525,7 +525,8 @@ class Event < ActiveRecord::Base
       clients = Client.with_roles(User.current.roles.pluck(:name), User.current).uniq
       event_count = clients.map{|c| c.events.count}.sum
       if User.current.no_of_event <= event_count
-        errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
+        errors.add(:event_limit, "You have crossed your events limit kindly contact.")
+        # errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
       else
         self.errors.delete(:event_limit)
       end 
