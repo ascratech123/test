@@ -591,7 +591,7 @@ class Event < ActiveRecord::Base
   end
 
   def set_timezone_on_associated_tables
-    if self.timezone_changed?
+    if true#self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize)
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
@@ -612,6 +612,24 @@ class Event < ActiveRecord::Base
       "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
     else
       self.start_event_date.strftime('%A, %d %b %Y')
+    end
+  end
+
+  def self.set_event_category
+    Event.find_each do |event|
+      if event.end_event_date.present? and event.start_event_date.present?
+      time_diff = event.end_event_date.utc_offset - Time.now.in_time_zone(event.timezone).utc_offset
+      hours = (time_diff.to_f/60/60).abs
+      prev_event_category  = event.event_category
+      if event.start_event_date <= Time.now + hours.hours and event.end_event_date >= Time.now + hours.hours
+        event.update_column("event_category","Ongoing")
+      elsif event.start_event_date > Time.now + hours.hours and event.end_event_date > Time.now + hours.hours
+        event.update_column("event_category","Upcoming")
+      else
+        event.update_column("event_category","Past")
+      end
+      event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
+      end
     end
   end
 end
