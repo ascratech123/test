@@ -235,7 +235,7 @@ class Analytic < ActiveRecord::Base
       user_engagement.each do |engagement|
         (0..23).each do |hour|
           q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
-          q_time = q_time.to_datetime.in_time_zone(event.timezone)
+          q_time = q_time.to_datetime.in_time_zone(event.timezone).beginning_of_hour
           if engagement == 'Favorite'
             type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
             count = Favorite.where('favoritable_type IN (?) and event_id = ? and created_at >= ? and created_at <= ?', type, event_id, q_time.to_datetime, (q_time.to_datetime + 1.hour)).count
