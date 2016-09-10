@@ -76,6 +76,7 @@ input:focus::-moz-placeholder {color: transparent;}
 
 
 
+
 body{
       width:100%;
       text-align:center;
@@ -213,8 +214,8 @@ body{
 .barcode.title img{width:100%; max-width:100%;}
 .company{margin-bottom: 4%;}
 #print .description{margin-bottom:0;}
-
 #print .company{font-size:22px;}
+
 
 @media print{
 /*.title{width:45%; text-align: center; margin: 0 auto;}

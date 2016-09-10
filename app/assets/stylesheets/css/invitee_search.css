@@ -92,3 +92,9 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
 #tab-3 .excelDownload{display:inline-block;}
 #tab-3 .table-grid{margin-top:15px;}
 #tab-3 .excelDownload {display: inline-block; float: right; margin-right: 77px;}
+
+.checkboxDiv{display:inline-block;}
+.checkboxDiv label {display:inline-block; line-height:23px; vertical-align:top; color: #626262; margin-right:12px;}
+.checkboxDiv input{display:inline-block;}
+.fieldDiv p{color:#626262; }
+.checkboxDiv input{margin-right:2px;}
