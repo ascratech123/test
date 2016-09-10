@@ -20,8 +20,8 @@ set :output, "log/cron_log.log"
 
 # Learn more: http://github.com/javan/whenever
 
-every 5.minutes do
-  runner "Notification.push_notification_time_basis", :environment => :production
+every 1.minutes do
+  runner "Notification.push_notification_time_basis", :environment => :staging
 end
 
 every 15.minutes do
