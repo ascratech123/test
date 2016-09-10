@@ -3,26 +3,25 @@
 %title Disha
 %body.qr-scanner-page#print
   - @badge_pdf = BadgePdf.find_by_event_id(params[:event_id])
-  - if @badge_pdf.present?
-    - if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
-      .container.printPage{:style => "background-image:url(#{@badge_pdf.badge_image.url(:large)})"}
-        .title
-          %img{:src => @event.logo.url}
-        .description
-          - if @badge_pdf.column1.present? && @badge_pdf.column1 == "active" 
-            %p.welcomeText 
-              = @invitee.name_of_the_invitee 
-          - if @badge_pdf.column2.present? && @badge_pdf.column2 == "active" 
-            .company
-              = @invitee.company_name
-          - if @badge_pdf.column3.present? && @badge_pdf.column3 == "active" 
-            .designation
-              = @invitee.designation              
-          %p.subText
-            = "#{@event.start_event_date.strftime('%d %b')} - #{@event.end_event_date.strftime('%d %b %Y')}"
-          %p.subText.place
-            = @event.cities rescue nil
-      = link_to "Confirm", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
+  - if @badge_pdf.present? and @event.present? and params[:qr_code_preview].blank?
+    .container.printPage{:style => "background-image:url(#{@badge_pdf.badge_image.url(:large)})"}
+      .title
+        %img{:src => @event.logo.url}
+      .description
+        - if @badge_pdf.column1.present? && @badge_pdf.column1 == "active" 
+          %p.welcomeText 
+            = @invitee.name_of_the_invitee 
+        - if @badge_pdf.column2.present? && @badge_pdf.column2 == "active" 
+          .company
+            = @invitee.company_name
+        - if @badge_pdf.column3.present? && @badge_pdf.column3 == "active" 
+          .designation
+            = @invitee.designation              
+        %p.subText
+          = "#{@event.start_event_date.strftime('%d %b')} - #{@event.end_event_date.strftime('%d %b %Y')}"
+        %p.subText.place
+          = @event.cities rescue nil
+    = link_to "Confirm", "#", :id => 'prnt', :class =>"printBtn", :onclick => "printpage()" if @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
   - elsif @event.present? and params[:qr_code_preview].blank? #[368, 165, 168].include? @event.id
     .container.printPage
       .title
