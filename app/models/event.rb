@@ -14,6 +14,7 @@ class Event < ActiveRecord::Base
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_many :my_profiles, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
@@ -83,7 +84,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_time desc') }
@@ -603,6 +604,7 @@ class Event < ActiveRecord::Base
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
           obj.update_column("updated_at", Time.now)
+          obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
       end   
     end
@@ -646,5 +648,21 @@ class Event < ActiveRecord::Base
 
   def display_time_zone
     Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  end
+
+  def extra_invitee_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    ['attr1', 'attr2', 'attr3', 'attr4', 'attr5'].each do |t|
+      h[t] = my_profile.attributes[t] if my_profile.attributes[t].present? and my_profile.attributes['enabled_attr'][t] == 'yes'
+    end if my_profile.present?
+    h
+  end
+
+  def get_invitee_my_profile_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    h = my_profile.attributes['enabled_attr'] rescue {}
+    h
   end
 end

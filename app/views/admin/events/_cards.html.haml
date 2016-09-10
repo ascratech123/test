@@ -14,7 +14,7 @@
             = Client::display_hsh[url]  
             
           - page = params[:controller].split("/").second
-          - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images", "abouts", "sponsors", "my_profile", "qr_code","my_calendar", "favourites", 'leaderboard','custom_page1s','custom_page2s','custom_page3s','custom_page4s','custom_page5s']
+          - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images", "abouts", "sponsors", "my_profiles", "qr_code","my_calendar", "favourites", 'leaderboard','custom_page1s','custom_page2s','custom_page3s','custom_page4s','custom_page5s']
           - if ["poll_walls","conversation_walls","qna_walls"].exclude? url and show_card_except_event_features(url)
             - event_feature = @event.event_features.where(:name => page)
             - page = page.titleize
@@ -27,8 +27,11 @@
               - elsif url == "venue"
                 - count = (@event.emergency_exit.present?) ? 1 : 0
                 - redirection = (count == 1 ? "/#{@event.emergency_exit.id}/edit" : "/new")
-
-              - elsif ["notes","qr_code","my_profile","my_calendar", "favourites","chats","social_sharings"].include? (url)
+              - elsif url == "my_profile"
+                - count = (@event.my_profiles.present?) ? 1 : 0
+                - redirection = (count == 1 ? "/#{@event.my_profiles.first.id}/edit" : "/new")
+              
+              - elsif ["notes","qr_code","my_calendar", "favourites","chats","social_sharings"].include? (url)
               - elsif url == "leaderboard"
                 - count = Invitee.get_leaderboard_count(@event)
               - elsif ["poll_walls","conversation_walls","qna_walls"].include? (url)
@@ -52,6 +55,7 @@
                 - url1 = "emergency_exits" if url == "venue"
                 - url1 = url if url != "venue"
                 - url1 = "leaderboards" if url == "leaderboard"
+                - url1 = "my_profiles" if url == "my_profile"
                 = link_to "#{count}","/admin/events/#{@event.id}/#{url1}#{redirection}"
 
       - if show_card(url) and (@resource_role.blank? or @resource_role.present?) and !(current_user.has_role? :db_manager)
