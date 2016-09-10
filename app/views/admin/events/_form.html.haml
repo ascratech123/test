@@ -17,6 +17,16 @@
                 .field_with_errors
                   .span{:class => "errorMessage"}
                     = f.object.errors.messages[:event_limit].join("") rescue nil
+        - if not f.object.errors.messages[:event_limit].present?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+            .bs-component
+              .form-group
+                .col-lg-4 
+                .col-lg-7
+                  = f.hidden_field_tag :event_date_limit
+                  .field_with_errors
+                    .span{:class => "errorMessage"}
+                      = f.object.errors.messages[:event_date_limit].join("") rescue nil
         = f.custom_text_field :event_name, "Event Name *"
         =# f.custom_text_field :event_code, "Event Code"
         - if f.object.new_record? and params[:mobile_application_id].present?
