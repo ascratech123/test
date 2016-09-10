@@ -631,4 +631,20 @@ class Event < ActiveRecord::Base
       event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
     end
   end
+
+  def event_start_time_in_utc
+    event_time_in_timezone = self.start_event_time
+    difference_in_seconds = Time.now.utc.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
+    if difference_in_seconds < 0
+      difference_in_hours = (difference_in_seconds.to_f/60/60).abs
+      self.start_event_date - difference_in_hours.hours
+    else
+      difference_in_hours = (difference_in_seconds.to_f/60/60)
+      self.start_event_date + difference_in_hours.hours
+    end
+  end
+
+  def display_time_zone
+    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  end
 end
