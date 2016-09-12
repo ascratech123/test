@@ -34,7 +34,9 @@ input:focus::-webkit-input-placeholder{color:transparent;}
 input:focus::-moz-placeholder{color:transparent;}
 footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0;}
 .table-grid th{background:#00b1bb; padding:5px 0 5px 8px; color:#fff; font-weight:normal; text-align:left;}
-.tab4-table td{padding-bottom: 15px;}
+.tab4-table td{padding-bottom: 15px; display:inline-block; vertical-align:top;}
+.tab4-table tr td:first-child{width:115px;}
+.tab4-table tr.formbutton td:first-child{width:auto;}
 #tab-4 .tab4-table span.error{display:block; font-size:13px; margin-top: 5px;}
 #tab-4  span.success-error{color:#4F8A10; font-size:16px;}
 #tab-4 .tab4-table{margin-top:10px;}

@@ -202,7 +202,7 @@ body{
 #print .subText.place{line-height:0px; margin-top: 0px;}
 #prnt.printBtn {color:#ffffff;  font-size:22px; padding:3px 10px; margin-bottom: 2%;
     right:20px; text-decoration: none; top: 13px; background:#00b1bb;}
-#print .welcomeText{line-height:44px; margin-top:60%; font-size:35px;}
+#print .description{ padding-top:60%; font-size:35px;}
 
 .btnDiv.searchManuallyBtn{ padding: 20px 0 0;}
 .btnDiv.newScanBtn{margin:5% 0; padding:0;}
@@ -212,9 +212,10 @@ body{
 .barcodePage .description p{font-size:34px;}
 .barcode.title{width:28%; margin:0 auto;}
 .barcode.title img{width:100%; max-width:100%;}
-.company{margin-bottom: 4%;}
+.company{margin-bottom: 0;}
 #print .description{margin-bottom:0;}
 #print .company{font-size:22px;}
+#print .designation{font-size:22px;}
 
 
 @media print{
