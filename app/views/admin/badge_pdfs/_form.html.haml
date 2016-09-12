@@ -13,16 +13,19 @@
             / = f.custom_radio_button :column1, "active","Active", :id => "option-1"
             / = f.custom_radio_button :column1, "deactive", "Deactive", :id => "option-2"
             .checkboxDiv
-              = f.check_box :column1, {}, "active", "Deactive"
               %label
+                = f.check_box :column1, {}, "active", "Deactive"
+                %span.checkbox 
                 Name       
-            .checkboxDiv  
-              = f.check_box :column2, {}, "active", "Deactive"        
-              %label
+            .checkboxDiv 
+              %label 
+                = f.check_box :column2, {}, "active", "Deactive" 
+                %span.checkbox        
                 Company
             .checkboxDiv
-              = f.check_box :column3, {}, "active", "Deactive"      
               %label
+                = f.check_box :column3, {}, "active", "Deactive"    
+                %span.checkbox   
                 Designation
             = f.hidden_field :event_id,:value => params[:event_id]
             %br

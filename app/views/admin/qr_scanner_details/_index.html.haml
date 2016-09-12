@@ -21,7 +21,7 @@
       %td.font16= link_to invitee_search_url,invitee_search_url, target: "_blank" 
       %td.IconDrp
         = more_vert_button(event.id)
-        %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{event.id}"}
+        %ul.badgeUL.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{event.id}"}
           
           - if @badge_pdf.present?
             = link_to edit_admin_event_badge_pdf_path(:event_id => event.id, :id =>@badge_pdf.id), :class => "mdl-menu__item mdl-js-ripple-effect",target: '_blank' do
@@ -30,7 +30,8 @@
             = link_to new_admin_event_badge_pdf_path(:event_id => event.id), :class => "mdl-menu__item mdl-js-ripple-effect",target: '_blank' do
               Add Badge Pdf
           - if @attendees.present?
-            = link_to "Attendee Export", {action: 'index', controller: 'invitee_searches',:format => 'xls'}    
+            .mdl-menu__item
+              = link_to "Attendee Export", {action: 'index', controller: 'invitee_searches',:format => 'xls' }    
           / - if @event.registrations.present?
           /   = link_to regi_setti_url,:target =>"_blank"  ,:class => "mdl-menu__item mdl-js-ripple-effect" do
           /     Preview Form
