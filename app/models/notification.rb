@@ -38,7 +38,7 @@ class Notification < ActiveRecord::Base
 
   def push_notification
     if self.push_datetime.blank?
-      self.update_column(:push_datetime, Time.now)
+      self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
       # if self.group_ids.present?
       #   groups = InviteeGroup.where("id IN(?)", self.group_ids)
       #   invitee_ids = []
@@ -64,23 +64,27 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+    # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+    notifications = Notification.where(:pushed => false)
     if notifications.present?
       notifications.each do |notification|
-        event = notification.event
-        if event.mobile_application_id.present?
-          if notification.group_ids.present?
-            groups = InviteeGroup.where("id IN(?)", notification.group_ids)
-            invitee_ids = []
-            groups.each do |group|
-              invitee_ids = invitee_ids + group.get_invitee_ids
-            end  
-            invitee_ids = invitee_ids.uniq rescue []
-            objects = Invitee.where("id IN(?)", invitee_ids)
-            PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
-          else
-            objects = event.invitees
-            notification.send_to_all
+        current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+        if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
+          event = notification.event
+          if event.mobile_application_id.present?
+            if notification.group_ids.present?
+              groups = InviteeGroup.where("id IN(?)", notification.group_ids)
+              invitee_ids = []
+              groups.each do |group|
+                invitee_ids = invitee_ids + group.get_invitee_ids
+              end  
+              invitee_ids = invitee_ids.uniq rescue []
+              objects = Invitee.where("id IN(?)", invitee_ids)
+              PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
+            else
+              objects = event.invitees
+              notification.send_to_all
+            end
           end
         end
       end
@@ -90,7 +94,7 @@ class Notification < ActiveRecord::Base
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
-    self.update_column(:push_datetime, Time.now)
+    self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
@@ -197,7 +201,7 @@ class Notification < ActiveRecord::Base
   # end
 
   def formatted_push_datetime_with_event_timezone
-    self.push_datetime.in_time_zone(self.event_timezone).strftime("%b %d at %I:%M %p")
+    self.push_datetime.in_time_zone(self.event_timezone).strftime("%b %d") if self.push_datetime.present?
   end
 
   def set_event_timezone

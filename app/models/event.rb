@@ -82,7 +82,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
@@ -591,12 +591,13 @@ class Event < ActiveRecord::Base
   end
 
   def set_timezone_on_associated_tables
-    if true#self.timezone_changed?
+    if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize)
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
           obj.update_column("updated_at", Time.now)
+          obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
       end   
     end
@@ -631,5 +632,21 @@ class Event < ActiveRecord::Base
       event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
       end
     end
+  end
+
+  def event_start_time_in_utc
+    event_time_in_timezone = self.start_event_time
+    difference_in_seconds = Time.now.utc.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
+    if difference_in_seconds < 0
+      difference_in_hours = (difference_in_seconds.to_f/60/60).abs
+      self.start_event_date - difference_in_hours.hours
+    else
+      difference_in_hours = (difference_in_seconds.to_f/60/60)
+      self.start_event_date + difference_in_hours.hours
+    end
+  end
+
+  def display_time_zone
+    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
   end
 end
