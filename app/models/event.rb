@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
   resourcify
   serialize :preferences
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :event_date_limit
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
@@ -80,7 +80,7 @@ class Event < ActiveRecord::Base
                                          }.merge(EVENT_INSIDE_LOGO_PATH)                                       
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
-  validate :event_count_within_limit, :on => :create
+  validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token
@@ -322,6 +322,16 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def check_event_date
+    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present?)
+      if User.current.licensee_end_date < self.end_event_date
+        errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
+      else
+        self.errors.delete(:event_date_limit)
+      end
+    end
+  end
+
   def check_event_content_status
     features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
@@ -525,7 +535,8 @@ class Event < ActiveRecord::Base
       clients = Client.with_roles(User.current.roles.pluck(:name), User.current).uniq
       event_count = clients.map{|c| c.events.count}.sum
       if User.current.no_of_event <= event_count
-        errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
+        errors.add(:event_limit, "You have crossed your events limit kindly contact.")
+        # errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
       else
         self.errors.delete(:event_limit)
       end 
