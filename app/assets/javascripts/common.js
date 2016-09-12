@@ -669,3 +669,18 @@ $(function () {
         }]
     });
 });      */
+
+/* nilam - new event form - copy ad custom content */
+$(document).ready(function(){
+  $('.add-data #yes').click(function(){
+    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
+    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
+  });
+  $('.customButton').click(function(){
+    $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
+  });
+  $('.add-data #no').click(function(){
+    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
+    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
+  });
+});

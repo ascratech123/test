@@ -104,6 +104,10 @@
 .error_space_h57{height:57px}
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
+.add-data{}
+.select-eventDiv{display:none;}
+.copyCustom-btnDiv{display:none;}
+.selectContentDiv{display:none;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
@@ -326,7 +330,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 
 /* nilam css start here */
 
-.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
+/*.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}*/
 .back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
 /* nilam css ends here */
@@ -1412,4 +1416,10 @@ i.incards {font-size: 60px}
 .galleryLayout li {display: inline-block;margin-right: 2%;text-align: left; width: 30.99%;}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
+
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
+
+
+.txtCenter{text-align:center;}
+.copyCustomContent button{border:0 none; background:#1cb1ba; color:#fff;padding:5px 8px; cursor:pointer; margin-right:20px;}
+.copyCustomContent button:last-child{margin-right:0px;}

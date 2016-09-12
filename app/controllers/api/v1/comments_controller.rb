@@ -10,8 +10,8 @@ class Api::V1::CommentsController < ApplicationController
 				updated_at_with_tmz = comment.updated_at.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
 				created_at_with_tmz = comment.created_at.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
    			year = Time.now.strftime("%Y") + " "
-   			formatted_updated_at_with_event_timezone = updated_at_with_tmz.sub(year, "")   			
-   			formatted_created_at_with_event_timezone = created_at_with_tmz.sub(year, "")			
+   			formatted_updated_at_with_event_timezone = comment.formatted_updated_at_with_event_timezone
+   			formatted_created_at_with_event_timezone = comment.formatted_created_at_with_event_timezone		
 				render :status=>200,:json=>{:status=>"Success",:message=>"comment Created Successfully.",  "commentable_id" => params[:commentable_id], "commentable_type" => params[:commentable_type], "user_id" => params[:user_id], "description" => params[:description], "created_at" => comment.created_at, "updated_at" => comment.updated_at, "comment_count" => conversation.comments.count, "user_name" => User.find_by_id(params[:user_id]).username, "formatted_updated_at_with_event_timezone" => formatted_updated_at_with_event_timezone, "formatted_created_at_with_event_timezone" => formatted_created_at_with_event_timezone}
 			else
 				render :status=>406,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{comment.errors.full_messages.join(" , ")}" }
