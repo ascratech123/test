@@ -5,8 +5,8 @@ class Admin::QrScannerDetailsController < ApplicationController
 
 
   def index
-    @event = Event.where(:id=>params[:event_id])
-    @badge_pdf = @event.first.badge_Pdf
+  	@event = Event.where(:id=>params[:event_id])
+    @badge_pdf = @event.first.badge_pdf#.find_by_event_id(params[:event_id])
     @attendees = Invitee.where(:qr_code_registration => true, :event_id => params[:event_id]).order('updated_at desc')
   end
 
