@@ -83,7 +83,7 @@ class Event < ActiveRecord::Base
   validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
-  after_create :update_theme_updated_at, :set_uniq_token
+  after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
   after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
   #before_validation :set_time
   
@@ -631,18 +631,22 @@ class Event < ActiveRecord::Base
 
   def self.set_event_category
     Event.find_each do |event|
-      time_diff = event.end_event_date.utc_offset - Time.now.in_time_zone(event.timezone).utc_offset
-      hours = (time_diff.to_f/60/60).abs
-      prev_event_category  = event.event_category
-      if event.start_event_date <= Time.now + hours.hours and event.end_event_date >= Time.now + hours.hours
-        event.update_column("event_category","Ongoing")
-      elsif event.start_event_date > Time.now + hours.hours and event.end_event_date > Time.now + hours.hours
-        event.update_column("event_category","Upcoming")
-      else
-        event.update_column("event_category","Past")
-      end
-      event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
+      event.set_event_category
     end
+  end
+
+  def set_event_category
+    time_diff = self.end_event_date.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
+    hours = (time_diff.to_f/60/60)
+    prev_event_category  = self.event_category
+    if self.start_event_date <= Time.now + hours.hours and self.end_event_date >= Time.now + hours.hours
+    self.update_column("event_category","Ongoing")
+    elsif self.start_event_date > Time.now + hours.hours and self.end_event_date > Time.now + hours.hours
+    self.update_column("event_category","Upcoming")
+    else
+    self.update_column("event_category","Past")
+    end
+    self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
   end
 
   def event_start_time_in_utc
