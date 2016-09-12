@@ -64,7 +64,7 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
     margin: 0 15px 0 0; cursor: pointer; font-size: 17px;}
 .btnDiv .linkBtn:last-child {margin: 0;}
 .searchManuallyDiv a {font-size: 15px;}
-.tableDiv table tr th {background-color: #00b1bb; text-align: left;}
+.tableDiv table tr th {background-color: #00b1bb; text-align: center;}
 .tableDiv tr th {font-weight: bold;}
 .tableDiv table th {padding: 10px 0; background: #ccc; color: #fff;}
 .tableDiv tr td {padding: 10px 0;}
@@ -178,3 +178,5 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
 }
 
 .fieldCheckbox{margin-top:15px;}
+
+.thankYouWrapper{text-align:center;}
