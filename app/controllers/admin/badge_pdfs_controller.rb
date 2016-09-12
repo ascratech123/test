@@ -10,7 +10,7 @@ class Admin::BadgePdfsController < ApplicationController
 	def create
 		@badge_pdf = BadgePdf.new(badge_pdf_params)
     if @badge_pdf.save
-      redirect_to new_admin_event_badge_pdf_path(:event_id => @badge_pdf.event_id)
+      redirect_to admin_event_qr_scanner_details_path(:event_id => @badge_pdf.event_id)
     else
       render :action => 'new'
     end
@@ -23,7 +23,7 @@ class Admin::BadgePdfsController < ApplicationController
   def update
     @badge_pdf = BadgePdf.find(params[:id])
     if @badge_pdf.update_attributes(badge_pdf_params)
-      redirect_to new_admin_event_badge_pdf_path(:event_id => @badge_pdf.event_id)
+      redirect_to admin_event_qr_scanner_details_path(:event_id => @badge_pdf.event_id)
     else
       render :action => "edit"
     end

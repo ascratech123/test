@@ -5,7 +5,7 @@
   - if params[:event_id].present?
     - @event = Event.get_event_by_id(params[:event_id])
     - @mobile_application = @event.mobile_application
-    - if params[:event_id].present? and ["admin/event_highlights","admin/abouts", "admin/mobile_applications", "admin/leaderboards","admin/telecallers"].exclude?(params[:controller])
+    - if params[:event_id].present? and ["admin/event_highlights","admin/abouts", "admin/mobile_applications", "admin/leaderboards","admin/telecallers","admin/qr_scanner_details"].exclude?(params[:controller])
       - page = (params[:controller].split("/").second).singularize
       - page = "event_feature" if page == "menu"
       - page = "invitee_datum" if page == "invitee_data"
