@@ -1,6 +1,6 @@
 class BadgePdf < ActiveRecord::Base
   belongs_to :event
-  validates_uniqueness_of :event_id,:message => "Badge image for Event already set."
+  #validates_uniqueness_of :event_id,:message => "Badge image for Event already set."
   validate :badge_image_validate
   has_attached_file :badge_image
   validates_attachment_content_type :badge_image, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
