@@ -104,7 +104,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => [:chage_updated_at, :create_log_change_for_publish] do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -505,8 +505,10 @@ class Event < ActiveRecord::Base
     LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "destroy") rescue nil
   end
 
-  def create_log_change_for_publish
-    LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "published") rescue nil
+  def destroy_log_change_for_publish
+    log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
+    #log_changes.each{|l| l.update_column("action", "unpublished")}
+    log_changes.destroy_all
   end
 
   def add_default_invitee
