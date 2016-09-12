@@ -3,7 +3,6 @@ class Analytic < ActiveRecord::Base
   VIEWABLE_TYPE_TO_ACTION = {'Conversation' => ['conversation post', 'like', 'comment'], 'Favorite' => ['favorite'], 'Ratings' => ['rated'], 'Rating' => ['rated'], 'Q&A' => ['question asked'], 'Poll' => ['poll answered'], 'Feedback' => ['feedback given'], 'E-Kit' => ['page view'], 'Quiz' => ['played'], 'QR code scan' => ['qr code scan']}
 
   ACTION_TO_VIEWABLE_TYPE = {"favorite" => 'Favorite', "rated" => 'Rating', "qr code scan" => 'QR Code Scan', "comment" => 'Comment', "conversation post" => 'Conversation', "like" => 'Like', "played" => 'Quiz', "question asked" => 'Q&A', "login" => 'Login', "Login" => 'Login', "poll answered" => 'Poll', "feedback given" => 'Feedback', 'continue' => 'Event Highlight', 'profile_pic' => 'Profile Pic Update', 'Add To Calender' => 'Add To Calender', 'one_on_one' => 'Chat', 'group_chat' => 'Chat'}
-  ACTION_POINTS = {"favorite" => 5, "rated" => 5, "comment" => 2, "conversation post" => 5, "like" => 2, "quiz correct answer" => 5, "quiz incorrect answer" => 2, "question asked" => 5, "poll answered" => 5, "feedback given" => 10, 'e_kits' => 5, 'Login' => 10, 'profile_pic' => 5, 'page view' => 5, "played" => 5, 'Add To Calender' => 10, 'one_on_one' => 0, 'group chat' => 0, 'share' => 5}
   TOP_PAGE_LIST_TO_FEATURES = {'top_pages' => 'pages', 'top_fav_agendas' => 'agendas', 'top_rated_agendas' => 'agendas', 'top_rated_speakers' => 'speakers', 'top_fav_speakers' => 'speakers', 'top_question_speakers' => 'speakers', 'top_commented_conversations' => 'conversations', 'top_liked_conversations' => 'conversations', 'top_viewed_ekits' => 'e_kits', 'top_answered_quizzes' => 'quizzes', 'top_answered_polls' => 'polls', 'top_fav_invitees' => 'invitees', 'top_fav_sponsors' => 'sponsors', 'top_viewed_sponsors' => 'sponsors', 'top_fav_exhibitors' => 'exhibitors', 'top_viewed_exhibitors' => 'exhibitors', 'top_fav_leaderboard' => 'leaderboard'}
   VIEWABLE_TYPE_TO_FEATURE = {"Invitee" => 'invitees', "Event Highlight" => 'event_highlights', "Gallery listing" => 'galleries', "Speaker" => 'speakers', "Exhibitors" => 'exhibitors', "My Favorite" => 'favourites', "Exhibitors listing" => 'exhibitors', "About" => 'abouts', "Agenda" => 'agendas', "Sessions" => 'agendas', "Conversation" => 'conversations', "Quiz" => 'quizzes', "Poll" => 'polls', "Sponsor" => 'sponsors', "Speakers" => 'speakers', "Q&A" => 'qnas', "My Profile" => 'my_profile', "Sponsors" => 'sponsors', "E-Kit" => 'e_kits', "Event" => 'event_highlights', "Highlights" => 'event_highlights', "Contacts" => 'contacts', "Gallery" => 'galleries', "Feedback" => 'feedbacks', "FAQ" => 'faqs', "Venue" => 'venue', "Notes" => 'notes', "Exhibitor" => 'exhibitors', "Quiz listing" => 'quizzes', "Emergency Exit" => 'emergency_exits', "Edit" => 'my_profile', "Edit Profile" => 'my_profile', "Event Listing" => 'event_highlights', "Contact" => 'contacts', "Note" => 'notes', "Attendee" => 'invitees', 'top_fav_leaderboard' => 'Top Favorited Leader Boards'}
 
@@ -29,13 +28,25 @@ class Analytic < ActiveRecord::Base
     feature = event.event_features.where(:name => "leaderboard") rescue nil
     if feature.present?
       if error.exclude? false and ((self.points.blank? or (self.points.present? and self.points == 0)) and ["favorite", "rated", "comment", "conversation post", "like", "question asked", "played", "poll answered", "feedback given", 'profile_pic', 'Login', 'Add To Calender', 'share'].include? self.action or (self.viewable_type == 'E-Kit' and self.viewable_id.present?))
-        self.points = Analytic::ACTION_POINTS[self.action]
+        self.points = get_action_points
       elsif self.points.blank?
         self.points = 0
       end
     else
       self.points = 0
     end  
+  end
+
+  def get_action_points
+    activity_points = ActivityPoint.where(:event_id => self.event_id, :action => self.action).first
+    if activity_points.present?
+      if activity_points.one_time_only.present?
+        analytic = Analytic.where(:action => self.action, :viewable_type => self.viewable_type, :invitee_id => self.invitee_id, :event_id => self.event_id)
+        (analytic.present? ? 0 : activity_points.action_point)
+      end
+    else
+      0
+    end
   end
 
   def update_points_to_invitee

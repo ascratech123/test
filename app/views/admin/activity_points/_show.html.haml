@@ -1,0 +1,10 @@
+%form.ng-pristine.ng-valid{:action => "#"}
+  .mdl-grid
+    = show_field("Name :", obj.action) rescue nil 
+    = show_field("Point :", obj.action_point) rescue nil 
+    = show_field("Number Of Times :", obj.one_time_only) rescue nil 
+    / = show_field("Start Activity Date :", obj.start_activity_time) rescue nil 
+    / = show_field("End Activity Date :", obj.end_activity_time) rescue nil 
+  .m-l-18
+    .mdl-cell--12-col.mdl-cell--12-col-tablet
+      = back_button_detailed_page(:back)

@@ -15,6 +15,7 @@ class Event < ActiveRecord::Base
   has_one :contact
   has_one :emergency_exit
   has_many :speakers, :dependent => :destroy
+  has_many :activity_points, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
   has_many :agendas, :dependent => :destroy

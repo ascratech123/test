@@ -1,6 +1,7 @@
 - if !objs.present? and !params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = index_nodata_message("leaderboards")
+    / = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "manage points", :url => "/admin/events/#{params[:event_id]}/activity_points/new", :msg => 'test'}
 -elsif !objs.present? and params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = get_search_data("invitees")

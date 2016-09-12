@@ -82,7 +82,9 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
-
+..timeZoneP-l-0 div.col-lg-4.pl15{padding-left: 15px;}
+.timeZoneP-l-0.yesNo{margin-top: 10px;}
+.timeZoneP-l-0.yesNo .control-label{padding-top: 0px;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}

@@ -54,6 +54,14 @@
   - when 'attendee'
     = link_to new_admin_event_attendee_path(:event_id => @event.id) ,:class => " rightBtn hvr-sweep-to-right" do
       New Attendee
+  - when 'leaderboard'
+    - if @event.present?
+      = link_to admin_event_activity_points_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Manage Points
+  - when 'activity_point'
+    - if @event.present?
+      = link_to new_admin_event_activity_point_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Point
   - when 'agenda'
     - if @event.present?
       = link_to new_admin_event_agenda_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

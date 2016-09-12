@@ -1,0 +1,29 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "activity_points", :url => "/admin/activity_points/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("activity_points")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Name
+      %th Point
+      %th Number Of Times
+      / %th Start Activity Date
+      / %th End Activity Date
+      %th
+    - objs.each do |activity|
+      %tr
+        %td.font16= activity.action.capitalize rescue nil 
+        %td.font16= activity.action_point rescue nil 
+        %td.font16= activity.one_time_only rescue nil
+        / %td.font16= activity.start_activity_time rescue nil
+        / %td.font16= activity.end_activity_time rescue nil
+        %td.IconDrp
+          = more_vert_button(activity.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{activity.id}"}
+            = link_to edit_admin_event_activity_point_path(:id => activity.id),:class => "mdl-menu__item" do 
+              Edit
+            = link_to admin_event_activity_point_path(:id=>activity.id), method: :delete, data: { confirm: 'Are you sure?' }, :class => "mdl-menu__item" do 
+              Delete
