@@ -5,7 +5,7 @@
         %h4.heading-border.p-t-10.m-b-15
           General Information
       = f.new_custom_file_browser_field :badge_image, "Badge Image picture (396x554px)only", :id => "uploadBtn", :value => f.object.badge_image_file_name, :action=> params[:action], :action=> params[:action], "background" => "false"
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15.fieldCheckbox
         .mdl-grid.p-v-5.form-group
           .col-lg-4.mdl-typography--text-right.fieldDiv
             %p.displayInlineBlock.multicitytxt Show Fields
