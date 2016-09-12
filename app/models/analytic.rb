@@ -223,8 +223,9 @@ class Analytic < ActiveRecord::Base
 
 
   def self.get_today_user_engagements(event_id, from_date, to_date)
+    event = Event.find(event_id)
     today_date = Date.today
-    overall, data = [], []
+    overall, data, hsh = [], [], {}
     analytics = Analytic.where("event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?", event_id, from_date, from_date)
     if analytics.present?
       user_engagement = []
@@ -240,7 +241,7 @@ class Analytic < ActiveRecord::Base
       user_engagement.each do |engagement|
         (0..23).each do |hour|
           q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
-          q_time = q_time.to_time.utc
+          q_time = q_time.to_datetime.in_time_zone(event.timezone).beginning_of_hour
           if engagement == 'Favorite'
             type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
             count = Favorite.where('favoritable_type IN (?) and event_id = ? and created_at >= ? and created_at <= ?', type, event_id, q_time.to_datetime, (q_time.to_datetime + 1.hour)).count
@@ -260,8 +261,13 @@ class Analytic < ActiveRecord::Base
           else
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           end
-          data << count;
+          hsh[q_time.strftime("%k").to_i] = count
         end
+        (0..23).each do |hour|
+          hsh[hour] = 0 if hsh[hour].blank?
+        end
+        hsh = Hash[hsh.sort]
+        data = hsh.values
         if data.sum == 0
           length = data.length
           data = [nil]*length
@@ -274,7 +280,6 @@ class Analytic < ActiveRecord::Base
     end
     overall
   end
-
 
   def self.get_features_count(event_id, from_date, to_date)
     event_features = EventFeature.where(:event_id => event_id).pluck(:name)

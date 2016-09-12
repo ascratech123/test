@@ -1,6 +1,6 @@
 class Agenda < ActiveRecord::Base
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :new_category, :agenda_track_name_import
   belongs_to :event
   belongs_to :speaker
   belongs_to :agenda_track
@@ -130,7 +130,7 @@ class Agenda < ActiveRecord::Base
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).agendas.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
-
+  
   def get_agenda_type_name
     self.agenda_type
     id = []
