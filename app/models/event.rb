@@ -55,7 +55,7 @@ class Event < ActiveRecord::Base
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
-  has_one :badge_pdfs, :dependent => :destroy
+  has_one :badge_pdf, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
