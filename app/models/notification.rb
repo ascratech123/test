@@ -201,7 +201,7 @@ class Notification < ActiveRecord::Base
   # end
 
   def formatted_push_datetime_with_event_timezone
-    self.push_datetime.in_time_zone(self.event_timezone).strftime("%b %d") if self.push_datetime.present?
+    self.push_datetime.strftime("%b %d") if self.push_datetime.present?
   end
 
   def set_event_timezone
