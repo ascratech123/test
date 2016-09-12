@@ -55,7 +55,7 @@ module SyncMobileData
     models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
     model_name.each do |model|
-      start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') if start_event_date.present?
+      start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') and start_event_date.present? and not start_event_date == "01/01/1990 13:26:58".to_time.utc
       info = self.get_model_class(model).where(:updated_at => start_event_date..end_event_date) rescue []
       info = info.where(:event_id => event_ids) rescue []
       case model
