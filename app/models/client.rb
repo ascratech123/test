@@ -27,6 +27,9 @@ class Client < ActiveRecord::Base
     elsif user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+    elsif user.has_role? :db_manager
+       events = Event.with_roles("db_manager", user)
+       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     else
       client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     end
@@ -39,6 +42,9 @@ class Client < ActiveRecord::Base
     elsif user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+    elsif user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
+      events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)    
     else
       client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     end
@@ -90,7 +96,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.display_hsh 
-    {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speakers', 'invitees' => 'Invitees', 'agendas' => 'Agenda', 'polls' => 'Polls', 'conversations' => 'Conversations', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Awards', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlights', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Notes', 'highlight_images' => 'Highlight Images', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsors", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourites","networks" => "My Network","exhibitors" => "Exhibitors", "invitee_datas" => "Dashboard", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall","registration_settings"=> "Registration Setting", 'leaderboard' => 'Leaderboard', 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', 'analytics' => "Analytics", "leaderboards" => "Leaderboards", "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel",'user_registrations' => 'User Registrations',"social_sharings" => "Social Sharing","qr_scanner_details" => "Qr Scanner","badge_pdfs" => "Badge"}    
+     {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speakers', 'invitees' => 'Invitees', 'agendas' => 'Agenda', 'polls' => 'Polls', 'conversations' => 'Conversations', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Awards', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlights', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Notes', 'highlight_images' => 'Highlight Images', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsors", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourites","networks" => "My Network","exhibitors" => "Exhibitors", "invitee_datas" => "Database", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall","registration_settings"=> "Registration Setting", 'leaderboard' => 'Leaderboard', 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', 'analytics' => "Analytics", "leaderboards" => "Leaderboards", "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel", 'user_registrations' => 'User Registrations',"social_sharings" => "Social Sharing","campaigns" => "Campaign","edms" => "eDM","qr_scanner_details" => "Qr Scanner","badge_pdfs" => "Badge"}    
   end
 
   def self.display_hsh1 
