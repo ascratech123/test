@@ -7,8 +7,8 @@ class Api::V1::CommentsController < ApplicationController
 			# comment = conversation.comments.new(user_id: mobile_current_user.id, description: params[:description])
 			comment = conversation.comments.new(:user_id => params[:user_id], :description => params[:description], :commentable_id => params[:commentable_id], :commentable_type => params[:commentable_type])
 			if comment.save
-				user = User.find_by_id(params[:user_id])
-				username = user.get_full_name 
+				invitee = Invitee.find_by_id(params[:user_id])
+				username = invitee.name_of_the_invitee 
 				updated_at_with_tmz = comment.updated_at.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
 				created_at_with_tmz = comment.created_at.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
    			year = Time.now.strftime("%Y") + " "
