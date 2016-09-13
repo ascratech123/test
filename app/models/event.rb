@@ -636,15 +636,14 @@ class Event < ActiveRecord::Base
   end
 
   def set_event_category
-    time_diff = self.end_event_date.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
-    hours = (time_diff.to_f/60/60)
+    time_now = Time.now.in_time_zone(self.timezone).strftime("%d %m %Y %H:%M").to_datetime
     prev_event_category  = self.event_category
-    if self.start_event_date <= Time.now + hours.hours and self.end_event_date >= Time.now + hours.hours
-    self.update_column("event_category","Ongoing")
-    elsif self.start_event_date > Time.now + hours.hours and self.end_event_date > Time.now + hours.hours
-    self.update_column("event_category","Upcoming")
-    else
-    self.update_column("event_category","Past")
+    if self.start_event_date <= time_now and self.end_event_date >= time_now
+      self.update_column("event_category","Ongoing")
+    elsif self.start_event_date > time_now
+      self.update_column("event_category","Upcoming")
+    elsif self.end_event_date < time_now
+      self.update_column("event_category","Past")
     end
     self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
   end
