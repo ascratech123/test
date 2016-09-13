@@ -76,12 +76,6 @@
                     / = 700 - (@attendance.count.to_i)
 
         #tab-3.tab-content.current
-          / .excelDownload
-          /   %p
-          /     - if @attendees.present?
-          /       = link_to image_tag("excel.png", border: 0), {action: 'index', controller: 'invitee_searches',:format => 'xls'}
-          /     - else 
-          /       = image_tag("excel.png", border: 0)
           .searchDiv.tab3
             = render :partial => "admin/invitees/search", :locals => {:attendee => true}
             .excelDownload
@@ -172,7 +166,7 @@
                           - if params[:params_value].present? && session[:invitee_serach_email].present?
                             #{session[:invitee_serach_email]}
                             #{session[:invitee_serach_email] = nil}                         
-                    %tr{:align => "center"}
+                    %tr.formbutton{:align => "center"} 
                       %td.tab4Btn{:align => "center", :colspan => "6"}
                         %input{:name => "submit", :type => "submit", :value => "Submit"}/
                         %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
