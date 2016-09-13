@@ -1,4 +1,4 @@
-.save_button.mdl-card
+.save_button.mdl-card.editBadgeForm
   = form_for [:admin, @event, @badge_pdf], :builder => CustomFormBuilder, :html => { :multipart => true } do |f|
     .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
@@ -9,7 +9,7 @@
         .mdl-grid.p-v-5.form-group
           .col-lg-4.mdl-typography--text-right.fieldDiv
             %p.displayInlineBlock.multicitytxt Show Fields
-          .col-lg-6.p-h-12    
+          .col-lg-6.editBadgeFormChkBox    
             / = f.custom_radio_button :column1, "active","Active", :id => "option-1"
             / = f.custom_radio_button :column1, "deactive", "Deactive", :id => "option-2"
             .checkboxDiv
