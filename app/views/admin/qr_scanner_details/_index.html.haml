@@ -25,10 +25,10 @@
           
           - if @badge_pdf.present?
             = link_to edit_admin_event_badge_pdf_path(:event_id => event.id, :id =>@badge_pdf.id), :class => "mdl-menu__item mdl-js-ripple-effect",target: '_blank' do
-              Edit Badge Pdf
+              Edit Badge
           - else
             = link_to new_admin_event_badge_pdf_path(:event_id => event.id), :class => "mdl-menu__item mdl-js-ripple-effect",target: '_blank' do
-              Add Badge Pdf
+              Add Badge
           - if @attendees.present?
             .mdl-menu__item
               = link_to "Attendee Export", {action: 'index', controller: 'invitee_searches',:format => 'xls' }    
