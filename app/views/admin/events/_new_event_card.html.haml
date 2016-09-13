@@ -12,7 +12,7 @@
               = card_title
           %h2.fs30.mt5.mbn
             - if feature_count.present?
-              = link_to feature_count, manage_link, :target => '_blank' if card_title == "QR Scanner"
+              = link_to feature_count, manage_link#, :target => '_blank' if card_title == "QR Scanner"
               = link_to feature_count, manage_link if card_title != "QR Scanner"
       .row.pv5.AddmoreCard
         .col-xs-12.ph5
