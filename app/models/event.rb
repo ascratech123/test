@@ -637,7 +637,7 @@ class Event < ActiveRecord::Base
   end
 
   def set_event_category
-    time_now = Time.now.in_time_zone(self.timezone).strftime("%d %m %Y %H:%M").to_datetime
+    time_now = Time.now.in_time_zone(self.timezone).strftime("%d-%m-%Y %H:%M").to_datetime
     prev_event_category  = self.event_category
     if self.start_event_time <= time_now and self.end_event_time >= time_now
       self.update_column("event_category","Ongoing")
