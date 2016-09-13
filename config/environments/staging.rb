@@ -126,6 +126,7 @@ ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
@@ -210,3 +211,5 @@ EXHIBITOR_IMAGE_PATH=   {:path => "exhibitor/image/:style/:id-:filename",
 
 NOTIFICATION_IMAGE_PATH  = {:path => "notifications/image/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+BADGE_IMAGE_PATH  = {:path => "badge_pdfs/image/:style/:id-:filename",
+                     :url => "#{S3_url}/badge_pdfs/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                        
