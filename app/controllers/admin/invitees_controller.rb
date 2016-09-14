@@ -39,7 +39,8 @@ class Admin::InviteesController < ApplicationController
         for invitee in @invitees
           arr = @only_columns.map{|c| invitee.attributes[c]}
           method_allowed = 
-          arr += @methods.map{|c| invitee.logged_in}
+          # arr += @methods.map{|c| invitee.logged_in}
+          arr += [invitee.logged_in]
           @export_array << arr
         end if params[:sample_download].blank?
 
