@@ -9,6 +9,7 @@ class Admin::QnasController < ApplicationController
   before_filter :qna_wall_present, :only => [:index]
   # before_action :authenticate_user, :authorize_event_role, :find_features, unless: :abc
   before_filter :find_qna_wall, :only => :index
+  before_filter :check_for_access, :only => [:index]
 
 	def index
     if params[:auto_approve].present?

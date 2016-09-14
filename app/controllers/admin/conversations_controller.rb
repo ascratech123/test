@@ -9,6 +9,7 @@ class Admin::ConversationsController < ApplicationController
   before_filter :conversation_wall_present, :only => [:index]
   # before_action :authenticate_user, :authorize_event_role, :find_features, :find_likes_and_comments, unless: :abc
   before_filter :find_conversation_wall, :only => :index
+  before_filter :check_for_access, :only => [:index]
 
   def index
     @conversations = @conversations.paginate(page: params[:page], per_page: 10) if params["format"] != "xls" and params[:conversations_wall].blank?

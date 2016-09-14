@@ -146,7 +146,7 @@ class Conversation < ActiveRecord::Base
     comment_obj = []
     comments.first.each do |comment|
       comment_obj << comment
-    end
+    end if comments.present?
     object = object + comment_obj + conversation_without_comment
     object
   end

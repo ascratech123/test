@@ -18,7 +18,7 @@ namespace :admin do
   get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
-  resources :profiles, :manage_mobile_apps, :downloads, :external_login
+  resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses
   resources :licensees do
     resources :clients
   end
@@ -39,7 +39,7 @@ namespace :admin do
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
-    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels
+    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:manage_invitee_fields
     
     resources :polls do
       resources :user_polls

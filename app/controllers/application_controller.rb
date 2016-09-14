@@ -231,4 +231,16 @@ class ApplicationController < ActionController::Base
   #   #   redirect_to url
   #   # end
   # end
+  def check_for_access
+    if (params[:format].present? and params["export_type"].blank? and current_user.has_role? :db_manager and ["admin/speakers","admin/feedbacks"].include? params[:controller])
+      redirect_to admin_prohibited_accesses_path
+    elsif params[:format].present? and !(current_user.has_role? :db_manager)
+      redirect_to admin_prohibited_accesses_path
+    end
+    if (params[:import].present? and !(current_user.has_role? :db_manager) and params[:controller] == "admin/invitees")
+      redirect_to admin_prohibited_accesses_path
+    elsif (params[:import].present? and (current_user.has_role? :db_manager) and params[:controller] != "admin/invitees")
+      redirect_to admin_prohibited_accesses_path
+    end
+  end
 end
