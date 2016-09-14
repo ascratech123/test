@@ -566,7 +566,7 @@ class Invitee < ActiveRecord::Base
     data = []
     invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
     notifications = Notification.where(:id => invitee_notifications.pluck(:notification_id))
-    notifications.as_json(:except => [:group_ids, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
+    notifications.as_json(:except => [:group_ids, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone]) 
   end
 
   def get_read_notification(mobile_app_code,submitted_app)
