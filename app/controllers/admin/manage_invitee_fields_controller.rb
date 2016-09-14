@@ -61,7 +61,7 @@ class Admin::ManageInviteeFieldsController < ApplicationController
     if params[:manage_invitee_field].present?
       params.require(:manage_invitee_field).permit!
     else
-      params["manage_invitee_field"] = {'name_of_the_invitee' => 'false', 'email' => 'false', 'company_name' => 'false', 'designation' => 'false'}
+      params["manage_invitee_field"] = {'first_name' => 'false', 'last_name' => 'false', 'email' => 'false', 'company_name' => 'false', 'designation' => 'false'}
     end
   end
 
