@@ -5,9 +5,11 @@ class Admin::QnasController < ApplicationController
   skip_before_filter :authenticate_user, :authorize_event_role, :find_features, :only => [:index]
   skip_before_action :load_filter, :only => [:index] 
   before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:index]
+  before_filter :check_user_role, :except => [:index]
   before_filter :qna_wall_present, :only => [:index]
   # before_action :authenticate_user, :authorize_event_role, :find_features, unless: :abc
   before_filter :find_qna_wall, :only => :index
+  before_filter :check_for_access, :only => [:index]
 
 	def index
     if params[:auto_approve].present?
@@ -108,6 +110,12 @@ class Admin::QnasController < ApplicationController
       authorize_event_role
       find_features
     end
+  end
+  
+  def check_user_role
+    if current_user.has_role? :db_manager 
+      redirect_to admin_dashboards_path
+    end  
   end
 
   def qna_params
