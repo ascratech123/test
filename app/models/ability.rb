@@ -204,8 +204,6 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
-      can :create, MyProfile
-      can :manage, MyProfile, :event_id => e_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -534,6 +532,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :db_manager
       can :read, :all
+      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee]
     elsif user.has_role? :db_executive
       can :read, :all
     elsif user.has_role? :response_manager
@@ -552,17 +551,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :client_moderator
       can :read, :all
-    elsif user.has_role? :db_manager
-      can :read, Event
-      can :read, Speaker
-      can :read, Feedback
-      can :read, Agenda
-      can :read, Leaderboard
-      can :read, Conversation
-      can :read, Qna
-      # can :read, Quiz
-      can :read, MobileApplication
-      can :read, Poll
+      
     # elsif user.has_role? :telecaller
     #   can :read, Client.with_role(:module_admin, user)
     #   c_ids = Client.with_role(:event_admin, user).pluck(:id)
