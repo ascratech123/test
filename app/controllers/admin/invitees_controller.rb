@@ -2,8 +2,9 @@ class Admin::InviteesController < ApplicationController
   layout 'admin'
 
   #load_and_authorize_resource
-  before_filter :check_user_role, :except => [:index]
   before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :check_for_access, :only => [:index,:new]
+  before_filter :check_user_role, :except => [:index]
   before_filter :find_my_profiles, :only => [:edit, :new, :index]
   before_filter :find_invitee_visible_columns, :only => [:index]
 
@@ -38,7 +39,8 @@ class Admin::InviteesController < ApplicationController
         for invitee in @invitees
           arr = @only_columns.map{|c| invitee.attributes[c]}
           method_allowed = 
-          arr += @methods.map{|c| invitee.logged_in}
+          # arr += @methods.map{|c| invitee.logged_in}
+          arr += [invitee.logged_in]
           @export_array << arr
         end if params[:sample_download].blank?
 
@@ -114,7 +116,7 @@ class Admin::InviteesController < ApplicationController
   protected
 
   def check_user_role
-    if (!current_user.has_role? :db_manager) and (!current_user.has_role? :licensee_admin)
+    if (!current_user.has_role? :db_manager)
       redirect_to admin_dashboards_path
     end  
   end
