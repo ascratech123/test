@@ -466,7 +466,9 @@ function flightTime() {
     $(".custome_hide").parent().parent().parent().parent().parent().show();
     }
   }); 
-  $("#custom_template_for_edm").click(function(){   
+
+
+  $("#custom_template_for_edm").click(function(){          
     value = $("#custom_template_for_edm").val();
     if (value == "custom_template"){
       $(".ckeditor_custom").show();
@@ -482,6 +484,8 @@ function flightTime() {
       }
     }
   });
+
+
   $("#edm_broadcast_time_now").click(function(){
     value = $("#edm_broadcast_time_now").val();
     if (value == "now"){
@@ -518,9 +522,12 @@ function flightTime() {
   $("#need_social_icon_no_for_edm").click(function(){
     $(".md-checkboxsocialcheck").hide();
   });
+
   $("#custom_template_for_edm").click(function(){
     $(".md-checkboxsocialcheck").hide();
   });
+
+  
   $('input,textarea').attr('autocomplete', 'off');
   $('input[type="radio"][checked="checked"]').prop('checked', true);
 
