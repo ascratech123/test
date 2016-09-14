@@ -127,7 +127,7 @@
                           - if invitee.profile_pic.present?
                             = image_tag(invitee.profile_pic.url(:thumb))
                           - else
-                            = image_tag('coloured_icons/licensee.png')
+                            = image_tag('/profile_pics/thumb/missing.png')
                         = invitee.name_of_the_invitee
                       %td
                         = invitee.points rescue 0
