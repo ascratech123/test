@@ -15653,6 +15653,7 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
 }
 .breadcrumb > li a {
   text-decoration: none;
+  font-family: 'Ubuntu',sans-serif;
 }
 .breadcrumb > li.breadcrumb-active > a {
   color: #f5393d;

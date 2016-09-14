@@ -236,7 +236,7 @@ body{
 #print .description{margin-top: 30%;}  
 #print .welcomeText{  line-height: 50px;}
 .company {font-size: 28px;}
-
+#print .description{padding-top:15%;}
 }
 
 
