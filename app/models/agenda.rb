@@ -149,17 +149,17 @@ class Agenda < ActiveRecord::Base
   def formatted_time
     timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z")
     if self.end_agenda_time.present?
-      self.start_agenda_time.strftime('%I:%M %p') + " - " + self.end_agenda_time.strftime('%I:%M %p (GMT ') + timezone + ")"
+      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (GMT ') + timezone + ")"
     else
-      self.start_agenda_time.strftime('%I:%M %p Onwards (GMT ')  + timezone + ")"
+      self.start_agenda_time.strftime('%l:%M %p Onwards (GMT ')  + timezone + ")"
     end
   end
 
   def formatted_time_without_timezone
     if self.end_agenda_time.present?
-      self.start_agenda_time.strftime('%I:%M %p') + " - " + self.end_agenda_time.strftime('%I:%M %p')
+      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p')
     else
-      self.start_agenda_time.strftime('%I:%M %p Onwards')
+      self.start_agenda_time.strftime('%l:%M %p Onwards')
     end
   end
 

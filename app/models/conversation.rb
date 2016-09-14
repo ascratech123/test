@@ -1,4 +1,3 @@
-
 class Conversation < ActiveRecord::Base
   include AASM
   attr_accessor :platform
@@ -213,6 +212,7 @@ class Conversation < ActiveRecord::Base
   def comment
     ""
   end
+  
   def Status
     self.status rescue ""
   end
@@ -230,12 +230,17 @@ class Conversation < ActiveRecord::Base
   end
 
   def formatted_created_at_with_event_timezone
-    self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    created_at_with_tmz.sub(year, "")
   end
 
   def formatted_updated_at_with_event_timezone
-    self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    updated_at_with_tmz.sub(year, "")    
   end
 
 end
-
