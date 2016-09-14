@@ -6757,7 +6757,7 @@ input[type="month"].input-lg {
   line-height: 57px;
 }
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 .radio,
 .checkbox {
@@ -15658,6 +15658,7 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
 }
 .breadcrumb > li a {
   text-decoration: none;
+  font-family: 'Ubuntu',sans-serif;
 }
 .breadcrumb > li.breadcrumb-active > a {
   color: #f5393d;
