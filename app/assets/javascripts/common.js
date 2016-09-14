@@ -466,7 +466,7 @@ function flightTime() {
     $(".custome_hide").parent().parent().parent().parent().parent().show();
     }
   }); 
-  $("#custom_template_for_edm").click(function(){
+  $("#custom_template_for_edm").click(function(){   
     value = $("#custom_template_for_edm").val();
     if (value == "custom_template"){
       $(".ckeditor_custom").show();
