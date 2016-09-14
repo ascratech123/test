@@ -89,6 +89,8 @@
               = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id,:telecaller_index => "true"),:class => "mdl-color-text--white"
             - elsif page == "edms"
               = link_to "#{@campaign.campaign_name.capitalize} / ", admin_event_campaigns_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+            - elsif page == "manage_invitee_fields"
+              = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
             = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
         - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
           = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
