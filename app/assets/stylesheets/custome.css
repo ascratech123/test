@@ -82,6 +82,8 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
+  .ckeditor_custom {text-align: left;}
 
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
@@ -104,6 +106,7 @@
 .error_space_h57{height:57px}
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
+.panel-body.scroller-sm.top3LeaderDiv{height:auto; max-height:initial;}
 .account-popup {background: #fff; color: #444; font-size: 14px; height: auto; left: 0; margin: 0 auto; padding: 18px 15px; position: absolute; right: 0; text-align: center; top: 50%; width: 400px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); -moz-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -webkit-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);z-index: 9999;}
 .account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
 .account-popup .content{padding:18px 0;}
@@ -216,7 +219,6 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }
-
 }
 
 /*rwd table css start - Deepti */    
@@ -1030,9 +1032,9 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 /*============================= menu active link  ======================================= */
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600{-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600:hover{box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);-webkit-transform: scale(0.9,0.9);transform: scale(0.9,0.9);opacity:1;-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
-.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
-.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
-.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
+.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
+.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
 /*============================= Agenda Start css   ======================================= */
 /*.HeaderUserName .mdl-menu__container.is-upgraded.is-visible{max-height: 300px !important; overflow-y:auto;} */ 
 .newRightsearch .mdl-textfield{display:block !important; width:calc(50% - 16px);text-align: right;}
