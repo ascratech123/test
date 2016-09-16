@@ -531,16 +531,18 @@ class Invitee < ActiveRecord::Base
 
   def self.get_notification(notifications, user)
     notification_ids = []
-    notifications = notifications.where(:pushed => true)
-    notifications.each do |notification|
-      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
-      if notification.group_ids.present?
-        notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
-      else
-        notification_ids << notification.id
+    if notifications.present?
+      notifications = notifications.where(:pushed => true)
+      notifications.each do |notification|
+        invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
+        if notification.group_ids.present?
+          notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
+        else
+          notification_ids << notification.id
+        end
       end
+      notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     end
-     notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 
