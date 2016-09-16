@@ -5,7 +5,7 @@ class Contact < ActiveRecord::Base
   
 	default_scope { order('created_at desc') }
 
-  def self.update_last_updated_model
+  def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
   end
 end

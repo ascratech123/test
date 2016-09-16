@@ -23,7 +23,7 @@ module SyncMobileData
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       else
-        create_data = get_model_class(model).new(params_data(value))
+        create_data = get_model_class(model_name).new(params_data(value))
         create_data.save
         message[:message] = (create_data.errors.messages.blank? ? "Created" : "#{create_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  create_data.as_json() rescue nil
@@ -174,7 +174,7 @@ module SyncMobileData
         when 'MyTravel'  
           if current_user.present?
             invitee_ids = Invitee.where(:event_id => event_ids, :email => current_user.email).pluck(:id)
-            info = info.where(:invitee_id => invitee_ids)
+            info = info.where(:invitee_id => invitee_ids) if info.present?
             data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
           end
         when 'EKit' 
