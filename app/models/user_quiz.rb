@@ -52,13 +52,13 @@ class UserQuiz < ActiveRecord::Base
 
 
   def user_answer
-    self.answer.join(', ').to_s
+    self.answer.to_s
     #self.quiz.attributes[self.answer.downcase]
   end
   
-  def answer
-    self.quiz.correct_answer
-  end
+  # def answer
+  #   self.quiz.correct_answer
+  # end
 
   def correct_answer
     self.quiz.correct_answer.join(', ').to_s
