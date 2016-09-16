@@ -139,8 +139,9 @@
         New Contact Us              
   - when 'notification'
     - if @event.present?
-      = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-        New Notification
+      -if !(current_user.has_role? :db_manager)
+        = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+          New Notification
       = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Invitee Groups 
   - when 'qna'
