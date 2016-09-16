@@ -671,7 +671,7 @@ $(function () {
 });      */
 
 /* nilam - new event form - copy ad custom content */
-$(document).ready(function(){
+$(document).ready(function(){  
   $('.add-data #yes').click(function(){
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
@@ -683,4 +683,19 @@ $(document).ready(function(){
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
   });
+
+  /* Added by hemant */
+  $(document).on('click', '.copyButton', function(){
+    $('.selectContentDiv').hide();
+    $('.copyEvent, .ClientPopup, .popup-overlay').show();
+  });
 });
+
+$(document).on('click', '.ClickPop', function(){
+  $('#copy_content').val(true);
+  $('#custom_content').val('');
+})
+$(document).on('click', '.customButton', function(){
+  $('#custom_content').val(true);
+  $('#copy_content').val('');
+})

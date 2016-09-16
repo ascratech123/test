@@ -108,6 +108,10 @@
 .select-eventDiv{display:none;}
 .copyCustom-btnDiv{display:none;}
 .selectContentDiv{display:none;}
+#register-form-copyContentPopup.ClientPopup-info {padding: 50px 20px;}
+#register-form-copyContentPopup p{color:#666; margin-bottom: 18px;  line-height: 27px;
+    font-size: 17px;}
+#register-form-copyContentPopup p + .ClickPop {text-transform:uppercase;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
@@ -1423,3 +1427,5 @@ i.incards {font-size: 60px}
 .txtCenter{text-align:center;}
 .copyCustomContent button{border:0 none; background:#1cb1ba; color:#fff;padding:5px 8px; cursor:pointer; margin-right:20px;}
 .copyCustomContent button:last-child{margin-right:0px;}
+
+.copyEvent{display: none;}
