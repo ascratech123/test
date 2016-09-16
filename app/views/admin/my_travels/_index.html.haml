@@ -16,32 +16,19 @@
             %td.font16= Invitee.get_invitee_name(my_travel.invitee_id) rescue nil 
             %td.font16= Invitee.get_invitee_email(my_travel.invitee_id) rescue nil
             %td.font16.eventNameLink
-              - if !(current_user.has_role? :db_manager) 
-                -if my_travel.attach_file.present?
-                  = link_to "#{my_travel.attach_file_1_name}", "#{my_travel.attach_file.url})}",:target => "_blank"
-                -if my_travel.attach_file_2.present?
-                  = link_to "#{','+(my_travel.attach_file_2_name.present? ? my_travel.attach_file_2_name : "Attachment2")}", "#{my_travel.attach_file_2.url})}",:target => "_blank"
-                -if my_travel.attach_file_3.present?
-                  = link_to "#{','+(my_travel.attach_file_3_name.present? ? my_travel.attach_file_3_name : "Attachment3")}", "#{my_travel.attach_file_3.url})}",:target => "_blank"
-                -if my_travel.attach_file_4.present?
-                  = link_to "#{','+(my_travel.attach_file_4_name.present? ? my_travel.attach_file_4_name : "Attachment4")}", "#{my_travel.attach_file_4.url})}",:target => "_blank"
-                -if my_travel.attach_file_5.present?
-                  = link_to "#{','+(my_travel.attach_file_5_name.present? ? my_travel.attach_file_5_name : "Attachment5")}", "#{my_travel.attach_file_5.url})}",:target => "_blank"
-              - else
-                -if my_travel.attach_file.present?
-                  = my_travel.attach_file_1_name
-                -if my_travel.attach_file_2.present?
-                  = "#{','+(my_travel.attach_file_2_name.present? ? my_travel.attach_file_2_name : "Attachment2")}"
-                -if my_travel.attach_file_3.present?
-                  = "#{','+(my_travel.attach_file_3_name.present? ? my_travel.attach_file_3_name : "Attachment3")}"
-                -if my_travel.attach_file_4.present?
-                  = "#{','+(my_travel.attach_file_4_name.present? ? my_travel.attach_file_4_name : "Attachment4")}"
-                -if my_travel.attach_file_5.present?
-                  = "#{','+(my_travel.attach_file_5_name.present? ? my_travel.attach_file_5_name : "Attachment5")}"
+              -if my_travel.attach_file.present?
+                = link_to "#{my_travel.attach_file_1_name}", "#{my_travel.attach_file.url})}",:target => "_blank"
+              -if my_travel.attach_file_2.present?
+                = link_to "#{','+(my_travel.attach_file_2_name.present? ? my_travel.attach_file_2_name : "Attachment2")}", "#{my_travel.attach_file_2.url})}",:target => "_blank"
+              -if my_travel.attach_file_3.present?
+                = link_to "#{','+(my_travel.attach_file_3_name.present? ? my_travel.attach_file_3_name : "Attachment3")}", "#{my_travel.attach_file_3.url})}",:target => "_blank"
+              -if my_travel.attach_file_4.present?
+                = link_to "#{','+(my_travel.attach_file_4_name.present? ? my_travel.attach_file_4_name : "Attachment4")}", "#{my_travel.attach_file_4.url})}",:target => "_blank"
+              -if my_travel.attach_file_5.present?
+                = link_to "#{','+(my_travel.attach_file_5_name.present? ? my_travel.attach_file_5_name : "Attachment5")}", "#{my_travel.attach_file_5.url})}",:target => "_blank"
             %td.IconDrp
-              - if !(current_user.has_role? :db_manager) 
-                = more_vert_button(my_travel.id)
-                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{my_travel.id}"}
-                  = edit_link(params, my_travel.id)
-                  = delete_link(params, my_travel.id)
+              = more_vert_button(my_travel.id)
+              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{my_travel.id}"}
+                = edit_link(params, my_travel.id)
+                = delete_link(params, my_travel.id)
   = will_paginate objs

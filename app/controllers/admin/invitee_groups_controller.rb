@@ -1,8 +1,9 @@
 class Admin::InviteeGroupsController < ApplicationController
   layout 'admin'
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :check_user_role, :except => [:index]
     
   def index
   end
@@ -55,5 +56,10 @@ class Admin::InviteeGroupsController < ApplicationController
   def invitee_group_params
   	params["invitee_group"]["invitee_ids"] = params["invitee_group"]["invitee_ids"].reject(&:empty?) if  (params["invitee_group"].present? and params["invitee_group"]["invitee_ids"].present?)
     params.require(:invitee_group).permit!
+  end
+  def check_user_role
+    if (!current_user.has_role? :db_manager) 
+      redirect_to admin_dashboards_path
+    end  
   end
 end

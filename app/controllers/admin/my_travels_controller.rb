@@ -4,7 +4,7 @@ class Admin::MyTravelsController < ApplicationController
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :check_for_access, :only => [:index,:new]
-  before_filter :check_user_role, :except => [:index]
+  before_filter :check_user_role, :except => [:index,:new]
 
   def index
     @my_travels = @my_travels.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
@@ -74,7 +74,7 @@ class Admin::MyTravelsController < ApplicationController
     params.require(:my_travel).permit!
   end
   def check_user_role
-    if current_user.has_role? :db_manager 
+    if (!current_user.has_role? :db_manager) 
       redirect_to admin_dashboards_path
     end  
   end

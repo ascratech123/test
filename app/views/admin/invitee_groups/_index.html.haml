@@ -17,8 +17,9 @@
               - if !invitee_group.default_logical_group?
                 = invitee_group.get_invitee_name
             %td.IconDrp
-              = more_vert_button(invitee_group.id)
-              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{invitee_group.id}"}
-                - if !invitee_group.default_logical_group?
-                  = edit_link(params, invitee_group.id)
-                  = delete_link(params, invitee_group.id)
+              -if current_user.has_role? :db_manager
+                = more_vert_button(invitee_group.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{invitee_group.id}"}
+                  - if !invitee_group.default_logical_group?
+                    = edit_link(params, invitee_group.id)
+                    = delete_link(params, invitee_group.id)
