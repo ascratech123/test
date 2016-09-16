@@ -239,7 +239,10 @@ class ApplicationController < ActionController::Base
     end
     if (params[:import].present? and !(current_user.has_role? :db_manager) and params[:controller] == "admin/invitees")
       redirect_to admin_prohibited_accesses_path
-    elsif (params[:import].present? and (current_user.has_role? :db_manager) and params[:controller] != "admin/invitees")
+    elsif (params[:import].present? and (current_user.has_role? :db_manager) and ["admin/invitees","admin/my_travels"].exclude? params[:controller])
+      redirect_to admin_prohibited_accesses_path
+    end
+    if (["admin/invitees","admin/my_travels"].include? params[:controller] and ["index","new"].include? params[:action] and (!current_user.has_role? :db_manager))
       redirect_to admin_prohibited_accesses_path
     end
   end

@@ -23,9 +23,10 @@
             %td.font16= time_with_zone(notification.push_datetime, 'IST')
             %td.font16= notification.pushed rescue nil
             %td.IconDrp
-              = more_vert_button(notification.id)
-              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{notification.id}"}
-                - if !notification.pushed?
-                  = edit_link(params, notification.id)
-                  = delete_link(params, notification.id)
+              - if !(current_user.has_role? :db_manager) 
+                = more_vert_button(notification.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{notification.id}"}
+                  - if !notification.pushed?
+                    = edit_link(params, notification.id)
+                    = delete_link(params, notification.id)
   = will_paginate objs

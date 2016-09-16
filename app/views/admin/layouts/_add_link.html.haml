@@ -46,9 +46,10 @@
       = link_to new_admin_event_speaker_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Speaker
   - when 'invitee_group'
-    - if @event.present?
+    - if @event.present? and (current_user.has_role? :db_manager)
       = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Invitee Group
+    - if @event.present? and !(current_user.has_role? :db_manager)
       = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Notification
   - when 'attendee'
@@ -65,9 +66,8 @@
       New Invitee
     = link_to new_admin_event_manage_invitee_field_path(:event_id => @event.id) ,:class => "rightBtn hvr-sweep-to-right" do
       Manage Invitee Field
-    - if !(current_user.has_role? :db_manager)
-      = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
-        Send Password To All
+    = link_to 'javascript:void(0);' ,:class => "rightBtn hvr-sweep-to-right send-password-confirm" do
+      Send Password To All
   - when 'user'
     = link_to 'javascript:void(0);',:class => "rightBtn hvr-sweep-to-right", :id => 'add_user_popup' do
       New User
@@ -87,9 +87,8 @@
       = link_to new_admin_event_telecaller_accessible_column_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
         Telecaller Access Column
   - when 'my_travel'
-    - if !(current_user.has_role? :db_manager)
-      = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
-        New My Travel
+    = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+      New My Travel
 
     / = link_to admin_event_manage_feature_status_index_path(:event_id => @event.id, :status => "approved", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
     /   Approve All

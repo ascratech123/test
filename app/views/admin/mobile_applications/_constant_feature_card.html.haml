@@ -42,19 +42,20 @@
               - url_new ="/new" if (@event.present? and @event.notifications.count < 1)
               - redirect_url = "/admin/events/#{@event.id}/#{feature[0]}#{url_new}"
             = link_to feature_count, redirect_url
-      .row.pv5.AddmoreCard{:style => "margin-bottom : #{(feature[0] == 'percent_completed' and review_status[2] == 100) ? "23px" : "0px"}" }
-        .col-xs-12.ph5
-          - manage_feature = ["themes", "event_highlights", "emergency_exits"]
-          - if feature[0] == 'percent_completed'
-            - if review_status[0].present?   
-              - feature[0] = review_status[0].first
-            - else
-              - feature[0] = review_status[0].first
-          - if feature[0] == "event_features"
-            = link_to "Manage Menu", "/admin/events/#{@event.id}/mobile_applications/#{@mobile_application.id}/edit?type=event_edit" 
-          - elsif manage_feature.include?(feature[0])
-            - url_dynamic = "/admin/events/#{@event.id}/#{feature[0]}/new?type=dashboard_new" if feature[0] != "themes"
-            - url_dynamic = "/admin/events/#{@event.id}/#{feature[0]}/#{@event.theme_id}/edit?type=dashboard_edit" if feature[0] == "themes"
-            = link_to "Manage #{Client::display_hsh[feature[0]]}", url_dynamic
-          - elsif feature[0].present?
-            = link_to "Add New",  "/admin/events/#{@event.id}/#{feature[0]}/new?type=dashboard_new"
+      - if !(current_user.has_role? :db_manager)
+        .row.pv5.AddmoreCard{:style => "margin-bottom : #{(feature[0] == 'percent_completed' and review_status[2] == 100) ? "23px" : "0px"}" }
+          .col-xs-12.ph5
+            - manage_feature = ["themes", "event_highlights", "emergency_exits"]
+            - if feature[0] == 'percent_completed'
+              - if review_status[0].present?   
+                - feature[0] = review_status[0].first
+              - else
+                - feature[0] = review_status[0].first
+            - if feature[0] == "event_features"
+              = link_to "Manage Menu", "/admin/events/#{@event.id}/mobile_applications/#{@mobile_application.id}/edit?type=event_edit" 
+            - elsif manage_feature.include?(feature[0])
+              - url_dynamic = "/admin/events/#{@event.id}/#{feature[0]}/new?type=dashboard_new" if feature[0] != "themes"
+              - url_dynamic = "/admin/events/#{@event.id}/#{feature[0]}/#{@event.theme_id}/edit?type=dashboard_edit" if feature[0] == "themes"
+              = link_to "Manage #{Client::display_hsh[feature[0]]}", url_dynamic
+            - elsif feature[0].present?
+              = link_to "Add New",  "/admin/events/#{@event.id}/#{feature[0]}/new?type=dashboard_new"

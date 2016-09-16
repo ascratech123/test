@@ -516,7 +516,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :db_manager
       can :read, :all
-      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee]
+      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee,InviteeGroup]
     elsif user.has_role? :db_executive
       can :read, :all
     elsif user.has_role? :response_manager

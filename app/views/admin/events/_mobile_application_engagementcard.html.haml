@@ -12,14 +12,17 @@
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count}
       - if show_card("leaderboard")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Leaderboard.png", :objs => @event, :url => "leaderboard", :@count => 0}
-      / - if show_card("quizzes")
-      /   = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls.png", :objs => @event.quizzes, :url => "quizzes", :@count => @count}
       - if show_card("conversations")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "conversations.png", :objs => @event.conversations, :url => "conversations", :@count => @count}
       - if show_card("qnas")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Q&A.png", :objs => @event.qnas, :url => "qnas", :@count => @count}
       - if show_card("polls")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.polls, :url => "polls", :@count => @count}
+      - constant_features = {"notifications" => "notification.png"}
+      - constant_features.each do |feature|
+        - if params[:event_id].present?
+          - @event = Event.get_event_by_id(params[:event_id].to_i)
+          = render :partial => "constant_feature_card", :locals => {:feature => feature}
     -else
       - if show_card("leaderboard")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Leaderboard.png", :objs => @event, :url => "leaderboard", :@count => 0} 
