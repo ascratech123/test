@@ -201,11 +201,6 @@ class Invitee < ActiveRecord::Base
       else
         invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
       end
-    #if params[:full_search].present?
-     # invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?) or mobile_no like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}", "%#{keyword}")if keyword.present? and params[:full_search].present?
-    #else
-    #  invitees = invitees.where("name_of_the_invitee like (?) or email like (?) or company_name like (?) or designation like (?)", "%#{keyword}%", "%#{keyword}%", "%#{keyword}%", "%#{keyword}")if keyword.present?
-    #end
     invitees   
   end
 
@@ -586,6 +581,14 @@ class Invitee < ActiveRecord::Base
     data
   end
   
+  def self.get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
+    start_event_date = start_event_date - 5.minutes
+    info = InviteeNotification.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)    
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
+    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
+    invitee_notifications.pluck(:notification_id) rescue []
+  end
+
   def get_licensee_admin
     self.event.client.licensee rescue nil
   end

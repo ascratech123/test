@@ -26,6 +26,7 @@ class Registration < ActiveRecord::Base
   attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4,:option_5,:option_6,:option_7,:option_8,:option_9,:option_10,:mandatory_field,:text_box_required_after_options
   
   validate :mandate_field_check
+  after_save :update_last_updated_model
 
   default_scope { order('created_at desc') }
 
@@ -43,6 +44,10 @@ class Registration < ActiveRecord::Base
 
   def selected_columns
     self.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'custom_source_code').map{|k, v| (v.present? and v['label'].present?)? k : nil}.compact
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def selected_column_values

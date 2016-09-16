@@ -28,9 +28,13 @@ class Notification < ActiveRecord::Base
   validates :notification_type, presence: true
   after_create :set_event_timezone
   before_save :update_details
-  after_save :push_notification
+  after_save :push_notification, :update_last_updated_model
 
   default_scope { order('created_at desc') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def update_details
     self.push_page = Notification::ACTION_TO_PAGE_HSH[self.action]

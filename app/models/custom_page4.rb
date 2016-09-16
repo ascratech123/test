@@ -2,7 +2,9 @@ class CustomPage4 < ActiveRecord::Base
   belongs_to :event
   validates_presence_of :page_type, presence:{ :message => "This field is required." }
   validate :check_url_or_description_is_present
+  after_save :update_last_updated_model
   #after_save :update_site_url
+  
   def check_url_or_description_is_present
     if self.page_type == "url" 
       errors.add(:site_url, "This field is required.") if self.site_url.blank?
@@ -11,6 +13,10 @@ class CustomPage4 < ActiveRecord::Base
     if self.page_type == "build_new"
       errors.add(:description, "This field is required.") if self.description.blank?
     end
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_site_url

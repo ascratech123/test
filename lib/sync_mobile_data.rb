@@ -5,11 +5,11 @@ module SyncMobileData
     values.each do |value|
       update_data = nil
       if model_name == 'InviteeNotification'
-        update_data = (model_name.constantize).where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
+        update_data = InviteeNotification.where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
       elsif model_name == 'UserFeedback'
-        update_data = (model_name.constantize).find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
       else
-        update_data = (model_name.constantize).find_by_id(value["id"])
+        update_data = get_model_class(model_name).find_by_id(value["id"])
       end
       if !update_data.blank?
         if model_name == 'InviteeNotification'
@@ -23,11 +23,11 @@ module SyncMobileData
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       else
-        create_data = (model_name.constantize).new(params_data(value))
+        create_data = get_model_class(model).new(params_data(value))
         create_data.save
         message[:message] = (create_data.errors.messages.blank? ? "Created" : "#{create_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  create_data.as_json() rescue nil
-      end
+      end      
     end if values.present?
     return message
   end
@@ -52,16 +52,16 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'VenueSection']#.each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'VenueSection', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
+    last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
     model_name.each do |model|
-
-      # info = model.constantize.where(:updated_at => start_event_date..end_event_date) rescue []
-      # info = info.where(:event_id => event_ids) rescue []
-
-      #info = model.constantize.includes(:event).where(:updated_at => start_event_date..end_event_date , :event_id => event_ids)
-
-      info = model.constantize.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)
+      start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') and start_event_date.present? and not start_event_date == "01/01/1990 13:26:58".to_time.utc
+      if last_updated_models.include? model
+        info = self.get_model_class(model).where(:updated_at => start_event_date..end_event_date).where(:event_id => event_ids) rescue []
+      else
+        info = []
+      end
       case model
         when 'Conversation'
           # info = info.where(:status => 'approved')
@@ -198,6 +198,74 @@ module SyncMobileData
 
   def self.name_table(model)
     return model == "Agenda" ? model.constantize.table_name.singularize : model.constantize.table_name
+  end
+
+  def self.get_model_class(model)
+    case model
+      when 'Conversation'
+        Conversation
+      when 'EmergencyExit'
+        EmergencyExit
+      when 'Event'
+        Event
+      when 'EventFeature'
+        EventFeature
+      when 'Speaker'
+        Speaker
+      when 'Image'
+        Image  
+      when 'HighlightImage'
+        HighlightImage
+      when 'Theme'
+        Theme
+      when 'Winner'
+        Winner
+      when 'Comment'
+        Comment
+      when 'Sponsor'
+        Sponsor
+      when 'Exhibitor'
+        Exhibitor
+      when 'Notification'
+        Notification
+      when 'InviteeNotification'
+        InviteeNotification
+      when 'Poll'
+        Poll
+      when 'Invitee'
+        Invitee
+      when 'Quiz'
+        Quiz
+      when 'LogChange'
+        LogChange
+      when 'Favorite'
+        Favorite
+      when 'Like'
+        Like
+      when 'UserPoll'
+        UserPoll
+      when 'UserQuiz'
+        UserQuiz
+      when 'Rating'
+        Rating
+      when 'Qna'
+        Qna
+      when 'UserFeedback'  
+        UserFeedback
+      when "MobileApplication"  
+        MobileApplication
+      when 'MyTravel'  
+        MyTravel
+      when 'EKit' 
+        EKit
+      when 'Analytic'  
+        Analytic
+      when "Agenda"
+        Agenda
+      else
+        model.constantize
+    end  
+
   end
 
   def self.params_data(value)

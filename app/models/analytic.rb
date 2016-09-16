@@ -11,7 +11,12 @@ class Analytic < ActiveRecord::Base
 
   belongs_to :event
   before_create :update_points
-  after_create :update_points_to_invitee#, :set_dates_with_event_timezone
+  after_create :update_points_to_invitee
+  after_save :update_last_updated_model
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def check_ekit_viewed
     if Analytic.where(:action => 'page view', :viewable_type => "E-Kit", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
@@ -49,12 +54,6 @@ class Analytic < ActiveRecord::Base
       end
     end  
   end
-
-  # def set_dates_with_event_timezone
-  #   event = self.event
-  #   self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone)) if event.present?
-  #   self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone)) if event.present?   
-  # end
 
   def self.get_top_three_ids(event_id, from_date, to_date)
     Analytic.where('viewable_type = ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'Speaker', event_id, from_date, to_date).group(:viewable_id).count.sort_by{|k, v| v}.last(3).map{|a| a[0]}
@@ -280,6 +279,7 @@ class Analytic < ActiveRecord::Base
     end
     overall
   end
+
 
   def self.get_features_count(event_id, from_date, to_date)
     event_features = EventFeature.where(:event_id => event_id).pluck(:name)

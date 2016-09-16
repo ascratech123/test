@@ -10,6 +10,7 @@ class EKit < ActiveRecord::Base
   validates_attachment_presence :attachment, :message => "This field is required." 
   validates :name, presence: { :message => "This field is required." }
   #validates_attachment_content_type :attachment, :content_type => %w(application/zip application/msword application/vnd.ms-office application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/xls application/xlsx application/pdf)
+  after_save :update_last_updated_model
   
   #after_create :set_dates_with_event_timezone
   default_scope { order('created_at desc') }
@@ -19,6 +20,10 @@ class EKit < ActiveRecord::Base
     self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
     self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
   end  
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
 	def pdf_attached?
 	  self.attachment.file?

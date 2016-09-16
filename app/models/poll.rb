@@ -11,7 +11,7 @@ class Poll < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}, :allow_blank => true#, presence: true
   
   before_save :set_time
-  after_save :push_notification, :check_push_to_wall_status
+  after_save :push_notification, :check_push_to_wall_status, :update_last_updated_model
   before_create :set_sequence_no
   after_create :set_status_as_per_auto_approve, :set_event_timezone
 
@@ -28,6 +28,10 @@ class Poll < ActiveRecord::Base
     event :deactivate do
       transitions :from => [:activate], :to => [:deactivate]
     end
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def self.search(params,polls)

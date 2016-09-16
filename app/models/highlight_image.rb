@@ -13,6 +13,8 @@ class HighlightImage < ActiveRecord::Base
   validates_attachment_content_type :highlight_image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
   #after_create :set_dates_with_event_timezone
 
+  after_save :update_last_updated_model
+	
   def set_dates_with_event_timezone	
     event = self.event
     self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
@@ -33,6 +35,10 @@ class HighlightImage < ActiveRecord::Base
       "delete_type" => "DELETE" ,
       "id" => self.id
     }
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def created_at_with_event_timezone
