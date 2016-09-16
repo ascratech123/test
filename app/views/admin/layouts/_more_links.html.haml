@@ -265,17 +265,17 @@
                   Add Panel   
           - when 'quiz'
             %li
-              - if ["index", "new"].include?(params[:action])
-                = link_to new_admin_event_quizee_path(:event_id => @event.id, :importable_type => 'quizee', :import => "xls") ,:class => "centerAlign" do
-                  Import 
-              - if params[:action] == "index" and @quizees.present?
-                = link_to admin_event_quizees_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
+              / - if ["index", "new"].include?(params[:action])
+              /   = link_to new_admin_event_quizee_path(:event_id => @event.id, :importable_type => 'quizee', :import => "xls") ,:class => "centerAlign" do
+              /     Import 
+              - if params[:action] == "index" and @quizzes.present?
+                = link_to admin_event_user_quizzes_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
-                = link_to new_admin_event_quizee_path(:event_id => @event.id, :importable_type => 'user_quizees', :import => "xls") ,:class => "centerAlign" do
-                  Import Answer
-                - if @user_quizees.present?
-                  = link_to admin_event_user_quizees_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
-                    Export Answer
+                / = link_to new_admin_event_quizee_path(:event_id => @event.id, :importable_type => 'user_quizees', :import => "xls") ,:class => "centerAlign" do
+                /   Import Answer
+                / - if @user_quizees.present?
+                /   = link_to admin_event_user_quizees_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
+                /     Export Answer
           - when 'my_travel'
             %li
               - if @event.present?# and !(current_user.has_role? :db_manager)
