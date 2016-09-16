@@ -7,10 +7,14 @@ class Comment < ActiveRecord::Base
   validates :description,:commentable_id,:commentable_type,:user_id,:presence =>true
   
   after_create :create_analytic_record
-  after_save :update_conversation
+  after_save :update_conversation, :update_last_updated_model
 
   default_scope { order('created_at desc') }
   
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def commented_user_name
     # Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
     self.user.name_of_the_invitee rescue ""

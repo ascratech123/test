@@ -6,8 +6,7 @@ class Qna < ActiveRecord::Base
 
   validates :question, :receiver_id,:sender_id, presence: { :message => "This field is required." }
   after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone
-
-
+  after_save :update_last_updated_model
 
   default_scope { order('created_at desc') }
 
@@ -24,6 +23,9 @@ class Qna < ActiveRecord::Base
     end
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def change_status(event)
     if event== "approve"
@@ -123,4 +125,5 @@ class Qna < ActiveRecord::Base
   def set_event_timezone
     self.update_column(:event_timezone, self.event.timezone)
   end
+  
 end

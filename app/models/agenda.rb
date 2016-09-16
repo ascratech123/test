@@ -106,6 +106,10 @@ class Agenda < ActiveRecord::Base
     self.update_column("event_timezone", self.event.timezone)
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def check_category_present_if_new_category_select_from_dropdown
     if self.agenda_type == "Add New Track" and self.new_category.present?
       self.agenda_type = self.new_category

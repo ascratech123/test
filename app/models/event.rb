@@ -90,7 +90,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_time desc') }
@@ -112,7 +112,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => :chage_updated_at do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -129,6 +129,10 @@ class Event < ActiveRecord::Base
   def init
     self.status = "pending"
     self.event_theme = "create your own theme"
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_theme_updated_at
@@ -526,6 +530,12 @@ class Event < ActiveRecord::Base
 
   def create_log_change
     LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "destroy") rescue nil
+  end
+
+  def destroy_log_change_for_publish
+    log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
+    #log_changes.each{|l| l.update_column("action", "unpublished")}
+    log_changes.destroy_all
   end
 
   def add_default_invitee
