@@ -684,7 +684,7 @@ class Event < ActiveRecord::Base
     h
   end
   def copy_event_associations_from(event)
-    # event.copy_association(event.campaigns, self.id) if event.campaigns.present?
+    event.copy_association(event.campaigns, self.id) if event.campaigns.present?
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present?
     event.copy_association(event.attendees, self.id) if event.attendees.present?
     event.copy_awards_association(event.awards, self.id) if event.awards.present?
@@ -714,7 +714,7 @@ class Event < ActiveRecord::Base
   end
 
     def copy_custom_event_associations_from(event, params)
-    # event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
+    event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? and params[:associations].include?('mobile application')
     event.copy_association(event.attendees, self.id) if event.attendees.present? and params[:associations].include?('attendees')
     event.copy_awards_association(event.awards, self.id) if event.awards.present? and params[:associations].include?('awards')
