@@ -1,4 +1,4 @@
-- event_features_array = @event.event_features.where('name IN (?)', ["feedbacks", "polls", "quizzes", "e_kits", "qnas", "qr_code", "conversations", "favourites", "leaderboard", 'invitees']).pluck(:name)
+- event_features_array = @event.event_features.where('name IN (?)', ["feedbacks", "polls", "quizzes", "e_kits", "qnas", "qr_code", "conversations", "favourites", "leaderboard"]).pluck(:name)
 - arr = [0]
 - @live_analytics['user_engagements'].map{|q| arr += q[:data]} if @live_analytics.present? and @live_analytics['user_engagements'].present?
 - if arr.all? {|el| el.to_i == 0}
@@ -8,9 +8,7 @@
   :javascript
     displayText = ""
 - if @date_filter_error.blank?
-  - max_val = arr.compact.max
   :javascript
-    var INTERVALYAXIS = #{(max_val.present? and max_val > 100) ? (max_val / 100) : 5}
     var LINECATEGORY = #{@live_analytics['xaxis_interval_labels_and_interval'][0]}
     var OVERALL_ENGAGEMENT = #{@live_analytics['user_engagements'].to_json}
     var DONUTCHART1ARRAY = #{@live_analytics['unique_users'][0]}
@@ -113,14 +111,14 @@
           .panel-heading
             %span.panel-titlem
               Top 3 Leaders
-          .panel-body.scroller-sm
+          .panel-body.scroller-sm.top3LeaderDiv
             %table.table.mbn.tc-icon-bold.br-t
               %thead
                 %tr.hidden
                   %th #
                   %th First Name
               %tbody
-                - if @live_analytics['leaderboards'].present? and event_features_array.include? 'invitees'
+                - if @live_analytics['leaderboards'].present?
                   - @live_analytics['leaderboards'].each do |invitee_id|
                     %tr
                       - invitee = Invitee.get_invitee_by_id(invitee_id[0])
@@ -240,5 +238,6 @@
     time: false,
     maxDate : "#{Date.today.strftime("%d/%m/%Y") rescue nil}"
   })    
+
 
 

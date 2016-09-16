@@ -118,16 +118,16 @@ class Comment < ActiveRecord::Base
 
   def formatted_created_at_with_event_timezone
     # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
-    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     year = Time.now.strftime("%Y") + " "
     created_at_with_tmz.sub(year, "")    
   end
 
   def formatted_updated_at_with_event_timezone
     # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
-    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %H:%M %p (GMT %:z)")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     year = Time.now.strftime("%Y") + " "
-    updated_at_with_tmz.sub(year, "")        
+    updated_at_with_tmz.sub(year, "")
   end
 
 end

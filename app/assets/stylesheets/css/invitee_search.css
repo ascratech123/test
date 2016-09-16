@@ -71,7 +71,7 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
 .tableDiv table th {padding: 10px 0; background: #ccc; color: #fff;}
 .tableDiv tr td {padding: 10px 0;}
 .tableDiv td, .tableDiv th {border: 1px solid #a4a2a2; color: #000;}
-.thankyou-text{margin-top:7%; margin-bottom: 5%; }
+.thankyou-text{margin-top:5%; margin-bottom: 5%; }
 .newScanBtn{margin: 3% auto; text-align: center;}
 #search_keyword{border: 1px solid #808080; padding: 5px; width: 350px;}
 .tab1-searchBtn input[type="submit"]{border-radius:0; border: 1px solid #808080; padding: 5px;  background: #fff;}
@@ -134,7 +134,7 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
     transform: rotate(-45deg);
     width: 14px;
 }
-.checkboxDiv label{padding-left:30px;}
+.checkboxDiv label{padding-left:25px;} 
 
 .checkboxDiv input[type="checkbox"] + .checkbox {
     animation: 0.25s ease 0s normal none 1 checkbox-bg-off;
@@ -182,3 +182,5 @@ footer{position:fixed; left:0; right:0; margin:0 auto; background:#fff; bottom:0
 .fieldCheckbox{margin-top:15px;}
 
 .thankYouWrapper{text-align:center;}
+.editBadgeFormChkBox{padding: 0 12px;}
+.editBadgeForm{  font-family: 'Ubuntu',sans-serif;}

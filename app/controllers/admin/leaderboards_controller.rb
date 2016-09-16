@@ -1,6 +1,7 @@
 class Admin::LeaderboardsController < ApplicationController
 	layout 'admin'
   before_filter :authenticate_user, :authorize_event_role
+  before_filter :check_for_access, :only => [:index]
 	
 	def index
 		@invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc').first(5)
