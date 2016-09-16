@@ -165,8 +165,9 @@
     = link_to new_admin_event_grouping_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Grouping
   - when 'quiz'
-    = link_to new_admin_event_quiz_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      New Quiz    
+    -if !(current_user.has_role? :db_manager)
+      = link_to new_admin_event_quiz_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Quiz    
   - when 'registration'
     - if @event.present? and @event.registrations.count == 0
       = link_to new_admin_event_registration_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

@@ -3,6 +3,8 @@ class Admin::QuizzesController < ApplicationController
   
   before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :find_user_quizzes, :only => [:index, :new]
+  before_filter :check_for_access, :only => [:index,:new]
+  before_filter :check_user_role, :except => [:index]
   
 	def index
     @quizzes = Quiz.search(params, @quizzes) if params[:search].present?
@@ -79,5 +81,10 @@ class Admin::QuizzesController < ApplicationController
 
   def quizze_params
     params.require(:quiz).permit!
+  end
+  def check_user_role
+    if (current_user.has_role? :db_manager) 
+      redirect_to admin_dashboards_path
+    end  
   end
 end
