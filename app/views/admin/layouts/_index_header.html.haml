@@ -17,6 +17,8 @@
               Manage Invitee Data 
             - elsif page == "manage_users"
               Manage Users
+            - elsif page == "prohibited_accesses"
+              Restricted Access
             -else
               Manage
               = page.humanize.titleize == "E Kits" ? "e-KIT" : page.humanize.titleize
@@ -35,68 +37,69 @@
                 -if false
                   - features = ["speakers", "attendees", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "contacts"]
                 
-                - if page != "abouts" and page != 'event_highlights' and page != 'emergency_exits'
-                  - if objs.present? and objs.count != 0
-                    - if page == "users"
-                      - if current_user.has_role?("licensee_admin") and params[:role] == "all"
-                        = objs.count + Role.get_client_role(@event.client_id, current_user).length rescue ""
+                - if page != "prohibited_accesses"
+                  - if page != "abouts" and page != 'event_highlights' and page != 'emergency_exits'
+                    - if objs.present? and objs.count != 0
+                      - if page == "users"
+                        - if current_user.has_role?("licensee_admin") and params[:role] == "all"
+                          = objs.count + Role.get_client_role(@event.client_id, current_user).length rescue ""
+                        - else
+                          = objs.count rescue nil 
                       - else
-                        = objs.count rescue nil 
-                    - else
-                      = objs.count rescue nil
-                    -if page == "qnas"
-                      Q&A
-                    - elsif page == "edms"
-                      eDM
-                    - elsif page == "feedbacks"
-                      Feedback
-                    - elsif page == "contacts"
-                      Contact Us 
+                        = objs.count rescue nil
+                      -if page == "qnas"
+                        Q&A
+                      - elsif page == "edms"
+                        eDM
+                      - elsif page == "feedbacks"
+                        Feedback
+                      - elsif page == "contacts"
+                        Contact Us 
+                      -elsif (page == "polls" or page == "faqs")
+                        Questions
+                      - elsif page == "quizzes"
+                        Quiz
+                      - elsif (page == "invitee_structures" or page == "faqs")
+                        Database
+                      - elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include? page
+                        = page.humanize.singularize rescue nil
+                      -else
+                        = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
                     -elsif (page == "polls" or page == "faqs")
-                      Questions
-                    - elsif page == "quizzes"
-                      Quiz
-                    - elsif (page == "invitee_structures" or page == "faqs")
-                      Database
-                    - elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include? page
-                      = page.humanize.singularize rescue nil
-                    -else
-                      = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
-                  -elsif (page == "polls" or page == "faqs")
-                    No Questions
-                  -elsif (page == "edms")
-                    No eDMs
-                  -else 
-                    - if @invitee_structures.present?
-                      = '1'
-                    -elsif page == "manage_users"
-                      = Role.get_user_role_list(current_user).length rescue "No"
-                    - else
-                      No
-                    -if page == "qnas"
-                      Q&A
-                    - elsif page.humanize == "E kits"
-                      e-KIT
-                    - elsif page == "feedbacks"
-                      Feedback 
-                    - elsif page == "contacts"
-                      Contact Us 
-                    - elsif page == "invitee_structures"
-                      Database
-                    - elsif page == "quizzes"
-                      Quiz
-                    - elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include? page
-                      = page.humanize.singularize rescue nil
-                    - else
-                      = page.humanize rescue nil   
-                    -if false 
-                      = page.humanize == "E kits" ? "e-KIT" : page.humanize rescue nil
-                -elsif objs.present?
-                  = 1
-                  = page.humanize.singularize rescue nil
-                -else
-                  No
-                  = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
+                      No Questions
+                    -elsif (page == "edms")
+                      No eDMs
+                    -else 
+                      - if @invitee_structures.present?
+                        = '1'
+                      -elsif page == "manage_users"
+                        = Role.get_user_role_list(current_user).length rescue "No"
+                      - else
+                        No
+                      -if page == "qnas"
+                        Q&A
+                      - elsif page.humanize == "E kits"
+                        e-KIT
+                      - elsif page == "feedbacks"
+                        Feedback 
+                      - elsif page == "contacts"
+                        Contact Us 
+                      - elsif page == "invitee_structures"
+                        Database
+                      - elsif page == "quizzes"
+                        Quiz
+                      - elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include? page
+                        = page.humanize.singularize rescue nil
+                      - else
+                        = page.humanize rescue nil   
+                      -if false 
+                        = page.humanize == "E kits" ? "e-KIT" : page.humanize rescue nil
+                  -elsif objs.present?
+                    = 1
+                    = page.humanize.singularize rescue nil
+                  -else
+                    No
+                    = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
                 = render :partial => 'admin/layouts/add_link' 
             .mdl-typography--text-center.BlnkTxt
               - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images"]

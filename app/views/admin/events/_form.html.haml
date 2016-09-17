@@ -25,6 +25,16 @@
                 .field_with_errors
                   .span{:class => "errorMessage"}
                     = f.object.errors.messages[:event_limit].join("") rescue nil
+        - if not f.object.errors.messages[:event_limit].present?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+            .bs-component
+              .form-group
+                .col-lg-4 
+                .col-lg-7
+                  = f.hidden_field_tag :event_date_limit
+                  .field_with_errors
+                    .span{:class => "errorMessage"}
+                      = f.object.errors.messages[:event_date_limit].join("") rescue nil
         = f.custom_text_field :event_name, "Event Name *"
         =# f.custom_text_field :event_code, "Event Code"
         - if f.object.new_record? and params[:mobile_application_id].present?
@@ -83,6 +93,66 @@
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
         = f.custom_text_area_field :remarks, "Remarks"
+        = f.hidden_field :copy_content, :id => 'copy_content'
+        = f.hidden_field :custom_content, :id => 'custom_content'
+        - event_names = @client.events.pluck(:event_name, :id)
+        - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
+            .bs-componet
+              .form-group.set_highlight_select
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  Do you want to add data from another event?
+                .col-lg-7
+                  = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
+                  = f.custom_radio_button :copy_event, "no", "No", :id => "no"
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.select-eventDiv
+            .bs-componet
+              .form-group.set_highlight_select
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  Select Event
+                .col-lg-7
+                  -# default_remarks = ['ABC','PQR','XYZ']
+                  -# default_remarks << 'New Category'
+                  %i.arrow.single
+                  = f.select("event", "event_id", event_names, {:prompt => "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+                  - if @event.errors[:event_id].present?
+                    .p.errorMessage
+                      = 'This field is required.'
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
+            .bs-componet
+              .form-group.set_highlight_select 
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  //Select Event     
+                .col-lg-7.copyCustomContent
+                  %button.copyButton{:onclick => "return false;"} Copy Content
+                  %button.customButton{:onclick => "return false;"} Custom Content
+                  - if @event.errors[:copy_content].present?
+                    .p.errorMessage
+                      = @event.errors[:copy_content].first
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Select Content
+              .col-lg-7.notification                
+                - Event::EVENT_ASSOCIATIONS.each_with_index do |group, index|
+                  - if index == 0
+                    .usersep
+                      Select Content
+                  .md-checkbox
+                    %label
+                      = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+                      %span.checkbox 
+                      = group
+                  / - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
+                  / - default_group_list.each_with_index do |group, index|
+                  /   - if index == 0
+                  /     .usersep
+                  /       Groups created by you
+                  /   .md-checkbox
+                  /     %label
+                  /       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+                  /       %span.checkbox 
+                  /       = group[0]
     - elsif false  
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
@@ -111,3 +181,33 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
+.copyEvent
+  .popup-overlay
+  .ClientPopup
+    #register-form-copyContentPopup.col.s12.ClientPopup-info
+      %p.txtcenter.m-b-30 Are you sure you wan't to copy all the contents of this event?          
+      %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
+        ok
+:javascript
+  $('#selectAll').click(function() {
+    $(':checkbox').each(function() {
+      this.checked = true;                        
+    });
+  });  
+  $('#unSelectAll').click(function() {
+    $(':checkbox').each(function() {
+      this.checked = false;                        
+    });
+  });     
+  $(document).ready(function(){  
+    if("{@event.errors[:event_id].present?}")
+    {
+      $('#yes').trigger('click');
+    }
+  });
+:javascript
+  $(window).load(function(){
+  flightTime();
+  minutes();
+  times();  
+  })
