@@ -1,0 +1,25 @@
+/ !!!
+/ %html
+/   %head
+/     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+/     %title
+/       = @microsite.subject_line
+/     %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+/     %link{:href => "/assets/css/microsite.css", :rel => "stylesheet"}
+/     = javascript_include_tag '/assets/jquery-1.11.3.min.js'
+/     = javascript_include_tag '/assets/js/microsite.js'
+/     %script{:src => "http://cdn.ckeditor.com/4.5.5/standard/ckeditor.js"}
+/   %body
+/     %header
+/       .header_content
+/         .logo
+/           %a{:href => "javascript:void(0);"}
+/             %img{:alt => "Event Logo", :src => "#{@microsite.logo_image}", :title => "Event Logo"}/
+/     .wrapper
+/       .wrapperContent
+/         = @microsite.body.html_safe
+/     %footer
+/       %p.copyright
+/         = "Copyright © #{@microsite.website_name}"
+
+= @microsite.body.html_safe

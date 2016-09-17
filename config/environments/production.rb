@@ -47,7 +47,7 @@ Rails.application.configure do
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
-#  config.log_level = :debug
+
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
@@ -125,7 +125,12 @@ PAPERCLIP_SETTINGS =  {
                         :bucket => S3_bucket
                         }
 
-
+MICROSITE_HEADER_IMAGE_PATH = {:path => "microsite/header_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/header_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+MICROSITE_BANNER_IMAGE_PATH = {:path => "microsite/banner_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/banner_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+MICROSITE_LOGO_IMAGE_PATH =   {:path => "microsite/logo_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/logo_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
                      :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
