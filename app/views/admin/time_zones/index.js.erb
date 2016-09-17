@@ -1,0 +1,5 @@
+<% if @timezone.present? %>
+	$("#event_timezone").val("<%= @timezone %>");
+<% else %>
+	$("#event_timezone").val("UTC");
+<% end %>	

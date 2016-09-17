@@ -579,6 +579,21 @@ function flightTime() {
       $("#search_speakers_by_cname").submit();            
     });
   });
+  $(document).ready(function(){
+    $("#event_cities").blur(function(){
+      $(".overlayBg").show();
+      data = $("#event_cities").val();
+      $.ajax({
+        url: '/admin/time_zones',
+        type: 'get',
+        data: {'city_name' : data},
+        dataType: 'script',
+        success: function(data){
+          $(".overlayBg").hide();
+      }
+        });
+      });
+  });
 
   /* Event _Form  start */
     // $('#selectAll').click(function() {
@@ -768,33 +783,3 @@ $(function () {
         }]
     });
 });      */
-
-/* nilam - new event form - copy ad custom content */
-$(document).ready(function(){  
-  $('.add-data #yes').click(function(){
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
-  });
-  $('.customButton').click(function(){
-    $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
-  });
-  $('.add-data #no').click(function(){
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
-  });
-
-  /* Added by hemant */
-  $(document).on('click', '.copyButton', function(){
-    $('.selectContentDiv').hide();
-    $('.copyEvent, .ClientPopup, .popup-overlay').show();
-  });
-});
-
-$(document).on('click', '.ClickPop', function(){
-  $('#copy_content').val(true);
-  $('#custom_content').val('');
-})
-$(document).on('click', '.customButton', function(){
-  $('#custom_content').val(true);
-  $('#copy_content').val('');
-})
