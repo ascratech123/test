@@ -63,7 +63,7 @@ class Poll < ActiveRecord::Base
   
   def option_percentage
     data = {}
-    option1=option2=option3=option4=option5=option6=0
+    option1=option2=option3=option4=option5=option6=option7=option8=option9=option10=0
     data["total"] = self.user_polls.count
     self.user_polls.each do |user_poll|
       option1 = user_poll.answer.downcase.include?("option1") ? option1 + 1 : option1 rescue option1
@@ -72,6 +72,10 @@ class Poll < ActiveRecord::Base
       option4 = user_poll.answer.downcase.include?("option4") ? option4 + 1 : option4 rescue option4
       option5 = user_poll.answer.downcase.include?("option5") ? option5 + 1 : option5 rescue option5
       option6 = user_poll.answer.downcase.include?("option6") ? option6 + 1 : option6 rescue option6
+      option7 = user_poll.answer.downcase.include?("option7") ? option7 + 1 : option7 rescue option7
+      option8 = user_poll.answer.downcase.include?("option8") ? option8 + 1 : option8 rescue option8
+      option9 = user_poll.answer.downcase.include?("option9") ? option9 + 1 : option9 rescue option9
+      option10 = user_poll.answer.downcase.include?("option10") ? option10 + 1 : option10 rescue option10
     end
     data["option1"] = option1 rescue nil
     data["option2"] = option2 rescue nil
@@ -79,6 +83,10 @@ class Poll < ActiveRecord::Base
     data["option4"] = option4 rescue nil
     data["option5"] = option5 rescue nil
     data["option6"] = option6 rescue nil
+    data["option7"] = option7 rescue nil
+    data["option8"] = option8 rescue nil
+    data["option9"] = option9 rescue nil
+    data["option10"] = option10 rescue nil
     data
   end
 
