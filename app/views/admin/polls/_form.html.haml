@@ -14,7 +14,7 @@
               Select Option Type*
             .col-lg-7
               %i.arrow.single
-              = f.select("poll", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
+              = f.select("poll", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"], ['Rating','Rating']], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
               - if @poll.present? and @poll.errors.present? and @poll.errors.messages.include? :option_type
                 .field_with_errors{:style => 'color:red'}
                   %span{:for => "poll_option2", :class => "errorMessage"} 
@@ -25,6 +25,11 @@
         = f.custom_text_field :option3, "Option3","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option4, "Option4","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option5, "Option5","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option6, "Option6","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option7, "Option7","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option8, "Option8","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option9, "Option9","background" => "false", class: "poll_hide_field"
+        = f.custom_text_field :option10, "Option10","background" => "false", class: "poll_hide_field"        
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.p-b-5
           .mdl-grid.p-v-5.form-group.poll_hide_field1
             .col-lg-4.mdl-typography--text-right
@@ -61,7 +66,7 @@
       $('.poll_hide_field').parent().parent().show()
       $(".poll_hide_field1").show();
     }
-    if(val == "Textbox"){
+    if(val == "Textbox" || val == "Rating"){
       $('input.poll_hide_field').parent().parent().hide();
       $(".poll_hide_field1").hide();
     }
