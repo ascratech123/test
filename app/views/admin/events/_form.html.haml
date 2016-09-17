@@ -1,3 +1,11 @@
+.overlayBg
+  / %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+  .spinner
+    .rect1
+    .rect2
+    .rect3
+    .rect4
+    .rect5
 .save_button.mdl-card.eventExceedLimit
   = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
@@ -87,7 +95,6 @@
         = f.custom_text_area_field :remarks, "Remarks"
         = f.hidden_field :copy_content, :id => 'copy_content'
         = f.hidden_field :custom_content, :id => 'custom_content'
-
         - event_names = @client.events.pluck(:event_name, :id)
         - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
@@ -174,7 +181,6 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-
 .copyEvent
   .popup-overlay
   .ClientPopup
@@ -182,14 +188,12 @@
       %p.txtcenter.m-b-30 Are you sure you wan't to copy all the contents of this event?          
       %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
         ok
-
 :javascript
   $('#selectAll').click(function() {
     $(':checkbox').each(function() {
       this.checked = true;                        
     });
   });  
-
   $('#unSelectAll').click(function() {
     $(':checkbox').each(function() {
       this.checked = false;                        
@@ -201,7 +205,6 @@
       $('#yes').trigger('click');
     }
   });
-
 :javascript
   $(window).load(function(){
   flightTime();

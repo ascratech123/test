@@ -1,0 +1,5 @@
+<% if @timezone.present? and ActiveSupport::TimeZone.all.sort_by(&:name).map{|e| e.name}.include?(@timezone)%>
+	$("#event_timezone").val("<%= @timezone %>");
+<% else %>
+	$("#event_timezone").val("UTC");
+<% end %>	
