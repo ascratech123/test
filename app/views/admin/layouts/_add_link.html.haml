@@ -43,6 +43,10 @@
     - if @event.present?
       = link_to new_admin_event_speaker_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Speaker
+  - when 'microsite'
+    - if @event.present?
+      = link_to new_admin_event_microsite_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Microsite
   - when 'invitee_group'
     - if @event.present?
       = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

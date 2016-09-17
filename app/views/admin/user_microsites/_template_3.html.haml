@@ -1,0 +1,80 @@
+/ !!!
+/ %html
+/   %head
+/     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+/     %title
+/       = @microsite.subject_line
+/     %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+/     %link{:href => "/assets/css/microsite.css", :rel => "stylesheet"}
+/     = javascript_include_tag '/assets/jquery-1.11.3.min.js'
+/     = javascript_include_tag '/assets/js/microsite.js'
+/     %script{:src => "http://cdn.ckeditor.com/4.5.5/standard/ckeditor.js"}
+/   %body
+/     %header
+/       .header_content
+/         .logo
+/           %a{:href => "javascript:void(0);"}
+/             %img{:alt => "Event Logo", :src => "#{@microsite.logo_image}", :title => "Event Logo"}/
+/         .menuIconDiv
+/           .menuIcon.Open
+/             %a{:href => "javascript:void(0);"}
+/               %img{:src => "/assets/microsite_menu.png"}/
+/           .menuIcon.close
+/             %a{:href => "javascript:void(0);"}
+/               %img{:src => "/assets/microsite_cancel.png"}/
+/         .menuDiv
+/           .leftMenuDiv
+/             %ul
+/               %li
+/                 %a{:href => "javascript:void(0);"} Home
+/               %li
+/                 %a{:href => "javascript:void(0);"} About Us
+/               %li
+/                 %a{:href => "javascript:void(0);"} Services
+/               %li
+/                 %a{:href => "javascript:void(0);"} Products
+/               %li
+/                 %a{:href => "javascript:void(0);"} Contacts
+/               %li
+/                 %a{:href => "javascript:void(0);"} Blog
+/       .banner
+/     .wrapper
+/       %form.registration
+/         %fieldset
+/           %h2 Register Today
+/           %p
+/             %label First Name
+/             %input{:placeholder => "First Name", :type => "text"}/
+/           %p
+/             %label Last Name
+/             %input{:placeholder => "Last Name", :type => "text"}/
+/           %p
+/             %label City
+/             %input{:placeholder => "City", :type => "text"}/
+/           %p
+/             %label Mobile
+/             %input{:placeholder => "Mobile", :type => "text"}/
+/           %p
+/             %label Email
+/             %input{:placeholder => "Email", :type => "text"}/
+/           %p.registerBtn
+/             %input.registerNowBtn{:type => "submit", :value => "Register Now"}/
+/     %footer
+/       %p.copyright
+/         Copyright © abcxyz.com
+/       .social-icon
+/         %p Stay Connected
+/         .social-icon-image
+/           %ul
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_facebook.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_google-plus.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_twitter.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_linkedin.png"}/

@@ -29,6 +29,13 @@
 .error_space_h57{height:57px}
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
+.eventDetailSection p.orText{color:#a9acbd; font-size:16px; margin:15px auto 5px auto; text-align:center; width:100%;}
+.headerColor{width:100%;}
+.orText + .headerColor .form-group {margin-bottom: 5px;}
+.micrositeTemplateForm .error_space{height: auto;;}
+
+.errorMess #microsite_field1 + .field_with_errors{top:40px;}
+.newMicrositeFieldDiv .mdl-grid .form-group  {margin-bottom: 15px;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/

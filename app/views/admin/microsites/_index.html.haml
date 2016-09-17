@@ -1,0 +1,40 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "microsites", :url => "/admin/events/#{params[:event_id]}/microsites/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("microsites")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered{"template-pagination" => "custom/pager"}
+    %tr
+      %th Subject
+      %th Template
+      %th Default Template
+      %th Title
+      %th Social Icons
+      %th Registration Form
+      %th URL
+      %th
+    - objs.each do |microsite|
+      %tr
+        %td.font16= microsite.subject_line
+        %td.font16= (microsite.template_type == "default_template" ? "Default Template" : "Custom Template")
+        %td.font16= microsite.default_template
+        %td.font16= microsite.subject_line#ActionView::Base.full_sanitizer.sanitize(microsite.body).html_safe
+        %td.font16= microsite.social_icons.map(&:capitalize).join(', ')
+        %td.font16= microsite.need_registration_form
+        %td.font16= link_to 'Create Template', microsite.micro_url, :target => "_blank"
+        %td.IconDrp
+          = more_vert_button(microsite.id)
+          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{microsite.id}"}
+            / = link_to edit_admin_event_microsite_path(:id => microsite.id),:class => "mdl-menu__item" do
+            / Edit
+            = link_to '#', :class => "mdl-menu__item" do
+              Deactive
+            = link_to admin_event_user_microsite_path(:id => microsite.id), :class => "mdl-menu__item" do
+              Preview
+            = link_to '#', :class => "mdl-menu__item" do
+              Extract Code
+            / = link_to admin_event_microsite_path(:id => microsite.id),method: :delete, data: { confirm: 'Are you sure?' },:class =>"mdl-menu__item" do
+            / Delete
+  = will_paginate objs

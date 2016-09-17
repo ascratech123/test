@@ -1,0 +1,56 @@
+/ !!!
+/ %html
+/   %head
+/     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+/     %title Reference 01
+/     %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+/     %link{:href => "/assets/css/microsite.css", :rel => "stylesheet"}
+/     = javascript_include_tag '/assets/jquery-1.11.3.min.js'
+/     = javascript_include_tag '/assets/js/microsite.js'
+/     %script{:src => "http://cdn.ckeditor.com/4.5.5/standard/ckeditor.js"}
+/   %body
+/     %header
+/       .header_content
+/         .logo
+/           %a{:href => "javascript:void(0);"}
+/             %img{:alt => "Event Logo", :src => "/assets/microsite_logo.jpg", :title => "Event Logo"}/
+/         .menu
+/           %ul
+/             %li
+/               %a{:href => "javascript:void(0);"} Home
+/             %li
+/               %a{:href => "javascript:void(0);"} About Us
+/             %li
+/               %a{:href => "javascript:void(0);"} Services
+/             %li
+/               %a{:href => "javascript:void(0);"} Products
+/             %li
+/               %a{:href => "javascript:void(0);"} Contacts
+/             %li
+/               %a{:href => "javascript:void(0);"} Blog
+/       .banner
+/     .wrapper
+/       %form
+/         %textarea#editor1{:cols => "80", :name => "editor1", :rows => "10"}
+/           This is my textarea to be replaced with CKEditor.
+/     %footer
+/       %p.copyright
+/         Copyright © abcxyz.com
+/       .social-icon
+/         %p Stay Connected
+/         .social-icon-image
+/           %ul
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_facebook.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_google-plus.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_twitter.png"}/
+/             %li
+/               %a{:href => "javascript:void(0);"}
+/                 %img{:src => "/assets/microsite_linkedin.png"}/
+/ :javascript
+/   CKEDITOR.replace( 'editor1' );

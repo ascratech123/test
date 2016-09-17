@@ -14,6 +14,8 @@ class Event < ActiveRecord::Base
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_many :microsites, :dependent => :destroy
+  has_many :user_microsites, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
