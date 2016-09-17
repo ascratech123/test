@@ -20,6 +20,7 @@
                   %span{:for => "poll_option2", :class => "errorMessage"} 
                   = "This field is required."
         - @show_options = (f.object.option_type == "Radio" or f.object.option_type == "Checkbox") ? true : false
+        - @show_rating_options = f.object.option_type == "Rating" ? true : false
         = f.custom_text_field :option1, "Option1 *","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option2, "Option2 *","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option3, "Option3","background" => "false", class: "poll_hide_field"
@@ -29,7 +30,10 @@
         = f.custom_text_field :option7, "Option7","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option8, "Option8","background" => "false", class: "poll_hide_field"
         = f.custom_text_field :option9, "Option9","background" => "false", class: "poll_hide_field"
-        = f.custom_text_field :option10, "Option10","background" => "false", class: "poll_hide_field"        
+        = f.custom_text_field :option10, "Option10","background" => "false", class: "poll_hide_field"   
+        = f.custom_text_field :rating_first_text, "point_1","background" => "false", class: "rating_hide_field"
+        = f.custom_text_field :rating_second_text, "point_2","background" => "false", class: "rating_hide_field"   
+
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.p-b-5
           .mdl-grid.p-v-5.form-group.poll_hide_field1
             .col-lg-4.mdl-typography--text-right
@@ -58,6 +62,15 @@
     $('input.poll_hide_field').parent().parent().hide();
     $(".poll_hide_field1").hide();
 
+- if params[:action] == "new" and @show_rating_options == true
+  :javascript
+    $('input.rating_hide_field').parent().parent().show();
+    $(".rating_hide_field").show();  
+- elsif @show_rating_options == false
+  :javascript
+    $('input.rating_hide_field').parent().parent().hide();
+    $(".rating_hide_field").hide();
+
 :javascript
   $('input.col-lg-7.p-h-12').parent().parent().hide();
   $('#poll_option_type').on('change', function() {
@@ -65,9 +78,17 @@
     if(val == "Checkbox" || val == "Radio"){
       $('.poll_hide_field').parent().parent().show()
       $(".poll_hide_field1").show();
+      $('input.rating_hide_field').parent().parent().hide();
     }
     if(val == "Textbox" || val == "Rating"){
       $('input.poll_hide_field').parent().parent().hide();
+      $(".poll_hide_field1").hide();
+      $('input.rating_hide_field').parent().parent().hide();
+    }
+    if(val == "Rating"){
+      $('input.rating_hide_field').parent().parent().show();
+      $(".rating_hide_field").show();
+      $('.poll_hide_field').parent().parent().hide()
       $(".poll_hide_field1").hide();
     }
   });
