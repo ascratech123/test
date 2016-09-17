@@ -456,12 +456,16 @@ function flightTime() {
     value = $("#default_template_for_edm").val();
     if (value == "default_template"){
       $("#header_image_uploadBtn").parent().parent().parent().parent().parent().show();
+      $("#banner_image_uploadBtn").parent().parent().parent().parent().parent().show();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
       $("#edm_templ_select").parent().parent().parent().show();
+      $("#edm_font_select").parent().parent().parent().show();
       $(".ckeditor_custom").hide();
       $(".without_social_icons").show();
+      $(".md-checkboxregistrationcheck").show();
       $(".custome_hide").parent().parent().parent().parent().show();
       $(".ckeditor_custome_hide").show();
+      $('.orText').show();
       checked = document.getElementById("need_social_icon_yes_for_edm").checked;
       if (checked == "true"){
         $(".md-checkboxsocialcheck").show();    
@@ -469,26 +473,26 @@ function flightTime() {
     $(".custome_hide").parent().parent().parent().parent().parent().show();
     }
   }); 
-
-
-  $("#custom_template_for_edm").click(function(){          
+  $("#custom_template_for_edm").click(function(){
     value = $("#custom_template_for_edm").val();
     if (value == "custom_template"){
       $(".ckeditor_custom").show();
       $("#header_image_uploadBtn").parent().parent().parent().parent().parent().hide();
+      $("#banner_image_uploadBtn").parent().parent().parent().parent().parent().hide();
       $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
       $("#edm_templ_select").parent().parent().parent().hide();
+      $("#edm_font_select").parent().parent().parent().hide();
       $(".without_social_icons").hide();
+      $(".md-checkboxregistrationcheck").hide();
       $(".custome_hide").parent().parent().parent().parent().hide();
       $(".ckeditor_custome_hide").hide();
+      $('.orText').hide();
       checked = document.getElementById("need_social_icon_no_for_edm").checked;
       if (checked == "true"){
         $(".md-checkboxsocialcheck").hide();    
       }
     }
   });
-
-
   $("#edm_broadcast_time_now").click(function(){
     value = $("#edm_broadcast_time_now").val();
     if (value == "now"){
@@ -525,14 +529,32 @@ function flightTime() {
   $("#need_social_icon_no_for_edm").click(function(){
     $(".md-checkboxsocialcheck").hide();
   });
-
   $("#custom_template_for_edm").click(function(){
     $(".md-checkboxsocialcheck").hide();
   });
-
-  
   $('input,textarea').attr('autocomplete', 'off');
   $('input[type="radio"][checked="checked"]').prop('checked', true);
+
+
+  $("#need_registration_form_yes_for_edm").click(function(){
+    checked = document.getElementById("need_registration_form_yes_for_edm").checked;
+    if (checked == "true"){
+      $(".md-checkboxregistrationcheck").show();    
+    }
+  }); 
+  $("#need_registration_form_no_for_edm").click(function(){
+    checked = document.getElementById("need_registration_form_no_for_edm").checked;
+    if (checked == "true"){
+      $(".md-checkboxregistrationcheck").hide();
+    }
+  });
+
+  $("#need_registration_form_yes_for_edm").click(function(){
+    $(".md-checkboxregistrationcheck").show();
+  });
+  $("#need_registration_form_no_for_edm").click(function(){
+    $(".md-checkboxregistrationcheck").hide();
+  });
 
 
   $(document).ready(function (){

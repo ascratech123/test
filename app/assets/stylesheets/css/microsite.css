@@ -1,0 +1,47 @@
+body{margin:0; font-family: 'Roboto', sans-serif;  width:100%;}
+header{background:#1491f2; }
+.header_content{padding:18px 30px; display:block;}
+.logo{width:200px; display:inline-block; vertical-align:middle;}
+.logo a{font-size:17px; text-decoration:none;}
+.menu{display:inline-block; float:right; vertical-align:middle; margin-top:15px;}
+.menu ul{ padding:0; margin:0;}
+.menu ul li{display:inline-block;}
+.menu ul li a{font-size:17px; text-decoration:none; border-right:1px solid #093e67; padding:0 17px;}
+.menu ul li:last-child a{border-right:0 none;}
+/* .menu ul li a:last-child{border-right:0 none;} */
+.banner{width:100%; height:300px; background:#a6a5a5;}
+.wrapper{display:block;  padding: 18px 30px;}
+.banner{background:url(/assets/microsite_banner.jpg); no-repeat; width:100%; background-size:100%;}
+footer{background:#1491f2; padding:40px; vertical-align:middle; text-align:center;}
+footer p{margin:0;}
+.copyright{display:inline-block; vertical-align:top;}
+.social-icon{display:inline-block; vertical-align:top; float:right;}
+.social-icon-image ul{margin:5px 0 0 0; padding:0;}
+.social-icon-image ul li{margin:0; padding:0; list-style:none; display:inline-block; margin-right:3px;}
+
+/* ref -02 -form */
+input:focus::-webkit-input-placeholder {color: transparent;}
+input:focus::-moz-placeholder {color: transparent;}
+label {display: inline-block; width: 150px; margin-bottom:8px;}
+.registration{width:50%; margin:0 auto;}
+.registration h2{ margin: 25px 0 30px;}
+.registerNowBtn{width:15%;}
+fieldset{border:0 none;}
+.registration input{padding:7px 10px; width:80%;}
+.registerBtn{margin:0 auto; text-align:center;}
+.registration input.registerNowBtn{width:150px; margin-top:20px;}
+.menuIconDiv{display:inline-block; float:right;}
+.menuIcon{display:inline-block; vertical-align:top; margin-top:10px;}
+.menuDiv{background:#1491F2; position:fixed; right:-18%; top:80px; width:250px;transition:all 1s ease-in-out 0s; color:#fff; height:100%;z-index:999999;}
+.menuDiv ul{ padding:0; margin:0;}
+.menuDiv ul li{display:block; padding:10px 0; text-align:center;}
+.menuDiv ul li a{font-size:17px; text-decoration:none; padding:0 17px;color:#fff;}
+.menuIcon.Open{}
+.menuIcon.close{display:none;}
+.header_content.ref02_header{position:fixed;background:#1491F2; padding:0;width:100%;}
+.headerInnerContent{padding:18px 30px;}
+.cke_bottom{position:static !important;}
+.registration input.registerNowBtn {background:#36a3f7; border:0 none; color:#ffffff; cursor:pointer; margin-top:20px; width:150px;
+box-shadow:0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);}
+.registration input.registerNowBtn:hover{color:#36a3f7; background:#ffffff;}
+.errorMessage{color: #ff0000; font-size:13px;}

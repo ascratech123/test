@@ -1,0 +1,8 @@
+- if @microsite.default_template.present?
+  - if @microsite.default_template == "Template 1"
+    = render :partial => "template_1"
+  - elsif @microsite.default_template == "Template 2"
+    = render :partial => "template_2"
+- elsif @microsite.template_type.present? and @microsite.template_type == "custom_template"
+  = render :partial => "template_3"
+      

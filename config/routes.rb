@@ -21,7 +21,7 @@ namespace :admin do
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses
   resources :licensees do
-    resources :clients
+    resources :clients    
   end
   resources :clients do
     resources :users
@@ -36,7 +36,7 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :microsites, :user_microsites, :microsite_templates
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
