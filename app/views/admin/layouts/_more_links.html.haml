@@ -74,6 +74,7 @@
                 = link_to admin_event_agendas_path(:event_id => @event.id, :format => 'xls', :export_type => 'Feedback'),:class => "centerAlign" do
                   Export Session Feedback
                 / - if (!current_user.has_role? :db_manager)
+              - if @event.present?
                 = link_to new_admin_event_agenda_path(:importable_type => 'agenda', :importable_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import
           - when 'invitee'
