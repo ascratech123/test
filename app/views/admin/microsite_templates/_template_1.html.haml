@@ -1,0 +1,78 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title
+      = @microsite.subject_line
+    %link{:href => "https://fonts.googleapis.com/css?family=Roboto", :rel => "stylesheet"}/
+    %link{:href => "/assets/css/microsite.css", :rel => "stylesheet"}
+    = javascript_include_tag '/assets/jquery-1.11.3.min.js'
+    = javascript_include_tag '/assets/js/microsite.js'
+    %script{:src => "http://cdn.ckeditor.com/4.5.5/standard/ckeditor.js"}
+  %body
+    %header
+      .header_content
+        .logo
+          %a{:href => "javascript:void(0);"}
+            %img{:alt => "Event Logo", :src => "#{@microsite.logo_image}", :title => "Event Logo"}/
+        .menu
+          %ul
+            %li
+              %a{:href => "javascript:void(0);"} Home
+            %li
+              %a{:href => "javascript:void(0);"} About Us
+            %li
+              %a{:href => "javascript:void(0);"} Services
+            %li
+              %a{:href => "javascript:void(0);"} Products
+            %li
+              %a{:href => "javascript:void(0);"} Contacts
+            %li
+              %a{:href => "javascript:void(0);"} Blog
+      .banner
+    .wrapper
+      .wrapperContent
+        = @microsite.body.html_safe
+    = form_for [:admin, @event, @microsite], :url => url_for(:controller => 'user_microsites', :action => 'create'), :method => 'post', :builder => CustomFormBuilder,:html => {:class =>'registration'} do |f|
+      %fieldset
+        %h2 Register Today
+        - if params[:microsite_id].present?
+          = hidden_field_tag :microsite_id , params[:microsite_id]
+        - if @microsite.field1.present?
+          %p
+            = f.custom_text_field :field1, "#{@microsite.field1}", :value => ' '
+            - if params[:error].present?
+              .errorMessage This field is required
+        - if @microsite.field2.present?
+          %p
+            = f.custom_text_field :field2, "#{@microsite.field2}", :value => ' '
+        - if @microsite.field3.present?
+          %p
+            = f.custom_text_field :field3, "#{@microsite.field3}", :value => ' '
+        - if @microsite.field4.present?
+          %p
+            = f.custom_text_field :field4, "#{@microsite.field4}", :value => ' '
+        - if @microsite.field5.present?
+          %p
+            = f.custom_text_field :field5, "#{@microsite.field5}", :value => ' '
+        %p.registerBtn
+          = f.submit 'Register Now', :class => 'registerNowBtn'
+    %footer
+      %p.copyright
+        = "Copyright © #{@microsite.website_name}"
+      .social-icon
+        %p Stay Connected
+        .social-icon-image
+          %ul
+            %li
+              = link_to @microsite.facebook_link do
+                %img{:src => "/assets/microsite_facebook.png"}/
+            %li
+              = link_to @microsite.google_plus_link do
+                %img{:src => "/assets/microsite_google-plus.png"}/
+            %li
+              = link_to @microsite.twitter_link do
+                %img{:src => "/assets/microsite_twitter.png"}/
+            %li
+              = link_to @microsite.linkedin_link do
+                %img{:src => "/assets/microsite_linkedin.png"}/
