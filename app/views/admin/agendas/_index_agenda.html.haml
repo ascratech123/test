@@ -100,7 +100,7 @@
                                           %td
                                           - if !(current_user.has_role? :db_manager)
                                             %td.font16
-                                              = link_to track_agenda.title, edit_admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
+                                              = link_to track_agenda.title, admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
                                           - else
                                             %td.font16= track_agenda.title 
                                           %td.font16
@@ -250,7 +250,7 @@
                                           - if agenda.agenda_track.present?
                                             %td.font16
                                               - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
-                                                = link_to track_agenda.title, edit_admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
+                                                = link_to track_agenda.title, admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
                                                 = break_line.html_safe
                                             %td.font16
                                               - agenda.agenda_track.agendas.each_with_index do |track_agenda, index|
@@ -280,7 +280,7 @@
                                                 %br      
                                           - else
                                             / %td.font16= agenda.title
-                                            %td.font16= link_to agenda.title, edit_admin_event_agenda_path(agenda.event_id,agenda.id)
+                                            %td.font16= link_to agenda.title, admin_event_agenda_path(agenda.event_id,agenda.id)
                                             %td.font16= agenda.speaker_name 
                                             / %td.font16= agenda.start_agenda_time
                                             %td.font16= formatted_time(agenda.start_agenda_time, "%d-%m-%Y %I:%M %p")
