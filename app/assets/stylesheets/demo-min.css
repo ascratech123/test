@@ -9834,6 +9834,10 @@ _:-ms-input-placeholder {
     .mdl-cell--5-col-desktop.mdl-cell--5-col-desktop {
         width: calc(41.6666666667% - 16px)
     }
+    .feedbackInfo .mdl-cell--5-col
+    {
+         width: calc(33.66% - 3px)
+     }
     .mdl-grid--no-spacing>.mdl-cell--5-col,
     .mdl-grid--no-spacing>.mdl-cell--5-col-desktop.mdl-cell--5-col-desktop {
         width: 41.6666666667%
