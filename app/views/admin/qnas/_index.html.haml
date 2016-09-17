@@ -11,7 +11,7 @@
       / %th Answer
       %th Speaker Name
       %th User Name
-      %th Company Name
+      / %th Company Name
       %th Date 
       %th Status
       %th On Wall
@@ -22,7 +22,7 @@
         / %td.description_adjust.font16= ques_answer.answer
         %td.font16= ques_answer.get_speaker_name
         %td.font16= ques_answer.get_user_name
-        %td.font16= ques_answer.get_company_name
+        / %td.font16= ques_answer.get_company_name
         %td.font16= get_datetime(ques_answer.created_at) rescue nil
         %td.font16
           = ques_answer.status
