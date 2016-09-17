@@ -15,6 +15,12 @@ validates_uniqueness_of :invitee_id, :message => "This Invitee is already Use."
 validates_attachment_content_type :attach_file,:attach_file_2,:attach_file_3,:attach_file_4,:attach_file_5, :content_type => ["application/pdf"],:message => "please select valid format."
 validates_length_of :comment_box, :maximum => 100 , :message => "Comment is upto 100 characters only." 
 
+  after_save :update_last_updated_model
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def attached_url
     self.attach_file.present? ? self.attach_file.url : ''
   end

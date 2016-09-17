@@ -28,13 +28,41 @@ class UserQuiz < ActiveRecord::Base
     invitee.email rescue nil
 	end
 
+  def email_id
+    event = self.quiz.event
+    invitee = event.invitees.where(:id => self.user_id).first
+    invitee.email rescue nil
+  end
+
+  def first_name
+    Invitee.find(self.user_id).first_name rescue nil
+  end
+
+  def last_name
+    Invitee.find(self.user_id).last_name rescue nil
+  end
+
+  def Timestamp
+    self.created_at.in_time_zone(self.quiz.event_timezone).strftime("%d/%m/%Y %T")
+  end
+  
   def question
     self.quiz.question if self.quiz.present?
   end
 
+
   def user_answer
-  	self.quiz.attributes[self.answer.downcase]
+    self.answer.to_s
+    #self.quiz.attributes[self.answer.downcase]
   end
+  
+  # def answer
+  #   self.quiz.correct_answer
+  # end
+
+  def correct_answer
+    self.quiz.correct_answer.join(', ').to_s
+  end 
 
   def get_event_id
     self.quiz.event_id rescue nil
