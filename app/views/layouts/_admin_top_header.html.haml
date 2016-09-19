@@ -21,96 +21,100 @@
 
 .topbar-left.blueheaderFont
   - if !current_user.has_role? :telecaller
-    %ol.breadcrumb
-      - if params[:controller] != 'admin/dashboards'
-        %li.breadcrumb-active
-          = link_to 'Home', admin_dashboards_path, :class => "mdl-color-text--white"
-      - if params[:controller] == 'admin/profiles' and @user.present?
-        %li.breadcrumb-active
-          = link_to @user.first_name, edit_admin_profile_path(id: @user.id), :class => "mdl-color-text--white"
-      - if @client.present?
-        - if @client.new_record?
-          = render :partial => "admin/layouts/breadcrum_new_record"
-        -else
-          %li.breadcrumb-link
-            - client_name = "#{@client.name}" rescue ""
-            = link_to client_name, admin_client_events_path(:client_id => @client.id), :class => "mdl-color-text--white"
-        - if params[:controller] == "admin/users" and params[:client_id].present?
-          %li.breadcrumb-link.mdl-color-text--white
-            - if params["get_role"] == "all" and params["events_id"].present?
-              = link_to "User",admin_event_users_path(:event_id => params[:events_id], :role => "all"), :class => "mdl-color-text--white" 
-            - else
-              = link_to "User",admin_client_users_path(:client_id => params[:client_id]), :class => "mdl-color-text--white" 
-          - if params[:action] != "index" and @user.new_record? 
-            = render :partial => "admin/layouts/breadcrum_new_record"
-      - if @event.present? #and !@event.new_record?
-        - if @event.new_record?
-          = render :partial => "admin/layouts/breadcrum_new_record"
-        
-        - else 
-          %li.breadcrumb-link
-            = link_to "#{@event.event_name}", admin_client_event_path(:client_id => @event.client_id, :id => @event.id), :class => "mdl-color-text--white"
-      - if @mobile_application.present? and ["admin/registrations","admin/invitee_structures","admin/groupings","admin/users","admin/manage_mobile_apps","admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns','admin/invitee_datas',"admin/campaigns","admin/edms", "admin/qr_scanner_details", "admin/badge_pdfs"].exclude?(params[:controller])
-        - mobile_application_name = "#{@mobile_application.name}" rescue ""
-        - if @event.present? and @mobile_application.present?
-          - if @mobile_application.new_record?
+    - if params[:controller] == "admin/prohibited_accesses"
+      - if request.referer.present? and (request.referer != "#{APP_URL}/admin/prohibited_accesses")
+        = render :partial => "layouts/prohibited_access_breadcrumb"
+    - else
+      %ol.breadcrumb
+        - if params[:controller] != 'admin/dashboards'
+          %li.breadcrumb-active
+            = link_to 'Home', admin_dashboards_path, :class => "mdl-color-text--white"
+        - if params[:controller] == 'admin/profiles' and @user.present?
+          %li.breadcrumb-active
+            = link_to @user.first_name, edit_admin_profile_path(id: @user.id), :class => "mdl-color-text--white"
+        - if @client.present?
+          - if @client.new_record?
             = render :partial => "admin/layouts/breadcrum_new_record"
           -else
             %li.breadcrumb-link
-              = link_to mobile_application_name, admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id), :class => "mdl-color-text--white"
-        - else
-          - if @mobile_application.new_record?
+              - client_name = "#{@client.name}" rescue ""
+              = link_to client_name, admin_client_events_path(:client_id => @client.id), :class => "mdl-color-text--white"
+          - if params[:controller] == "admin/users" and params[:client_id].present?
+            %li.breadcrumb-link.mdl-color-text--white
+              - if params["get_role"] == "all" and params["events_id"].present?
+                = link_to "User",admin_event_users_path(:event_id => params[:events_id], :role => "all"), :class => "mdl-color-text--white" 
+              - else
+                = link_to "User",admin_client_users_path(:client_id => params[:client_id]), :class => "mdl-color-text--white" 
+            - if params[:action] != "index" and @user.new_record? 
+              = render :partial => "admin/layouts/breadcrum_new_record"
+        - if @event.present? #and !@event.new_record?
+          - if @event.new_record?
             = render :partial => "admin/layouts/breadcrum_new_record"
-          -else
+          
+          - else 
             %li.breadcrumb-link
-              = link_to mobile_application_name, admin_client_mobile_applications_path(:client_id => @client.id), :class => "mdl-color-text--white"  
-      - page = "#{(params[:controller].split("/").second)}"
-      - page = "#{params["import"]["importable_type"] + "s" rescue nil}" if page == "imports"
-      - name = Client::display_hsh[page]
-      - name = "Look & Feel" if name == "Theme"
-      - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos"].exclude?(params[:controller])  
-        - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms", "admin/qr_scanner_details", "admin/badge_pdfs"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
-          %li.breadcrumb-link
-            - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups"].include?(params["controller"])
-              = link_to "Engagement", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_engagement"), :class => "mdl-color-text--white"
-            - else
-              = link_to "Content", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_content"), :class => "mdl-color-text--white"
-        - if !(["admin/invitee_structures", 'admin/user_registrations'].include? params[:controller] and ["new","create"].include?(params[:action]))
-          %li.breadcrumb-link
-            - if name == "Winner" 
-              = link_to "#{@award.title.capitalize} / ", admin_event_awards_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present? 
-            - elsif name == "Panel"
-              = link_to "Q&A / ", admin_event_qnas_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
-            - elsif page == "telecallers"
-              = link_to "User", admin_client_users_path(:client_id => @client.id),:class => "mdl-color-text--white" if @client.present? and params[:from_client].present?
-              = link_to "User", admin_event_users_path(:event_id => @event.id),:class => "mdl-color-text--white" if @event.present? and params[:from_event].present?
-              = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id),:class => "mdl-color-text--white" if (params[:from_telecaller].present? or params[:telecaller_index].present?)
-            - elsif page == 'telecaller_accessible_columns'
-              = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id,:telecaller_index => "true"),:class => "mdl-color-text--white"
-            - elsif page == "edms"
-              = link_to "#{@campaign.campaign_name.capitalize} / ", admin_event_campaigns_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
-            - elsif page == "manage_invitee_fields"
-              = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
-            = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
-        - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
-          = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
-          - if params[:action] == "new" and params[:controller] == "admin/telecallers"
-            %li.breadcrumb-link
-              = link_to "New User", "javascript:void(0);", :class => "mdl-color-text--white" if (params[:from_client].present? or params[:from_event].present?)
-        - elsif page == "telecaller_accessible_columns"
-          %li.breadcrumb-link
-            = link_to "Telecaller accessible columns", "javascript:void(0);", :class => "mdl-color-text--white"
-      - if (@mobile_application.present? and @event.present?) and (params[:controller] == "admin/mobile_applications" and params[:action] == "edit")
-        %li.breadcrumb-link
-          = link_to "App Info", edit_admin_event_mobile_application_path(event_id: @event.id, id: @mobile_application.id), :class => "mdl-color-text--white"
-      
-      - if @event.present? and (params[:controller] == "admin/event_features" and params[:action] == "new")
-        %li.breadcrumb-link
-          - if params[:feature] == "my_calender"
-            = link_to "Calender", new_admin_event_event_feature_path(event_id: @event.id, :feature => "my_calender"), :class => "mdl-color-text--white"
+              = link_to "#{@event.event_name}", admin_client_event_path(:client_id => @event.client_id, :id => @event.id), :class => "mdl-color-text--white"
+        - if @mobile_application.present? and ["admin/registrations","admin/invitee_structures","admin/groupings","admin/users","admin/manage_mobile_apps","admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns','admin/invitee_datas',"admin/campaigns","admin/edms"].exclude?(params[:controller])
+          - mobile_application_name = "#{@mobile_application.name}" rescue ""
+          - if @event.present? and @mobile_application.present?
+            - if @mobile_application.new_record?
+              = render :partial => "admin/layouts/breadcrum_new_record"
+            -else
+              %li.breadcrumb-link
+                = link_to mobile_application_name, admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id), :class => "mdl-color-text--white"
           - else
-            = link_to "Features", new_admin_event_event_feature_path(event_id: @event.id), :class => "mdl-color-text--white"
-      
-      - if @event.present? and (params[:controller] == "admin/menus" and params[:action] == "index")
-        %li.breadcrumb-link
-          = link_to "Menu", admin_event_menus_path(event_id: @event.id), :class => "mdl-color-text--white"
+            - if @mobile_application.new_record?
+              = render :partial => "admin/layouts/breadcrum_new_record"
+            -else
+              %li.breadcrumb-link
+                = link_to mobile_application_name, admin_client_mobile_applications_path(:client_id => @client.id), :class => "mdl-color-text--white"  
+        - page = "#{(params[:controller].split("/").second)}"
+        - page = "#{params["import"]["importable_type"] + "s" rescue nil}" if page == "imports"
+        - name = Client::display_hsh[page]
+        - name = "Look & Feel" if name == "Theme"
+        - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos"].exclude?(params[:controller])  
+          - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
+            %li.breadcrumb-link
+              - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups"].include?(params["controller"])
+                = link_to "Engagement", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_engagement"), :class => "mdl-color-text--white"
+              - else
+                = link_to "Content", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_content"), :class => "mdl-color-text--white"
+          - if !(["admin/invitee_structures", 'admin/user_registrations'].include? params[:controller] and ["new","create"].include?(params[:action]))
+            %li.breadcrumb-link
+              - if name == "Winner" 
+                = link_to "#{@award.title.capitalize} / ", admin_event_awards_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present? 
+              - elsif name == "Panel"
+                = link_to "Q&A / ", admin_event_qnas_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+              - elsif page == "telecallers"
+                = link_to "User", admin_client_users_path(:client_id => @client.id),:class => "mdl-color-text--white" if @client.present? and params[:from_client].present?
+                = link_to "User", admin_event_users_path(:event_id => @event.id),:class => "mdl-color-text--white" if @event.present? and params[:from_event].present?
+                = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id),:class => "mdl-color-text--white" if (params[:from_telecaller].present? or params[:telecaller_index].present?)
+              - elsif page == 'telecaller_accessible_columns'
+                = link_to "Telecaller", admin_event_telecallers_path(:event_id => @event.id,:telecaller_index => "true"),:class => "mdl-color-text--white"
+              - elsif page == "edms"
+                = link_to "#{@campaign.campaign_name.capitalize} / ", admin_event_campaigns_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+              - elsif page == "manage_invitee_fields"
+                = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+              = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
+          - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
+            = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
+            - if params[:action] == "new" and params[:controller] == "admin/telecallers"
+              %li.breadcrumb-link
+                = link_to "New User", "javascript:void(0);", :class => "mdl-color-text--white" if (params[:from_client].present? or params[:from_event].present?)
+          - elsif page == "telecaller_accessible_columns"
+            %li.breadcrumb-link
+              = link_to "Telecaller accessible columns", "javascript:void(0);", :class => "mdl-color-text--white"
+        - if (@mobile_application.present? and @event.present?) and (params[:controller] == "admin/mobile_applications" and params[:action] == "edit")
+          %li.breadcrumb-link
+            = link_to "App Info", edit_admin_event_mobile_application_path(event_id: @event.id, id: @mobile_application.id), :class => "mdl-color-text--white"
+        
+        - if @event.present? and (params[:controller] == "admin/event_features" and params[:action] == "new")
+          %li.breadcrumb-link
+            - if params[:feature] == "my_calender"
+              = link_to "Calender", new_admin_event_event_feature_path(event_id: @event.id, :feature => "my_calender"), :class => "mdl-color-text--white"
+            - else
+              = link_to "Features", new_admin_event_event_feature_path(event_id: @event.id), :class => "mdl-color-text--white"
+        
+        - if @event.present? and (params[:controller] == "admin/menus" and params[:action] == "index")
+          %li.breadcrumb-link
+            = link_to "Menu", admin_event_menus_path(event_id: @event.id), :class => "mdl-color-text--white"
