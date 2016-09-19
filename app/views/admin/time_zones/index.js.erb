@@ -1,4 +1,6 @@
-<% if @timezone.present? and ActiveSupport::TimeZone.all.sort_by(&:name).map{|e| e.name}.include?(@timezone)%>
+<% @list_of_zone = ActiveSupport::TimeZone.all.sort_by(&:name).uniq{|e| ["GMT#{e.formatted_offset}"]} %>
+<% if @timezone.present? and @list_of_zone.map{|e| ["GMT#{e.formatted_offset}",e.name]}.select{ |a| a[0] == @timezone}.present?%>
+	<% @timezone = @list_of_zone.map{|e| ["GMT#{e.formatted_offset}",e.name]}.select{ |a| a[0] == @timezone}.first[1] %>	
 	$("#event_timezone").val("<%= @timezone %>");
 <% else %>
 	$("#event_timezone").val("");
