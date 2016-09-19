@@ -53,7 +53,9 @@
                         = user.name_of_the_invitee rescue nil
                       %td.description_adjust.font12{:width => "300px;"}
                         = user.company_name rescue nil
-                      %td.font16= comment.created_at rescue nil
+                      %td.font16
+                        =# comment.created_at rescue nil
+                        = time_with_zone(comment.created_at, obj.event_timezone,"%Y-%m-%d %H:%M")
               - else
                 .p-20
                   %p= "No Comments"

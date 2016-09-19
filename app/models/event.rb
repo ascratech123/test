@@ -82,8 +82,8 @@ class Event < ActiveRecord::Base
   validate :event_count_within_limit, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
-  after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
@@ -105,7 +105,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => :chage_updated_at do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -117,6 +117,10 @@ class Event < ActiveRecord::Base
   def init
     self.status = "pending"
     self.event_theme = "create your own theme"
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_theme_updated_at
@@ -303,12 +307,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_time
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_time 
+      self.end_event_time = end_event_time.to_datetime 
     end
   end
 
@@ -506,6 +510,12 @@ class Event < ActiveRecord::Base
     LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "destroy") rescue nil
   end
 
+  def destroy_log_change_for_publish
+    log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
+    log_changes.each{|l| l.update_column("action", "unpublished")}
+    #log_changes.destroy_all
+  end
+
   def add_default_invitee
     invitee = self.invitees.new(name_of_the_invitee: "Preview", email: "preview@previewapp.com", password: "preview", invitee_password: "preview", :first_name => 'Preview', :last_name => 'Invitee')
     invitee.save rescue ""
@@ -591,8 +601,67 @@ class Event < ActiveRecord::Base
     users
   end
 
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      self.update_column("timezone", self.timezone.titleize)
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("updated_at", Time.now)
+          obj.update_last_updated_model
+          obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+        end
+      end   
+    end
+  end  
+
   def set_date
     self.update_column(:start_event_date, self.start_event_time)
     self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def about_date
+    if self.start_event_date.to_date != self.end_event_date.to_date
+      "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
+    else
+      self.start_event_date.strftime('%A, %d %b %Y')
+    end
+  end
+
+  def self.set_event_category
+    Event.find_each do |event|
+      event.set_event_category rescue nil
+    end
+  end
+
+  def set_event_category
+    time_now = Time.now.in_time_zone(self.timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+    prev_event_category  = self.event_category
+    if self.start_event_time.present? and self.end_event_time.present?
+      if self.start_event_time <= time_now and self.end_event_time >= time_now
+        self.update_column("event_category","Ongoing")
+      elsif self.start_event_time > time_now
+        self.update_column("event_category","Upcoming")
+      elsif self.end_event_time < time_now
+        self.update_column("event_category","Past")
+      end
+      self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
+    end
+  end
+
+  def event_start_time_in_utc
+    event_time_in_timezone = self.start_event_time
+    difference_in_seconds = Time.now.utc.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
+    if difference_in_seconds < 0
+      difference_in_hours = (difference_in_seconds.to_f/60/60).abs
+      self.start_event_date - difference_in_hours.hours
+    else
+      difference_in_hours = (difference_in_seconds.to_f/60/60)
+      self.start_event_date + difference_in_hours.hours
+    end
+  end
+
+  def display_time_zone
+    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
   end
 end

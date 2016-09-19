@@ -20,7 +20,8 @@
             %td.font16
               = push_page[notification.push_page].present? ? push_page[notification.push_page] : notification.push_page
             %td.font16= notification.page_id rescue nil
-            %td.font16= time_with_zone(notification.push_datetime, 'IST')
+            / %td.font16= time_with_zone(notification.push_datetime, 'IST')
+            %td.font16= formatted_time(notification.push_datetime, '%Y-%m-%d %H:%M')
             %td.font16= notification.pushed rescue nil
             %td.IconDrp
               - if !(current_user.has_role? :db_manager) 

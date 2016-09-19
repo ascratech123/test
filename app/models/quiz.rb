@@ -10,7 +10,8 @@ class Quiz < ActiveRecord::Base
   
   before_validation :set_correct_answer, :if => Proc.new{|p| p.correct_ans_option1.present? or p.correct_ans_option2.present? or p.correct_ans_option3.present? or p.correct_ans_option4.present? or p.correct_ans_option5.present?} 
   before_create :set_sequence_no
-  after_save :push_notification
+  after_create :set_event_timezone
+  after_save :push_notification, :update_last_updated_model
 
   default_scope { order("sequence") }
 
@@ -25,6 +26,10 @@ class Quiz < ActiveRecord::Base
     event :deactivate do
       transitions :from => [:activate], :to => [:deactivate]
     end
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def correct_ans_option1=(var)
@@ -101,6 +106,10 @@ class Quiz < ActiveRecord::Base
       count = count + 1 if self.correct_answer.include?(ans.answer)
     end
     count
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
   end
 
 end
