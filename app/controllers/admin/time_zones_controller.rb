@@ -7,9 +7,11 @@ class Admin::TimeZonesController < ApplicationController
   
   def index
   	city_name = params[:city_name]
-  	if city_name.present?
+  	country_name = params[:country_name]
+  	if city_name.present? && country_name.present?
   		city_name = URI.encode(city_name)
-  	  position = TimeZoneApi.get_lat_long_from_city(city_name)
+  		country_name = URI.encode(country_name)
+  	  position = TimeZoneApi.get_lat_long_from_city(city_name,country_name)
 	  	if position["results"].present?
 	  		lat = position["results"][0]["geometry"]["location"]["lat"]
 	  		lng = position["results"][0]["geometry"]["location"]["lng"]

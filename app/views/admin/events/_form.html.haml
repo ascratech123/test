@@ -86,9 +86,21 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
           .form-group.set_highlight_select
             %label.col-lg-4.control-label.ml-color--shades-white
+              Country *
+            .col-lg-7
+              = f.select :event, :country_name, Event::COUNTRIES,{:prompt => "Please select the country" ,:selected => (@event.country_name)}, {:class => 'select2-single form-control'}
+              - if @event.errors.present? and @event.errors[:country_name].present?
+                .field_with_errors
+                  %span.errorMessage{:for => "event_country_name"} This field is required.
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+          .form-group.set_highlight_select
+            %label.col-lg-4.control-label.ml-color--shades-white
               Time Zone *
             .col-lg-7
-              = f.select :event, :timezone, ActiveSupport::TimeZone.all.sort_by(&:name).map{|e| ["#{e.name} (GMT#{e.formatted_offset})", e.name]}, {:selected => (@event.timezone.present? ? @event.timezone : "UTC")}, {:class => 'select2-single form-control'}
+              = f.select :event, :timezone, ActiveSupport::TimeZone.all.sort_by(&:name).map{|e| ["GMT#{e.formatted_offset}", e.name]},{:include_blank => true ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+              - if @event.errors.present? and @event.errors[:timezone].present?
+                .field_with_errors
+                  %span.errorMessage{:for => "event_timezone"} This field is required.  
         = f.custom_text_field :pax, "Nbr. of people"
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
