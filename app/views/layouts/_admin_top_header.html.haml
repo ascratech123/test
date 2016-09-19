@@ -19,7 +19,7 @@
     - @event = Event.get_event_by_id(params[:event_id])
     - @client = @event.client
 
-.topbar-left.blueheaderFont
+.topbar-left.blueheaderFont   
   - if !current_user.has_role? :telecaller
     - if params[:controller] == "admin/prohibited_accesses"
       - if request.referer.present? and (request.referer != "#{APP_URL}/admin/prohibited_accesses")

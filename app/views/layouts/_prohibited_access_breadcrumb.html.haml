@@ -4,7 +4,7 @@
 - position_value = arr.at(position_no)
 - event = Event.find(position_value)
 - client = Client.find(event.client_id)
-- mobile_application = event.mobile_application
+- mobile_application = event.mobile_application   
 %ol.breadcrumb
   %li.breadcrumb-active
     = link_to 'Home', admin_dashboards_path, :class => "mdl-color-text--white"
