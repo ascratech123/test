@@ -68,7 +68,7 @@
                               = show_field_newQuestion("Comment : ", comment.description) rescue nil
                             = show_field("Name : ", user.name_of_the_invitee ) rescue nil
                             = show_field("Company : ", user.company_name) rescue nil
-                            = show_field("Date : ", get_datetime(comment.created_at)) rescue nil
+                            = show_field("Date : ", time_with_zone(comment.created_at, obj.event_timezone, "%Y-%m-%d %H:%M"))
                             .feedbackBorder  
                         - else
                           .p-20
