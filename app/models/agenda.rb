@@ -14,7 +14,7 @@ class Agenda < ActiveRecord::Base
   before_validation :set_attr_accessor
   before_validation :set_time
   after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected
+  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
 
