@@ -35,7 +35,7 @@
                           .br-widget.mdl-cell--6-col.mdl-cell--6-col-tablet.m-h-5
                             - avg_rate = calculate_rating(@agenda,"agenda")
                             - (1..5).each do |rate|
-                              - if rate < avg_rate
+                              - if rate <= avg_rate
                                 %a.mdl-color-text--red-400{"data-rating-value" => "1", :href => "#"}
                                   %i.large.material-icons.active star_rate
                               - else
