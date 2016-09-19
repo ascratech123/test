@@ -162,8 +162,9 @@
           - when 'feedback'
             %li
               - if ["index", "new"].include?(params[:action])# and (!current_user.has_role? :db_manager)
-                = link_to new_admin_event_feedback_path(:importable_type => 'feedback', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                  Import
+                - if false
+                  = link_to new_admin_event_feedback_path(:importable_type => 'feedback', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                    Import
               - if params[:action] == "index" and @feedbacks.present?# and ( current_user.has_role? :licensee_admin or current_user.has_role? :db_manager)
                 / - if !(current_user.has_role? :db_manager)
                 = link_to admin_event_feedbacks_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
@@ -195,17 +196,18 @@
           - when 'poll'
             %li
               - if ["index", "new"].include?(params[:action]) and (!current_user.has_role? :db_manager)
-                = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'poll', :import => "xls") ,:class => "centerAlign" do
-                  Import 
+                - if false
+                  = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'poll', :import => "xls") ,:class => "centerAlign" do
+                    Import 
                 / - if params[:action] == "index" and @polls.present?
                 /   = link_to admin_event_polls_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                 /     Export
                 - if false
                   = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'user_polls', :import => "xls") ,:class => "centerAlign" do
                     Import Answer
-              - if @user_polls.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
-                = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
-                  Export Answer
+                - if @user_polls.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
+                  = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
+                    Export Answer
           - when 'qna'
             %li
               - if @qnas.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
