@@ -662,16 +662,14 @@ class Event < ActiveRecord::Base
   def set_event_category
     time_now = Time.now.in_time_zone(self.timezone).strftime("%d-%m-%Y %H:%M").to_datetime
     prev_event_category  = self.event_category
-    if self.start_event_time.present? and self.end_event_time.present?
-      if self.start_event_time <= time_now and self.end_event_time >= time_now
-        self.update_column("event_category","Ongoing")
-      elsif self.start_event_time > time_now
-        self.update_column("event_category","Upcoming")
-      elsif self.end_event_time < time_now
-        self.update_column("event_category","Past")
-      end
-      self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
+    if self.start_event_time <= time_now and self.end_event_time >= time_now
+      self.update_column("event_category","Ongoing")
+    elsif self.start_event_time > time_now
+      self.update_column("event_category","Upcoming")
+    elsif self.end_event_time < time_now
+      self.update_column("event_category","Past")
     end
+    self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
   end
 
   def event_start_time_in_utc
