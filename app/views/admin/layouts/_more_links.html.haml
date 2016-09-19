@@ -160,8 +160,9 @@
           - when 'feedback'
             %li
               - if ["index", "new"].include?(params[:action])  
-                = link_to new_admin_event_feedback_path(:importable_type => 'feedback', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
-                  Import
+                - if false
+                  = link_to new_admin_event_feedback_path(:importable_type => 'feedback', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
+                    Import
               - if params[:action] == "index" and @feedbacks.present?
                 = link_to admin_event_feedbacks_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export  
@@ -192,8 +193,9 @@
           - when 'poll'
             %li
               - if ["index", "new"].include?(params[:action])
-                = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'poll', :import => "xls") ,:class => "centerAlign" do
-                  Import 
+                - if false
+                  = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'poll', :import => "xls") ,:class => "centerAlign" do
+                    Import 
                 / - if params[:action] == "index" and @polls.present?
                 /   = link_to admin_event_polls_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                 /     Export
