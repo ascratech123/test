@@ -624,7 +624,7 @@ class Event < ActiveRecord::Base
 
   def self.set_event_category
     Event.find_each do |event|
-      event.set_event_category
+      event.set_event_category rescue nil
     end
   end
 
