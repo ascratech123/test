@@ -14,7 +14,7 @@ class Agenda < ActiveRecord::Base
   before_validation :set_attr_accessor
   before_validation :set_time
   after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected
+  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
 
@@ -104,6 +104,10 @@ class Agenda < ActiveRecord::Base
 
   def set_event_timezone
     self.update_column("event_timezone", self.event.timezone)
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def check_category_present_if_new_category_select_from_dropdown

@@ -10,6 +10,7 @@ class Feedback < ActiveRecord::Base
 
   before_create :set_sequence_no
   after_create :set_description_value, :set_event_timezone
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") }
 
@@ -21,6 +22,10 @@ class Feedback < ActiveRecord::Base
 
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).feedbacks.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   # def option_percentage(option_name='option1')

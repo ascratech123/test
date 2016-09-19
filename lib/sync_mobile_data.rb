@@ -5,11 +5,11 @@ module SyncMobileData
     values.each do |value|
       update_data = nil
       if model_name == 'InviteeNotification'
-        update_data = (model_name.constantize).where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
+        update_data = InviteeNotification.where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
       elsif model_name == 'UserFeedback'
-        update_data = (model_name.constantize).find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
       else
-        update_data = (model_name.constantize).find_by_id(value["id"])
+        update_data = get_model_class(model_name).find_by_id(value["id"])
       end
       if !update_data.blank?
         if model_name == 'InviteeNotification'
@@ -23,7 +23,7 @@ module SyncMobileData
         message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  update_data.as_json() rescue nil
       else
-        create_data = (model_name.constantize).new(params_data(value))
+        create_data = get_model_class(model_name).new(params_data(value))
         create_data.save
         message[:message] = (create_data.errors.messages.blank? ? "Created" : "#{create_data.errors.full_messages.join(",")}") rescue nil
         message[:data] =  create_data.as_json() rescue nil
@@ -52,12 +52,16 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session']#.each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
+    last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
     model_name.each do |model|
       start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') and start_event_date.present? and not start_event_date == "01/01/1990 13:26:58".to_time.utc
-      info = self.get_model_class(model).where(:updated_at => start_event_date..end_event_date) rescue []
-      info = info.where(:event_id => event_ids) rescue []
+      if last_updated_models.include? model
+        info = self.get_model_class(model).where(:updated_at => start_event_date..end_event_date).where(:event_id => event_ids) rescue []
+      else
+        info = []
+      end
       case model
         when 'Conversation'
           # info = info.where(:status => 'approved')
@@ -170,7 +174,7 @@ module SyncMobileData
         when 'MyTravel'  
           if current_user.present?
             invitee_ids = Invitee.where(:event_id => event_ids, :email => current_user.email).pluck(:id)
-            info = info.where(:invitee_id => invitee_ids)
+            info = info.where(:invitee_id => invitee_ids) if info.present?
             data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
           end
         when 'EKit' 

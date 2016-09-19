@@ -63,6 +63,8 @@ class MobileApplication < ActiveRecord::Base
   validate :image_dimensions_for_login_background, :if => Proc.new{|p| p.login_background_file_name_changed? and p.login_background_file_name.present? }
   validate :image_dimensions_for_screen_background, :if => Proc.new{|p| p.listing_screen_background_file_name_changed? and p.listing_screen_background_file_name.present? }
   
+  after_save :update_last_updated_model
+  
   default_scope { order('created_at desc') }
 
   aasm :column => :status do  # defaults to aasm_state
@@ -75,6 +77,10 @@ class MobileApplication < ActiveRecord::Base
     event :remove_from_store do
       transitions :from => [:submitted], :to => [:draft]
     end 
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_social_media_status

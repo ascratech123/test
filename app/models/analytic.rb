@@ -12,6 +12,11 @@ class Analytic < ActiveRecord::Base
   belongs_to :event
   before_create :update_points
   after_create :update_points_to_invitee
+  after_save :update_last_updated_model
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def check_ekit_viewed
     if Analytic.where(:action => 'page view', :viewable_type => "E-Kit", :invitee_id => self.invitee_id, :event_id => self.event_id).present?

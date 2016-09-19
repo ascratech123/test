@@ -82,7 +82,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
@@ -116,6 +116,10 @@ class Event < ActiveRecord::Base
   def init
     self.status = "pending"
     self.event_theme = "create your own theme"
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_theme_updated_at
@@ -603,6 +607,7 @@ class Event < ActiveRecord::Base
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
           obj.update_column("updated_at", Time.now)
+          obj.update_last_updated_model
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
       end   

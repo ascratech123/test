@@ -8,6 +8,7 @@ class Faq < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   before_create :set_sequence_no
   after_create :set_event_timezone
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") } 
 
@@ -25,4 +26,8 @@ class Faq < ActiveRecord::Base
     self.update_column("event_timezone", self.event.timezone)
   end
   
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
 end

@@ -25,8 +25,13 @@ class Sponsor < ActiveRecord::Base
   validate :check_logo_is_present
   accepts_nested_attributes_for :images
   before_create :set_sequence_no
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def self.search(params,sponsors)
     sponsor_type = params[:search]

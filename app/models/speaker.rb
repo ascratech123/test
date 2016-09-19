@@ -31,7 +31,12 @@ class Speaker < ActiveRecord::Base
   before_create :set_sequence_no
   after_create :set_event_timezone
   before_save :set_full_name
+  after_save :update_last_updated_model
   default_scope { order("sequence") }  
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def self.search(params, speakers)
     speaker_name,email_address,designation,company_name = params[:search][:name],params[:search][:email_address],params[:search][:designation],params[:search][:company_name] if params[:adv_search].present?

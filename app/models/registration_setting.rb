@@ -7,10 +7,14 @@ class RegistrationSetting < ActiveRecord::Base
   validate :check_external_regi_and_login_present
 
   before_save :update_registation_login_url,:update_template_to_template_name
-  after_save :update_registation_surl
+  after_save :update_registation_surl, :update_last_updated_model
 
   attr_accessor :template_name
   
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def update_registation_login_url
     if self.login == 'hobnob'
       event = self.event
