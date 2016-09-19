@@ -9,7 +9,8 @@ class Feedback < ActiveRecord::Base
   validates :option1, :option2, presence: { :message => "This field is required." }, if: Proc.new { |object| object.option_type == "Radio" || object.option_type == "Checkbox"}
 
   before_create :set_sequence_no
-  after_create :set_description_value 
+  after_create :set_description_value, :set_event_timezone
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") }
 
@@ -21,6 +22,10 @@ class Feedback < ActiveRecord::Base
 
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).feedbacks.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   # def option_percentage(option_name='option1')
@@ -39,6 +44,18 @@ class Feedback < ActiveRecord::Base
       self.description = true
       self.save
     end
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
+  end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event_timezone)
   end
 
 end

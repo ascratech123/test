@@ -9,22 +9,24 @@ class Conversation < ActiveRecord::Base
   has_many :likes, as: :likable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
-	has_attached_file :image, {:styles => {:large => "640x640>",
+  has_attached_file :image, {:styles => {:large => "640x640>",
                                          :small => "200x200>", 
                                          :thumb => "60x60>"},
                              :convert_options => {:large => "-strip -quality 90", 
                                          :small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(CONVERSATION_IMAGE_PATH)
-	
-	validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+  
+  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
   validates :description, presence: { :message => "This field is required." }
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
+  after_save :update_last_updated_model
 
-  default_scope { order('created_at desc') }
+  scope :desc_ordered, -> { order('updated_at DESC') }
+  scope :asc_ordered, -> { order('updated_at ASC') }
 
   aasm :column => :status do
     state :pending, :initial => true
@@ -39,6 +41,10 @@ class Conversation < ActiveRecord::Base
     end 
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def perform_conversation(conversation)
     if conversation == "approve"
       self.approve!
@@ -48,7 +54,7 @@ class Conversation < ActiveRecord::Base
       self.reject!
     end
   end
-	
+  
   def check_image_and_description
     if self.image.blank? and self.description.blank?
       self.error.add :description, 'You need to pass atleast one description or image'
@@ -94,7 +100,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def timestamp
-    self.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M')
+    self.created_at.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes
@@ -132,6 +138,16 @@ class Conversation < ActiveRecord::Base
     analytic.save rescue nil
   end
 
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end
+
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+  end  
+
   def self.get_export_object(conversations)
     object = []
     conversation_without_comment = []
@@ -144,7 +160,8 @@ class Conversation < ActiveRecord::Base
       end
     end if conversations.present?
     comment_obj = []
-    comments.first.each do |comment|
+    # binding.pry
+    comments.each do |comment|
       comment_obj << comment
     end if comments.present?
     object = object + comment_obj + conversation_without_comment
@@ -168,10 +185,19 @@ class Conversation < ActiveRecord::Base
   #use for conversation export remove blank values
   def commented_user_name
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # name_of_the_invitee = Invitee.find_by_id(comment_by).name_of_the_invitee
+    # return name_of_the_invitee
+    # binding.pry
   end
+
   def commented_user_email
     ""
+    # comment_by = self.comments.pluck(:user_id)
+    # email = Invitee.find_by_id(comment_by).email
+    # return email
   end
+
   def email
     Invitee.find_by_id(self.user_id).email rescue ""
   end
@@ -198,4 +224,28 @@ class Conversation < ActiveRecord::Base
   def post_id
     self.id
   end
+
+  def created_at_with_event_timezone
+    self.created_at.in_time_zone(self.event_timezone)
+  end
+
+  def updated_at_with_event_timezone
+    self.updated_at.in_time_zone(self.event_timezone)
+  end
+
+  def formatted_created_at_with_event_timezone
+    # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    created_at_with_tmz.sub(year, "")
+  end
+
+  def formatted_updated_at_with_event_timezone
+    # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    updated_at_with_tmz.sub(year, "")    
+  end
+
 end
+

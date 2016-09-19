@@ -10,8 +10,13 @@ class Exhibitor < ActiveRecord::Base
   validates :name,:image, presence:{ :message => "This field is required." }
   validate :image_dimensions
   before_create :set_sequence_no
+  after_save :update_last_updated_model
   
   default_scope { order('sequence') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def image_url(style=:small)
     style.present? ? self.image.url(style) : self.image.url

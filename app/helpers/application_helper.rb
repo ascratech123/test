@@ -1,5 +1,19 @@
 module ApplicationHelper
 
+  def time_with_zone(datetime, zone=nil,format)
+    if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
+      datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
+    elsif zone.present?
+      datetime.to_time.in_time_zone(zone).strftime(format) if datetime.present?
+    else
+      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') if datetime.present?
+    end
+  end
+
+  def formatted_time(datetime, date_format)
+    datetime.strftime(date_format) if datetime.present?
+  end
+
   def break_line
     str = "<br><br><br>"
   end
@@ -39,24 +53,24 @@ module ApplicationHelper
     link_to html_content, url, :confirm =>'Are you sure?'#,:style => "float:right;width:120px"
   end
 
-  def time_with_zone(datetime, zone=nil)
-    if zone.present? and zone == 'IST'
-      datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
-    else
-      datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
-    end
-  end
+  #def time_with_zone(datetime, zone=nil)
+  #  if zone.present? and zone == 'IST'
+  #    datetime.to_time.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') rescue nil
+  #  else
+  #    datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') rescue nil
+  #  end
+  #end
 
   def get_hour_minute_second_ampm(time, format)
     case format
     when 'hour'
-      time.to_time.in_time_zone('Kolkata').strftime('%l').strip.rjust(2, '0') rescue nil
+      time.strftime('%l').strip.rjust(2, '0') rescue nil
     when 'minute'
-      time.to_time.in_time_zone('Kolkata').strftime('%M').strip.rjust(2, '0') rescue nil
+      time.strftime('%M').strip.rjust(2, '0') rescue nil
     when 'second'
-      time.to_time.in_time_zone('Kolkata').strftime('%S').strip.rjust(2, '0') rescue nil
+      time.strftime('%S').strip.rjust(2, '0') rescue nil
     when 'ampm'
-      time.to_time.in_time_zone('Kolkata').strftime('%p').strip.rjust(2, '0') rescue nil
+      time.strftime('%p').strip.rjust(2, '0') rescue nil
     end
   end
 
@@ -301,8 +315,18 @@ module ApplicationHelper
 
   def custom_basic_text_field_tag(name, title, params, *args)
     params = params.to_s
-    params1 = params.gsub(/[^0-9a-z]/, '')
-    params = params1.slice!(0..6)
+    params1 = params.delete('\\{}"')#params.gsub(/[^0-9a-zA-Z]/, " ")
+    if params["selected"].present?
+      params = params1.slice!(0..10)
+    elsif params["invitee_status"].present? or params["visible_status"].present?
+      params = params1.slice!(0..15)
+    elsif params["login_status"].present? or params["company_name"].present?
+      params = params1.slice!(0..13)
+    elsif params["designation"].present?
+      params = params1.slice!(0..12)
+    else
+      params = params1.slice!(0..8)
+    end
     str = content_tag(:input, nil, :type => 'text', :name => name, :value => params1, :class => "mdl-textfield__input")
     str += content_tag :label, title, class: "mdl-textfield__label"
     str
@@ -766,7 +790,7 @@ end
     # action_arr = []
     # logic_arr = []
     dest_arr = []
-    event.event_features.each do |feature|
+    event.event_features.not_hidden_icon.each do |feature|
       #action_arr += action_based[feature.name] if action_based[feature.name].present?
       #logic_arr += logic_based[feature.name] if logic_based[feature.name].present?
       dest_arr << destination_based[feature.name] if destination_based[feature.name].present?

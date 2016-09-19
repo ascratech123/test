@@ -4,6 +4,8 @@ class Panel < ActiveRecord::Base
   # validates :panel_id, presence: true
   validate :check_speaker_is_present
   before_create :set_sequence_no
+  after_save :update_last_updated_model
+  
   default_scope { order("sequence") }
 
   def check_speaker_is_present
@@ -15,4 +17,9 @@ class Panel < ActiveRecord::Base
   def set_sequence_no
     self.sequence = (Panel.where(:event_id => self.event_id).pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
 end

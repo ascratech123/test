@@ -20,7 +20,7 @@
       %tr
         %td.description_adjust.font16= ques_answer.question
         / %td.description_adjust.font16= ques_answer.answer
-        %td.font16= ques_answer.get_speaker_name
+        %td.font16= ques_answer.get_panel_name
         %td.font16= ques_answer.get_user_name
         / %td.font16= ques_answer.get_company_name
         %td.font16= get_datetime(ques_answer.created_at) rescue nil
@@ -30,7 +30,7 @@
           - if ques_answer.on_wall == "yes" and ques_answer.status != "rejected" 
             = "Pushed on Wall"
           - else 
-            = ""     
+            = ""
         %td.IconDrp
           - if !(current_user.has_role? :db_manager)
             = more_vert_button(ques_answer.id)

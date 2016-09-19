@@ -6,7 +6,7 @@ class Chat < ActiveRecord::Base
 
   belongs_to :event
   validates :chat_type, :sender_id,:member_ids,presence: { :message => "This field is required." }
-  after_create :set_date_time
+  after_create :set_date_time, :set_event_timezone
   after_create :send_puch_notification, :create_analytic_record
 
   def get_sender_name(id)
@@ -23,6 +23,9 @@ class Chat < ActiveRecord::Base
     self.update_column(:date_time, Time.now)
   end
 
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
+  end
 
   def send_puch_notification
     receivers = Invitee.where(:id => self.member_ids.split(',').map{|a| a.to_i}) rescue nil

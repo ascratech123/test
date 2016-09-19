@@ -22,31 +22,11 @@ class Theme < ActiveRecord::Base
   validate :image_dimensions
   validate :check_whether_event_bacground_image_or_bacground_color_present
 
-  # default_scope { order('updated_at') }
+  after_save :update_last_updated_model
 
-  # validate :validate_name_uniqueness
-  # validate :check_presence_of_event_id
-  # after_save :update_field_id_to_event
-  #before_validation :set_event_id
-
-  # def update_field_id_to_event
-  #   event = Event.find(self.event.id)
-  #   event.theme_id = self.id
-  #   event.save
-  # end
-
-  # def validate_name_uniqueness
-  #   if self.licensee_id.blank?
-
-  #   end
-  # end
-
-  # def set_event_id
-  #   if self.event_id.blank?
-  #     # self.theme_id = Theme.where('licensee_id IS NULL').first.id
-  #     self.event_id = Event.first.id
-  #   end
-  # end
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def check_presence_of_event_id
     # if event_id == nil

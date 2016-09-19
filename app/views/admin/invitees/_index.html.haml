@@ -35,6 +35,7 @@
           -  @invitee_designation = Invitee.where( event_id: @event.id).pluck('DISTINCT designation').compact.delete_if(&:empty?)
           = select_tag 'search[designation]', options_for_select(['All'] + @invitee_designation, selected: (params[:search][:designation] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"      
+          = hidden_field_tag :adv_search, "true"
       %th.test
         .event_select123
           STATUS
@@ -42,6 +43,7 @@
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_invitee_status" , :class => "category_dropdown invitee_status_title" do
           = select_tag "search[invitee_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]], selected: (params[:search][:invitee_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"
+          = hidden_field_tag :adv_search, "true"
       %th.test
         .event_select123
           VISIBLE STATUS
@@ -49,6 +51,7 @@
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_visible_status" , :class => "category_dropdown" do
           = select_tag "search[visible_status]",options_for_select([['All','All'],["Active","active"],["Deactive", "deactive"]], selected: (params[:search][:visible_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"  
+          = hidden_field_tag :adv_search, "true"
       %th.test
         .event_select123.invitee_logged_in
           LOGGED IN
@@ -56,6 +59,7 @@
         = form_tag admin_event_invitees_path(:event_id => @event.id) , :method => :get , id: "search_invitee_by_login_status" , :class => "category_dropdown invitee_loggegIn" do
           = select_tag "search[login_status]",options_for_select([['All','All'],["Yes","yes"],["No", "no"]], selected: (params[:search][:login_status] if params[:search].present?))
           = hidden_field_tag :admin_search, "true"
+          = hidden_field_tag :adv_search, "true"
       %th
         - objs.each do |invitee|
           %tr

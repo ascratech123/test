@@ -21,16 +21,22 @@ class Speaker < ActiveRecord::Base
             :format => {
             :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
             :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
-  validates :phone_no,
-            :numericality => true,
-            :length => { :minimum => 10, :maximum => 12,
-            :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
+  # validates :phone_no,
+  #           :numericality => true,
+  #           :length => { :minimum => 10, :maximum => 12,
+  #           :message=> "Please enter a valid 10 digit number" }, :allow_blank => true
   validates :event_id,:rating_status, :presence => true
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
+  after_create :set_event_timezone
   before_save :set_full_name
+  after_save :update_last_updated_model
   default_scope { order("sequence") }  
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def self.search(params, speakers)
     speaker_name,email_address,designation,company_name = params[:search][:name],params[:search][:email_address],params[:search][:designation],params[:search][:company_name] if params[:adv_search].present?
@@ -84,5 +90,9 @@ class Speaker < ActiveRecord::Base
 
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
   end
 end

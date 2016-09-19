@@ -9,7 +9,7 @@
     %title Polls Wall
     = stylesheet_link_tag "theme.css"
     = stylesheet_link_tag "css/bootstrap_polls.min.css"
-  %body.main-events{:role => "document"}
+  %body.main-events{:role => "document",:class => "#{@event.event_name.present? and @event.event_name == "Karnival de Kochi".strip ? "poll-bg" : ""}"}   
     .container.poll-container{:role => "main"}
       .col-xs-12.col-lg-12
         .row

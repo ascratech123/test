@@ -25,11 +25,12 @@ class EventFeature < ActiveRecord::Base
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
-  after_save :venue_menu_icon_selection
+  after_save :venue_menu_icon_selection, :update_last_updated_model
   after_destroy :delete_default_invitee_groups
 
   default_scope { order("sequence") }
-  
+  scope :not_hidden_icon, -> { where(menu_visibilty: "active",status: "active") }
+
   aasm :column => :status do  # defaults to aasm_state
     state :active, :initial => true
     state :deactive
@@ -48,6 +49,10 @@ class EventFeature < ActiveRecord::Base
 
   Paperclip.interpolates :main_icon_interpolate_time_stamp  do |attachment, style|
     attachment.instance.main_icon_interpolate_time_stamp.to_s
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def venue_menu_icon_selection

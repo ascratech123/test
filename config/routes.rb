@@ -15,12 +15,11 @@ namespace :admin do
   get '/events/:event_id/success' => 'user_registrations#show'
   get 'bee_editor/token' => 'bee_editors#token'
   get 'bee_editor/template' => 'bee_editors#template'
-  get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses
   resources :licensees do
-    resources :clients
+    resources :clients    
   end
   resources :clients do
     resources :users
@@ -35,7 +34,7 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
@@ -67,10 +66,6 @@ namespace :admin do
       resources :invitee_datas
     end
     resources :registrations
-    
-    resources :campaigns do
-      resources :edms
-    end
 
   end
   # resources :imports
@@ -88,7 +83,7 @@ end
         resources :chats
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
-      resources :faqs, :notifications, :conversations, :comments, :qnas, :polls, defaults: {format: 'json'}
+      resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
     end
   end
