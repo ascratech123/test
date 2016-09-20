@@ -22,14 +22,14 @@
               %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :seq_type => "up", :feature_type => "feedbacks"),:class => "uparrow", :method => "put", :remote => true
             - if feedback.sequence.to_i != 0 and (@feedbacks.length - 1) != index
               %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
-        - if !(current_user.has_role? :db_manager)
+        - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
           %td.description_adjust.font16= show_link(params, feedback.id, feedback.question) rescue nil
         - else
           %td.font16= feedback.question
         %td.font16= feedback.option_type rescue nil
         %td.font16= (feedback.description ? "Yes" : "No")
         %td.IconDrp
-          - if !(current_user.has_role? :db_manager)
+          - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
             = more_vert_button(feedback.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback.id}"}
               = edit_link(params, feedback.id)

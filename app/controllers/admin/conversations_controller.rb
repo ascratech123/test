@@ -1,4 +1,4 @@
-class Admin::ConversationsController < ApplicationController
+class Admin::ConversationsController < ApplicationController 
   layout 'admin'
 
   #load_and_authorize_resource
@@ -93,7 +93,7 @@ class Admin::ConversationsController < ApplicationController
     end
   end
   def check_user_role
-    if current_user.has_role? :db_manager 
+    if (current_user.has_role_for_event?("db_manager", @event.id)) #current_user.has_role? :db_manager 
       redirect_to admin_dashboards_path
     end  
   end
