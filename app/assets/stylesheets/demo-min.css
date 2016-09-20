@@ -7979,8 +7979,8 @@ input.mdl-button[type=submit] {
 .mdl-layout__content {
     -ms-flex: 0 1 auto;
     display: inline-block;
-    overflow-y: auto;
-    overflow-x: hidden;
+   /* overflow-y: auto;
+    overflow-x: hidden;*/
     -webkit-flex-grow: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
@@ -9521,7 +9521,7 @@ _:-ms-input-placeholder {
 .mdl-shadow--16dp {
     box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
 }
-/*.mdl-grid{background: #fff;}*/
+
 .mdl-grid {
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
@@ -9835,9 +9835,9 @@ _:-ms-input-placeholder {
         width: calc(41.6666666667% - 16px)
     }
     .feedbackInfo .mdl-cell--5-col
-   {
+    {
         width: calc(33.66% - 3px)
-    }
+     }
     .mdl-grid--no-spacing>.mdl-cell--5-col,
     .mdl-grid--no-spacing>.mdl-cell--5-col-desktop.mdl-cell--5-col-desktop {
         width: 41.6666666667%
