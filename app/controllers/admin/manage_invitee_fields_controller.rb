@@ -53,7 +53,7 @@ class Admin::ManageInviteeFieldsController < ApplicationController
   protected
 
   def check_user_role
-    if (!current_user.has_role? :db_manager) and (!current_user.has_role? :licensee_admin)
+    if (!current_user.has_role_for_event?("db_manager", @event.id)) and (!current_user.has_role_for_event?("licensee_admin", @event.id)) #(!current_user.has_role? :db_manager) and (!current_user.has_role? :licensee_admin)
       redirect_to admin_dashboards_path
     end  
   end

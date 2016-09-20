@@ -30,9 +30,9 @@
           - if ques_answer.on_wall == "yes" and ques_answer.status != "rejected" 
             = "Pushed on Wall"
           - else 
-            = ""     
+            = ""
         %td.IconDrp
-          - if !(current_user.has_role? :db_manager)
+          - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
             = more_vert_button(ques_answer.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{ques_answer.id}"}
               = edit_link(params, ques_answer.id)
