@@ -1,7 +1,7 @@
 .content
   .row
     - @count = 0
-    - if (!current_user.has_role? :db_manager)
+    - if (!current_user.has_role_for_event?("db_manager", @event.id))#(!current_user.has_role? :db_manager)
       - if show_card_except_event_features("abouts")  
         = render :partial => "admin/events/cards", :locals => {:icon => "b_&_w", :objs => @event, :url => "abouts", :img => "about.png"}
       - if show_card_except_event_features("speakers")
