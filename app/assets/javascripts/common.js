@@ -669,3 +669,19 @@ $(function () {
         }]
     });
 });      */
+ $(document).ready(function(){
+   $('#event_country_name').on('change', function() {
+     $(".overlayBg").show();
+     data = $("#event_cities").val();
+     country_name = $("#event_country_name").val();
+     $.ajax({
+       url: '/admin/time_zones',
+       type: 'get',
+       data: {'city_name' : data, 'country_name' : country_name},
+       dataType: 'script',
+       success: function(data){
+         $(".overlayBg").hide();
+     }
+       });
+   });
+ });
