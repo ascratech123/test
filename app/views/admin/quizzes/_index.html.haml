@@ -19,10 +19,13 @@
               %span= link_to "",admin_event_sequence_path(:event_id => quizze.event_id, :id => quizze.id, :seq_type => "up", :feature_type => "quizzes"),:class => "uparrow", :method => "put", :remote => true
             - if quizze.sequence.to_i != 0 and (@quizzes.length - 1) != index
               %span= link_to "",admin_event_sequence_path(:event_id => quizze.event_id, :id => quizze.id, :type => "down", :feature_type => "quizzes"),:class => "downarrow", :method => "put", :remote => true
-        %td.description_adjust.font16= show_link(params, quizze.id, quizze.question) rescue nil
+        -if (!current_user.has_role_for_event?("db_manager", @event.id))
+          %td.description_adjust.font16= show_link(params, quizze.id, quizze.question) rescue nil
+        -else 
+          %td.font16= quizze.question
         %td.font16= quizze.status.capitalize rescue nil
         %td.IconDrp
-          -if !(current_user.has_role? :db_manager)
+          -if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
             = more_vert_button(quizze.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{quizze.id}"}
               = edit_link(params, quizze.id)

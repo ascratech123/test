@@ -11,10 +11,12 @@
         %section#content.table-layout.animated.fadeIn
           .chute.chute-center
             - if ["show_content","show_engagement"].exclude?(params[:type])
-              - if !(current_user.has_role? :moderator)
+              / - if !(current_user.has_role? :moderator)
+              - if (!current_user.has_role_for_event?("moderator", params[:event_id]))
                 = render :partial => 'mobile_card_show'
             - else
-              - if !(current_user.has_role? :moderator)
+              / - if !(current_user.has_role? :moderator)
+              - if (!current_user.has_role_for_event?("moderator", params[:event_id]))
                 = render :partial => 'mobile_card_show'
               =# render :partial => 'mobile_application_constant_features'
               - if params[:type] == "show_content"
@@ -23,7 +25,8 @@
               - elsif params[:type] == "show_engagement"
                 .enable_card_eng
                   = render :partial => 'admin/events/mobile_application_engagementcard'
-              - if !(current_user.has_role? :moderator)
+              / - if !(current_user.has_role? :moderator)
+              - if (!current_user.has_role_for_event?("moderator", params[:event_id]))  
                 - if params[:type] == "show_content"
                   .disable_card
                     = render :partial => 'admin/events/mobile_application_dashboard_except_selected_event_features'

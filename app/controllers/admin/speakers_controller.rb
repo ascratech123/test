@@ -78,7 +78,7 @@ class Admin::SpeakersController < ApplicationController
     params.require(:speaker).permit!
   end
   def check_user_role
-    if current_user.has_role? :db_manager 
+    if (current_user.has_role_for_event?("db_manager", @event.id))
       redirect_to admin_dashboards_path
     end  
   end

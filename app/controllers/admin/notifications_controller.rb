@@ -1,9 +1,10 @@
 class Admin::NotificationsController < ApplicationController
   layout 'admin'
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :find_groups, :only => [:new, :create, :edit, :update]
+  before_filter :check_user_role, :except => [:index]
   def index
     @notifications = @notifications.paginate(:page => params[:page], :per_page => 10)
   end
@@ -60,5 +61,10 @@ class Admin::NotificationsController < ApplicationController
     @groups = @event.invitee_groups
     @default_groups = @groups.where(:name => ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'])
     @other_groups = @groups.where('name NOT IN (?)', ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'])
+  end
+  def check_user_role
+    if (current_user.has_role_for_event?("db_manager", @event.id))
+      redirect_to admin_dashboards_path
+    end  
   end
 end
