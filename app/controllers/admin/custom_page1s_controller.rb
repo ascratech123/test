@@ -1,7 +1,8 @@
 class Admin::CustomPage1sController < ApplicationController
   layout 'admin'
-  load_and_authorize_resource :except => [:create]
+  # load_and_authorize_resource :except => [:create]
   before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :check_user_role
 
   def index
     # @custom_pages = @custom_page1s.paginate(page: params[:page], per_page: 10)
@@ -63,5 +64,10 @@ class Admin::CustomPage1sController < ApplicationController
 
   def custom_page_params
     params.require(:custom_page1).permit!
+  end
+  def check_user_role
+    if (current_user.has_role_for_event?("db_manager", @event.id)) #current_user.has_role? :db_manager 
+      redirect_to admin_dashboards_path
+    end  
   end
 end
