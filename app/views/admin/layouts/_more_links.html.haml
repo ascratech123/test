@@ -194,7 +194,7 @@
                   Add Highlight Image        
           - when 'poll'
             %li
-              - if ["index", "new"].include?(params[:action]) and (!current_user.has_role? :db_manager)
+              - if ["index", "new"].include?(params[:action]) and (!current_user.has_role_for_event?("db_manager", @event.id)) #(!current_user.has_role? :db_manager)
                 = link_to new_admin_event_poll_path(:event_id => @event.id, :importable_type => 'poll', :import => "xls") ,:class => "centerAlign" do
                   Import 
                 / - if params[:action] == "index" and @polls.present?

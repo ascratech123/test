@@ -11,7 +11,8 @@
       %th Question 
       %th Status
       %th On Wall
-      %th Result Status
+      - if (!current_user.has_role_for_event?("db_manager", @event.id))
+        %th Result Status
       %th 
     - objs.each_with_index do |poll,index|
       %tr
@@ -23,7 +24,7 @@
               %span= link_to "",admin_event_sequence_path(:event_id => poll.event_id, :id => poll.id, :seq_type => "up", :feature_type => "polls"),:class => "uparrow", :method => "put", :remote => true
             - if poll.sequence.to_i != 0 and (@polls.length - 1) != index
               %span= link_to "",admin_event_sequence_path(:event_id => poll.event_id, :id => poll.id, :type => "down", :feature_type => "polls"),:class => "downarrow", :method => "put", :remote => true
-        - if !(current_user.has_role? :db_manager)
+        - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
           %td.description_adjust.font16= show_link(params, poll.id, poll.question) rescue nil
         - else
           %td.font16= poll.question
@@ -34,26 +35,27 @@
             = "Pushed on Wall"
           - else 
             = "" 
-        %td.font16
-          .result_statusdiv
-            - if poll.option_visible == 'yes'
-              = link_to admin_event_poll_path(:id => poll.id, :option_visible => "no"), :method => "patch", :data => { confirm: 'Are you sure, you want to hide result.'} do
-                .onoffswitch
-                  %input#myonoffswitch.onoffswitch-checkbox{:checked => "checked", :name => "onoffswitch", :type => "checkbox"}/
-                  %label.onoffswitch-label{:for => "myonoffswitch"}
-                    %span.onoffswitch-inner
-                    %span.onoffswitch-switch
-            - else
-              = link_to admin_event_poll_path(:id => poll.id, :option_visible => "yes"), :method => "patch", :data => { confirm: 'Are you sure, you want to display result.'} do
-                .onoffswitch
-                  %input#myonoffswitch.onoffswitch-checkbox{:checked => false, :name => "onoffswitch", :type => "checkbox"}/
-                  %label.onoffswitch-label{:for => "myonoffswitch"}
-                    %span.onoffswitch-inner
-                    %span.onoffswitch-switch
+        - if (!current_user.has_role_for_event?("db_manager", @event.id))
+          %td.font16
+            .result_statusdiv
+              - if poll.option_visible == 'yes'
+                = link_to admin_event_poll_path(:id => poll.id, :option_visible => "no"), :method => "patch", :data => { confirm: 'Are you sure, you want to hide result.'} do
+                  .onoffswitch
+                    %input#myonoffswitch.onoffswitch-checkbox{:checked => "checked", :name => "onoffswitch", :type => "checkbox"}/
+                    %label.onoffswitch-label{:for => "myonoffswitch"}
+                      %span.onoffswitch-inner
+                      %span.onoffswitch-switch
+              - else
+                = link_to admin_event_poll_path(:id => poll.id, :option_visible => "yes"), :method => "patch", :data => { confirm: 'Are you sure, you want to display result.'} do
+                  .onoffswitch
+                    %input#myonoffswitch.onoffswitch-checkbox{:checked => false, :name => "onoffswitch", :type => "checkbox"}/
+                    %label.onoffswitch-label{:for => "myonoffswitch"}
+                      %span.onoffswitch-inner
+                      %span.onoffswitch-switch
 
 
         %td.IconDrp
-          - if !(current_user.has_role? :db_manager)
+          - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
             = more_vert_button(poll.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
               = edit_link(params, poll.id)

@@ -42,7 +42,8 @@
               - url_new ="/new" if (@event.present? and @event.notifications.count < 1)
               - redirect_url = "/admin/events/#{@event.id}/#{feature[0]}#{url_new}"
             = link_to feature_count, redirect_url
-      - if !(current_user.has_role? :db_manager)
+      / - if !(current_user.has_role? :db_manager)
+      - if  (!current_user.has_role_for_event?("db_manager", @event.id))
         .row.pv5.AddmoreCard{:style => "margin-bottom : #{(feature[0] == 'percent_completed' and review_status[2] == 100) ? "23px" : "0px"}" }
           .col-xs-12.ph5
             - manage_feature = ["themes", "event_highlights", "emergency_exits"]
