@@ -40,7 +40,7 @@ class Speaker < ActiveRecord::Base
   def update_agenda_speaker_name
     if self.speaker_name_changed?
       old_speaker_name = self.speaker_name_was
-      agendas = Agenda.where(event_id:self.event_id,speaker_name:old_speaker_name)
+      agendas = Agenda.where(event_id:self.event_id,speaker_name:old_speaker_name,speaker_id:self.id)
       if agendas.present?
         agendas.each do |agenda|
           agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
@@ -50,13 +50,11 @@ class Speaker < ActiveRecord::Base
   end
 
   def empty_agenda_speaker_name_and_id
-    if self.speaker_name.present?
-      agendas = Agenda.where(event_id:self.event_id,speaker_name:self.speaker_name)
-      if agendas.present?
-        agendas.each do |agenda|
-          agenda.update_columns(speaker_id: "",speaker_name: "",updated_at: Time.now) 
-        end  
-      end
+    agendas = Agenda.where(event_id:self.event_id,speaker_name:self.speaker_name,speaker_id:self.id)
+    if agendas.present?
+      agendas.each do |agenda|
+        agenda.update_columns(speaker_id: "",speaker_name: "",updated_at: Time.now) 
+      end  
     end
   end  
 
