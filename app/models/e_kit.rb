@@ -10,8 +10,13 @@ class EKit < ActiveRecord::Base
   validates_attachment_presence :attachment, :message => "This field is required." 
   validates :name, presence: { :message => "This field is required." }
   #validates_attachment_content_type :attachment, :content_type => %w(application/zip application/msword application/vnd.ms-office application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/xls application/xlsx application/pdf)
+  after_save :update_last_updated_model
   
   default_scope { order('created_at desc') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
 	def pdf_attached?
 	  self.attachment.file?

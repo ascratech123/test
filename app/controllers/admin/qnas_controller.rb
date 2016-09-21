@@ -59,13 +59,13 @@ class Admin::QnasController < ApplicationController
 	end
 
 	def update
-    if params[:status].present? or params[:on_wall].present?
+    if params[:status].present? or params[:on_wall].present? or params[:anonymous_on_wall].present?
+      @qna.update_column(:anonymous_on_wall, params[:anonymous_on_wall]) if params[:anonymous_on_wall].present?
       @qna.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @qna.change_status(params[:status]) if params[:status].present?
       @qna.update_column(:wall_answer, nil) if @qna.on_wall == "no"
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id, :page => params[:page])
-    elsif params[:wall_answer].present? or params[:on_wall].present?
-      @qna.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
+    elsif params[:wall_answer].present? 
       @qna.update_column(:wall_answer, params[:wall_answer]) if params[:wall_answer].present?
       redirect_to admin_event_qnas_path(:event_id => @qna.event_id, :page => params[:page])  
     else

@@ -12,6 +12,7 @@ class Api::V1::TokensController < ApplicationController
       device = Device.find_by_token(params["token"])
       if device.present?
         device.update_column(:enabled, "false")
+        session['invitee_id'] = nil
         render :status => 200, :json => {:status=>"Success", :message=>"Notification Stop successfully."}
       else
         render :status => 200, :json => {:status=>"Failure", :message=>"Device Not Found."}

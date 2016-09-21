@@ -2,7 +2,7 @@ class Notification < ActiveRecord::Base
   require 'rubygems'
   require 'aws-sdk'
   require 'push_notification'
-  ACTION_TO_PAGE_HSH = {'Group Notification' => 'Group','Agenda Rating' => 'Agenda', 'Agenda Favorite' => 'Agenda', 'Speaker Rating' => 'Speaker', 'Speaker Favorite' => 'Speaker', 'Invitee Favorite​' => 'Invitee', 'Sponsors Favorite' => 'Sponsor', 'Sponsors' => 'Sponsor', 'Exhibitors Favorite​​' => 'Exhibitor', 'Polls Taken' => 'Poll', 'Feedback Submitted' => 'Feedback', 'Quiz Answered' => 'Quiz', 'Question Asked' => 'Q&A', 'QR code scanned' => 'QR code', 'Event Highlight' => 'Event Highlight', 'Event Listing' => 'Event Listing', 'Quiz' => 'Quiz', 'Q&A' => 'Q&A', 'Speaker' => 'Speaker', 'Invitee' => 'Invitee', 'Profile' => 'Profile', 'Feedback' => 'Feedback', 'Agenda' => 'Agenda', 'Quiz' => 'Quiz', 'Poll' => 'Poll', 'Leaderboard' => 'Leaderboard', 'FAQ' => 'FAQ', 'About' => 'About', 'Conversation' => 'Conversation', 'E-Kit' => 'E-Kit', 'Award' => 'Award', 'Contact' => 'Contact', 'Sponsor' => 'Sponsor', 'Gallery' => 'Gallery', 'Emergency Exit' => 'Emergency Exit', 'Note' => 'Note', 'Venue' => 'Venue', 'Custom Page1' => 'Custom Page1', 'Custom Page2' => 'Custom Page2', 'Custom Page3' => 'Custom Page3', 'Custom Page4' => 'Custom Page4', 'Custom Page5' => 'Custom Page5', 'My Travel' => 'My Travel', 'Exhibitor' => 'Exhibitor', 'My Favorite' => 'My Favorite', 'QR code' => 'QR code'}
+  ACTION_TO_PAGE_HSH = {'Group Notification' => 'Group','Agenda Rating' => 'Agenda', 'Agenda Favorite' => 'Agenda', 'Speaker Rating' => 'Speaker', 'Speaker Favorite' => 'Speaker', 'Invitee Favorite​' => 'Invitee', 'Sponsors Favorite' => 'Sponsor', 'Sponsors' => 'Sponsor', 'Exhibitors Favorite​​' => 'Exhibitor', 'Polls Taken' => 'Poll', 'Feedback Submitted' => 'Feedback', 'Quiz Answered' => 'Quiz', 'Question Asked' => 'Q&A', 'QR code scanned' => 'QR code', 'Event Highlight' => 'Event Highlight', 'Event Listing' => 'Event Listing', 'Quiz' => 'Quiz', 'Q&A' => 'Q&A', 'Speaker' => 'Speaker', 'Invitee' => 'Invitee', 'Profile' => 'Profile', 'Feedback' => 'Feedback', 'Agenda' => 'Agenda', 'Quiz' => 'Quiz', 'Poll' => 'Poll', 'Leaderboard' => 'Leaderboard', 'FAQ' => 'FAQ', 'About' => 'About', 'Conversation' => 'Conversation', 'E-Kit' => 'E-Kit', 'Award' => 'Award', 'Contact' => 'Contact', 'Sponsor' => 'Sponsor', 'Gallery' => 'Gallery', 'Emergency Exit' => 'Emergency Exit', 'Note' => 'Note', 'Venue' => 'Venue', 'Custom Page1' => 'Custom Page1', 'Custom Page2' => 'Custom Page2', 'Custom Page3' => 'Custom Page3', 'Custom Page4' => 'Custom Page4', 'Custom Page5' => 'Custom Page5', 'My Travel' => 'My Travel', 'Exhibitor' => 'Exhibitor', 'My Favorite' => 'My Favorite', 'QR code' => 'QR code', 'Home Page' => 'home'}
   
   attr_accessor :push_time_hour, :push_time_minute ,:push_time_am, :push_timing, :n_user
   serialize :group_ids, Array
@@ -26,10 +26,15 @@ class Notification < ActiveRecord::Base
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
   validates :push_datetime, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.push_timing == 'later' }
   validates :notification_type, presence: true
+  after_create :set_event_timezone
   before_save :update_details
-  after_save :push_notification
+  after_save :push_notification, :update_last_updated_model
 
   default_scope { order('created_at desc') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def update_details
     self.push_page = Notification::ACTION_TO_PAGE_HSH[self.action]
@@ -37,7 +42,7 @@ class Notification < ActiveRecord::Base
 
   def push_notification
     if self.push_datetime.blank?
-      self.update_column(:push_datetime, Time.now)
+      self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
       # if self.group_ids.present?
       #   groups = InviteeGroup.where("id IN(?)", self.group_ids)
       #   invitee_ids = []
@@ -63,23 +68,27 @@ class Notification < ActiveRecord::Base
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+    # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+    notifications = Notification.where(:pushed => false)
     if notifications.present?
       notifications.each do |notification|
-        event = notification.event
-        if event.mobile_application_id.present?
-          if notification.group_ids.present?
-            groups = InviteeGroup.where("id IN(?)", notification.group_ids)
-            invitee_ids = []
-            groups.each do |group|
-              invitee_ids = invitee_ids + group.get_invitee_ids
-            end  
-            invitee_ids = invitee_ids.uniq rescue []
-            objects = Invitee.where("id IN(?)", invitee_ids)
-            PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
-          else
-            objects = event.invitees
-            notification.send_to_all
+        current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+        if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
+          event = notification.event
+          if event.mobile_application_id.present?
+            if notification.group_ids.present?
+              groups = InviteeGroup.where("id IN(?)", notification.group_ids)
+              invitee_ids = []
+              groups.each do |group|
+                invitee_ids = invitee_ids + group.get_invitee_ids
+              end  
+              invitee_ids = invitee_ids.uniq rescue []
+              objects = Invitee.where("id IN(?)", invitee_ids)
+              PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
+            else
+              objects = event.invitees
+              notification.send_to_all
+            end
           end
         end
       end
@@ -89,7 +98,7 @@ class Notification < ActiveRecord::Base
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
-    self.update_column(:push_datetime, Time.now)
+    self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
@@ -167,7 +176,7 @@ class Notification < ActiveRecord::Base
   def set_time(push_datetime, push_time_hour, push_time_minute, push_time_am)
     if push_datetime.present?
       time = "#{push_datetime} #{push_time_hour.gsub(':', "") rescue nil}:#{push_time_minute.gsub(':', "") rescue nil}:#{0} #{push_time_am}"
-      time = time.to_time rescue nil
+      time = time.to_datetime rescue nil
       self.push_datetime = time
     end
   end
@@ -194,4 +203,13 @@ class Notification < ActiveRecord::Base
   #   event_features.each do |feature|
 
   # end
+
+  def formatted_push_datetime_with_event_timezone
+    self.push_datetime.strftime("%b %d") if self.push_datetime.present?
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
+  end
+
 end
