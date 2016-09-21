@@ -43,6 +43,7 @@ class Speaker < ActiveRecord::Base
       if agendas.present?
         agendas.each do |agenda|
           agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
+          agenda.update_last_updated_model
         end  
       end
     end  
@@ -53,6 +54,7 @@ class Speaker < ActiveRecord::Base
     if agendas.present?
       agendas.each do |agenda|
         agenda.update_columns(speaker_id: "",speaker_name: "",updated_at: Time.now) 
+        agenda.update_last_updated_model
       end  
     end
   end  
