@@ -11121,6 +11121,7 @@ ol.timeline-list li.timeline-item .timeline-date {
   table-layout: fixed;
   width: 100%;
   margin: 0;
+  background:#f5f5f5;
 }
 .table-layout > div,
 .table-layout > aside,
@@ -15658,7 +15659,6 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
 }
 .breadcrumb > li a {
   text-decoration: none;
-  font-family: 'Ubuntu',sans-serif;
 }
 .breadcrumb > li.breadcrumb-active > a {
   color: #f5393d;
