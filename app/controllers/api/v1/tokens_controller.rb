@@ -183,8 +183,8 @@ class Api::V1::TokensController < ApplicationController
 
   def set_instances_for_create
     @submitted_app = (params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No"
-    # @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_preview_code"])
-    mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_preview_code"])
+    # mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
     event_ids = @mobile_application.events.pluck(:id) rescue nil 
     @invitees = Invitee.where(:event_id => event_ids)  rescue nil 
     @user = @invitees.find_by_key(params[:key]) rescue nil 

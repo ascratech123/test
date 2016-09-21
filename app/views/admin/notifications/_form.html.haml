@@ -103,7 +103,7 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{:style => ((f.object.push_timing == 'now' or f.object.push_timing.blank?)? 'margin-top:30px;display:none;' : 'margin-top:30px')}
         .bs-component
           .form-group
-            %label.col-lg-4.control-label{:for => "Push Time"} Set Time(IST)
+            %label.col-lg-4.control-label{:for => "Push Time"} Set Time
             = f.custom_text_field_date :push_datetime, "Push Time", :id => "date-start", :value => f.object.push_datetime.present? ? f.object.push_datetime.strftime('%d/%m/%Y') : '' 
             .col-lg-3.timeDropdown
               .timeTab
