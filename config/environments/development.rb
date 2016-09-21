@@ -95,7 +95,6 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         :bucket => S3_bucket
                         }
 
-
 ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
@@ -106,7 +105,26 @@ ATTACH_FILE_4_PATH =   {:path => "my_travel/attachment4/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment4/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_5_PATH =   {:path => "my_travel/attachment5/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment5/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-
+MICROSITE_HEADER_IMAGE_PATH =   {:path => "microsite/header_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+MICROSITE_BANNER_IMAGE_PATH =   {:path => "microsite/banner_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+MICROSITE_LOGO_IMAGE_PATH =   {:path => "microsite/logo_image/:style/:id-:filename",
+                     :url => "#{S3_url}/microsite/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
+                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_PATH =   {:path => "my_travel/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_2_PATH =   {:path => "my_travel/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_3_PATH =   {:path => "my_travel/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_4_PATH =   {:path => "my_travel/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+ATTACH_FILE_5_PATH =   {:path => "my_travel/:style/:id-:filename",
+                     :url => "#{S3_url}/my_travel/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 CKEDITOR_IMAGE_PATH =   {:path => "ckeditor/:style/:id-:filename",
                      :url => "#{S3_url}/ckeditor/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 

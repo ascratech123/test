@@ -448,7 +448,7 @@ module ApplicationHelper
 
   def calculate_rating(speaker,type)   
     if type == "agenda"
-      speaker.ratings.pluck(:rating).sum / agenda.ratings.count rescue 0
+      speaker.ratings.pluck(:rating).sum / speaker.ratings.count rescue 0
     else
       speaker.ratings.pluck(:rating).sum / speaker.ratings.count.to_f rescue 0
     end

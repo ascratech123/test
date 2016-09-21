@@ -21,6 +21,15 @@ class ApplicationController < ActionController::Base
     params[resource] &&= send(method) if respond_to?(method, true)
   end
 
+  def go_back 
+    #Attempt to redirect
+    redirect_to :back
+ 
+    #Catch exception and redirect to root
+    rescue ActionController::RedirectBackError
+      redirect_to root_path
+  end
+
   def load_filter
     if params[:key].present? 
       authenticate_user_from_token!
