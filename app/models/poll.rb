@@ -37,6 +37,10 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def self.search(params,polls)
     keyword = params[:search][:keyword]
      polls = polls.where("question like (?) ", "%#{keyword}%") if keyword.present?
