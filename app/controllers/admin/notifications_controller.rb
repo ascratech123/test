@@ -63,7 +63,7 @@ class Admin::NotificationsController < ApplicationController
     @other_groups = @groups.where('name NOT IN (?)', ['No Polls taken', 'No Feedback given', 'No Quiz taken', 'No Q&A Participation', 'No Participation in Conversations', 'No Favorites added'])
   end
   def check_user_role
-    if (current_user.has_role_for_event?("db_manager", @event.id))
+    if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       redirect_to admin_dashboards_path
     end  
   end

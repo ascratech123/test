@@ -5,7 +5,7 @@
       Content
     - @count = 0
     / - if (current_user.has_role? :moderator) and (!current_user.has_role? :db_manager)
-    - if (current_user.has_role_for_event?("moderator", @event.id)) and (!current_user.has_role_for_event?("db_manager", @event.id))
+    - if (current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       - if show_card("polls")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.polls, :url => "polls", :@count => @count}
       - if show_card("conversations")
@@ -14,7 +14,7 @@
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Q&A.png", :objs => @event.qnas, :url => "qnas", :@count => @count}
     - else
       / - if (current_user.has_role? "db_manager")
-      - if (current_user.has_role_for_event?("db_manager", @event.id))
+      - if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
         - if show_card("speakers") 
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "speakers.png", :objs => @event.speakers, :url => "speakers", :@count => @count}
         - if show_card("agendas")
@@ -24,7 +24,7 @@
         - if show_card("my_travels")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "travel.png", :objs => @event.my_travels, :url => "my_travels", :@count => 0}
         / -elsif !(current_user.has_role? "db_manager")  
-      -elsif (!current_user.has_role_for_event?("db_manager", @event.id))
+      -elsif (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
         - if show_card("abouts")  
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "about.png", :objs => @event, :url => "abouts"}
         - if show_card("speakers") 

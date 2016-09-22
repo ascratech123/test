@@ -51,7 +51,7 @@
           - else 
             = ""
         %td.IconDrp
-          - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+          - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
             = more_vert_button(conversation.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{conversation.id}"}
               = edit_link(params, conversation.id)

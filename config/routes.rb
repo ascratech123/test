@@ -19,7 +19,7 @@ namespace :admin do
   # get '/check_email_existance' => 'users#check_email_existance'
   resources :time_zones 
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
-  resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses
+  resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses,:change_roles
   resources :licensees do
     resources :clients    
   end
