@@ -83,6 +83,11 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
 
+  def active_for_authentication?
+    licensee_admin = self.get_licensee_admin
+    super and licensee_admin.active? rescue nil
+  end
+
   def add_licensee_role
     if self.license == true
       self.add_role :licensee_admin
@@ -201,6 +206,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def get_smtp_setting
+    licensee_admin = get_licensee_admin
+    smtp_setting = licensee_admin.smtp_setting rescue nil
+  end
+
   def perform_event(status)
     self.approve! if status== "approve"
     self.reject! if status== "reject"
@@ -310,6 +320,34 @@ class User < ActiveRecord::Base
     if self.assign_grouping.blank? and self.telecaller.present?
       errors.add(:assign_grouping, "This field is required.")
     end
+  end
+  
+  def get_count(telecaller_id,event_id, type)
+    event = Event.find(event_id)
+    telecaller = User.unscoped.find(telecaller_id)
+    grouping = Grouping.find(telecaller.assign_grouping) rescue nil
+    groupings = Grouping.with_role(telecaller.roles.pluck(:name), telecaller)
+    invitee_structure = event.invitee_structures.first if event.invitee_structures.present?
+    invitee_data = invitee_structure.invitee_datum
+    @data = Grouping.get_search_data_count(invitee_data, [grouping]) if groupings.present? and invitee_data.present?
+    @assigned = @data.count
+    @processed = @data.where('status IS NOT NULL').count rescue 0
+    @remaining = @data.where(:status => nil).count rescue 0
+    return @assigned if type == "Assigned"
+    return @processed if type == "Processed"
+    return @remaining if type == "Remaining"
+  end
+  def get_clients
+    clients = Client.with_roles(self.roles.pluck(:name), self)
+  end
+  
+  def get_roles_for_user(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+  end
+
+  def get_licensee_events_count
+    clients = get_clients
+    event_count = clients.map{|c| c.events.count}.sum
   end
 
   def has_role_for_event?(role_name, event_id, session_role_name)

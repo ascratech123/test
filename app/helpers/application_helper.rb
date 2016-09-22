@@ -1,5 +1,6 @@
 module ApplicationHelper
-
+  
+  #timezone methods
   def time_with_zone(datetime, zone=nil,format)
     if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
       datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
@@ -9,29 +10,68 @@ module ApplicationHelper
       datetime.to_time.utc.strftime('%Y-%m-%d %H:%M') if datetime.present?
     end
   end
-
-  def formatted_time(datetime, date_format)
-    datetime.strftime(date_format) if datetime.present?
-  end
+    def formatted_time(datetime, format)
+      datetime.strftime(format) if datetime.present?
+    end
 
   def break_line
     str = "<br><br><br>"
   end
 
-  def get_only_time_in_ampm(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
-  end
+  # BELOW 5 METHODS NOT CALL FROM ANYWHERE
+    # def get_datetime(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') if time.present?
+    # end
 
-  def get_datetime_with_ist_timezone(datetime)
-    #datetime.in_time_zone('Kolkata') if datetime.present?
-    datetime.in_time_zone('Kolkata').strftime('%Y-%m-%d %H:%M') if datetime.present?
-  end
+    # def get_datetime_in_ampm(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') if time.present?
+    # end
 
+    # def get_only_time_in_ampm(time)
+    #   time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') if time.present?
+    # end
+    
+    # def date_with_zone(datetime, zone=nil)
+    #   if zone.present? and zone == 'IST'
+    #     datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') if datetime.present?
+    #   else
+    #     datetime.to_time.utc.strftime('%d %b %Y') if datetime.present?
+    #   end
+    # end
+    
+    # def set_end_agenda_time_am(am)
+    #   if am.strftime("%p") != "AM" or am.strftime("%p") != "PM" and (am.strftime("%H:%M") == "00:00")
+    #     return nil
+    #   else
+    #     return am.strftime("%p")
+    #   end if am.present?
+    # end
 
+    # def set_end_agenda_time_hour(hour)
+    #   if hour.strftime("%H") == "00"
+    #     return nil
+    #   else
+    #     return hour.strftime("%I")
+    #   end if hour.present?
+    # end
+
+    # def set_end_agenda_time_minute(minute)
+    #   if minute.strftime("%M") == "00"
+    #     return nil
+    #   else
+    #     return minute.strftime("%M")
+    #   end if minute.present?
+    # end
+  #----------------------------------------------------#
+  
   def get_status_button(f, status, icon_name)
     url = update_status_admin_licensee_path(:id => f.id, :status => status)
     html_content = content_tag(:i, icon_name, :class => "material-icons center")
     link_to html_content, url, :class => "col-md-6 btn back_button", :confirm =>'Are you sure?', :style => "float:right;width:80px"
+  end
+
+  def editable_field(field_name, event)
+    (Invitee.where("event_id = ? and #{field_name} IS NOT NULL", event.id).present? and MyProfile.where(:event_id => event.id).present?) ? true : false
   end
 
   def admin_event_color(event)
@@ -72,26 +112,6 @@ module ApplicationHelper
     when 'ampm'
       time.strftime('%p').strip.rjust(2, '0') rescue nil
     end
-  end
-
-  def date_with_zone(datetime, zone=nil)
-    if zone.present? and zone == 'IST'
-      datetime.to_time.in_time_zone('Kolkata').strftime('%d %b %Y') rescue nil
-    else
-      datetime.to_time.utc.strftime('%d %b %Y') rescue nil
-    end
-  end
-  
-  def get_only_time_in_ampm(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%I:%M %p') rescue nil
-  end
-
-  def get_datetime(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %H:%M') rescue nil
-  end
-
-  def get_datetime_in_ampm(time)
-    time.to_time.in_time_zone('Kolkata').strftime('%d-%m-%Y %I:%M %p') rescue nil
   end
 
   def back_button_detailed_page(url = :back)
@@ -448,7 +468,7 @@ module ApplicationHelper
 
   def calculate_rating(speaker,type)   
     if type == "agenda"
-      speaker.ratings.pluck(:rating).sum / agenda.ratings.count rescue 0
+      speaker.ratings.pluck(:rating).sum / speaker.ratings.count rescue 0
     else
       speaker.ratings.pluck(:rating).sum / speaker.ratings.count.to_f rescue 0
     end
@@ -701,36 +721,12 @@ end
     end
   end
 
-  def set_end_agenda_time_hour(hour)
-    if hour.strftime("%H") == "00"
-      return nil
-    else
-      return hour.strftime("%I")
-    end if hour.present?
-  end
-
-  def set_end_agenda_time_minute(minute)
-    if minute.strftime("%M") == "00"
-      return nil
-    else
-      return minute.strftime("%M")
-    end if minute.present?
-  end
-
   def get_login_at(event,object)
     if object.errors.present?
       (params[:event][:login_at] == "After Splash") ? "" : "none" 
     else
       (event.login_at == 'Before Interaction'or event.login_at == 'After Highlight') ? "none" : "" if event.present?
     end
-  end
-
-  def set_end_agenda_time_am(am)
-    if am.strftime("%p") != "AM" or am.strftime("%p") != "PM" and (am.strftime("%H:%M") == "00:00")
-      return nil
-    else
-      return am.strftime("%p")
-    end if am.present?
   end
 
   def get_highlight_class1(object)
@@ -776,6 +772,10 @@ end
 
   def get_publish_event_message
     @mobile_application.store_info.present? ? "Do you want to Add this Event in the Published App?" : "Are you sure, you want to Publish this." rescue ""
+  end
+
+  def is_number? string
+    true if Float(string) rescue false
   end
 
   def get_notification_type_group_array(event)
