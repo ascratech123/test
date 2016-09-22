@@ -32,7 +32,32 @@ class Speaker < ActiveRecord::Base
   after_create :set_event_timezone
   before_save :set_full_name
   after_save :update_last_updated_model
+  after_update :update_agenda_speaker_name
+  after_destroy :empty_agenda_speaker_name_and_id
   default_scope { order("sequence") }  
+
+
+  def update_agenda_speaker_name
+    if self.speaker_name_changed?
+      agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      if agendas.present?
+        agendas.each do |agenda|
+          agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
+          agenda.update_last_updated_model
+        end  
+      end
+    end  
+  end
+
+  def empty_agenda_speaker_name_and_id
+    agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+    if agendas.present?
+      agendas.each do |agenda|
+        agenda.update_columns(speaker_id: "",speaker_name: "",updated_at: Time.now) 
+        agenda.update_last_updated_model
+      end  
+    end
+  end  
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
