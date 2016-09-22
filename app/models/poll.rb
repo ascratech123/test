@@ -82,7 +82,7 @@ class Poll < ActiveRecord::Base
         option7 = user_poll.answer.downcase.include?("option7") ? option7 + 1 : option7 rescue option7
         option8 = user_poll.answer.downcase.include?("option8") ? option8 + 1 : option8 rescue option8
         option9 = user_poll.answer.downcase.include?("option9") ? option9 + 1 : option9 rescue option9
-        option10 = user_poll.answer.downcase.include?("option10") ? option10 + 1 : option10 rescue option10        
+        option10 = user_poll.answer.downcase.include?("option010") ? option10 + 1 : option10 rescue option10        
       end  
     end
     data["option1"] = option1 rescue nil
