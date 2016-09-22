@@ -86,7 +86,7 @@ class Admin::AgendasController < ApplicationController
     params.require(:agenda).permit!
   end
   def check_user_role
-    if (current_user.has_role_for_event?("db_manager", @event.id))
+    if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       redirect_to admin_dashboards_path
     end  
   end

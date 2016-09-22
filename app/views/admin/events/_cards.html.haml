@@ -42,7 +42,7 @@
               - else
                 - count = objs.count  
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "")
-                - redirection = "" if (count == 0 and url == 'qnas' and (!current_user.has_role_for_event?("moderator", @event.id)))# !current_user.has_role? :moderator)
+                - redirection = "" if (count == 0 and url == 'qnas' and (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])))# !current_user.has_role? :moderator)
               - if ["poll_walls","conversation_walls","qna_walls"].include? (url)
                 - url1 = "polls" if url == "poll_walls"
                 - url1 = "conversations" if url == "conversation_walls"
@@ -54,7 +54,7 @@
                 - url1 = "leaderboards" if url == "leaderboard"
                 = link_to "#{count}","/admin/events/#{@event.id}/#{url1}#{redirection}"
 
-      - if show_card(url) and (@resource_role.blank? or @resource_role.present?) and (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+      - if show_card(url) and (@resource_role.blank? or @resource_role.present?) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
         .row.pv5.AddmoreCard
           .col-xs-12.ph5
             - single_associated = ["qnas","conversations"]
@@ -79,10 +79,10 @@
               - url1 = url if url != "venue"
               - url1 = "leaderboards" if url == "leaderboard"
               = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
-            - if (!current_user.has_role_for_event?("moderator", @event.id)) #!(current_user.has_role? :moderator)
+            - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |
               = link_to "Disable", admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id,:disable_event => "#{url}", :type => params[:type]), :method => "put", :remote => true 
-            - if ["polls","conversations","qnas"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
+            - if ["polls","conversations","qnas"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
               |
               - if url == "polls"
                 = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
@@ -99,7 +99,7 @@
               = link_to "Go to Wall", admin_event_qnas_path(:event_id => @event.id, :qnas_wall => true),:class => " centerAlign", :target => "_blank"
             - elsif url == "conversations"
               = link_to "Go to Wall", admin_event_conversations_path(:event_id => @event.id, :conversations_wall => true),:class => " centerAlign", :target => "_blank"
-      - elsif (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager) #true#(@resource_role.blank? or (@resource_role.present? and @resource_role.name != 'moderator'))
+      - elsif (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager) #true#(@resource_role.blank? or (@resource_role.present? and @resource_role.name != 'moderator'))
         .row.pv5.AddmoreCard
           .col-xs-12.ph5
             = link_to "Enable", admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id,:enable_event => "#{url}", :type => params[:type]), :method => "put" ,:class => " centerAlign", :remote => true

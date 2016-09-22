@@ -68,7 +68,7 @@
                                       %tr                                 
                                         %td
                                         %td
-                                        - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+                                        - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
                                           %td.font16= link_to agenda.title, edit_admin_event_agenda_path(agenda.event_id,agenda.id)
                                         - else
                                           %td.font16= agenda.title
@@ -79,7 +79,7 @@
                                         %td.font16= formatted_time(agenda.end_agenda_time, "%d-%m-%Y %I:%M %p")
                                         %td.font16= agenda.discription                                          
                                         %td.IconDrp.agendtaIconDrp
-                                          - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+                                          - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
                                             = more_vert_button(agenda.id)
                                             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
                                               = edit_link(params, agenda.id)
@@ -98,7 +98,7 @@
                                         %tr
                                           %td
                                           %td
-                                          - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+                                          - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
                                             %td.font16
                                               = link_to track_agenda.title, edit_admin_event_agenda_path(track_agenda.event_id,track_agenda.id)
                                           - else
@@ -112,7 +112,7 @@
                                           %td.font16
                                             = track_agenda.discription.present? ? track_agenda.discription : '-'
                                           %td.IconDrp.agendtaIconDrp
-                                            - if (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+                                            - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
                                               = more_vert_button(track_agenda.id)
                                               %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
                                                 = edit_link(params, track_agenda.id)

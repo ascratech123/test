@@ -312,14 +312,14 @@ class User < ActiveRecord::Base
     end
   end
 
-  def has_role_for_event?(role_name, event_id)
+  def has_role_for_event?(role_name, event_id, session_role_name)
     roles = self.roles
     access = false
     for role in roles 
       if role.resource_type == "Event"
-        access = true if role.name == role_name and role.resource_id == event_id
+        access = true if role.name == role_name and role.name == session_role_name and role.resource_id == event_id
       elsif role.resource_type == "Client"
-        access = true if role.resource.events.pluck(:id).include? event_id and role_name == role.name
+        access = true if role.resource.events.pluck(:id).include? event_id and role.name == role_name and role.name == session_role_name
       end
     end
     access

@@ -135,7 +135,7 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :telecaller
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
-      admin_dashboards_path
+      new_admin_change_role_path# admin_dashboards_path
     end
   end
 
@@ -255,17 +255,17 @@ class ApplicationController < ActionController::Base
   # end
 
   def check_for_access
-    if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id)))
+    if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
-    elsif params[:format].present? and (!current_user.has_role_for_event?("db_manager", @event.id))
-      redirect_to admin_prohibited_accesses_path
-    end
-    if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id))
-      redirect_to admin_prohibited_accesses_path
-    elsif (params[:import].present? and ["admin/invitees","admin/my_travels"].exclude? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id)))
+    elsif params[:format].present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       redirect_to admin_prohibited_accesses_path
     end
-    if (["admin/invitees","admin/my_travels"].include? params[:controller] and ["index","new"].include? params[:action] and (!current_user.has_role_for_event?("db_manager", @event.id)))
+    if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+      redirect_to admin_prohibited_accesses_path
+    elsif (params[:import].present? and ["admin/invitees","admin/my_travels"].exclude? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    end
+    if (["admin/invitees","admin/my_travels"].include? params[:controller] and ["index","new"].include? params[:action] and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
     end
   end

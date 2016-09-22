@@ -33,7 +33,7 @@ class Admin::SequencesController < ApplicationController
   protected
     def check_user_role
       @event = Event.find_by_id(params[:event_id])
-      if (current_user.has_role_for_event?("db_manager", @event.id)) 
+      if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) 
         redirect_to admin_dashboards_path
       end  
     end

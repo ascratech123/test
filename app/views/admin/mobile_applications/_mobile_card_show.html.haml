@@ -6,7 +6,7 @@
     - redirect_urls = {"app_info" => "#{edit_admin_event_mobile_application_path(@event.id, @mobile_application.id)}", "look_and_feel"=>"#{ (@event.theme.is_preview?) ? new_admin_event_theme_path(:event_id => @event.id, :step => "event_theme") : edit_admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id, :step => "event_theme")}", "look_and_feel1"=>"#{edit_admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id, :step => "event_theme")}" , "features" => "#{new_admin_event_event_feature_path(:event_id => @event.id)}" , "menus" => "#{admin_event_menus_path(:event_id => @event.id)}", "content" => "#{admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_content")}", "engagement" => "#{admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_engagement")}"}
     - constant_features.each_with_index do |feature,index|
       / - if current_user.has_role? "db_manager"
-      - if current_user.has_role_for_event?("db_manager", @event.id)
+      - if current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])
         -if (name[feature[0]] == "Engagement" or name[feature[0]] == "Content")
           .col-sm-3.col-xl-3{:id => "active_card#{index}"}
             %a{:href => "#{redirect_urls[feature[0]]}"}
@@ -35,7 +35,7 @@
                     - if "#{name[feature[0]]}" != "Engagement"
                       %h2.fs30.mt5.mbn
                         = "#{@event.review_status(feature[0])}%"
-  - if ((@event.check_event_content_status[0].present? or @mobile_application.review_status[1].present?) or @mobile_application.review_status[1] and ["show_content","show_engagement"].exclude?(params[:type])) and params[:analytics].blank? and (!current_user.has_role_for_event?("db_manager", @event.id))#(!current_user.has_role? :db_manager)
+  - if ((@event.check_event_content_status[0].present? or @mobile_application.review_status[1].present?) or @mobile_application.review_status[1] and ["show_content","show_engagement"].exclude?(params[:type])) and params[:analytics].blank? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)
     - if @mobile_application.review_status[1].present? or (@event.review_look_and_feel[1].present? or @event.check_event_content_status[0].present? or @event.review_menus[1].present? )
       .row
         %section.content

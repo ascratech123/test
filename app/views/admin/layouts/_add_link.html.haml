@@ -42,21 +42,21 @@
     = link_to new_admin_theme_path ,:class => "rightBtn hvr-sweep-to-right" do
       New Theme
   - when 'speaker'
-    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_speaker_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Speaker
   - when 'invitee_group'
-    - if @event.present? and (current_user.has_role_for_event?("db_manager", @event.id))#(current_user.has_role? :db_manager)
+    - if @event.present? and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(current_user.has_role? :db_manager)
       = link_to new_admin_event_invitee_group_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Invitee Group
-    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
       = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Notification
   - when 'attendee'
     = link_to new_admin_event_attendee_path(:event_id => @event.id) ,:class => " rightBtn hvr-sweep-to-right" do
       New Attendee
   - when 'agenda'
-    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id))#!(current_user.has_role? :db_manager)
+    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
       = link_to new_admin_event_agenda_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Session
       = link_to new_admin_event_event_feature_path(:event_id => @event.id, :feature => "my_calender"),:class => "rightBtn hvr-sweep-to-right" do
@@ -76,10 +76,10 @@
     = link_to new_admin_licensee_path ,:class => "rightBtn hvr-sweep-to-right" do
       New Licensee
   - when 'conversation'
-    - if @event.conversation_auto_approve == "true" and (!current_user.has_role_for_event?("db_manager", @event.id))#(!current_user.has_role? :db_manager)
+    - if @event.conversation_auto_approve == "true" and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "false", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Disable Auto Approve
-    -elsif @event.conversation_auto_approve == "false" and (!current_user.has_role_for_event?("db_manager", @event.id)) #(!current_user.has_role? :db_manager)
+    -elsif @event.conversation_auto_approve == "false" and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #(!current_user.has_role? :db_manager)
       = link_to admin_event_conversations_path(:event_id => @event.id, :auto_approve => "true", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'telecaller'
@@ -99,7 +99,7 @@
     = link_to new_admin_event_faq_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New FAQ
   - when 'feedback'
-    - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+    - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Feedback
   - when 'image'   
@@ -111,7 +111,7 @@
       = link_to  new_admin_event_highlight_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Highlight Image        
   - when 'poll'
-    - if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+    - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_poll_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Question
   - when 'sponsor'
@@ -139,7 +139,7 @@
         New Contact Us              
   - when 'notification'
     - if @event.present?
-      -if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+      -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
         = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
           New Notification
       = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
@@ -151,10 +151,10 @@
     - if (current_user.has_role? :moderator)
       = link_to new_admin_event_qna_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         Add Question
-    - if @event.qna_auto_approve == "true" and (!current_user.has_role_for_event?("db_manager", @event.id)) #(!current_user.has_role? :db_manager)
+    - if @event.qna_auto_approve == "true" and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #(!current_user.has_role? :db_manager)
       = link_to admin_event_qnas_path(:event_id => @event.id, :auto_approve => "false", :feature => "QNA"),:class => "rightBtn hvr-sweep-to-right" do
         Disable Auto Approve
-    -elsif @event.qna_auto_approve == "false" and (!current_user.has_role_for_event?("db_manager", @event.id)) #(!current_user.has_role? :db_manager)
+    -elsif @event.qna_auto_approve == "false" and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #(!current_user.has_role? :db_manager)
       = link_to admin_event_qnas_path(:event_id => @event.id, :auto_approve => "true", :feature => "QNA"),:class => "rightBtn hvr-sweep-to-right" do
         Enable Auto Approve
   - when 'panel'
@@ -165,7 +165,7 @@
     = link_to new_admin_event_grouping_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New Grouping
   - when 'quiz'
-    -if (!current_user.has_role_for_event?("db_manager", @event.id)) #!(current_user.has_role? :db_manager)
+    -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_quiz_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Quiz    
   - when 'registration'

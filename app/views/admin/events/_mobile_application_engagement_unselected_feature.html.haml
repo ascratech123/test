@@ -1,7 +1,7 @@
 .content
   .row
     - @count = 0
-    - if (!current_user.has_role_for_event?("moderator", @event.id)) and (!current_user.has_role_for_event?("db_manager", @event.id))#(!current_user.has_role? :moderator) and (!current_user.has_role? :db_manager)
+    - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :moderator) and (!current_user.has_role? :db_manager)
       - if show_card_except_event_features("feedbacks")
         = render :partial => "admin/events/cards", :locals => {:icon => "b_&_w", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count, :img => "feedback.png"}
       - if show_card_except_event_features("e_kits")
