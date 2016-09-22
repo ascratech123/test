@@ -62,9 +62,28 @@ class ApplicationController < ActionController::Base
     User.current = current_user
   end
 
+  # def authorize_client_role
+  #   client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
+  #   @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+  #   client_ids += @events.pluck(:client_id)
+  #   @clients = Client.where(:id => client_ids)
+  #   @client = @clients.find_by_id(params[:client_id])
+  #   return redirect_to admin_dashboards_path if @client.blank?
+  
+  #   @events = @events.where(:client_id => @client.id)
+  #   @events = @client.events if @events.blank? and @client.present?
+  #   @event = @events.find_by_id(params[:id]) if params[:id].present? and @events.present?
+
+  #   @log_changes = LogChange.get_changes('Event', @event.id) if params[:id].present? and @event.present?
+    
+  #   if params[:id].present? and @event.blank? and params[:controller] == 'admin/events'
+  #     redirect_to admin_dashboards_path
+  #   end
+  # end
+
   def authorize_client_role
-    client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
-    @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+    client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
+    @events = Event.with_roles(session[:current_user_role], current_user)
     client_ids += @events.pluck(:client_id)
     @clients = Client.where(:id => client_ids)
     @client = @clients.find_by_id(params[:client_id])
@@ -81,9 +100,27 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # def find_client_association
+  #   features = params[:controller].gsub('admin/','')
+  #   @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+  #   @events = @events.where(:client_id => @client.id)
+  #   if @events.blank?
+  #     instance_variable_set("@"+features, @client.send(features)) if params[:action] == 'index'
+  #   else
+  #     instance_variable_set("@"+features, @events) if params[:action] == 'index'
+  #   end
+  #   ##Dont delete it #@attendee = @attendees.find_by_id(params[:id]) if params[:id].present? and @attendees.present?
+  #   if @client.association(features).present? and params[:id].present?
+  #     feature = @client.association(features).find(params[:id]) rescue nil
+  #     instance_variable_set("@"+features.singularize, feature)
+  #     instance_variable_set("@"+'log_changes', LogChange.get_changes(features.capitalize.singularize.camelize, feature.id)) if params[:action] == 'show'
+  #   end
+  #   redirect_to admin_dashboards_path if params[:id].present? and instance_variable_get("@"+features.singularize).blank?
+  # end
+
   def find_client_association
     features = params[:controller].gsub('admin/','')
-    @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+    @events = Event.with_roles(session[:current_user_role], current_user)
     @events = @events.where(:client_id => @client.id)
     if @events.blank?
       instance_variable_set("@"+features, @client.send(features)) if params[:action] == 'index'
@@ -99,11 +136,24 @@ class ApplicationController < ActionController::Base
     redirect_to admin_dashboards_path if params[:id].present? and instance_variable_get("@"+features.singularize).blank?
   end
 
+  # def authorize_event_role
+  #   @event = Event.find(params[:event_id]) rescue nil
+  #   if @event.present?
+  #     @assigned_event = Event.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.id).first
+  #     @client = Client.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.client_id).first
+  #     if (@client.blank? and @assigned_event.blank?)
+  #       redirect_to admin_dashboards_path  
+  #     end
+  #   else
+  #     redirect_to admin_dashboards_path
+  #   end
+  # end
+
   def authorize_event_role
     @event = Event.find(params[:event_id]) rescue nil
     if @event.present?
-      @assigned_event = Event.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.id).first
-      @client = Client.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.client_id).first
+      @assigned_event = Event.with_roles(session[:current_user_role], current_user).where(:id => @event.id).first
+      @client = Client.with_roles(session[:current_user_role], current_user).where(:id => @event.client_id).first
       if (@client.blank? and @assigned_event.blank?)
         redirect_to admin_dashboards_path  
       end
@@ -200,8 +250,10 @@ class ApplicationController < ActionController::Base
     if current_user.has_role? :super_admin
       @clients = Client.with_roles(current_user.roles.pluck(:name), current_user)
     else
-      client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
-      client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
+      # client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
+      # client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
+      client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
+      client_ids += Event.with_roles(session[:current_user_role], current_user).pluck(:client_id)
       @clients = Client.where(:id => client_ids)
     end if current_user.present?
     @client = @clients.find(params[:id]) rescue nil if params[:id].present? and @clients.present?
