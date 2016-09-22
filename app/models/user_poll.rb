@@ -47,7 +47,12 @@ class UserPoll < ActiveRecord::Base
   end
 
   def user_answer
-  	self.poll.attributes[self.answer.downcase]
+    answer_count = self.answer.split(',').count
+    if answer_count == 1
+      self.poll.attributes[self.answer.downcase]
+    else
+      self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
+    end
   end
 
   def create_analytic_record
