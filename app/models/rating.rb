@@ -69,10 +69,10 @@ class Rating < ActiveRecord::Base
   
   def speaker_name
     if self.ratable_type == 'Agenda'
-      self.ratable.speaker_name rescue ""
+      return self.ratable.speaker_name rescue ""
     end
     if self.ratable_type == "Speaker"
-      self.ratable.speaker_name rescue ""
+      return self.ratable.speaker_name rescue ""
     end  
   end
 
