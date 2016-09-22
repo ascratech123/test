@@ -321,7 +321,44 @@ class User < ActiveRecord::Base
       elsif role.resource_type == "Client"
         access = true if role.resource.events.pluck(:id).include? event_id and role.name == role_name and role.name == session_role_name
       end
+      return true if access 
     end
     access
   end
+
+  # def has_role_without_event(role_name, client_ids,session_role_name)
+  #   # clients = Client.where(:id => client_ids)
+  #   event_ids = Event.where(:client_id => client_ids).pluck(:id)
+  #   access = false
+  #   roles = self.roles
+  #   for client_id in client_ids
+  #     events = Event.where(:client_id => client_id)#client.events
+  #     for event in events
+  #       for role in roles 
+  #         if role.resource_type == "Event"
+  #           access = true if role.name == role_name and role.name == session_role_name and role.resource_id == event.id
+  #         elsif role.resource_type == "Client"
+  #           access = true if role.resource.events.pluck(:id).include? event.id and role.name == role_name and role.name == session_role_name
+  #         end
+  #         return true if access 
+  #       end
+  #     end
+  #   end
+  #   access
+  # end
+
+  def has_role_without_event(role_name, client_ids,session_role_name)
+    event_ids = Event.where(:client_id => client_ids).pluck(:id)
+    access = false
+    for role in self.roles 
+      if role.resource_type == "Event"
+        access = true if role.name == role_name and role.name == session_role_name and event_ids.include? role.resource_id 
+      elsif role.resource_type == "Client"
+        access = true if (role.resource.events.pluck(:id) & event_ids).present? and role.name == role_name and role.name == session_role_name
+      end
+      return true if access 
+    end
+    access
+  end
+
 end

@@ -15,16 +15,17 @@
       %th Ongoing Event
       %th Past Event
       %th Status
-      - if !current_user.has_role? :super_admin  
+      - objs_ids = objs.pluck(:id)
+      - if !current_user.has_role_without_event("super_admin", objs_ids,session[:current_user_role])#!current_user.has_role? :super_admin  
         %th
     - objs.each do |client|
       %tr
-        -if client.status == "deactive" or current_user.has_role? :super_admin
+        -if client.status == "deactive" or current_user.has_role_without_event("super_admin", objs_ids,session[:current_user_role])#current_user.has_role? :super_admin
           %td.font16= client.name rescue nil
           %td.font16= Client.upcoming_event(client,current_user).length
           %td.font16= Client.ongoing_event(client,current_user).length
           %td.font16= Client.past_event(client,current_user).length
-        - elsif current_user.has_role? :db_manager
+        - elsif current_user.has_role_without_event("db_manager", objs_ids,session[:current_user_role])#current_user.has_role? :db_manager
           %td.font16= client.name
           %td.font16= Client.upcoming_event(client,current_user).length
           %td.font16= Client.ongoing_event(client,current_user).length
@@ -36,13 +37,13 @@
           %td.font16= link_to "#{Client.past_event(client,current_user).length} ", admin_client_events_path(:client_id => client.id,:type => "past_event"),:class => "collection-item"
         %td.font16= client.status.capitalize rescue nil
         %td.IconDrp
-          - if (current_user.has_any_role? :licensee_admin, :client_admin)
+          - if (current_user.has_role_without_event("licensee_admin", objs_ids,session[:current_user_role]) or current_user.has_role_without_event("client_admin", objs_ids,session[:current_user_role]))#(current_user.has_any_role? :licensee_admin, :client_admin)
             = more_vert_button(client.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{client.id}"}
               - if can? :update, client
                 = link_to edit_admin_client_path(client.id), :class => "mdl-menu__item" do
                   Edit
-              - if user_signed_in? and current_user.has_role? :licensee_admin
+              - if (user_signed_in? and current_user.has_role_without_event("licensee_admin", objs_ids,session[:current_user_role])) #current_user.has_role? :licensee_admin
                 = link_to "/admin/clients/#{client.id}/users", :class =>"mdl-menu__item" do
                   Manage Users
                 - client.aasm.events.each do |eve|

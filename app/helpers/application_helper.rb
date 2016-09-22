@@ -589,14 +589,14 @@ module ApplicationHelper
     end
   end
 
-  def check_curent_user_role(role_type)
+  def check_curent_user_role(role_type,client_ids,session_role_name)
     module_access = false
     if role_type == "client"
-      module_access = current_user.has_role? :licensee_admin
+      module_access = current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role])#current_user.has_role? :licensee_admin
     elsif role_type == "event"
-      module_access = current_user.has_any_role?(:licensee_admin, :client_admin)
+      module_access = (current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role]) or current_user.has_role_without_event("client_admin", client_ids,session[:current_user_role]))#current_user.has_any_role?(:licensee_admin, :client_admin)
     elsif role_type == "mobile_application"
-      module_access = current_user.has_any_role?(:licensee_admin, :client_admin)
+      module_access = (current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role]) or current_user.has_role_without_event("client_admin", client_ids,session[:current_user_role]))#current_user.has_any_role?(:licensee_admin, :client_admin)
     end
     module_access    
   end
