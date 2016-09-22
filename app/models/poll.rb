@@ -1,5 +1,5 @@
 class Poll < ActiveRecord::Base
-  
+  include ApplicationHelper
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am
 
   belongs_to :event
@@ -70,16 +70,24 @@ class Poll < ActiveRecord::Base
     option1=option2=option3=option4=option5=option6=option7=option8=option9=option10=0
     data["total"] = self.user_polls.count
     self.user_polls.each do |user_poll|
-      option1 = user_poll.answer.downcase.include?("option1") ? option1 + 1 : option1 rescue option1
-      option2 = user_poll.answer.downcase.include?("option2") ? option2 + 1 : option2 rescue option2
-      option3 = user_poll.answer.downcase.include?("option3") ? option3 + 1 : option3 rescue option3
-      option4 = user_poll.answer.downcase.include?("option4") ? option4 + 1 : option4 rescue option4
-      option5 = user_poll.answer.downcase.include?("option5") ? option5 + 1 : option5 rescue option5
-      option6 = user_poll.answer.downcase.include?("option6") ? option6 + 1 : option6 rescue option6
-      option7 = user_poll.answer.downcase.include?("option7") ? option7 + 1 : option7 rescue option7
-      option8 = user_poll.answer.downcase.include?("option8") ? option8 + 1 : option8 rescue option8
-      option9 = user_poll.answer.downcase.include?("option9") ? option9 + 1 : option9 rescue option9
-      option10 = user_poll.answer.downcase.include?("option10") ? option10 + 1 : option10 rescue option10
+      if is_number? user_poll.answer
+        option1 = user_poll.answer.to_i == 1 ? option1 + 1 : option1 rescue option1
+        option2 = user_poll.answer.to_i == 2 ? option2 + 1 : option2 rescue option2
+        option3 = user_poll.answer.to_i == 3 ? option3 + 1 : option3 rescue option3
+        option4 = user_poll.answer.to_i == 4 ? option4 + 1 : option4 rescue option4
+        option5 = user_poll.answer.to_i == 5 ? option5 + 1 : option5 rescue option5
+      else  
+        option1 = user_poll.answer.downcase.include?("option1") ? option1 + 1 : option1 rescue option1
+        option2 = user_poll.answer.downcase.include?("option2") ? option2 + 1 : option2 rescue option2
+        option3 = user_poll.answer.downcase.include?("option3") ? option3 + 1 : option3 rescue option3
+        option4 = user_poll.answer.downcase.include?("option4") ? option4 + 1 : option4 rescue option4
+        option5 = user_poll.answer.downcase.include?("option5") ? option5 + 1 : option5 rescue option5
+        option6 = user_poll.answer.downcase.include?("option6") ? option6 + 1 : option6 rescue option6
+        option7 = user_poll.answer.downcase.include?("option7") ? option7 + 1 : option7 rescue option7
+        option8 = user_poll.answer.downcase.include?("option8") ? option8 + 1 : option8 rescue option8
+        option9 = user_poll.answer.downcase.include?("option9") ? option9 + 1 : option9 rescue option9
+        option10 = user_poll.answer.downcase.include?("option10") ? option10 + 1 : option10 rescue option10        
+      end  
     end
     data["option1"] = option1 rescue nil
     data["option2"] = option2 rescue nil

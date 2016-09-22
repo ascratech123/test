@@ -774,6 +774,10 @@ end
     @mobile_application.store_info.present? ? "Do you want to Add this Event in the Published App?" : "Are you sure, you want to Publish this." rescue ""
   end
 
+  def is_number? string
+    true if Float(string) rescue false
+  end
+
   def get_notification_type_group_array(event)
     # action_based = {'agendas' => [['Agenda Rating', 'agendas']], 'favorites' => [['Agenda Favorite', 'agendas'], ['Speaker Favorite', 'speakers'], ['Invitee Favorite', 'invitees'], ['Sponsor Favorite', 'sponsors'], ['Exhibitors Favorite', 'exhibitors']]}
     # logic_based = {'polls' => [['Polls Taken', 'polls']], 'feedbacks' => [['Feedback Submitted', 'feedbacks']], 'quizzes' => [['Quiz Answered', 'quizzes']], 'qnas' => [['Question Asked', 'qnas']], 'qr_code' => [['QR Code Scanned', 'qr_code']]}
