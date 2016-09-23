@@ -1,4 +1,3 @@
-
 class Conversation < ActiveRecord::Base
   include AASM
   attr_accessor :platform
@@ -23,7 +22,8 @@ class Conversation < ActiveRecord::Base
   # validate :check_image_and_description
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
-  after_create :set_status_as_per_auto_approve, :create_analytic_record#, :set_event_timezone, :set_dates_with_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
+  after_save :update_last_updated_model
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -39,6 +39,10 @@ class Conversation < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end 
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def perform_conversation(conversation)
@@ -96,7 +100,7 @@ class Conversation < ActiveRecord::Base
   end
 
   def timestamp
-    self.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M')
+    self.created_at.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes
@@ -221,20 +225,26 @@ class Conversation < ActiveRecord::Base
     self.id
   end
 
-  def created_at_with_timezone
+  def created_at_with_event_timezone
     self.created_at.in_time_zone(self.event_timezone)
   end
 
-  def updated_at_with_timezone
+  def updated_at_with_event_timezone
     self.updated_at.in_time_zone(self.event_timezone)
   end
 
-  def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event.timezone)
+  def formatted_created_at_with_event_timezone
+    # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    created_at_with_tmz.sub(year, "")
   end
 
-  def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event.timezone)
+  def formatted_updated_at_with_event_timezone
+    # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    updated_at_with_tmz.sub(year, "")    
   end
 
 end

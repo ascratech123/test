@@ -10,8 +10,13 @@ class EKit < ActiveRecord::Base
   validates_attachment_presence :attachment, :message => "This field is required." 
   validates :name, presence: { :message => "This field is required." }
   #validates_attachment_content_type :attachment, :content_type => %w(application/zip application/msword application/vnd.ms-office application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/xls application/xlsx application/pdf)
+  after_save :update_last_updated_model
   
   default_scope { order('created_at desc') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
 	def pdf_attached?
 	  self.attachment.file?
@@ -89,14 +94,14 @@ class EKit < ActiveRecord::Base
     value = {}
     tags.each do |tag|
       value["type"], value["tag"] = "folder", tag.name
-      value["list"] = EKit.tagged_with(tag.name).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).as_json(:only => [:id,:event_id, :name, :created_at, :updated_at], :methods => [:attachment_url,:attachment_type ]) rescue []
+      value["list"] = EKit.tagged_with(tag.name).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type ]) rescue []
       data << value rescue nil
       value = {}
     end
     EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).each do |e_kit|
       if (e_kit.tags.count == 0)
         value["type"], value["tag"] = "non_folder", ""
-        value["list"] = [e_kit.as_json(:only => [:id,:event_id, :name, :created_at, :updated_at], :methods => [:attachment_url,:attachment_type])] rescue []
+        value["list"] = [e_kit.as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type])] rescue []
         data << value rescue nil
         value = {}
       end

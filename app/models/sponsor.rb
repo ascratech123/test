@@ -22,11 +22,20 @@ class Sponsor < ActiveRecord::Base
 
   validates_attachment_content_type :logo, :content_type => ["image/jpg", "image/jpeg", "image/png"],:message => "please select valid format."
   validates :sponsor_type,:name, presence: { :message => "This field is required." }
+  validates :email,
+            :format => {
+            :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
+            :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
   validate :check_logo_is_present
   accepts_nested_attributes_for :images
   before_create :set_sequence_no
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def self.search(params,sponsors)
     sponsor_type = params[:search]

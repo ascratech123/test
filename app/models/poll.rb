@@ -1,19 +1,19 @@
 class Poll < ActiveRecord::Base
-  
+  include ApplicationHelper
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am
 
   belongs_to :event
   has_many :user_polls, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   
-  #validate :time_format
-  validates :question,:option1,:option2, presence: { :message => "This field is required." }
-  #validates :sequence, uniqueness: {scope: :event_id}, :allow_blank => true#, presence: true
+  validates :option_type,  presence: { :message => "This field is required." }, unless: Proc.new { |object| object.description == true }
+  validates :question, presence: { :message => "This field is required." }
+  validates :option1, :option2, presence: { :message => "This field is required." }, if: Proc.new { |object| object.option_type == "Radio" || object.option_type == "Checkbox"}
   
   before_save :set_time
-  after_save :push_notification, :check_push_to_wall_status
+  after_save :push_notification, :check_push_to_wall_status, :update_last_updated_model
   before_create :set_sequence_no
-  after_create :set_status_as_per_auto_approve
+  after_create :set_status#, :set_status_as_per_auto_approve
 
   default_scope { order("sequence") }
 
@@ -30,6 +30,17 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def set_status
+    if self.status.blank?
+      self.status = "activate"
+      self.save
+    end
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+ 
   def self.search(params,polls)
     keyword = params[:search][:keyword]
      polls = polls.where("question like (?) ", "%#{keyword}%") if keyword.present?
@@ -56,15 +67,27 @@ class Poll < ActiveRecord::Base
   
   def option_percentage
     data = {}
-    option1=option2=option3=option4=option5=option6=0
+    option1=option2=option3=option4=option5=option6=option7=option8=option9=option10=0
     data["total"] = self.user_polls.count
     self.user_polls.each do |user_poll|
-      option1 = user_poll.answer.downcase.include?("option1") ? option1 + 1 : option1 rescue option1
-      option2 = user_poll.answer.downcase.include?("option2") ? option2 + 1 : option2 rescue option2
-      option3 = user_poll.answer.downcase.include?("option3") ? option3 + 1 : option3 rescue option3
-      option4 = user_poll.answer.downcase.include?("option4") ? option4 + 1 : option4 rescue option4
-      option5 = user_poll.answer.downcase.include?("option5") ? option5 + 1 : option5 rescue option5
-      option6 = user_poll.answer.downcase.include?("option6") ? option6 + 1 : option6 rescue option6
+      if is_number? user_poll.answer
+        option1 = user_poll.answer.to_i == 1 ? option1 + 1 : option1 rescue option1
+        option2 = user_poll.answer.to_i == 2 ? option2 + 1 : option2 rescue option2
+        option3 = user_poll.answer.to_i == 3 ? option3 + 1 : option3 rescue option3
+        option4 = user_poll.answer.to_i == 4 ? option4 + 1 : option4 rescue option4
+        option5 = user_poll.answer.to_i == 5 ? option5 + 1 : option5 rescue option5
+      else  
+        option1 = user_poll.answer.downcase.include?("option1") ? option1 + 1 : option1 rescue option1
+        option2 = user_poll.answer.downcase.include?("option2") ? option2 + 1 : option2 rescue option2
+        option3 = user_poll.answer.downcase.include?("option3") ? option3 + 1 : option3 rescue option3
+        option4 = user_poll.answer.downcase.include?("option4") ? option4 + 1 : option4 rescue option4
+        option5 = user_poll.answer.downcase.include?("option5") ? option5 + 1 : option5 rescue option5
+        option6 = user_poll.answer.downcase.include?("option6") ? option6 + 1 : option6 rescue option6
+        option7 = user_poll.answer.downcase.include?("option7") ? option7 + 1 : option7 rescue option7
+        option8 = user_poll.answer.downcase.include?("option8") ? option8 + 1 : option8 rescue option8
+        option9 = user_poll.answer.downcase.include?("option9") ? option9 + 1 : option9 rescue option9
+        option10 = user_poll.answer.downcase.include?("option010") ? option10 + 1 : option10 rescue option10        
+      end  
     end
     data["option1"] = option1 rescue nil
     data["option2"] = option2 rescue nil
@@ -72,6 +95,10 @@ class Poll < ActiveRecord::Base
     data["option4"] = option4 rescue nil
     data["option5"] = option5 rescue nil
     data["option6"] = option6 rescue nil
+    data["option7"] = option7 rescue nil
+    data["option8"] = option8 rescue nil
+    data["option9"] = option9 rescue nil
+    data["option10"] = option10 rescue nil
     data
   end
 
@@ -106,16 +133,16 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def set_status_as_per_auto_approve
-    if Event.find(self.event_id).poll_auto_approve == "true"
-      self.update_column(:status, "activate") 
-    elsif Event.find(self.event_id).poll_auto_approve == "false"
-      self.update_column(:status, "deactivate")
-    end
-  end
+  # def set_status_as_per_auto_approve
+  #   if Event.find(self.event_id).poll_auto_approve == "true"
+  #     self.update_column(:status, "activate") 
+  #   elsif Event.find(self.event_id).poll_auto_approve == "false"
+  #     self.update_column(:status, "deactivate")
+  #   end
+  # end
 
-  def self.set_auto_approve(value,event)
-    event.update_column(:poll_auto_approve, value)
-  end
+  # def self.set_auto_approve(value,event)
+  #   event.update_column(:poll_auto_approve, value)
+  # end
   
 end

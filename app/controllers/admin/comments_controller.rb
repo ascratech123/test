@@ -9,7 +9,7 @@ class Admin::CommentsController < ApplicationController
       format.html  
       format.xls do
         method_allowed = [:conversation, :email, :user_name, :comment, :like_count,:timestamp]
-        send_data @comments.to_xls(:methods => method_allowed)
+        send_data @comments.includes(:commentable).to_xls(:methods => method_allowed)
       end
     end
   end

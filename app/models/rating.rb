@@ -34,7 +34,7 @@ class Rating < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.in_time_zone('Kolkata').strftime("%d/%m/%Y %T")
+    self.created_at.in_time_zone(self.ratable.event_timezone).strftime("%d/%m/%Y %T")
   end
 
   def email_id
@@ -69,10 +69,10 @@ class Rating < ActiveRecord::Base
   
   def speaker_name
     if self.ratable_type == 'Agenda'
-      self.ratable.speaker_name rescue ""
+      return self.ratable.speaker_name rescue ""
     end
     if self.ratable_type == "Speaker"
-      self.ratable.speaker_name rescue ""
+      return self.ratable.speaker_name rescue ""
     end  
   end
 

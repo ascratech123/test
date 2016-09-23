@@ -14,8 +14,13 @@ class EmergencyExit < ActiveRecord::Base
   validate :image_dimensions
 
   before_save :update_event_name
+  after_save :update_last_updated_model
   
   default_scope { order('created_at desc') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def update_event_name
   	self.event_name = Event.find_by_id(self.event_id).event_name rescue nil

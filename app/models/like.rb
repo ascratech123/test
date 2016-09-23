@@ -20,7 +20,7 @@ class Like < ActiveRecord::Base
   end
 
   def user_name
-    self.user.name_of_the_invitee
+    self.user.name_of_the_invitee rescue ""
   end
 
   def conversation

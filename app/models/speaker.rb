@@ -29,8 +29,39 @@ class Speaker < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
+  after_create :set_event_timezone
   before_save :set_full_name
+  after_save :update_last_updated_model
+  after_update :update_agenda_speaker_name
+  after_destroy :empty_agenda_speaker_name_and_id
   default_scope { order("sequence") }  
+
+
+  def update_agenda_speaker_name
+    if self.speaker_name_changed?
+      agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      if agendas.present?
+        agendas.each do |agenda|
+          agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
+          agenda.update_last_updated_model
+        end  
+      end
+    end  
+  end
+
+  def empty_agenda_speaker_name_and_id
+    agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+    if agendas.present?
+      agendas.each do |agenda|
+        agenda.update_columns(speaker_id: "",speaker_name: "",updated_at: Time.now) 
+        agenda.update_last_updated_model
+      end  
+    end
+  end  
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def self.search(params, speakers)
     speaker_name,email_address,designation,company_name = params[:search][:name],params[:search][:email_address],params[:search][:designation],params[:search][:company_name] if params[:adv_search].present?
@@ -84,5 +115,9 @@ class Speaker < ActiveRecord::Base
 
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
   end
 end

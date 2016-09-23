@@ -6,6 +6,7 @@ class Award < ActiveRecord::Base
   validates :title,presence: { :message => "This field is required." }
   
   before_create :set_sequence_no
+  after_save :update_last_updated_model
 
   default_scope { order("sequence") }
   
@@ -17,5 +18,9 @@ class Award < ActiveRecord::Base
 
   def set_sequence_no
     self.sequence = (Event.find(self.event_id).awards.pluck(:sequence).compact.max.to_i + 1) rescue nil
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 end

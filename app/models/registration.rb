@@ -26,6 +26,7 @@ class Registration < ActiveRecord::Base
   attr_accessor :label,:option_type,:validation_type,:option_1,:option_2,:option_3,:option_4
   
   validate :mandate_field_check
+  after_save :update_last_updated_model
 
   default_scope { order('created_at desc') }
 
@@ -39,4 +40,9 @@ class Registration < ActiveRecord::Base
         errors.add(:option_2, "This field is required.") if ((field[:option_type] == "Check Box" or field[:option_type] == "Radio Button") and field[:option_2].blank?)
     end
   end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
 end

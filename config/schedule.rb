@@ -23,3 +23,8 @@ set :output, "log/cron_log.log"
 every 5.minutes do
   runner "Notification.push_notification_time_basis", :environment => :production
 end
+
+every 5.minutes do
+  runner "Event.set_event_category", :environment => :production
+end
+

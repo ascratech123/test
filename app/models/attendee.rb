@@ -16,6 +16,8 @@ class Attendee < ActiveRecord::Base
 
   default_scope { order('created_at desc') }
 
+  after_create :set_event_timezone
+
   def self.search(params, attendees)
       name,email,phone_no = params[:search][:attendee_name],params[:search][:email],params[:search][:phone_number] if params[:adv_search].present?
       basic = params[:search][:keyword]
@@ -25,5 +27,9 @@ class Attendee < ActiveRecord::Base
       attendees = attendees.where("attendee_name like ? or phone_number like ? or email_address like ? ", "%#{basic}%", "%#{basic}%", "%#{basic}%") if basic.present?
     attendees
   end
+   
+  def set_event_timezone
+    self.update_column("event_timezone", self.event.timezone)
+  end  
    
 end

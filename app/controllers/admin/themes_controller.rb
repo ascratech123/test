@@ -103,7 +103,8 @@ class Admin::ThemesController < ApplicationController
 
   def show
     if !(current_user.has_role? :super_admin)
-      redirect_to :back
+      # redirect_to :back
+      go_back
     end
   end
 

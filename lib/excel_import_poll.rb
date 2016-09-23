@@ -50,7 +50,7 @@ module ExcelImportPoll
         objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).strip rescue ''
       end
       poll = Poll.find_or_initialize_by(:event_id => event_id,:question => objekt["question"])
-      poll.assign_attributes(:option1 => objekt["option1"], :option2 => objekt["option2"], :option3 => objekt["option3"], :option4 => objekt["option4"], :option5 => objekt["option5"], :option6 => objekt["option6"], :status => objekt["status"])
+      poll.assign_attributes(:option_type => objekt["option_type"], :option1 => objekt["option1"], :option2 => objekt["option2"], :option3 => objekt["option3"], :option4 => objekt["option4"], :option5 => objekt["option5"], :option6 => objekt["option6"], :status => objekt["status"], :description => objekt["description"])
       objekts << poll
     end
     objekts.compact
@@ -63,7 +63,6 @@ module ExcelImportPoll
       Rails.logger.info objekt.errors.inspect
     end
     error_rows
-    
   end
 
   def self.save_objekts(objekts)

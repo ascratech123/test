@@ -8,10 +8,19 @@ class Exhibitor < ActiveRecord::Base
                                          }.merge(EXHIBITOR_IMAGE_PATH)
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png"],:message => "please select valid format."
   validates :name,:image, presence:{ :message => "This field is required." }
+  validates :email,
+            :format => {
+            :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
+            :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
   validate :image_dimensions
   before_create :set_sequence_no
+  after_save :update_last_updated_model
   
   default_scope { order('sequence') }
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def image_url(style=:small)
     style.present? ? self.image.url(style) : self.image.url

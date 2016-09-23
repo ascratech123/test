@@ -1,5 +1,3 @@
-
-
 class Comment < ActiveRecord::Base
   
   attr_accessor :platform
@@ -9,10 +7,14 @@ class Comment < ActiveRecord::Base
   validates :description,:commentable_id,:commentable_type,:user_id,:presence =>true
   
   after_create :create_analytic_record
-  after_save :update_conversation
+  after_save :update_conversation, :update_last_updated_model
 
   default_scope { order('created_at desc') }
   
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def commented_user_name
     # Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
     self.user.name_of_the_invitee rescue ""
@@ -78,7 +80,8 @@ class Comment < ActiveRecord::Base
   end
   
   def timestamp
-    self.commentable.created_at.in_time_zone('Kolkata').strftime('%m/%d/%Y %H:%M') rescue ""
+    commentable_rec = self.commentable
+    commentable_rec.created_at.in_time_zone(commentable_rec.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
   end
   def image_url
     conversation = Conversation.find_by_id(self.commentable_id)
@@ -115,6 +118,20 @@ class Comment < ActiveRecord::Base
   def updated_at_with_event_timezone
     timezone = Conversation.joins(:event).select("conversations.id as conversation_id, events.id as event_id, events.timezone as timezone").where("conversations.id = ?", self.commentable_id).first.timezone
     self.updated_at.in_time_zone(timezone)
+  end
+
+  def formatted_created_at_with_event_timezone
+    # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    created_at_with_tmz.sub(year, "")    
+  end
+
+  def formatted_updated_at_with_event_timezone
+    # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    year = Time.now.strftime("%Y") + " "
+    updated_at_with_tmz.sub(year, "")
   end
 
 end

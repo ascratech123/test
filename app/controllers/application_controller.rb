@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   #protect_from_forgery with: :exception
-  before_action :load_filter, :except => [:mobile_current_user]
+  before_action :load_filter, :except => [:mobile_current_user_present]
   #before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_url_history, :except => :back
@@ -19,6 +19,15 @@ class ApplicationController < ActionController::Base
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
+  end
+
+  def go_back 
+    #Attempt to redirect
+    redirect_to :back
+ 
+    #Catch exception and redirect to root
+    rescue ActionController::RedirectBackError
+      redirect_to root_path
   end
 
   def load_filter
@@ -221,6 +230,11 @@ class ApplicationController < ActionController::Base
 
   def mobile_current_user
     Invitee.find_by_id(session['invitee_id'])
+    #session['invitee_id'].present?
+  end
+
+  def mobile_current_user_present
+   session['invitee_id'].present?
   end
 
   # def redirect_show_to_edit

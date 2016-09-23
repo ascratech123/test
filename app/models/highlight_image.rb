@@ -11,6 +11,8 @@ class HighlightImage < ActiveRecord::Base
                                          }.merge(HIGHLIGHT_IMAGE_PATH)
   
   validates_attachment_content_type :highlight_image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+
+  after_save :update_last_updated_model
 	
   def highlight_image_url(style=:large)
   	style.present? ? self.highlight_image.url(style) : self.highlight_image.url
@@ -27,4 +29,9 @@ class HighlightImage < ActiveRecord::Base
       "id" => self.id
     }
   end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
 end

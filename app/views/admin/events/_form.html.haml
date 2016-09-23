@@ -1,3 +1,11 @@
+.overlayBg
+  / %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+  .spinner
+    .rect1
+    .rect2
+    .rect3
+    .rect4
+    .rect5
 .save_button.mdl-card.eventExceedLimit
   = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
@@ -65,6 +73,25 @@
                   = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'minute'))}", :col => '2',:maxlength => "2"
                   = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%p').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'ampm'))}", :col => '3',:maxlength => "2"
         = f.custom_text_field :cities, "City *"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+          .form-group.set_highlight_select
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Country *
+            .col-lg-7
+              = f.select :event, :country_name, Event::COUNTRIES,{:prompt => "Please select the country" ,:selected => (@event.country_name)}, {:class => 'select2-single form-control'}
+              - if @event.errors.present? and @event.errors[:country_name].present?
+                .field_with_errors
+                  %span.errorMessage{:for => "event_country_name"} This field is required.
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+          .form-group.set_highlight_select
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Time Zone *
+            .col-lg-7
+              - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.now.formatted_offset}"]}
+              = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.now.formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+              - if @event.errors.present? and @event.errors[:timezone].present?
+                .field_with_errors
+                  %span.errorMessage{:for => "event_timezone"} This field is required.  
         = f.custom_text_field :pax, "Nbr. of people"
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
