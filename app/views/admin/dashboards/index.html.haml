@@ -70,10 +70,11 @@
           - @events = Event.where(:client_id => client_ids)
           - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
-            - @mobile_applications = MobileApplication.where(:id => ids)
+            - @mobile_applications = MobileApplication.where(:id => ids)      
           - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
+            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
             - @mobile_applications = MobileApplication.where(:id => ids)
+
           - else
             - @mobile_applications = MobileApplication.where(:client_id => client_ids)
           - event_ids = @events.pluck(:id)
@@ -130,7 +131,7 @@
                               - length = @count.pluck(:id).compact.uniq.count rescue 0
                               = link_to length, admin_clients_path(:feature => 'users',:redirect_page => "index", :role => "moderator", :wall => true)
                             -else
-                              - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
+                              - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])
                                 - length = @count.pluck(:id).compact.uniq.count rescue 0
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
@@ -241,7 +242,7 @@
             / = render :partial => 'admin/layouts/card_event', :locals => {:image_path => "coloured_icons/user_3.png", :page_title => "Leads", :feature_count => "0" }
 
 
-                      
+                        
           - if @clients.blank? or @mobile_applications.blank? or @events.blank?  
             - if @mobile_applications.blank? 
               - title = "Mobile App" 
