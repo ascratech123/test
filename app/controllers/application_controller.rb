@@ -44,16 +44,20 @@ class ApplicationController < ActionController::Base
   def check_licensee_expiry
     if (current_user.present? and !current_user.has_role? :super_admin)
       licensee_admin = current_user.get_licensee_admin
-      if licensee_admin.present?
-        if licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today
-          session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
-          redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
-        elsif licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today
-          session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
-          redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
-        elsif session[:licensee_expired].present?
-          session[:licensee_expired] = nil
-        end
+      if licensee_admin.present? and (licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today or licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today)
+
+        sign_out current_user
+        session[:date_error] = "Your account is deactive, Please contact admin."
+        root_path
+        # if licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today
+        #   session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
+        #   redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
+        # elsif licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today
+        #   session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
+        #   redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
+        # elsif session[:licensee_expired].present?
+        #   session[:licensee_expired] = nil
+        # end
       end
     end
   end
@@ -196,6 +200,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_super_admin
+    # binding.pry
     unless (user_signed_in? and current_user.roles.present? and current_user.has_role? :super_admin)
      redirect_to admin_dashboards_path
     end

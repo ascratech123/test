@@ -192,7 +192,8 @@ class User < ActiveRecord::Base
     if self.has_role? :licensee_admin
       User.where(:id => self.id).first
     else
-      User.where(:licensee_id => self.licensee_id).first
+      User.where(:id => self.licensee_id).first
+      # User.where(:licensee_id => self.licensee_id).first #ToDeactivate Every User which Belongs To Licensee User Created By Admin
     end
   end
 

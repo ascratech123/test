@@ -42,6 +42,7 @@ class Admin::StoreInfosController < ApplicationController
     if @event.present? and @event.mobile_application.present?
       @store_info = StoreInfo.new(store_info_params)
       if @store_info.save
+        UserMailer.send_event_mail_to_licensee(@store_info).deliver_now
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id)
       else
         render :action => 'new'
