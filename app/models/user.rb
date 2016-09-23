@@ -350,7 +350,7 @@ class User < ActiveRecord::Base
     clients = get_clients
     event_count = clients.map{|c| c.events.count}.sum
   end
-  
+
    def has_role_for_event?(role_name, event_id, session_role_name)
      roles = self.roles
      access = false
@@ -400,4 +400,5 @@ class User < ActiveRecord::Base
      end
      access
    end
+ end
 end
