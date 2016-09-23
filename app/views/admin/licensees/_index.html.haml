@@ -17,12 +17,12 @@
       %th
       - if objs.present?
         - objs.each do |licensee| 
-          %tr
+          %tr 
             %td.font16= link_to "#{licensee.get_full_name}", edit_admin_licensee_path(:id => licensee.id)
             %td.font16= licensee.company.capitalize rescue nil
             %td.font16= link_to "#{licensee.email}", admin_licensee_path(licensee.id)
             %td.font16= licensee.status.capitalize rescue nil
-            / %td.font16= licensee.get_licensee_events_count
+            / %td.font16= licensee.get_licensee_events_count 
             - if licensee.no_of_event.present?
               %td.font16= "#{licensee.get_licensee_events_count} of #{licensee.no_of_event}"
             - else
