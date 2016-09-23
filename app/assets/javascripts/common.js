@@ -819,17 +819,62 @@ $(document).on('click', '.customButton', function(){
 
 $(document).ready(function(){
   $('#event_country_name').on('change', function() {
-    $(".overlayBg").show();
-    data = $("#event_cities").val();
-    country_name = $("#event_country_name").val();
-    $.ajax({
-      url: '/admin/time_zones',
-      type: 'get',
-      data: {'city_name' : data, 'country_name' : country_name},
-      dataType: 'script',
-      success: function(data){
-        $(".overlayBg").hide();
-      }
-    });
-  });
+   var start_date_time = $("#date-start").val();
+   /*alert(start_date_time)*/
+   if (start_date_time)  
+   {  
+     $(".overlayBg").show();
+     city = $("#event_cities").val();
+
+     country_name = $("#event_country_name").val();
+     $.ajax({
+       url: '/admin/time_zones',
+       type: 'get',
+       data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
+       dataType: 'script',
+       success: function(data){
+         $(".overlayBg").hide();
+       }
+     });
+   }
+   else
+   {
+     alert("Please select event start date");
+     $('select#event_country_name option:selected').prop("selected", false);
+   }
+ });
+});
+
+$(document).ready(function(){
+ $('#event_cities').blur(function(){
+   country_name = $("#event_country_name").val();
+   var country = (country_name != "Please select the Time Zone" && country_name != "");
+   if(country)
+   {  
+     var start_date_time = $("#date-start").val();
+     if(start_date_time)
+     {  
+       $(".overlayBg").show();
+       city = $("#event_cities").val();
+       country_name = $("#event_country_name").val();
+       $.ajax({
+         url: '/admin/time_zones',
+         type: 'get',
+         data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
+         dataType: 'script',
+         success: function(data){
+           $(".overlayBg").hide();
+         },
+         error: function(xhr, status, error) {
+           $(".overlayBg").hide();
+         }         
+       });
+     }
+     else
+     {
+       alert("Please select event start date");
+       $('select#event_country_name option:selected').prop("selected", false);
+     }  
+   }
+ });
 });
