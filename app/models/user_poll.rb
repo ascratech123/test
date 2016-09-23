@@ -14,17 +14,17 @@ class UserPoll < ActiveRecord::Base
 
   validates_uniqueness_of :user_id, :scope => [:poll_id], :message => 'Poll already taken'
 
-  after_save :update_poll, :update_last_updated_model
+  after_save :update_poll
 
   default_scope { order('created_at desc') }
 
-  def update_last_updated_model
-    LastUpdatedModel.update_record(self.class.name)
-  end
-	
   def update_poll
-		Poll.find_by_id(self.poll_id).update_column(:updated_at, self.updated_at) rescue nil
-	end
+    poll = Poll.find_by_id(self.poll_id)                               
+    if poll.present?
+      poll.update_column(:updated_at, self.updated_at)
+      poll.update_last_updated_model     
+    end
+  end
 
   def Timestamp
     self.created_at.in_time_zone(self.poll.event_timezone).strftime("%d/%m/%Y %T")
