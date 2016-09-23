@@ -79,9 +79,9 @@
           - event_ids = @events.pluck(:id)
           - @registrations = Registration.where(:event_id => event_ids)
           - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
-            - @users = User.get_managed_user(current_user,client_ids,@count.pluck(:id)) rescue []
+            - @users = User.get_managed_user(current_user,client_ids,@count.pluck(:id),session[:current_user_role]) rescue []
           - else   
-            - @users = User.get_managed_user(current_user,client_ids,event_ids) rescue []
+            - @users = User.get_managed_user(current_user,client_ids,event_ids,session[:current_user_role]) rescue []
           .row.DashPage.eventShowCard
             - if !(current_user.has_role_without_event("super_admin", client_ids,session[:current_user_role]))#(current_user.has_role? :super_admin)  
               .col-sm-3.col-xl-3

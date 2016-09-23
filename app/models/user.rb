@@ -249,16 +249,16 @@ class User < ActiveRecord::Base
     Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', resource.class.name, resource.id, self.id).last
   end
 
-  def self.get_managed_user(user,client_ids,event_ids)
-    if user.has_role? :licensee_admin
+  def self.get_managed_user(user,client_ids,event_ids,session_role)
+    if user.has_role_without_event("licensee_admin", client_ids,session_role)#user.has_role? :licensee_admin
       role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
       users = User.where(:licensee_id => user.id)
       users
     else
       users = []
-      if user.has_role? :client_admin
+      if user.has_role_without_event("client_admin", client_ids,session_role)#user.has_role? :client_admin
         users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Event", event_ids, Role.not_manage_user_dropdown("client_admin")).uniq
-      elsif user.has_role? :event_admin
+      elsif user.has_role_without_event("event_admin", client_ids,session_role)#user.has_role? :event_admin
         users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Event", event_ids, Role.not_manage_user_dropdown("event_admin")).uniq
       end  
       #users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Client", client_ids, Role.not_manage_user_dropdown("client_admin")).uniq rescue nil
@@ -398,5 +398,4 @@ class User < ActiveRecord::Base
     end
     access
   end
-
 end
