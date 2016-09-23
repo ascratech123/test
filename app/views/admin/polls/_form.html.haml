@@ -19,6 +19,13 @@
                 .field_with_errors{:style => 'color:red'}
                   %span{:for => "poll_option2", :class => "errorMessage"} 
                   = "This field is required."
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Options Visible?
+            .col-lg-3.p-h-12   
+              = f.custom_radio_button_menu :option_visible, "yes","Yes", :id => "url_page_type", :default_checked => (f.object.option_visible == 'yes' or f.object.option_visible.blank?) ? 'checked' : ''
+              = f.custom_radio_button_menu :option_visible, "no","No", :id => "build_new_page_type", :default_checked => (f.object.option_visible == 'no') ? 'checked' : ''
         - @show_options = (f.object.option_type == "Radio" or f.object.option_type == "Checkbox") ? true : false
         - @show_rating_options = f.object.option_type == "Rating" ? true : false
         = f.custom_text_field :option1, "Option1 *","background" => "false", class: "poll_hide_field"
