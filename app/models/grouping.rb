@@ -75,39 +75,38 @@ class Grouping < ActiveRecord::Base
   end
 
   def self.get_search_data_count(invitee_data, groupings)
-    conditions = []
-    invitee_data_ids = []
-    if groupings.present?
-      if groupings.map{|g| g.name}.include? "Default Group"
-        invitee_data = invitee_data
-      else
-        groupings.each do |grouping|
-          grouping.condition.map{|condition| condition[1]['value'].present? ? conditions << condition : nil}
-          if conditions.present? and invitee_data.present?
-            conditions.each do |condition|
-              k = condition[0] 
-              c = Grouping.get_query_condition(condition[1]['condition'])
-              v = Grouping.get_query_value(condition[1]['condition'], condition[1]['value'])
-              if c == "like"
-                v.each do |value|
-                  invitee_data_ids += invitee_data.where("#{k} #{c} (?)", value)
-                end 
-              else
-                invitee_data = invitee_data.where("#{k} #{c} (?)", v)
-                invitee_data_ids += invitee_data.pluck(:id)
-              end
-            end
-          else
-            invitee_data_ids += invitee_data.pluck(:id)
-          end
-        end
-        invitee_data_ids = invitee_data_ids.compact.uniq
-        invitee_data = invitee_data.where(:id => invitee_data_ids) rescue []
-      end
-      invitee_data.present? ? invitee_data : []
+    conditions, invitee_data_ids = [], []
+    # return [] if !groupings.present?
+    if groupings.map{|g| g.name}.include? "Default Group"
+      invitee_data = invitee_data
     else
-      []
+      groupings.each do |grouping|
+        grouping.condition.map{|condition| condition[1]['value'].present? ? conditions << condition : nil}
+        if conditions.present? #and invitee_data.present?
+          invitee_data_ids = Grouping.get_invitee_data_ids(conditions, invitee_data, invitee_data_ids)
+        else
+          invitee_data_ids += invitee_data.pluck(:id)
+        end
+      end
+      invitee_data = invitee_data.where(:id => invitee_data_ids.compact.uniq) rescue []
     end
+    invitee_data.present? ? invitee_data : []
   end
 
+  def self.get_invitee_data_ids(conditions, invitee_data, invitee_data_ids)
+    conditions.each do |condition|
+      k = condition[0] 
+      c = Grouping.get_query_condition(condition[1]['condition'])
+      v = Grouping.get_query_value(condition[1]['condition'], condition[1]['value'])
+      if c == "like"
+        v.each do |value|
+          invitee_data_ids += invitee_data.where("#{k} #{c} (?)", value)
+        end 
+      else
+        invitee_data_ids += invitee_data.where("#{k} #{c} (?)", v).pluck(:id)
+      end
+    end  
+      return invitee_data_ids
+  end
 end
+
