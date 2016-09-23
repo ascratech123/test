@@ -5,11 +5,15 @@
         = link_to new_admin_event_user_path(:event_id => @event.id, :feature => 'users', :role => 'db_manager',:page_id => "#{page_id}" || params[:page_id], :get_role => params["role"]), :class => "mdl-color-text--white" do
           Add DB Manager
       - elsif params[:client_id].present?
-        = link_to admin_client_events_path(:client_id => params[:client_id], :role => 'db_manager', :feature => 'users', :redirect_page => 'new',:page_id => "#{page_id}" || params[:page_id]), :class => "mdl-color-text--white" do
-          Add DB Manager
+        = link_to admin_client_events_path(:client_id => params[:client_id], :role => 'db_manager', :feature => 'users', :redirect_page => 'new',:page_id => "#{page_id}" || params[:page_id], :event_level => true), :class => "mdl-color-text--white" do
+          Add DB Manager(event level)        
       - else
         = link_to admin_clients_path(:feature => 'users', :role => 'db_manager'), :class => "mdl-color-text--white" do
           Add DB Manager
+    -# if params[:client_id].present?
+    %li.mdl-menu__item
+      = link_to new_admin_client_user_path(:client_id => params[:client_id], :role => 'db_manager', :client_level => true), :class => "mdl-color-text--white" do
+        Add DB Manager(client level)        
     - if (params[:client_id].present? and params[:action] != "show") #(params[:client_id].present? or @event.present?) and params[:action] != "show" 
       %li.mdl-menu__item
         - @client = @event.client if @event.present?

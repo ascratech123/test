@@ -2,7 +2,7 @@
 .ClientPopup
 #register-form.col.s12.ClientPopup-info
   %p.txtcenter.m-b-30
-    - if prompt_message == 'Select Event'
+    - if ((prompt_message == 'Select Event') and (params[:event_level].present? and params[:event_level] == "true"))
       Please select an event to continue
     - else
       Please select a client to continue
