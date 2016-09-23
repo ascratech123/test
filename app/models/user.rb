@@ -251,7 +251,7 @@ class User < ActiveRecord::Base
   end
 
   def self.get_managed_user(user,client_ids,event_ids,session_role)
-    if if user.has_role_without_event("licensee_admin", client_ids,session_role)
+    if user.has_role_without_event("licensee_admin", client_ids,session_role)
       role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
       users = User.where(:licensee_id => user.id)
       users
@@ -387,11 +387,11 @@ class User < ActiveRecord::Base
    #   access
    # end
  
-   def has_role_without_event(role_name, client_ids,session_role_name)
-     event_ids = Event.where(:client_id => client_ids).pluck(:id)
-     access = false
-     for role in self.roles 
-       if role.resource_type == "Event"
+  def has_role_without_event(role_name, client_ids,session_role_name)
+    event_ids = Event.where(:client_id => client_ids).pluck(:id)
+    access = false
+    for role in self.roles 
+      if role.resource_type == "Event"
          access = true if role.name == role_name and role.name == session_role_name and event_ids.include? role.resource_id 
        elsif role.resource_type == "Client"
          access = true if (role.resource.events.pluck(:id) & event_ids).present? and role.name == role_name and role.name == session_role_name
@@ -400,5 +400,4 @@ class User < ActiveRecord::Base
      end
      access
    end
- end
 end
