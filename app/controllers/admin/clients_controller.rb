@@ -8,17 +8,17 @@ class Admin::ClientsController < ApplicationController
     if params[:feature].present?
       if params[:client_id].present? or (@clients.present? and @clients.count == 1)
         client_id = (@clients.count == 1) ? @clients.first.id : params[:client_id]
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => params[:feature]) if ["mobile_applications","users","manage_event_users","manage_moderator_users"].exclude? params[:feature] and params[:redirect_page] != "new"
-        redirect_to new_admin_client_event_path(:client_id => client_id) if params[:feature] == "events" and params[:redirect_page] == "new"
-        redirect_to admin_client_mobile_applications_path(:client_id => client_id) if params[:feature] == "mobile_applications" and params[:redirect_page] != "new"
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "mobile_applications") if params[:feature] == "mobile_applications" and params[:redirect_page] == "new"
-        redirect_to admin_client_users_path(:client_id => client_id) if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] == "index"
-        redirect_to new_admin_client_user_path(:client_id => client_id, :role => "client_admin") if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] != "index"
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'event_admin' or params[:role] == 'moderator') and params[:redirect_page] != "index"
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'db_manager') and params[:redirect_page] != "index" and params[:dashboard_client_level].blank?
-        redirect_to new_admin_client_user_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'db_manager') and params[:redirect_page] != "index" and params[:dashboard_client_level].present?
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role =>"telecaller") if params[:feature] == "users" and (params[:role] == 'telecaller') 
-        redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role], :redirect_page => "index",:wall => "#{params[:wall].present?  ? params[:wall] : ""}") if params[:feature] == "users" and params[:role] == 'event_admin' or params[:role] == 'moderator' and params[:redirect_page] == "index"
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => params[:feature]) if ["mobile_applications","users","manage_event_users","manage_moderator_users"].exclude? params[:feature] and params[:redirect_page] != "new"
+        return redirect_to new_admin_client_event_path(:client_id => client_id) if params[:feature] == "events" and params[:redirect_page] == "new"
+        return redirect_to admin_client_mobile_applications_path(:client_id => client_id) if params[:feature] == "mobile_applications" and params[:redirect_page] != "new"
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => "mobile_applications") if params[:feature] == "mobile_applications" and params[:redirect_page] == "new"
+        return redirect_to admin_client_users_path(:client_id => client_id) if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] == "index"
+        return redirect_to new_admin_client_user_path(:client_id => client_id, :role => "client_admin") if params[:feature] == "users" and params[:role] == 'client_admin' and params[:redirect_page] != "index"
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'event_admin' or params[:role] == 'moderator') and params[:redirect_page] != "index"
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'db_manager') and params[:redirect_page] != "index" and params[:dashboard_client_level].blank?
+        return redirect_to new_admin_client_user_path(:client_id => client_id, :feature => "users", :role => params[:role]) if params[:feature] == "users" and (params[:role] == 'db_manager') and params[:redirect_page] != "index" and params[:dashboard_client_level].present?
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role =>"telecaller") if params[:feature] == "users" and (params[:role] == 'telecaller') 
+        return redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :role => params[:role], :redirect_page => "index",:wall => "#{params[:wall].present?  ? params[:wall] : ""}") if params[:feature] == "users" and params[:role] == 'event_admin' or params[:role] == 'moderator' and params[:redirect_page] == "index"
         redirect_to admin_client_events_path(:client_id => client_id, :feature => "users", :redirect_page => "index", :dashboard => "true") if  params[:feature] == "users" and params[:redirect_page] == "index" and params[:role].blank?
       else
         @select = true
