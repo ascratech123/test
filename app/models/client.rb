@@ -20,14 +20,14 @@ class Client < ActiveRecord::Base
   scope :past_event, -> (client){client.events.where('end_event_date < ?',Date.today) }
   scope :ordered, -> { order('created_at desc') }
   
-  def self.upcoming_event(client,user)
-    if user.has_role? :event_admin
+  def self.upcoming_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
-    elsif user.has_role? :db_manager
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Event.with_roles("db_manager", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     else
@@ -35,14 +35,14 @@ class Client < ActiveRecord::Base
     end
   end
 
-  def self.ongoing_event(client,user)
-    if user.has_role? :event_admin
+  def self.ongoing_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
-    elsif user.has_role? :db_manager
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Event.with_roles("db_manager", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     else
@@ -50,14 +50,14 @@ class Client < ActiveRecord::Base
     end
   end
 
-  def self.past_event(client,user)
-    if user.has_role? :event_admin
+  def self.past_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('end_event_date < ?',Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
       events.where('end_event_date < ?',Date.today)
-    elsif user.has_role? :db_manager
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Event.with_roles("db_manager", user)
       events.where('end_event_date < ?',Date.today)
     else
