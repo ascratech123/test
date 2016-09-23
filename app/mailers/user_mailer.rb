@@ -21,7 +21,7 @@ class UserMailer < ActionMailer::Base
   def send_event_mail_to_licensee(store_info)
     @mobile_application = MobileApplication.find(store_info.mobile_application_id)
     @licensee = @mobile_application.client.licensee
-    mail(to: @licensee.email, subject: 'Your #{@mobile_application.name} created')
+    mail(from: "info@hobnobspace.com", to: @licensee.email, bcc: "minakshi@ascratech.com", subject: "Your #{@mobile_application.name} created")
   end
 
   def send_password_invitees(invitee)
