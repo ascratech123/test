@@ -9,11 +9,15 @@
           Add DB Manager(event level)        
       - else
         = link_to admin_clients_path(:feature => 'users', :role => 'db_manager'), :class => "mdl-color-text--white" do
-          Add DB Manager
-    -# if params[:client_id].present?
-    %li.mdl-menu__item
-      = link_to new_admin_client_user_path(:client_id => params[:client_id], :role => 'db_manager', :client_level => true), :class => "mdl-color-text--white" do
-        Add DB Manager(client level)        
+          Add DB Manager (event level)        
+    - if params[:controller] == 'admin/dashboards'
+      %li.mdl-menu__item
+        = link_to admin_clients_path(:feature => 'users', :role => 'db_manager', :dashboard_client_level => true), :class => "mdl-color-text--white" do
+          Add DB Manager (client level)
+    - if params[:client_id].present?
+      %li.mdl-menu__item
+        = link_to new_admin_client_user_path(:client_id => params[:client_id], :role => 'db_manager', :client_level => true), :class => "mdl-color-text--white" do
+          Add DB Manager(client level)        
     - if (params[:client_id].present? and params[:action] != "show") #(params[:client_id].present? or @event.present?) and params[:action] != "show" 
       %li.mdl-menu__item
         - @client = @event.client if @event.present?

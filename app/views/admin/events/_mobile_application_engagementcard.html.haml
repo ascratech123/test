@@ -43,7 +43,7 @@
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Q&A.png", :objs => @event.qnas, :url => "qnas", :@count => @count}
       - if show_card("polls")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "polls_1.png", :objs => @event.polls, :url => "polls", :@count => @count}
-    - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role]))  
+    - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))  
       - if show_card("chats")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "chat.png", :objs => @event.chats, :url => "chats", :@count => @count}       
 

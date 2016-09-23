@@ -176,7 +176,7 @@ class Admin::EventsController < ApplicationController
   end
 
   def check_moderator_role
-    @events = Event.with_role(:moderator, current_user).where(:client_id => params[:client_id]) if current_user.has_role? :moderator
+    @events = Event.with_role(session[:current_user_role].to_sym, current_user).where(:client_id => params[:client_id]) if session[:current_user_role] == "moderator"
   end
 
   def events_params

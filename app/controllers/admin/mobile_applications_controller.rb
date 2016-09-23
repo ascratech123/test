@@ -11,7 +11,7 @@ class Admin::MobileApplicationsController < ApplicationController
 
 
   def index
-    if current_user.has_role? :moderator or current_user.has_role? :event_admin or current_user.has_role? :db_manager 
+    if current_user.has_role_without_event("moderator",@clients,session[:current_user_role]) or current_user.has_role_without_event("event_admin",@clients,session[:current_user_role]) or current_user.has_role_without_event("db_manager",@clients,session[:current_user_role]) #current_user.has_role? :moderator or current_user.has_role? :event_admin or current_user.has_role? :db_manager 
       mobile_app_id = @events.pluck(:mobile_application_id) rescue []
       @mobile_applications = MobileApplication.where("id IN (?) and client_id = ?",mobile_app_id,@client.id )
     else
