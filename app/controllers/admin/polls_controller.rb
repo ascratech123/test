@@ -52,6 +52,7 @@ class Admin::PollsController < ApplicationController
       @poll.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @poll.change_status(params[:status]) if params[:status].present?
       @poll.update_columns(:option_visible => params[:option_visible], :updated_at => Time.now) if params[:option_visible].present?
+      @poll.update_last_updated_model
       redirect_to admin_event_polls_path(:event_id => @poll.event_id)
     else
   		if @poll.update_attributes(poll_params)

@@ -147,27 +147,27 @@ class Agenda < ActiveRecord::Base
   end
 
   def formatted_start_date_detail
-    "#{self.start_agenda_time.strftime('%d %B %Y')}"
+    "#{self.start_agenda_time.strftime('%d %B %Y')}"if self.start_agenda_time.present?
   end
 
   def formatted_time
-    timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z")
-    if self.end_agenda_time.present?
+    timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z") if self.start_agenda_time.present?
+    if self.end_agenda_time.present? and self.start_agenda_time.present?
       self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (GMT ') + timezone + ")"
-    else
+    elsif self.start_agenda_time.present?
       self.start_agenda_time.strftime('%l:%M %p Onwards (GMT ')  + timezone + ")"
     end
   end
 
   def formatted_time_without_timezone
-    if self.end_agenda_time.present?
+    if self.end_agenda_time.present? and self.start_agenda_time.present?
       self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p')
-    else
-      self.start_agenda_time.strftime('%l:%M %p Onwards')
+    elsif self.start_agenda_time.present?
+      self.start_agenda_time.strftime('%l:%M %p Onwards') 
     end
   end
 
   def formatted_start_date_listing
-    "#{self.start_agenda_time.strftime('%d-%b-%y')}"
+    "#{self.start_agenda_time.strftime('%d-%b-%y')}" if self.start_agenda_time.present?
   end
 end

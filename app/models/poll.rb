@@ -11,7 +11,7 @@ class Poll < ActiveRecord::Base
   validates :option1, :option2, presence: { :message => "This field is required." }, if: Proc.new { |object| object.option_type == "Radio" || object.option_type == "Checkbox"}
   
   before_save :set_time
-  after_save :push_notification, :check_push_to_wall_status
+  after_save :push_notification, :check_push_to_wall_status, :update_last_updated_model
   before_create :set_sequence_no
   after_create :set_status#, :set_status_as_per_auto_approve
 
@@ -37,6 +37,10 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+ 
   def self.search(params,polls)
     keyword = params[:search][:keyword]
      polls = polls.where("question like (?) ", "%#{keyword}%") if keyword.present?
