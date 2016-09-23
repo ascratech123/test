@@ -322,7 +322,7 @@ class User < ActiveRecord::Base
       errors.add(:assign_grouping, "This field is required.")
     end
   end
-  
+
   def get_count(telecaller_id,event_id, type)
     event = Event.find(event_id)
     telecaller = User.unscoped.find(telecaller_id)

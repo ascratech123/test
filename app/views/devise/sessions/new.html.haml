@@ -26,7 +26,7 @@
                         - if flash['alert'].present? and flash['alert'] == 'Your account is not activated yet.'
                           = 'Your account is deactive, Please contact admin.'
                         - elsif session[:date_error].present?
-                          = 'Your account is deactive, Please contact admin.'
+                          = 'Your account has been expired, Please contact admin.'
                           = session[:date_error] = nil
                         - else
                           = "#{(flash.first[1].present? and request.referer.include? "sign_in") ? "The email and password you entered don't match." : ""}" rescue ""

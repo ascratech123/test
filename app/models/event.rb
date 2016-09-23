@@ -555,10 +555,10 @@ class Event < ActiveRecord::Base
   end
   
   def event_count_within_limit
-    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?)
+    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?) or (self.client.licensee.present? and self.client.licensee.no_of_event.present?)
       clients = Client.with_roles(User.current.roles.pluck(:name), User.current).uniq
       event_count = clients.map{|c| c.events.count}.sum
-      if User.current.no_of_event <= event_count
+      if (User.current.no_of_event.present? and User.current.no_of_event <= event_count) or (self.client.licensee.present? and self.client.licensee.no_of_event <= event_count)
         errors.add(:event_limit, "You have crossed your events limit kindly contact.")
         # errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
       else
@@ -632,7 +632,7 @@ class Event < ActiveRecord::Base
     self.update_column(:end_event_date, self.end_event_time)
   end
 
- def set_timezone_on_associated_tables
+  def set_timezone_on_associated_tables
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
       for table_name in ["agendas", "attendees", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
