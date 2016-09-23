@@ -177,30 +177,30 @@
                               = 'Add One' if @mobile_applications.count <= 0
                               = 'New Mobile App' if @mobile_applications.count > 0
                               
-              - if !(current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))#(current_user.has_role? :db_manager)                
-                .col-sm-3.col-xl-3
-                  .panel.panel-tile.manageusers
-                    .panel-body
-                      .row.pv5
-                        .col-xs-5.ph10
-                          = image_tag("coloured_icons/user_3.png")
-                        .col-xs-7.pl5
-                          - if @users.count == 0
-                            %h6.text-muted Manage Users
-                            %h2.fs30.mt5.mbn
-                              = '0'
-                          - else
-                            %h6.text-muted Manage Users
-                            %h2.fs30.mt5.mbn
-                              = link_to @users.count, admin_clients_path(:feature => 'users',:redirect_page => 'index')
-                              =# @events.count
-                      .row.pv5.AddmoreCard
-                        .col-xs-12.ph5
-                          -if true#check_curent_user_role("mobile_application")
-                            %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
-                              = 'Add One' if @users.count <= 0
-                              = 'New User' if @users.count > 0
-                            = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
+                - if !(current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))#(current_user.has_role? :db_manager)                
+                  .col-sm-3.col-xl-3
+                    .panel.panel-tile.manageusers
+                      .panel-body
+                        .row.pv5
+                          .col-xs-5.ph10
+                            = image_tag("coloured_icons/user_3.png")
+                          .col-xs-7.pl5
+                            - if @users.count == 0
+                              %h6.text-muted Manage Users
+                              %h2.fs30.mt5.mbn
+                                = '0'
+                            - else
+                              %h6.text-muted Manage Users
+                              %h2.fs30.mt5.mbn
+                                = link_to @users.count, admin_clients_path(:feature => 'users',:redirect_page => 'index')
+                                =# @events.count
+                        .row.pv5.AddmoreCard
+                          .col-xs-12.ph5
+                            -if true#check_curent_user_role("mobile_application")
+                              %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
+                                = 'Add One' if @users.count <= 0
+                                = 'New User' if @users.count > 0
+                              = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
               -if !(current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))#(current_user.has_role? :db_manager)              
                 .col-sm-3.col-xl-3
                   .panel.panel-tile

@@ -142,8 +142,9 @@
       -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
         = link_to new_admin_event_notification_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
           New Notification
-      = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-        Invitee Groups 
+      - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role]))
+        = link_to admin_event_invitee_groups_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+          Invitee Groups 
   - when 'qna'
     - if !(current_user.has_any_role? :moderator, :db_manager)
       = link_to admin_event_panels_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
