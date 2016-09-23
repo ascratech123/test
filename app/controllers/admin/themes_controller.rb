@@ -40,9 +40,7 @@ class Admin::ThemesController < ApplicationController
         elsif themes_event_params.blank?
           redirect_to admin_event_mobile_application_path(:event_id => params[:event_id], :id => @event.mobile_application_id)
         elsif @event.mobile_application.present?
-          check_event_logo_error
-          check_event_inside_logo_error
-          render :action => "edit"
+          check_errors
         end
       else
         check_event_logo_error
@@ -79,25 +77,18 @@ class Admin::ThemesController < ApplicationController
         if @event.update_attributes(themes_event_params) 
           redirect_to admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id)
         else
-          check_event_logo_error
-          check_event_inside_logo_error
-          render :action => "edit"
+          check_errors          
         end if themes_event_params.present?
       else
-        check_event_logo_error
-        check_event_inside_logo_error
-        render :action => "edit"
+        check_errors        
       end
     elsif params[:remove_image] == "true"
       @theme.update_attribute(:event_background_image, nil) if @theme.event_background_image.present?
       redirect_to edit_admin_event_theme_path(:event_id => @event.id, :id => @theme.id, :step => "event_theme")
     else
-      if @theme.update_attributes(theme_params.except(:event))
-        url = (params[:event_id].present? ? admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id,:type => "show_content") : admin_themes_path)
-        redirect_to url
-      else
-        render :action => "edit"
-      end
+      @theme.update_attributes(theme_params.except(:event)) ? 
+        (url = (params[:event_id].present? ? admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id,:type => "show_content") : admin_themes_path)
+        redirect_to url) : (render :action => "edit")
     end  
   end
 
@@ -114,6 +105,12 @@ class Admin::ThemesController < ApplicationController
   end
 
   protected
+
+  def check_errors
+    check_event_logo_error
+    check_event_inside_logo_error
+    render :action => "edit"
+  end
 
   def find_themes
     @event = Event.find_by_id(params[:event_id]) if params[:event_id].present?
