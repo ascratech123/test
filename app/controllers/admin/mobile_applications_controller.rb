@@ -110,9 +110,17 @@ class Admin::MobileApplicationsController < ApplicationController
   end
 
   def show
-    @resource_role = current_user.get_role_on_resource(@event)
+    # @resource_role = current_user.get_role_on_resource(@event)
+    # if @resource_role.present? and @resource_role.name == 'moderator' and params[:type].blank?
+    #   if (current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role]))#current_user.has_role?(:moderator)
+    #     redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_engagement")
+    #   else
+    #     redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_content")
+    #   end
+    # end
+    @resource_role = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and name = ?', @event.class.name, @event.id, session[:current_user_role]).last#current_user.get_role_on_resource(@event)
     if @resource_role.present? and @resource_role.name == 'moderator' and params[:type].blank?
-      if current_user.has_role?(:moderator)
+      if (current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role]))#current_user.has_role?(:moderator)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_engagement")
       else
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id, :type => "show_content")
