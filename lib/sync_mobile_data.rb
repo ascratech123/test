@@ -77,9 +77,9 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
         when 'Image'
           images = Image.where(:updated_at => start_event_date..end_event_date) rescue []
-          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type, :image_updated_at], :methods => [:image_url]) rescue []  
         when 'HighlightImage'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id], :methods => [:highlight_image_url]) rescue []    
+          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id, :highlight_image_updated_at], :methods => [:highlight_image_url]) rescue []    
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
