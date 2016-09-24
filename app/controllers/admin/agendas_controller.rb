@@ -4,6 +4,8 @@ class Admin::AgendasController < ApplicationController
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :find_ratings, :only => [:index, :new]
+  before_filter :check_for_access, :only => [:index,:new]
+  before_filter :check_user_role, :except => [:index]
 
   def index
     @agenda_group_by_start_agenda_time = @agendas.group("date(start_agenda_date)")
@@ -82,5 +84,10 @@ class Admin::AgendasController < ApplicationController
       params["agenda"]["start_agenda_time"].to_time
     end
     params.require(:agenda).permit!
+  end
+  def check_user_role
+    if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+      redirect_to admin_dashboards_path
+    end  
   end
 end

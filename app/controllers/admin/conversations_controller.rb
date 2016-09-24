@@ -5,9 +5,11 @@ class Admin::ConversationsController < ApplicationController
   skip_before_filter :authenticate_user, :authorize_event_role, :find_features, :find_likes_and_comments, :only => [:index]
   skip_before_action :load_filter, :only => [:index] 
   before_filter :authenticate_user, :authorize_event_role, :find_features, :find_likes_and_comments, :except => [:index]
+  before_filter :check_user_role, :except => [:index]
   before_filter :conversation_wall_present, :only => [:index]
   # before_action :authenticate_user, :authorize_event_role, :find_features, :find_likes_and_comments, unless: :abc
   before_filter :find_conversation_wall, :only => :index
+  before_filter :check_for_access, :only => [:index]
 
   def index
     @conversations = @conversations.paginate(page: params[:page], per_page: 10) if params["format"] != "xls" and params[:conversations_wall].blank?
@@ -87,6 +89,11 @@ class Admin::ConversationsController < ApplicationController
       find_features
       find_likes_and_comments
     end
+  end
+  def check_user_role
+    if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #current_user.has_role? :db_manager 
+      redirect_to admin_dashboards_path
+    end  
   end
 
   def conversation_params

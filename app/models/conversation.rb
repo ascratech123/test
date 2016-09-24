@@ -163,7 +163,7 @@ class Conversation < ActiveRecord::Base
     # binding.pry
     comments.each do |comment|
       comment_obj << comment
-    end
+    end if comments.present?
     object = object + comment_obj + conversation_without_comment
     object
   end

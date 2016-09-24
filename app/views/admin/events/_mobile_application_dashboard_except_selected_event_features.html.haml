@@ -1,7 +1,7 @@
 .content
   .row
     - @count = 0
-    - if true
+    - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)
       - if show_card_except_event_features("abouts")  
         = render :partial => "admin/events/cards", :locals => {:icon => "b_&_w", :objs => @event, :url => "abouts", :img => "about.png"}
       - if show_card_except_event_features("speakers")
@@ -38,20 +38,20 @@
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"myfavourite_b.png", :objs => "", :url => "favourites"}  
       - if false#show_card_except_event_features("my_calendar")
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "event.png", :objs => "", :url => "my_calendar", :@count => 0}
-    - if show_card_except_event_features("custom_page1s")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page1s, :url => "custom_page1s"}
-    
-    - if show_card_except_event_features("custom_page2s")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page2s, :url => "custom_page2s"}
-    
-    - if show_card_except_event_features("custom_page3s")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page3s, :url => "custom_page3s"}
-    
-    - if show_card_except_event_features("custom_page4s")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page4s, :url => "custom_page4s"}
-    
-    - if show_card_except_event_features("custom_page5s")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page5s, :url => "custom_page5s"}        
+      - if show_card_except_event_features("custom_page1s")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page1s, :url => "custom_page1s"}
+      
+      - if show_card_except_event_features("custom_page2s")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page2s, :url => "custom_page2s"}
+      
+      - if show_card_except_event_features("custom_page3s")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page3s, :url => "custom_page3s"}
+      
+      - if show_card_except_event_features("custom_page4s")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page4s, :url => "custom_page4s"}
+      
+      - if show_card_except_event_features("custom_page5s")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"custom_b.png", :objs => @event.custom_page5s, :url => "custom_page5s"}        
 
-    - if show_card_except_event_features("my_travels")
-      = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"travel.png", :objs => @event.my_travels, :url => "my_travels"}   
+      - if show_card_except_event_features("my_travels")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"travel.png", :objs => @event.my_travels, :url => "my_travels"}   

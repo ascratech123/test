@@ -2,7 +2,7 @@
 - breadcrum_image = MobileApplication::BREADCRUM_IMAGES
 %header#topbar.alt
   .topbar-left
-    - if params[:controller] == "admin/mobile_applications" and params[:action] == "show" and !current_user.has_role? :moderator
+    - if params[:controller] == "admin/mobile_applications" and params[:action] == "show" and !(current_user.has_any_role? :moderator, :db_manager)
       %ul.publishTab
         - calc_percentage = @event.present? ? "#{@event.avg_review.to_i}" : ''
         %li.progress.mdl-color--grey-500
@@ -52,7 +52,8 @@
             = "#{page}" if params[:controller] == "admin/faqs"
             = "#{page}" if params[:controller] == "admin/events"
           - if params[:action] == "show" and params[:controller] != "admin/mobile_applications" and params[:controller] != "admin/manage_mobile_apps" and params[:controller] != "admin/telecallers"
-            = show_edit_link(params)  
+            - if !(current_user.has_role? :db_manager)
+              = show_edit_link(params)  
           - if (params[:controller] == "admin/mobile_applications" and ["show","edit"].include?(params[:action])) or (params[:controller] == "admin/themes" and params[:step] == "event_theme") or (params[:controller] == "admin/event_features" and params[:action] == "new") or (params[:controller] == "admin/menus" and params[:action] == "index") 
             .previewTxt    
               -  if @mobile_application.present?

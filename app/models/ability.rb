@@ -516,6 +516,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :db_manager
       can :read, :all
+      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee,InviteeGroup,Quiz]
     elsif user.has_role? :db_executive
       can :read, :all
     elsif user.has_role? :response_manager
@@ -534,6 +535,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :client_moderator
       can :read, :all
+      
     # elsif user.has_role? :telecaller
     #   can :read, Client.with_role(:module_admin, user)
     #   c_ids = Client.with_role(:event_admin, user).pluck(:id)

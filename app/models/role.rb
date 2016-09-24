@@ -19,11 +19,11 @@ class Role < ActiveRecord::Base
     if role == 'licensee_admin'
       ['licensee_admin']
     elsif role == 'client_admin'
-      ['licensee_admin', 'client_admin']
+      ['licensee_admin', 'client_admin', 'db_manager']
     elsif role == 'event_admin'
-      ['licensee_admin', 'client_admin', 'event_admin']
+      ['licensee_admin', 'client_admin', 'event_admin', 'db_manager']
     elsif role == 'moderator'
-      ['licensee_admin', 'client_admin', 'event_admin', 'moderator']
+      ['licensee_admin', 'client_admin', 'event_admin', 'moderator', 'db_manager']
     end    
   end
 

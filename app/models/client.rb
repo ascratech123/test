@@ -21,36 +21,45 @@ class Client < ActiveRecord::Base
   scope :past_event, -> (client){client.events.where('end_event_date < ?',Date.today) }
   scope :ordered, -> { order('created_at desc') }
   
-  def self.upcoming_event(client,user)
-    if user.has_role? :event_admin
+  def self.upcoming_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
+      events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     else
       client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     end
   end
 
-  def self.ongoing_event(client,user)
-    if user.has_role? :event_admin
+  def self.ongoing_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
+      events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     else
       client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     end
   end
 
-  def self.past_event(client,user)
-    if user.has_role? :event_admin
+  def self.past_event(client,user,session_role)
+    if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
       events.where('end_event_date < ?',Date.today)
-    elsif user.has_role? :moderator
+    elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
+      events.where('end_event_date < ?',Date.today)
+    elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
+      events = Event.with_roles("db_manager", user)
       events.where('end_event_date < ?',Date.today)
     else
       client.events.where('end_event_date < ?',Date.today)
@@ -88,7 +97,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.display_hsh 
-    {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speakers', 'invitees' => 'Invitees', 'agendas' => 'Agenda', 'polls' => 'Polls', 'conversations' => 'Conversations', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Awards', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlights', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Notes', 'highlight_images' => 'Highlight Images', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsors", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourites","networks" => "My Network","exhibitors" => "Exhibitors", "invitee_datas" => "Dashboard", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall","registration_settings"=> "Registration Setting", 'leaderboard' => 'Leaderboard', 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', 'analytics' => "Analytics", "leaderboards" => "Leaderboards", "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel",'user_registrations' => 'User Registrations',"social_sharings" => "Social Sharing"}    
+    {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speakers', 'invitees' => 'Invitees', 'agendas' => 'Agenda', 'polls' => 'Polls', 'conversations' => 'Conversations', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Awards', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlights', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Notes', 'highlight_images' => 'Highlight Images', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsors", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourites","networks" => "My Network","exhibitors" => "Exhibitors", "invitee_datas" => "Dashboard", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall","registration_settings"=> "Registration Setting", 'leaderboard' => 'Leaderboard', 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', 'analytics' => "Analytics", "leaderboards" => "Leaderboards", "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel",'user_registrations' => 'User Registrations',"social_sharings" => "Social Sharing","manage_invitee_fields" => "Manage Invitee Field"}    
   end
 
   def self.display_hsh1 
@@ -96,7 +105,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.bredcrumb_hsh 
-    {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speaker', 'invitees' => 'Invitee', 'agendas' => 'Agenda', 'polls' => 'Poll', 'conversations' => 'Conversation', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Award', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlight', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Note', 'highlight_images' => 'Highlight Image', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsor", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourite","networks" => "My Network","exhibitors" => "Exhibitor", "invitee_datas" => "Dashboard", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall", 'leaderboard' => 'Leaderboard' , 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel","social_sharings" => "Social Sharing"}
+    {'mobile_applications' => 'Mobile Application', 'users' => 'User', 'clients' => 'Client', 'events' => 'Event', 'speakers' => 'Speaker', 'invitees' => 'Invitee', 'agendas' => 'Agenda', 'polls' => 'Poll', 'conversations' => 'Conversation', 'faqs' => 'FAQ', 'images' => 'Gallery', 'awards' => 'Award', 'qnas' => 'Q&A','feedbacks' => 'Feedback', 'e_kits' => 'e-KIT','contacts' => 'Contact Us', 'event_highlights' => 'Event Highlight', 'abouts' => 'About', 'notifications' => 'Notification', 'venue' => 'Venue', 'emergency_exit' => 'Venue','emergency_exits' => 'Venue', 'event_features' => 'Menu', 'winners' => 'Winner', 'galleries' => 'Gallery', 'notes' => 'Note', 'highlight_images' => 'Highlight Image', 'themes' => 'Theme', 'panels' => 'Panel', "store_infos" => "Store Info", "sponsors" => "Sponsor", "my_profiles" => "My Profile", "qr_codes" => "QR Code Scanner", "my_profile" => "My Profile", "qr_code" => "QR Code Scanner","my_calendar" => "My Calendar", "groupings" => "Grouping","quizzes" => "Quiz","registrations"=> "Registration", "exhibitors" => "Exhibitor","registrations"=> "Registration","invitee_structures"=> "Database","favourites" => "My Favourite","networks" => "My Network","exhibitors" => "Exhibitor", "invitee_datas" => "Dashboard", "conversation_walls" => "View conversation wall", "poll_walls" => "View poll wall","qna_walls" => "View Q&A wall", 'leaderboard' => 'Leaderboard' , 'custom_page1s' => 'Custom Page1', 'custom_page2s' => 'Custom Page2', 'custom_page3s' => 'Custom Page3', 'custom_page4s' => 'Custom Page4', 'custom_page5s' => 'Custom Page5', "chats" => "One on One Chat", "invitee_groups" => "Invitee Group","my_travels" => "My Travel","social_sharings" => "Social Sharing","manage_invitee_fields" => "Manage Invitee Field"}
   end
 
   def self.no_data_message
