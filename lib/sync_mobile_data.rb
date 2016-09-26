@@ -52,7 +52,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'VenueSection', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel']#.each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
     last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
     model_name.each do |model|
@@ -65,7 +65,7 @@ module SyncMobileData
       case model
         when 'Conversation'
           # info = info.where(:status => 'approved')
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name])
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :profile_pic_url])
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
@@ -77,9 +77,9 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated]) rescue [] 
         when 'Image'
           images = Image.where(:updated_at => start_event_date..end_event_date) rescue []
-          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type], :methods => [:image_url]) rescue []  
+          data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type, :image_updated_at], :methods => [:image_url]) rescue []  
         when 'HighlightImage'
-          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id], :methods => [:highlight_image_url]) rescue []    
+          data[:"#{name_table(model)}"] = info.as_json(:only => [:id, :name,:event_id, :highlight_image_updated_at], :methods => [:highlight_image_url]) rescue []    
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
@@ -98,7 +98,7 @@ module SyncMobileData
         when 'Exhibitor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url]) rescue []  
         when 'Notification'
-          info = Invitee.get_notification(info, current_user)
+          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
           data[:"notifications"] = info
         when 'InviteeNotification'
           info = Invitee.get_read_notification(info, event_ids, current_user)
@@ -108,7 +108,7 @@ module SyncMobileData
         when 'Invitee'
           arr = []
           leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
-          event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points, :profile_pic_updated_at], :methods => [:profile_pic_url])}
+          event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee, :first_name, :last_name, :company_name,:event_id, :points, :profile_pic_updated_at], :methods => [:profile_pic_url])}
           data[:"leaderboard"] = arr#event_ids.map{|id| {'id' => id, 'data'=> leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}}
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil

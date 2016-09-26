@@ -8,19 +8,38 @@ class Like < ActiveRecord::Base
   validates_uniqueness_of :user_id, :scope => [:likable_type, :likable_id]
   
   after_create :create_analytic_record
-  after_save :update_conversation
-  after_destroy :update_conversation
+  after_save :update_conversation, :update_conversation_records_for_create
+  after_destroy :update_conversation, :update_conversation_records_for_destroy
 
   def update_conversation
 		Conversation.find_by_id(self.likable_id).update_column(:updated_at, Time.now.utc) rescue nil
 	end
+
+  def update_conversation_records_for_create
+    conversation = Conversation.find_by_id(self.likable_id) rescue nil
+    if conversation.present?
+      conversation.update_column(:action, 'Like')
+      conversation.update_column(:first_name_user, Invitee.find(self.user_id).first_name)
+      conversation.update_column(:last_name_user, Invitee.find(self.user_id).last_name)      
+      conversation.update_column(:profile_pic_url_user, Invitee.find(self.user_id).profile_pic.url(:large))      
+    end
+  end
+
+  def update_conversation_records_for_destroy
+    conversation = Conversation.find_by_id(self.likable_id) rescue nil    
+    conversation.update_column(:action, nil) if conversation.present?
+      # conversation.update_column(:first_name_user, nil)
+      # conversation.update_column(:last_name_user, nil)      
+      # conversation.update_column(:profile_pic_url_user, nil)      
+    # end
+  end
 	
   def email
     self.user.email
   end
 
   def user_name
-    self.user.name_of_the_invitee
+    self.user.name_of_the_invitee rescue ""
   end
 
   def conversation
