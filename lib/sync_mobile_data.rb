@@ -130,7 +130,8 @@ module SyncMobileData
           if current_user.present?
             invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
             info = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:only=> [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id]) rescue []
+            # binding.pry
+            data[:"#{name_table(model)}"] = info.as_json(:only=> [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id], :methods => [:image_url]) rescue []
           end
         when 'Like'
           if current_user.present?

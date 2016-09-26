@@ -9,6 +9,13 @@ class Favorite < ActiveRecord::Base
   after_create :create_analytic_record
   default_scope { order('created_at desc') }
 
+  def image_url(style=:large)
+    # binding.pry
+    if self.favoritable_type == "Image"
+      style.present? ? self.favoritable.image.url(style) : self.favoritable.image.url rescue nil
+    end
+  end
+
   def create_analytic_record
     event_id = Invitee.find_by_id(self.invitee_id).event_id rescue nil
     analytic = Analytic.new(viewable_type: self.favoritable_type, viewable_id: self.favoritable_id, action: "favorite", invitee_id: self.invitee_id, event_id: event_id, platform: platform)

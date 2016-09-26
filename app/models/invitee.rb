@@ -3,7 +3,7 @@ class Invitee < ActiveRecord::Base
   require 'vpim/vcard'
   require 'rqrcode_png'
   require 'qr_code' 
-
+  
   attr_accessor :password, :invitee_searches_page
   COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture'}
   
@@ -374,8 +374,31 @@ class Invitee < ActiveRecord::Base
   def get_favorites(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+
+    # favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+    # favorite_types = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+
+    # favorite_types.each do |favorite_type|
+    #   if favorite_type == "Image"
+      Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id], :methods => [:image_url])
+    #   else
+    #     Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+    #   end
+    # end
   end
+
+  # def get_favorites_gallery(mobile_app_code,submitted_app)
+  #   mobile_application_ids = MobileApplication.where(submitted_code: mobile_app_code).pluck(:id)
+  #   event_ids = Event.where(mobile_application_id: mobile_application_ids).pluck(:id)
+  #   # event_ids = get_event_id(mobile_app_code,submitted_app)
+  #   invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+  #   binding.pry
+  #   favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+  #   favorite_ids = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+  #   # Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id]) rescue nil
+  #   Image.where(:imageable_type => favorite_ids).as_json(:only => [:id, :imageable_type], :methods => [:image_url]) if favorite_ids.present?
+  #   # Image.find(fav.favoratable_id) if fav.imageable_type == "Gallery"
+  # end
    
   def get_my_network_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
@@ -546,6 +569,8 @@ class Invitee < ActiveRecord::Base
       end
       notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     end
+    notification_ids << get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
+     notifications = Notification.where(:id => notification_ids.flatten).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 
