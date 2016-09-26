@@ -41,7 +41,7 @@
         %td.font16= conversation.description  
         %td.font16= conversation.user_name
         / %td.font16= conversation.get_company_name
-        %td.font16= conversation.created_at.to_s.gsub("UTC", "") rescue nil
+        %td.font16= formatted_time(conversation.created_at_with_event_timezone, "%Y-%m-%d %H:%M")
         %td.font16= conversation.comments.count
         %td.font16= conversation.likes.count
         %td.font16= conversation.status.capitalize rescue nil
