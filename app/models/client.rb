@@ -28,14 +28,7 @@ class Client < ActiveRecord::Base
       events = Event.with_roles("moderator", user)
       events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
-      events = Event.with_roles("db_manager", user)
-      if client.present?
-        events += Event.where(:client_id => client.id)
-        events = events.flatten.uniq
-      end
-      event_ids = events.map{|a| a.id}.compact.uniq 
-      events = Event.where('start_event_date > ? and end_event_date > ? and id IN (?)',Date.today, Date.today, event_ids)
-      #events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      events = Client.get_events_for_db_manager(client,user,session_role, category = "Upcoming")
     else
       client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
     end
@@ -49,14 +42,7 @@ class Client < ActiveRecord::Base
       events = Event.with_roles("moderator", user)
       events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
-      events = Event.with_roles("db_manager", user)
-      if client.present?
-        events += Event.where(:client_id => client.id)
-        events = events.flatten.uniq
-      end
-      event_ids = events.map{|a| a.id}.compact.uniq 
-      events = Event.where('start_event_date <= ? and end_event_date >= ? and id IN (?)',Date.today, Date.today, event_ids)
-      #events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      events = Client.get_events_for_db_manager(client,user,session_role, category = "Ongoing")
     else
       client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
     end
@@ -70,14 +56,7 @@ class Client < ActiveRecord::Base
       events = Event.with_roles("moderator", user)
       events.where('end_event_date < ?',Date.today)
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
-      events = Event.with_roles("db_manager", user)
-      if client.present?
-        events += Event.where(:client_id => client.id)
-        events = events.flatten.uniq
-      end
-      event_ids = events.map{|a| a.id}.compact.uniq 
-      events = Event.where('end_event_date < ? and id IN (?)',Date.today,event_ids)
-      #events.where('end_event_date < ?',Date.today)
+      events = Client.get_events_for_db_manager(client,user,session_role, category = "Past")
     else
       client.events.where('end_event_date < ?',Date.today)
     end
@@ -144,5 +123,14 @@ class Client < ActiveRecord::Base
 
   def self.get_client_by_id(id)
     self.find_by_id(id)
+  end
+
+  def self.get_events_for_db_manager(client,user,session_role,category)
+    event_ids = Event.with_role("db_manager", user).where(:client_id => client.id).pluck(:id)
+    clients =  Client.with_role(session_role, user)
+    if clients.pluck(:id).include? client.id
+      event_ids += Event.where(:client_id => client.id).pluck(:id)
+    end
+    events = Event.where(:id => event_ids, :event_category => category)
   end
 end
