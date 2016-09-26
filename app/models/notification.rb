@@ -42,7 +42,8 @@ class Notification < ActiveRecord::Base
 
   def push_notification
     if self.push_datetime.blank?
-      self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
+      # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
+      self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
       # if self.group_ids.present?
       #   groups = InviteeGroup.where("id IN(?)", self.group_ids)
       #   invitee_ids = []
@@ -72,7 +73,8 @@ class Notification < ActiveRecord::Base
     notifications = Notification.where(:pushed => false)
     if notifications.present?
       notifications.each do |notification|
-        current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+        # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+        current_time_in_time_zone = Time.now + self.event_timezone_offset.to_i.seconds
         if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
           event = notification.event
           if event.mobile_application_id.present?
@@ -98,7 +100,8 @@ class Notification < ActiveRecord::Base
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
-    self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
+    # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
+    self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
@@ -209,7 +212,10 @@ class Notification < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column(:event_timezone, self.event.timezone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
 
 end

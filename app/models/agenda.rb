@@ -103,9 +103,11 @@ class Agenda < ActiveRecord::Base
   end
 
   def set_event_timezone
-    # self.update_column("event_timezone", self.event.timezone)
-    self.update_column("event_timezone", self.event.timezone_offset)
-  end
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
+  end  
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
@@ -153,11 +155,10 @@ class Agenda < ActiveRecord::Base
 
   def formatted_time
     # timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z") if self.start_agenda_time.present?
-    timezone = self.event.display_time_zone
     if self.end_agenda_time.present? and self.start_agenda_time.present?
-      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (') + timezone + ")"
+      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (') + self.event_display_time_zone.to_s + ")"
     elsif self.start_agenda_time.present?
-      self.start_agenda_time.strftime('%l:%M %p Onwards (')  + timezone + ")"
+      self.start_agenda_time.strftime('%l:%M %p Onwards (')  + self.event_display_time_zone.to_s + ")"
     end
   end
 

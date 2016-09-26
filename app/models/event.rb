@@ -606,16 +606,13 @@ class Event < ActiveRecord::Base
   def set_timezone_on_associated_tables
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
-      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].utc_offset)
+      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].at(self.start_event_time).utc_offset)
+      display_time_zone = self.event_display_time_zone
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
-          # obj.update_column("event_timezone", self.timezone)
-          if table_name == "conversations" 
-            obj.update_column("event_timezone", self.timezone_offset)
-            obj.update_column("event_timezone_offset", self.display_time_zone)
-          else
-            obj.update_column("event_timezone", self.timezone)          
-          end
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model rescue nil
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
@@ -672,8 +669,8 @@ class Event < ActiveRecord::Base
 
   def display_time_zone
     event_tz = "GMT +00:00"
-    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.formatted_offset}"]}
-      event_tz = "GMT#{tz.formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(self.start_event_time).formatted_offset}"]}
+      event_tz = "GMT#{tz.at(self.start_event_time).formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
     end
     return event_tz
   end
