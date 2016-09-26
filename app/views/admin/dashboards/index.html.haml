@@ -72,9 +72,9 @@
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)      
           - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
+            -# ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
+            - ids = @count.map{|a| a.mobile_application_id}.compact.uniq 
             - @mobile_applications = MobileApplication.where(:id => ids)
-
           - else
             - @mobile_applications = MobileApplication.where(:client_id => client_ids)
           - event_ids = @events.pluck(:id)
@@ -133,13 +133,10 @@
                             -else
                               - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])
                                 - length = @count.pluck(:id).compact.uniq.count rescue 0
-                                = link_to length, admin_clients_path(:feature => 'events')                              
-                                
-                                - length = @count.pluck(:id).compact.uniq.count rescue 0
-                                = link_to length, admin_clients_path(:feature => 'events')
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-                                - length = @count.pluck(:id).compact.uniq.count rescue 0
+                                -# length = @count.pluck(:id).compact.uniq.count rescue 0
+                                - length = @count.map{|a| a.id}.compact.uniq.count
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - else  
                                 = link_to @events.length, admin_clients_path(:feature => 'events')
