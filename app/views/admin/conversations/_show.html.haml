@@ -55,6 +55,6 @@
                         = user.company_name rescue nil
                       %td.font16
                         =# comment.created_at rescue nil
-                        = time_with_zone(comment.created_at, obj.event_timezone,"%Y-%m-%d %H:%M")
+                        = formatted_time(comment.created_at_with_event_timezone, "%Y-%m-%d %H:%M")
               - else
                   %p= "No Comments"

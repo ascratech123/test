@@ -23,7 +23,7 @@
         %td.font16= ques_answer.get_panel_name
         %td.font16= ques_answer.get_user_name
         / %td.font16= ques_answer.get_company_name
-        %td.font16= time_with_zone(ques_answer.created_at, ques_answer.event_timezone, '%d-%m-%Y %H:%M')
+        %td.font16= formatted_time(ques_answer.created_at_with_event_timezone, "%Y-%m-%d %H:%M")
         %td.font16
           = ques_answer.status
         %td.font16

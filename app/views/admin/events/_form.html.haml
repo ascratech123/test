@@ -97,11 +97,18 @@
             %label.col-lg-4.control-label.ml-color--shades-white
               Time Zone *
             .col-lg-7
-              - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.now.formatted_offset}"]}
-              = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.now.formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
-              - if @event.errors.present? and @event.errors[:timezone].present?
-                .field_with_errors
-                  %span.errorMessage{:for => "event_timezone"} This field is required.  
+              - if @event.start_event_time.present?
+                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}"]}
+                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+                - if @event.errors.present? and @event.errors[:timezone].present?
+                  .field_with_errors
+                    %span.errorMessage{:for => "event_timezone"} This field is required.  
+              - else
+                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.now.formatted_offset}"]}
+                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.now.formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+                - if @event.errors.present? and @event.errors[:timezone].present?
+                  .field_with_errors
+                    %span.errorMessage{:for => "event_timezone"} This field is required.  
         = f.custom_text_field :pax, "Nbr. of people"
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
