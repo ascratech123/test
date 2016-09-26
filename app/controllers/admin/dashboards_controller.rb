@@ -12,8 +12,12 @@ class Admin::DashboardsController < ApplicationController
     # if current_user.has_role? :event_admin
     #   @count = Event.with_roles(current_user.roles.pluck(:name), current_user)
     # end
-    
     @count = Event.with_role(session[:current_user_role], current_user)
+    client_ids = Client.with_role(session[:current_user_role], current_user).pluck(:id)
+    if client_ids.present?
+      @count += Event.where(:client_id => client_ids)
+      @count = @count.flatten.uniq
+    end
   end
   
   # def index

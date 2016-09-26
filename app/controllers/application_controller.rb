@@ -67,12 +67,20 @@ class ApplicationController < ActionController::Base
   def authorize_client_role
     client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
     @events = Event.with_roles(session[:current_user_role], current_user)
-    client_ids += @events.pluck(:client_id)
+    if client_ids.present?
+      @events += Event.where(:client_id => client_ids)
+      @events = @events.flatten.uniq
+    end
+    
+    #client_ids += @events.pluck(:client_id)
+    client_ids += @events.map{|a|a.client_id}.compact.uniq
     @clients = Client.where(:id => client_ids)
     @client = @clients.find_by_id(params[:client_id])
     return redirect_to admin_dashboards_path if @client.blank?
   
-    @events = @events.where(:client_id => @client.id)
+    #@events = @events.where(:client_id => @client.id)
+    event_ids = @events.map{|a|a.id}.compact.uniq
+    @events = Event.where('client_id IN (?) and id IN (?)', @client.id,event_ids)
     @events = @client.events if @events.blank? and @client.present?
     @event = @events.find_by_id(params[:id]) if params[:id].present? and @events.present?
 
@@ -104,7 +112,14 @@ class ApplicationController < ActionController::Base
   def find_client_association
     features = params[:controller].gsub('admin/','')
     @events = Event.with_roles(session[:current_user_role], current_user)
-    @events = @events.where(:client_id => @client.id)
+    client_ids = Client.with_role(session[:current_user_role], current_user).pluck(:id)
+    if client_ids.present?
+      @events += Event.where(:client_id => client_ids)
+      @events = @events.flatten.uniq
+    end
+    #@events = @events.where(:client_id => @client.id)
+    event_ids = @events.map{|a|a.id}.compact.uniq
+    @events = Event.where('client_id IN (?) and id IN (?)', @client.id,event_ids)
     if @events.blank?
       instance_variable_set("@"+features, @client.send(features)) if params[:action] == 'index'
     else
