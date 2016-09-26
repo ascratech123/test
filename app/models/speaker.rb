@@ -118,6 +118,9 @@ class Speaker < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column(:event_timezone, self.event.timezone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
 end

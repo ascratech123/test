@@ -100,7 +100,8 @@ class Conversation < ActiveRecord::Base
   end
 
   def timestamp
-    self.created_at.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M')
+    # self.created_at.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M')
+    (self.created_at + self.event_timezone_offset.to_i.seconds).strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes
@@ -139,13 +140,16 @@ class Conversation < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
 
   def set_dates_with_event_timezone
     event = self.event
-    self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
-    self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+    # self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    # self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
   end  
 
   def self.get_export_object(conversations)
@@ -163,7 +167,7 @@ class Conversation < ActiveRecord::Base
     # binding.pry
     comments.each do |comment|
       comment_obj << comment
-    end
+    end if comments.present?
     object = object + comment_obj + conversation_without_comment
     object
   end
@@ -226,23 +230,27 @@ class Conversation < ActiveRecord::Base
   end
 
   def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event_timezone)
+    # self.created_at.in_time_zone(self.event_timezone)
+    self.created_at + self.event_timezone_offset.to_i.seconds
   end
 
   def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event_timezone)
+    # self.updated_at.in_time_zone(self.event_timezone)
+    self.updated_at + self.event_timezone_offset.to_i.seconds
   end
 
   def formatted_created_at_with_event_timezone
     # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
-    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    # created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event_display_time_zone})")
     year = Time.now.strftime("%Y") + " "
     created_at_with_tmz.sub(year, "")
   end
 
   def formatted_updated_at_with_event_timezone
     # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
-    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
+    # updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event.display_time_zone})")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event_display_time_zone})")
     year = Time.now.strftime("%Y") + " "
     updated_at_with_tmz.sub(year, "")    
   end

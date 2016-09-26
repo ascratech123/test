@@ -59,7 +59,8 @@ class Qna < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.in_time_zone(self.event_timezone).strftime("%d/%m/%Y %T")
+    # self.created_at.in_time_zone(self.event_timezone).strftime("%d/%m/%Y %T")
+    (self.created_at + self.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
   
   def email_id
@@ -123,7 +124,10 @@ class Qna < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column(:event_timezone, self.event.timezone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
   
 end

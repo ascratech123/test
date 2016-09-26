@@ -603,11 +603,15 @@ class Event < ActiveRecord::Base
   end
 
   def set_timezone_on_associated_tables
+    binding.pry
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
+      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].utc_offset)
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", self.display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model rescue nil
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
@@ -663,6 +667,14 @@ class Event < ActiveRecord::Base
   end
 
   def display_time_zone
-    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+    event_tz = "GMT +00:00"
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.formatted_offset}"]}
+      event_tz = "GMT#{tz.formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    end
+    return event_tz
   end
+
+  #def display_time_zone
+  #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  #end
 end

@@ -215,7 +215,10 @@ class Invitee < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
 
   def assign_secret_key
@@ -609,11 +612,13 @@ class Invitee < ActiveRecord::Base
   end
 
   def created_at_with_event_timezone
-    self.created_at.in_time_zone(self.event_timezone)
+    # self.created_at.in_time_zone(self.event_timezone)
+    self.created_at + self.event_timezone_offset.to_i.seconds
   end
  
   def updated_at_with_event_timezone
-    self.updated_at.in_time_zone(self.event_timezone)
+    # self.updated_at.in_time_zone(self.event_timezone)
+    self.updated_at + self.event_timezone_offset.to_i.seconds
   end
 
   private
