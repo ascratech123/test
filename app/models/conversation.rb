@@ -211,6 +211,10 @@ class Conversation < ActiveRecord::Base
   def first_name
     Invitee.find_by_id(self.user_id).first_name rescue ""
   end
+
+  def profile_pic_url
+    Invitee.find_by_id(self.user_id).profile_pic.url(:large) rescue ""
+  end
   
   def last_name
     Invitee.find_by_id(self.user_id).last_name rescue ""
