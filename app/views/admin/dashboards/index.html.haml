@@ -72,9 +72,9 @@
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)      
           - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
+            -# ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
+            - ids = @count.map{|a| a.mobile_application_id}.compact.uniq 
             - @mobile_applications = MobileApplication.where(:id => ids)
-
           - else
             - @mobile_applications = MobileApplication.where(:client_id => client_ids)
           - event_ids = @events.pluck(:id)
@@ -135,7 +135,8 @@
                                 - length = @count.pluck(:id).compact.uniq.count rescue 0
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-                                - length = @count.pluck(:id).compact.uniq.count rescue 0
+                                -# length = @count.pluck(:id).compact.uniq.count rescue 0
+                                - length = @count.map{|a| a.id}.compact.uniq.count
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - else  
                                 = link_to @events.length, admin_clients_path(:feature => 'events')
@@ -266,7 +267,7 @@
                   - if false
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, a galley of type and scrambled it to make a type specimen book.
                 .appBtn
-                  %a{:href => admin_clients_path(:feature => 'mobile_applications', :redirect_page => "new"), :class => 'DashAddIcon mdl-color--light-blue-600'}
+                  %a{:href => url, :class => 'DashAddIcon mdl-color--light-blue-600'}
                     %i.material-icons
                       added
                     = "New #{title}"   
