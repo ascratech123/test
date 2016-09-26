@@ -3,6 +3,7 @@ class Admin::UserFeedbacksController < ApplicationController
   layout 'admin'
   load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :check_for_access, :only => [:index]
 
   def index
     respond_to do |format|

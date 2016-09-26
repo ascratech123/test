@@ -26,7 +26,6 @@
                 = link_to "#{','+(my_travel.attach_file_4_name.present? ? my_travel.attach_file_4_name : "Attachment4")}", "#{my_travel.attach_file_4.url})}",:target => "_blank"
               -if my_travel.attach_file_5.present?
                 = link_to "#{','+(my_travel.attach_file_5_name.present? ? my_travel.attach_file_5_name : "Attachment5")}", "#{my_travel.attach_file_5.url})}",:target => "_blank"
-            / %td.font16= "#{my_travel.attach_file_file_name}#{','+my_travel.attach_file_2_file_name if my_travel.attach_file_2_file_name.present?}#{','+my_travel.attach_file_3_file_name if my_travel.attach_file_3_file_name.present?}#{','+my_travel.attach_file_4_file_name if my_travel.attach_file_4_file_name.present?}#{','+my_travel.attach_file_5_file_name if my_travel.attach_file_5_file_name.present?}"rescue nil
             %td.IconDrp
               = more_vert_button(my_travel.id)
               %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{my_travel.id}"}

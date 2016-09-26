@@ -23,6 +23,7 @@
       = select_tag :event_id, options_for_select(objs.map{|c| [c.event_name,c.id]}), :prompt => "#{prompt_message}"
     - else
       = select_tag :client_id, options_for_select(objs.map{|c| [c.name,c.id]}), :prompt => "#{prompt_message}"
+      = hidden_field_tag :dashboard_client_level, params[:dashboard_client_level] if params[:dashboard_client_level].present?
     = hidden_field_tag :feature, params[:feature]
     = hidden_field_tag :redirect_page, params[:redirect_page] if params[:redirect_page].present?
     = hidden_field_tag :role, params[:role]

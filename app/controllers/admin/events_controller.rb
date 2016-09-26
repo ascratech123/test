@@ -49,7 +49,7 @@ class Admin::EventsController < ApplicationController
   end
     
   def show
-    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present?
+    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
     mobile_application_ids = @events.pluck(:mobile_application_id).compact
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)
     @multi_mobile_applications = single_mobile_application_ids.present? ? @client.mobile_applications.where('id NOT IN (?)', single_mobile_application_ids) : @client.mobile_applications
@@ -102,7 +102,7 @@ class Admin::EventsController < ApplicationController
 
   def feature_redirect_on_condition
     if params[:feature].present? and params[:feature]  != "events"
-      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller") ? @events.count("events.id") : @events.count
+      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller" or current_user.has_role? :db_manager) ? @events.count("events.id") : @events.count
       if params[:event_id].present? or (@events.present? and event_count == 1 and params[:feature] != "mobile_application" and params[:feature] != "mobile_applications")
         @event = (event_count == 1) ? @events.first : @events.find(params[:event_id])
         if params[:feature] == "mobile_application"
@@ -176,7 +176,7 @@ class Admin::EventsController < ApplicationController
   end
 
   def check_moderator_role
-    @events = Event.with_role(:moderator, current_user).where(:client_id => params[:client_id]) if current_user.has_role? :moderator
+    @events = Event.with_role(session[:current_user_role].to_sym, current_user).where(:client_id => params[:client_id]) if session[:current_user_role] == "moderator"
   end
 
   def events_params

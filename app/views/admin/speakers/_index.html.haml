@@ -37,14 +37,19 @@
                 - if speaker.sequence.to_i != 0 and (@speakers.length - 1) != index
                   %span= link_to "",admin_event_sequence_path(:event_id => speaker.event_id, :id => speaker.id, :type => "down", :feature_type => "speakers"),:class => "downarrow", :method => "put", :remote => true
             %td.font16= image_tag(speaker.profile_pic_url(:thumb), :width => 60, :heigth => 60 )
-            %td.font16= show_link(params, speaker.id, speaker.speaker_name) rescue nil
+            / - if current_user.has_role? :db_manager 
+            -if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+              %td.font16= speaker.speaker_name
+            - else
+              %td.font16= show_link(params, speaker.id, speaker.speaker_name) rescue nil
             %td.font16= speaker.designation rescue nil
             %td.font16= speaker.company rescue nil
             %td.IconDrp
-              = more_vert_button(speaker.id)
-              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{speaker.id}"}
-                = edit_link(params, speaker.id)
-                = delete_link(params, speaker.id)
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
+                = more_vert_button(speaker.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{speaker.id}"}
+                  = edit_link(params, speaker.id)
+                  = delete_link(params, speaker.id)
 
 :javascript
 

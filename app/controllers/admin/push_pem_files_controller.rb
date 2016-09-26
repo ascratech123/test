@@ -2,6 +2,7 @@ class Admin::PushPemFilesController < ApplicationController
   layout 'admin'
 
   #before_filter :authenticate_user, :authorize_mobile_application_role, :find_features
+  before_filter :check_user_role
   before_filter :authorize_client_role, :find_mobile_application#, :find_client_association, :only => [:index, :show, :edit, :update, :create, :new], :if => Proc.new{params[:client_id].present?}
 
   def index
@@ -64,4 +65,9 @@ class Admin::PushPemFilesController < ApplicationController
     @push_pem_file = @mobile_application.push_pem_file if params[:id].present?
   end
 
+  def check_user_role
+    if current_user.has_role? :db_manager 
+      redirect_to admin_dashboards_path
+    end  
+  end
 end

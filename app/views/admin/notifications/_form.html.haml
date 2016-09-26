@@ -116,9 +116,10 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-          = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
+      - if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(current_user.has_role? :db_manager)
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
 :javascript
   $(window).load(function(){
     flightTime();

@@ -19,16 +19,21 @@
               %span= link_to "",admin_event_sequence_path(:event_id => quizze.event_id, :id => quizze.id, :seq_type => "up", :feature_type => "quizzes"),:class => "uparrow", :method => "put", :remote => true
             - if quizze.sequence.to_i != 0 and (@quizzes.length - 1) != index
               %span= link_to "",admin_event_sequence_path(:event_id => quizze.event_id, :id => quizze.id, :type => "down", :feature_type => "quizzes"),:class => "downarrow", :method => "put", :remote => true
-        %td.description_adjust.font16= show_link(params, quizze.id, quizze.question) rescue nil
+        -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+          %td.description_adjust.font16= show_link(params, quizze.id, quizze.question) rescue nil
+        -else 
+          %td.font16= quizze.question
         %td.font16= quizze.status.capitalize rescue nil
         %td.IconDrp
-          = more_vert_button(quizze.id)
-          %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{quizze.id}"}
-            = edit_link(params, quizze.id)
-            = delete_link(params, quizze.id)
-            - quizze.aasm.events.each do |eve|
-              = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
-  =# will_paginate objs   
+          -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
+            = more_vert_button(quizze.id)
+            %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{quizze.id}"}
+              = edit_link(params, quizze.id)
+              = delete_link(params, quizze.id)
+              - quizze.aasm.events.each do |eve|
+                = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
+  =# will_paginate objs
+  = render :partial => 'admin/layouts/more_links'   
 
 :javascript
 

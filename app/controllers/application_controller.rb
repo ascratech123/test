@@ -45,9 +45,28 @@ class ApplicationController < ActionController::Base
     User.current = current_user
   end
 
+  # def authorize_client_role
+  #   client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
+  #   @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+  #   client_ids += @events.pluck(:client_id)
+  #   @clients = Client.where(:id => client_ids)
+  #   @client = @clients.find_by_id(params[:client_id])
+  #   return redirect_to admin_dashboards_path if @client.blank?
+  
+  #   @events = @events.where(:client_id => @client.id)
+  #   @events = @client.events if @events.blank? and @client.present?
+  #   @event = @events.find_by_id(params[:id]) if params[:id].present? and @events.present?
+
+  #   @log_changes = LogChange.get_changes('Event', @event.id) if params[:id].present? and @event.present?
+    
+  #   if params[:id].present? and @event.blank? and params[:controller] == 'admin/events'
+  #     redirect_to admin_dashboards_path
+  #   end
+  # end
+
   def authorize_client_role
-    client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
-    @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+    client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
+    @events = Event.with_roles(session[:current_user_role], current_user)
     client_ids += @events.pluck(:client_id)
     @clients = Client.where(:id => client_ids)
     @client = @clients.find_by_id(params[:client_id])
@@ -64,9 +83,27 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # def find_client_association
+  #   features = params[:controller].gsub('admin/','')
+  #   @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+  #   @events = @events.where(:client_id => @client.id)
+  #   if @events.blank?
+  #     instance_variable_set("@"+features, @client.send(features)) if params[:action] == 'index'
+  #   else
+  #     instance_variable_set("@"+features, @events) if params[:action] == 'index'
+  #   end
+  #   ##Dont delete it #@attendee = @attendees.find_by_id(params[:id]) if params[:id].present? and @attendees.present?
+  #   if @client.association(features).present? and params[:id].present?
+  #     feature = @client.association(features).find(params[:id]) rescue nil
+  #     instance_variable_set("@"+features.singularize, feature)
+  #     instance_variable_set("@"+'log_changes', LogChange.get_changes(features.capitalize.singularize.camelize, feature.id)) if params[:action] == 'show'
+  #   end
+  #   redirect_to admin_dashboards_path if params[:id].present? and instance_variable_get("@"+features.singularize).blank?
+  # end
+
   def find_client_association
     features = params[:controller].gsub('admin/','')
-    @events = Event.with_roles(current_user.roles.pluck(:name), current_user)
+    @events = Event.with_roles(session[:current_user_role], current_user)
     @events = @events.where(:client_id => @client.id)
     if @events.blank?
       instance_variable_set("@"+features, @client.send(features)) if params[:action] == 'index'
@@ -82,11 +119,24 @@ class ApplicationController < ActionController::Base
     redirect_to admin_dashboards_path if params[:id].present? and instance_variable_get("@"+features.singularize).blank?
   end
 
+  # def authorize_event_role
+  #   @event = Event.find(params[:event_id]) rescue nil
+  #   if @event.present?
+  #     @assigned_event = Event.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.id).first
+  #     @client = Client.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.client_id).first
+  #     if (@client.blank? and @assigned_event.blank?)
+  #       redirect_to admin_dashboards_path  
+  #     end
+  #   else
+  #     redirect_to admin_dashboards_path
+  #   end
+  # end
+
   def authorize_event_role
     @event = Event.find(params[:event_id]) rescue nil
     if @event.present?
-      @assigned_event = Event.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.id).first
-      @client = Client.with_roles(current_user.roles.pluck(:name), current_user).where(:id => @event.client_id).first
+      @assigned_event = Event.with_roles(session[:current_user_role], current_user).where(:id => @event.id).first
+      @client = Client.with_roles(session[:current_user_role], current_user).where(:id => @event.client_id).first
       if (@client.blank? and @assigned_event.blank?)
         redirect_to admin_dashboards_path  
       end
@@ -144,7 +194,7 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :telecaller
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
-      admin_dashboards_path
+      new_admin_change_role_path# admin_dashboards_path
     end
   end
 
@@ -183,8 +233,10 @@ class ApplicationController < ActionController::Base
     if current_user.has_role? :super_admin
       @clients = Client.with_roles(current_user.roles.pluck(:name), current_user)
     else
-      client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
-      client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
+      # client_ids = Client.with_roles(current_user.roles.pluck(:name), current_user).pluck(:id)
+      # client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
+      client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
+      client_ids += Event.with_roles(session[:current_user_role], current_user).pluck(:client_id)
       @clients = Client.where(:id => client_ids)
     end if current_user.present?
     @client = @clients.find(params[:id]) rescue nil if params[:id].present? and @clients.present?
@@ -245,4 +297,37 @@ class ApplicationController < ActionController::Base
   #   #   redirect_to url
   #   # end
   # end
+  
+
+  # def check_for_access
+  #   if (params[:format].present? and params["export_type"].blank? and current_user.has_role? :db_manager and ["admin/speakers","admin/feedbacks"].include? params[:controller])
+  #     redirect_to admin_prohibited_accesses_path
+  #   elsif params[:format].present? and !(current_user.has_role? :db_manager)
+  #     redirect_to admin_prohibited_accesses_path
+  #   end
+  #   if (params[:import].present? and !(current_user.has_role? :db_manager) and params[:controller] == "admin/invitees")
+  #     redirect_to admin_prohibited_accesses_path
+  #   elsif (params[:import].present? and (current_user.has_role? :db_manager) and ["admin/invitees","admin/my_travels"].exclude? params[:controller])
+  #     redirect_to admin_prohibited_accesses_path
+  #   end
+  #   if (["admin/invitees","admin/my_travels"].include? params[:controller] and ["index","new"].include? params[:action] and (!current_user.has_role? :db_manager))
+  #     redirect_to admin_prohibited_accesses_path
+  #   end
+  # end
+
+  def check_for_access
+    if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    elsif params[:format].present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+      redirect_to admin_prohibited_accesses_path
+    end
+    if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+      redirect_to admin_prohibited_accesses_path
+    elsif (params[:import].present? and ["admin/invitees","admin/my_travels"].exclude? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    end
+    if (["admin/invitees","admin/my_travels"].include? params[:controller] and ["index","new"].include? params[:action] and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    end
+  end
 end

@@ -1,6 +1,6 @@
 class Admin::SequencesController < ApplicationController
   layout 'admin'
-
+  before_filter :check_user_role
   before_filter :authenticate_user, :authorize_event_role
 
   def update
@@ -29,4 +29,12 @@ class Admin::SequencesController < ApplicationController
       format.html{}
     end 
   end
+
+  protected
+    def check_user_role
+      @event = Event.find_by_id(params[:event_id])
+      if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) 
+        redirect_to admin_dashboards_path
+      end  
+    end
 end

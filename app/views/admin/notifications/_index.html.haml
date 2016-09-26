@@ -24,9 +24,10 @@
             %td.font16= formatted_time(notification.push_datetime, '%Y-%m-%d %H:%M')
             %td.font16= notification.pushed rescue nil
             %td.IconDrp
-              = more_vert_button(notification.id)
-              %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{notification.id}"}
-                - if !notification.pushed?
-                  = edit_link(params, notification.id)
-                  = delete_link(params, notification.id)
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager) 
+                = more_vert_button(notification.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{notification.id}"}
+                  - if !notification.pushed?
+                    = edit_link(params, notification.id)
+                    = delete_link(params, notification.id)
   = will_paginate objs
