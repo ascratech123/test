@@ -664,6 +664,14 @@ class Event < ActiveRecord::Base
   end
 
   def display_time_zone
-    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+    event_tz = "GMT +00:00"
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.formatted_offset}"]}
+      event_tz = "GMT#{tz.formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    end
+    return event_tz
   end
+
+  #def display_time_zone
+  #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  #end
 end
