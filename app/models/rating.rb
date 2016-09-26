@@ -34,7 +34,8 @@ class Rating < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.in_time_zone(self.ratable.event_timezone).strftime("%d/%m/%Y %T")
+    # self.created_at.in_time_zone(self.ratable.event_timezone).strftime("%d/%m/%Y %T")
+    (self.created_at + self.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
 
   def email_id

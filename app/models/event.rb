@@ -637,28 +637,36 @@ class Event < ActiveRecord::Base
   def set_timezone_on_associated_tables
     if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
-      for table_name in ["agendas", "attendees", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].utc_offset)
+      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", self.display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model rescue nil
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
       end   
     end
-  end 
+  end  
 
-  def about_date   
+  def set_date
+    self.update_column(:start_event_date, self.start_event_time)
+    self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def about_date
     if self.start_event_date.to_date != self.end_event_date.to_date
       "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
     else
       self.start_event_date.strftime('%A, %d %b %Y')
     end
-  end 
+  end
 
   def self.set_event_category
     Event.find_each do |event|
-      event.set_event_category 
+      event.set_event_category rescue nil
     end
   end
 
@@ -692,10 +700,18 @@ class Event < ActiveRecord::Base
   end
 
   def display_time_zone
-    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+    event_tz = "GMT +00:00"
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.formatted_offset}"]}
+      event_tz = "GMT#{tz.formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    end
+    return event_tz
   end
 
-  def copy_event_associations_from(event)
+  #def display_time_zone
+  #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  #end
+
+ def copy_event_associations_from(event)
     event.copy_association(event.campaigns, self.id) if event.campaigns.present?
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present?
     event.copy_association(event.attendees, self.id) if event.attendees.present?
@@ -850,4 +866,5 @@ class Event < ActiveRecord::Base
     h = my_profile.attributes['enabled_attr'] rescue {}
     h
   end
+
 end

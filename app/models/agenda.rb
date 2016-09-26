@@ -103,8 +103,11 @@ class Agenda < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
-  end
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
+  end  
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
@@ -151,27 +154,27 @@ class Agenda < ActiveRecord::Base
   end
 
   def formatted_start_date_detail
-    "#{self.start_agenda_time.strftime('%d %B %Y')}"
+    "#{self.start_agenda_time.strftime('%d %B %Y')}"if self.start_agenda_time.present?
   end
 
   def formatted_time
-    timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z")
-    if self.end_agenda_time.present?
-      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (GMT ') + timezone + ")"
-    else
-      self.start_agenda_time.strftime('%l:%M %p Onwards (GMT ')  + timezone + ")"
+    # timezone = self.start_agenda_time.in_time_zone(self.event_timezone).strftime("%:z") if self.start_agenda_time.present?
+    if self.end_agenda_time.present? and self.start_agenda_time.present?
+      self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p (') + self.event_display_time_zone.to_s + ")"
+    elsif self.start_agenda_time.present?
+      self.start_agenda_time.strftime('%l:%M %p Onwards (')  + self.event_display_time_zone.to_s + ")"
     end
   end
 
   def formatted_time_without_timezone
-    if self.end_agenda_time.present?
+    if self.end_agenda_time.present? and self.start_agenda_time.present?
       self.start_agenda_time.strftime('%l:%M %p') + " - " + self.end_agenda_time.strftime('%l:%M %p')
-    else
-      self.start_agenda_time.strftime('%l:%M %p Onwards')
+    elsif self.start_agenda_time.present?
+      self.start_agenda_time.strftime('%l:%M %p Onwards') 
     end
   end
 
   def formatted_start_date_listing
-    "#{self.start_agenda_time.strftime('%d-%b-%y')}"
+    "#{self.start_agenda_time.strftime('%d-%b-%y')}" if self.start_agenda_time.present?
   end
 end

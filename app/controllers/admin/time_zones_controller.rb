@@ -9,6 +9,7 @@ class Admin::TimeZonesController < ApplicationController
     city_name = params[:city_name]
     country_name = params[:country_name]
     timestamp = params[:timestamp].to_datetime.to_i
+    @timestamp = params[:timestamp].to_datetime
     if city_name.present? && country_name.present?
       city_name = URI.encode(city_name)
       country_name = URI.encode(country_name)
