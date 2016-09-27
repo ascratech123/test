@@ -23,7 +23,11 @@ class UserPoll < ActiveRecord::Base
   end
 	
   def update_poll
-		Poll.find_by_id(self.poll_id).update_column(:updated_at, self.updated_at) rescue nil
+		poll = Poll.find_by_id(self.poll_id)
+                if poll.present?
+                  poll.update_column(:updated_at, self.updated_at)
+                  poll.update_last_updated_model
+                end
 	end
 
   def Timestamp

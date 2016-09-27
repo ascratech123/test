@@ -98,13 +98,13 @@ module SyncMobileData
         when 'Exhibitor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url]) rescue []  
         when 'Notification'
-          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
+          info = Invitee.get_notification(info, current_user)
           data[:"notifications"] = info
         when 'InviteeNotification'
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
+          data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage])
         when 'Invitee'
           arr = []
           leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
