@@ -133,7 +133,7 @@ class Event < ActiveRecord::Base
   
   def content_is_present
     unless copy_content.blank? ^ custom_content.blank?
-      errors.add(:copy_content, "Choose one of the options.")
+      errors.add(:copy_content, "This field is required.")
     end
   end
  

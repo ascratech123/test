@@ -178,7 +178,7 @@
 								- Event::INVITEE_STRUCTURES.each_with_index do |group, index|
 									- if index == 0
 										.usersep
-											Invitee Structures
+											Registration
 									.md-checkbox
 										%label
 											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
@@ -187,7 +187,7 @@
 								- Event::GROUPINGS.each_with_index do |group, index|
 									- if index == 0
 										.usersep
-											Groupings
+											Communication
 									.md-checkbox
 										%label
 											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
@@ -236,7 +236,7 @@
 	.popup-overlay
 	.ClientPopup
 		#register-form-copyContentPopup.col.s12.ClientPopup-info
-			%p.txtcenter.m-b-30 Are you sure you wan't to copy all the contents of this event?          
+			%p.txtcenter.m-b-30 Are you sure you want to copy all the content of this event?          
 			%a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
 				ok
 
