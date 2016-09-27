@@ -75,6 +75,10 @@ class Conversation < ActiveRecord::Base
     conversations
   end 
 
+  def share_count
+    Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation", action: "share").length rescue 0
+  end
+
   def like_count
     Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
   end
@@ -101,7 +105,7 @@ class Conversation < ActiveRecord::Base
 
   def timestamp
     # self.created_at.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M')
-    self.created_at + self.event_timezone.to_i.seconds
+    (self.created_at + self.event_timezone_offset.to_i.seconds).strftime('%m/%d/%Y %H:%M')
   end
 
   # def likes
@@ -140,8 +144,10 @@ class Conversation < ActiveRecord::Base
   end
 
   def set_event_timezone
-    self.update_column("event_timezone", self.event.timezone)
-    self.update_column("event_timezone_offset", self.event.display_time_zone)
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.update_column("event_timezone_offset", event.timezone_offset)
+    self.update_column("event_display_time_zone", event.display_time_zone)
   end
 
   def set_dates_with_event_timezone
@@ -233,12 +239,12 @@ class Conversation < ActiveRecord::Base
 
   def created_at_with_event_timezone
     # self.created_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone.to_i.seconds
+    self.created_at + self.event_timezone_offset.to_i.seconds
   end
 
   def updated_at_with_event_timezone
     # self.updated_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone.to_i.seconds
+    self.updated_at + self.event_timezone_offset.to_i.seconds
   end
 
   def formatted_created_at_with_event_timezone
@@ -258,4 +264,3 @@ class Conversation < ActiveRecord::Base
   end
 
 end
-
