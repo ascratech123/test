@@ -26,7 +26,7 @@ class Admin::EventsController < ApplicationController
   end
 
   def new
-    @event = @client.events.build
+    @event = @client.events.build  
     @event.images.build
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
@@ -38,7 +38,6 @@ class Admin::EventsController < ApplicationController
     @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
     @event.set_status_for_licensee if current_user.has_role? :licensee_admin
     @themes = Theme.find_themes()
-
     if @event.save  
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
         event = Event.find(params[:event][:event_id])

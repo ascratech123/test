@@ -1,234 +1,283 @@
 .overlayBg
-  / %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
-  .spinner
-    .rect1
-    .rect2
-    .rect3
-    .rect4
-    .rect5
+	/ %img{:src => "/assets/loader.gif", :class =>"loader-img"}/
+	.spinner
+		.rect1
+		.rect2
+		.rect3
+		.rect4
+		.rect5
 .save_button.mdl-card.eventExceedLimit
-  = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
-    - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
-      .mdl-grid.mdl-card.mdl-shadow--1dp
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          %h4.heading-border.p-t-10.m-b-15
-            General Information
-            / %a{:href => '/whats_this/event/general_information/event_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
-            /   what's this?
-        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "event_generalInfo.jpg", :section_id => "event_general_section"}
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          .bs-component
-            .form-group
-              .col-lg-4 
-              .col-lg-7
-                = f.hidden_field_tag :event_limit
-                .field_with_errors
-                  .span{:class => "errorMessage"}
-                    = f.object.errors.messages[:event_limit].join("") rescue nil
-        - if not f.object.errors.messages[:event_limit].present?
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-            .bs-component
-              .form-group
-                .col-lg-4 
-                .col-lg-7
-                  = f.hidden_field_tag :event_date_limit
-                  .field_with_errors
-                    .span{:class => "errorMessage"}
-                      = f.object.errors.messages[:event_date_limit].join("") rescue nil
-        = f.custom_text_field :event_name, "Event Name *"
-        =# f.custom_text_field :event_code, "Event Code"
-        - if f.object.new_record? and params[:mobile_application_id].present?
-          = f.hidden_field :mobile_application_id, :value => "#{params[:mobile_application_id].to_i rescue nil}"
-        - if false
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
-            .form-group.set_highlight_select
-              %label.col-lg-4.control-label.ml-color--shades-white
-                Select List
-              .col-lg-7
-                = f.select("event", "login_at", ["After Highlight", "Before Interaction"], {:selected => f.object.login_at, :prompt => 'Mobile Login At *'}, {include_blank: 'None',:class=> 'select2-single form-control' })
-                .field_with_errors
-                  .span{:class => "errorMessage"}
-                    = f.object.errors.messages[:login_at].join("") rescue nil
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          .bs-component
-            .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
-              = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
-              .col-lg-3.timeDropdown
-                .timeTab
-                  = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365,368,333].include? f.object.id) ? (f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'hour'))}", :col => '2',:maxlength => "2"
-                  
-                  = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.start_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'minute'))}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.start_event_time.strftime('%p').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'ampm'))}", :col => '3',:maxlength => "2"       
-        / = f.custom_text_field :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : '', :col => '8'
-        / .timeDropdown
-        /   .timeTab  
-        /     = f.custom_text_fieldTime :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-        /     = f.custom_text_fieldTime :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_event_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
-        /     = f.custom_text_fieldTime :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_event_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
-        / = f.custom_text_field :hours, :value => f.object.get_hours, :class => 'hours inputs', :placeholder=>"HH",:col => '2'
-        / \:
-        / = f.custom_text_field :minutes, :value => f.object.get_minutes, :class => 'minutes inputs', :placeholder=>"MM", :col => '2'
-        / \:
-        / = f.custom_text_field :ampm, :value => f.object.get_ampm, :class => 'ampm inputs', :placeholder=>"AM/PM",:col => '2'
-        / = f.hidden_field :plugin_start_time, :class => 'plugin_start_time'
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          .bs-component
-            .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
-              = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
-              .col-lg-3.timeDropdown
-                .timeTab  
-                  = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'hour'))}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'minute'))}", :col => '2',:maxlength => "2"
-                  = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%p').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'ampm'))}", :col => '3',:maxlength => "2"
-        = f.custom_text_field :cities, "City *"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
-          .form-group.set_highlight_select
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Country *
-            .col-lg-7
-              = f.select :event, :country_name, Event::COUNTRIES,{:prompt => "Please select the country" ,:selected => (@event.country_name)}, {:class => 'select2-single form-control'}
-              - if @event.errors.present? and @event.errors[:country_name].present?
-                .field_with_errors
-                  %span.errorMessage{:for => "event_country_name"} This field is required.
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
-          .form-group.set_highlight_select
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Time Zone *
-            .col-lg-7
-              - if @event.start_event_time.present?
-                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}"]}
-                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
-                - if @event.errors.present? and @event.errors[:timezone].present?
-                  .field_with_errors
-                    %span.errorMessage{:for => "event_timezone"} This field is required.  
-              - else
-                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.now.formatted_offset}"]}
-                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.now.formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
-                - if @event.errors.present? and @event.errors[:timezone].present?
-                  .field_with_errors
-                    %span.errorMessage{:for => "event_timezone"} This field is required.  
-        = f.custom_text_field :pax, "Nbr. of people"
-        = f.custom_text_field :venues, "Venue"
-        = f.custom_text_field :google_map_link, "Google Map"
-        = f.custom_text_area_field :remarks, "Remarks"
-        = f.hidden_field :copy_content, :id => 'copy_content'
-        = f.hidden_field :custom_content, :id => 'custom_content'
-        - event_names = @client.events.pluck(:event_name, :id)
-        - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
-            .bs-componet
-              .form-group.set_highlight_select
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  Do you want to add data from another event?
-                .col-lg-7
-                  = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
-                  = f.custom_radio_button :copy_event, "no", "No", :id => "no"
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.select-eventDiv
-            .bs-componet
-              .form-group.set_highlight_select
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  Select Event
-                .col-lg-7
-                  -# default_remarks = ['ABC','PQR','XYZ']
-                  -# default_remarks << 'New Category'
-                  %i.arrow.single
-                  = f.select("event", "event_id", event_names, {:prompt => "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-                  - if @event.errors[:event_id].present?
-                    .p.errorMessage
-                      = 'This field is required.'
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
-            .bs-componet
-              .form-group.set_highlight_select 
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  //Select Event     
-                .col-lg-7.copyCustomContent
-                  %button.copyButton{:onclick => "return false;"} Copy Content
-                  %button.customButton{:onclick => "return false;"} Custom Content
-                  - if @event.errors[:copy_content].present?
-                    .p.errorMessage
-                      = @event.errors[:copy_content].first
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
-            .form-group
-              %label.col-lg-4.control-label.ml-color--shades-white
-                Select Content
-              .col-lg-7.notification                
-                - Event::EVENT_ASSOCIATIONS.each_with_index do |group, index|
-                  - if index == 0
-                    .usersep
-                      Select Content
-                  .md-checkbox
-                    %label
-                      = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
-                      %span.checkbox 
-                      = group
-                  / - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
-                  / - default_group_list.each_with_index do |group, index|
-                  /   - if index == 0
-                  /     .usersep
-                  /       Groups created by you
-                  /   .md-checkbox
-                  /     %label
-                  /       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
-                  /       %span.checkbox 
-                  /       = group[0]
-    - elsif false  
-      .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          %h4.heading-border
-            Highlights / Summary Details
-        = f.custom_text_area_field :description,"highlight"
-        = f.custom_text_area_field :summary,"summary"
-        = f.custom_file_browser_field :logo, "Listing logo ", :id => "uploadBtn"
-        = f.custom_file_browser_field :inside_logo, "Screen logo ", :id => "uploadBtn1"
+	= form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+		- if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
+			.mdl-grid.mdl-card.mdl-shadow--1dp
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					%h4.heading-border.p-t-10.m-b-15
+						General Information
+						/ %a{:href => '/whats_this/event/general_information/event_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+						/   what's this?
+				= #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "event_generalInfo.jpg", :section_id => "event_general_section"}
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					.bs-component
+						.form-group
+							.col-lg-4 
+							.col-lg-7
+								= f.hidden_field_tag :event_limit
+								.field_with_errors
+									.span{:class => "errorMessage"}
+										= f.object.errors.messages[:event_limit].join("") rescue nil
+				- if not f.object.errors.messages[:event_limit].present?
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+						.bs-component
+							.form-group
+								.col-lg-4 
+								.col-lg-7
+									= f.hidden_field_tag :event_date_limit
+									.field_with_errors
+										.span{:class => "errorMessage"}
+											= f.object.errors.messages[:event_date_limit].join("") rescue nil
+				= f.custom_text_field :event_name, "Event Name *"
+				=# f.custom_text_field :event_code, "Event Code"
+				- if f.object.new_record? and params[:mobile_application_id].present?
+					= f.hidden_field :mobile_application_id, :value => "#{params[:mobile_application_id].to_i rescue nil}"
+				- if false
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+						.form-group.set_highlight_select
+							%label.col-lg-4.control-label.ml-color--shades-white
+								Select List
+							.col-lg-7
+								= f.select("event", "login_at", ["After Highlight", "Before Interaction"], {:selected => f.object.login_at, :prompt => 'Mobile Login At *'}, {include_blank: 'None',:class=> 'select2-single form-control' })
+								.field_with_errors
+									.span{:class => "errorMessage"}
+										= f.object.errors.messages[:login_at].join("") rescue nil
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					.bs-component
+						.form-group.timeZoneP-l-0
+							%label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
+							= f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
+							.col-lg-3.timeDropdown
+								.timeTab
+									= f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365,368,333].include? f.object.id) ? (f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'hour'))}", :col => '2',:maxlength => "2"
+									
+									= f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.start_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'minute'))}", :col => '2',:maxlength => "2"
+									= f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.start_event_time.strftime('%p').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.start_event_time, 'ampm'))}", :col => '3',:maxlength => "2"       
+				/ = f.custom_text_field :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : '', :col => '8'
+				/ .timeDropdown
+				/   .timeTab  
+				/     = f.custom_text_fieldTime :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => "#{f.object.start_event_time.strftime('%l').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+				/     = f.custom_text_fieldTime :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{f.object.start_event_time.strftime('%M').strip.rjust(2, '0') rescue nil}", :col => '2',:maxlength => "2"
+				/     = f.custom_text_fieldTime :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{f.object.start_event_time.strftime('%p') rescue nil}", :col => '3',:maxlength => "2"
+				/ = f.custom_text_field :hours, :value => f.object.get_hours, :class => 'hours inputs', :placeholder=>"HH",:col => '2'
+				/ \:
+				/ = f.custom_text_field :minutes, :value => f.object.get_minutes, :class => 'minutes inputs', :placeholder=>"MM", :col => '2'
+				/ \:
+				/ = f.custom_text_field :ampm, :value => f.object.get_ampm, :class => 'ampm inputs', :placeholder=>"AM/PM",:col => '2'
+				/ = f.hidden_field :plugin_start_time, :class => 'plugin_start_time'
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					.bs-component
+						.form-group.timeZoneP-l-0
+							%label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
+							= f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
+							.col-lg-3.timeDropdown
+								.timeTab  
+									= f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs", :placeholder => 'HH ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%l').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'hour'))}", :col => '2',:maxlength => "2"
+									= f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs", :placeholder => 'MM ', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%M').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'minute'))}", :col => '2',:maxlength => "2"
+									= f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs", :placeholder => 'AM/PM', :value => "#{([345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? f.object.id) ? (f.object.end_event_time.strftime('%p').strip.rjust(2, '0') rescue nil) : (get_hour_minute_second_ampm(f.object.end_event_time, 'ampm'))}", :col => '3',:maxlength => "2"
+				= f.custom_text_field :cities, "City *"
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+					.form-group.set_highlight_select
+						%label.col-lg-4.control-label.ml-color--shades-white
+							Country *
+						.col-lg-7
+							= f.select :event, :country_name, Event::COUNTRIES,{:prompt => "Please select the country" ,:selected => (@event.country_name)}, {:class => 'select2-single form-control'}
+							- if @event.errors.present? and @event.errors[:country_name].present?
+								.field_with_errors
+									%span.errorMessage{:for => "event_country_name"} This field is required.
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8  
+					.form-group.set_highlight_select
+						%label.col-lg-4.control-label.ml-color--shades-white
+							Time Zone *
+						.col-lg-7
+							- if @event.start_event_time.present?
+								- @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}"]}
+								= f.select :event, :timezone, @zones.map{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+								- if @event.errors.present? and @event.errors[:timezone].present?
+									.field_with_errors
+										%span.errorMessage{:for => "event_timezone"} This field is required.  
+							- else
+								- @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.now.formatted_offset}"]}
+								= f.select :event, :timezone, @zones.map{|e| ["GMT#{e.now.formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+								- if @event.errors.present? and @event.errors[:timezone].present?
+									.field_with_errors
+										%span.errorMessage{:for => "event_timezone"} This field is required.  
+				= f.custom_text_field :pax, "Nbr. of people"
+				= f.custom_text_field :venues, "Venue"
+				= f.custom_text_field :google_map_link, "Google Map"
+				= f.custom_text_area_field :remarks, "Remarks"
+				= f.hidden_field :copy_content, :id => 'copy_content'
+				= f.hidden_field :custom_content, :id => 'custom_content'
 
-      .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          %h4.heading-border
-            Additional Information
-        .mdl-cell--6-col.mdl-cell--4-col-tablet.m-8  
-          .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-            = f.select("event", "theme_id", @themes.collect {|p| [ p.name, p.id ]}, {:selected => f.object.theme_id,:prompt => 'Theme Name'}, {include_blank: 'None'})
-        - @default_features.each do |event_feature|
-          .mdl-cell--4-col.mdl-cell--2-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-8
-            %label{:for => "event_user_ids_#{event_feature}"}
-              = check_box_tag "event[features][]", event_feature, @present_feature.include?("#{event_feature}"), :class => "", :id => "event_user_ids_#{event_feature}"
-              %span.checkbox 
-              = event_feature    
-    .fixed-activon-btn-new
-      = f.custom_submit_button "SAVE"
-      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-          = back_button(:back)
+				- event_names = @client.events.pluck(:event_name, :id)
+				/ - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
+				- if event_names.present? 
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
+						.bs-componet
+							.form-group.set_highlight_select
+								%label.col-lg-4.control-label.ml-color--shades-white
+									Do you want to add data from another event?
+								.col-lg-7
+									= f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
+									= f.custom_radio_button :copy_event, "no", "No", :id => "no"
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.select-eventDiv
+						.bs-componet
+							.form-group.set_highlight_select
+								%label.col-lg-4.control-label.ml-color--shades-white
+									Select Event
+								.col-lg-7
+									-# default_remarks = ['ABC','PQR','XYZ']
+									-# default_remarks << 'New Category'
+									%i.arrow.single
+									- event_name = Event.find(@event.parent_id).event_name rescue nil
+									= f.select("event", "event_id", event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+									- if @event.errors[:event_id].present?
+										.p.errorMessage
+											= 'This field is required.'
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
+						.bs-componet
+							.form-group.set_highlight_select 
+								%label.col-lg-4.control-label.ml-color--shades-white
+									//Select Event     
+								.col-lg-7.copyCustomContent
+									%button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Copy Content
+									%button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} Custom Content
+									- if @event.errors[:copy_content].present?
+										.p.errorMessage
+											= @event.errors[:copy_content].first
+					.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+						.form-group
+							%label.col-lg-4.control-label.ml-color--shades-white
+								Select Content
+							.col-lg-7.notification                
+								- Event::MOBILE_APPLICATIONS.each_with_index do |group, index|
+									- if index == 0
+										.usersep
+											Mobile Application
+									.md-checkbox
+										%label
+											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+											%span.checkbox 
+											= group
+								- Event::DATABASES.each_with_index do |group, index|
+									- if index == 0
+										.usersep
+											Database
+									.md-checkbox
+										%label
+											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+											%span.checkbox 
+											= group  
+								- Event::INVITEE_STRUCTURES.each_with_index do |group, index|
+									- if index == 0
+										.usersep
+											Invitee Structures
+									.md-checkbox
+										%label
+											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+											%span.checkbox 
+											= group       
+								- Event::GROUPINGS.each_with_index do |group, index|
+									- if index == 0
+										.usersep
+											Groupings
+									.md-checkbox
+										%label
+											= check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+											%span.checkbox 
+											= group                  
+									/ - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
+									/ - default_group_list.each_with_index do |group, index|
+									/   - if index == 0
+									/     .usersep
+									/       Groups created by you
+									/   .md-checkbox
+									/     %label
+									/       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+									/       %span.checkbox 
+									/       = group[0]
+		- elsif false  
+			.mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					%h4.heading-border
+						Highlights / Summary Details
+				= f.custom_text_area_field :description,"highlight"
+				= f.custom_text_area_field :summary,"summary"
+				= f.custom_file_browser_field :logo, "Listing logo ", :id => "uploadBtn"
+				= f.custom_file_browser_field :inside_logo, "Screen logo ", :id => "uploadBtn1"
+
+			.mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					%h4.heading-border
+						Additional Information
+				.mdl-cell--6-col.mdl-cell--4-col-tablet.m-8  
+					.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+						= f.select("event", "theme_id", @themes.collect {|p| [ p.name, p.id ]}, {:selected => f.object.theme_id,:prompt => 'Theme Name'}, {include_blank: 'None'})
+				- @default_features.each do |event_feature|
+					.mdl-cell--4-col.mdl-cell--2-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-8
+						%label{:for => "event_user_ids_#{event_feature}"}
+							= check_box_tag "event[features][]", event_feature, @present_feature.include?("#{event_feature}"), :class => "", :id => "event_user_ids_#{event_feature}"
+							%span.checkbox 
+							= event_feature    
+		.fixed-activon-btn-new
+			= f.custom_submit_button "SAVE"
+			.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+					= back_button(:back)
+
 .copyEvent
-  .popup-overlay
-  .ClientPopup
-    #register-form-copyContentPopup.col.s12.ClientPopup-info
-      %p.txtcenter.m-b-30 Are you sure you wan't to copy all the contents of this event?          
-      %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
-        ok
-:javascript
-  $('#selectAll').click(function() {
-    $(':checkbox').each(function() {
-      this.checked = true;                        
-    });
-  });  
-  $('#unSelectAll').click(function() {
-    $(':checkbox').each(function() {
-      this.checked = false;                        
-    });
-  });     
-  $(document).ready(function(){  
-    if("{@event.errors[:event_id].present?}")
-    {
-      $('#yes').trigger('click');
-    }
-  });
-:javascript
-  $(window).load(function(){
-  flightTime();
-  minutes();
-  times();  
-  })
+	.popup-overlay
+	.ClientPopup
+		#register-form-copyContentPopup.col.s12.ClientPopup-info
+			%p.txtcenter.m-b-30 Are you sure you wan't to copy all the contents of this event?          
+			%a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
+				ok
 
+:javascript
+	$(window).load(function(){
+		flightTime();
+		minutes();
+		times();  
+	})
+	$('#selectAll').click(function() {
+		$(':checkbox').each(function() {
+			this.checked = true;                        
+		});
+	});  
+	$('#unSelectAll').click(function() {
+		$(':checkbox').each(function() {
+			this.checked = false;                        
+		});
+	});     
+	$(document).ready(function(){  
+		if("{@event.errors[:event_id].present?}")
+		{
+			$('#yes').trigger('click');
+		}      
+	});
+
+- if params[:action] == 'edit'
+	:javascript
+		$("#event_event_id").attr('disabled','disabled')
+		document.getElementById("copyButton").disabled = true;      
+		document.getElementById("customButton").disabled = true;
+	- if @event.copy_event == 'no'
+		:javascript
+			document.getElementById("no").disabled = true;  
+	- elsif @event.copy_event == 'yes'
+		:javascript
+			document.getElementById("no").disabled = true;        
+	-else
+		:javascript
+			document.getElementById("yes").disabled = true;      
+			document.getElementById("no").checked = true;    
+			$(document).ready(function(){  
+				$(".select-eventDiv, .copyCustom-btnDiv").hide()
+			});  

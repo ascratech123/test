@@ -4,13 +4,19 @@ class Event < ActiveRecord::Base
   resourcify
   serialize :preferences
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :event_date_limit, :copy_event, :event_id, :copy_content, :custom_content
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :event_id
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
   EVENT_ASSOCIATIONS = ['speakers', 'invitees', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'user registrations', 'sponsors', 'registrations', 'registration settings', 'my travels', 'invitee structures', 'invitee groups', 'images', 'groupings', 'exhibitors', 'features', 'custom page1s', 'custom page2s', 'custom page3s', 'custom page4s', 'custom page5s', 'campaigns', 'attendees', 'mobile application']
   COUNTRIES = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Democratic Republic of the", "Congo", "Republic of the", "Costa Rica", "Cote dIvoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "North", "Korea", "South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territories", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"]
 
+  MOBILE_APPLICATIONS = ['invitees', 'speakers', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'sponsors', 'my travels', 'images', 'exhibitors', 'features', 'custom page1', 'custom page2', 'custom page3', 'custom page4', 'custom page5']
+
+  DATABASES = ['invitee structures', 'groupings']
+
+  INVITEE_STRUCTURES=['registrations', 'registration settings']
+  GROUPINGS = ['campaigns']
 
   belongs_to :client
   belongs_to :theme
@@ -742,26 +748,25 @@ class Event < ActiveRecord::Base
     event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present?
     event.copy_association(event.user_registrations, self.id) if event.user_registrations.present?
   end
- 
-  def copy_custom_event_associations_from(event, params)
+
+    def copy_custom_event_associations_from(event, params)
     event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
-    event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? and params[:associations].include?('mobile application')
+    event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? 
     event.copy_association(event.attendees, self.id) if event.attendees.present? and params[:associations].include?('attendees')
     event.copy_awards_association(event.awards, self.id) if event.awards.present? and params[:associations].include?('awards')
     event.copy_images_association(event.images, self.id) if event.images.present? and params[:associations].include?('images')
     event.copy_agendas_association(event.agendas, self.id) if event.agendas.present? and params[:associations].include?('agendas')
     event.copy_association(event.contacts, self.id) if event.contacts.present? and params[:associations].include?('contacts')
-    event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1s')
-    event.copy_association(event.custom_page2s, self.id) if event.custom_page2s.present? and params[:associations].include?('custom page2s')
-    event.copy_association(event.custom_page3s, self.id) if event.custom_page3s.present? and params[:associations].include?('custom page3s')
-    event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present? and params[:associations].include?('custom page4s')
-    event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present? and params[:associations].include?('custom page5s')
+    event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1')
+    event.copy_association(event.custom_page2s, self.id) if event.custom_page2s.present? and params[:associations].include?('custom page2')
+    event.copy_association(event.custom_page3s, self.id) if event.custom_page3s.present? and params[:associations].include?('custom page3')
+    event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present? and params[:associations].include?('custom page4')
+    event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present? and params[:associations].include?('custom page5')
     event.copy_association(event.event_features, self.id) if event.event_features.present? and params[:associations].include?('features')
     event.copy_association(event.exhibitors, self.id) if event.exhibitors.present? and params[:associations].include?('exhibitors')
     event.copy_association(event.faqs, self.id) if event.faqs.present? and params[:associations].include?('faqs')
     event.copy_association(event.groupings, self.id) if event.groupings.present? and params[:associations].include?('groupings')
-    event.copy_association(event.highlight_images, self.id) if event.highlight_images.present? and params[:associations].include?('highlight images')
-    event.copy_association(event.invitee_groups, self.id) if event.invitee_groups.present? and params[:associations].include?('invitee groups')
+    event.copy_association(event.highlight_images, self.id) if event.highlight_images.present? and params[:associations].include?('highlight images')    
     event.copy_association(event.invitee_structures, self.id) if event.invitee_structures.present? and params[:associations].include?('invitee structures')
     event.copy_association(event.invitees, self.id) if event.invitees.present? and params[:associations].include?('invitees')
     event.copy_association(event.my_travels, self.id) if event.my_travels.present? and params[:associations].include?('my travels')
@@ -769,11 +774,10 @@ class Event < ActiveRecord::Base
     event.copy_association(event.registrations, self.id) if event.registrations.present? and params[:associations].include?('registrations')
     event.copy_association(event.speakers, self.id) if event.speakers.present? and params[:associations].include?('speakers')
     event.copy_association(event.sponsors, self.id) if event.sponsors.present? and params[:associations].include?('sponsors')
-    event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('emergency exit')
-    event.copy_association(event.user_registrations, self.id) if event.user_registrations.present? and params[:associations].include?('user registrations')
+    event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('emergency exit')    
   end
- 
- 
+
+
   def copy_association(objekts, event_id)    
     objekts.each do |objekt|
       new_objekt = objekt.dup
