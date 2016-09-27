@@ -15,8 +15,9 @@ class Admin::ImportsController < ApplicationController
   require 'excel_import_agendas'
   require 'excel_import_my_travels'
 
-  load_and_authorize_resource
+  #load_and_authorize_resource
   before_filter :authenticate_user, :authorize_event_role#, :find_features
+  before_filter :check_for_access, :only => [:index,:new]
 
   def new
     @import = Import.new
