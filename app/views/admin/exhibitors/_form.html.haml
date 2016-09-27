@@ -7,6 +7,7 @@
       = f.custom_text_field :name, "name *","background" => "false"
       = f.new_custom_file_browser_field :image, "Logo (300x300px) (png/jpg) only*", :id => "uploadBtn", :value => f.object.image_file_name, :action => params[:action], "background" => "false"
       = f.custom_text_field :website_url, "Url","background" => "false"
+      = f.custom_text_field :contact_person_name, "Contact person name","background" => "false"
       = f.custom_text_field :email, "Email address","background" => "false"
       = f.custom_text_area_field :description,"description", "background" => "false"
     .fixed-activon-btn-new  
