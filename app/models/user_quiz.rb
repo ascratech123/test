@@ -19,7 +19,9 @@ class UserQuiz < ActiveRecord::Base
   default_scope { order('created_at desc') }
 
 	def update_quiz
-		Quiz.find_by_id(self.quiz_id).update_column(:updated_at, self.updated_at) rescue nil
+		quiz = Quiz.find_by_id(self.quiz_id)
+                quiz.update_column(:updated_at, self.updated_at) rescue nil
+                quiz.update_last_updated_model
 	end
 
   def email
@@ -56,9 +58,9 @@ class UserQuiz < ActiveRecord::Base
     #self.quiz.attributes[self.answer.downcase]
   end
   
-  def answer
-    self.quiz.correct_answer
-  end
+  # def answer
+  #   self.quiz.correct_answer
+  # end
 
   def correct_answer
     self.quiz.correct_answer.join(', ').to_s
