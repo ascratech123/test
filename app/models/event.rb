@@ -78,6 +78,7 @@ class Event < ActiveRecord::Base
   # validates :start_event_date, presence: true
   validates :event_id, presence: true, :if => Proc.new{|e| e.copy_event.present? and e.copy_event == 'yes' }
   validate :content_is_present, :if => Proc.new{|e| e.copy_event.present? and e.copy_event == 'yes' }
+
   has_attached_file :logo, {:styles => {:small => "200x200>", 
                                          :thumb => "60x60>"},
                              :convert_options => {:small => "-strip -quality 80", 
@@ -789,7 +790,7 @@ class Event < ActiveRecord::Base
         new_copy = mobile_application.dup
         new_copy.name = mobile_application.name + ' copy'
         copy_event.update_column('mobile_application_id', new_copy.id)        
-        new_copy.update_column('parent_id', mobile_application.id)          
+        new_copy.parent_id = mobile_application.id        
         new_copy.save  
       else
         copy_event.update_column('mobile_application_id', mobile_application.id)
