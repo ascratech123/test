@@ -18,9 +18,11 @@ class UserQuiz < ActiveRecord::Base
 
   default_scope { order('created_at desc') }
 
-	def update_quiz
-		Quiz.find_by_id(self.quiz_id).update_column(:updated_at, self.updated_at) rescue nil
-	end
+        def update_quiz
+                quiz = Quiz.find_by_id(self.quiz_id)
+                quiz.update_column(:updated_at, self.updated_at) rescue nil
+                quiz.update_last_updated_model
+        end
 
   def email
     event = self.quiz.event
