@@ -788,10 +788,10 @@ class Event < ActiveRecord::Base
       mobile_application = MobileApplication.find(event.mobile_application_id)
       if mobile_application.application_type == 'single event' 
         new_copy = mobile_application.dup
-        new_copy.name = mobile_application.name + ' copy'
-        copy_event.update_column('mobile_application_id', new_copy.id)        
+        new_copy.name = mobile_application.name + ' copy'                
         new_copy.parent_id = mobile_application.id        
         new_copy.save  
+        copy_event.update_column('mobile_application_id', new_copy.id)
       else
         copy_event.update_column('mobile_application_id', mobile_application.id)
       end
