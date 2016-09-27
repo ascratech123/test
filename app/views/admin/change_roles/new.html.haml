@@ -3,9 +3,9 @@
 #register-form.col.s12.ClientPopup-info
   %p.txtcenter.m-b-30
     Please select Role to continue
-  %span 
-    = link_to back_path, :class => 'closeclick' do 
-      X  
+  / %span 
+  /   = link_to back_path, :class => 'closeclick' do 
+  /     X  
   = form_tag admin_change_roles_path, :class => "caret", :method => :post do
     %i.arrow.single   
     - prompt_message = 'Select Role'

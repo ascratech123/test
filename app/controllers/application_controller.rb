@@ -230,7 +230,9 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :telecaller
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
-      new_admin_change_role_path# admin_dashboards_path
+      if resource.roles.pluck(:name).uniq.count > 1 #or session[:current_user_role].blank?
+        new_admin_change_role_path# admin_dashboards_path
+      end
     end
   end
 
