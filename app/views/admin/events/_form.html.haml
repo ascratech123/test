@@ -88,8 +88,8 @@
               Time Zone *
             .col-lg-7
               - if @event.start_event_time.present?
-                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@event,start_event_time).formatted_offset}"]}
-                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.at(@event,start_event_time).formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
+                - @zones = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}"]}
+                = f.select :event, :timezone, @zones.map{|e| ["GMT#{e.at(@event.start_event_time).formatted_offset}", e.name]}.sort,{:prompt => "Please select the Time Zone" ,:selected => (@event.timezone)}, {:class => 'select2-single form-control'}
                 - if @event.errors.present? and @event.errors[:timezone].present?
                   .field_with_errors
                     %span.errorMessage{:for => "event_timezone"} This field is required.  

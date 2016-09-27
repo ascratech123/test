@@ -1,3 +1,4 @@
+<% @timestamp ||= Time.now %>
 <% @list_of_zone = ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(@timestamp).formatted_offset}"]} %>
 <% if @timezone.present? and @list_of_zone.map{|e| ["GMT#{e.at(@timestamp).formatted_offset}",e.name]}.select{ |a| a[0] == @timezone}.present?%>
 	<% @timezone = @list_of_zone.map{|e| ["GMT#{e.at(@timestamp).formatted_offset}",e.name]}.select{ |a| a[0] == @timezone}.first[1] %>	
