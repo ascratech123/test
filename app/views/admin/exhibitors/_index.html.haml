@@ -11,6 +11,7 @@
       %th Name
       %th Logo
       %th Url
+      %th Contact Person Name
       %th Email id
       %th 
     - objs.each_with_index do |exhibitor,index|
@@ -24,6 +25,7 @@
         %td.font16= show_link(params, exhibitor.id, exhibitor.name) rescue nil
         %td.font16= image_tag(exhibitor.image_url(:thumb), :width => 60, :heigth => 60 ) rescue nil 
         %td.font16= exhibitor.website_url rescue ""
+        %td.font16= exhibitor.contact_person_name
         %td.font16= exhibitor.email
         %td.IconDrp
           = more_vert_button(exhibitor.id)
