@@ -145,13 +145,13 @@
               - if @conversations.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_conversations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
-              / - @conversation_wall = ConversationWall.find_by_event_id(@event.id)   
-              / - if @conversation_wall.present?
-              /   = link_to edit_admin_event_conversation_wall_path(:event_id => @event.id,:id =>@conversation_wall.id),:class => "centerAlign" do
-              /     Customize Wall
-              / - else
-              /   = link_to new_admin_event_conversation_wall_path(:event_id => @event.id),:class => "centerAlign" do
-              /     Customize Wall
+              - @conversation_wall = ConversationWall.find_by_event_id(@event.id)   
+              - if @conversation_wall.present?
+                = link_to edit_admin_event_conversation_wall_path(:event_id => @event.id,:id =>@conversation_wall.id),:class => "centerAlign" do
+                  Customize Wall
+              - else
+                = link_to new_admin_event_conversation_wall_path(:event_id => @event.id),:class => "centerAlign" do
+                  Customize Wall
               - if false
                 = link_to new_admin_event_conversation_path(:importable_type => 'conversation', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import   
