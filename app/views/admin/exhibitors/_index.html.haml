@@ -11,7 +11,9 @@
       %th Name
       %th Logo
       %th Url
+      %th Contact Person Name
       %th Email id
+      %th Contact Number
       %th 
     - objs.each_with_index do |exhibitor,index|
       %tr 
@@ -24,7 +26,9 @@
         %td.font16= show_link(params, exhibitor.id, exhibitor.name) rescue nil
         %td.font16= image_tag(exhibitor.image_url(:thumb), :width => 60, :heigth => 60 ) rescue nil 
         %td.font16= exhibitor.website_url rescue ""
+        %td.font16= exhibitor.contact_person_name
         %td.font16= exhibitor.email
+        %td.font16= exhibitor.mobile
         %td.IconDrp
           = more_vert_button(exhibitor.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{exhibitor.id}"}
