@@ -14,13 +14,9 @@ class Comment < ActiveRecord::Base
   
   def update_conversation_records_for_create
     conversation = Conversation.find_by_id(self.commentable_id)
-    invitee = Invitee.find(self.user_id)
     if conversation.present?
       conversation.update_column(:action, 'Comment')
-      conversation.update_column(:first_name_user, invitee.first_name)
-      conversation.update_column(:last_name_user, invitee.last_name)      
-      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url(:large))
-      conversation.update_column(:last_update_comment_description, self.description)
+      conversation.update_column(:actioner_id, self.user_id)      
       conversation.update_last_updated_model
     end
   end
@@ -28,10 +24,6 @@ class Comment < ActiveRecord::Base
   def update_conversation_records_for_destroy
     conversation = Conversation.find_by_id(self.commentable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
-      # conversation.update_column(:first_name_user, nil)
-      # conversation.update_column(:last_name_user, nil)      
-      # conversation.update_column(:profile_pic_url_user, nil)      
-    # end
   end
 
 
