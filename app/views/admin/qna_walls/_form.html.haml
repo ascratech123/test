@@ -11,7 +11,7 @@
         %h4.heading-border.p-t-10
           Title
       = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "thrmr_look_feel.jpg", :section_id => "theme_look_feel_section"}
-      = f.custom_text_field :title, "Title", :value => @qna_wall.title, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.title.present?) ? "has-success" : ""}"
+      = f.custom_text_field :title, "Title", :value => @qna_wall.title,:view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.title.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
