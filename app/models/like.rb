@@ -18,6 +18,7 @@ class Like < ActiveRecord::Base
   def update_conversation_records_for_create
     conversation = Conversation.find_by_id(self.likable_id) rescue nil
     if conversation.present?
+      conversation.update_column(:updated_at, self.updated_at)
       conversation.update_column(:action, 'Like')
       conversation.update_column(:actioner_id, self.user_id)      
     end
@@ -26,6 +27,7 @@ class Like < ActiveRecord::Base
   def update_conversation_records_for_destroy
     conversation = Conversation.find_by_id(self.likable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
+    conversation.update_column(:updated_at, self.updated_at)
   end
 	
   def email

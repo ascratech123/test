@@ -18,12 +18,14 @@ class Comment < ActiveRecord::Base
       conversation.update_column(:action, 'Comment')
       conversation.update_column(:actioner_id, self.user_id)      
       conversation.update_last_updated_model
+      conversation.update_column(:updated_at, self.updated_at)
     end
   end
 
   def update_conversation_records_for_destroy
     conversation = Conversation.find_by_id(self.commentable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
+    conversation.update_column(:updated_at, self.updated_at)
   end
 
 
