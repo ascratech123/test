@@ -31,7 +31,7 @@ class QnaWall < ActiveRecord::Base
       logo_dimension_height  = 300.0
       logo_dimension_width = 1280.0
       dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path)
-      if (dimensions.width != logo_dimension_width or dimensions.height !logo_dimension_height)
+      if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
         errors.add(:logo, "Image size should be 1280x300px only")
       end
     end
