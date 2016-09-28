@@ -13,10 +13,11 @@ class Comment < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   def update_conversation_records_for_create
-    conversation = Conversation.find_by_id(self.commentable_id) rescue nil
+    conversation = Conversation.find_by_id(self.commentable_id)
     if conversation.present?
       conversation.update_column(:action, 'Comment')
       conversation.update_column(:actioner_id, self.user_id)      
+      conversation.update_last_updated_model
     end
   end
 
@@ -69,16 +70,20 @@ class Comment < ActiveRecord::Base
 
   def first_name
     # Invitee.find_by_id(self.user_id).first_name rescue ""
-    user_id = Conversation.find_by_id(self.commentable_id).user_id
-    first_name = Invitee.find_by_id(user_id).first_name rescue ""
-    return first_name
+    # user_id = Conversation.find_by_id(self.commentable_id).user_id
+    # first_name = Invitee.find_by_id(user_id).first_name rescue ""
+    # return first_name
+    user = self.user
+    (user.present? ? user.first_name : "")
   end
   
   def last_name
-    user_id = Conversation.find_by_id(self.commentable_id).user_id
-    last_name = Invitee.find_by_id(user_id).last_name rescue ""
-    return last_name
+    # user_id = Conversation.find_by_id(self.commentable_id).user_id
+    # last_name = Invitee.find_by_id(user_id).last_name rescue ""
+    # return last_name
     # Invitee.find_by_id(self.user_id).last_name rescue ""
+    user = self.user
+    (user.present? ? user.first_name : "")
   end
   
   def conversation
