@@ -17,12 +17,12 @@ class Analytic < ActiveRecord::Base
   def update_conversation
     if self.viewable_type == "Conversation" and self.action == "share"
       conversation = Conversation.find(self.viewable_id)
-      invitee = Invitee.find(self.invitee_id)
+      # invitee = Invitee.find(self.invitee_id)
       conversation.update_column(:updated_at, self.updated_at)
-      conversation.update_column(:action, self.action)
-      conversation.update_column(:first_name_user, invitee.first_name)
-      conversation.update_column(:last_name_user, invitee.last_name)
-      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
+      conversation.update_column(:action, 'share')
+      # conversation.update_column(:first_name_user, invitee.first_name)
+      # conversation.update_column(:last_name_user, invitee.last_name)
+      # conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
     end
   end
 
