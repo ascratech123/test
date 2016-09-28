@@ -4,6 +4,11 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           = show_field_newQuestion(" ", obj.question)
+      = show_field_new_for_poll("1 :", "1",obj) if obj.option_type == "Rating"
+      = show_field_new_for_poll("2 :", "2",obj) if obj.option_type == "Rating"
+      = show_field_new_for_poll("3 :", "3",obj) if obj.option_type == "Rating"
+      = show_field_new_for_poll("4 :", "4",obj) if obj.option_type == "Rating"
+      = show_field_new_for_poll("5 :", "5",obj) if obj.option_type == "Rating"
       = show_field_new_for_poll("#{obj.option1} :", "option1",obj) if obj.option1.present?
       = show_field_new_for_poll("#{obj.option2} :", "option2",obj) if obj.option2.present?
       = show_field_new_for_poll("#{obj.option3} :", "option3",obj) if obj.option3.present?
