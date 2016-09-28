@@ -29,7 +29,7 @@ class Api::V1::ConversationsController < ApplicationController
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
       end_event_date = Time.now.utc + 2.minutes
       conversations = event.conversations.where(:updated_at => start_event_date..end_event_date, :status => 'approved') rescue []
-      data[:'conversations'] = conversations.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name])
+      data[:'conversations'] = conversations.as_json(:except => [:image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :last_name_user, :first_name_user, :profile_pic_url_user, :profile_pic_url])
       conversation_ids = conversations.pluck(:id) rescue []
       info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
       data[:'comments'] = info.as_json(:only => [:id, :commentable_id, :commentable_type, :user_id, :description, :created_at, :updated_at], :methods => [:user_name, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name]) rescue []
