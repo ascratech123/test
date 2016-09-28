@@ -10,7 +10,7 @@ class Admin::QnaWallsController < ApplicationController
   def create
 		@qna_wall = QnaWall.new(qna_wall_params)
     if @qna_wall.save
-      redirect_to edit_admin_event_qna_wall_path(:event_id => @qna_wall.event_id,:id =>@qna_wall.id)
+      redirect_to admin_event_qnas_path(:event_id => @qna_wall.event_id)
     else
       render :action => 'new'
     end
@@ -23,7 +23,7 @@ class Admin::QnaWallsController < ApplicationController
   def update
     @qna_wall = QnaWall.find(params[:id])
     if @qna_wall.update_attributes(qna_wall_params)
-      redirect_to edit_admin_event_qna_wall_path(:event_id => @qna_wall.event_id,:id =>@qna_wall.id)
+      redirect_to admin_event_qnas_path(:event_id => @qna_wall.event_id)
     else
       render :action => "edit"
     end

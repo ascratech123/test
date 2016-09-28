@@ -22,7 +22,7 @@
                 %i.material-icons refresh
           - unanswer_qnas = Qna.get_unanswer(objs,nil)
           - if @qna_wall.title.present?
-            %p.qa.QnaTitle 
+            %p.qa.QnaTitle{:style=>"color:#{@qna_wall.title_color};"} 
               = @qna_wall.title
           .bs-example
             #accordion.panel-group
@@ -154,7 +154,7 @@
                 %i.material-icons refresh
           - unanswer_qnas = Qna.get_unanswer(objs,nil)
           - if @qna_wall.title.present?
-            %p.qa.QnaTitle 
+            %p.qa.QnaTitle{:style=>"color:#{@qna_wall.title_color};"}  
               = @qna_wall.title
           .bs-example
             #accordion.panel-group
@@ -286,7 +286,7 @@
                 %i.material-icons refresh
           - unanswer_qnas = Qna.get_unanswer(objs,nil)
           - if @qna_wall.title.present?
-            %p.qa.QnaTitle 
+            %p.qa.QnaTitle{:style=>"color:#{@qna_wall.title_color};"}  
               = @qna_wall.title
           .bs-example
             #accordion.panel-group
