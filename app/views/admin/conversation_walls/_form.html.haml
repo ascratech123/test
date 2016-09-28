@@ -5,7 +5,7 @@
         %h4.heading-border.p-t-10
           Logo
           %span.editThemelinks  
-        = f.new_custom_file_browser_field "logo", "Qna Wall logo (200x200px) png only *", :id => "uploadBtn1", :value => (params[:action] == "create" and @conversation_wall.present?) ? @conversation_wall : @conversation_wall.logo_file_name, :action => params[:action], :view_popup => {:image_path => "a.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}  
+        = f.new_custom_file_browser_field "logo", "Conversation Wall logo (1280x300px) png only", :id => "uploadBtn1", :value => (params[:action] == "create" and @conversation_wall.present?) ? @conversation_wall : @conversation_wall.logo_file_name, :action => params[:action], :view_popup => {:image_path => "a.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}  
 
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
@@ -33,21 +33,21 @@
 
       %p.OrTxt.or-vertical-text
         or
-      = f.custom_text_field :background_color, "Background Color *", :value => @conversation_wall.background_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.background_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :background_color, "Background Color", :value => @conversation_wall.background_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.background_color.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           Font Color
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :font_color, "Font Color *", :value => @conversation_wall.font_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.font_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :font_color, "Font Color", :value => @conversation_wall.font_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.font_color.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           Box Color
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :box_color, "Box Color *", :value => @conversation_wall.box_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.box_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :box_color, "Box Color", :value => @conversation_wall.box_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.box_color.present?) ? "has-success" : ""}"
       = f.hidden_field :event_id,:value=>params[:event_id]                
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"
