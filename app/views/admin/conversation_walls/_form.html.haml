@@ -16,7 +16,7 @@
         .bs-component
           .form-group
             .span.col-lg-4
-              = f.label "Background Image (960x1600px) png only ",:class =>"control-label", style: "float: right;"
+              = f.label "Background Image (1600x900px) png only ",:class =>"control-label", style: "float: right;"
             .col-lg-7.Closetheme
               %label.field.file
                 %span.button.btn-primary
@@ -26,10 +26,10 @@
             - if @event.present? and f.object.background_image_file_name.present? 
               .col-lg-1
                 = link_to "?" ,"/whats_this/look_and_feel/backgrounds/Help_Look&Feel_BackgroundImage.jpg", rel: "event_bg_image", title: "Event Background Image", :class =>'fancybox whatsImg'
-                - if @event.theme.present? and @event.theme_id.present?
-                  = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
-                    %span
-                      X
+                / - if @event.theme.present? and @event.theme_id.present?
+                /   = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
+                /     %span
+                /       X
 
       %p.OrTxt.or-vertical-text
         or
@@ -62,3 +62,4 @@
                 %span.waves-effect.waves-light.btn
                   CANCEL
 = javascript_include_tag "jquery-1.11.3.min", "pick-a-color-1.2.0.min", "tinycolor", "jquery.fancybox", "theme_color_pick"                   
+ 

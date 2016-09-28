@@ -21,7 +21,7 @@ class QnaWall < ActiveRecord::Base
       background_image_dimension_width = 1600.0
       dimensions = Paperclip::Geometry.from_file(background_image.queued_for_write[:original].path)
       if (dimensions.width != background_image_dimension_width or dimensions.height != background_image_dimension_height)
-        errors.add(:background_image, "Image size should be 900x1600px only")
+        errors.add(:background_image, "Image size should be 1600x900px only")
       end
     end
   end

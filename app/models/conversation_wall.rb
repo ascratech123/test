@@ -21,7 +21,7 @@ class ConversationWall < ActiveRecord::Base
       background_image_dimension_width = 1600.0
       dimensions = Paperclip::Geometry.from_file(background_image.queued_for_write[:original].path)
       if (dimensions.width != background_image_dimension_width or dimensions.height != background_image_dimension_height)
-        errors.add(:background_image, "Image size should be 900x1600px only")
+        errors.add(:background_image, "Image size should be 1600x900px only")
       end
     end
   end
@@ -31,7 +31,7 @@ class ConversationWall < ActiveRecord::Base
       logo_dimension_height  = 300.0
       logo_dimension_width = 1280.0
       dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path)
-      if (dimensions.width != logo_dimension_width or dimensions.height !logo_dimension_height)
+      if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
         errors.add(:logo, "Image size should be 1280x300px only")
       end
     end

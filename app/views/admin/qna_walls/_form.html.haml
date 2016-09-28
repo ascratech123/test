@@ -35,7 +35,7 @@
         .bs-component
           .form-group
             .span.col-lg-4
-              = f.label "Background Image (900x1600px) png only ",:class =>"control-label", style: "float: right;"
+              = f.label "Background Image (1600x900px) png only ",:class =>"control-label", style: "float: right;"
             .col-lg-7.Closetheme
               %label.field.file
                 %span.button.btn-primary
@@ -45,10 +45,10 @@
             - if @event.present? and f.object.background_image_file_name.present? 
               .col-lg-1
                 = link_to "?" ,"a.png", rel: "event_bg_image", title: "Event Background Image", :class =>'fancybox whatsImg'
-                - if @event.theme.present? and @event.theme_id.present?
-                  = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
-                    %span
-                      X
+                / - if @event.background_image.present? and @event.theme_id.present?
+                /   = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
+                /     %span
+                /       X
 
       %p.OrTxt.or-vertical-text
         or
