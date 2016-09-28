@@ -31,6 +31,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
+    @event_names = @client.events.where.not(status: 'rejected').pluck(:event_name, :id)
   end
   
   def create
