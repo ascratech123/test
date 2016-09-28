@@ -111,17 +111,6 @@ PAPERCLIP_SETTINGS =  { :storage => :s3,
                         :s3_credentials => S3_CREDENTIALS,
                         :bucket => S3_bucket
                         }
-MICROSITE_HEADER_IMAGE_PATH = {:path => "microsite/header_image/:style/:id-:filename",
-                     :url => "#{S3_url}/microsite/header_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-MICROSITE_BANNER_IMAGE_PATH = {:path => "microsite/banner_image/:style/:id-:filename",
-                     :url => "#{S3_url}/microsite/banner_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-MICROSITE_LOGO_IMAGE_PATH = {:path => "microsite/logo_image/:style/:id-:filename",
-                     :url => "#{S3_url}/microsite/logo_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-HEADER_IMAGE_PATH =   {:path => "edm/header_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-FOOTER_IMAGE_PATH =   {:path => "edm/footer_image/:style/:id-:filename",
-                     :url => "#{S3_url}/edm/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
-                     
 ATTACH_FILE_PATH =   {:path => "my_travel/attachment1/:style/:id-:filename",
                      :url => "#{S3_url}/my_travel/attachment1/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 ATTACH_FILE_2_PATH =   {:path => "my_travel/attachment2/:style/:id-:filename",
@@ -219,3 +208,27 @@ NOTIFICATION_IMAGE_PATH  = {:path => "notifications/image/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 BADGE_IMAGE_PATH  = {:path => "badge_pdfs/image/:style/:id-:filename",
                      :url => "#{S3_url}/badge_pdfs/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                        
+                     
+QNAWALL_LOGO_PATH  = {:path => "qna_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/qna_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+CONVERSATIONWALL_LOGO_PATH  = {:path => "conversation_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/conversation_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+POLLWALL_LOGO_PATH  = {:path => "poll_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/poll_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+                     
+QUIZWALL_LOGO_PATH  = {:path => "quiz_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/quiz_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+QNAWALL_BG_IMAGE_PATH  = {:path => "qna_walls/background_image/:style/:id-:filename",
+      :url => "#{S3_url}/qna_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+CONVERSATIONWALL_BG_IMAGE_PATH  = {:path => "conversation_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/conversation_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+POLLWALL_BG_IMAGE_PATH  = {:path => "poll_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/poll_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                                                                                                                                                                                                     

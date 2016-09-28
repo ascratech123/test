@@ -23,6 +23,10 @@ class Event < ActiveRecord::Base
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_one :qna_wall
+  has_one :conversation_wall
+  has_one :poll_wall
+  has_one :quiz_wall
   has_many :my_profiles, :dependent => :destroy
   has_many :microsites, :dependent => :destroy
   has_many :user_microsites, :dependent => :destroy
