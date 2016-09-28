@@ -373,8 +373,31 @@ class Invitee < ActiveRecord::Base
   def get_favorites(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+
+    # favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+    # favorite_types = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+
+    # favorite_types.each do |favorite_type|
+    #   if favorite_type == "Image"
+      Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id], :methods => [:image_url])
+    #   else
+    #     Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+    #   end
+    # end
   end
+
+  # def get_favorites_gallery(mobile_app_code,submitted_app)
+  #   mobile_application_ids = MobileApplication.where(submitted_code: mobile_app_code).pluck(:id)
+  #   event_ids = Event.where(mobile_application_id: mobile_application_ids).pluck(:id)
+  #   # event_ids = get_event_id(mobile_app_code,submitted_app)
+  #   invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+  #   binding.pry
+  #   favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+  #   favorite_ids = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+  #   # Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id]) rescue nil
+  #   Image.where(:imageable_type => favorite_ids).as_json(:only => [:id, :imageable_type], :methods => [:image_url]) if favorite_ids.present?
+  #   # Image.find(fav.favoratable_id) if fav.imageable_type == "Gallery"
+  # end
    
   def get_my_network_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
