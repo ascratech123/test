@@ -28,6 +28,7 @@ class UserPoll < ActiveRecord::Base
 
   def Timestamp
     # self.created_at.in_time_zone(self.poll.event_timezone).strftime("%d/%m/%Y %T")
+    # (self.created_at + self.poll.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
     (self.created_at + self.poll.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
 
@@ -52,7 +53,14 @@ class UserPoll < ActiveRecord::Base
   end
 
   def user_answer
-  	self.poll.attributes[self.answer.downcase]
+    answer_count = self.answer.split(',').count
+    if answer_count == 1 and (self.poll.attributes["option1"].present? or self.poll.attributes["option2"].present? or self.poll.attributes["option3"].present? or self.poll.attributes["option4"].present? or self.poll.attributes["option5"].present? or self.poll.attributes["option6"].present? or self.poll.attributes["option7"].present? or self.poll.attributes["option8"].present? or self.poll.attributes["option9"].present? or self.poll.attributes["option10"].present?)
+      self.poll.attributes[self.answer.downcase]
+    elsif self.poll.attributes["option_type"] == "Rating" or self.poll.attributes["option_type"] == "Textbox"
+      self.answer
+    else
+      self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
+    end
   end
 
   def create_analytic_record
