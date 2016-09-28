@@ -11,9 +11,8 @@
     - prompt_message = 'Select Role'
     - current_user = User.current.roles.pluck(:name).uniq                      
     - roles = User.current.roles.pluck(:name).uniq.map{|val| val.gsub('_', ' ')}
-    - arr = []
-    - final_array = current_user.each_with_index.map{|val, i| arr << [roles[i], val]}
-    = select_tag :role, options_for_select(final_array.first)#, :prompt => "#{prompt_message}"
+    - final_array = roles.zip(current_user)
+    = select_tag :role, options_for_select(final_array)#, :prompt => "#{prompt_message}"
     = hidden_field_tag :previous_url, request.referer
     .row.txtcenter.UserSubmit.m-t-40
       = submit_tag "Submit", :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 disbtn"
