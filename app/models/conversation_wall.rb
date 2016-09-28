@@ -8,7 +8,7 @@ class ConversationWall < ActiveRecord::Base
                                        }.merge(CONVERSATIONWALL_LOGO_PATH)
   has_attached_file :background_image
   validates_attachment_content_type :background_image, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
-  has_attached_file :background_image, {:styles => {:large => "960x1600>", 
+  has_attached_file :background_image, {:styles => {:large => "900x1600>", 
                                        :thumb => "60x60>"}
                                        }.merge(CONVERSATIONWALL_BG_IMAGE_PATH)
   
