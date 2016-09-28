@@ -27,6 +27,42 @@
                     %p.poll-question 
                       %strong
                         = poll.question
+                    - if poll.option_type == "Rating"
+                      %p 
+                        = 1
+                        - percentage = get_user_poll_percentage("1",poll)
+                      .progress
+                        .pollwidth{:style => "width: 90%"}
+                          .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%"}
+                        = "#{percentage}%"
+                      %p 
+                        = 2
+                        - percentage = get_user_poll_percentage("2",poll)
+                      .progress
+                        .pollwidth{:style => "width: 90%"}
+                          .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%"}
+                        = "#{percentage}%"
+                      %p 
+                        = 3
+                        - percentage = get_user_poll_percentage("3",poll)
+                      .progress
+                        .pollwidth{:style => "width: 90%"}
+                          .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%"}
+                        = "#{percentage}%"
+                      %p 
+                        = 4
+                        - percentage = get_user_poll_percentage("4",poll)
+                      .progress
+                        .pollwidth{:style => "width: 90%"}
+                          .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%"}
+                        = "#{percentage}%"
+                      %p 
+                        = 5
+                        - percentage = get_user_poll_percentage("5",poll)
+                      .progress
+                        .pollwidth{:style => "width: 90%"}
+                          .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%"}
+                        = "#{percentage}%"
                     - if poll.option1.present?
                       %p 
                         = poll.option1

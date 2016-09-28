@@ -19,19 +19,13 @@ class Like < ActiveRecord::Base
     conversation = Conversation.find_by_id(self.likable_id) rescue nil
     if conversation.present?
       conversation.update_column(:action, 'Like')
-      conversation.update_column(:first_name_user, Invitee.find(self.user_id).first_name)
-      conversation.update_column(:last_name_user, Invitee.find(self.user_id).last_name)      
-      conversation.update_column(:profile_pic_url_user, Invitee.find(self.user_id).profile_pic.url(:large))      
+      conversation.update_column(:actioner_id, self.user_id)      
     end
   end
 
   def update_conversation_records_for_destroy
     conversation = Conversation.find_by_id(self.likable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
-      # conversation.update_column(:first_name_user, nil)
-      # conversation.update_column(:last_name_user, nil)      
-      # conversation.update_column(:profile_pic_url_user, nil)      
-    # end
   end
 	
   def email
