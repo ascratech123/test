@@ -5,13 +5,20 @@
         %h4.heading-border.p-t-10
           Logo
           %span.editThemelinks  
-        = f.new_custom_file_browser_field "logo", "Qna Wall logo (200x200px) png only * ", :id => "uploadBtn1", :value => (params[:action] == "create" and @qna_wall.present?) ? @qna_wall : @qna_wall.logo_file_name, :action => params[:action], :view_popup => {:image_path => "a.png", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
+        = f.new_custom_file_browser_field "logo", "Qna Wall logo (1280x300px) png only", :id => "uploadBtn1", :value => (params[:action] == "create" and @qna_wall.present?) ? @qna_wall : @qna_wall.logo_file_name, :action => params[:action], :view_popup => {:image_path => "a.png", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           Title
       = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "thrmr_look_feel.jpg", :section_id => "theme_look_feel_section"}
-      = f.custom_text_field :title, "Title "   
+      = f.custom_text_field :title, "Title", :value => @qna_wall.title, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.title.present?) ? "has-success" : ""}"
+    .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10
+          Title Color
+          %span.editThemelinks  
+      %p.OrTxt
+      = f.custom_text_field :title_color, "Title Color ", :value => @qna_wall.title_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.title_color.present?) ? "has-success" : ""}"
     / .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
     /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
     /     %h4.heading-border.p-t-10
@@ -59,7 +66,7 @@
           Tab Color
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :tab_color, "Tab Color *", :value => @qna_wall.tab_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.tab_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :tab_color, "Tab Color ", :value => @qna_wall.tab_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.tab_color.present?) ? "has-success" : ""}"
       = f.hidden_field :event_id,:value=>params[:event_id]                
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"

@@ -72,7 +72,7 @@
         - page = "#{params["import"]["importable_type"] + "s" rescue nil}" if page == "imports"
         - name = Client::display_hsh[page]
         - name = "Look & Feel" if name == "Theme"
-        - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos"].exclude?(params[:controller])  
+        - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos","admin/qna_walls","admin/conversation_walls", "admin/poll_walls", "admin/quiz_walls"].exclude?(params[:controller])  
           - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
             %li.breadcrumb-link
               - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups"].include?(params["controller"])

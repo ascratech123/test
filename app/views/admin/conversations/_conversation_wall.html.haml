@@ -14,7 +14,7 @@
         %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
           %p.conv-logo
             / %img{:src => @event.inside_logo.url, :alt => ""}/
-            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:thumb)}"}
+            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}
           %section#content.covesationPage
             - @conversations.each do |conversation|
               - event = conversation.event
@@ -52,7 +52,7 @@
         %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
           %p.conv-logo
             / %img{:src => @event.inside_logo.url, :alt => ""}/
-            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:thumb)}"}            
+            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}            
           %section#content.covesationPage
             - @conversations.each do |conversation|
               - event = conversation.event
@@ -90,7 +90,7 @@
         %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
           %p.conv-logo
             / %img{:src => @event.inside_logo.url, :alt => ""}/
-            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:thumb)}"}            
+            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}            
           %section#content.covesationPage
             - @conversations.each do |conversation|
               - event = conversation.event

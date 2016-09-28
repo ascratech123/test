@@ -10,7 +10,7 @@ class Admin::ConversationWallsController < ApplicationController
   def create
 		@conversation_wall = ConversationWall.new(conversation_wall_params)
     if @conversation_wall.save
-      redirect_to edit_admin_event_conversation_wall_path(:event_id => @conversation_wall.event_id,:id =>@conversation_wall.id)
+      redirect_to admin_event_conversations_path(:event_id => @conversation_wall.event_id)
     else
       render :action => 'new'
     end
@@ -23,7 +23,7 @@ class Admin::ConversationWallsController < ApplicationController
   def update
     @conversation_wall = ConversationWall.find(params[:id])
     if @conversation_wall.update_attributes(conversation_wall_params)
-      redirect_to edit_admin_event_conversation_wall_path(:event_id => @conversation_wall.event_id,:id =>@conversation_wall.id)
+      redirect_to admin_event_conversations_path(:event_id => @conversation_wall.event_id)
     else
       render :action => "edit"
     end
