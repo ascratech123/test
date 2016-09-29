@@ -12,7 +12,19 @@ class Analytic < ActiveRecord::Base
   belongs_to :event
   before_create :update_points
   after_create :update_points_to_invitee
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :update_conversation
+
+   def update_conversation
+     if self.viewable_type == "Conversation" and self.action == "share"
+       conversation = Conversation.find(self.viewable_id)
+       invitee = Invitee.find(self.invitee_id)
+       conversation.update_column(:updated_at, self.updated_at)
+       conversation.update_column(:action, self.action)
+       conversation.update_column(:first_name_user, invitee.first_name)
+       conversation.update_column(:last_name_user, invitee.last_name)
+       conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
+     end
+   end
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)

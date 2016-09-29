@@ -17,11 +17,12 @@ class Like < ActiveRecord::Base
 
   def update_conversation_records_for_create
     conversation = Conversation.find_by_id(self.likable_id) rescue nil
+   invitee = Invitee.find(self.user_id)
     if conversation.present?
       conversation.update_column(:action, 'Like')
-      conversation.update_column(:first_name_user, Invitee.find(self.user_id).first_name)
-      conversation.update_column(:last_name_user, Invitee.find(self.user_id).last_name)      
-      conversation.update_column(:profile_pic_url_user, Invitee.find(self.user_id).profile_pic.url(:large))      
+      conversation.update_column(:first_name_user, invitee.first_name)
+      conversation.update_column(:last_name_user, invitee.last_name)      
+      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url(:large))      
     end
   end
 

@@ -75,6 +75,10 @@ class Conversation < ActiveRecord::Base
     conversations
   end 
 
+   def share_count
+     Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation", action: "share").length rescue 0
+   end
+ 
   def like_count
     Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
   end
