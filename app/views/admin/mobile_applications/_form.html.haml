@@ -175,7 +175,8 @@
                 .col-lg-3.p-h-12   
                   = f.custom_radio_button_menu :choose_home_page, "active","Yes", :id => "home_page_type1", :default_checked => (f.object.choose_home_page == 'active') ? 'checked' : ''
                   = f.custom_radio_button_menu :choose_home_page, "deactive","No", :id => "home_page_type2", :default_checked => (f.object.choose_home_page == 'deactive' or f.object.choose_home_page == nil) ? 'checked' : ''
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.select-event
+            
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.select-event{:style => (@mobile_application.choose_home_page == nil or @mobile_application.choose_home_page == 'deactive') ? 'display : none' : 'display : block' }
               / {:style => "display: #{select_login_at}"}
               .form-group{:class => "#{params[:action] == "new" ? "" : "has-success"}"}
                 %label.col-lg-4.control-label.ml-color--shades-white
@@ -333,7 +334,3 @@
     $("#mobile_application_listing_screen_text_color").parent().parent().parent().show();
   });
 
-  if("#{@mobile_application.choose_home_page == 'active'}")
-  {
-    $(".select-event").show()
-  }
