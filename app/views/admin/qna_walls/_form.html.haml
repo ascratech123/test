@@ -19,13 +19,6 @@
           %span.editThemelinks  
       %p.OrTxt
       = f.custom_text_field :title_color, "Title Color ", :value => @qna_wall.title_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.title_color.present?) ? "has-success" : ""}"
-    / .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
-    /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-    /     %h4.heading-border.p-t-10
-    /       Background Color
-    /       %span.editThemelinks  
-    /   %p.OrTxt
-    /   = f.custom_text_field :bg_color, "Background Color *", :value => @qna_wall.bg_color, :class => 'pick-a-color', :view_popup => {:image_path => "look_and_feel/backgrounds/Help_Look&Feel_BackgroundColor.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.bg_color.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
@@ -42,13 +35,13 @@
                   Choose File 
                 = f.file_field :background_image,:id => "uploadBtn2", :class=>"gui-file"
                 = text_field_tag("text_file_name","", id: "1uploadBtn2", class: "gui-input", :value => "#{f.object.background_image_file_name.nil? ? "there is no Attachment Available !" : f.object.background_image_file_name}", :read_only => true)
-            - if @event.present? and f.object.background_image_file_name.present? 
+            - if f.object.background_image_file_name.present? 
               .col-lg-1
                 = link_to "?" ,"a.png", rel: "event_bg_image", title: "Event Background Image", :class =>'fancybox whatsImg'
-                / - if @event.background_image.present? and @event.theme_id.present?
-                /   = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
-                /     %span
-                /       X
+                - if @qna_wall.background_image.present?
+                  = link_to admin_event_qna_wall_path(:event_id => @event.id, :id => @qna_wall.id,:remove_bg_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
+                    %span
+                      X
 
       %p.OrTxt.or-vertical-text
         or
