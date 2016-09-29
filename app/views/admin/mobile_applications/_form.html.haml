@@ -83,7 +83,14 @@
         / = f.new_custom_file_browser_field :splash_screen, "Splash Screen (960X1600px) png only", :id => "splash_screen_uploadBtn", :value => f.object.splash_screen_file_name, :action=> params[:action], :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_SplashScreen.jpg", :rel=> "mobil_app_splash_screen", :title => "Splash Screen"}
         / - if (current_user.has_role? :licensee_admin and @mobile_application.splash_screen_file_name.present?)
         /   = link_to "(Download Splash Screen)",edit_admin_event_mobile_application_path(:event_id => params[:event_id],:id => params[:id],:download_image => "true",:image_name => @mobile_application.splash_screen_file_name,:image_url=>@mobile_application.splash_screen.url)
-        
+        - if false #f.object.new_record? or f.object.events.count == 1
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.errorMess
+            .mdl-grid.p-v-5.form-group
+              .col-lg-4.mdl-typography--text-right.m-b-10
+                %p.displayInlineBlock.multicitytxt Do you need login after splash screen? * 
+              .col-lg-7.p-h-12  
+                = f.custom_radio_button :login_at, "Yes", "Yes", :id => "option4"
+                = f.custom_radio_button :login_at, "No", "No", :id => "option5"
         
         =# f.new_custom_file_browser_field :listing_screen_background, "Listing Screen Background (960X1600px) only", :id => "listing_screen_uploadBtn", :value => f.object.listing_screen_background_file_name, :action=> params[:action], :display => "#{(f.object.application_type == 'multi event' or params[:action] == "new") ? "true" : "false"}", :view_popup => {:image_path => "app_info/master_screens/master_AppInfo_ListingScreenBackground.jpg", :rel=> "mobil_app_listing_screen_background", :title => "Listing Screen Background"}
 
@@ -155,7 +162,35 @@
             .col-lg-3.p-h-12   
               = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
               = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
-
+      -if  @mobile_application.application_type == 'multi event'
+        .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15.min-height-auto
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
+            %h4.heading-border.displaybolck.p-t-10.m-b-10
+              Home Page
+          - if params[:event_id].present?  
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+              .mdl-grid.p-v-15
+                .col-lg-4.mdl-typography--text-right
+                  %p.displayInlineBlock.multicitytxt  Choose Home Page
+                .col-lg-3.p-h-12   
+                  = f.custom_radio_button_menu :choose_home_page, "active","Yes", :id => "home_page_type1", :default_checked => (f.object.choose_home_page == 'active') ? 'checked' : ''
+                  = f.custom_radio_button_menu :choose_home_page, "deactive","No", :id => "home_page_type2", :default_checked => (f.object.choose_home_page == 'deactive' or f.object.choose_home_page == nil) ? 'checked' : ''
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.select-event
+              / {:style => "display: #{select_login_at}"}
+              .form-group{:class => "#{params[:action] == "new" ? "" : "has-success"}"}
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  Select Event
+                .col-lg-7
+                  %i.arrow.single
+                  - event_names = f.object.events.pluck(:event_name)
+                  - event_ids = f.object.events.pluck(:id)
+                  - arr = event_names.zip(event_ids)
+                  = f.select("mobile_application", "home_page_event_id", arr , {:selected => "#{f.object.home_page_event_id if f.object.home_page_event_id.present?}"}, {include_blank: 'None',:class=> 'select2-single form-control',:onclick =>"answers();"})
+                  - if f.object.new_record? or @event.present? and @event.event_features.pluck(:name).exclude? 'event_highlights'
+                    .field_with_errors#displayhighlight_message{:style => "display: #{(f.object.new_record? or @event.present? and @event.event_features.pluck(:name).exclude? 'event_highlights' and @event.login_at != 'After Highlight' ) ? 'none' : ''}"}
+                      .span{:class => "errorMessage"}
+                        = 'Kindly active Event Highlights feature to set login at After highlights'
+            
       / .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
       /     %h4.heading-border.displaybolck.p-t-10
@@ -297,3 +332,8 @@
     }
     $("#mobile_application_listing_screen_text_color").parent().parent().parent().show();
   });
+
+  if("#{@mobile_application.choose_home_page == 'active'}")
+  {
+    $(".select-event").show()
+  }

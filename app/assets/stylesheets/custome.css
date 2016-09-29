@@ -126,6 +126,9 @@
 .headerColor{width:100%;}
 .orText + .headerColor .form-group {margin-bottom: 5px;}
 .micrositeTemplateForm .error_space{height: auto;;}
+.select-event{display: none;}
+.min-height-auto{min-height: auto;}
+.save_button h4.m-b-10{margin-bottom: 10px;}
 
 .errorMess #microsite_field1 + .field_with_errors{top:40px;}
 .newMicrositeFieldDiv .mdl-grid .form-group  {margin-bottom: 15px;}
@@ -244,6 +247,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }
+
 }
 
 /*rwd table css start - Deepti */    
@@ -361,6 +365,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
 .back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
+
 /* nilam css ends here */
 
 .onoffswitch {
