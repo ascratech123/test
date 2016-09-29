@@ -6,6 +6,13 @@ $(document).ready(function(){
   $('#home_page_type2').click(function(){
     $('.select-event').hide()
   })
+  $('#option1').click(function(){
+    $('.choose-home-page').hide()
+  })
+  $('#option2').click(function(){
+    $('.choose-home-page').show()
+  })
+
   // $("a[href$='.jpg'],a[href$='.png'],a[href$='.gif']").attr('rel', 'gallery')
   $(".fancybox").fancybox({
     openEffect  : 'none',
