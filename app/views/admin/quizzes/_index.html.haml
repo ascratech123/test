@@ -10,6 +10,7 @@
       %th sequence
       %th Question 
       %th Status
+      %th On Wall
       %th 
     - objs.each_with_index do |quizze,index|
       %tr
@@ -24,12 +25,22 @@
         -else 
           %td.font16= quizze.question
         %td.font16= quizze.status.capitalize rescue nil
+        %td.font16
+          - if quizze.on_wall == "yes" and quizze.status != "rejected" 
+            = "Pushed on Wall"
+          - else 
+            = ""         
         %td.IconDrp
           -if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
             = more_vert_button(quizze.id)
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{quizze.id}"}
               = edit_link(params, quizze.id)
               = delete_link(params, quizze.id)
+              - if quizze.on_wall == "yes" 
+                = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
+              - elsif ((quizze.on_wall == "no" or quizze.on_wall == nil ) and quizze.event.quizzes.pluck(:on_wall).exclude?("yes"))
+                - if quizze.status != "deactivate"
+                  = link_to "Push To Wall",{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"              
               - quizze.aasm.events.each do |eve|
                 = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   =# will_paginate objs
