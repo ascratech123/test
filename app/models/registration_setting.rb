@@ -1,11 +1,13 @@
 class RegistrationSetting < ActiveRecord::Base
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am,:start_date_time,:end_date_time
   belongs_to :event 
 
-  validates :login, :event_id, :registration, presence: true
+  validates :event_id, :registration, presence: true   # :login,
   # validates :login_url, :login_surl, :reg_url, :reg_surl, presence: true, :if :registration == 'hobnob'
   # validates :forget_pass_url, :forget_pass_surl, presence: true
   validate :check_external_regi_and_login_present
 
+  before_validation :set_attr_accessor,:set_time
   before_save :update_registation_login_url,:update_template_to_template_name
   after_save :update_registation_surl, :update_last_updated_model
 
@@ -52,6 +54,48 @@ class RegistrationSetting < ActiveRecord::Base
     if self.template.present? and self.template == "default" 
       self.template = template_name if template_name.present?
     end
+  end
+
+  def set_attr_accessor
+    if self.start_time_hour.blank?
+      prev_start_time_hour = self.start_date.strftime('%l').strip.rjust(2, '0') rescue nil
+      self.start_time_hour = prev_start_time_hour.blank? ? "00" : prev_start_time_hour
+    end
+    
+    if self.start_time_minute.blank?
+      prev_start_time_minute = self.start_date.strftime('%M').strip.rjust(2, '0') rescue nil
+      self.start_time_minute = prev_start_time_minute.blank? ? "00" : prev_start_time_minute
+    end
+
+    if self.start_time_am.blank?
+      prev_start_time_am = self.start_date.strftime('%p') rescue "AM"
+      self.start_time_am = prev_start_time_am.blank? ? "AM" : prev_start_time_am
+    end
+
+    if self.end_time_hour.blank?
+      prev_end_time_hour = self.end_date.strftime('%l').strip.rjust(2, '0') rescue nil
+      self.end_time_hour = prev_end_time_hour.blank? ? "" : prev_end_time_hour
+    end
+
+    if self.end_time_minute.blank?
+      prev_end_time_minute = self.end_date.strftime('%M').strip.rjust(2, '0') rescue nil
+      self.end_time_minute = prev_end_time_minute.blank? ? "" : prev_end_time_minute
+    end
+
+    if self.end_time_am.blank?
+      prev_end_time_am = self.end_date.strftime('%p') rescue "PM"
+      self.end_time_am = prev_end_time_am.blank? ? "" : prev_end_time_am
+    end    
+
+  end
+
+  def set_time
+    start_date = self.start_date_time rescue nil
+    end_date = self.end_date_time rescue nil
+    start_time = "#{start_date} #{self.start_time_hour.gsub(':', "") rescue nil}:#{self.start_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.start_time_am}" if start_date.present?
+    end_time = "#{end_date} #{self.end_time_hour.gsub(':', "")  rescue nil}:#{self.end_time_minute.gsub(':', "")  rescue nil}:#{0} #{self.end_time_am}" if end_date.present?
+    self.start_date = start_time.to_datetime if start_date.present?
+    self.end_date = end_time.to_datetime if end_date.present?
   end
 
 end
