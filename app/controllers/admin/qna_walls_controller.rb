@@ -22,7 +22,10 @@ class Admin::QnaWallsController < ApplicationController
   
   def update
     @qna_wall = QnaWall.find(params[:id])
-    if @qna_wall.update_attributes(qna_wall_params)
+    if params[:remove_bg_image] == "true"
+      @qna_wall.update_attribute(:background_image, nil) if @qna_wall.background_image.present?
+      redirect_to edit_admin_event_qna_wall_path(:event_id => @event.id, :id => @qna_wall.id)
+    elsif @qna_wall.update_attributes(qna_wall_params)
       redirect_to admin_event_qnas_path(:event_id => @qna_wall.event_id)
     else
       render :action => "edit"
