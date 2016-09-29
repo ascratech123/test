@@ -1,5 +1,11 @@
 
 $(document).ready(function(){
+  $('#home_page_type1').click(function(){
+    $('.select-event').show()
+  })
+  $('#home_page_type2').click(function(){
+    $('.select-event').hide()
+  })
   // $("a[href$='.jpg'],a[href$='.png'],a[href$='.gif']").attr('rel', 'gallery')
   $(".fancybox").fancybox({
     openEffect  : 'none',
