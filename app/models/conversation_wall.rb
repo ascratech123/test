@@ -14,15 +14,24 @@ class ConversationWall < ActiveRecord::Base
   
   validate :backgroung_image_validate
   validate :logo_image_validate
+  validate :bg_image_or_bg_color_exist
+
+  def bg_image_or_bg_color_exist
+    if self.background_image.blank? and self.background_color.blank?
+      errors.add(:background_color, "This field is required.")
+    end  
+  end
   
   def backgroung_image_validate
     if self.background_image_file_name_changed?  
       background_image_dimension_height  = 900.0
       background_image_dimension_width = 1600.0
-      dimensions = Paperclip::Geometry.from_file(background_image.queued_for_write[:original].path)
-      if (dimensions.width != background_image_dimension_width or dimensions.height != background_image_dimension_height)
-        errors.add(:background_image, "Image size should be 1600x900px only")
-      end
+      dimensions = Paperclip::Geometry.from_file(background_image.queued_for_write[:original].path) rescue nil
+      if dimensions.present?
+        if (dimensions.width != background_image_dimension_width or dimensions.height != background_image_dimension_height)
+          errors.add(:background_image, "Image size should be 1600x900px only")
+        end
+      end  
     end
   end
   
@@ -30,10 +39,12 @@ class ConversationWall < ActiveRecord::Base
     if self.logo_file_name_changed?  
       logo_dimension_height  = 300.0
       logo_dimension_width = 1280.0
-      dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path)
-      if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
-        errors.add(:logo, "Image size should be 1280x300px only")
-      end
+      dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path) rescue nil
+      if dimensions.present?
+        if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
+          errors.add(:logo, "Image size should be 1280x300px only")
+        end
+      end  
     end
   end
   
