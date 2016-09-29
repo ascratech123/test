@@ -18,7 +18,7 @@ class MobileApplication < ActiveRecord::Base
 
   after_save :update_client_id
   after_create :set_preview_submitted_code
-  after_save :update_social_media_status
+  after_save :update_social_media_status, :update_choose_home_page_column
 
   has_attached_file :app_icon, {:styles => {:large => "90x90>",
                                          :small => "60x60>", 
@@ -63,6 +63,8 @@ class MobileApplication < ActiveRecord::Base
   validate :image_dimensions_for_login_background, :if => Proc.new{|p| p.login_background_file_name_changed? and p.login_background_file_name.present? }
   validate :image_dimensions_for_screen_background, :if => Proc.new{|p| p.listing_screen_background_file_name_changed? and p.listing_screen_background_file_name.present? }
   
+  after_save :update_last_updated_model
+  
   default_scope { order('created_at desc') }
 
   aasm :column => :status do  # defaults to aasm_state
@@ -75,6 +77,14 @@ class MobileApplication < ActiveRecord::Base
     event :remove_from_store do
       transitions :from => [:submitted], :to => [:draft]
     end 
+  end
+
+  def update_choose_home_page_column
+    self.update_column('choose_home_page', nil) if self.choose_home_page.present? and self.application_type == 'single event'
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_social_media_status
