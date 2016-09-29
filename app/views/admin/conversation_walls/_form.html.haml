@@ -16,7 +16,7 @@
         .bs-component
           .form-group
             .span.col-lg-4
-              = f.label "Background Image (1600x900px) png only ",:class =>"control-label", style: "float: right;"
+              = f.label "Background Image (1600x900px) png only *",:class =>"control-label", style: "float: right;"
             .col-lg-7.Closetheme
               %label.field.file
                 %span.button.btn-primary
@@ -33,7 +33,7 @@
 
       %p.OrTxt.or-vertical-text
         or
-      = f.custom_text_field :background_color, "Background Color", :value => @conversation_wall.background_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.background_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :background_color, "Background Color *", :value => @conversation_wall.background_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@conversation_wall.background_color.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
