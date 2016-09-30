@@ -10,7 +10,7 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Rails.application.config.assets.precompile += %w(demo-min.css vendors-min.css custome.css bootstrap-material-datetimepicker.css owl.carousel.css owl.theme.css new-card.css theme.css forms.css jquery.fancybox.css css/bootstrap_polls.min.css print_invoice.css css/telecaller_show.css warehouse_main.css)
+Rails.application.config.assets.precompile += %w(demo-min.css vendors-min.css custome.css bootstrap-material-datetimepicker.css owl.carousel.css owl.theme.css new-card.css theme.css forms.css jquery.fancybox.css css/bootstrap_polls.min.css print_invoice.css css/telecaller_show.css warehouse_main.css activity_feed.css fonts.css)
 Rails.application.config.assets.precompile += %w(jquery-1.11.3.min.js demo-min.js vendors-min.js material.js moment-with-locales-min.js bootstrap-material-datetimepicker.js timepicki.js common.js owl.carousel.min.js pick-a-color-1.2.0.min.js tinycolor.js select2.min.js jquery.fancybox.js)
 Rails.application.config.assets.precompile += %w(js/jquery.ui.widget.js js/jquery.blueimp-gallery.min.js js/tmpl.min.js js/load-image.all.min.js js/canvas-to-blob.min.js js/bootstrap.min.js js/jquery.fileupload.js js/jquery.fileupload-process.js js/jquery.fileupload-image.js js/jquery.fileupload-ui.js js/main.js js/test.js)
 Rails.application.config.assets.precompile += %w(css/bootstrap.min.css css/blueimp-gallery.min.css css/jquery.fileupload.css css/jquery.fileupload-ui.css)
