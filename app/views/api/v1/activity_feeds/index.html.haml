@@ -7,8 +7,9 @@
     %meta{:content => " ", :name => "keywords"}/
     %meta{:content => " ", :name => "description"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0", :name => "viewport"}/
-    %link{:href => "/assets/css/activity_feed.css", :rel => "stylesheet", :type => "text/css"}/
-    %link{:href => "font/font.css", :rel => "stylesheet", :type => "text/css"}/
+    //   %link{:href => "/assets/css/activity_feed.css", :rel => "stylesheet", :type => "text/css"}/
+    //   %link{:href => "/assets/css/fonts.css", :rel => "stylesheet", :type => "text/css"}/
+    = stylesheet_link_tag "activity_feed.css", "fonts.css"
   - if @background_image.present?
     %body{:style=>"background-image: url(#{@background_image});background-size:cover;background-repeat: no-repeat; background-attachment:fixed;"} 
       - if session['invitee_id'].present?
