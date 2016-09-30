@@ -27,3 +27,4 @@
 //= require jquery-ui.min-dash
 //= require jquery.mCustomScrollbar.min
 //= require 'common'
+//= require 'js/infinite_scroll_for_activity_feed'

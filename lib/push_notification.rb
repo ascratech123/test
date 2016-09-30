@@ -7,6 +7,7 @@ module PushNotification
   def self.push_notification(notification, objekts, mobile_application_id)
     if notification.present? and objekts.present?
       notification.update_column(:pushed, true)
+      # notification.create_notification_in_analytic
       notification.update_column(:push_datetime,Time.now + notification.event_timezone_offset.to_i.seconds)
       if objekts.present?
         arr = objekts.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
@@ -61,7 +62,7 @@ module PushNotification
     push_page = notification.push_page
     type = notification.group_ids.present? ? notification.group_ids : 'All'
     page_id = 0
-    time = notification.created_at#notification.push_datetime
+    time = notification.push_datetime
     options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, :formatted_push_datetime_with_event_timezone => notification.formatted_push_datetime_with_event_timezone}}
     response = gcm_obj.send(tokens, options)
     puts "******************************#{response}*************response of gcm***************************************"
