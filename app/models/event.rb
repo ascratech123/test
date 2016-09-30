@@ -16,6 +16,7 @@ class Event < ActiveRecord::Base
   has_one :contact
   has_one :emergency_exit
   has_many :speakers, :dependent => :destroy
+  has_many :venues, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
   has_many :agendas, :dependent => :destroy
@@ -59,6 +60,7 @@ class Event < ActiveRecord::Base
   has_many :manage_invitee_fields, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
+  accepts_nested_attributes_for :venues
 
   
   validates :event_name, :client_id, :cities, :start_event_date,:end_event_date, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
@@ -611,8 +613,8 @@ class Event < ActiveRecord::Base
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
-          obj.update_column("event_timezone_offset", self.timezone_offset)
-          obj.update_column("event_display_time_zone", display_time_zone)
+          # obj.update_column("event_timezone_offset", self.timezone_offset)
+          # obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model rescue nil
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"

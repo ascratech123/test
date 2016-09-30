@@ -36,17 +36,17 @@ $(document).ready(function(){
                
   });
 
-	$('.tabclick').click(function(){
-	var el = $(this).attr('for');
-	var DetailsEvent = $('.'+el).css('display');
-		if(DetailsEvent == 'none'){
-				$('.tabularlist').slideUp(500);
-				$('.'+el).slideDown(500);
-			}
-			else{
-				$('.'+el).slideUp(500);
-				}
-	});
+  $('.tabclick').click(function(){
+  var el = $(this).attr('for');
+  var DetailsEvent = $('.'+el).css('display');
+    if(DetailsEvent == 'none'){
+        $('.tabularlist').slideUp(500);
+        $('.'+el).slideDown(500);
+      }
+      else{
+        $('.'+el).slideUp(500);
+        }
+  });
   /*$('.closeclick').click(function() {
     $('.popup-overlay').hide();
     $('.ClientPopup-info').hide();
@@ -111,16 +111,16 @@ $('.help-popup-overlay').fadeOut();
 })
 
 
-	$('.menuclick').click(function(){
-		var menudsp =$('.collapseHide').css('display');
-		if(menudsp =='none'){
-			$('.collapseHide').slideDown(500);
-		}	
-		else{
+  $('.menuclick').click(function(){
+    var menudsp =$('.collapseHide').css('display');
+    if(menudsp =='none'){
+      $('.collapseHide').slideDown(500);
+    } 
+    else{
 
-			$('.collapseHide').slideUp(500);
-		}
-	})
+      $('.collapseHide').slideUp(500);
+    }
+  })
   $('.menuSubclick').click(function(){
     var menudsp =$('.SubMenucollapseHide').css('display');
     if(menudsp =='none'){
@@ -132,7 +132,7 @@ $('.help-popup-overlay').fadeOut();
     }
   })
   
-	$('.FeedBackHide').click(function(){
+  $('.FeedBackHide').click(function(){
     var feed = $(this).parent().parent('.feed').next('.FeedBackComment').css('display');
       if(feed == 'none'){
       $('.FeedBackHide').html('show')
@@ -159,21 +159,21 @@ $('.help-popup-overlay').fadeOut();
           }
   });
   $('.toggleDiv').css("display","none");
-		$('.viewMoreLink').click(function(){
-			$('.viewMoreLink').html("<span>view less</span>")
-			var dsp = $(".toggleDiv").css('display');
-			if(dsp == 'flex'){
-				$('.toggleDiv').slideUp(500)
-				$('.viewMoreLink').html("<span>view more</span>")
-			}
-			else{
-				$('.toggleDiv').slideDown(500)
-				$('.viewMoreLink').html("<span>view less</span>")
-			}
-		})
+    $('.viewMoreLink').click(function(){
+      $('.viewMoreLink').html("<span>view less</span>")
+      var dsp = $(".toggleDiv").css('display');
+      if(dsp == 'flex'){
+        $('.toggleDiv').slideUp(500)
+        $('.viewMoreLink').html("<span>view more</span>")
+      }
+      else{
+        $('.toggleDiv').slideDown(500)
+        $('.viewMoreLink').html("<span>view less</span>")
+      }
+    })
      
   /*$('.datePicker').each(function() {
-  	new Pikaday({
+    new Pikaday({
       field: $(this)[0]
     })
   })   
@@ -181,25 +181,25 @@ $('.help-popup-overlay').fadeOut();
   $('.datePicker').trigger('click')*/
 
 
-	$(".dropDownDiv").click(function(){
-		$(this).children('.dropDownUl').slideToggle('fast');
-		$('.dropDownDiv').not(this).children('.dropDownUl').slideUp("fast");
-	});
+  $(".dropDownDiv").click(function(){
+    $(this).children('.dropDownUl').slideToggle('fast');
+    $('.dropDownDiv').not(this).children('.dropDownUl').slideUp("fast");
+  });
 
 
-	$(".dropDownUl li").click(function(){
+  $(".dropDownUl li").click(function(){
        var selectedText = $(this).html();
         $(this).parent().prev().html(selectedText);
     })
-	$('.headerdrop').click(function(){
-		var droptxt = $(".dropDownUl").css('display');
-		if(droptxt == 'none'){
-			$('.dropDownUl').slideDown(500)
-		}
-		else{
-			$('.dropDownUl').slideUp(500)
-			}
-	})
+  $('.headerdrop').click(function(){
+    var droptxt = $(".dropDownUl").css('display');
+    if(droptxt == 'none'){
+      $('.dropDownUl').slideDown(500)
+    }
+    else{
+      $('.dropDownUl').slideUp(500)
+      }
+  })
 
     $('.adminClick').click(function(){
        var selectedText = $('.HideSearchBlog').css('display');
@@ -729,3 +729,9 @@ $(document).ready(function(){
     }
   });
 });
+
+function add_fields_for_event_venue(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  $(".venueFields").append(content.replace(regexp, new_id));
+}
