@@ -22,7 +22,10 @@ class Admin::ConversationWallsController < ApplicationController
   
   def update
     @conversation_wall = ConversationWall.find(params[:id])
-    if params[:remove_bg_image] == "true"
+    if params[:remove_logo_image] == "true"
+      @conversation_wall.update_attribute(:logo, nil) if @conversation_wall.logo.present?
+      redirect_to edit_admin_event_conversation_wall_path(:event_id => @event.id, :id => @conversation_wall.id)
+    elsif params[:remove_bg_image] == "true"
       @conversation_wall.update_attribute(:background_image, nil) if @conversation_wall.background_image.present?
       redirect_to edit_admin_event_conversation_wall_path(:event_id => @event.id, :id => @conversation_wall.id)
     elsif @conversation_wall.update_attributes(conversation_wall_params)

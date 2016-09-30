@@ -12,9 +12,9 @@
 
       %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
         %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
-          %p.conv-logo
-            / %img{:src => @event.inside_logo.url, :alt => ""}/
-            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}
+          - if @conversation_wall.logo.present?
+            %p.conv-logo
+              %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}
           %section#content.covesationPage
             - @conversations.each do |conversation|
               - event = conversation.event
@@ -50,9 +50,9 @@
     %body.newcoversationwallImg{:style=>"background-color: #{@conversation_wall.background_color};"} 
       %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
         %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
-          %p.conv-logo
-            / %img{:src => @event.inside_logo.url, :alt => ""}/
-            %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}            
+          - if @conversation_wall.logo.present?
+            %p.conv-logo
+              %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}            
           %section#content.covesationPage
             - @conversations.each do |conversation|
               - event = conversation.event
