@@ -417,7 +417,8 @@ class Analytic < ActiveRecord::Base
 
   def updated_at_with_event_timezone
     self.updated_at.in_time_zone(self.event.timezone)
-
+  end 
+   
   def get_likes(id)
     Analytic.where(:viewable_id => id, :viewable_type => "Conversation",:action => "like")
   end
