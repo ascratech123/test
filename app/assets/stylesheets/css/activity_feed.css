@@ -1,4 +1,4 @@
-body{margin:0; padding:0; font-size:14px; background:#7ac669; 
+body{margin:0; padding:0; font-size:14px; /*background:#7ac669; */
 	  font-family: 'helveticaregular';}
 body{height: auto;}
 ul,li,p{margin:0; padding:0;}
@@ -52,10 +52,19 @@ ul,li,p{margin:0; padding:0;}
 .commentText{margin:0;}
 .commentText p{margin-top:10px; margin-left:2%;}
 
+.noData {
+    color: #fff;
+    font-size:25px;
+    margin: 0;
+    padding: 22% 0 0;
+    text-align: center;
+}
+
 .userDetail .userName.commentUser{margin-bottom:0px;}
 .boldText{font-weight:bold;}
 @media screen and (max-width:480px){
 	.feed-activiity p span:first-child{width:20%;}
 	.feed-activiity p{width:31%;}
 	.userDetail{margin-left:1%; width:73%;}
+	.noData {font-size: 25px;}
 }
