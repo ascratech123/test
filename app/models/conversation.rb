@@ -92,15 +92,18 @@ class Conversation < ActiveRecord::Base
   end
 
   def get_company_name
-    Invitee.find_by_id(self.user_id).company_name rescue ""
+    # Invitee.find_by_id(self.user_id).company_name rescue ""
+    self.user.company_name
   end
 
   def company_name
-    Invitee.find_by_id(self.user_id).company_name rescue ""
+    # Invitee.find_by_id(self.user_id).company_name rescue ""
+    self.user.company_name
   end
 
   def invitee_email
-    Invitee.find_by_id(self.user_id).email rescue nil
+    # Invitee.find_by_id(self.user_id).email rescue nil
+    self.user.email
   end
 
   def timestamp

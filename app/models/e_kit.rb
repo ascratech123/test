@@ -96,20 +96,20 @@ class EKit < ActiveRecord::Base
   # end
 
   def self.get_e_kits_all_events(event_ids, start_event_date, end_event_date)
-    tags = EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).tag_counts_on(:tags) rescue []
+    tags = EKit.select(:name).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).tag_counts_on(:tags)
     data = []
     value = {}
     tags.each do |tag|
       value["type"], value["tag"] = "folder", tag.name
-      value["list"] = EKit.tagged_with(tag.name).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type ]) rescue []
-      data << value rescue nil
+      value["list"] = EKit.tagged_with(tag.name).includes(:tags).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type ])
+      data << value
       value = {}
     end
-    EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).each do |e_kit|
-      if (e_kit.tags.count == 0)
+    EKit.includes(:tags).where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).each do |e_kit|
+      if (e_kit.tags.length == 0)
         value["type"], value["tag"] = "non_folder", ""
-        value["list"] = [e_kit.as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type])] rescue []
-        data << value rescue nil
+        value["list"] = [e_kit.as_json(:only => [:id,:event_id, :name, :created_at, :updated_at, :attachment_updated_at], :methods => [:attachment_url,:attachment_type])]
+        data << value
         value = {}
       end
     end

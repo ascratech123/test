@@ -2,6 +2,9 @@ class Qna < ActiveRecord::Base
   include AASM
   attr_accessor :platform, :sender_email
   belongs_to :event
+  belongs_to :sender, :class_name => 'Invitee', :foreign_key => 'sender_id'
+  belongs_to :panel, :class_name => 'Panel', :foreign_key => 'receiver_id'
+  belongs_to :speaker, :class_name => 'Speaker', :foreign_key => 'receiver_id'
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
   validates :question, :receiver_id,:sender_id, presence: { :message => "This field is required." }
@@ -41,21 +44,29 @@ class Qna < ActiveRecord::Base
   end
 
   def get_speaker_name
-    name = Panel.find_by_id(self.receiver_id).name rescue nil
-    name = Speaker.find_by_id(self.receiver_id).speaker_name rescue '' if name.blank?
-    name
+    # name = Panel.find_by_id(self.receiver_id).name rescue nil
+    # name = Speaker.find_by_id(self.receiver_id).speaker_name rescue '' if name.blank?
+    # name
+    panel = self.panel
+    (panel.present? ? panel.name : (self.speaker.speaker_name rescue ""))
   end
 
   def get_panel_name
-    Panel.find_by_id(self.receiver_id).present? ? Panel.find_by_id(self.receiver_id).name : "" 
+    # panel = Panel.find_by_id(self.receiver_id)
+    panel = self.panel
+    panel.present? ? panel.name : "" 
   end 
 
   def get_user_name
-    Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+    # Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+    sender = self.sender
+    (sender.present? ? sender.name_of_the_invitee : "")
   end
 
   def get_company_name
-    Invitee.find_by_id(self.sender_id).company_name rescue ""
+    # Invitee.find_by_id(self.sender_id).company_name rescue ""
+    sender = self.sender
+    (sender.present? ? sender.company_name : "")
   end
 
   def Timestamp
@@ -64,19 +75,27 @@ class Qna < ActiveRecord::Base
   end
   
   def email_id
-    Invitee.find_by_id(self.sender_id).email rescue nil
+    # Invitee.find_by_id(self.sender_id).email rescue nil
+    sender = self.sender
+    (sender.present? ? sender.email : "")
   end
 
   def name
-    Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+    # Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
+    sender = self.sender
+    (sender.present? ? sender.name_of_the_invitee : "")
   end
   
   def first_name
-    Invitee.find_by_id(self.sender_id).first_name rescue ""
+    # Invitee.find_by_id(self.sender_id).first_name rescue ""
+    sender = self.sender
+    (sender.present? ? sender.first_name : "")
   end
 
   def last_name
-    Invitee.find_by_id(self.sender_id).last_name rescue ""
+    # Invitee.find_by_id(self.sender_id).last_name rescue ""
+    sender = self.sender
+    (sender.present? ? sender.last_name : "")
   end
 
   def question_ask
