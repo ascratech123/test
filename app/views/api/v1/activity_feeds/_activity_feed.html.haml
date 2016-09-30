@@ -26,10 +26,10 @@
         - invitee = Invitee.find(conversation.user_id) rescue nil
         -# conversation = Conversation.find(conversation.viewable_id) rescue nil
         - if analytic.action == "like" or analytic.action == "comment" or invitee.present? 
-          .feed
-            - if analytic.action == "like"
-              - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
-              - if like_invitee.present?
+          - if analytic.action == "like"
+            - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
+            - if like_invitee.present?
+              .feed
                 .feedHeading
                   - if like_invitee.profile_pic_file_name.present?
                     .userPic
@@ -40,9 +40,10 @@
                       %span.boldText= like_invitee.name_of_the_invitee
                       %span.italic liked this
                     %p= analytic.created_at 
-            - if analytic.action == "comment"
-              - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
-              - if comment_invitee.present? 
+          - if analytic.action == "comment"
+            - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
+            - if comment_invitee.present? 
+              .feed
                 .feedHeading
                   - if comment_invitee.profile_pic_file_name.present?
                     .userPic
@@ -53,7 +54,8 @@
                       %span.boldText= comment_invitee.name_of_the_invitee
                       %span.italic commented on this 
                     %p= analytic.created_at 
-            - if invitee.present?
+          - if invitee.present?
+            .feed
               .feedHeading
                 - if invitee.profile_pic_file_name.present?
                   .userPic
