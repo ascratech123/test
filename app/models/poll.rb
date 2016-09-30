@@ -68,7 +68,7 @@ class Poll < ActiveRecord::Base
   def option_percentage
     data = {}
     option1=option2=option3=option4=option5=option6=option7=option8=option9=option10=0
-    data["total"] = self.user_polls.length
+    data["total"] = self.user_polls.count
     self.user_polls.each do |user_poll|
       if is_number? user_poll.answer
         option1 = user_poll.answer.to_i == 1 ? option1 + 1 : option1 rescue option1
