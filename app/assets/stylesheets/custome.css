@@ -1,4 +1,4 @@
- @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700);
+ @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700); 
  html {font-family: 'Ubuntu', sans-serif;}
  td{word-break:break-all;}
  /*demo css start */
@@ -85,6 +85,7 @@
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
   .ckeditor_custom {text-align: left;}
 
+.mb10{margin-bottom: 10px;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -96,7 +97,6 @@
 .ckeditor_custom {text-align: left;}
 .titleQuestion{margin-left:15px;}
 .mdl-grid.mdl-shadow--1dp{background:#fff;}
-
 .mdl-cell--12-col .mdl-cell--12-col-tablet .ml-color--shades-white.input_box_url{display:none; width:80%; vertical-align: top;}
 .chkbox_input_div .help-tip{width: 98px;}
 .chkbox_input_div{width:100%;}
@@ -1451,12 +1451,4 @@ i.incards {font-size: 60px}
 .galleryLayout li {display: inline-block;margin-right: 2%;text-align: left; width: 30.99%;}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
-
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
-
-
-.txtCenter{text-align:center;}
-.copyCustomContent button{border:0 none; background:#1cb1ba; color:#fff;padding:5px 8px; cursor:pointer; margin-right:20px;}
-.copyCustomContent button:last-child{margin-right:0px;}
-
-.copyEvent{display: none;}
