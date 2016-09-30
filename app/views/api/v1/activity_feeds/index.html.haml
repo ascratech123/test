@@ -12,15 +12,19 @@
   %body
     .container
       .wrapper
-        %h1 Activity Feed
+        %h1
         %ul.tabs
-          %li.tab-link.current{"data-tab" => "tab1"} My Feed
+          - if session['invitee_id']
+            %li.tab-link.current{"data-tab" => "tab1"} My Feed
           %li.tab-link{"data-tab" => "tab2"} Social
         - if session['invitee_id']
           #tab1.tab-content.current
             = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-        #tab2.tab-content
+          #tab2.tab-content
           = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+        - else
+          #tab2.tab-content.current
+            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
         #productsList
         = link_to 'Load More Posts', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"      
     / %script{:src => "js/jquery-1.11.3.min.js", :type => "text/javascript"}

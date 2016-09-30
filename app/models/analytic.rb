@@ -410,4 +410,5 @@ class Analytic < ActiveRecord::Base
   def get_shares(id)
     Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation",:action => "share")
   end
+
 end
