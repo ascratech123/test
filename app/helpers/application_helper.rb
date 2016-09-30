@@ -517,18 +517,18 @@ module ApplicationHelper
     return "#{percentage.round} %"
   end
 
-  def correct_user_quizzes_for_percentile_for_wall(quiz,option)
-    percentage = 0
-    user_quizzes = quiz.user_quizzes if quiz.user_quizzes.present?
-    if user_quizzes.present?
-      total = user_quizzes.count
-      count = 0
-      user_quizzes.each do |ans|
-        count = count + 1 if quiz.attributes.key(ans.answer).to_s == option
-      end
-      percentage = (count.to_f/total) * 100 rescue 0
-    end
-    return "#{percentage.round}"
+  def correct_user_quizzes_for_percentile_for_wall(quiz,option) 
+     percentage = 0
+     user_quizzes = quiz.user_quizzes if quiz.user_quizzes.present?
+     if user_quizzes.present?
+       total = user_quizzes.count
+       count = 0
+       user_quizzes.each do |ans|
+         count = count + 1 if quiz.attributes.key(ans.answer).to_s == option
+       end
+       percentage = (count.to_f/total) * 100 rescue 0
+     end
+     return "#{percentage.round}" 
   end
 
   def correct_user_quizzes_for_total_count(quiz,option)
