@@ -1,11 +1,15 @@
 class Admin::QuizzesController < ApplicationController
 	layout 'admin'
   
-  before_filter :authenticate_user, :authorize_event_role, :find_features
+  before_filter :authenticate_user, :authorize_event_role, :find_features, :except => [:index]
+  skip_before_action :load_filter, :only => [:index] 
   before_filter :find_user_quizzes, :only => [:index, :new]
   before_filter :check_for_access, :only => [:index,:new]
   before_filter :check_user_role, :except => [:index]
   
+  before_filter :quiz_wall_present, :only => [:index]
+  before_filter :find_quiz_wall, :only => :index
+
 	def index
     if params[:quiz_wall].present? and params[:quiz_wall] == "true"
       @quizzes = @quizzes.where(:on_wall => "yes")   
@@ -87,6 +91,21 @@ class Admin::QuizzesController < ApplicationController
 
   def find_user_quizzes
     @user_quizzes = UserQuiz.where(:quizze_id => @quizzes.pluck(:id)) if @quizzes.present?
+  end
+
+  def find_quiz_wall
+    if params[:quiz_wall].present? and params[:quiz_wall] == "true" 
+      @event = Event.find(params[:event_id])
+      @quizzes = @event.quizzes
+    end
+  end
+
+  def quiz_wall_present
+    if params[:quiz_wall].present? and params[:quiz_wall] != 'true' or params[:quiz_wall].blank?
+      authenticate_user!
+      authorize_event_role
+      find_features
+    end
   end
 
   def quizze_params
