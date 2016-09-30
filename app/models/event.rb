@@ -31,7 +31,7 @@ class Event < ActiveRecord::Base
   has_many :microsites, :dependent => :destroy
   has_many :user_microsites, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
-  has_many :venues, :dependent => :destroy
+  #has_many :venues, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
   has_many :agendas, :dependent => :destroy
@@ -77,7 +77,7 @@ class Event < ActiveRecord::Base
   has_many :manage_invitee_fields, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
-  accepts_nested_attributes_for :venues
+  #accepts_nested_attributes_for :venues
 
   
   validates :event_name, :client_id, :cities, :start_event_date,:end_event_date, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
