@@ -10,8 +10,8 @@
     = stylesheet_link_tag "theme.css"
     = stylesheet_link_tag "css/bootstrap_polls.min.css"
   - @poll_wall = PollWall.find_by_event_id(params[:event_id])
-  - if @poll_wall.present? and @poll_wall.background_image.present?
-    %body.main-events{:style=>"background-image: url(#{@poll_wall.background_image.url(:large)});background-size:cover;background-repeat: no-repeat;"}    
+  -if @poll_wall.present? and @poll_wall.background_image.present?
+    %body.main-events{:style=>"background-image: url(#{@poll_wall.background_image.url(:large)});background-size:cover;background-repeat: no-repeat;"}  
       .container.poll-container{:role => "main"}
         .col-xs-12.col-lg-12
           .row
@@ -27,9 +27,50 @@
                   %hr
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
-                      %p.poll-question{:style=>"color:#{@poll_wall.font_color};"} 
+                      %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
                         %strong
                           = poll.question
+                      - if poll.option_type == "Rating"
+                        %p 
+                          = 1
+                          - percentage = get_user_poll_percentage("1",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 2
+                          - percentage = get_user_poll_percentage("2",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 3
+                          - percentage = get_user_poll_percentage("3",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 4
+                          - percentage = get_user_poll_percentage("4",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 5
+                          - percentage = get_user_poll_percentage("5",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option1.present?
                         %p 
                           = poll.option1
@@ -38,7 +79,7 @@
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option2.present?
                         %p
                           = poll.option2
@@ -47,7 +88,7 @@
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                          
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option3.present?
                         %p 
                           = poll.option3
@@ -55,8 +96,9 @@
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
-                          = "#{percentage}%"                      
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+
                       - if poll.option4.present?
                         %p 
                           = poll.option4
@@ -65,7 +107,7 @@
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                      
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option5.present?
                         %p 
                           = poll.option5
@@ -74,7 +116,7 @@
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
 
                       = show_field("Total number of response: ", poll.user_polls.count) rescue nil
                     
@@ -96,12 +138,55 @@
                     .col-xs-4.col-sm-12.col-md-12.col-lg-12.pollHeading
                       - if @poll_wall.logo.present? 
                         %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
+                    / .col-xs-8.col-sm-10.col-md-10.col-lg-10.pollHeading
+                    /   %h3 Polls
                   %hr
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
-                      %p.poll-question{:style=>"color:#{@poll_wall.font_color};"} 
+                      %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
                         %strong
                           = poll.question
+                      - if poll.option_type == "Rating"
+                        %p 
+                          = 1
+                          - percentage = get_user_poll_percentage("1",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0
+                        %p 
+                          = 2
+                          - percentage = get_user_poll_percentage("2",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 3
+                          - percentage = get_user_poll_percentage("3",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 4
+                          - percentage = get_user_poll_percentage("4",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
+                        %p 
+                          = 5
+                          - percentage = get_user_poll_percentage("5",poll)
+                        .progress
+                          .pollwidth{:style => "width: 90%"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
+                          = "#{percentage}%"
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option1.present?
                         %p 
                           = poll.option1
@@ -110,43 +195,43 @@
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0 
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option2.present?
                         %p
                           = poll.option2
                           - percentage = get_user_poll_percentage("option2",poll)
                         .progress
                           .pollwidth{:style => "width: 90%"}
-                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%;background-color:#{bar_color};"}
+                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0 
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option3.present?
                         %p 
                           = poll.option3
                           - percentage = get_user_poll_percentage("option3",poll)
                         .progress
                           .pollwidth{:style => "width: 90%"}
-                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%;background-color:#{@poll_wall.bar_color};"}
+                            .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option4.present?
                         %p 
                           = poll.option4
                           - percentage = get_user_poll_percentage("option4",poll)
                         .progress
                           .pollwidth{:style => "width: 90%"}
-                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%;background-color:#{@poll_wall.bar_color1};"}
+                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0 
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       - if poll.option5.present?
                         %p 
                           = poll.option5
                           - percentage = get_user_poll_percentage("option5",poll)
                         .progress
                           .pollwidth{:style => "width: 90%"}
-                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%;background-color:#{@poll_wall.bar_color};"}
+                            .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
                           = "#{percentage}%"
-                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0  
                       = show_field("Total number of response: ", poll.user_polls.count) rescue nil
                     
       %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
@@ -154,4 +239,4 @@
       %script{:src => "js/docs.min.js"}
       / IE10 viewport hack for Surface/desktop Windows 8 bug
       %script{:src => "js/ie10-viewport-bug-workaround.js"}
-      %script{:src => "js/base.min.js"}
+      %script{:src => "js/base.min.js"}      

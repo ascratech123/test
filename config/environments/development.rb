@@ -83,9 +83,9 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 APP_URL = "http://localhost:3000"
 SAPP_URL = "http://localhost:3000"
 S3_url = "http://s3.amazonaws.com/shobiz-new-development"
-S3_access_key = "AKIAIXEZXP4IENEMXA4Q"
-S3_secret_access_key = "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"
-S3_bucket = 'shobiz-new-development'
+S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
+S3_secret_access_key = "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"
+S3_bucket = 'shobiz-new-dev'
 
 
 S3_CREDENTIALS = {:access_key_id => S3_access_key,

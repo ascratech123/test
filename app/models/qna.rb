@@ -132,7 +132,7 @@ class Qna < ActiveRecord::Base
   
   def created_at_with_event_timezone
     # self.created_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone_offset.to_i.seconds
+    #self.created_at + self.event_timezone_offset.to_i.seconds
   end
 
   def updated_at_with_event_timezone

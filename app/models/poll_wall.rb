@@ -1,8 +1,11 @@
 class PollWall < ActiveRecord::Base
 	
 	belongs_to :event
-	
-	has_attached_file :logo
+  
+  
+  validates :bar_color, :bar_color1, presence:{ :message => "This field is required." }  
+  
+  has_attached_file :logo
   validates_attachment_content_type :logo, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   has_attached_file :logo, {:styles => {:large => "200x200>", 
                                        :thumb => "60x60>"}
@@ -16,8 +19,7 @@ class PollWall < ActiveRecord::Base
   validate :backgroung_image_validate
   validate :logo_image_validate
   validate :bg_image_or_bg_color_exist
-
-  validates :bar_color, :bar_color1, presence:{ :message => "This field is required." }  
+  
   def bg_image_or_bg_color_exist
     if self.background_image.blank? and self.background_color.blank?
       errors.add(:background_color, "This field is required.")
