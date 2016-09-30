@@ -17,14 +17,14 @@ namespace :admin do
   get 'bee_editor/template' => 'bee_editors#template'
   get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
-  resources :time_zones 
+  resources :time_zones
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses,:change_roles
   resources :licensees do
     resources :clients    
   end
   resources :clients do
-    resources :users
+    resources :users, :microsites
     resources :mobile_applications do
       resources :push_pem_files
     end
@@ -91,6 +91,7 @@ end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
+      resources :activity_feeds
     end
   end
 end

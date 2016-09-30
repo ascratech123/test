@@ -47,7 +47,7 @@ Rails.application.configure do
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
-
+#  config.log_level = :debug
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
@@ -97,7 +97,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Production Shobiz Error Notifier",
    :sender_address => %w{info@hobnobspace.com},
-   :exception_recipients => %w{shiv@ascratech.com sushil@ascratech.in atul@ascratech.com}
+   :exception_recipients => %w{sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com}
  }
 
 
@@ -256,4 +256,7 @@ POLLWALL_BG_IMAGE_PATH  = {:path => "poll_walls/background_image/:style/:id-:fil
                      :url => "#{S3_url}/poll_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
 QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:filename",
-                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                                                                                                                
+                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                                                                                                                                     
+
+NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
+                     :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
