@@ -1,7 +1,7 @@
 class Api::V1::ActivityFeedsController < ApplicationController
 
   def index
-    invitee = Invitee.find(session['invitee_id'])#Invitee.find_by_email("minu@test.com")
+    invitee = Invitee.find(session['invitee_id']) if session['invitee_id'].present?#Invitee.find_by_email("minu@test.com")
     event = Event.find(params[:event_id])#Event.find(165)
     if invitee.present?
       # @analytics = invitee.analytics.where(:viewable_type => ["Conversation","Notification","InviteeNotification"], :action => ["comment", "conversation post", "like", "share", "notification"])
