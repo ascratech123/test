@@ -21,7 +21,10 @@ class Admin::QuizWallsController < ApplicationController
   
   def update
     @quiz_wall = QuizWall.find(params[:id])
-    if params[:remove_bg_image] == "true"
+    if params[:remove_logo_image] == "true"
+      @quiz_wall.update_attribute(:logo, nil) if @quiz_wall.logo.present?
+      redirect_to edit_admin_event_quiz_wall_path(:event_id => @event.id, :id => @quiz_wall.id)    
+    elsif params[:remove_bg_image] == "true"
       @quiz_wall.update_attribute(:background_image, nil) if @quiz_wall.background_image.present?
       redirect_to edit_admin_event_quiz_wall_path(:event_id => @event.id, :id => @quiz_wall.id)
     elsif @quiz_wall.update_attributes(quiz_wall_params)
