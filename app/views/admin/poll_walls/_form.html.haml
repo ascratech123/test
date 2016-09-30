@@ -51,14 +51,14 @@
           Options Bar Color
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :bar_color, "Options Bar Color", :value => @poll_wall.bar_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@poll_wall.bar_color.present?) ? "has-success" : ""}"
+      = f.custom_text_field :bar_color, "Options Bar Color *", :value => @poll_wall.bar_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@poll_wall.bar_color.present?) ? "has-success" : ""}"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
           Options Bar Color
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :bar_color1, "Options Bar Color", :value => @poll_wall.bar_color1, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@poll_wall.bar_color1.present?) ? "has-success" : ""}"
+      = f.custom_text_field :bar_color1, "Options Bar Color *", :value => @poll_wall.bar_color1, :class => 'pick-a-color', :view_popup => {:image_path => "a.jpg", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@poll_wall.bar_color1.present?) ? "has-success" : ""}"
                
       = f.hidden_field :event_id,:value=>params[:event_id]                
       .fixed-activon-btn-new  
