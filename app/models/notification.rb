@@ -12,11 +12,15 @@ class Notification < ActiveRecord::Base
                              :convert_options => {:small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(NOTIFICATION_IMAGE_PATH)
-
   
-  validates_attachment_content_type :image, :content_type => ["image/png", "image/JPEG", "image/jpeg", "image/jpg", "image/jpeg"]
+  has_attached_file :image_for_show_notification, {:styles => {:small => "200x200>", 
+                                         :thumb => "60x60>"},
+                             :convert_options => {:small => "-strip -quality 80", 
+                                         :thumb => "-strip -quality 80"}
+                                         }.merge(NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION)                                        
+  validates_attachment_content_type :image,:image_for_show_notification, :content_type => ["image/png", "image/JPEG", "image/jpeg", "image/jpg", "image/jpeg"]
   validates_attachment_size :image, :less_than => 100.kilobytes
-  # validate :image_dimensions
+  validate :image_dimensions
 
   belongs_to :resourceable, polymorphic: true
   belongs_to :event
@@ -26,7 +30,7 @@ class Notification < ActiveRecord::Base
   validates :group_ids, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.notification_type == 'group' }
   validates :push_datetime, presence:{ :message => "This field is required." }, if: Proc.new { |n| n.push_timing == 'later' }
   validates :notification_type, presence: true
-  after_create :set_event_timezone
+  after_create :set_event_timezone,:set_activity_feed
   before_save :update_details
   after_save :push_notification, :update_last_updated_model
 
@@ -217,5 +221,41 @@ class Notification < ActiveRecord::Base
     self.update_column("event_timezone_offset", event.timezone_offset)
     self.update_column("event_display_time_zone", event.display_time_zone)
   end
+  def set_activity_feed
+    if (self.push == false and self.show_on_activity == true)
+      if self.group_ids.present?
+        groups = InviteeGroup.where("id IN(?)", self.group_ids)
+        invitee_ids = []
+        groups.each do |group|
+          invitee_ids = invitee_ids + group.get_invitee_ids
+        end  
+        invitee_ids = invitee_ids.uniq rescue []
+        objects = Invitee.where("id IN(?)", invitee_ids)
+        objects.each do |invitee|
+          self.create_notification_in_analytic(invitee.id)
+        end
+      else
+        self.create_notification_in_analytic
+      end
+    end    
+  end
 
+  def create_notification_in_analytic(invitee_id = nil)
+    Analytic.create(:viewable_type => "Notification",:viewable_id => self.id,:action => "notification",:event_id => self.event_id,:invitee_id => invitee_id)
+  end
+
+  def image_dimensions
+    if self.image_for_show_notification_file_name_changed?  
+      notification_image_height  = 200.0
+      notification_image_width = 200.0
+      dimensions = Paperclip::Geometry.from_file(image_for_show_notification.queued_for_write[:original].path)
+      if (dimensions.width != notification_image_width or dimensions.height != notification_image_height)
+        errors.add(:image_for_show_notification, "Image size should be 200x200px only")
+      end
+    end
+  end
+
+  def get_notifications
+    Comment.where(:commentable_id => self.id, :commentable_type => "Notification")
+  end
 end

@@ -7,6 +7,7 @@ module PushNotification
   def self.push_notification(notification, objekts, mobile_application_id)
     if notification.present? and objekts.present?
       notification.update_column(:pushed, true)
+      # notification.create_notification_in_analytic
       notification.update_column(:push_datetime,Time.now + notification.event_timezone_offset.to_i.seconds)
       if objekts.present?
         arr = objekts.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}

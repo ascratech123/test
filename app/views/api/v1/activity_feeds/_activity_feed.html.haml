@@ -1,0 +1,234 @@
+- analytics.each do |analytic|
+  - if analytic.viewable_type == "Conversation"
+    - conversation = Conversation.find(analytic.viewable_id)
+    - likes = analytic.get_likes(analytic.viewable_id)
+    - comments = analytic.get_comments(analytic.viewable_id)
+    - shares = analytic.get_shares(analytic.viewable_id)
+  - elsif analytic.viewable_type == "Notification"
+    - find_notification = Notification.find(analytic.viewable_id)
+  - elsif analytic.viewable_type == "InviteeNotification"
+    - find_notification = InviteeNotification.find(analytic.viewable_id).notification
+  - if false
+    - if analytic.action == "conversation post"
+      - conversation = analytic
+      -comments = analytic.get_comments(analytic.viewable_id)
+    - elsif analytic.action == "like"
+      - likes = analytic.get_likes(analytic.viewable_id)
+    - elsif analytic.action == "comment"
+      - comments = analytic.get_comments(analytic.viewable_id)
+    - elsif analytic.action == "notification"
+      - notification = analytic
+    -elsif analytic.action == "share"
+      - shares = analytic.get_shares(analytic.viewable_id)
+  -if conversation.present? or find_notification.present?
+    .myFeedDiv.post
+      -if conversation.present? 
+        - invitee = Invitee.find(conversation.user_id) rescue nil
+        -# conversation = Conversation.find(conversation.viewable_id) rescue nil
+        - if analytic.action == "like" or analytic.action == "comment" or invitee.present? 
+          .feed
+            - if analytic.action == "like"
+              - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
+              - if like_invitee.present?
+                .feedHeading
+                  - if like_invitee.profile_pic_file_name.present?
+                    .userPic
+                      %p.userPicImage
+                        %img{:src => like_invitee.profile_pic.url(:small)}/
+                  .userDetail
+                    %p.userName
+                      %span.boldText= like_invitee.name_of_the_invitee
+                      %span.italic liked this
+                    %p= analytic.created_at 
+            - if analytic.action == "comment"
+              - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
+              - if comment_invitee.present? 
+                .feedHeading
+                  - if comment_invitee.profile_pic_file_name.present?
+                    .userPic
+                      %p.userPicImage
+                        %img{:src => comment_invitee.profile_pic.url(:small)}/
+                  .userDetail
+                    %p.userName
+                      %span.boldText= comment_invitee.name_of_the_invitee
+                      %span.italic commented on this 
+                    %p= analytic.created_at 
+            - if invitee.present?
+              .feedHeading
+                - if invitee.profile_pic_file_name.present?
+                  .userPic
+                    %p.userPicImage
+                      %img{:src => invitee.profile_pic.url(:small)}/
+                  %p
+                .userDetail
+                  %p.userName= invitee.name_of_the_invitee 
+                  %p= invitee.created_at 
+              .feed-post
+                %p= conversation.description
+                - if conversation.image_file_name.present?
+                  %p
+                    %img{:src => conversation.image.url(:medium)}/ 
+              .feed-activiity
+                %p
+                  %span
+                    %img{:src => "/assets/share.png"}/
+                  %span= shares.present? ? shares.count : 0
+                %p
+                  %span
+                    %img{:src => "/assets/like.png"}/
+                  %span= likes.present? ? likes.count : 0
+                %p
+                  %span
+                    %img{:src => "/assets/comment.png"}/
+                  %span= comments.present? ? comments.count : 0
+      - elsif find_notification.present?
+        .feed
+          - if find_notification.image_for_show_notification_file_name.present?
+            .feedIcon
+              %img{:src => find_notification.image_for_show_notification.url(:small)}/
+          .feedDetail
+            %p= find_notification.description
+            %p= find_notification.created_at
+
+  - if false
+    -if conversation.present?
+      - invitee = Invitee.find(conversation.invitee_id) rescue nil
+      - conversation = Conversation.find(conversation.viewable_id) rescue nil
+      .feed
+        - if likes.present?
+          .feedHeading
+            - if invitee.present? and invitee.profile_pic_file_name.present?
+              .userPic
+                %p.userPicImage
+                  %img{:src => invitee.profile_pic.url(:small)}/
+            .userDetail
+              %p.userName
+                %span.boldText= invitee.name_of_the_invitee rescue nil
+                %span.italic liked this
+              %p= invitee.created_at rescue nil
+        .feedHeading
+          - if invitee.present? and invitee.profile_pic_file_name.present?
+            .userPic
+              %p.userPicImage
+                %img{:src => invitee.profile_pic.url(:small)}/
+            %p
+          .userDetail
+            %p.userName= invitee.name_of_the_invitee rescue nil
+            %p= invitee.created_at rescue nil
+        .feed-post
+          %p= conversation.description rescue nil
+          - if conversation.present? and conversation.image_file_name.present?
+            %p
+              %img{:src => conversation.image.url(:medium)}/ 
+        .feed-activiity
+          %p
+            %span
+              %img{:src => "/assets/share.png"}/
+            %span= shares.present? ? shares.count : 0
+          %p
+            %span
+              %img{:src => "/assets/like.png"}/
+            %span= likes.present? ? likes.count : 0
+          %p
+            %span
+              %img{:src => "/assets/comment.png"}/
+            %span= comments.present? ? comments.count : 0
+    - if likes.present?
+      - likes.each do |like|
+        - invitee = Invitee.find(like.user_id) rescue nil
+        - conversation = Conversation.find(like.viewable_id) rescue nil
+        - invitee_like = Invitee.find(Conversation.find(like.viewable_id).user_id) rescue nil
+        .feed
+          .feedHeading
+            - if invitee.present? and invitee.profile_pic_file_name.present?
+              .userPic
+                %p.userPicImage
+                  %img{:src => invitee.profile_pic.url(:small)}/
+            .userDetail
+              %p.userName
+                %span.boldText= invitee.name_of_the_invitee rescue nil
+                %span.italic liked this
+              %p= invitee.created_at rescue nil
+          .feedHeading
+            - if invitee_like.present? and invitee_like.profile_pic_file_name.present?
+              .userPic
+                %p.userPicImage
+                  %img{:src => invitee_like.profile_pic.url(:small)}/
+            .userDetail
+              %p.userName= invitee_like.name_of_the_invitee rescue nil
+              %p= invitee_like.created_at rescue nil
+          .feed-post
+            %p= conversation.description
+            - if conversation.image_file_name.present?
+              %p
+                %img{:src => conversation.image.url(:medium)}/
+          .feed-activiity
+            %p
+              %span
+                %img{:src => "/assets/share.png"}/
+              %span= shares.present? ? shares.count : 0
+            %p
+              %span
+                %img{:src => "/assets/like.png"}/
+              %span= likes.present? ? likes.count : 0
+            %p
+              %span
+                %img{:src => "/assets/comment.png"}/
+              %span= comments.present? ? comments.count : 0
+    -if comments.present?
+      - comments.each do |comment|
+        - invitee = Invitee.find(comment.user_id) rescue nil
+        - conversation = Conversation.find(comment.commentable_id) rescue nil
+        .feed
+          .feedHeading
+            .userDetail
+              %p.userName.commentUser
+                %span.boldText= invitee.name_of_the_invitee rescue nil
+                %span.italic commented on this 
+          .feedHeading
+            - if invitee.present? and invitee.profile_pic_file_name.present?
+              .userPic
+                %p.userPicImage
+                  %img{:src => invitee.profile_pic.url(:small)}/
+            .userDetail
+              %p.userName= invitee.name_of_the_invitee rescue nil
+              %p= invitee.created_at rescue nil
+          .feed-post
+            %p= conversation.description
+            - if conversation.image_file_name.present?
+              %p
+                %img{:src => conversation.image.url(:medium)}/
+          .feed-activiity
+            %p
+              %span
+                %img{:src => "/assets/share.png"}/
+              %span= shares.present? ? shares.count : 0
+            %p
+              %span
+                %img{:src => "/assets/like.png"}/
+              %span= likes.present? ? likes.count : 0
+            %p
+              %span
+                %img{:src => "/assets/comment.png"}/
+              %span= comments.present? ? comments.count : 0
+          .feedHeading.comment
+            - if invitee.present? and invitee.profile_pic_file_name.present?
+              .userPic
+                %p.userPicImage
+                  %img{:src => invitee.profile_pic.url(:small)}/
+                %p
+            .commentDiv
+              .userDetail
+                %p.userName= invitee.name_of_the_invitee rescue nil
+                %p= invitee.created_at rescue nil
+              .commentText
+                %p= comment.description
+    - if notification.present?
+      .feed
+        - find_notification = Notification.find(notification.viewable_id) rescue nil
+        - if find_notification.present? and find_notification.image_for_show_notification_file_name.present?
+          .feedIcon
+            %img{:src => find_notification.image_for_show_notification.url(:small)}/
+        .feedDetail
+          %p= find_notification.description rescue nil
+          %p= find_notification.created_at rescue nil

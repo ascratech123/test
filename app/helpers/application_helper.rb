@@ -805,3 +805,12 @@ end
     dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
     dest_arr
   end
+
+  def store_url_for(params)
+    url = url_for(params)
+    if url.include?("//?")
+      url.sub("//?", "/store?")
+    else
+      url
+    end
+  end

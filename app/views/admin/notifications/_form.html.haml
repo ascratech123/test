@@ -96,6 +96,40 @@
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
+            %p.displayInlineBlock.multicitytxt  Push
+          .col-lg-7.p-h-12 
+            = f.custom_radio_button_menu :push, true,"True", :id => 'push_true', :default_checked => (f.object.push == true or f.object.push.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :push, false,"False", :id => 'push_false', :default_checked => (f.object.push == false) ? 'checked' : ''
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+        .mdl-grid.p-v-5.form-group.mobiappstype
+          .col-lg-4.mdl-typography--text-right 
+            %p.displayInlineBlock.multicitytxt  Show on Notification Screen
+          .col-lg-7.p-h-12 
+            = f.custom_radio_button_menu :show_on_notification_screen, true,"True", :id => 'show_on_notification_screen_true', :default_checked => (f.object.show_on_notification_screen == true or f.object.show_on_notification_screen.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :show_on_notification_screen, false,"False", :id => 'show_on_notification_screen_false', :default_checked => (f.object.show_on_notification_screen == false) ? 'checked' : ''
+      
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.image_for_notification
+        .bs-component
+          .form-group
+            .span.col-lg-4
+              = f.label "Notification Image (200x200px)",:class =>"control-label", style: "float: right;"
+            .col-lg-7
+              %label.field.file
+                %span.button.btn-primary
+                  Choose File 
+                = f.file_field :image_for_show_notification,:id => "uploadBtn_image_for_show_notification", :class=>"gui-file"
+                = text_field_tag("text_file_name","", id: "1uploadBtn_image_for_show_notification", class: "gui-input", :value => "#{f.object.image_for_show_notification_file_name.nil? ? "there is no Attachment Available !" : f.object.image_for_show_notification_file_name}")
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+        .mdl-grid.p-v-5.form-group.mobiappstype
+          .col-lg-4.mdl-typography--text-right 
+            %p.displayInlineBlock.multicitytxt  Show on Activity
+          .col-lg-7.p-h-12 
+            = f.custom_radio_button_menu :show_on_activity, true,"True", :id => 'show_on_activity_true', :default_checked => (f.object.show_on_activity == true or f.object.show_on_activity.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :show_on_activity, false,"False", :id => 'show_on_activity_false', :default_checked => (f.object.show_on_activity == false) ? 'checked' : ''
+
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+        .mdl-grid.p-v-5.form-group.mobiappstype
+          .col-lg-4.mdl-typography--text-right 
             %p.displayInlineBlock.multicitytxt  Push Time *
           .col-lg-7.p-h-12 
             = f.custom_radio_button_menu :push_timing, "now","Now", :id => 'option3', :default_checked => (f.object.push_timing == 'now' or f.object.push_timing.blank?) ? 'checked' : ''
@@ -120,6 +154,12 @@
         .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg  
           .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
             = link_to "New Group", new_admin_event_invitee_group_path(:event_id => @event.id),:class => "waves-effect waves-light btn"    
+
+- if @notification.show_on_notification_screen == false
+  :javascript
+    $(".image_for_notification").hide();
+
+
 :javascript
   $(window).load(function(){
     flightTime();
@@ -149,3 +189,9 @@
   $(".send-notification-btn").click(function(){
     $(".overlayBg").show();
   });
+  $("#show_on_notification_screen_false").click(function(){
+    $(".image_for_notification").hide();
+  });
+  $("#show_on_notification_screen_true").click(function(){
+    $(".image_for_notification").show();
+  })
