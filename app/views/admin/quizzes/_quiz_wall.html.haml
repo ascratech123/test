@@ -34,7 +34,7 @@
                         %p 
                           = quiz.option1
                           / - percentage = get_user_poll_percentage("option1",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option1")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option1")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -44,7 +44,7 @@
                         %p
                           = quiz.option2
                           / - percentage = get_user_poll_percentage("option2",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option2")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option2")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -54,7 +54,7 @@
                         %p 
                           = quiz.option3
                           / - percentage = get_user_poll_percentage("option3",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option3")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option3")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -64,7 +64,7 @@
                         %p 
                           = quiz.option4
                           / - percentage = get_user_poll_percentage("option4",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option4")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option4")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -74,7 +74,7 @@
                         %p 
                           = quiz.option5
                           / - percentage = get_user_poll_percentage("option5",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option5")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option5")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -114,7 +114,7 @@
                         %p 
                           = quiz.option1
                           / - percentage = get_user_poll_percentage("option1",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option1")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option1")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -124,7 +124,7 @@
                         %p
                           = quiz.option2
                           / - percentage = get_user_poll_percentage("option2",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option2")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option2")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -134,7 +134,7 @@
                         %p 
                           = quiz.option3
                           / - percentage = get_user_poll_percentage("option3",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option3")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option3")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-2{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "50", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -144,7 +144,7 @@
                         %p 
                           = quiz.option4
                           / - percentage = get_user_poll_percentage("option4",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option4")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option4")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}
@@ -154,7 +154,7 @@
                         %p 
                           = quiz.option5
                           / - percentage = get_user_poll_percentage("option5",poll)
-                          - percentage = correct_user_quizzes_for_percentile(quiz,"option5")
+                          - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option5")
                         .progress
                           .pollwidth{:style => "width: 90%"}
                             .progress-bar.progress-bar-1.progress-bar-striped.active{"aria-valuemax" => "", "aria-valuemin" => "0", "aria-valuenow" => "40", :role => "progressbar", :style => "width: #{percentage}%; background-color:#{bar_color};"}

@@ -22,13 +22,12 @@
                   Choose File 
                 = f.file_field :background_image,:id => "uploadBtn2", :class=>"gui-file"
                 = text_field_tag("text_file_name","", id: "1uploadBtn2", class: "gui-input", :value => "#{f.object.background_image_file_name.nil? ? "there is no Attachment Available !" : f.object.background_image_file_name}", :read_only => true)
-            - if @event.present? and f.object.background_image_file_name.present? 
+            - if f.object.background_image_file_name.present?
               .col-lg-1
                 = link_to "?" ,"a.jpg", rel: "event_bg_image", title: "Event Background Image", :class =>'fancybox whatsImg'
-                - if @event.theme.present? and @event.theme_id.present?
-                  = link_to admin_event_theme_path(:event_id => @event.id, :id => @event.theme_id,:remove_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
-                    %span
-                      X
+                = link_to admin_event_quiz_wall_path(:event_id => @event.id, :id => @quiz_wall.id,:remove_bg_image => true), :class => "themeclose positionclose", :method => "put",data: { confirm: 'Are you sure?' } do
+                  %span
+                    X
 
       %p.OrTxt.or-vertical-text
         or
