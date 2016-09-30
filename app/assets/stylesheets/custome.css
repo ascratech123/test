@@ -140,6 +140,7 @@ p.or-vertical-text{    text-align: center;
     color: #a9acbd!important;
     font-size: 18px;
     text-transform: capitalize;}
+    .Regiserror.validationErr .field_with_errors{left:10px;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/

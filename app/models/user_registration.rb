@@ -24,6 +24,9 @@ class UserRegistration < ActiveRecord::Base
       attre.each do |regi_valid|
         self_attre = self.attributes.except("id", "registration_id","invitee_id", "event_id")
         self_attre.each do |user_regi_valid|
+          if regi_valid[1].present? and regi_valid[1][:mandatory_field] == "yes"
+            errors.add(user_regi_valid[0], "This field is required.") if regi_valid[0] == user_regi_valid[0] and user_regi_valid[1].blank?
+          end
           if regi_valid[1].present? and regi_valid[1][:validation_type].present?
             if regi_valid[1].present? and regi_valid[1][:validation_type] == "Mandatory"
               errors.add(user_regi_valid[0], "This field is required.") if regi_valid[0] == user_regi_valid[0] and user_regi_valid[1].blank?

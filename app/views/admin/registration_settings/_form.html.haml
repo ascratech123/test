@@ -68,7 +68,7 @@
             .field_with_errors.clear
               .span{:class => "errorMessage"}
                 = er
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror.validationErr
         .bs-component.m-b-30
           .form-group
             %label.col-lg-4.control-label{:for => "Start Regi_setting Date"} Start Registration Date/Time *
@@ -81,7 +81,7 @@
             .field_with_errors
               .span{:class => "errorMessage"}
                 = f.object.errors.messages[:start_date].join("") rescue nil
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.Regiserror.validationErr
         .bs-component.m-b-30
           .form-group
             %label.col-lg-4.control-label{:for => "End Regi_setting Date"} End Registration Date/Time *

@@ -2,7 +2,7 @@ class RegistrationSetting < ActiveRecord::Base
   attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am,:start_date_time,:end_date_time
   belongs_to :event 
 
-  validates :event_id, :registration, presence: true   # :login,
+  validates :event_id, :registration, :start_date_time, :on_mobile_app, :end_date_time, presence: true   # :login,
   # validates :login_url, :login_surl, :reg_url, :reg_surl, presence: true, :if :registration == 'hobnob'
   # validates :forget_pass_url, :forget_pass_surl, presence: true
   validate :check_external_regi_and_login_present
