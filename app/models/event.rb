@@ -613,8 +613,8 @@ class Event < ActiveRecord::Base
       for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
-          # obj.update_column("event_timezone_offset", self.timezone_offset)
-          # obj.update_column("event_display_time_zone", display_time_zone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model rescue nil
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
