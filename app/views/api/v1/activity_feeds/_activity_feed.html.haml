@@ -5,7 +5,7 @@
     - comments = analytic.get_comments(analytic.viewable_id)
     - shares = analytic.get_shares(analytic.viewable_id)
   - elsif analytic.viewable_type == "Notification"
-    - find_notification = Notification.find(analytic.viewable_id)
+    - find_notification = Notification.find(analytic.viewable_id) rescue nil
   - elsif analytic.viewable_type == "InviteeNotification"
     - find_notification = InviteeNotification.find(analytic.viewable_id).notification
   - if false
@@ -21,46 +21,44 @@
     -elsif analytic.action == "share"
       - shares = analytic.get_shares(analytic.viewable_id)
   -if conversation.present? or find_notification.present?
-    .myFeedDiv.post
+    .myFeedDiv.post      
       -if conversation.present? 
         - invitee = Invitee.find(conversation.user_id) rescue nil
         -# conversation = Conversation.find(conversation.viewable_id) rescue nil
         - if analytic.action == "like" or analytic.action == "comment" or invitee.present? 
-          - if analytic.action == "like"
-            - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
-            - if like_invitee.present?
-              .feed
+          .feed
+            - if analytic.action == "like"
+              - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
+              - if like_invitee.present?
                 .feedHeading
                   - if like_invitee.profile_pic_file_name.present?
                     .userPic
                       %p.userPicImage
-                        %img{:src => like_invitee.profile_pic.url(:small)}/
+                        %img{:src => like_invitee.profile_pic.url}/
                   .userDetail
                     %p.userName
                       %span.boldText= like_invitee.name_of_the_invitee
                       %span.italic liked this
                     %p= analytic.created_at 
-          - if analytic.action == "comment"
-            - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
-            - if comment_invitee.present? 
-              .feed
+            - if analytic.action == "comment"
+              - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
+              - if comment_invitee.present? 
                 .feedHeading
                   - if comment_invitee.profile_pic_file_name.present?
                     .userPic
                       %p.userPicImage
-                        %img{:src => comment_invitee.profile_pic.url(:small)}/
+                        %img{:src => comment_invitee.profile_pic.url}/
                   .userDetail
                     %p.userName
                       %span.boldText= comment_invitee.name_of_the_invitee
                       %span.italic commented on this 
                     %p= analytic.created_at 
-          - if invitee.present?
-            .feed
+            - if invitee.present?
               .feedHeading
                 - if invitee.profile_pic_file_name.present?
                   .userPic
                     %p.userPicImage
-                      %img{:src => invitee.profile_pic.url(:small)}/
+                      %img{:src => invitee.profile_pic.url}/
                   %p
                 .userDetail
                   %p.userName= invitee.name_of_the_invitee 
@@ -69,7 +67,7 @@
                 %p= conversation.description
                 - if conversation.image_file_name.present?
                   %p
-                    %img{:src => conversation.image.url(:medium)}/ 
+                    %img{:src => conversation.image.url}/ 
               .feed-activiity
                 %p
                   %span
@@ -84,10 +82,10 @@
                     %img{:src => "/assets/comment.png"}/
                   %span= comments.present? ? comments.count : 0
       - elsif find_notification.present?
-        .feed
+        .feed 
           - if find_notification.image_for_show_notification_file_name.present?
             .feedIcon
-              %img{:src => find_notification.image_for_show_notification.url(:small)}/
+              %img{:src => find_notification.image_for_show_notification.url}/
           .feedDetail
             %p= find_notification.description
             %p= find_notification.created_at
@@ -102,7 +100,7 @@
             - if invitee.present? and invitee.profile_pic_file_name.present?
               .userPic
                 %p.userPicImage
-                  %img{:src => invitee.profile_pic.url(:small)}/
+                  %img{:src => invitee.profile_pic.url}/
             .userDetail
               %p.userName
                 %span.boldText= invitee.name_of_the_invitee rescue nil
@@ -112,7 +110,7 @@
           - if invitee.present? and invitee.profile_pic_file_name.present?
             .userPic
               %p.userPicImage
-                %img{:src => invitee.profile_pic.url(:small)}/
+                %img{:src => invitee.profile_pic.url}/
             %p
           .userDetail
             %p.userName= invitee.name_of_the_invitee rescue nil
@@ -121,7 +119,7 @@
           %p= conversation.description rescue nil
           - if conversation.present? and conversation.image_file_name.present?
             %p
-              %img{:src => conversation.image.url(:medium)}/ 
+              %img{:src => conversation.image.url}/ 
         .feed-activiity
           %p
             %span
@@ -145,7 +143,7 @@
             - if invitee.present? and invitee.profile_pic_file_name.present?
               .userPic
                 %p.userPicImage
-                  %img{:src => invitee.profile_pic.url(:small)}/
+                  %img{:src => invitee.profile_pic.url}/
             .userDetail
               %p.userName
                 %span.boldText= invitee.name_of_the_invitee rescue nil
@@ -155,7 +153,7 @@
             - if invitee_like.present? and invitee_like.profile_pic_file_name.present?
               .userPic
                 %p.userPicImage
-                  %img{:src => invitee_like.profile_pic.url(:small)}/
+                  %img{:src => invitee_like.profile_pic.url}/
             .userDetail
               %p.userName= invitee_like.name_of_the_invitee rescue nil
               %p= invitee_like.created_at rescue nil
@@ -163,7 +161,7 @@
             %p= conversation.description
             - if conversation.image_file_name.present?
               %p
-                %img{:src => conversation.image.url(:medium)}/
+                %img{:src => conversation.image.url}/
           .feed-activiity
             %p
               %span
@@ -191,7 +189,7 @@
             - if invitee.present? and invitee.profile_pic_file_name.present?
               .userPic
                 %p.userPicImage
-                  %img{:src => invitee.profile_pic.url(:small)}/
+                  %img{:src => invitee.profile_pic.url}/
             .userDetail
               %p.userName= invitee.name_of_the_invitee rescue nil
               %p= invitee.created_at rescue nil
@@ -199,7 +197,7 @@
             %p= conversation.description
             - if conversation.image_file_name.present?
               %p
-                %img{:src => conversation.image.url(:medium)}/
+                %img{:src => conversation.image.url}/
           .feed-activiity
             %p
               %span
@@ -217,7 +215,7 @@
             - if invitee.present? and invitee.profile_pic_file_name.present?
               .userPic
                 %p.userPicImage
-                  %img{:src => invitee.profile_pic.url(:small)}/
+                  %img{:src => invitee.profile_pic.url}/
                 %p
             .commentDiv
               .userDetail
@@ -230,7 +228,7 @@
         - find_notification = Notification.find(notification.viewable_id) rescue nil
         - if find_notification.present? and find_notification.image_for_show_notification_file_name.present?
           .feedIcon
-            %img{:src => find_notification.image_for_show_notification.url(:small)}/
+            %img{:src => find_notification.image_for_show_notification.url}/
         .feedDetail
           %p= find_notification.description rescue nil
           %p= find_notification.created_at rescue nil
