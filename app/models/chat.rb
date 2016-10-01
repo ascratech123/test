@@ -7,7 +7,11 @@ class Chat < ActiveRecord::Base
   belongs_to :event
   validates :chat_type, :sender_id,:member_ids,presence: { :message => "This field is required." }
   after_create :set_date_time, :set_event_timezone
-  after_create :send_puch_notification, :create_analytic_record
+  after_create :send_puch_notification, :create_analytic_record, :update_last_updated_model
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
 
   def get_sender_name(id)
     Invitee.find_by_id(id).name_of_the_invitee rescue ""
