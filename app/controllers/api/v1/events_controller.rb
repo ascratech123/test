@@ -5,12 +5,9 @@ class Api::V1::EventsController < ApplicationController
   before_filter :check_date, :only => :index
 
   def index
-    # mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    # submitted_app = "Yes" if params[:mobile_application_code].present?
-
-    mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
-
-    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]
+    # mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    submitted_app = "Yes" if params[:mobile_application_code].present?
     if mobile_application.present?
 #======mine
 #      sync_time = Time.now.to_s
@@ -24,7 +21,7 @@ class Api::V1::EventsController < ApplicationController
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key])
       if invitee.present?
-        submitted_app = ((params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No")
+        submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
       end  
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app) 
