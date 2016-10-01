@@ -27,7 +27,7 @@ class Admin::EventsController < ApplicationController
 
   def new
     @event = @client.events.build
-    @event.images.build
+    @event.images.build 
     @event.event_venues.build
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
