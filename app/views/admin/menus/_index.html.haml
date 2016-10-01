@@ -21,7 +21,8 @@
         
 
   = f.fields_for :event_features do |builder|
-    - if ['chats', 'my_calendar','event_highlights','social_sharings'].exclude? builder.object.name
+    -# if ['chats', 'my_calendar','event_highlights','social_sharings'].exclude? builder.object.name
+    - if ['my_calendar','event_highlights','social_sharings'].exclude? builder.object.name
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-b-10.agendaheight.menuSubCard
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.heading-border.menuEventList
           %h4.p-t-10.displayInlineBlock
