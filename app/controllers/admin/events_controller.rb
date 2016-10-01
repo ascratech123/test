@@ -5,6 +5,7 @@ class Admin::EventsController < ApplicationController
   before_filter :authenticate_user
   before_filter :authorize_client_role, :find_client_association
   before_filter :check_moderator_role, :feature_redirect_on_condition, :only => [:index]
+  before_filter :get_event_names, :only => [:new, :create, :edit]
 
   def index
     if params["type"].present?
@@ -31,8 +32,7 @@ class Admin::EventsController < ApplicationController
     #@event.venues.build
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
-    @present_feature = @event.set_features rescue []
-    @event_names = @client.events.where.not(status: 'rejected').pluck(:event_name, :id)
+    @present_feature = @event.set_features rescue []    
   end
   
   def create
@@ -112,6 +112,10 @@ class Admin::EventsController < ApplicationController
   end
 
   protected
+
+  def get_event_names
+    @event_names = @client.events.where.not(status: 'rejected').pluck(:event_name, :id)    
+  end
 
   def feature_redirect_on_condition
     if params[:feature].present? and params[:feature]  != "events"
