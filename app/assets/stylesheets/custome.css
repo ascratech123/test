@@ -85,7 +85,9 @@
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
   .ckeditor_custom {text-align: left;}
 
+
 .mb10{margin-bottom: 10px;}
+.displayNone{display: none;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
