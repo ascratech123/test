@@ -7,7 +7,8 @@ class Api::V1::SocialMediaAuthenticationsController < ApplicationController
   def create
     provider = params[:provider]
     email = params[:email]
-    mobile_application = MobileApplication.find_by_preview_code(params["mobile_application_preview_code"]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    # mobile_application = MobileApplication.find_by_preview_code(params["mobile_application_preview_code"]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
     if mobile_application.present?
       event = mobile_application.events.where(:id => params['event_id']) if params['event_id'].present?
       event = mobile_application.events if event.blank?
