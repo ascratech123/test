@@ -1455,7 +1455,4 @@ i.incards {font-size: 60px}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
-<<<<<<< HEAD
 .copyEvent{display: none;}
-=======
->>>>>>> 2d794485b301e01690fc067d2bedfa3f63977e72
