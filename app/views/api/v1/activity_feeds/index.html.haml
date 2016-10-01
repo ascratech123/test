@@ -39,14 +39,15 @@
             %ul.tabs
               - if session['invitee_id']
                 %li.tab-link.current{"data-tab" => "tab1"} My Feed
-              / %li.tab-link{"data-tab" => "tab2"} Social
+              %li.tab-link{"data-tab" => "tab2"} Social
             - if session['invitee_id']
               #tab1.tab-content.current
                 = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
+                #analytics
             - if false
               #tab2.tab-content.current
                 = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-            #productsList
+                #eventAnalytics
             = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"            
       -else
         %h1.noData No Data Available
