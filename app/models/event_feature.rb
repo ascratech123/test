@@ -83,9 +83,10 @@ class EventFeature < ActiveRecord::Base
   end
 
   def set_menu_icon_visibility
-    if ["contacts","venue","event_highlights", 'chats','social_sharings'].include?(self.name)
+    # if ["contacts","venue","event_highlights", 'chats','social_sharings'].include?(self.name)
+    if ["contacts","venue","event_highlights",'social_sharings'].include?(self.name)
       self.menu_icon_visibility = "no"
-    end
+    end    
   end
 
   def image_dimensions
@@ -146,7 +147,8 @@ class EventFeature < ActiveRecord::Base
   end
 
   def update_visibility
-    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats","social_sharings"]
+    #disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats","social_sharings"]
+    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","social_sharings"]
     if disable_features.include? self.name
       self.update_column(:menu_visibilty, 'inactive')
     else

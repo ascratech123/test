@@ -8,7 +8,8 @@ class Api::V1::ChatsController < ApplicationController
       member_first_name = member.first_name rescue ''
       member_last_name = member.last_name rescue ''
   		chats = event.chats.where('sender_id = ? and member_ids = ? or sender_id = ? and member_ids = ?', params[:sender_id], params[:member_ids], params[:member_ids], params[:sender_id]).where('id > ?', params[:id].to_i)
-  		render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at])}
+  		# render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at])}
+      render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at], :methods => [:created_at_with_event_timezone, :updated_at_with_event_timezone])}
   	else
   		render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
   	end
@@ -32,6 +33,26 @@ class Api::V1::ChatsController < ApplicationController
   	end
   end
 
+
+  def update_chat_read_status
+    member_id = params[:member_id]
+    sender_id = params[:sender_id]
+    event_id = params[:event_id]
+    if member_id.present? and sender_id.present? and event_id.present?
+      chats = Chat.where("event_id = ? and member_ids =? and sender_id =? and unread = ?",event_id,member_id,sender_id,true) 
+      if chats.present?
+        chats.each do |chat|
+          chat.update(:unread => false, :updated_at => Time.now)
+        end  
+        render :status=> 200, :json=>{:status=> "Success",:message=>"chat Updated Successfully."} 
+      else
+        render :status=>200, :json=>{:status=>"Success",:message=>"chats already read."}
+      end
+    else
+      render :status=>200, :json=>{:status=>"Failure",:message=>"please send all required parameters."}
+    end
+  end
+
   def update
     chat = Chat.find_by_id(params[:id])
     if chat.present?
@@ -44,4 +65,5 @@ class Api::V1::ChatsController < ApplicationController
       render :status=>200, :json=>{:status=>"Failure",:message=>"Chat Not Found."}
     end
   end
+
 end
