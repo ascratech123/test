@@ -38,6 +38,14 @@ class Like < ActiveRecord::Base
     self.user.name_of_the_invitee rescue ""
   end
 
+  def first_name
+    self.user.first_name rescue ""
+  end
+  
+  def last_name
+    self.user.last_name rescue ""
+  end  
+
   def conversation
     self.likable.description
   end

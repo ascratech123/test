@@ -86,7 +86,9 @@
   .ckeditor_custom {text-align: left;}
 .copyCustomContent button{background:#1CB1BA; border:0 none; padding:5px; color:#fff; cursor:pointer;}
 .copyCustomContent button:first-child{margin-right:10px;}
+
 .mb10{margin-bottom: 10px;}
+.displayNone{display: none;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -1453,4 +1455,7 @@ i.incards {font-size: 60px}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
+<<<<<<< HEAD
 .copyEvent{display: none;}
+=======
+>>>>>>> 2d794485b301e01690fc067d2bedfa3f63977e72
