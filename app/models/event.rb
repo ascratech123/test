@@ -652,18 +652,19 @@ class Event < ActiveRecord::Base
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
       self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].at(self.start_event_time).utc_offset)
       display_time_zone = self.display_time_zone
-      for table_name in ["agendas", "attendees", "chats", "conversations", "faqs", "feedbacks", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      #["agendas", "chats", "conversations", "faqs", "feedbacks", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      for table_name in ["agendas", "chats", "conversations", "notifications"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
           obj.update_column("event_timezone_offset", self.timezone_offset)
           obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
-          obj.update_last_updated_model rescue nil
+          obj.update_last_updated_model
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
-      end   
+      end
     end
-  end  
+  end
 
   def set_date
     self.update_column(:start_event_date, self.start_event_time)

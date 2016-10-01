@@ -47,7 +47,7 @@ class Invitee < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   before_create :ensure_authentication_token, :generate_key
-  after_create :set_event_timezone
+  # after_create :set_event_timezone
   before_save :encrypt_password
   
   before_save :set_full_name
@@ -225,12 +225,12 @@ class Invitee < ActiveRecord::Base
     self.assign_secret_key
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 
   def assign_secret_key
     self.secret_key = self.get_secret_key
@@ -650,12 +650,12 @@ class Invitee < ActiveRecord::Base
 
   def created_at_with_event_timezone
     # self.created_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone_offset.to_i.seconds
+    self.created_at + self.event.timezone_offset.to_i.seconds
   end
  
   def updated_at_with_event_timezone
     # self.updated_at.in_time_zone(self.event_timezone)
-    self.updated_at + self.event_timezone_offset.to_i.seconds
+    self.updated_at + self.event.timezone_offset.to_i.seconds
   end
 
   private

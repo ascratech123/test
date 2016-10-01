@@ -32,7 +32,7 @@ class UserPoll < ActiveRecord::Base
 
   def Timestamp
     # self.created_at.in_time_zone(self.poll.event_timezone).strftime("%d/%m/%Y %T")
-    (self.created_at + self.poll.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
+    (self.created_at + self.poll.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
 
   def email_id

@@ -5,7 +5,7 @@ class Qna < ActiveRecord::Base
   has_many :favorites, as: :favoritable, :dependent => :destroy
 
   validates :question, :receiver_id,:sender_id, presence: { :message => "This field is required." }
-  after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone
+  after_create :set_status_as_per_auto_approve, :create_analytic_record#, :set_event_timezone
   after_save :update_last_updated_model
 
   default_scope { order('created_at desc') }
@@ -60,7 +60,7 @@ class Qna < ActiveRecord::Base
 
   def Timestamp
     # self.created_at.in_time_zone(self.event_timezone).strftime("%d/%m/%Y %T")
-    (self.created_at + self.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
+    (self.created_at + self.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
   
   def email_id
@@ -123,12 +123,12 @@ class Qna < ActiveRecord::Base
     pids = Qna.where('event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, start_date, end_date).group(:receiver_id).count.sort_by{|k, v| v}.last(count)
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
   
   def created_at_with_event_timezone
     # self.created_at.in_time_zone(self.event_timezone)
