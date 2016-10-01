@@ -848,3 +848,16 @@ end
       url
     end
   end
+
+  def datetime_with_adjusted_offset(datetime, offset)
+    datetime + offset.to_i.seconds
+  end
+
+  def datetime_with_display_timezone(datetime, display_timezone)
+    "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
+  end
+
+  def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
+    time_with_offset = datetime_with_adjusted_offset(datetime, offset)
+    datetime_with_display_timezone(time_with_offset, display_timezone)
+  end
