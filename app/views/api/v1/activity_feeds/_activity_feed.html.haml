@@ -1,6 +1,6 @@
 - analytics.each do |analytic|
   - if analytic.viewable_type == "Conversation"
-    - conversation = Conversation.find(analytic.viewable_id)
+    - conversation = Conversation.get_approved_conversation(analytic.viewable_id)
     - likes = analytic.get_likes(analytic.viewable_id)
     - comments = analytic.get_comments(analytic.viewable_id)
     - shares = analytic.get_shares(analytic.viewable_id)
@@ -17,74 +17,78 @@
             - if analytic.action == "like"
               - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
               - if like_invitee.present?
-                .feedHeading
-                  - if like_invitee.profile_pic_file_name.present?
-                    .userPic
-                      %p.userPicImage
-                        %img{:src => like_invitee.profile_pic.url}/
-                  -else
-                    .userPic
-                      %p.userPicImage
-                        %img{:src => "/profile_pics/thumb/missing.png"}/
-                  .userDetail
-                    %p.userName
-                      %span.boldText= like_invitee.name_of_the_invitee
-                      %span.italic liked this
-                    %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
+                %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
+                  .feedHeading
+                    - if like_invitee.profile_pic_file_name.present?
+                      .userPic
+                        %p.userPicImage
+                          %img{:src => like_invitee.profile_pic.url}/
+                    -else
+                      .userPic
+                        %p.userPicImage
+                          %img{:src => "/profile_pics/thumb/missing.png"}/
+                    .userDetail
+                      %p.userName
+                        %span.boldText= like_invitee.name_of_the_invitee
+                        %span.italic liked this
+                      %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
             - if analytic.action == "comment"
               - comment_invitee = Invitee.find(analytic.invitee_id) rescue nil
               - if comment_invitee.present? 
+                %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
+                  .feedHeading
+                    - if comment_invitee.profile_pic_file_name.present?
+                      .userPic
+                        %p.userPicImage
+                          %img{:src => comment_invitee.profile_pic.url}/
+                    -else
+                      .userPic
+                        %p.userPicImage
+                          %img{:src => "/profile_pics/thumb/missing.png"}/
+                    .userDetail
+                      %p.userName
+                        %span.boldText= comment_invitee.name_of_the_invitee
+                        %span.italic commented on this 
+                      %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
+            - if invitee.present?
+              %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{invitee.id}"}
                 .feedHeading
-                  - if comment_invitee.profile_pic_file_name.present?
+                  - if invitee.profile_pic_file_name.present?
                     .userPic
                       %p.userPicImage
-                        %img{:src => comment_invitee.profile_pic.url}/
+                        %img{:src => invitee.profile_pic.url}/
                   -else
                     .userPic
                       %p.userPicImage
                         %img{:src => "/profile_pics/thumb/missing.png"}/
                   .userDetail
-                    %p.userName
-                      %span.boldText= comment_invitee.name_of_the_invitee
-                      %span.italic commented on this 
+                    %p.userName= invitee.name_of_the_invitee 
                     %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
-            - if invitee.present?
-              .feedHeading
-                - if invitee.profile_pic_file_name.present?
-                  .userPic
-                    %p.userPicImage
-                      %img{:src => invitee.profile_pic.url}/
-                -else
-                  .userPic
-                    %p.userPicImage
-                      %img{:src => "/profile_pics/thumb/missing.png"}/
-                .userDetail
-                  %p.userName= invitee.name_of_the_invitee 
-                  %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
-              .feed-post
-                %p= conversation.description
-                - if conversation.image_file_name.present?
+                .feed-post
+                  %p= conversation.description
+                  - if conversation.image_file_name.present?
+                    %p
+                      %img{:src => conversation.image.url}/ 
+                .feed-activiity
                   %p
-                    %img{:src => conversation.image.url}/ 
-              .feed-activiity
-                %p
-                  %span
-                    %img{:src => "/assets/share.png"}/
-                  %span= shares.present? ? shares.count : 0
-                %p
-                  %span
-                    %img{:src => "/assets/like.png"}/
-                  %span= likes.present? ? likes.count : 0
-                %p
-                  %span
-                    %img{:src => "/assets/comment.png"}/
-                  %span= comments.present? ? comments.count : 0
+                    %span
+                      %img{:src => "/assets/share.png"}/
+                    %span= shares.present? ? shares.count : 0
+                  %p
+                    %span
+                      %img{:src => "/assets/like.png"}/
+                    %span= likes.present? ? likes.count : 0
+                  %p
+                    %span
+                      %img{:src => "/assets/comment.png"}/
+                    %span= comments.present? ? comments.count : 0
       - elsif find_notification.present?
         .feed 
-          .feedIcon
-            - if find_notification.image_for_show_notification_file_name.present?
-              %img{:src => find_notification.image_for_show_notification.url}/
-          .feedDetail
-            %p= find_notification.description
-            %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
+          %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}"}
+            .feedIcon
+              - if find_notification.image_for_show_notification_file_name.present?
+                %img{:src => find_notification.image_for_show_notification.url}/
+            .feedDetail
+              %p= find_notification.description
+              %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
 

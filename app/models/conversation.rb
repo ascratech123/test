@@ -255,4 +255,7 @@ class Conversation < ActiveRecord::Base
     updated_at_with_tmz.sub(year, "")    
   end
 
+  def self.get_approved_conversation(id)
+    self.where("id = ? and status = ?", id, "approved").first
+  end
 end

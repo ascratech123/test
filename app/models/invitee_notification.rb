@@ -10,7 +10,7 @@ class InviteeNotification < ActiveRecord::Base
   end
 
   def create_analytic_invitee_notification
-  	if (self.show_on_activity == true)
+  	if (self.notification.show_on_activity == true)
   		self.create_invitee_notification_in_analytic
   	end
   end
