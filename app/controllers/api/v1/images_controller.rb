@@ -4,9 +4,12 @@ class Api::V1::ImagesController < ApplicationController
 	respond_to :json
 	
 	def index
-		# mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code]) || MobileApplication.find_by_id(params["mobile_application_id"])
-
-		mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
+		# mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) 
+		if params[:mobile_application_preview_code].present?
+      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
+			mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
+		end
 
 
 		event_status = ((params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? ["published"] : ["approved","published"])

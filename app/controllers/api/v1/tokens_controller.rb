@@ -152,8 +152,11 @@ class Api::V1::TokensController < ApplicationController
     if params["mobile_application_code"].present? or params["mobile_application_preview_code"].present? or params[:mobile_application_id].present?
       
       # @mobile_application = MobileApplication.find_by_preview_code(params["mobile_application_preview_code"]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find(params[:mobile_application_id])
-
-      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params[:mobile_application_id]).first
+      if params[:mobile_application_preview_code].present?
+        @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+      elsif params[:mobile_application_code].present? or params[:mobile_application_id].present?
+        @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params[:mobile_application_id]).first
+      end
 
       @event = Event.find_by_id(params[:event_id]) if params[:event_id].present?
       event_ids = [@event.id] if params[:event_id].present? and @event.present?
@@ -185,7 +188,11 @@ class Api::V1::TokensController < ApplicationController
   end
 
   def set_instances_for_create
-    @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    if params[:mobile_application_preview_code].present?
+      @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    elsif params[:mobile_application_code].present?
+      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    end
 
     # @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_preview_code"])
 
