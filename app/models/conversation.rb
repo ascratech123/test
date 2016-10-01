@@ -75,10 +75,6 @@ class Conversation < ActiveRecord::Base
     conversations
   end 
 
-  def share_count
-    Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation", action: "share").length rescue 0
-  end
-
   def like_count
     Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
   end
@@ -217,25 +213,9 @@ class Conversation < ActiveRecord::Base
   def first_name
     Invitee.find_by_id(self.user_id).first_name rescue ""
   end
-
-  def first_name_user
-    Invitee.find_by_id(self.actioner_id).first_name rescue ""
-  end
-
-  def profile_pic_url_user
-    Invitee.find_by_id(self.actioner_id).profile_pic.url(:thumb) rescue ""
-  end
-
-  def profile_pic_url
-    Invitee.find_by_id(self.user_id).profile_pic.url(:large) rescue ""
-  end
   
   def last_name
     Invitee.find_by_id(self.user_id).last_name rescue ""
-  end
-
-  def last_name_user
-    Invitee.find_by_id(self.actioner_id).last_name rescue ""
   end
 
   def comment
@@ -262,7 +242,7 @@ class Conversation < ActiveRecord::Base
   def formatted_created_at_with_event_timezone
     # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
-    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event.display_time_zone})")
+    created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event_display_time_zone})")
     year = Time.now.strftime("%Y") + " "
     created_at_with_tmz.sub(year, "")
   end
@@ -270,10 +250,12 @@ class Conversation < ActiveRecord::Base
   def formatted_updated_at_with_event_timezone
     # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event.display_time_zone})")
-    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event.display_time_zone})")
+    updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (#{self.event_display_time_zone})")
     year = Time.now.strftime("%Y") + " "
     updated_at_with_tmz.sub(year, "")    
   end
 
+  def self.get_approved_conversation(id)
+    self.where("id = ? and status = ?", id, "approved").first
+  end
 end
-
