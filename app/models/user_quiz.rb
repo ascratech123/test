@@ -46,7 +46,7 @@ class UserQuiz < ActiveRecord::Base
 
   def Timestamp
     # self.created_at.in_time_zone(self.quiz.event.time_zone).strftime("%d/%m/%Y %T")
-    (self.created_at + self.quiz.event.event_timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
+    (self.created_at + self.quiz.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
   
   def question
@@ -55,7 +55,7 @@ class UserQuiz < ActiveRecord::Base
 
 
   def user_answer
-    self.answer.join(', ').to_s
+    self.answer#.join(', ').to_s
     #self.quiz.attributes[self.answer.downcase]
   end
   
