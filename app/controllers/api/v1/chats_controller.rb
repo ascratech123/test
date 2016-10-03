@@ -8,7 +8,13 @@ class Api::V1::ChatsController < ApplicationController
       member_first_name = member.first_name rescue ''
       member_last_name = member.last_name rescue ''
   		chats = event.chats.where('sender_id = ? and member_ids = ? or sender_id = ? and member_ids = ?', params[:sender_id], params[:member_ids], params[:member_ids], params[:sender_id]).where('id > ?', params[:id].to_i)
-  		# render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at])}
+  		@current_user_recieved_chats = event.chats.where("event_id = ? and member_ids = ? and sender_id = ? and unread = ?", params[:event_id], params[:sender_id], params[:member_ids],true) 
+      if @current_user_recieved_chats.present?
+        @current_user_recieved_chats.each do |chat|
+          chat.update(:unread => false, :updated_at => Time.now)
+        end 
+      end
+      # render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at])}
       render :status => 200, :json => {:status => "Success", :member_first_name => member_first_name, :member_last_name => member_last_name, :chats => chats.as_json(:except => [:created_at, :updated_at], :methods => [:created_at_with_event_timezone, :updated_at_with_event_timezone])}
   	else
   		render :status=>200, :json=>{:status=>"Failure",:message=>"Event Not Found."}
