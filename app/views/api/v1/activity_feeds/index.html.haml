@@ -12,58 +12,28 @@
     = stylesheet_link_tag "activity_feed.css", "fonts.css"
   - if @background_image.present?
     %body{:style=>"background-image: url(#{@background_image});background-size:cover;background-repeat: no-repeat; background-attachment:fixed;"} 
-      - if session['invitee_id'].present?
-        .container
-          .wrapper
-            %h1
-            -if false
-              %ul.tabs
-                - if session['invitee_id']
-                  %li.tab-link.current{"data-tab" => "tab1"} My Feed
-                %li.tab-link{"data-tab" => "tab2"} Social
-            / - if session['invitee_id']
-            /   #tab1.tab-content.current
-            /     = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-            /   #tab2.tab-content
-            /     = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-            - if session['invitee_id'].present? and params[:my_feed].present?
-              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-              #analytics
-            -elsif params[:social].present?
-              -if false
-                = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-              #eventAnalytics
-            = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
-      -else 
-        %h1.noData No Data Available
+      .container
+        .wrapper
+          %h1
+          - if session['invitee_id'].present? and params[:my_feed].present?
+            = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
+            #analytics
+          -elsif params[:social].present?
+            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+            #eventAnalytics
+          = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
   -elsif @background_color.present?
     %body{:style => "background:##{@background_color};"}
-      - if session['invitee_id'].present?
-        .container
-          .wrapper
-            %h1
-            -if false
-              %ul.tabs
-                - if session['invitee_id']
-                  %li.tab-link.current{"data-tab" => "tab1"} My Feed
-                %li.tab-link{"data-tab" => "tab2"} Social
-            / - if session['invitee_id']
-            /   #tab1.tab-content.current
-            /     = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-            /     #analytics
-            / - if false
-            /   #tab2.tab-content.current
-            /     = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-            - if session['invitee_id'].present? and params[:my_feed].present?
-              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-              #analytics
-            -elsif params[:social].present?
-              -if false
-                = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-                #eventAnalytics
-            = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"            
-      -else
-        %h1.noData No Data Available
+      .container
+        .wrapper
+          %h1
+          - if session['invitee_id'].present? and params[:my_feed].present?
+            = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
+            #analytics
+          -elsif params[:social].present?
+            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+            #eventAnalytics
+          = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"            
 :javascript
   $(document).ready(function(){
     $('.tabs li').click(function(){
@@ -74,3 +44,4 @@
       $('#'+ tab_id).addClass('current');
     });
   });
+
