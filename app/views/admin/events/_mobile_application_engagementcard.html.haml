@@ -2,13 +2,11 @@
   %section.content
     %h4.heading-borderCard.m-l-10.m-b-20
       Engagement
-    / - if (!current_user.has_role? :moderator) and (!current_user.has_role? :db_manager) 
     - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       - if show_card("e_kits")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "e-kit.png", :objs => @event.e_kits, :url => "e_kits", :@count => @count}
       - if show_card("feedbacks")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count}
-    / - if (current_user.has_role? :db_manager)
     - if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       - if show_card("feedbacks")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count}
@@ -46,6 +44,8 @@
     - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))  
       - if show_card("chats")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "chat.png", :objs => @event.chats, :url => "chats", :@count => @count}       
+    - if show_card("activity_feeds")
+      = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "activity_feed.png", :objs => [], :url => "activity_feeds", :@count => 0}
 
       - if show_card("social_sharings")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "social_sharing.png", :objs => @event.chats, :url => "social_sharings", :@count => @count}  

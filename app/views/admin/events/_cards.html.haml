@@ -65,7 +65,7 @@
               - display_title = "Add"
             -elsif url == "venue" and @event.emergency_exit.present?
               - display_title = "Manage"
-            - elsif ["leaderboard"].include?(url)
+            - elsif ["leaderboard", "activity_feeds"].include?(url)
               - display_title = "Manage"
               - redirect_link = ""
             -elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include?(url) 

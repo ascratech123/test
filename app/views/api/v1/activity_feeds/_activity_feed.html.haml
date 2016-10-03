@@ -17,7 +17,7 @@
             - if analytic.action == "like"
               - like_invitee = Invitee.find(analytic.invitee_id) rescue nil
               - if like_invitee.present?
-                %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
+                %a{:href => "#{APP_URL}?viewresource_typeable_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
                   .feedHeading
                     - if like_invitee.profile_pic_file_name.present?
                       .userPic
@@ -84,10 +84,10 @@
                     %span= comments.present? ? comments.count : 0
       - elsif find_notification.present?
         .feed 
-          %a{:href => "#{APP_URL}?viewable_type=#{analytic.viewable_type}&viewable_id=#{analytic.viewable_id}&action=#{analytic.action}"}
+          %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id="}
             .feedIcon
-              - if find_notification.image_for_show_notification_file_name.present?
-                %img{:src => find_notification.image_for_show_notification.url}/
+              - icon_url = get_notification_icon_by_action(find_notification)
+              %img{:src => icon_url}/
             .feedDetail
               %p= find_notification.description
               %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
