@@ -35,18 +35,15 @@ class Api::V1::ChatsController < ApplicationController
 
 
   def update_chat_read_status
-    member_id = params[:member_id]
-    sender_id = params[:sender_id]
-    event_id = params[:event_id]
-    if member_id.present? and sender_id.present? and event_id.present?
-      chats = Chat.where("event_id = ? and member_ids =? and sender_id =? and unread = ?",event_id,member_id,sender_id,true) 
-      if chats.present?
-        chats.each do |chat|
+    if params[:member_id].present? and params[:sender_id].present? and params[:event_id].present?
+      @chats = Chat.where("event_id = ? and member_ids = ? and sender_id = ? and unread = ?", params[:event_id], params[:member_id], params[:sender_id],true) 
+      if @chats.present?
+        @chats.each do |chat|
           chat.update(:unread => false, :updated_at => Time.now)
         end  
         render :status=> 200, :json=>{:status=> "Success",:message=>"chat Updated Successfully."} 
       else
-        render :status=>200, :json=>{:status=>"Success",:message=>"chats already read."}
+        render :status=>200, :json=>{:status=>"Success",:message=>" no unread chats found."}
       end
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"please send all required parameters."}
