@@ -13,7 +13,7 @@ class Api::V1::InviteeChatsController < ApplicationController
 				
 				#@invitees_list = @chats.pluck(:sender_id,:member_ids).flatten.map { |x| x.to_i}.uniq
 				invitees = []
-				@invitees_list.each do |invitee|
+				@invitees_list.uniq.each do |invitee|
 					@invitee = Invitee.find(invitee)
 					if @invitee.present?
 						data = {}
