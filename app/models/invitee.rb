@@ -127,6 +127,10 @@ class Invitee < ActiveRecord::Base
     self.profile_pic.url rescue ""
   end
 
+  def unread_chat_count
+
+  end 
+
   def Remark
     self.remark
   end

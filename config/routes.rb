@@ -88,7 +88,8 @@ end
         post 'delete_mobile_data', on: :collection 
         resources :chats do 
           post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
-        end  
+        end
+        resources :invitee_chats  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
