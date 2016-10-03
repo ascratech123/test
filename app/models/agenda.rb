@@ -6,6 +6,9 @@ class Agenda < ActiveRecord::Base
   belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
+  has_many :agenda_speakers
+
+  accepts_nested_attributes_for :agenda_speakers, allow_destroy: true
   
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date

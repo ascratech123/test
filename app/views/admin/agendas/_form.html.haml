@@ -27,22 +27,42 @@
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:agenda_type].join("") rescue nil 
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-          #new_category
+          #new_category      
 
             = f.custom_text_field_speaker :new_category, "Track Name *","background" => "false", :col => '12', :display_field => "#{f.object.agenda_type != "Add New Track" ? "none" : ""}"
-        - list_of_speakers = event_speakers_list(params[:event_id])
+        / - list_of_speakers = event_speakers_list(params[:event_id])
+        
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
               Speaker
-            .col-lg-7  
-              - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
-              - speaker_name << ["Add Speaker", 0]
-              %i.arrow.single
-              = f.select("agenda", "speaker_id", speaker_name, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-          #add_speaker
-            = f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }"
+            .col-lg-7
+              - count = f.object.agenda_speakers.count 
+              - val = 1
+              .venueFields
+                = f.fields_for :agenda_speakers do |field|
+                  - if val <= count or f.object.new_record?
+                    = render 'agenda_speakers_fields', f: field, val: val
+        %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
+          %div.bs-component
+            %div.form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+              %div.col-lg-7.addmoretext
+                = link_to_add_fields_for_event_field '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :agenda_speakers, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900"
+
+        / .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+        /   .form-group
+        /     %label.col-lg-4.control-label.ml-color--shades-white
+        /     .col-lg-7  
+        /       = f.fields_for :agenda_speakers do |field|
+        /         - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
+        /         - speaker_name << ["Add Speaker", 0]
+        /         %i.arrow.single
+        /         =# field.custom_text_field :label, "speaker_name",:value => 'tes'
+        /         = field.select("agenda_speaker", "speaker_id", speaker_id, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+        / .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+        /   #add_speaker
+        /     = f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group
@@ -101,14 +121,6 @@
             = back_button(:back)
   = render :partial => 'admin/layouts/more_links'
 :javascript
-  $("#agenda_speaker_id").change(function(){
-    value = $("#agenda_speaker_id").val();
-    if(value > 0){
-      $("#agenda_speaker_name").parent().parent().hide();
-    }else if(value == 0){
-      $("#agenda_speaker_name").parent().parent().show();
-    }
-  });
   $("#agenda_agenda_track_id").click(function(){
     value = $('#agenda_agenda_track_id').find(":selected").text();
     if(value == "Add New Track")

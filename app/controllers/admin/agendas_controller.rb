@@ -25,6 +25,7 @@ class Admin::AgendasController < ApplicationController
   def new
     agenda_data = Agenda.find(params[:id]) rescue Agenda.new
     @agenda = @event.agendas.build(agenda_data.attributes.except('id', 'created_at', 'updated_at', 'start_agenda_time', 'end_agenda_time'))
+    @agenda.agenda_speakers.build
     @spearkers = @event.speakers
     @import = Import.new if params[:import].present?
   end

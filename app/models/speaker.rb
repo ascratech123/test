@@ -3,6 +3,7 @@ class Speaker < ActiveRecord::Base
   belongs_to :event
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :agendas
+
   has_many :panels, as: :panel, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   has_many :analytics, :class_name => 'Analytic', :foreign_key => :viewable_id

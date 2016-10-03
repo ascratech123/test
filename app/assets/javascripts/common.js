@@ -302,6 +302,12 @@ $(window).load(function() {
   });
 });
 
+function add_fields_for_event_venue(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  $(".venueFields").append(content.replace(regexp, new_id));
+}
+
 function flightTime() {
     var hours = [
       '01', 

@@ -387,6 +387,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .result_statusdiv{width:75px;}
 .back_btn_header{display: inline-block; margin-top: 17px;}
 .search_header + div{width:85px;}
+.select-speaker{margin-bottom: 15px;}
 /* nilam css ends here */
 
 /*nilam*/
