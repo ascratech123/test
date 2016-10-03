@@ -388,31 +388,8 @@ class Invitee < ActiveRecord::Base
   def get_favorites(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-
-    # favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
-    # favorite_types = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
-
-    # favorite_types.each do |favorite_type|
-    #   if favorite_type == "Image"
-      Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id], :methods => [:image_url])
-    #   else
-    #     Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
-    #   end
-    # end
+    Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
   end
-
-  # def get_favorites_gallery(mobile_app_code,submitted_app)
-  #   mobile_application_ids = MobileApplication.where(submitted_code: mobile_app_code).pluck(:id)
-  #   event_ids = Event.where(mobile_application_id: mobile_application_ids).pluck(:id)
-  #   # event_ids = get_event_id(mobile_app_code,submitted_app)
-  #   invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-  #   binding.pry
-  #   favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
-  #   favorite_ids = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
-  #   # Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id]) rescue nil
-  #   Image.where(:imageable_type => favorite_ids).as_json(:only => [:id, :imageable_type], :methods => [:image_url]) if favorite_ids.present?
-  #   # Image.find(fav.favoratable_id) if fav.imageable_type == "Gallery"
-  # end
    
   def get_my_network_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
@@ -569,21 +546,18 @@ class Invitee < ActiveRecord::Base
     new_user
   end
 
-  def self.get_notification(notifications, user)
+  def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
-    if notifications.present?
-      notifications = notifications.where(:pushed => true)
-      notifications.each do |notification|
-        invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
-        if notification.group_ids.present?
-          notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
-        else
-          notification_ids << notification.id
-        end
+    notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
+    notifications.each do |notification|
+      invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
+      if notification.group_ids.present?
+        notification_ids << notification.id if user.present? and invitee_notification_ids.include? user.id#
+      else
+        notification_ids << notification.id
       end
-      notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     end
-    # notification_ids << get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
+    notification_ids << get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
      notifications = Notification.where(:id => notification_ids.flatten).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
@@ -598,14 +572,14 @@ class Invitee < ActiveRecord::Base
     #   groups.map{|group| invitee_ids = invitee_ids + group.invitee_ids}  
     #     notification_ids << notification.id if invitee_ids.include? self.id.to_s
     # end
-    # notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids])
+    # notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :ima$
     # notifications.present? ? notifications : []
     event_ids = get_event_id(mobile_app_code,submitted_app)
     user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
     notifications = Notification.where(:id => invitee_notifications.pluck(:notification_id))
-    notifications.as_json(:except => [:group_ids, :updated_at, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone]) 
+    notifications.as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at, :open, :unread], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
   end
 
   def get_read_notification(mobile_app_code,submitted_app)
