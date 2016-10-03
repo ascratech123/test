@@ -4,15 +4,12 @@ class Api::V1::InviteeChatsController < ApplicationController
 	def index
 		if params[:event_id] and params[:invitee_id].present?
 			@event = Event.find(params[:event_id])
-			@chats = @event.chats.where("sender_id = ? or member_ids = ?",params[:invitee_id],params[:invitee_id])
+			@chats = @event.chats.where("sender_id = ? or member_ids = ?",params[:invitee_id],params[:invitee_id]).order(created_at: :desc)
 			if @chats.present?
-				@recieve_chats_invitee_ids = @chats.pluck(:sender_id).uniq		
-				@send_chats_invitee_ids = @chats.pluck(:member_ids).uniq.map { |x| x.to_i }
-				#@send_chats_invitee_ids = @send_chats_invitee_ids.map{|val| val.split(',')}.flatten.uniq
-				#@send_chats_invitee_ids = @send_chats_invitee_ids.map {|i| i.to_i}
-				
-				@invitee_list = @recieve_chats_invitee_ids + @send_chats_invitee_ids 
-				@invitee_list = @invitee_list.uniq
+				#@recieve_chats_invitee_ids = @chats.pluck(:sender_id).uniq		
+				#@send_chats_invitee_ids = @chats.pluck(:member_ids).uniq.map { |x| x.to_i }
+				#@invitee_list = @recieve_chats_invitee_ids + @send_chats_invitee_ids 
+				@invitees_list = @chats.pluck(:sender_id,:member_ids).flatten.map { |x| x.to_i}.uniq
 				@invitees = Invitee.where("id IN (?)",@invitee_list)
 				invitees = []
 				@invitees.each do |invitee|
