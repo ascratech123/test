@@ -10,7 +10,7 @@ class Api::V1::InviteeChatsController < ApplicationController
 				#@send_chats_invitee_ids = @chats.pluck(:member_ids).uniq.map { |x| x.to_i }
 				#@invitee_list = @recieve_chats_invitee_ids + @send_chats_invitee_ids 
 				@invitees_list = @chats.pluck(:sender_id,:member_ids).flatten.map { |x| x.to_i}.uniq
-				@invitees = Invitee.where("id IN (?)",@invitee_list)
+				@invitees = Invitee.where("id IN (?)",@invitees_list)
 				invitees = []
 				@invitees.each do |invitee|
 					data = {}
