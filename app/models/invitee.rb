@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page
+  attr_accessor :password, :invitee_searches_page, :current_user_invitee_id # current_user_invitee_id attr used for api
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -115,6 +115,10 @@ class Invitee < ActiveRecord::Base
   def profile_picture
     self.profile_pic.url rescue ""
   end
+
+  def unread_chat_count
+
+  end 
 
   def Remark
     self.remark
