@@ -461,8 +461,8 @@ module ApplicationHelper
   def correct_user_polls_for_percentile(poll,option)
     percentage = 0
     user_polls = poll.user_polls if poll.user_polls.present?
+    total = user_polls.pluck(:answer).join(",").split(",").count
     if user_polls.present?
-      total = user_polls.count
       count = 0
       user_polls.each do |ans|
         count = count + 1 if ans.answer.split(',').include?(option)
