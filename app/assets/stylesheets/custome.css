@@ -44,6 +44,7 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
+.clear{clear: both;}
 /*test*/
 .test{position:relative;}
 .event_select123{position:absolute;top:16px;z-index:99999999999;}
@@ -89,6 +90,8 @@
 
 .mb10{margin-bottom: 10px;}
 .displayNone{display: none;}
+.text-left{text-align: left;}
+.addmoretext.text-left{text-align:left; margin-top:8px;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -428,6 +431,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .result_statusdiv{width:75px;}
 .back_btn_header{display: inline-block; margin-top: 17px;}
 .search_header + div{width:85px;}
+.select-speaker{margin-bottom: 15px;}
 /* nilam css ends here */
 
 /*nilam*/
