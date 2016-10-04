@@ -847,3 +847,31 @@ module ApplicationHelper
     dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
     dest_arr
   end
+
+  def store_url_for(params)
+    url = url_for(params)
+    if url.include?("//?")
+      url.sub("//?", "/store?")
+    else
+      url
+    end
+  end
+
+  def datetime_with_adjusted_offset(datetime, offset)
+    datetime + offset.to_i.seconds
+  end
+
+  def datetime_with_display_timezone(datetime, display_timezone)
+    "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
+  end
+
+  def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
+    time_with_offset = datetime_with_adjusted_offset(datetime, offset)
+    datetime_with_display_timezone(time_with_offset, display_timezone)
+  end
+
+  def get_notification_icon_by_action(notification)
+    hsh = {"abouts" => "about", "agendas" => "agenda", "speakers" => "speakers", "faqs" => "faq", "galleries" => "galler_1y", "feedbacks" => "feedback", "e_kits" => "e-kit","conversations" => "conversations","polls" => "polls_1","awards" => "awards_2","invitees" => "invitees","qnas" => "Q&A", "notes" => "note", "contacts" => "contact_us", "event_highlights" => "event_highlights","sponsors" => "sponsor", "my_profile" => "my_profile", "qr_code" => "qr_code","quizzes" => "polls","favourites" => "myfavourite","exhibitors" => "Exhibitor-breadcumb",'venue' => "venue", 'leaderboard' => "Leaderboard", "custom_page1s" => "custom", "custom_page2s" => "custom", "custom_page3s" => "custom","custom_page4s" => "custom","custom_page5s" => "custom", "chats" => "chat", "my_travels" => "travel","social_sharings" => "social_sharing"}
+    "coloured_icons/#{hsh[notification.action]}"
+  end
+end
