@@ -30,34 +30,56 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
-                          = get_percentage(number, poll, bar_color, poll_wall, 50)                        
+                          -percentage = get_user_poll_percentage(number,poll)
+                          = get_percentage(number, poll, bar_color, @poll_wall, 50, percentage)  
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                       
                       - if poll.option1.present?
-                        = get_percentage('option1', poll, bar_color, poll_wall, 50)                  
+                        - percentage = get_user_poll_percentage('option1',poll)
+                        = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                           
                       - if poll.option2.present?
-                        = get_percentage('option2', poll, bar_color, poll_wall, 40)
+                        - percentage = get_user_poll_percentage('option2',poll)
+                        = get_percentage('option2', poll, bar_color, @poll_wall, 40, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                        
                       - if poll.option3.present?
-                        = get_percentage('option3', poll, bar_color, poll_wall, 50)              
+                        - percentage = get_user_poll_percentage('option3',poll)
+                        = get_percentage('option3', poll, bar_color, @poll_wall, 50, percentage)        
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
 
                       - if poll.option4.present?
-                        = get_percentage('option4', poll, bar_color, poll_wall, 40)              
+                        - percentage = get_user_poll_percentage('option4',poll)
+                        = get_percentage('option4', poll, bar_color, @poll_wall, 40, percentage)        
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
                           
                       - if poll.option5.present?
-                        = get_percentage('option5', poll, bar_color, poll_wall, 40)   
+                        - percentage = get_user_poll_percentage('option5',poll)
+                        = get_percentage('option5', poll, bar_color, @poll_wall, 40, percentage)   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option6.present?
-                        = get_percentage('option6', poll, bar_color, poll_wall, 40)
+                        - percentage = get_user_poll_percentage('option6',poll)
+                        = get_percentage('option6', poll, bar_color, @poll_wall, 40, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option7.present?
-                        = get_percentage('option7', poll, bar_color, poll_wall, 50)                                     
+                        - percentage = get_user_poll_percentage('option7',poll)
+                        = get_percentage('option7', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                                                 
                       - if poll.option8.present?
-                        = get_percentage('option8', poll, bar_color, poll_wall, 50)              
+                        - percentage = get_user_poll_percentage('option8',poll)
+                        = get_percentage('option8', poll, bar_color, @poll_wall, 50, percentage)              
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option9.present?
-                        = get_percentage('option9', poll, bar_color, poll_wall, 50)              
+                        - percentage = get_user_poll_percentage('option9',poll)
+                        = get_percentage('option9', poll, bar_color, @poll_wall, 50, percentage)        
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
                       
                       - if poll.option010.present?
-                        = get_percentage('option010', poll, bar_color, poll_wall, 50)            
+                        - percentage = get_user_poll_percentage('option010',poll)
+                        = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)      
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
 
                       = show_field("Total number of response: ", poll.user_polls.count) rescue nil
                     
@@ -89,37 +111,59 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
+                          - percentage = get_user_poll_percentage(number,poll)
                           = get_percentage(number, poll, bar_color, poll_wall, 50)
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                         
                       - if poll.option1.present?
-                        = get_percentage('option1', poll, bar_color, @poll_wall, 50)
+                        - percentage = get_user_poll_percentage('option1',poll)
+                        = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                         
                       - if poll.option2.present?
-                        = get_percentage('option2', poll, bar_color, @poll_wall, 40)
+                        - percentage = get_user_poll_percentage('option2',poll)
+                        = get_percentage('option2', poll, bar_color, @poll_wall, 40, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                       
                       - if poll.option3.present?
-                        = get_percentage('option3', poll, bar_color, @poll_wall, 50)
+                        - percentage = get_user_poll_percentage('option3',poll)
+                        = get_percentage('option3', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                       
                       - if poll.option4.present?
-                        = get_percentage('option4', poll, bar_color, @poll_wall, 40)
+                        - percentage = get_user_poll_percentage('option4',poll)
+                        = get_percentage('option4', poll, bar_color, @poll_wall, 40, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                       
                       - if poll.option5.present?
-                        = get_percentage('option5', poll, bar_color, @poll_wall, 40)
+                        - percentage = get_user_poll_percentage('option5',poll)
+                        = get_percentage('option5', poll, bar_color, @poll_wall, 40, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option6.present?
-                        = get_percentage('option6', poll, bar_color, @poll_wall, 50)
+                        - percentage = get_user_poll_percentage('option6',poll)
+                        = get_percentage('option6', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option7.present?
-                        = get_percentage('option7', poll, bar_color, @poll_wall, 50)
+                        - percentage = get_user_poll_percentage('option7',poll)
+                        = get_percentage('option7', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option8.present?
-                        = get_percentage('option8', poll, bar_color, @poll_wall, 50)
+                        - percentage = get_user_poll_percentage('option8',poll)
+                        = get_percentage('option8', poll, bar_color, @poll_wall, 50, percentage)
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
                         
                       - if poll.option9.present?
-                        = get_percentage('option9', poll, bar_color, @poll_wall, 50)   
+                        - percentage = get_user_poll_percentage('option9',poll)
+                        = get_percentage('option9', poll, bar_color, @poll_wall, 50, percentage)   
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
                       - if poll.option010.present?
-                        = get_percentage('option010', poll, bar_color, @poll_wall, 50)    
+                        - percentage = get_user_poll_percentage('option010',poll)
+                        = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)    
+                        - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
    
 
                       = show_field("Total number of response: ", poll.user_polls.count) rescue nil
