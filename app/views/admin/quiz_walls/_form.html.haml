@@ -5,8 +5,8 @@
         %h4.heading-border.p-t-10
           Logo
           %span.editThemelinks  
-        = f.new_custom_file_browser_field "logo", "Quiz Wall logo (1280x300px) png only ", :id => "uploadBtn1", :value => (params[:action] == "create" and @quiz_wall.present?) ? @quiz_wall.logo_file_name : @quiz_wall.logo_file_name, :action => params[:action], :view_popup => {:image_path => "a.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
-        - if f.object.logo_file_name.present? 
+        = f.new_custom_file_browser_field "logo", "Quiz Wall logo (1280x300px) png only ", :id => "uploadBtn", :value => f.object.logo_file_name, :action => params[:action], "background" => "false", :view_popup => {:image_path => "a.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
+        - if f.object.logo_file_name.present? and ['edit','update'].include? params[:action]
           .col-lg-1
             - if @quiz_wall.logo.present?
               = link_to admin_event_quiz_wall_path(:event_id => @event.id, :id => @quiz_wall.id,:remove_logo_image => true), :class => "themeclose positionclose delete-wall-logo", :method => "put",data: { confirm: 'Are you sure?' } do

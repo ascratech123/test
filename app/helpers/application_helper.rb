@@ -786,8 +786,11 @@ end
     percentage = 0.0
     length = poll.user_polls.length
     answers = poll.user_polls.pluck(:answer)
+    # answers.each do |answer|
+    #   count = count + 1 if answer.downcase == option
+    # end
     answers.each do |answer|
-      count = count + 1 if answer.downcase == option
+      count = count + 1 if answer.split(',').include?(option)
     end
     percentage = (count/length.to_f) * 100 rescue 0 if length > 0
     percentage.round
