@@ -84,7 +84,7 @@
                     %span= comments.present? ? comments.count : 0
       - elsif find_notification.present?
         .feed 
-          %a{:href => "#{APP_URL}?resource_type=#{analytic.action}&resource_id="}
+          %a{:href => "#{APP_URL}?resource_type=#{find_notification.action}&resource_id="}
             .feedIcon
               - icon_url = get_notification_icon_by_action(find_notification)
               %img{:src => icon_url}/
