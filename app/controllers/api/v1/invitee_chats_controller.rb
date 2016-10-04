@@ -15,6 +15,7 @@ class Api::V1::InviteeChatsController < ApplicationController
 				invitees = []
 				@invitees_list.uniq.each do |invitee|
 					@invitee = Invitee.find_by_id(invitee)
+					next if invitee == params[:invitee_id].to_i
 					if @invitee.present?
 						data = {}
 						data["id"] = @invitee.id
