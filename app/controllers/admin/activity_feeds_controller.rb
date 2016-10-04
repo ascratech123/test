@@ -1,5 +1,5 @@
 class Admin::ActivityFeedsController < ApplicationController
-
+  layout 'admin'
   def index
     @event = Event.find(params[:event_id])
   end

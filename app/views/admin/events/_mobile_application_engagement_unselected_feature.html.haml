@@ -21,3 +21,5 @@
       
       - if show_card_except_event_features("social_sharings")
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"social_sharing.png", :objs => "", :url => "social_sharings"}
+      - if show_card_except_event_features("activity_feeds")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "social_sharing.png", :objs => "", :url => "activity_feeds"}
