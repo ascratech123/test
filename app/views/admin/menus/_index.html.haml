@@ -61,7 +61,7 @@
                 = builder.custom_radio_button_menu :status, "active","Active", :id => "option-1#{builder.object.id}", :default_checked => "#{builder.object.status == "active" ? "checked" : ""}",:class => "menu_status_active"
                 = builder.custom_radio_button_menu :status, "deactive", "Deactive", :id => "option-2#{builder.object.id}", :default_checked => "#{builder.object.status == "deactive" ? "checked" : ""}",:class => "menu_status_deactive"
           = builder.custom_text_area_field :description, "Message",:message_display => "#{custom_message_display(builder.object)}"
-          - if ['event_highlights', 'emergency_exits', "my_calendar","chats"].exclude?(builder.object.name)
+          - if ['event_highlights', 'emergency_exits', "my_calendar"].exclude?(builder.object.name)
             .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15
               .mdl-grid.p-v-5.form-group
                 .col-lg-4.mdl-typography--text-right
