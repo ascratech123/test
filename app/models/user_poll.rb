@@ -58,12 +58,13 @@ class UserPoll < ActiveRecord::Base
   def user_answer
     answer_count = self.answer.split(',').count
     if answer_count == 1 and (self.poll.attributes["option1"].present? or self.poll.attributes["option2"].present? or self.poll.attributes["option3"].present? or self.poll.attributes["option4"].present? or self.poll.attributes["option5"].present? or self.poll.attributes["option6"].present? or self.poll.attributes["option7"].present? or self.poll.attributes["option8"].present? or self.poll.attributes["option9"].present? or self.poll.attributes["option10"].present?)
-      self.answer.downcase == 'option010' ? self.poll.attributes['option10'] : self.poll.attributes[self.answer.downcase]
+      self.poll.attributes[self.answer.downcase]
+      # self.answer.downcase == 'option010' ? self.poll.attributes['option10'] : self.poll.attributes[self.answer.downcase]
     elsif self.poll.attributes["option_type"] == "Rating" or self.poll.attributes["option_type"] == "Textbox"
       self.answer
     else
-      # self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
-      self.answer.split(',').map{|value| value=="option010" ? self.poll.attributes["option10"] : self.poll.attributes[value]}.join(',')
+      self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
+      # self.answer.split(',').map{|value| value=="option010" ? self.poll.attributes["option10"] : self.poll.attributes[value]}.join(',')
     end
   end
 
