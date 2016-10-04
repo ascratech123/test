@@ -1,5 +1,20 @@
 module ApplicationHelper
 
+  def get_percentage(num, poll, bar_color, poll_wall, size)
+   result= "<p>"
+   (num.is_a? Numeric) ? result+= num : result+= poll.send(num)
+   percentage = get_user_poll_percentage(num,poll)
+   result+= "</p>"
+   result+= "<div class='progress'>"
+   result+= "<div class='pollwidth' style='width: 90%'>"
+   result+= "<div class='progress-bar progress-bar-2' style='width: '"+percentage.to_s+"'' role='progressbar' aria-valuemax='' aria-valuemin='0'  aria-valuenow='"+size.to_s+"' background-color: '"+bar_color+"'>"
+   result+= "</div></div>"
+   result+= percentage.to_s + '%'
+   result+= "</div>"
+   bar_color = ((bar_color == poll_wall.bar_color)? poll_wall.bar_color1 : poll_wall.bar_color) if percentage.present? and percentage != 0  
+   return result.html_safe
+  end
+
   def time_with_zone(datetime, zone=nil,format)
     if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
       datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
