@@ -651,7 +651,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
  .pick-a-color-markup .input-group-btn{position: absolute;right: 30px;top: -2px;}
  .save_button h4,.new_event_feature h4{color:#a9acbd; font-size: 20px; margin-bottom:20px;}
  .p-h-12{padding: 0px 5px !important;}
- .mdl-card.agendaHeight{min-height:auto;}
+ .mdl-card.agendaHeight{min-height:auto;background:#fff;}
  .form-horizontal .mdl-grid.mdl-card.mdl-shadow--1dp{box-sizing:border-box;padding: 5px 20px;}
  .setting .col-xl-3{width: 20%;}
  .topbar-left.blueheaderFont{ margin-left: 60px;}
