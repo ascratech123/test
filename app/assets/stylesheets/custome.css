@@ -83,6 +83,12 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+.addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+
+.form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
+
+.addMoreSpeaker{ border-radius: 50%;
+    display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
 .text-left{text-align: left;}
 .addmoretext.text-left{text-align:left; margin-top:8px;}
 .titleQuestion{margin-left:15px;}
