@@ -7,13 +7,14 @@ class Api::V1::InviteeChatsController < ApplicationController
 			@chats = @event.chats.where("sender_id = ? or member_ids = ?",params[:invitee_id],params[:invitee_id]).order(created_at: :desc)
 			if @chats.present?
 				
-				@recieve_chats_invitee_ids = @chats.pluck(:sender_id).uniq		
-				@send_chats_invitee_ids = @chats.pluck(:member_ids).uniq.map { |x| x.to_i }
-				@invitees_list = @recieve_chats_invitee_ids + @send_chats_invitee_ids
+				#@recieve_chats_invitee_ids = @chats.pluck(:sender_id).uniq		
+				#@send_chats_invitee_ids = @chats.pluck(:member_ids).uniq.map { |x| x.to_i }
+				#@invitees_list = @recieve_chats_invitee_ids + @send_chats_invitee_ids
 				
 				#@invitees_list = @chats.pluck(:sender_id,:member_ids).flatten.map { |x| x.to_i}.uniq
+				@invitees_list = @chats.pluck(:sender_id,:member_ids).flatten.map { |x| x.to_i}.uniq
 				invitees = []
-				@invitees_list.uniq.each do |invitee|
+				@invitees_list.each do |invitee|
 					@invitee = Invitee.find_by_id(invitee)
 					next if invitee == params[:invitee_id].to_i
 					if @invitee.present?
