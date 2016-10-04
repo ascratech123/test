@@ -26,7 +26,7 @@ class Agenda < ActiveRecord::Base
   default_scope { order('start_agenda_time asc') }
 
   def set_speaker_ids
-    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "")
+    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "") if self.speaker_ids.present?
   end
 
   # def speaker_names

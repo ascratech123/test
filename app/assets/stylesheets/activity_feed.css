@@ -2,7 +2,7 @@ body{margin:0; padding:0; font-size:14px; /*background:#7ac669;*/
 	   font-family: 'Helvetica';}
 body{height: auto;}
 ul,li,p{margin:0; padding:0;}
-.wrapper{width:100%;}
+.wrapper{width:100%; padding: 0 12px;}
 .wrapper h1{margin-left:30px;}
 .container{width:100%; padding: 0px;}
 .tabs li{list-style:none; display:inline-block;}
