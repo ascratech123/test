@@ -59,7 +59,8 @@ class UserPoll < ActiveRecord::Base
     elsif self.poll.attributes["option_type"] == "Rating" or self.poll.attributes["option_type"] == "Textbox"
       self.answer
     else
-      self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
+      # self.answer.split(',').map{|value| self.poll.attributes[value]}.join(',')
+      self.answer.split(',').map{|value| value=="option010" ? self.poll.attributes["option10"] : self.poll.attributes[value]}.join(',')
     end
   end
 
