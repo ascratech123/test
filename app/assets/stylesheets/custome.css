@@ -83,6 +83,13 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+ .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+ 
+  
+ .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
+ 
+ .addMoreSpeaker{ border-radius: 50%;
+     display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
   .ckeditor_custom {text-align: left;}
 .copyCustomContent button{background:#1CB1BA; border:0 none; padding:5px; color:#fff; cursor:pointer;}
