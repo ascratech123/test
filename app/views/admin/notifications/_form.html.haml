@@ -93,6 +93,10 @@
           .span.col-lg-1
             = link_to("?" ,"/whats_this/notification/general_information/select_root_destination.png", rel: "selecte_template", title: "Destination", :class =>"fancybox whatsImg")
 
+    .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-15
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+        
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
@@ -119,7 +123,7 @@
       /             Choose File 
       /           = f.file_field :image_for_show_notification,:id => "uploadBtn_image_for_show_notification", :class=>"gui-file"
       /           = text_field_tag("text_file_name","", id: "1uploadBtn_image_for_show_notification", class: "gui-input", :value => "#{f.object.image_for_show_notification_file_name.nil? ? "there is no Attachment Available !" : f.object.image_for_show_notification_file_name}")
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.show_on_activity
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
             %p.displayInlineBlock.multicitytxt  Show on Activity
@@ -158,6 +162,9 @@
 - if @notification.show_on_notification_screen == false
   :javascript
     $(".image_for_notification").hide();
+- if @notification.notification_type.present? and @notification.notification_type == "group" 
+  :javascript
+    $(".show_on_activity").hide();
 
 
 :javascript
@@ -176,9 +183,11 @@
   })
   $("#option1").click(function(){
     $("#group_check_boxes").hide();
+    $(".show_on_activity").show();
   });
   $("#option2").click(function(){
     $("#group_check_boxes").show();
+    $(".show_on_activity").hide();
   });
   $("#option3").click(function(){
     $("#date-start").parent().parent().parent().parent().hide();
