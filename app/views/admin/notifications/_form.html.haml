@@ -108,17 +108,17 @@
             = f.custom_radio_button_menu :show_on_notification_screen, true,"True", :id => 'show_on_notification_screen_true', :default_checked => (f.object.show_on_notification_screen == true or f.object.show_on_notification_screen.blank?) ? 'checked' : ''
             = f.custom_radio_button_menu :show_on_notification_screen, false,"False", :id => 'show_on_notification_screen_false', :default_checked => (f.object.show_on_notification_screen == false) ? 'checked' : ''
       
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.image_for_notification
-        .bs-component
-          .form-group
-            .span.col-lg-4
-              = f.label "Notification Image (200x200px)",:class =>"control-label", style: "float: right;"
-            .col-lg-7
-              %label.field.file
-                %span.button.btn-primary
-                  Choose File 
-                = f.file_field :image_for_show_notification,:id => "uploadBtn_image_for_show_notification", :class=>"gui-file"
-                = text_field_tag("text_file_name","", id: "1uploadBtn_image_for_show_notification", class: "gui-input", :value => "#{f.object.image_for_show_notification_file_name.nil? ? "there is no Attachment Available !" : f.object.image_for_show_notification_file_name}")
+      / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.image_for_notification
+      /   .bs-component
+      /     .form-group
+      /       .span.col-lg-4
+      /         = f.label "Notification Image (200x200px)",:class =>"control-label", style: "float: right;"
+      /       .col-lg-7
+      /         %label.field.file
+      /           %span.button.btn-primary
+      /             Choose File 
+      /           = f.file_field :image_for_show_notification,:id => "uploadBtn_image_for_show_notification", :class=>"gui-file"
+      /           = text_field_tag("text_file_name","", id: "1uploadBtn_image_for_show_notification", class: "gui-input", :value => "#{f.object.image_for_show_notification_file_name.nil? ? "there is no Attachment Available !" : f.object.image_for_show_notification_file_name}")
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
