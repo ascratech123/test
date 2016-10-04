@@ -1,4 +1,4 @@
-- if !objs.present? and !params[:admin_search].present?
+- if !objs.present? and !params[:admin_search].present? and !(current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "notifications", :url => "/admin/events/#{params[:event_id]}/notifications/new", :msg => 'test'}
 -elsif !objs.present? and params[:admin_search].present?
