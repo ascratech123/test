@@ -1,17 +1,8 @@
 - list_of_speakers = event_speakers_list(params[:event_id])
 - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
 - speaker_name << ["Add Speaker", 0]
-= f.select("agenda_speaker", "speaker_id", speaker_name, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control select-speaker'})
-.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
-	.add_speaker
-		= f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }"
-
-:javascript
-	$(".select-speaker").change(function(){		
-		value = $(this).val();
-		if(value > 0){
-			$(".add_speaker").parent().parent().hide();
-		}else if(value == 0){
-			$(".add_speaker").parent().show();
-		}
-	});    
+= f.select("agenda_speaker", "speaker_id[#{i}]", speaker_name, {:selected => f.object.speaker_id.present? ? f.object.speaker_id : (params[:agenda].present? ? params[:agenda][:speaker_id] : ''),:prompt => "#{(f.object.speaker_id.nil? and f.object.speaker_name.present?) ? f.object.speaker_name : "Select Speaker" }"}, {include_blank: 'None',:class=> 'select2-single form-control select-speaker'}) 
+- if false
+	.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+		.add_speaker
+			= f.custom_text_field_speaker :speaker_name, "Speaker Name *","background" => "false", :col => '12', :display_field => "#{(f.object.speaker_id != 0) ? "none" :  "" }"

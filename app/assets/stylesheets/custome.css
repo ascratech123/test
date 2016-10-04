@@ -44,6 +44,7 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
+.clear{clear: both;}
 /*test*/
 .test{position:relative;}
 .event_select123{position:absolute;top:16px;z-index:99999999999;}
@@ -82,7 +83,8 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
-
+.text-left{text-align: left;}
+.addmoretext.text-left{text-align:left; margin-top:8px;}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}

@@ -6,9 +6,9 @@ class Agenda < ActiveRecord::Base
   belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
-  has_many :agenda_speakers
+  # has_many :agenda_speakers
 
-  accepts_nested_attributes_for :agenda_speakers, allow_destroy: true
+  # accepts_nested_attributes_for :agenda_speakers, allow_destroy: true
   
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
@@ -16,12 +16,26 @@ class Agenda < ActiveRecord::Base
   
   before_validation :set_attr_accessor
   before_validation :set_time
-  after_save :set_speaker_name
+  # before_save :set_agenda_speakers
+  before_save :set_speaker_ids
+  # after_save :set_speaker_name
   after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
 
   default_scope { order('start_agenda_time asc') }
+
+  def set_speaker_ids
+    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "")
+  end
+
+  # def speaker_names
+  #   self.agenda_speakers.pluck(:speaker_name).join(', ')
+  # end
+
+  # def speaker_ids
+  #   self.speaker_name#agenda_speakers.pluck(:speaker_name).join(', ')
+  # end
 
   def set_attr_accessor
     if self.start_time_hour.blank?
@@ -84,6 +98,13 @@ class Agenda < ActiveRecord::Base
     if self.speaker_id.present? and self.speaker_id != 0
       name = Speaker.find(self.speaker_id).speaker_name
       self.update_column(:speaker_name ,name)
+    end
+  end
+
+  def set_agenda_speakers
+    if self.speaker_name_changed?  or self.agenda_speaker_form_data.present?
+      self.agenda_speakers = []
+      self.agenda_speakers_attributes = self.speaker_name.split(",").collect{|s, i| {"speaker_id" => 0, "speaker_name" => s}}
     end
   end
 
