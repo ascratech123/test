@@ -17,7 +17,7 @@ namespace :admin do
   get 'bee_editor/template' => 'bee_editors#template'
   get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
-  resources :time_zones
+  resources :time_zones, :notification_action_changes
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses,:change_roles
   resources :licensees do
@@ -49,12 +49,6 @@ namespace :admin do
     resources :quizzes do
       resources :user_quizzes
     end
-
-    # resources :invitee_datas do
-    #   collection do
-    #     post 'update_details'
-    #   end
-    # end
 
     resources :user_polls, :user_quizzes, :user_feedbacks, :likes, :comments
 
