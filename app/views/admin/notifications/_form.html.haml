@@ -128,7 +128,7 @@
           .col-lg-4.mdl-typography--text-right 
             %p.displayInlineBlock.multicitytxt  Show on Activity
           .col-lg-7.p-h-12 
-            = f.custom_radio_button_menu :show_on_activity, true,"True", :id => 'show_on_activity_true', :default_checked => (f.object.show_on_activity == true or f.object.show_on_activity.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :show_on_activity, true,"True", :id => 'show_on_activity_true', :default_checked => (f.object.show_on_activity == true) ? 'checked' : ''
             = f.custom_radio_button_menu :show_on_activity, false,"False", :id => 'show_on_activity_false', :default_checked => (f.object.show_on_activity == false) ? 'checked' : ''
 
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
