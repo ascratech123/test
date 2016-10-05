@@ -34,8 +34,18 @@ class Speaker < ActiveRecord::Base
   before_save :set_full_name
   after_save :update_last_updated_model
   after_update :update_agenda_speaker_name
-  after_destroy :empty_agenda_speaker_name_and_id
+  before_destroy :empty_agenda_speaker_name_and_id, :delete_speaker_name_from_agenda
   default_scope { order("sequence") }  
+
+  def delete_speaker_name_from_agenda
+    agenda_ids = self.all_agenda_ids.split(',')
+    agenda_ids = agenda_ids.reject { |e| e.to_s.empty? }
+    agenda_ids.each do |agenda_id|
+      agenda = Agenda.find(agenda_id)
+      agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
+      agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name]).join(","))
+    end if agenda_ids.present?
+  end
 
 
   def update_agenda_speaker_name

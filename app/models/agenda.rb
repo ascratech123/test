@@ -6,9 +6,6 @@ class Agenda < ActiveRecord::Base
   belongs_to :agenda_track
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
-  # has_many :agenda_speakers
-
-  # accepts_nested_attributes_for :agenda_speakers, allow_destroy: true
   
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
@@ -22,6 +19,7 @@ class Agenda < ActiveRecord::Base
   after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model, :update_agenda_speakers
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
+  before_destroy :destroy_id_from_speaker
 
   default_scope { order('start_agenda_time asc') }
 
@@ -29,12 +27,27 @@ class Agenda < ActiveRecord::Base
     self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "") if self.speaker_ids.present?
   end
 
+  def destroy_id_from_speaker
+    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
+    speaker_ids.each do |speaker_id|
+      speaker = Speaker.find(speaker_id)
+      agenda_ids = speaker.all_agenda_ids.to_s.split(",")
+      speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(","))
+    end if speaker_ids.present?
+  end
+
   def update_agenda_speakers
     speaker_ids = self.speaker_ids.split(',')
-    result = []
+    speaker_names = []
     speaker_ids.each do |speaker_id|
-      result <<  Speaker.find(speaker_id).update_column(:agenda_id, self.id)
+      speaker = Speaker.find(speaker_id)
+      agenda_ids = (speaker.all_agenda_ids.to_s.split(",") + [self.id.to_s]).uniq.join(",")
+      speaker.update_column(:all_agenda_ids, agenda_ids)
+      speaker_names << speaker.speaker_name
     end if speaker_ids.present?
+    all_speaker_names = (self.speaker_names.to_s.split(",") + speaker_names).uniq.join(",")
+    self.update_column("all_speaker_names", all_speaker_names)
   end
 
   # def speaker_names
