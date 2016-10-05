@@ -30,11 +30,12 @@ class Speaker < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
-  after_create :set_event_timezone
+  #after_create :set_event_timezone
   before_save :set_full_name
   after_save :update_last_updated_model
   after_update :update_agenda_speaker_name
-  before_destroy :empty_agenda_speaker_name_and_id, :delete_speaker_name_from_agenda
+  after_destroy :empty_agenda_speaker_name_and_id
+  before_destroy :delete_speaker_name_from_agenda
   default_scope { order("sequence") }  
 
   def delete_speaker_name_from_agenda

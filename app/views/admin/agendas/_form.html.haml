@@ -32,29 +32,31 @@
             = f.custom_text_field_speaker :new_category, "Track Name *","background" => "false", :col => '12', :display_field => "#{f.object.agenda_type != "Add New Track" ? "none" : ""}"
         / - list_of_speakers = event_speakers_list(params[:event_id])
         
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{:style => 'margin-top:30px', :id => 'group_check_boxes'}
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{ :id => 'group_check_boxes'}
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
               Speaker
-            .col-lg-7.notification
+            .col-lg-7.notification.agendaDropdown
               - list_of_speakers = event_speakers_list(params[:event_id])
               - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
               - speaker_ids = f.object.speaker_ids.to_s.split(", ")
               .agendaSpeakerCheckboxes
                 .usersep
-                  Select Speaker
-                - for speaker in @event.speakers
-                  .md-checkbox
-                    %label
-                      = check_box_tag "[agenda][speaker_ids][]", speaker.id, (speaker_ids.include? speaker.id.to_s), :class => "", :id => "agenda_speaker_ids#{speaker.id}"
-                      %span.checkbox 
-                      = speaker.speaker_name           
+                  %a{:href => 'javascript:void(0)', :onclick => "agenda_speaker_dropdown()", :class => "dropbtn"}
+                    Select Speaker
+                #myDropdown
+                  - for speaker in @event.speakers
+                    .md-checkbox
+                      %label
+                        = check_box_tag "[agenda][speaker_ids][]", speaker.id, (speaker_ids.include? speaker.id.to_s), :class => "", :id => "agenda_speaker_ids#{speaker.id}"
+                        %span.checkbox 
+                        = speaker.speaker_name
             = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
               %i.material-icons.mdl-color-text--white
                 add
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           #add_speaker
-            = f.custom_text_field_speaker :speaker_names, "Speaker Names (Comma seperated) *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }", :value => f.object.speaker_names
+            = f.custom_text_field_speaker :speaker_names, "Add Speaker (Comma seperated) *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_id != 0 ? "none" :  "" }", :value => f.object.speaker_names
 
             - if false
               .col-lg-7

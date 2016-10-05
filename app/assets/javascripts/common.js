@@ -764,7 +764,7 @@ $(document).on('change','#agenda_speaker_id',function(){
 });
 
 $(document).on("click", ".addMoreSpeaker", function(){
-  $('#add_speaker .form-group').show();
+  $('#add_speaker .form-group').toggle();
 })
 
 $(document).on('keyup', "#agenda_speaker_names", function(e) {
@@ -775,4 +775,15 @@ $(document).on('keyup', "#agenda_speaker_names", function(e) {
     $(this).val(value.slice(0, -1));
     alert("You cannot add more than " + (allow + 1));
   }
+});
+
+
+/*function agenda_speaker_dropdown() {
+  alert('asdasda');
+  document.getElementById("myDropdown").classList.toggle("show");
+} */
+$(document).ready(function(){
+  $('.usersep').click(function(){
+  $('#myDropdown').toggle();
+  });
 });
