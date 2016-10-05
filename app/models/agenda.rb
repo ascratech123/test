@@ -19,7 +19,7 @@ class Agenda < ActiveRecord::Base
   # before_save :set_agenda_speakers
   before_save :set_speaker_ids
   # after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model
+  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model, :update_agenda_speakers
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
 
@@ -27,6 +27,14 @@ class Agenda < ActiveRecord::Base
 
   def set_speaker_ids
     self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "") if self.speaker_ids.present?
+  end
+
+  def update_agenda_speakers
+    speaker_ids = self.speaker_ids.split(',')
+    result = []
+    speaker_ids.each do |speaker_id|
+      result <<  Speaker.find(speaker_id).update_column(:agenda_id, self.id)
+    end if speaker_ids.present?
   end
 
   # def speaker_names
