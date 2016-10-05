@@ -5,6 +5,7 @@ class Admin::NotificationsController < ApplicationController
   before_filter :authenticate_user, :authorize_event_role, :find_features
   before_filter :find_groups, :only => [:new, :create, :edit, :update]
   before_filter :check_user_role, :except => [:index]
+  before_filter :get_associated_data, :only => [:edit,:update]
   def index
     @notifications = @notifications.paginate(:page => params[:page], :per_page => 10)
   end
@@ -12,6 +13,7 @@ class Admin::NotificationsController < ApplicationController
   def new
     @notification = @event.notifications.build
   end
+
 
   def create
     @notification = @event.notifications.build(notification_params)
@@ -66,5 +68,14 @@ class Admin::NotificationsController < ApplicationController
     if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       redirect_to admin_dashboards_path
     end  
+  end
+  def get_associated_data
+    if @notification.action.present?
+      feature_name = @notification.action.downcase.pluralize if @notification.action != "E-Kit"
+      feature_name = "e_kits" if @notification.action == "E-Kit"
+      if ["speakers","polls","quizzes","agendas","e_kits"].include? feature_name
+        @data = instance_variable_set("@"+feature_name, @event.send(feature_name))
+      end
+    end
   end
 end
