@@ -104,6 +104,7 @@ class Notification < ActiveRecord::Base
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
+    self.create_notification_in_analytic
     # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     invitees = Invitee.where(:event_id => self.event_id)
