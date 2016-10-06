@@ -30,6 +30,7 @@ class Comment < ActiveRecord::Base
     conversation = Conversation.find_by_id(self.commentable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
     conversation.update_column(:updated_at, self.updated_at)
+    conversation.update_column(:last_interaction_at, self.updated_at)
   end
 
 
@@ -43,7 +44,7 @@ class Comment < ActiveRecord::Base
   end
 
   def update_conversation
-    Conversation.find_by_id(self.commentable_id).update_column(:updated_at, self.updated_at) rescue nil
+    Conversation.find_by_id(self.commentable_id).update_columns(updated_at: Time.now.utc, last_interaction_at: Time.now.utc)
   end
 
   def self.get_comments(conversations, start_event_date, end_event_date)
