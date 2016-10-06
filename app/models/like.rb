@@ -12,7 +12,7 @@ class Like < ActiveRecord::Base
   after_destroy :update_conversation, :update_conversation_records_for_destroy
 
   def update_conversation
-		Conversation.find_by_id(self.likable_id).update_column(:updated_at, Time.now.utc) rescue nil
+		Conversation.find_by_id(self.likable_id).update_columns(updated_at: Time.now.utc, last_interaction_at: Time.now.utc)
 	end
 
   def update_conversation_records_for_create
