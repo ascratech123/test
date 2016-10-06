@@ -12,6 +12,7 @@ class Api::V1::ConversationsController < ApplicationController
         conversation = event.conversations.new(:description => params[:description], :user_id => params[:user_id] ) 
       end
       if conversation.save
+        conversation.update_column('last_interaction_at',conversation.updated_at)
         render :status=>406,:json=>{:status=>"Success",:message=>"Conversation Created Successfully.", :id => conversation.id, :visible_status => conversation.status, :updated_at => conversation.updated_at, :image_url => conversation.image_url, :company_name => conversation.company_name, :user_name => conversation.user_name, :first_name => conversation.user.first_name, :last_name => conversation.user.last_name, :formatted_created_at_with_event_timezone => conversation.formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone => conversation.formatted_updated_at_with_event_timezone, :last_interaction_at => conversation.last_interaction_at}
       else
         render :status=>406,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{conversation.errors.full_messages.join(" , ")}" }
