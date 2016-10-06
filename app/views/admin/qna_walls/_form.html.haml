@@ -59,9 +59,9 @@
           Font Colors
           %span.editThemelinks  
       %p.OrTxt
-      = f.custom_text_field :font_color, "Font Color 1", :value => @qna_wall.font_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.font_color.present?) ? "has-success" : ""}"  
+      = f.custom_text_field :font_color, "Font color for tab heading", :value => @qna_wall.font_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.font_color.present?) ? "has-success" : ""}"  
       %p.OrTxt
-      = f.custom_text_field :sub_text_color, "Font Color 2", :value => @qna_wall.sub_text_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.sub_text_color.present?) ? "has-success" : ""}"      
+      = f.custom_text_field :sub_text_color, "Font color for question text", :value => @qna_wall.sub_text_color, :class => 'pick-a-color', :view_popup => {:image_path => "a.png", :rel=> "background_color", :title => "Background Color"}, :admin_theme => "#{(@qna_wall.sub_text_color.present?) ? "has-success" : ""}"      
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10
