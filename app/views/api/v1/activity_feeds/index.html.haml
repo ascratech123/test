@@ -11,33 +11,23 @@
     //   %link{:href => "/assets/css/fonts.css", :rel => "stylesheet", :type => "text/css"}/
     = stylesheet_link_tag "activity_feed.css", "fonts.css"
   - if @background_image.present?
-    %body{:style=>"background-image: url(#{@background_image});background-size:cover;background-repeat: no-repeat; background-attachment:fixed;"} 
-      .container
-        .wrapper
-          %h1
-          - if session['invitee_id'].present? and params[:my_feed].present?
-            #analytics
-              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-            .centerAlign#loadingText_activity
-          -elsif params[:social].present?
-            #eventAnalytics
-              = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-            .centerAlign#loadingText_activity
-          = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
-  -elsif @background_color.present?
-    %body{:style => "background:##{@background_color};"}
-      .container
-        .wrapper
-          %h1
-          - if session['invitee_id'].present? and params[:my_feed].present?
-            #analytics
-              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
-            .centerAlign#loadingText_activity
-          -elsif params[:social].present?
-            #eventAnalytics
-              = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
-            .centerAlign#loadingText_activity
-          = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"            
+    - style = "background-image: url(#{@background_image});background-size:cover;background-repeat: no-repeat; background-attachment:fixed;"
+  - else
+    - style = "background:##{@background_color};"
+  %body{:style=>style} 
+    .container
+      .wrapper
+        %h1
+        - if params[:social].present?
+          #analytics
+            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+          .centerAlign#loadingText_activity
+        -elsif params[:social].blank?
+          #eventAnalytics
+            Comming Soon
+          .centerAlign#loadingText_activity
+        = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
+            
 :javascript
   $(document).ready(function(){
     $('.tabs li').click(function(){
