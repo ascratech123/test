@@ -109,21 +109,21 @@
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-15
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10.m-b-15
-        
+          Notification Type 
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
-            %p.displayInlineBlock.multicitytxt  Push
+            %p.displayInlineBlock.multicitytxt Send as Push Message
           .col-lg-7.p-h-12 
-            = f.custom_radio_button_menu :push, true,"True", :id => 'push_true', :default_checked => (f.object.push == true or f.object.push.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :push, false,"False", :id => 'push_false', :default_checked => (f.object.push == false) ? 'checked' : ''
+            = f.custom_radio_button_menu :push, true,"Yes", :id => 'push_true', :default_checked => (f.object.push == true or f.object.push.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :push, false,"No", :id => 'push_false', :default_checked => (f.object.push == false) ? 'checked' : ''
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
           .col-lg-4.mdl-typography--text-right 
             %p.displayInlineBlock.multicitytxt  Show on Notification Screen
           .col-lg-7.p-h-12 
-            = f.custom_radio_button_menu :show_on_notification_screen, true,"True", :id => 'show_on_notification_screen_true', :default_checked => (f.object.show_on_notification_screen == true or f.object.show_on_notification_screen.blank?) ? 'checked' : ''
-            = f.custom_radio_button_menu :show_on_notification_screen, false,"False", :id => 'show_on_notification_screen_false', :default_checked => (f.object.show_on_notification_screen == false) ? 'checked' : ''
+            = f.custom_radio_button_menu :show_on_notification_screen, true,"Yes", :id => 'show_on_notification_screen_true', :default_checked => (f.object.show_on_notification_screen == true or f.object.show_on_notification_screen.blank?) ? 'checked' : ''
+            = f.custom_radio_button_menu :show_on_notification_screen, false,"No", :id => 'show_on_notification_screen_false', :default_checked => (f.object.show_on_notification_screen == false) ? 'checked' : ''
       
       / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.image_for_notification
       /   .bs-component
@@ -136,13 +136,14 @@
       /             Choose File 
       /           = f.file_field :image_for_show_notification,:id => "uploadBtn_image_for_show_notification", :class=>"gui-file"
       /           = text_field_tag("text_file_name","", id: "1uploadBtn_image_for_show_notification", class: "gui-input", :value => "#{f.object.image_for_show_notification_file_name.nil? ? "there is no Attachment Available !" : f.object.image_for_show_notification_file_name}")
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.show_on_activity
-        .mdl-grid.p-v-5.form-group.mobiappstype
-          .col-lg-4.mdl-typography--text-right 
-            %p.displayInlineBlock.multicitytxt  Show on Activity
-          .col-lg-7.p-h-12 
-            = f.custom_radio_button_menu :show_on_activity, true,"True", :id => 'show_on_activity_true', :default_checked => (f.object.show_on_activity == true) ? 'checked' : ''
-            = f.custom_radio_button_menu :show_on_activity, false,"False", :id => 'show_on_activity_false', :default_checked => (f.object.show_on_activity == false) ? 'checked' : ''
+      - if @event.event_features.pluck(:name).include? "activity_feeds"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.show_on_activity
+          .mdl-grid.p-v-5.form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right 
+              %p.displayInlineBlock.multicitytxt Show on Activity Feed
+            .col-lg-7.p-h-12 
+              = f.custom_radio_button_menu :show_on_activity, true,"Yes", :id => 'show_on_activity_true', :default_checked => (f.object.show_on_activity == true) ? 'checked' : ''
+              = f.custom_radio_button_menu :show_on_activity, false,"No", :id => 'show_on_activity_false', :default_checked => (f.object.show_on_activity == false) ? 'checked' : ''
 
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess
         .mdl-grid.p-v-5.form-group.mobiappstype
