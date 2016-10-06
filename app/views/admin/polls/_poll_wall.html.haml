@@ -2,7 +2,7 @@
   %head
     %title Hobnob
     %meta{:charset => "utf-8"}
-    %meta{'http-equiv'=>'refresh', :content => '60'}
+    / %meta{'http-equiv'=>'refresh', :content => '60'}
     %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
     %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
     %meta{:content => "", :name => "description"}
@@ -80,8 +80,8 @@
                         - percentage = get_user_poll_percentage('option010',poll)
                         = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)      
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
-
-                      = show_field("Total number of response: ", poll.user_polls.count) rescue nil
+                      %span{:style=>"color:#{@poll_wall.font_color};"}  
+                        = show_field("Total responses: ", poll.user_polls.count) rescue nil
                     
       %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
       %script{:src => "js/bootstrap.min.js"}
@@ -90,7 +90,7 @@
       %script{:src => "js/ie10-viewport-bug-workaround.js"}
       %script{:src => "js/base.min.js"}
   - elsif @poll_wall.present? and @poll_wall.background_color.present?
-    %body.main-events{:style=>"background-color: #{@poll_wall.background_color}"}    
+    %body.main-events{:style=>"background-color: #{@poll_wall.background_color};padding: 0px;"}    
       .container.poll-container{:role => "main", :style =>"display:inline-block;width:100%;background-color: #{@poll_wall.background_color}"}
         .col-xs-12.col-lg-12
           .row
@@ -165,8 +165,8 @@
                         = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)    
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
    
-
-                      = show_field("Total number of response: ", poll.user_polls.count) rescue nil
+                      %span{:style=>"color:#{@poll_wall.font_color};"}   
+                        = show_field("Total responses: ", poll.user_polls.count) rescue nil
                     
       %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
       %script{:src => "js/bootstrap.min.js"}
