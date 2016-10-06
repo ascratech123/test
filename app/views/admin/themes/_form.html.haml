@@ -14,12 +14,12 @@
         - nested_attr_obj = (f.object.new_record? ? @theme.events.build : @event)
         = f.fields_for :events, nested_attr_obj  do |event|
           - if @event.present? and @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
-            = event.new_custom_file_browser_field "logo", "Event listing logo (200x200px) png only ", :id => "uploadBtn", :value => (params[:action] == "create" and @logo_file_name.present?) ? @logo_file_name : nested_attr_obj.logo_file_name, :action => params[:action], :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventListingLogo.jpg", :rel=> "event_logo", :title => "Event Logo"}
+            = event.new_custom_file_browser_field "logo", "Event listing logo (200x200px) png only ", :id => "uploadBtn", :value => (params[:action] == "create" and @logo_file_name.present?) ? @logo_file_name : nested_attr_obj.logo_file_name, :action => params[:action], "background" => "false", :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventListingLogo.jpg", :rel=> "event_logo", :title => "Event Logo"}
             - if old_event.present?
               .field_with_errors{:style => "margin-left: 35%;"}
                 .span{:class => "errorMessage"}
                   = old_event.errors.messages[:logo].join("") rescue nil
-          = event.new_custom_file_browser_field "inside_logo", "Event logo (1280x300px) png only ", :id => "uploadBtn1", :value => (params[:action] == "create" and @inside_file_name.present?) ? @inside_file_name : nested_attr_obj.inside_logo_file_name, :action => params[:action], :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventLogo.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
+          = event.new_custom_file_browser_field "inside_logo", "Event logo (1280x300px) png only ", :id => "uploadBtn1", :value => (params[:action] == "create" and @inside_file_name.present?) ? @inside_file_name : nested_attr_obj.inside_logo_file_name, :action => params[:action], "background" => "false", :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventLogo.jpg", :rel=> "event_listing_logo", :title => "Event Listing Logo"}
           - if old_event.present?
             .field_with_errors{:style => "margin-left: 35%;"}
               .span{:class => "errorMessage"}
