@@ -404,7 +404,7 @@ class Analytic < ActiveRecord::Base
   end
   
   def get_comments(id)
-    Comment.where(:commentable_id => id, :commentable_type => "Conversation")
+    Comment.where(:commentable_id => id, :commentable_type => "Conversation",:analytic_id => self.id)
   end
 
   def get_shares(id)

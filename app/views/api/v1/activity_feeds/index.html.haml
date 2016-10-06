@@ -16,11 +16,13 @@
         .wrapper
           %h1
           - if session['invitee_id'].present? and params[:my_feed].present?
-            = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
             #analytics
+              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
+            .centerAlign#loadingText_activity
           -elsif params[:social].present?
-            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
             #eventAnalytics
+              = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+            .centerAlign#loadingText_activity
           = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
   -elsif @background_color.present?
     %body{:style => "background:##{@background_color};"}
@@ -28,11 +30,13 @@
         .wrapper
           %h1
           - if session['invitee_id'].present? and params[:my_feed].present?
-            = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
             #analytics
+              = render :partial =>"activity_feed", :locals => {:analytics => @analytics}
+            .centerAlign#loadingText_activity
           -elsif params[:social].present?
-            = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
             #eventAnalytics
+              = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
+            .centerAlign#loadingText_activity
           = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"            
 :javascript
   $(document).ready(function(){

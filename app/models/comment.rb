@@ -93,7 +93,7 @@ class Comment < ActiveRecord::Base
   def create_analytic_record
     event_id = Invitee.find_by_id(self.user_id).event_id rescue nil
     analytic = Analytic.new(viewable_type: self.commentable_type, viewable_id: self.commentable_id, action: "comment", invitee_id: self.user_id, event_id: event_id, platform: platform)
-    analytic.save rescue nil
+    self.update_column("analytic_id",analytic.id) if analytic.save
   end
 
   def self.get_top_commented(count, type, event_id, from_date, to_date)
