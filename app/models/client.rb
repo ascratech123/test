@@ -119,7 +119,7 @@ class Client < ActiveRecord::Base
   end
 
   def self.menu_icon
-    {"invitees" => "Attendees", "polls" => "Polls", "faqs" => "FAQ", "abouts" => "About", "speakers" => "Speaker", "conversations" => "Conversations", "e_kits" => "Ekit", "awards" => "Awards", "qnas" => "qnas", "About" => "About", "agendas" => "Agenda", "contacts" => "contact", "sponsors" => "Sponsor", "notes" => "Notes", "event_highlights" => "event_highlights", "Faqs" => "FAQ", "galleries" => "Gallery", "emergency_exits" => "emergency_exits", "feedbacks" => "Feedback", "attendees" => "Attendees", "venue" => "Venue", "my_calendar" => "my_calendar", "my_profile" => "my_profile", "quizzes" => "Quiz", "qr_code" => "qr_code", "favourites" => "my_favorite", "exhibitors" => "Exhibitor", 'leaderboard' => 'Leaderboard',"my_travels" => "my_travel"}
+    {"invitees" => "Attendees", "polls" => "Polls", "faqs" => "FAQ", "abouts" => "About", "speakers" => "Speaker", "conversations" => "Conversations", "e_kits" => "Ekit", "awards" => "Awards", "qnas" => "qnas", "About" => "About", "agendas" => "Agenda", "contacts" => "contact", "sponsors" => "Sponsor", "notes" => "Notes", "event_highlights" => "event_highlights", "Faqs" => "FAQ", "galleries" => "Gallery", "emergency_exits" => "emergency_exits", "feedbacks" => "Feedback", "attendees" => "Attendees", "venue" => "Venue", "my_calendar" => "my_calendar", "my_profile" => "my_profile", "quizzes" => "Quiz", "qr_code" => "qr_code", "favourites" => "my_favorite", "exhibitors" => "Exhibitor", 'leaderboard' => 'Leaderboard',"my_travels" => "my_travel","activity_feeds" => "activity_feed","chats" => "one_on_one_chat"}
   end
 
   def self.get_client_by_id(id)
