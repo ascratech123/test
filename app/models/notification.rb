@@ -74,7 +74,7 @@ class Notification < ActiveRecord::Base
     if notifications.present?
       notifications.each do |notification|
         # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
-        current_time_in_time_zone = Time.now + self.event_timezone_offset.to_i.seconds
+        current_time_in_time_zone = Time.now + notification.event_timezone_offset.to_i.seconds
         if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
           event = notification.event
           if event.mobile_application_id.present?

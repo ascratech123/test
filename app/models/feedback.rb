@@ -9,7 +9,7 @@ class Feedback < ActiveRecord::Base
   validates :option1, :option2, presence: { :message => "This field is required." }, if: Proc.new { |object| object.option_type == "Radio" || object.option_type == "Checkbox"}
 
   before_create :set_sequence_no
-  after_create :set_description_value, :set_event_timezone
+  after_create :set_description_value#, :set_event_timezone
   after_save :update_last_updated_model
 
   default_scope { order("sequence") }
@@ -46,19 +46,19 @@ class Feedback < ActiveRecord::Base
     end
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 
   def created_at_with_event_timezone
-    self.created_at + self.event_timezone_offset.to_i.seconds
+    self.created_at + self.event.event_timezone_offset.to_i.seconds
   end
 
   def updated_at_with_event_timezone
-    self.created_at + self.event_timezone_offset.to_i.seconds
+    self.created_at + self.event.event_timezone_offset.to_i.seconds
   end
 
 end
