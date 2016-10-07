@@ -51,10 +51,12 @@ class Speaker < ActiveRecord::Base
 
   def update_agenda_speaker_name
     if self.speaker_name_changed?
-      agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      # agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      agendas = Agenda.where(:id => self.all_agenda_ids.to_s.split(","))
       if agendas.present?
         agendas.each do |agenda|
-          agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
+          agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
+          agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name_was] + [self.speaker_name]).join(","))
           agenda.update_last_updated_model
         end  
       end
