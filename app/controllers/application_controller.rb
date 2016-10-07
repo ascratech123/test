@@ -333,9 +333,9 @@ class ApplicationController < ActionController::Base
   # end
 
   def check_for_access
-    # if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
-    #   redirect_to admin_prohibited_accesses_path
-    if params[:format].present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+    if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    elsif (params[:format].present? and params["export_type"].present? and ["admin/speakers","admin/feedbacks","admin/user_feedbacks"].include? params[:controller] and(!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
     end
     if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
