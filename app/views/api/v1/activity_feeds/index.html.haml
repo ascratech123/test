@@ -18,13 +18,13 @@
     .container
       .wrapper
         %h1
-        - if params[:social].present?
+        - if params[:social].blank?
           #analytics
             = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
           .centerAlign#loadingText_activity
-        -elsif params[:social].blank?
+        -elsif params[:social].present?
           #eventAnalytics
-            Comming Soon
+            Coming Soon
           .centerAlign#loadingText_activity
         = link_to '', store_url_for(params.merge(:page => params[:page].to_i + 1)), :class => 'load-more-posts colorFFF', :remote => true, :id => "load-more-posts"   
             
