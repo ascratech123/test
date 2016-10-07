@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   def load_filter
     if params[:key].present? 
       authenticate_user_from_token!
-    elsif (params["controller"] == "api/v1/events" and params["key"].blank?)
+    elsif (["api/v1/events", "api/v1/social_feeds"].include? params["controller"] and params["key"].blank?)
       session['invitee_id'] = nil
     else
       session['invitee_id'] = nil  
