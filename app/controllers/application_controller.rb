@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   def check_licensee_expiry
     if (current_user.present? and !current_user.has_role? :super_admin)
       licensee_admin = current_user.get_licensee_admin
-      if licensee_admin.present? and (licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today or licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today)
+      if licensee_admin.present? and (licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today or licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today) and licensee_admin.status != "active"
 
         sign_out current_user
         session[:date_error] = "Your account is deactive, Please contact admin."

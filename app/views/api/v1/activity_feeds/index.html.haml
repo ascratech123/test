@@ -18,11 +18,11 @@
     .container
       .wrapper
         %h1
-        - if params[:social].present?
+        - if params[:social].blank?
           #analytics
             = render :partial =>"activity_feed", :locals => {:analytics => @event_analytics}
           .centerAlign#loadingText_activity
-        -elsif params[:social].blank?
+        -elsif params[:social].present?
           #eventAnalytics
             Comming Soon
           .centerAlign#loadingText_activity

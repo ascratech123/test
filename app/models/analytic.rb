@@ -251,9 +251,10 @@ class Analytic < ActiveRecord::Base
       user_engagement += ['One on one chat'] if event.event_features.map{|f| f.name}.include? 'chats'
       user_engagement.each do |engagement|
         (0..23).each do |hour|
-          q_time = today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00"
+          time = (today_date.strftime('%Y/%m/%d ') + hour.to_s + ":00").to_datetime
+          q_time = time#.beginning_of_hour
           # q_time = q_time.to_datetime.in_time_zone(event.timezone).beginning_of_hour
-          q_time = (q_time.to_datetime + event.timezone_offset.to_i.seconds).beginning_of_hour
+          # q_time = (q_time.to_datetime + event.timezone_offset.to_i.seconds).beginning_of_hour
           if engagement == 'Favorite'
             type = ['Invitee', 'Sponsor', 'Agenda', 'Agendas', 'Sessions', 'Speaker', 'Speakers', 'Exhibitor', 'Exhibitors']
             count = Favorite.where('favoritable_type IN (?) and event_id = ? and created_at >= ? and created_at <= ?', type, event_id, q_time.to_datetime, (q_time.to_datetime + 1.hour)).count
@@ -273,7 +274,8 @@ class Analytic < ActiveRecord::Base
           else
             count = analytics.where('created_at >= ? and created_at <= ? and viewable_type = ? and action IN (?)', q_time.to_datetime, (q_time.to_datetime + 1.hour), engagement, Analytic::VIEWABLE_TYPE_TO_ACTION[engagement]).count
           end
-          hsh[q_time.strftime("%k").to_i] = count
+          time = (time + event.timezone_offset.to_i.seconds).beginning_of_hour.strftime("%k")
+          hsh[time.to_i] = count
         end
         (0..23).each do |hour|
           hsh[hour] = 0 if hsh[hour].blank?

@@ -52,7 +52,7 @@ class EventFeature < ActiveRecord::Base
   end
 
   def update_event_activity_feed
-    if (self.status == "deactive" or self.menu_visibilty == "no") 
+    if (self.status == "deactive" or self.menu_visibilty == "inactive") 
       self.hide_event_activity_feed
     end
   end
