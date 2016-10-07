@@ -17,21 +17,21 @@ class Comment < ActiveRecord::Base
     invitee = Invitee.find(self.user_id)
     if conversation.present?
       conversation.update_column(:action, 'Comment')
+      conversation.update_column(:actioner_id, self.user_id)       
       conversation.update_column(:first_name_user, invitee.first_name)
-      conversation.update_column(:last_name_user, invitee.last_name)      
-      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url(:large))
+      conversation.update_column(:last_name_user, invitee.last_name)
+      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
       conversation.update_column(:last_update_comment_description, self.description)
       conversation.update_last_updated_model
+      conversation.update_column(:updated_at, self.updated_at)
     end
   end
 
   def update_conversation_records_for_destroy
     conversation = Conversation.find_by_id(self.commentable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
-      # conversation.update_column(:first_name_user, nil)
-      # conversation.update_column(:last_name_user, nil)      
-      # conversation.update_column(:profile_pic_url_user, nil)      
-    # end
+    conversation.update_column(:updated_at, self.updated_at)
+    conversation.update_column(:last_interaction_at, self.updated_at)
   end
 
 
@@ -45,7 +45,7 @@ class Comment < ActiveRecord::Base
   end
 
   def update_conversation
-    Conversation.find_by_id(self.commentable_id).update_column(:updated_at, self.updated_at) rescue nil
+    Conversation.find_by_id(self.commentable_id).update_columns(updated_at: Time.now.utc, last_interaction_at: Time.now.utc)
   end
 
   def self.get_comments(conversations, start_event_date, end_event_date)

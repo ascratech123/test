@@ -53,6 +53,7 @@ class Invitee < ActiveRecord::Base
   after_save :clear_password, :update_favorite
   after_save :generate_qr_code
   after_save :update_event_updated_at
+  after_save :update_conversations_updated_at
   # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
   
@@ -78,6 +79,18 @@ class Invitee < ActiveRecord::Base
   #   end
   # end
     
+  def update_conversations_updated_at
+    conversations = Conversation.where('user_id = ? or actioner_id =?', self.id, self.id)
+    if conversations.present?
+      conversations.each do |conversation|
+        conversation.update_column(:updated_at, self.updated_at)
+        conversation.update_column(:first_name_user, self.first_name) if self.first_name.present? and self.first_name_changed?
+        conversation.update_column(:last_name_user, self.last_name) if self.last_name.present? and self.last_name_changed?
+        conversation.update_column(:profile_pic_url_user, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
+      end
+    end
+  end
+
   def facebook
     self.facebook_id rescue ""
   end
