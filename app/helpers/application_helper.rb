@@ -1,5 +1,15 @@
 module ApplicationHelper
 
+  def add_fields_for_agenda_speakers(name, f, association, disp, partial = "agenda_speakers_fields", locals = {}, klass)
+    new_object = association.to_s.classify.constantize.new
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
+      locals[:f] = builder
+      locals[:disp] = disp
+      render(:partial => partial, :locals => locals)
+    end
+    link_to name, 'javascript:void(0);', :class => klass, :onclick => "add_fields_for_agenda_speakers(this, \"#{association}\", \"#{escape_javascript(fields)}\")"
+  end
+
   def time_with_zone(datetime, zone=nil,format)
     if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
       datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
