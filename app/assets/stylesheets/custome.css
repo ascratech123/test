@@ -44,6 +44,7 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
+.redText{color:red;}
 .clear{clear: both;}
 /*test*/
 .test{position:relative;}

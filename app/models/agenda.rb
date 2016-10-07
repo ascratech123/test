@@ -10,6 +10,7 @@ class Agenda < ActiveRecord::Base
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
   validate :check_speaker_and_track_is_present
+  validate :speakers_count
   
   before_validation :set_attr_accessor
   before_validation :set_time
@@ -172,6 +173,17 @@ class Agenda < ActiveRecord::Base
     end
     if self.agenda_type == "Add New Track"
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
+    end
+  end
+
+  def speakers_count
+    if self.speaker_ids.present? or self.speaker_names.present?
+      speaker_ids_count = self.speaker_ids.split(",").count
+      speaker_names_count = self.speaker_names.split(",").count
+      if (speaker_ids_count + speaker_names_count) > 5
+        errors.add(:speaker_names, "you can add upto 5 speakers") if self.speaker_names.present?
+        errors.add(:speaker_ids, "you can add upto 5 speakers") if self.speaker_ids.present?
+      end
     end
   end
 
