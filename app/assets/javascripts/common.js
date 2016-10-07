@@ -931,12 +931,12 @@ $(document).on("click", ".addMoreSpeaker", function(){
   $('#add_speaker .form-group').show();
 })
 
-$(document).on('keyup', "#agenda_speaker_names", function(e) {
-  value = $(this).val();
-  selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
-  allow = 5 - selected_speakers - 1;
-  if((value.split(",").length - 1) > allow){
-    $(this).val(value.slice(0, -1));
-    alert("You cannot add more than " + (allow + 1));
-  }
-});
+// $(document).on('keyup', "#agenda_speaker_names", function(e) {
+//   value = $(this).val();
+//   selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
+//   allow = 5 - selected_speakers - 1;
+//   if((value.split(",").length - 1) > allow){
+//     $(this).val(value.slice(0, -1));
+//     alert("You cannot add more than " + (allow + 1));
+//   }
+// });
