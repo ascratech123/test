@@ -30,7 +30,7 @@ class Speaker < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
-  #after_create :set_event_timezone
+  # after_create :set_event_timezone
   before_save :set_full_name
   after_save :update_last_updated_model
   after_update :update_agenda_speaker_name
@@ -132,10 +132,10 @@ class Speaker < ActiveRecord::Base
     self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 end
