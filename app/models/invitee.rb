@@ -116,6 +116,12 @@ class Invitee < ActiveRecord::Base
     self.profile_pic.url rescue ""
   end
 
+  def unread_chat_count(invitee_id)
+    @event = Event.find(self.event_id)
+    chats = @event.chats.where("sender_id = ? and member_ids = ? and unread = ?",self.id,invitee_id.to_i,true)
+    chats.present? ? chats.count : 0
+  end 
+
   def Remark
     self.remark
   end
