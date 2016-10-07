@@ -10,7 +10,7 @@ class Quiz < ActiveRecord::Base
   
   before_validation :set_correct_answer, :if => Proc.new{|p| p.correct_ans_option1.present? or p.correct_ans_option2.present? or p.correct_ans_option3.present? or p.correct_ans_option4.present? or p.correct_ans_option5.present?} 
   before_create :set_sequence_no
-  after_create :set_event_timezone
+  # after_create :set_event_timezone
   after_save :push_notification, :update_last_updated_model
 
   default_scope { order("sequence") }
@@ -108,11 +108,11 @@ class Quiz < ActiveRecord::Base
     count
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 
 end

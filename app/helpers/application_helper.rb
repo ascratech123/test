@@ -1,5 +1,15 @@
 module ApplicationHelper
 
+  def add_fields_for_agenda_speakers(name, f, association, disp, partial = "agenda_speakers_fields", locals = {}, klass)
+    new_object = association.to_s.classify.constantize.new
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
+      locals[:f] = builder
+      locals[:disp] = disp
+      render(:partial => partial, :locals => locals)
+    end
+    link_to name, 'javascript:void(0);', :class => klass, :onclick => "add_fields_for_agenda_speakers(this, \"#{association}\", \"#{escape_javascript(fields)}\")"
+  end
+
   def time_with_zone(datetime, zone=nil,format)
     if zone.present? and zone == 'IST'# and format == "%Y-%m-%d %H:%M"
       datetime.to_time.in_time_zone('Kolkata').strftime(format) if datetime.present?
@@ -461,8 +471,8 @@ module ApplicationHelper
   def correct_user_polls_for_percentile(poll,option)
     percentage = 0
     user_polls = poll.user_polls if poll.user_polls.present?
+    total = user_polls.pluck(:answer).join(",").split(",").count
     if user_polls.present?
-      total = user_polls.count
       count = 0
       user_polls.each do |ans|
         count = count + 1 if ans.answer.split(',').include?(option)
@@ -638,8 +648,6 @@ module ApplicationHelper
     index = a.last
     index
   end
-end
-
 
   def custom_text_field_tag_user(name,title, params,*args)
     str = ''
@@ -757,8 +765,11 @@ end
     percentage = 0.0
     length = poll.user_polls.length
     answers = poll.user_polls.pluck(:answer)
+    # answers.each do |answer|
+    #   count = count + 1 if answer.downcase == option
+    # end
     answers.each do |answer|
-      count = count + 1 if answer.downcase == option
+      count = count + 1 if answer.split(',').include?(option)
     end
     percentage = (count/length.to_f) * 100 rescue 0 if length > 0
     percentage.round
@@ -805,3 +816,35 @@ end
     dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
     dest_arr
   end
+
+  def store_url_for(params)
+    url = url_for(params)
+    if url.include?("//?")
+      url.sub("//?", "/store?")
+    else
+      url
+    end
+  end
+
+  def datetime_with_adjusted_offset(datetime, offset)
+    datetime + offset.to_i.seconds
+  end
+
+  def datetime_with_display_timezone(datetime, display_timezone)
+    "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
+  end
+
+  def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
+    time_with_offset = datetime_with_adjusted_offset(datetime, offset)
+    datetime_with_display_timezone(time_with_offset, display_timezone)
+  end
+
+  def get_notification_icon_by_action(notification)
+    hsh = hsh = {"About" => "about", "Agenda" => "agenda", "Speaker" => "speakers", "FAQ" => "faq", "Gallery" => "galler_1y", "Feedback" => "feedback", "E-Kit" => "e-kit","Conversation" => "conversations","Poll" => "polls_1","Award" => "awards_2","Invitee" => "invitees","Q&A" => "Q&A", "Note" => "note", "Contact" => "contact_us", "Event Highlight" => "event_highlights","Sponsor" => "sponsor", "Sponsors" => "sponsor", "Profile" => "my_profile", "QR code" => "qr_code","Quiz" => "polls","My Favorite" => "myfavourite","Exhibitor" => "Exhibitor-breadcumb",'Venue' => "venue", 'Leaderboard' => "Leaderboard", "Custom Page1" => "custom", "Custom Page2" => "custom", "Custom Page3" => "custom","Custom Page4" => "custom","Custom Page5" => "custom", "chats" => "chat", "My Travel" => "travel","social_sharings" => "social_sharing"}
+    if hsh[notification.action].present?
+      "/assets/coloured_icons/#{hsh[notification.action]}.png"
+    else
+      ""
+    end
+  end
+end

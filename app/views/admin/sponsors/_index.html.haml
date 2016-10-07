@@ -12,6 +12,8 @@
       %th Sponsor Name
       %th Sponsor Logo
       %th Email id
+      %th Contact Person Name
+      %th Contact No.
       %th 
     - objs.each_with_index do |sponsor, index|
       %tr
@@ -27,6 +29,8 @@
           - if sponsor.logo.present?
             = image_tag(sponsor.logo.url(:thumb), :width => 60, :heigth => 60 ) rescue nil  
         %td.font16= sponsor.email
+        %td.font16= sponsor.contact_person_name
+        %td.font16= sponsor.mobile
         %td.IconDrp
           = more_vert_button(sponsor.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{sponsor.id}"}

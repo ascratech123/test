@@ -217,6 +217,10 @@ class Conversation < ActiveRecord::Base
   def first_name
     Invitee.find_by_id(self.user_id).first_name rescue ""
   end
+
+  def profile_pic_url
+    Invitee.find_by_id(self.user_id).profile_pic.url(:large) rescue ""
+  end
   
   def last_name
     Invitee.find_by_id(self.user_id).last_name rescue ""
@@ -259,4 +263,7 @@ class Conversation < ActiveRecord::Base
   #   updated_at_with_tmz.sub(year, "")    
   # end
 
+  def self.get_approved_conversation(id)
+    self.where("id = ? and status = ?", id, "approved").first
+  end
 end

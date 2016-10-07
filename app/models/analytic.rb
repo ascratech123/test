@@ -14,17 +14,17 @@ class Analytic < ActiveRecord::Base
   after_create :update_points_to_invitee
   after_save :update_last_updated_model, :update_conversation
 
-  def update_conversation
-    if self.viewable_type == "Conversation" and self.action == "share"
-      conversation = Conversation.find(self.viewable_id)
-      # invitee = Invitee.find(self.invitee_id)
-      conversation.update_column(:updated_at, self.updated_at)
-      conversation.update_column(:action, 'share')
-      # conversation.update_column(:first_name_user, invitee.first_name)
-      # conversation.update_column(:last_name_user, invitee.last_name)
-      # conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
-    end
-  end
+   def update_conversation
+     if self.viewable_type == "Conversation" and self.action == "share"
+       conversation = Conversation.find(self.viewable_id)
+       invitee = Invitee.find(self.invitee_id)
+       conversation.update_column(:updated_at, self.updated_at)
+       conversation.update_column(:action, self.action)
+       conversation.update_column(:first_name_user, invitee.first_name)
+       conversation.update_column(:last_name_user, invitee.last_name)
+       conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
+     end
+   end
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
@@ -409,6 +409,18 @@ class Analytic < ActiveRecord::Base
     result_hsh['feature_count'] = Analytic.get_features_count(params[:id], params[:start_date], params[:end_date])
     result_hsh['xaxis_interval_labels_and_interval'] = Analytic.get_x_axis_labels_and_interval(params)
     result_hsh
+  end
+
+  def get_likes(id)
+    Analytic.where(:viewable_id => id, :viewable_type => "Conversation",:action => "like")
+  end
+  
+  def get_comments(id)
+    Comment.where(:commentable_id => id, :commentable_type => "Conversation",:analytic_id => self.id)
+  end
+
+  def get_shares(id)
+    Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation",:action => "share")
   end
 
 end

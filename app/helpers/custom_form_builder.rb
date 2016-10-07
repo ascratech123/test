@@ -190,6 +190,7 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
   def custom_text_field(name, title, *args)
     args[0] ||= {}
     args.first[:col] ||= "12"
+    # binding.pry
     @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8" do
       @template.content_tag :div, class: "bs-component", :style => "display: #{args[0][:message_display].present? ? args[0][:message_display] : ""}"do
         @template.content_tag :div, class: "form-group #{args[0][:admin_theme].present? ? args[0][:admin_theme] : "" rescue ""} #{args[0]["background"] == "false" ? "" : (args[0][:route].present? ? set_highlight_class1(name,args[0][:field_name]) : set_highlight_class(name))}" do
@@ -213,6 +214,33 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
       end      
     end
   end
+
+  # def custom_text_field_for_venue(name, title, *args)
+  #   args[0] ||= {}
+  #   args.first[:col] ||= "12"
+  #   @template.content_tag :div, class: "mdl-cell--#{args.first[:col]}-col mdl-cell--#{args.first[:col]}-col-tablet ml-color--shades-white m-8" do
+  #     @template.content_tag :div, class: "bs-component", :style => "display: #{args[0][:message_display].present? ? args[0][:message_display] : ""}"do
+  #       @template.content_tag :div, class: "form-group #{args[0][:admin_theme].present? ? args[0][:admin_theme] : "" rescue ""} #{args[0]["background"] == "false" ? "" : (args[0][:route].present? ? set_highlight_class1(name,args[0][:field_name]) : set_highlight_class(name))}" do
+  #         str = @template.label("", "#{title}", class: "col-lg-4 control-label", id: "#{name}_label")
+  #         str += @template.content_tag :div, class: "col-lg-7" do
+  #           @template.content_tag :span, class: "append-icon right" do
+  #             @template.content_tag :i, :class => "fa fa-gear"
+  #           end
+  #           if args.first[:class].blank?
+  #             args.first[:class] = "form-control"
+  #           else
+  #             args.first[:class] = "form-control #{args.first[:class]}"
+  #           end
+  #           text_field(name, args.first)
+  #         end
+  #         str += @template.content_tag :span, class: "col-lg-1" do
+  #           @template.link_to(" ? " ,"/whats_this/#{args.first[:view_popup][:image_path] rescue ""}", rel: "#{args.first[:view_popup][:rel] rescue "#{name}"}", title: "#{args.first[:view_popup][:title] rescue ""}", :class =>"fancybox whatsImg") if args.first[:view_popup].present?
+  #         end
+  #         str
+  #       end
+  #     end      
+  #   end
+  # end
 
   def custom_text_field_for_edm_social_icon(name, title, id_match_with_checkbox=nil, *args)
     args[0] ||= {}
@@ -284,7 +312,11 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
             else
               args.first[:class] = "form-control #{args.first[:class]}"
             end
-            text_field(name, args.first)
+            # if args.present? and args.first["value"].present?
+            #   text_field(name, args.first)
+            # else
+              text_field(name, args.first)
+            # end
           end
           str += @template.content_tag :span, class: "col-lg-1" do
             @template.link_to(" ? " ,"/whats_this/#{args.first[:view_popup][:image_path] rescue ""}", rel: "#{args.first[:view_popup][:rel] rescue "#{name}"}", title: "#{args.first[:view_popup][:title] rescue ""}", :class =>"fancybox whatsImg") if args.first[:view_popup].present?

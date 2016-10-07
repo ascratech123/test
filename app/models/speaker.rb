@@ -3,6 +3,7 @@ class Speaker < ActiveRecord::Base
   belongs_to :event
   has_many :ratings, as: :ratable, :dependent => :destroy
   has_many :agendas
+
   has_many :panels, as: :panel, :dependent => :destroy
   has_many :favorites, as: :favoritable, :dependent => :destroy
   has_many :analytics, :class_name => 'Analytic', :foreign_key => :viewable_id
@@ -29,20 +30,34 @@ class Speaker < ActiveRecord::Base
   #validates :sequence, uniqueness: {scope: :event_id}#, presence: true
   validate :image_dimensions
   before_create :set_sequence_no
-  after_create :set_event_timezone
+  # after_create :set_event_timezone
   before_save :set_full_name
   after_save :update_last_updated_model
   after_update :update_agenda_speaker_name
   after_destroy :empty_agenda_speaker_name_and_id
+  before_destroy :delete_speaker_name_from_agenda
   default_scope { order("sequence") }  
+
+  def delete_speaker_name_from_agenda
+    agenda_ids = self.all_agenda_ids.split(',')
+    agenda_ids = agenda_ids.reject { |e| e.to_s.empty? }
+    agenda_ids.each do |agenda_id|
+      agenda = Agenda.find(agenda_id)
+      agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
+      agenda.update_column("speaker_ids", (agenda.speaker_ids.to_s.split(", ") - [self.id.to_s]).join(","))
+    end if agenda_ids.present?
+  end
 
 
   def update_agenda_speaker_name
     if self.speaker_name_changed?
-      agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      # agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
+      agendas = Agenda.where(:id => self.all_agenda_ids.to_s.split(","))
       if agendas.present?
         agendas.each do |agenda|
-          agenda.update_columns(speaker_name:self.speaker_name,updated_at: Time.now) 
+          agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
+          agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name_was] + [self.speaker_name]).join(","))
+          agenda.update_columns(updated_at: Time.now)
           agenda.update_last_updated_model
         end  
       end
@@ -117,10 +132,10 @@ class Speaker < ActiveRecord::Base
     self.sequence = (Event.find(self.event_id).speakers.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 end

@@ -46,7 +46,7 @@ class Invitee < ActiveRecord::Base
   default_scope { order('created_at desc') }
   
   before_create :ensure_authentication_token, :generate_key
-  after_create :set_event_timezone
+  # after_create :set_event_timezone
   before_save :encrypt_password
   
   before_save :set_full_name
@@ -115,6 +115,12 @@ class Invitee < ActiveRecord::Base
   def profile_picture
     self.profile_pic.url rescue ""
   end
+
+  def unread_chat_count(invitee_id)
+    @event = Event.find(self.event_id)
+    chats = @event.chats.where("sender_id = ? and member_ids = ? and unread = ?",self.id,invitee_id.to_i,true)
+    chats.present? ? chats.count : 0
+  end 
 
   def Remark
     self.remark
@@ -214,12 +220,12 @@ class Invitee < ActiveRecord::Base
     self.assign_secret_key
   end
 
-  def set_event_timezone
-    event = self.event
-    self.update_column("event_timezone", event.timezone)
-    self.update_column("event_timezone_offset", event.timezone_offset)
-    self.update_column("event_display_time_zone", event.display_time_zone)
-  end
+  # def set_event_timezone
+  #   event = self.event
+  #   self.update_column("event_timezone", event.timezone)
+  #   self.update_column("event_timezone_offset", event.timezone_offset)
+  #   self.update_column("event_display_time_zone", event.display_time_zone)
+  # end
 
   def assign_secret_key
     self.secret_key = self.get_secret_key
@@ -373,8 +379,31 @@ class Invitee < ActiveRecord::Base
   def get_favorites(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+
+    # favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+    # favorite_types = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+
+    # favorite_types.each do |favorite_type|
+    #   if favorite_type == "Image"
+      Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id], :methods => [:image_url])
+    #   else
+    #     Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id])
+    #   end
+    # end
   end
+
+  # def get_favorites_gallery(mobile_app_code,submitted_app)
+  #   mobile_application_ids = MobileApplication.where(submitted_code: mobile_app_code).pluck(:id)
+  #   event_ids = Event.where(mobile_application_id: mobile_application_ids).pluck(:id)
+  #   # event_ids = get_event_id(mobile_app_code,submitted_app)
+  #   invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
+  #   binding.pry
+  #   favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
+  #   favorite_ids = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
+  #   # Favorite.where("invitee_id IN (?)", invitees).as_json(:only => [:id, :invitee_id , :favoritable_type, :favoritable_id, :event_id]) rescue nil
+  #   Image.where(:imageable_type => favorite_ids).as_json(:only => [:id, :imageable_type], :methods => [:image_url]) if favorite_ids.present?
+  #   # Image.find(fav.favoratable_id) if fav.imageable_type == "Gallery"
+  # end
    
   def get_my_network_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
@@ -533,7 +562,7 @@ class Invitee < ActiveRecord::Base
 
   def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
-    notifications = notifications.where(:pushed => true) if notifications.present?
+    notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
     notifications.each do |notification|
       invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?
@@ -613,12 +642,12 @@ class Invitee < ActiveRecord::Base
 
   def created_at_with_event_timezone
     # self.created_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone_offset.to_i.seconds
+    self.created_at + self.event.timezone_offset.to_i.seconds
   end
  
   def updated_at_with_event_timezone
     # self.updated_at.in_time_zone(self.event_timezone)
-    self.updated_at + self.event_timezone_offset.to_i.seconds
+    self.updated_at + self.event.timezone_offset.to_i.seconds
   end
 
   private

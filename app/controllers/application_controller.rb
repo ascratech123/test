@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   def load_filter
     if params[:key].present? 
       authenticate_user_from_token!
-    elsif (params["controller"] == "api/v1/events" and params["key"].blank?)
+    elsif (["api/v1/events", "api/v1/activity_feeds"].include? params["controller"] and params["key"].blank?)
       session['invitee_id'] = nil
     else
       session['invitee_id'] = nil  
@@ -209,7 +209,9 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :telecaller
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
+      #if resource.roles.pluck(:name).uniq.count > 1 #or session[:current_user_role].blank?
       new_admin_change_role_path# admin_dashboards_path
+      #end
     end
   end
 

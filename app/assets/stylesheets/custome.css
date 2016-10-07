@@ -44,6 +44,8 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
+.redText{color:red;}
+.clear{clear: both;}
 /*test*/
 .test{position:relative;}
 .event_select123{position:absolute;top:16px;z-index:99999999999;}
@@ -82,7 +84,20 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+.agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
+.col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
+.col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
+.addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+.col-lg-7.notification.agendaDropdown{height:auto;}
+.form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
 
+.addMoreSpeaker{ border-radius: 50%;
+    display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
+.text-left{text-align: left;}
+.addmoretext.text-left{text-align:left; margin-top:8px;}
+.centerAlign{text-align:center;}
+#loadingText{}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -387,6 +402,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .result_statusdiv{width:75px;}
 .back_btn_header{display: inline-block; margin-top: 17px;}
 .search_header + div{width:85px;}
+.select-speaker{margin-bottom: 15px;}
 /* nilam css ends here */
 
 /*nilam*/

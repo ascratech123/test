@@ -7,10 +7,34 @@ class Comment < ActiveRecord::Base
   validates :description,:commentable_id,:commentable_type,:user_id,:presence =>true
   
   after_create :create_analytic_record
-  after_save :update_conversation, :update_last_updated_model
+  after_save :update_conversation, :update_last_updated_model, :update_conversation_records_for_create
+  after_destroy :update_conversation_records_for_destroy
 
   default_scope { order('created_at desc') }
   
+  def update_conversation_records_for_create
+    conversation = Conversation.find_by_id(self.commentable_id)
+    invitee = Invitee.find(self.user_id)
+    if conversation.present?
+      conversation.update_column(:action, 'Comment')
+      conversation.update_column(:first_name_user, invitee.first_name)
+      conversation.update_column(:last_name_user, invitee.last_name)      
+      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url(:large))
+      conversation.update_column(:last_update_comment_description, self.description)
+      conversation.update_last_updated_model
+    end
+  end
+
+  def update_conversation_records_for_destroy
+    conversation = Conversation.find_by_id(self.commentable_id) rescue nil    
+    conversation.update_column(:action, nil) if conversation.present?
+      # conversation.update_column(:first_name_user, nil)
+      # conversation.update_column(:last_name_user, nil)      
+      # conversation.update_column(:profile_pic_url_user, nil)      
+    # end
+  end
+
+
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
   end
@@ -54,16 +78,20 @@ class Comment < ActiveRecord::Base
 
   def first_name
     # Invitee.find_by_id(self.user_id).first_name rescue ""
-    user_id = Conversation.find_by_id(self.commentable_id).user_id
-    first_name = Invitee.find_by_id(user_id).first_name rescue ""
-    return first_name
+    # user_id = Conversation.find_by_id(self.commentable_id).user_id
+    # first_name = Invitee.find_by_id(user_id).first_name rescue ""
+    # return first_name
+    user = self.user
+    (user.present? ? user.first_name : "")
   end
   
   def last_name
-    user_id = Conversation.find_by_id(self.commentable_id).user_id
-    last_name = Invitee.find_by_id(user_id).last_name rescue ""
-    return last_name
+    # user_id = Conversation.find_by_id(self.commentable_id).user_id
+    # last_name = Invitee.find_by_id(user_id).last_name rescue ""
+    # return last_name
     # Invitee.find_by_id(self.user_id).last_name rescue ""
+    user = self.user
+    (user.present? ? user.last_name : "")
   end
   
   def conversation
@@ -93,7 +121,7 @@ class Comment < ActiveRecord::Base
   def create_analytic_record
     event_id = Invitee.find_by_id(self.user_id).event_id rescue nil
     analytic = Analytic.new(viewable_type: self.commentable_type, viewable_id: self.commentable_id, action: "comment", invitee_id: self.user_id, event_id: event_id, platform: platform)
-    analytic.save rescue nil
+    self.update_column("analytic_id",analytic.id) if analytic.save
   end
 
   def self.get_top_commented(count, type, event_id, from_date, to_date)
@@ -124,7 +152,7 @@ class Comment < ActiveRecord::Base
     # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     conversation = Conversation.find(self.commentable_id)
-    created_at_with_tmz = (self.created_at + conversation.event_timezone.to_i.seconds).strftime("%Y %b %d at %l:%M %p (") + conversation.event_display_time_zone + ")"
+    created_at_with_tmz = (self.created_at + conversation.event_timezone_offset.to_i.seconds).strftime("%Y %b %d at %l:%M %p (") + conversation.event_display_time_zone.to_s + ")"
     year = Time.now.strftime("%Y") + " "
     created_at_with_tmz.sub(year, "")    
   end
@@ -133,7 +161,7 @@ class Comment < ActiveRecord::Base
     # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     conversation = Conversation.find(self.commentable_id)
-    updated_at_with_tmz = (self.updated_at + conversation.event_timezone.to_i.seconds).strftime("%Y %b %d at %l:%M %p (") + conversation.event_display_time_zone + ")"    
+    updated_at_with_tmz = (self.updated_at + conversation.event_timezone_offset.to_i.seconds).strftime("%Y %b %d at %l:%M %p (") + conversation.event_display_time_zone.to_s + ")"    
     year = Time.now.strftime("%Y") + " "
     updated_at_with_tmz.sub(year, "")
   end

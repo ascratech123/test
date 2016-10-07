@@ -80,9 +80,15 @@ class Admin::EventsController < ApplicationController
       @event.update(:start_event_date => schedule_date) rescue nil
       redirect_to admin_client_events_path(:client_id => @client.id, :page => params[:page]) rescue nil
     else
-      @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
+      if params["event"]["start_event_date"].present?
+        @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
+      end
       if @event.update_attributes(events_params)
-        redirect_to admin_client_events_path(:client_id => @client.id)
+        if params[:set_activity_feed_bool].present?
+          redirect_to admin_event_mobile_application_path(:id => @event.mobile_application.id, :event_id => @event.id, :type => "show_engagement")
+        else
+          redirect_to admin_client_events_path(:client_id => @client.id)
+        end
       else
         @default_features = @event.set_features_default_list
         @present_feature = @event.set_features
