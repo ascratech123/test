@@ -70,11 +70,12 @@
                     = render 'agenda_speakers_fields', f: field, i: random_number#, val: val
               .col-lg-1.addmoretext.text-left
                 = add_fields_for_agenda_speakers '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :agenda_speakers, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900 abc"#, :onClick => "button_click()"
-        %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
-          %div.bs-component
-            %div.form-group
-              %label.col-lg-4.control-label.ml-color--shades-white
-              %div.col-lg-7.addmoretext
+        - if false
+          %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
+            %div.bs-component
+              %div.form-group
+                %label.col-lg-4.control-label.ml-color--shades-white
+                %div.col-lg-7.addmoretext
               / = link_to_add_fields_for_event_field '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :agenda_speakers, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900"#, :onClick => "button_click()"
 
         / .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
