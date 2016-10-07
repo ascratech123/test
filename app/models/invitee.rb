@@ -562,7 +562,7 @@ class Invitee < ActiveRecord::Base
 
   def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
-    notifications = notifications.where(:pushed => true) if notifications.present?
+    notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
     notifications.each do |notification|
       invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?

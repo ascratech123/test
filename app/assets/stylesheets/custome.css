@@ -96,6 +96,8 @@
     display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
 .text-left{text-align: left;}
 .addmoretext.text-left{text-align:left; margin-top:8px;}
+.centerAlign{text-align:center;}
+#loadingText{}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}

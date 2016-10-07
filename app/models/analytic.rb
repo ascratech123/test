@@ -411,4 +411,16 @@ class Analytic < ActiveRecord::Base
     result_hsh
   end
 
+  def get_likes(id)
+    Analytic.where(:viewable_id => id, :viewable_type => "Conversation",:action => "like")
+  end
+  
+  def get_comments(id)
+    Comment.where(:commentable_id => id, :commentable_type => "Conversation",:analytic_id => self.id)
+  end
+
+  def get_shares(id)
+    Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation",:action => "share")
+  end
+
 end

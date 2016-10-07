@@ -648,8 +648,6 @@ module ApplicationHelper
     index = a.last
     index
   end
-end
-
 
   def custom_text_field_tag_user(name,title, params,*args)
     str = ''
@@ -818,3 +816,35 @@ end
     dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
     dest_arr
   end
+
+  def store_url_for(params)
+    url = url_for(params)
+    if url.include?("//?")
+      url.sub("//?", "/store?")
+    else
+      url
+    end
+  end
+
+  def datetime_with_adjusted_offset(datetime, offset)
+    datetime + offset.to_i.seconds
+  end
+
+  def datetime_with_display_timezone(datetime, display_timezone)
+    "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
+  end
+
+  def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
+    time_with_offset = datetime_with_adjusted_offset(datetime, offset)
+    datetime_with_display_timezone(time_with_offset, display_timezone)
+  end
+
+  def get_notification_icon_by_action(notification)
+    hsh = hsh = {"About" => "about", "Agenda" => "agenda", "Speaker" => "speakers", "FAQ" => "faq", "Gallery" => "galler_1y", "Feedback" => "feedback", "E-Kit" => "e-kit","Conversation" => "conversations","Poll" => "polls_1","Award" => "awards_2","Invitee" => "invitees","Q&A" => "Q&A", "Note" => "note", "Contact" => "contact_us", "Event Highlight" => "event_highlights","Sponsor" => "sponsor", "Sponsors" => "sponsor", "Profile" => "my_profile", "QR code" => "qr_code","Quiz" => "polls","My Favorite" => "myfavourite","Exhibitor" => "Exhibitor-breadcumb",'Venue' => "venue", 'Leaderboard' => "Leaderboard", "Custom Page1" => "custom", "Custom Page2" => "custom", "Custom Page3" => "custom","Custom Page4" => "custom","Custom Page5" => "custom", "chats" => "chat", "My Travel" => "travel","social_sharings" => "social_sharing"}
+    if hsh[notification.action].present?
+      "/assets/coloured_icons/#{hsh[notification.action]}.png"
+    else
+      ""
+    end
+  end
+end
