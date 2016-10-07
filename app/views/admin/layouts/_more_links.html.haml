@@ -145,13 +145,14 @@
               - if @conversations.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_conversations_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
-              - @conversation_wall = ConversationWall.find_by_event_id(@event.id)   
-              - if @conversation_wall.present?
-                = link_to edit_admin_event_conversation_wall_path(:event_id => @event.id,:id =>@conversation_wall.id),:class => "centerAlign" do
-                  Customize Wall
-              - else
-                = link_to new_admin_event_conversation_wall_path(:event_id => @event.id),:class => "centerAlign" do
-                  Customize Wall
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+                - @conversation_wall = ConversationWall.find_by_event_id(@event.id)   
+                - if @conversation_wall.present?
+                  = link_to edit_admin_event_conversation_wall_path(:event_id => @event.id,:id =>@conversation_wall.id),:class => "centerAlign" do
+                    Customize Wall
+                - else
+                  = link_to new_admin_event_conversation_wall_path(:event_id => @event.id),:class => "centerAlign" do
+                    Customize Wall
               - if false
                 = link_to new_admin_event_conversation_path(:importable_type => 'conversation', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                   Import   
@@ -213,18 +214,20 @@
               - if @user_polls.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_user_polls_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
                   Export Answer
-              - @poll_wall = PollWall.find_by_event_id(@event.id)   
-              - if @poll_wall.present?
-                = link_to edit_admin_event_poll_wall_path(:event_id => @event.id,:id =>@poll_wall.id),:class => "centerAlign" do
-                  Customize Wall
-              - else
-                = link_to new_admin_event_poll_wall_path(:event_id => @event.id),:class => "centerAlign" do
-                  Customize Wall                   
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))    
+                - @poll_wall = PollWall.find_by_event_id(@event.id)   
+                - if @poll_wall.present?
+                  = link_to edit_admin_event_poll_wall_path(:event_id => @event.id,:id =>@poll_wall.id),:class => "centerAlign" do
+                    Customize Wall
+                - else
+                  = link_to new_admin_event_poll_wall_path(:event_id => @event.id),:class => "centerAlign" do
+                    Customize Wall                   
           - when 'qna'
             %li
               - if @qnas.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_qnas_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))    
                 - @qna_wall = QnaWall.find_by_event_id(@event.id)   
                 - if @qna_wall.present?
                   = link_to edit_admin_event_qna_wall_path(:event_id => @event.id,:id =>@qna_wall.id),:class => "centerAlign" do
@@ -293,7 +296,7 @@
               - if params[:action] == "index" and @quizzes.present?
                 = link_to admin_event_user_quizzes_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
                   Export
-
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))    
                 - @quiz_wall = QuizWall.find_by_event_id(@event.id)   
                 - if @quiz_wall.present?
                   = link_to edit_admin_event_quiz_wall_path(:event_id => @event.id,:id =>@quiz_wall.id),:class => "centerAlign" do
