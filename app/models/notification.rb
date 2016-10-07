@@ -242,8 +242,10 @@ class Notification < ActiveRecord::Base
   end
 
   def create_notification_in_analytic(invitee_id = nil)
-    analytic = Analytic.find_or_initialize_by(:viewable_type => "Notification",:viewable_id => self.id,:action => "notification",:event_id => self.event_id)
-    analytic.save
+    if self.show_on_activity.present?
+      analytic = Analytic.find_or_initialize_by(:viewable_type => "Notification",:viewable_id => self.id,:action => "notification",:event_id => self.event_id)
+      analytic.save
+    end
   end
 
   # def image_dimensions
