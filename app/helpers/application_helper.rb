@@ -843,6 +843,8 @@ module ApplicationHelper
     hsh = hsh = {"About" => "about", "Agenda" => "agenda", "Speaker" => "speakers", "FAQ" => "faq", "Gallery" => "galler_1y", "Feedback" => "feedback", "E-Kit" => "e-kit","Conversation" => "conversations","Poll" => "polls_1","Award" => "awards_2","Invitee" => "invitees","Q&A" => "Q&A", "Note" => "note", "Contact" => "contact_us", "Event Highlight" => "event_highlights","Sponsor" => "sponsor", "Sponsors" => "sponsor", "Profile" => "my_profile", "QR code" => "qr_code","Quiz" => "polls","My Favorite" => "myfavourite","Exhibitor" => "Exhibitor-breadcumb",'Venue' => "venue", 'Leaderboard' => "Leaderboard", "Custom Page1" => "custom", "Custom Page2" => "custom", "Custom Page3" => "custom","Custom Page4" => "custom","Custom Page5" => "custom", "chats" => "chat", "My Travel" => "travel","social_sharings" => "social_sharing"}
     if hsh[notification.action].present?
       "/assets/coloured_icons/#{hsh[notification.action]}.png"
+    elsif notification.action.blank? 
+      "/assets/coloured_icons/notification.png"
     else
       ""
     end
