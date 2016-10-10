@@ -76,9 +76,9 @@
                         = get_percentage('option9', poll, bar_color, @poll_wall, 50, percentage)        
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
                       
-                      - if poll.option010.present?
-                        - percentage = get_user_poll_percentage('option010',poll)
-                        = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)      
+                      - if poll.option10.present?
+                        - percentage = get_user_poll_percentage('option10',poll)
+                        = get_percentage('option10', poll, bar_color, @poll_wall, 50, percentage)      
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                  
                       %span{:style=>"color:#{@poll_wall.font_color};"}  
                         = show_field("Total responses: ", poll.user_polls.count) rescue nil
@@ -160,9 +160,9 @@
                         = get_percentage('option9', poll, bar_color, @poll_wall, 50, percentage)   
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
 
-                      - if poll.option010.present?
-                        - percentage = get_user_poll_percentage('option010',poll)
-                        = get_percentage('option010', poll, bar_color, @poll_wall, 50, percentage)    
+                      - if poll.option10.present?
+                        - percentage = get_user_poll_percentage('option10',poll)
+                        = get_percentage('option10', poll, bar_color, @poll_wall, 50, percentage)    
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
    
                       %span{:style=>"color:#{@poll_wall.font_color};"}   
