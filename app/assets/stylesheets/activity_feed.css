@@ -2,7 +2,7 @@ body{margin:0; padding:0; font-size:14px; /*background:#7ac669;*/
 	   font-family: 'Helvetica';}
 body{height: auto;}
 ul,li,p{margin:0; padding:0;}
-.wrapper{width:100%;}
+.wrapper{width:100%; padding: 0 12px;}
 .wrapper h1{margin-left:30px;}
 .container{width:100%; padding: 0px;}
 .tabs li{list-style:none; display:inline-block;}
@@ -41,18 +41,29 @@ a{color: #000;}
 .feed-activiity p{border-right:1px solid #b0b1b3; text-align:center; padding:3px 0;}
 .feed-activiity p:last-child{border-right:0 none;}
 .feed-activiity{ border-top: 1px solid #999;}
-.userName .italic{font-style:italic;}
-.userName .italic{text-transform:lowercase;}
+.userName .normal{font-style:normal; font-family: "Helvetica"; }
+.userName .normal{text-transform:lowercase;}
 .userPicImage{width:53px; height:53px; border-radius:50%;}
 .userPicImage img{width:53px; height:53px; border-radius:50%;}
 .feedHeading.comment{border-top:1px solid #96989a;}
 .commentDiv {display: inline-block;  vertical-align: top; width:75%;}
 .commentText{margin:0;}
-.commentText p{margin-top:10px; margin-left:2%;}
+.commentText p{margin-top:3px; margin-left:2%; line-height:16px;}
 .userDetail .userName.commentUser{margin-bottom:0px;}
 .feed-post p{margin: 0px;}
 .userDetail .userName .italic{font-family:'Helvetica';}
 .noData {color: #fff;font-size:25px;margin: 0;padding: 22% 0 0;text-align: center;}
+.commentDiv > .userDetail{width:100%;}
+.subBoxAdd .subBox.subBoxNone { background:#cecece; border:1px solid #96989a; margin:0px 11px 10px 11px;}
+.subBoxAdd .feedHeading{border-bottom:0 none;}
+.subBoxAdd .feedHeading.comment{border-top:0 none;}
+.subBox.subBoxNone{background:#FFFFFF; margin:0px;}
+.subBoxAdd .feed-post{border-top:1px solid #96989a;	}
+
+
+
+
+
 
 
 @media screen and (max-width:480px){

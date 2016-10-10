@@ -23,7 +23,7 @@ class Api::V1::InviteesController < ApplicationController
         else
           invitees = Invitee.where(:event_id => event.first.id, :visible_status => 'active') rescue []
         end
-        render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:except => [:created_at, :updated_at, :badge_count, :encrypted_password, :salt, :key, :secret_key, :authentication_token]) } rescue []
+        render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:except => [:created_at, :updated_at, :badge_count, :encrypted_password, :salt, :key, :secret_key, :authentication_token],:methods => [:profile_picture]) } rescue []
 			else
 				render :status => 200, :json => {:status => "Failure", :message => "Event Not Found."}
 			end	

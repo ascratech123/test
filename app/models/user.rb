@@ -266,7 +266,7 @@ class User < ActiveRecord::Base
   end
 
   def self.get_managed_user(user,client_ids,event_ids,session_role)
-    if user.has_role_without_event("licensee_admin", client_ids,session_role)
+    if user.has_role_without_event("licensee_admin", client_ids,session_role)#user.has_role? :licensee_admin
       role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
       users = User.where(:licensee_id => user.id)
       users
@@ -353,6 +353,7 @@ class User < ActiveRecord::Base
     return @processed if type == "Processed"
     return @remaining if type == "Remaining"
   end
+
   def get_clients
     clients = Client.with_roles(self.roles.pluck(:name), self)
   end
@@ -360,6 +361,8 @@ class User < ActiveRecord::Base
   def get_roles_for_user(user,resource_id,user_id)
     @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
   end
+  
+
 
   def get_licensee_events_count
     clients = get_clients
@@ -415,4 +418,8 @@ class User < ActiveRecord::Base
      end
      access
    end
+
+  def get_roles_for_user_for_checking(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
+  end
 end

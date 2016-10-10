@@ -9,8 +9,8 @@
   = form_tag admin_change_roles_path, :class => "caret", :method => :post do
     %i.arrow.single   
     - prompt_message = 'Select Role'
-    - current_user = User.current.roles.pluck(:name).uniq                      
-    - roles = User.current.roles.pluck(:name).uniq.map{|val| val.gsub('_', ' ')}
+    - current_user = User.current.roles.pluck(:name).uniq     
+    - roles = User.current.roles.pluck(:name).uniq.map{|val| val.gsub('_', ' ').titleize}
     - final_array = roles.zip(current_user)
     = select_tag :role, options_for_select(final_array)#, :prompt => "#{prompt_message}"
     = hidden_field_tag :previous_url, request.referer

@@ -20,7 +20,7 @@ class Notification < ActiveRecord::Base
                                          }.merge(NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION)                                        
   validates_attachment_content_type :image,:image_for_show_notification, :content_type => ["image/png", "image/JPEG", "image/jpeg", "image/jpg", "image/jpeg"]
   validates_attachment_size :image, :less_than => 100.kilobytes
-  validate :image_dimensions
+  #validate :image_dimensions
 
   belongs_to :resourceable, polymorphic: true
   belongs_to :event
@@ -78,7 +78,7 @@ class Notification < ActiveRecord::Base
     if notifications.present?
       notifications.each do |notification|
         # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
-        current_time_in_time_zone = Time.now + self.event_timezone_offset.to_i.seconds
+        current_time_in_time_zone = Time.now + notification.event_timezone_offset.to_i.seconds
         if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
           event = notification.event
           if event.mobile_application_id.present?
@@ -104,6 +104,7 @@ class Notification < ActiveRecord::Base
   def send_to_all
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
+    self.create_notification_in_analytic
     # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     invitees = Invitee.where(:event_id => self.event_id)
@@ -134,7 +135,7 @@ class Notification < ActiveRecord::Base
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
     notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id})
-    response = ios_obj.push(notification)
+    response = ios_obj.push(notification) rescue nil
     Rails.logger.info("******************************#{response}****************************************************")
   end
 
@@ -241,19 +242,22 @@ class Notification < ActiveRecord::Base
   end
 
   def create_notification_in_analytic(invitee_id = nil)
-    Analytic.create(:viewable_type => "Notification",:viewable_id => self.id,:action => "notification",:event_id => self.event_id,:invitee_id => invitee_id)
-  end
-
-  def image_dimensions
-    if self.image_for_show_notification_file_name_changed?  
-      notification_image_height  = 200.0
-      notification_image_width = 200.0
-      dimensions = Paperclip::Geometry.from_file(image_for_show_notification.queued_for_write[:original].path)
-      if (dimensions.width != notification_image_width or dimensions.height != notification_image_height)
-        errors.add(:image_for_show_notification, "Image size should be 200x200px only")
-      end
+    if self.show_on_activity.present?
+      analytic = Analytic.find_or_initialize_by(:viewable_type => "Notification",:viewable_id => self.id,:action => "notification",:event_id => self.event_id)
+      analytic.save
     end
   end
+
+  # def image_dimensions
+  #   if self.image_for_show_notification_file_name_changed?  
+  #     notification_image_height  = 200.0
+  #     notification_image_width = 200.0
+  #     dimensions = Paperclip::Geometry.from_file(image_for_show_notification.queued_for_write[:original].path)
+  #     if (dimensions.width != notification_image_width or dimensions.height != notification_image_height)
+  #       errors.add(:image_for_show_notification, "Image size should be 200x200px only")
+  #     end
+  #   end
+  # end
 
   def get_notifications
     Comment.where(:commentable_id => self.id, :commentable_type => "Notification")

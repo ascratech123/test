@@ -1,5 +1,32 @@
 module ApplicationHelper
 
+  def get_percentage(num, poll, bar_color, poll_wall, size, percentage)
+   result= "<p style='color:"+poll_wall.font_color+"'>"
+   (num.is_a? Numeric) ? result+= num : result+= poll.send(num)
+   percentage = get_user_poll_percentage(num,poll)
+   result+= "</p>"
+   result+= "<div class='progress'>"
+   result+= "<div class='pollwidth' style='width: 90%'>"
+   result+= "<div class='progress-bar progress-bar-2' style='width: "+percentage.to_s+"%; background-color: "+bar_color+";' role='progressbar' aria-valuemax='' aria-valuemin='0'  aria-valuenow="+size.to_s+" >"
+   result+= "</div></div>"
+   result+= "<span style='color: "+poll_wall.font_color+"'>" 
+   result+= percentage.to_s + '%' 
+   result+= "</span>"
+   result+= "</div>"
+   bar_color = ((bar_color == poll_wall.bar_color)? poll_wall.bar_color1 : poll_wall.bar_color) if percentage.present? and percentage != 0  
+   return result.html_safe
+  end
+
+  def add_fields_for_agenda_speakers(name, f, association, disp, partial = "agenda_speakers_fields", locals = {}, klass)
+    new_object = association.to_s.classify.constantize.new
+    fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
+      locals[:f] = builder
+      locals[:disp] = disp
+      render(:partial => partial, :locals => locals)
+    end
+    link_to name, 'javascript:void(0);', :class => klass, :onclick => "add_fields_for_agenda_speakers(this, \"#{association}\", \"#{escape_javascript(fields)}\")"
+  end
+
   def link_to_add_fields(name, f, association, disp, partial = "venue_fields", locals = {}, klass)
     new_object = association.to_s.classify.constantize.new
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
@@ -693,8 +720,7 @@ module ApplicationHelper
     index = a.last
     index
   end
-end
-
+end  
 
   def custom_text_field_tag_user(name,title, params,*args)
     str = ''
@@ -839,25 +865,34 @@ end
     dest_arr = dest_arr.sort_by{|a| a[0]} if dest_arr.present?
     dest_arr
   end
-
-  def store_url_for(params)
-    url = url_for(params)
-    if url.include?("//?")
-      url.sub("//?", "/store?")
-    else
-      url
-    end
-  end
-
-  def datetime_with_adjusted_offset(datetime, offset)
-    datetime + offset.to_i.seconds
-  end
-
-  def datetime_with_display_timezone(datetime, display_timezone)
-    "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
-  end
-
-  def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
-    time_with_offset = datetime_with_adjusted_offset(datetime, offset)
-    datetime_with_display_timezone(time_with_offset, display_timezone)
+     def store_url_for(params)
+     url = url_for(params)
+     if url.include?("//?")
+       url.sub("//?", "/store?")
+     else
+  
+       url
+     end
+   end
+ 
+   def datetime_with_adjusted_offset(datetime, offset)
+     datetime + offset.to_i.seconds
+   end
+ 
+   def datetime_with_display_timezone(datetime, display_timezone)
+     "#{datetime.strftime('%b %d at %l:%M %P')} (#{display_timezone})"
+   end
+ 
+   def datetime_with_adjusted_offset_and_display_timezone(datetime, offset, display_timezone)
+     time_with_offset = datetime_with_adjusted_offset(datetime, offset)
+     datetime_with_display_timezone(time_with_offset, display_timezone)
+   end
+ 
+  def get_notification_icon_by_action(notification)
+     hsh = {"About" => "about", "Agenda" => "agenda", "Speaker" => "speakers", "FAQ" => "faq", "Gallery" => "galler_1y", "Feedback" => "feedback", "E-Kit" => "e-kit","Conversation" => "conversations","Poll" => "polls_1","Award" => "awards_2","Invitee" => "invitees","Q&A" => "Q&A", "Note" => "note", "Contact" => "contact_us", "Event Highlight" => "event_highlights","Sponsor" => "sponsor", "Sponsors" => "sponsor", "Profile" => "my_profile", "QR code" => "qr_code","Quiz" => "polls","My Favorite" => "myfavourite","Exhibitor" => "Exhibitor-breadcumb",'Venue' => "venue", 'Leaderboard' => "Leaderboard", "Custom Page1" => "custom", "Custom Page2" => "custom", "Custom Page3" => "custom","Custom Page4" => "custom","Custom Page5" => "custom", "chats" => "chat", "My Travel" => "travel","social_sharings" => "social_sharing"}
+     if hsh[notification.action].present?
+       "/assets/coloured_icons/#{hsh[notification.action]}.png"
+     else
+       ""
+     end
   end

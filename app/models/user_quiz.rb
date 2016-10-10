@@ -45,7 +45,8 @@ class UserQuiz < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.in_time_zone(self.quiz.event.timezone).strftime("%d/%m/%Y %T")
+    #self.created_at.in_time_zone(self.quiz.event.timezone).strftime("%d/%m/%Y %T")
+    (self.created_at + self.quiz.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
   
   def question

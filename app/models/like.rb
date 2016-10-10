@@ -12,15 +12,20 @@ class Like < ActiveRecord::Base
   after_destroy :update_conversation, :update_conversation_records_for_destroy
 
   def update_conversation
-		Conversation.find_by_id(self.likable_id).update_column(:updated_at, Time.now.utc) rescue nil
+		Conversation.find_by_id(self.likable_id).update_columns(updated_at: Time.now.utc, last_interaction_at: Time.now.utc)
 	end
 
   def update_conversation_records_for_create
-    conversation = Conversation.find_by_id(self.likable_id) rescue nil
+    conversation = Conversation.find_by_id(self.likable_id)
+    invitee = Invitee.find(self.user_id)
     if conversation.present?
-      conversation.update_column(:updated_at, self.updated_at)
       conversation.update_column(:action, 'Like')
-      conversation.update_column(:actioner_id, self.user_id)      
+      conversation.update_column(:actioner_id, self.user_id)       
+      conversation.update_column(:first_name_user, invitee.first_name)
+      conversation.update_column(:last_name_user, invitee.last_name)
+      conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
+      conversation.update_last_updated_model
+      conversation.update_column(:updated_at, self.updated_at)
     end
   end
 

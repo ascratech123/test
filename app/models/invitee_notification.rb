@@ -3,14 +3,16 @@ class InviteeNotification < ActiveRecord::Base
   belongs_to :notification
 
   validates :invitee_id, :notification_id, :event_id, presence: { :message => "This field is required." }
-  after_save :update_last_updated_model, :create_analytic_invitee_notification
+  after_save :update_last_updated_model
+  after_create :create_analytic_invitee_notification
   
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
   end
 
   def create_analytic_invitee_notification
-  	if (self.notification.show_on_activity == true)
+    notification = self.notification
+  	if (notification.show_on_activity == true)
   		self.create_invitee_notification_in_analytic
   	end
   end

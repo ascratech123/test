@@ -12,7 +12,6 @@
         .col-xs-7.pl5
           %h6.text-muted.truncate
             = Client::display_hsh[url]  
-            
           - page = params[:controller].split("/").second
           - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images", "abouts", "sponsors", "my_profiles", "qr_code","my_calendar", "favourites", 'leaderboard','custom_page1s','custom_page2s','custom_page3s','custom_page4s','custom_page5s']
           - if ["poll_walls","conversation_walls","qna_walls"].exclude? url and show_card_except_event_features(url)
@@ -43,7 +42,8 @@
                 - count = objs.present? ? 1 : 0
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "") 
               - else
-                - count = objs.count  
+                - count = objs.count if url != "activity_feeds"
+                - count = @count if url == "activity_feeds"
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "")
                 - redirection = "" if (count == 0 and url == 'qnas' and (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])))# !current_user.has_role? :moderator)
               - if ["poll_walls","conversation_walls","qna_walls"].include? (url)
@@ -69,7 +69,7 @@
               - display_title = "Add"
             -elsif url == "venue" and @event.emergency_exit.present?
               - display_title = "Manage"
-            - elsif ["leaderboard"].include?(url)
+            - elsif ["leaderboard", "activity_feeds"].include?(url)
               - display_title = "Manage"
               - redirect_link = ""
             -elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include?(url) 
@@ -224,6 +224,5 @@
         .mdl-card__menu
           %button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
             %i.material-icons more_vert   
-
 
 

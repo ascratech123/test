@@ -17,7 +17,7 @@ namespace :admin do
   get 'bee_editor/template' => 'bee_editors#template'
   get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
-  resources :time_zones
+  resources :time_zones, :notification_action_changes
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses,:change_roles
   resources :licensees do
@@ -36,7 +36,7 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :microsites, :user_microsites, :microsite_templates, :qna_walls, :conversation_walls, :poll_walls, :quiz_walls
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :microsites, :user_microsites, :microsite_templates, :qna_walls, :conversation_walls, :poll_walls, :quiz_walls, :activity_feeds
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
@@ -49,12 +49,6 @@ namespace :admin do
     resources :quizzes do
       resources :user_quizzes
     end
-
-    # resources :invitee_datas do
-    #   collection do
-    #     post 'update_details'
-    #   end
-    # end
 
     resources :user_polls, :user_quizzes, :user_feedbacks, :likes, :comments
 
@@ -86,7 +80,10 @@ end
       post 'tokens/twitter_authentication' => 'tokens#twitter_authentication', defaults: {format: 'json'}
       resources :events do 
         post 'delete_mobile_data', on: :collection 
-        resources :chats
+        resources :chats do 
+          post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
+        end
+        resources :invitee_chats  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}

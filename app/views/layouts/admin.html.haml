@@ -73,6 +73,9 @@
                 = link_to "Smtp Setting", new_admin_smtp_setting_path(),:class =>'logoutwieght'
                 / %a{:href =>"/admin/smtp_settings/new",:class => "logoutwieght"}
                 /   Smtp Setting
+            - if current_user.roles.pluck(:name).uniq.count > 1
+              %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
+                = link_to "Change Role", "/admin/change_roles/new", :class =>'logoutwieght', :id => 'change_role_btn'
             %li.mdl-menu__item.mdl-menu__item--full-bleed-divider
               = link_to "Logout", destroy_user_session_path, :method => :get, :class =>'logoutwieght', :id => 'hdrbtn' 
             

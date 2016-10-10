@@ -33,6 +33,8 @@
               - redirect_url = "javascript:void(0)"
             - elsif feature[0] == "themes"
               - redirect_url = "/admin/events/#{@event.id}/#{feature[0]}/#{@event.theme_id}"
+            - elsif feature[0] == "notifications"
+              - redirect_url = "/admin/events/#{@event.id}/#{feature[0]}"
             - elsif redirect_feature.include?(feature[0]) #and feature_count == 1
               - id = @event.emergency_exit.id if (feature[0] == "emergency_exits" and @event.emergency_exit.present?)
               - id = @event.id if (feature[0] == "event_highlights" and @event.present?)

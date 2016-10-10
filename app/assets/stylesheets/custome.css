@@ -43,7 +43,8 @@
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
-
+.redText{color:red;}
+.clear{clear: both;}
 /*test*/
 .test{position:relative;}
 .event_select123{position:absolute;top:16px;z-index:99999999999;}
@@ -82,6 +83,13 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+ .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+ 
+  
+ .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
+ 
+ .addMoreSpeaker{ border-radius: 50%;
+     display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
   .ckeditor_custom {text-align: left;}
 .copyCustomContent button{background:#1CB1BA; border:0 none; padding:5px; color:#fff; cursor:pointer;}
@@ -89,6 +97,10 @@
 
 .mb10{margin-bottom: 10px;}
 .displayNone{display: none;}
+.text-left{text-align: left;}
+.addmoretext.text-left{text-align:left; margin-top:8px;}
+.centerAlign{text-align:center;}
+#loadingText{}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -428,6 +440,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .result_statusdiv{width:75px;}
 .back_btn_header{display: inline-block; margin-top: 17px;}
 .search_header + div{width:85px;}
+.select-speaker{margin-bottom: 15px;}
 /* nilam css ends here */
 
 /*nilam*/
@@ -651,7 +664,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
  .pick-a-color-markup .input-group-btn{position: absolute;right: 30px;top: -2px;}
  .save_button h4,.new_event_feature h4{color:#a9acbd; font-size: 20px; margin-bottom:20px;}
  .p-h-12{padding: 0px 5px !important;}
- .mdl-card.agendaHeight{min-height:auto;}
+ .mdl-card.agendaHeight{min-height:auto;background:#fff;}
  .form-horizontal .mdl-grid.mdl-card.mdl-shadow--1dp{box-sizing:border-box;padding: 5px 20px;}
  .setting .col-xl-3{width: 20%;}
  .topbar-left.blueheaderFont{ margin-left: 60px;}

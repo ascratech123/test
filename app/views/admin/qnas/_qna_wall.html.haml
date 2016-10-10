@@ -41,27 +41,30 @@
                         %tbody
                           %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead To
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead From
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead Company
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                             %td{:align => "center", :valign => "middle", :width => "40%"}
-                              %p.tabHead Question
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead Answer/Ignore
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Answer/Ignore
                           - unanswer_qnas.each do |qna|
                             %tr
                               %td
-                                %p.userTxt= qna.get_receiver_user_name
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.get_receiver_user_name
                               %td
-                                %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                                 %br
                                   %p.companyTxt
                               %td
-                                %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name 
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name 
                               %td
-                                %p.userTxt
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                   = qna.question
                               %td{:align => "center", :valign => "middle"}
                                 = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "approved"), :method => "put" do
@@ -83,26 +86,29 @@
                       %tbody
                         %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead To
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead From
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead Company
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                           %td{:align => "center", :valign => "middle", :width => "55%"}
-                            %p.tabHead Question
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                           / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                         - answered_qnas.each do |qna|
                           %tr
                             %td
-                              %p.userTxt= qna.get_receiver_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.get_receiver_user_name
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                               %br
                                 %p.companyTxt
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
                             %td
-                              %p.userTxt
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                 = qna.question  
               - rejected_qnas = Qna.get_unanswer(objs,"rejected")
               .panel.panel-default
@@ -119,26 +125,29 @@
                       %tbody
                         %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead To
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead From
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead Company
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                           %td{:align => "center", :valign => "middle", :width => "55%"}
-                            %p.tabHead Question
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                           / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                         - rejected_qnas.each do |qna|
                           %tr
                             %td
-                              %p.userTxt= qna.get_receiver_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.get_receiver_user_name
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                               %br
                                 %p.companyTxt
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
                             %td
-                              %p.userTxt
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                 = qna.question
     - elsif @qna_wall.bg_color.present?
       %body{:style=>"background-color: #{@qna_wall.bg_color};"}
@@ -174,27 +183,30 @@
                         %tbody
                           %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead To
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead From
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead Company
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                             %td{:align => "center", :valign => "middle", :width => "40%"}
-                              %p.tabHead Question
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                             %td{:align => "center", :valign => "middle", :width => "15%"}
-                              %p.tabHead Answer/Ignore
+                              %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Answer/Ignore
                           - unanswer_qnas.each do |qna|
                             %tr
                               %td
-                                %p.userTxt= qna.get_receiver_user_name
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.get_receiver_user_name
                               %td
-                                %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                                 %br
-                                  %p.companyTxt
+                                  %p.companyTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                               %td
-                                %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name 
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                  = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name 
                               %td
-                                %p.userTxt
+                                %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                   = qna.question
                               %td{:align => "center", :valign => "middle"}
                                 = link_to admin_event_qna_path(event_id: qna.event_id, id: qna.id, wall_answer: "approved"), :method => "put" do
@@ -216,26 +228,29 @@
                       %tbody
                         %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead To
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead From
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead Company
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                           %td{:align => "center", :valign => "middle", :width => "55%"}
-                            %p.tabHead Question
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                           / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                         - answered_qnas.each do |qna|
                           %tr
                             %td
-                              %p.userTxt= qna.get_receiver_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.get_receiver_user_name
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                               %br
-                                %p.companyTxt
+                                %p.companyTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
                             %td
-                              %p.userTxt
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                 = qna.question  
               - rejected_qnas = Qna.get_unanswer(objs,"rejected")
               .panel.panel-default
@@ -252,26 +267,29 @@
                       %tbody
                         %tr{:align => "center", :bgcolor => "#e8e8e8", :valign => "middle"}
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead To
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} To
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead From
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} From
                           %td{:align => "center", :valign => "middle", :width => "15%"}
-                            %p.tabHead Company
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Company
                           %td{:align => "center", :valign => "middle", :width => "55%"}
-                            %p.tabHead Question
+                            %p.tabHead{:style=>"color:#{@qna_wall.sub_text_color};"} Question
                           / <td width="15%" valign="middle" align="center"><p class="tabHead"></p></td>
                         - rejected_qnas.each do |qna|
                           %tr
                             %td
-                              %p.userTxt= qna.get_receiver_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.get_receiver_user_name
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_user_name
                               %br
                                 %p.companyTxt
                             %td
-                              %p.userTxt= qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
+                                = qna.anonymous_on_wall == "true" ? "" : qna.get_company_name
                             %td
-                              %p.userTxt
+                              %p.userTxt{:style=>"color:#{@qna_wall.sub_text_color};"}
                                 = qna.question
 :javascript
   function show_menu(){

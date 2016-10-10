@@ -25,8 +25,8 @@ class EventFeature < ActiveRecord::Base
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
-  after_save :venue_menu_icon_selection, :update_last_updated_model
-  after_destroy :delete_default_invitee_groups
+  after_save :venue_menu_icon_selection, :update_last_updated_model, :update_event_activity_feed
+  after_destroy :delete_default_invitee_groups, :hide_event_activity_feed
 
   default_scope { order("sequence") }
   scope :not_hidden_icon, -> { where(menu_visibilty: "active",status: "active") }
@@ -49,6 +49,16 @@ class EventFeature < ActiveRecord::Base
 
   Paperclip.interpolates :main_icon_interpolate_time_stamp  do |attachment, style|
     attachment.instance.main_icon_interpolate_time_stamp.to_s
+  end
+
+  def update_event_activity_feed
+    if (self.status == "deactive" or self.menu_visibilty == "inactive") 
+      self.hide_event_activity_feed
+    end
+  end
+
+  def hide_event_activity_feed
+    self.event.update_column("set_activity_feed_as_homepage", nil) if self.name == "activity_feeds"
   end
 
   def update_last_updated_model
@@ -83,9 +93,10 @@ class EventFeature < ActiveRecord::Base
   end
 
   def set_menu_icon_visibility
-    if ["contacts","venue","event_highlights", 'chats','social_sharings'].include?(self.name)
+    # if ["contacts","venue","event_highlights", 'chats','social_sharings'].include?(self.name)
+    if ["contacts","venue","event_highlights",'social_sharings'].include?(self.name)
       self.menu_icon_visibility = "no"
-    end
+    end    
   end
 
   def image_dimensions
@@ -146,7 +157,8 @@ class EventFeature < ActiveRecord::Base
   end
 
   def update_visibility
-    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats","social_sharings"]
+    #disable_features = ['event_highlights', 'emergency_exits', "my_calendar","chats","social_sharings"]
+    disable_features = ['event_highlights', 'emergency_exits', "my_calendar","social_sharings"]
     if disable_features.include? self.name
       self.update_column(:menu_visibilty, 'inactive')
     else

@@ -9,7 +9,7 @@
       = f.custom_text_field :push_url, "Push Url *"
       = f.custom_text_field :android_push_key, "Android Pem Key *"
       = f.hidden_field :mobile_application_id, :value => params[:mobile_application_id]
-      = f.new_custom_file_browser_field :pem_file, "Pem File *", :id => "uploadBtn", :value => f.object.pem_file_file_name, :action=> params[:action]
+      = f.new_custom_file_browser_field :pem_file, "Pem File *", :id => "uploadBtn", :value => f.object.pem_file_file_name,"background" => "false", :action=> params[:action]
     .fixed-activon-btn-new  
       = f.custom_submit_button "SAVE"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

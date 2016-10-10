@@ -10,15 +10,54 @@ class Agenda < ActiveRecord::Base
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
   validate :check_speaker_and_track_is_present
+  validate :speakers_count
   
   before_validation :set_attr_accessor
   before_validation :set_time
-  after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model
+  # before_save :set_agenda_speakers
+  before_save :set_speaker_ids
+  # after_save :set_speaker_name
+  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model, :update_agenda_speakers
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
+  before_destroy :destroy_id_from_speaker
 
   default_scope { order('start_agenda_time asc') }
+
+  def set_speaker_ids
+    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "") if self.speaker_ids.present?
+  end
+
+  def destroy_id_from_speaker
+    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
+    speaker_ids.each do |speaker_id|
+      speaker = Speaker.find(speaker_id)
+      agenda_ids = speaker.all_agenda_ids.to_s.split(",")
+      speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(","))
+    end if speaker_ids.present?
+  end
+
+  def update_agenda_speakers
+    speaker_ids = self.speaker_ids.to_s.split(',')
+    speaker_names = []
+    speaker_ids.each do |speaker_id|
+      speaker = Speaker.find(speaker_id)
+      agenda_ids = (speaker.all_agenda_ids.to_s.split(",") + [self.id.to_s]).uniq.join(",")
+      speaker.update_column(:all_agenda_ids, agenda_ids)
+      speaker_names << speaker.speaker_name
+    end if speaker_ids.present?
+    all_speaker_names = (self.speaker_names.to_s.split(",") + speaker_names).uniq.join(",")
+    self.update_column("all_speaker_names", all_speaker_names)
+  end
+
+  # def speaker_names
+  #   self.agenda_speakers.pluck(:speaker_name).join(', ')
+  # end
+
+  # def speaker_ids
+  #   self.speaker_name#agenda_speakers.pluck(:speaker_name).join(', ')
+  # end
 
   def set_attr_accessor
     if self.start_time_hour.blank?
@@ -84,6 +123,13 @@ class Agenda < ActiveRecord::Base
     end
   end
 
+  def set_agenda_speakers
+    if self.speaker_name_changed?  or self.agenda_speaker_form_data.present?
+      self.agenda_speakers = []
+      self.agenda_speakers_attributes = self.speaker_name.split(",").collect{|s, i| {"speaker_id" => 0, "speaker_name" => s}}
+    end
+  end
+
   def set_time
     start_date = self.start_agenda_date rescue nil
     end_date = self.end_agenda_date rescue nil
@@ -128,6 +174,17 @@ class Agenda < ActiveRecord::Base
     if self.agenda_type == "Add New Track"
       errors.add(:new_category, "This field is required.") if self.new_category.blank?
     end
+  end
+
+  def speakers_count
+   if self.speaker_ids.present? or self.speaker_names.present?
+     speaker_ids_count = self.speaker_ids.to_s.split(",").count
+     speaker_names_count = self.speaker_names.to_s.split(",").count
+     if (speaker_ids_count + speaker_names_count) > 5
+       errors.add(:speaker_names, "you can add upto 5 speakers") if self.speaker_names.present?
+       errors.add(:speaker_ids, "you can add upto 5 speakers") if self.speaker_ids.present?
+     end
+   end
   end
 
   def agenda_type

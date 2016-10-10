@@ -31,7 +31,7 @@
                           %p.companyName{:style=>"color:#{@conversation_wall.font_color};"}
                             = user.company_name rescue nil
                         .qstnDiv
-                          %p{:style=>"color:#{@conversation_wall.font_color};"}
+                          %p{:style=>"color:#{@conversation_wall.sub_text_color};"}
                             = conversation.description
                       .back.back-img
                         - if conversation.image.present?
@@ -44,7 +44,7 @@
                             %p.companyNameBack{:style=>"color:#{@conversation_wall.font_color};"}
                               = user.company_name rescue nil
                           .qstnDivBack
-                            %p{:style=>"color:#{@conversation_wall.font_color};"}
+                            %p{:style=>"color:#{@conversation_wall.sub_text_color};"}
                               = conversation.description    
   - elsif @conversation_wall.present? and @conversation_wall.background_color.present? 
     %body.newcoversationwallImg{:style=>"background-color: #{@conversation_wall.background_color};"} 
@@ -69,7 +69,7 @@
                           %p.companyName{:style=>"color:#{@conversation_wall.font_color};"}
                             = user.company_name rescue nil
                         .qstnDiv
-                          %p{:style=>"color:#{@conversation_wall.font_color};"}
+                          %p{:style=>"color:#{@conversation_wall.sub_text_color};"}
                             = conversation.description
                       .back.back-img
                         - if conversation.image.present?
@@ -81,6 +81,6 @@
                             %p.companyNameBack{:style=>"color:#{@conversation_wall.font_color};"}
                               = user.company_name rescue nil
                           .qstnDivBack
-                            %p{:style=>"color:#{@conversation_wall.font_color};"}
+                            %p{:style=>"color:#{@conversation_wall.sub_text_color};"}
                               = conversation.description                                  
                        
