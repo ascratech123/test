@@ -47,4 +47,4 @@
       - if show_card("social_sharings")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "social_sharing.png", :objs => @event.chats, :url => "social_sharings", :@count => @count}  
       - if show_card("activity_feeds")
-        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "activity_feed.png", :objs => [], :url => "activity_feeds", :@count => (@event.set_activity_feed_as_homepage.present? and @event.set_activity_feed_as_homepage == true) ? 1 : 0 }
+        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "activity_feed.png", :objs => [], :url => "activity_feeds", :@count => (@event.set_activity_feed_as_homepage.nil?) ? 0 : 1 }
