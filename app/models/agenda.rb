@@ -29,7 +29,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def destroy_id_from_speaker
-    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = self.speaker_ids.to_s.split(',')
     speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
@@ -39,7 +39,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def update_agenda_speakers
-    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = self.speaker_ids.to_s.split(',')
     speaker_names = []
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
@@ -126,7 +126,7 @@ class Agenda < ActiveRecord::Base
   def set_agenda_speakers
     if self.speaker_name_changed?  or self.agenda_speaker_form_data.present?
       self.agenda_speakers = []
-      self.agenda_speakers_attributes = self.speaker_name.split(",").collect{|s, i| {"speaker_id" => 0, "speaker_name" => s}}
+      self.agenda_speakers_attributes = self.speaker_name.to_s.split(",").collect{|s, i| {"speaker_id" => 0, "speaker_name" => s}}
     end
   end
 
