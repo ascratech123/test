@@ -10,7 +10,7 @@ class Agenda < ActiveRecord::Base
   validates :title,:start_agenda_date, :rating_status, presence: { :message => "This field is required." }
   validate :start_agenda_time_is_after_agenda_date
   validate :check_speaker_and_track_is_present
-  validate :speakers_count
+  # validate :speakers_count
   
   before_validation :set_attr_accessor
   before_validation :set_time
@@ -29,7 +29,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def destroy_id_from_speaker
-    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = self.speaker_ids.split(',') if self.speaker_ids.present?
     speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
@@ -39,7 +39,7 @@ class Agenda < ActiveRecord::Base
   end
 
   def update_agenda_speakers
-    speaker_ids = self.speaker_ids.split(',')
+    speaker_ids = self.speaker_ids.split(',') if self.speaker_ids.present?
     speaker_names = []
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
@@ -176,16 +176,16 @@ class Agenda < ActiveRecord::Base
     end
   end
 
-  def speakers_count
-    if self.speaker_ids.present? or self.speaker_names.present?
-      speaker_ids_count = self.speaker_ids.split(",").count
-      speaker_names_count = self.speaker_names.split(",").count
-      if (speaker_ids_count + speaker_names_count) > 5
-        errors.add(:speaker_names, "you can add upto 5 speakers") if self.speaker_names.present?
-        errors.add(:speaker_ids, "you can add upto 5 speakers") if self.speaker_ids.present?
-      end
-    end
-  end
+  # def speakers_count
+  #   if self.speaker_ids.present? or self.speaker_names.present?
+  #     speaker_ids_count = self.speaker_ids.split(",").count
+  #     speaker_names_count = self.speaker_names.split(",").count
+  #     if (speaker_ids_count + speaker_names_count) > 5
+  #       errors.add(:speaker_names, "you can add upto 5 speakers") if self.speaker_names.present?
+  #       errors.add(:speaker_ids, "you can add upto 5 speakers") if self.speaker_ids.present?
+  #     end
+  #   end
+  # end
 
   def agenda_type
     self.agenda_track.present? ? self.agenda_track.track_name : ""

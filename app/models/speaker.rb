@@ -39,7 +39,7 @@ class Speaker < ActiveRecord::Base
   default_scope { order("sequence") }  
 
   def delete_speaker_name_from_agenda
-    agenda_ids = self.all_agenda_ids.split(',')
+    agenda_ids = self.all_agenda_ids.split(',')  if self.all_agenda_ids.present?
     agenda_ids = agenda_ids.reject { |e| e.to_s.empty? }
     agenda_ids.each do |agenda_id|
       agenda = Agenda.find(agenda_id)
