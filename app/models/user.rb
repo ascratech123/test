@@ -360,4 +360,8 @@ class User < ActiveRecord::Base
     end
     access
   end
+
+  def get_roles_for_user_for_checking(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
+  end
 end

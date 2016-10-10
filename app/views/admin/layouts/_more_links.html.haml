@@ -172,7 +172,7 @@
                   = link_to new_admin_event_feedback_path(:event_id => @event.id, :importable_type => 'user_feedbacks', :import => "xls") ,:class => "centerAlign" do
                     Import Answer     
                 - if @user_feedbacks.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
-                  = link_to admin_event_user_feedbacks_path(:event_id => @event.id, :format => "xls") ,:class => "centerAlign" do
+                  = link_to admin_event_user_feedbacks_path(:event_id => @event.id, :format => "xls",:export_type => 'user_feedback') ,:class => "centerAlign" do
                     Export Answer 
           - when 'faq'
             %li
