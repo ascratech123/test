@@ -69,16 +69,20 @@
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
         = f.custom_text_area_field :remarks, "Remarks"
-        = f.hidden_field :copy_content, :id => 'copy_content'
-        = f.hidden_field :custom_content, :id => 'custom_content'
+        =# f.hidden_field :copy_content, :id => 'copy_content'
+        =# f.hidden_field :custom_content, :id => 'custom_content'
 
+      .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            Copy Event 
         - event_names = @client.events.pluck(:event_name, :id)
         - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
             .bs-componet
               .form-group.set_highlight_select
                 %label.col-lg-4.control-label.ml-color--shades-white
-                  Do you want to add data from another event?
+                  Do you want to copy data from another event?
                 .col-lg-7
                   = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
                   = f.custom_radio_button :copy_event, "no", "No", :id => "no"
@@ -95,26 +99,36 @@
                   - if @event.errors[:event_id].present?
                     .p.errorMessage
                       = 'This field is required.'
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
-            .bs-componet
-              .form-group.set_highlight_select 
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  //Select Event     
-                .col-lg-7.copyCustomContent
-                  %button.copyButton{:onclick => "return false;"} Copy Content
-                  %button.customButton{:onclick => "return false;"} Custom Content
-                  - if @event.errors[:copy_content].present?
-                    .p.errorMessage
-                      = @event.errors[:copy_content].first
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+          / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
+          /   .bs-componet
+          /     .form-group.set_highlight_select 
+          /       %label.col-lg-4.control-label.ml-color--shades-white
+          /         //Select Event     
+          /       .col-lg-7.copyCustomContent
+          /         %button.copyButton{:onclick => "return false;"} Copy Content
+          /         %button.customButton{:onclick => "return false;"} Custom Content
+          /         - if @event.errors[:copy_content].present?
+          /           .p.errorMessage
+          /             = @event.errors[:copy_content].first
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.selectContentDiv
+            .mdl-grid.p-v-5
+              .col-lg-4.mdl-typography--text-right
+                %p.displayInlineBlock.multicitytxt Do you want to copy all content from this event?
+              .col-lg-3.p-h-12   
+                = f.custom_radio_button :copy_all_content, "yes","Yes", :id => "copy_all_content_option-1"
+                = f.custom_radio_button :copy_all_content, "no", "No", :id => "copy_all_content_option-2"
+                .field_with_errors
+                  .span{:class => "errorMessage"}
+                    = f.object.errors.messages[:agenda_type].join("") rescue nil
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.hideDiv.selectContentDiv
             .form-group
               %label.col-lg-4.control-label.ml-color--shades-white
                 Select Content
               .col-lg-7.notification                
-                - Event::EVENT_ASSOCIATIONS.each_with_index do |group, index|
+                - Event::MOBILE_APPLICATIONS.each_with_index do |group, index|
                   - if index == 0
                     .usersep
-                      Select Content
+                      Mobile Application
                   .md-checkbox
                     %label
                       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
@@ -167,11 +181,12 @@
       %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
         ok
 
-:javascript
-  $(document).ready(function(){  
-    if("{@event.errors[:event_id].present?}")
-    {
-      $('#yes').trigger('click');
-    }
-  });
+/ :javascript
+/   $(document).ready(function(){  
+/     if("{@event.errors[:event_id].present?}")
+/     {
+/       $('#yes').trigger('click');
+/     }
+/   });
 
+  

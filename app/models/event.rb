@@ -10,6 +10,10 @@ class Event < ActiveRecord::Base
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
   EVENT_ASSOCIATIONS = ['speakers', 'invitees', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'user registrations', 'sponsors', 'registrations', 'registration settings', 'my travels', 'invitee structures', 'invitee groups', 'images', 'groupings', 'exhibitors', 'features', 'custom page1s', 'custom page2s', 'custom page3s', 'custom page4s', 'custom page5s', 'campaigns', 'attendees', 'mobile application']
 
+  MOBILE_APPLICATIONS = ['invitees', 'speakers', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'sponsors', 'my travels', 'gallery', 'exhibitors', 'features', 'custom page1', 'custom page2', 'custom page3', 'custom page4', 'custom page5']
+  # DATABASES = ['invitee structures', 'groupings']
+  # INVITEE_STRUCTURES=['registrations', 'registration settings']
+
   belongs_to :client
   belongs_to :theme
   belongs_to :mobile_application
@@ -639,7 +643,7 @@ class Event < ActiveRecord::Base
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? and params[:associations].include?('mobile application')
     event.copy_association(event.attendees, self.id) if event.attendees.present? and params[:associations].include?('attendees')
     event.copy_awards_association(event.awards, self.id) if event.awards.present? and params[:associations].include?('awards')
-    event.copy_images_association(event.images, self.id) if event.images.present? and params[:associations].include?('images')
+    event.copy_images_association(event.images, self.id) if event.images.present? and params[:associations].include?('gallery')
     event.copy_agendas_association(event.agendas, self.id) if event.agendas.present? and params[:associations].include?('agendas')
     event.copy_association(event.contacts, self.id) if event.contacts.present? and params[:associations].include?('contacts')
     event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1s')
