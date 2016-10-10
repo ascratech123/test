@@ -648,6 +648,7 @@ module ApplicationHelper
     index = a.last
     index
   end
+end
 
   def custom_text_field_tag_user(name,title, params,*args)
     str = ''
@@ -847,4 +848,4 @@ module ApplicationHelper
       ""
     end
   end
-end
+#end
