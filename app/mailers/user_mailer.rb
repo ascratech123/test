@@ -11,7 +11,7 @@ class UserMailer < ActionMailer::Base
       @licensee = licensee
       mail(to: 'shiv@ascratech.com', subject: 'Welcome to My Awesome Site', from: @smtp_setting.from_email)
     end  
-  end
+  end 
 
   def send_mail_to_new_invitee(invitee)
     @invitee = invitee
