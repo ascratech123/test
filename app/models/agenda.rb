@@ -178,8 +178,8 @@ class Agenda < ActiveRecord::Base
 
   def speakers_count
     if self.speaker_ids.present? or self.speaker_names.present?
-      speaker_ids_count = self.speaker_ids.split(",").count
-      speaker_names_count = self.speaker_names.split(",").count
+      speaker_ids_count = self.speaker_ids.to_s.split(",").count
+      speaker_names_count = self.speaker_names.to_s.split(",").count
       if (speaker_ids_count + speaker_names_count) > 5
         errors.add(:speaker_names, "you can add upto 5 speakers") if self.speaker_names.present?
         errors.add(:speaker_ids, "you can add upto 5 speakers") if self.speaker_ids.present?
