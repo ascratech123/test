@@ -35,7 +35,7 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :activity_feeds
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers,:qna_walls,:conversation_walls,:poll_walls,:quiz_walls, :activity_feeds
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations

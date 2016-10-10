@@ -1,5 +1,22 @@
 module ApplicationHelper
 
+  def get_percentage(num, poll, bar_color, poll_wall, size, percentage)
+   result= "<p style='color:"+poll_wall.font_color+"'>"
+   (num.is_a? Numeric) ? result+= num : result+= poll.send(num)
+   percentage = get_user_poll_percentage(num,poll)
+   result+= "</p>"
+   result+= "<div class='progress'>"
+   result+= "<div class='pollwidth' style='width: 90%'>"
+   result+= "<div class='progress-bar progress-bar-2' style='width: "+percentage.to_s+"%; background-color: "+bar_color+";' role='progressbar' aria-valuemax='' aria-valuemin='0'  aria-valuenow="+size.to_s+" >"
+   result+= "</div></div>"
+   result+= "<span style='color: "+poll_wall.font_color+"'>" 
+   result+= percentage.to_s + '%' 
+   result+= "</span>"
+   result+= "</div>"
+   bar_color = ((bar_color == poll_wall.bar_color)? poll_wall.bar_color1 : poll_wall.bar_color) if percentage.present? and percentage != 0  
+   return result.html_safe
+  end
+
   def add_fields_for_agenda_speakers(name, f, association, disp, partial = "agenda_speakers_fields", locals = {}, klass)
     new_object = association.to_s.classify.constantize.new
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
@@ -505,6 +522,20 @@ module ApplicationHelper
       percentage = (count.to_f/total) * 100 rescue 0
     end
     return "#{percentage.round} %"
+  end
+
+  def correct_user_quizzes_for_percentile_for_wall(quiz,option) 
+     percentage = 0
+     user_quizzes = quiz.user_quizzes if quiz.user_quizzes.present?
+     if user_quizzes.present?
+       total = user_quizzes.count
+       count = 0
+       user_quizzes.each do |ans|
+         count = count + 1 if quiz.attributes.key(ans.answer).to_s == option
+       end
+       percentage = (count.to_f/total) * 100 rescue 0
+     end
+     return "#{percentage.round}" 
   end
 
   def correct_user_quizzes_for_total_count(quiz,option)

@@ -206,6 +206,29 @@ EXHIBITOR_IMAGE_PATH=   {:path => "exhibitor/image/:style/:id-:filename",
 
 NOTIFICATION_IMAGE_PATH  = {:path => "notifications/image/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+                     
+QNAWALL_LOGO_PATH  = {:path => "qna_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/qna_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
+CONVERSATIONWALL_LOGO_PATH  = {:path => "conversation_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/conversation_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+POLLWALL_LOGO_PATH  = {:path => "poll_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/poll_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+                     
+QUIZWALL_LOGO_PATH  = {:path => "quiz_walls/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/quiz_walls/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+QNAWALL_BG_IMAGE_PATH  = {:path => "qna_walls/background_image/:style/:id-:filename",
+      :url => "#{S3_url}/qna_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+CONVERSATIONWALL_BG_IMAGE_PATH  = {:path => "conversation_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/conversation_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+POLLWALL_BG_IMAGE_PATH  = {:path => "poll_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/poll_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
