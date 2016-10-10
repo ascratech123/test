@@ -11,7 +11,7 @@ class UserMailer < ActionMailer::Base
       @licensee = licensee
       mail(to: 'shiv@ascratech.com', subject: 'Welcome to My Awesome Site', from: @smtp_setting.from_email)
     end  
-  end 
+  end
 
   def send_mail_to_new_invitee(invitee)
     @invitee = invitee
@@ -21,7 +21,7 @@ class UserMailer < ActionMailer::Base
   def send_event_mail_to_licensee(store_info)
     @mobile_application = MobileApplication.find(store_info.mobile_application_id)
     @licensee = @mobile_application.client.licensee
-    mail(from: 'info@hobnobspace.com', to: @licensee.email, bcc: "bhavana@ascratech.com,minakshi@ascratech.com", subject: "Your #{@mobile_application.name} created")
+    mail(from: "info@hobnobspace.com", to: "info@hobnobspace.com", bcc: "minakshi@ascratech.com", subject: "Your #{@mobile_application.name} created")
   end
 
   def send_password_invitees(invitee)

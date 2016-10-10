@@ -20,6 +20,10 @@ set :output, "log/cron_log.log"
 
 # Learn more: http://github.com/javan/whenever
 
+every 60.seconds do
+  runner "User.change_status_for_super_admin", :environment => :staging
+end
+
 every 1.minutes do
   runner "Notification.push_notification_time_basis", :environment => :staging
 end
