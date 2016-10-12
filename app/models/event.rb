@@ -81,7 +81,7 @@ class Event < ActiveRecord::Base
   accepts_nested_attributes_for :event_venues
 
   
-  validates :event_name, :client_id, :cities, :start_event_date,:end_event_date, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :event_name, :client_id, :cities, :start_event_date,:end_event_date,:event_type_for_registration, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
   validates :country_name,:timezone, presence:{ :message => "This field is required." }
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 
@@ -149,7 +149,7 @@ class Event < ActiveRecord::Base
     self.status = "pending"
     self.event_theme = "create your own theme"
   end
-  
+
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
   end
@@ -338,7 +338,7 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_datetime 
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
