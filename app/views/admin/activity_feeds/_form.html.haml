@@ -11,7 +11,7 @@
           .col-lg-4.mdl-typography--text-right
             %p.displayInlineBlock.multicitytxt Set Activity Feed as Home Page
           .col-lg-3.p-h-12   
-            - if true#@activity_feed_feature 
+            - if @activity_feed_feature 
               = f.custom_radio_button :set_activity_feed_as_homepage, true, "Yes", :id => "option-1"
               = f.custom_radio_button :set_activity_feed_as_homepage, false, "No", :id => "option-2"
             - else
