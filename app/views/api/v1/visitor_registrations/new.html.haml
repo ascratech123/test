@@ -1,3 +1,19 @@
-= form_for [:admin, @event, @invitee], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
-  = f.custom_text_field :email, "Email"
-  = f.custom_submit_button "SAVE"
+= stylesheet_link_tag "signup.css"
+.mdl-grid.mdl-card.mdl-shadow--1dp.signupDiv
+  .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+    %h4.heading-border.p-t-10.m-b-15
+      Sign Up 
+  = form_for [:admin, @event, @invitee], :html => {:class =>'form-horizontal signup-form'}, :builder => CustomFormBuilder do |f|
+    = f.custom_text_field :email, "First Name"
+    = f.custom_text_field :email, "Last Name"  
+    = f.custom_text_field :email, "Email Id"
+    = f.custom_text_field :email, "Company"
+    = f.custom_text_field :email, "Designation"
+    = f.custom_text_field :email, "Phone No"
+    = f.custom_text_field :email, "Password"
+    = f.custom_text_field :email, "Confirm Password"
+    .submit-btn
+      = f.custom_submit_button "SUBMIT" 
+
+
+  
