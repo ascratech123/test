@@ -70,7 +70,7 @@ class MobileApplication < ActiveRecord::Base
   validate :image_dimensions_for_splash_screen, :if => Proc.new{|p| p.splash_screen_file_name_changed? and p.splash_screen_file_name.present? }
   validate :image_dimensions_for_login_background, :if => Proc.new{|p| p.login_background_file_name_changed? and p.login_background_file_name.present? }
   validate :image_dimensions_for_screen_background, :if => Proc.new{|p| p.listing_screen_background_file_name_changed? and p.listing_screen_background_file_name.present? }
-  validate :registration_background_image_or_color_present, :if => Proc.new{|p| p.visitor_registration_background_image_file_name.blank? and p.visitor_registration_background_color.blank? }
+  validate :registration_background_image_or_color_present, :if => Proc.new{|p| p.visitor_registration == "yes" and p.visitor_registration_background_image_file_name.blank? and p.visitor_registration_background_color.blank? }
   
   after_save :update_last_updated_model
   
