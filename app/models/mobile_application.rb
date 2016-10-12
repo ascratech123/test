@@ -123,6 +123,14 @@ class MobileApplication < ActiveRecord::Base
     style.present? ? self.listing_screen_background.url(style) : self.listing_screen_background.url
   end
 
+  def visitor_registration_background_image_url
+    self.visitor_registration_background_image.present? ? self.visitor_registration_background_image : " "
+  end
+
+  def visitor_registration_background_color
+    self.visitor_registration_background_color.present? ? self.visitor_registration_background_color : " "
+  end
+
   def app_icon_url(style=:large)
     style.present? ? self.app_icon.url(style) : self.app_icon.url
   end
