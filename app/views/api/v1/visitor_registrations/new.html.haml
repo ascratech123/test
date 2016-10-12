@@ -1,0 +1,3 @@
+= form_for [:admin, @event, @invitee], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+  = f.custom_text_field :email, "Email"
+  = f.custom_submit_button "SAVE"
