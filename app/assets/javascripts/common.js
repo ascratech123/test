@@ -940,3 +940,26 @@ $(document).on("click", ".addMoreSpeaker", function(){
 //     alert("You cannot add more than " + (allow + 1));
 //   }
 // });
+
+$(window).scroll(function() {
+  console.log("scroll");
+  if ($(window).scrollTop() > $(document).height()-1000)  {
+    $(".load_products").trigger('click');
+    $(".load_products").addClass("dont_load_products").removeClass("load_products");
+    return false;
+  }
+});
+
+$(document).on('click','.load_products',function(){
+  load_products();
+});
+
+function load_products(){
+  var event_id = $('#social_event_id').attr('for')
+  $.ajax({
+    type: "GET",
+    dataType: 'script',
+    url: "/api/v1/events/"+event_id+"/social_feeds.js",
+  });
+  // return false;
+}
