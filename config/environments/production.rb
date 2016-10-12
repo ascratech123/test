@@ -198,6 +198,9 @@ Mobile_Application_LOGIN_BACKGROUND_PATH = {:path => "mobile_application/login_b
 Mobile_Application_LISTING_SCREEN_BACKGROUND_PATH = {:path => "mobile_application/listing_screen_background/:style/:id-:filename",
                      :url => "#{S3_url}/mobile_application/listing_screen_background/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
+Mobile_Application_VISITOR_REGISTRATION_IMAGE_PATH = {:path => "mobile_application/visitor_registration_background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/mobile_application/visitor_registration_background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                          
+
 IMPORT_STORAGE = {:path => "imports/:id-:filename",
                      :url => "#{S3_url}/imports/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
