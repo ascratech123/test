@@ -1,1 +1,5 @@
-%iframe{:allowtransparency => "true", :frameborder => "0", :height => "529", :scrolling => "no", :src => "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F988514557904784%2Fposts%2F1102669676489271&width=500&show_text=true&appId=303479416692337&height=529", :style => "border:none;overflow:hidden", :width => "500"}
+#my-posts
+	= render :partial =>"social_feeds", :locals => {:social_feeds => @social_feeds}
+#feed_data_social
+	= link_to "Load More", "javascript:void(0);",:class => "load_products"
+#social_event_id{:for => params[:event_id].to_i}

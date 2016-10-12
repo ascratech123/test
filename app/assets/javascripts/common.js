@@ -729,3 +729,42 @@ $(document).ready(function(){
     }
   });
 });
+
+
+// $(function() {
+//   if ($('#feed_data_social').size() > 0) {    
+//     $(window).on('scroll', function() {
+//       // if ($(window).scrollTop() > $(document).height() - $(window).height() - 60) {
+//       if ($(window).scrollTop() > $(document).height()-2500)  {
+//         // alert("scorll");
+//         $.ajax({
+//           type: "GET",
+//           dataType: 'script',
+//           url: "/api/v1/social_feeds",
+//         });
+//       }
+//     });
+//   }
+// });
+$(window).scroll(function() {
+  console.log("scroll");
+  if ($(window).scrollTop() > $(document).height()-1000)  {
+    $(".load_products").trigger('click');
+    $(".load_products").addClass("dont_load_products").removeClass("load_products");
+    return false;
+  }
+});
+
+$(document).on('click','.load_products',function(){
+  load_products();
+});
+
+function load_products(){
+  var event_id = $('#social_event_id').attr('for')
+  $.ajax({
+    type: "GET",
+    dataType: 'script',
+    url: "/api/v1/events/"+event_id+"/social_feeds.js",
+  });
+  // return false;
+}

@@ -1,0 +1,26 @@
+.save_button.mdl-card
+  = form_for [:admin, @event], :builder => CustomFormBuilder do |f|
+    = hidden_field_tag "set_activity_feed_bool", true
+    = hidden_field_tag "client_id", @event.client_id
+    .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General Information
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15
+        .mdl-grid.p-v-5.form-group
+          .col-lg-4.mdl-typography--text-right
+            %p.displayInlineBlock.multicitytxt Set Activity Feed as Home Page
+          .col-lg-3.p-h-12   
+            - if true#@activity_feed_feature 
+              = f.custom_radio_button :set_activity_feed_as_homepage, true, "Yes", :id => "option-1"
+              = f.custom_radio_button :set_activity_feed_as_homepage, false, "No", :id => "option-2"
+            - else
+              Activity Feed needs to be an active feature
+    .mdl-grid.mdl-card.mdl-shadow--1dp
+      = f.custom_text_field :facebook_social_tags, "Facebook Social Tags"
+      = f.custom_text_field :twitter_social_tags, "Twitter social Tags(tags followed by #)"
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
