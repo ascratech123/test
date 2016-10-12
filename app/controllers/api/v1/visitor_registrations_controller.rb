@@ -1,4 +1,5 @@
 class Api::V1::VisitorRegistrationsController < ApplicationController
+  skip_before_action :load_filter
   before_filter :get_event, :only => [:create]
   
   def index
