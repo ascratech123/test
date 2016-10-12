@@ -174,6 +174,11 @@
                 - if @user_feedbacks.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                   = link_to admin_event_user_feedbacks_path(:event_id => @event.id, :format => "xls",:export_type => 'user_feedback') ,:class => "centerAlign" do
                     Export Answer 
+          - when 'image'
+            %li
+              - if @event.present?
+                = link_to  new_admin_feedback_form_path(:event_id => @event.id),:class => "centerAlign" do
+                  Add Feedback Form
           - when 'faq'
             %li
               - if params[:show_history] != "true" and @faq.nil?

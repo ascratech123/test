@@ -102,6 +102,9 @@
     - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Feedback
+  - when 'feedback_form'
+    = link_to new_admin_event_feedback_form_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      Create Feedback Form
   - when 'image'   
     - if @event.present?
       = link_to  new_admin_event_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

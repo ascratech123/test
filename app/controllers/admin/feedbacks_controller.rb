@@ -6,10 +6,11 @@ class Admin::FeedbacksController < ApplicationController
   before_filter :find_user_feedback, :only => [:new, :index]
   before_filter :check_for_access, :only => [:index,:new]
   before_filter :check_user_role, :except => [:index]
+  before_action :find_feedback_form
   
 	def index
     @feedbacks = Feedback.search(params,@feedbacks) if params[:search].present?
-    @feedbacks = @feedbacks#.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
+    @feedbacks = @feedbacks.where(feedback_form_id: params[:feedback_form_id])#@feedbacks#.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
@@ -21,17 +22,19 @@ class Admin::FeedbacksController < ApplicationController
 	end
 
 	def new
-		@feedback = @event.feedbacks.build
+    @feedback = @event.feedbacks.build
+    @feedback = @feedback_form.feedbacks.build
     @import = Import.new if params[:import].present?
 	end
 
 	def create
-		@feedback = @event.feedbacks.build(feedback_params)
+    @feedback = @event.feedbacks.build(feedback_params)
+    @feedback.feedback_form_id = params[:feedback_form_id] if params[:feedback_form_id].present?
     if @feedback.save
       if params[:type].present?
         redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_engagement")
       else
-        redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+        redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
       end
     else
       render :action => 'new'
@@ -43,7 +46,7 @@ class Admin::FeedbacksController < ApplicationController
 
 	def update
 	  if @feedback.update_attributes(feedback_params)
-      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
     else
       render :action => "edit"
     end
@@ -65,7 +68,7 @@ class Admin::FeedbacksController < ApplicationController
 
   def destroy
     if @feedback.destroy
-      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
     end
   end
 
@@ -73,6 +76,10 @@ class Admin::FeedbacksController < ApplicationController
 
   def find_user_feedback
     @user_feedbacks = UserFeedback.where(:feedback_id => @feedbacks.pluck(:id)) if @feedbacks.present?
+  end
+
+  def find_feedback_form
+    @feedback_form = FeedbackForm.find(params[:feedback_form_id])
   end
 
   def feedback_params

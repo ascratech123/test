@@ -1,6 +1,7 @@
 class Feedback < ActiveRecord::Base
   
   belongs_to :event
+  belongs_to :feedback_form
   has_many :user_feedbacks
   has_many :favorites, as: :favoritable, :dependent => :destroy
 

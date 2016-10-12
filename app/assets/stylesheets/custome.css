@@ -940,6 +940,9 @@ input.upload {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;cursor:pointer
 .save_button .mdl-radio{vertical-align: middle; margin: 0 6px;}
 .sequenceInputWidht input{width: 50%;}
 .sequenceInputWidht th:first-child{width:15%;}
+.sequenceInputWidht th.feedback-title{width:40%;}
+.create-feedback-form th:first-child{width:40%;}
+.save_button.mdl-card.nobg{background:none;}
 .save_button .ekitTab .ekitpage{width: 18%;}
 .pagination .previous_page{font-size: 16px;}
 .pagination > a {font-size: 16px;font-weight: 400;}

@@ -35,11 +35,15 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :activity_feeds
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :activity_feeds, :feedback_forms
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
-    resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
+    resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
     resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:manage_invitee_fields
+    
+    resources :feedback_forms do
+      resources :feedbacks
+    end
     
     resources :polls do
       resources :user_polls
