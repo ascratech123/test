@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page
+  attr_accessor :password, :invitee_searches_page,:visitor_registration
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -42,6 +42,7 @@ class Invitee < ActiveRecord::Base
   validates_attachment_content_type :qr_code, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :profile_pic, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   # validate :image_dimensions
+  validates :password, presence: { :message => "This field is required." }, :if => Proc.new{|p| p.visitor_registration.present? and p.visitor_registration == "true"}
 
   default_scope { order('created_at desc') }
   

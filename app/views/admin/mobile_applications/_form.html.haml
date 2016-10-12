@@ -189,8 +189,8 @@
                   = er
 
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8
-          .bs-component.registration_background_image
-            .form-group{:style => "display: #{ get_login_at(@event,f.object)}", :class => "#{get_highlight_class(f.object)}" }
+          .bs-component.registration_background_image{:style => "display:none"}
+            .form-group{:class => "#{get_highlight_class(f.object)}" }
               .span.col-lg-4
                 = f.label "Registration background Image",:class =>"control-label", style: "float: right;"
               .col-lg-7
@@ -199,9 +199,10 @@
                     Choose File 
                   = f.file_field :visitor_registration_background_image,:id =>"registration_background_image_uploadBtn", :class=>"gui-file"
                   = text_field_tag("text_file_name","", id:"1registration_background_image_uploadBtn", class: "gui-input", :value => "#{f.object.visitor_registration_background_image_file_name.nil? ? "there is no Attachment Available !" : f.object.visitor_registration_background_image_file_name}")
-        %p.OrTxt
+        %p.OrTxt.registration_background_image{:style => "display:none"}
           or
-        = f.custom_text_field :visitor_registration_background_color, "Registration Background Color", :value => f.object.visitor_registration_background_color, :class => 'pick-a-color', :admin_theme => "#{(f.object.visitor_registration_background_color.present?) ? "has-success" : ""}"
+        .registration_background_color.col-lg-12{:style => "display:none"}
+          = f.custom_text_field :visitor_registration_background_color, "Registration Background Color", :value => f.object.visitor_registration_background_color, :class => 'pick-a-color',:admin_theme => "#{(f.object.visitor_registration_background_color.present?) ? "has-success" : ""}"
 
     - if false#f.object.events.count > 0
       .mdl-grid.mdl-shadow--1dp.m-t-40
@@ -337,5 +338,12 @@
   });
 
   $("#visitor_registration_yes").click(function(){
-    $("#registration_background_image").show()
+    $(".registration_background_image").show()
+    $(".registration_background_color").show()
   });
+
+  $("#visitor_registration_no").click(function(){
+    $(".registration_background_image").hide()
+    $(".registration_background_color").hide()
+  });
+
