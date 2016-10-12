@@ -2,7 +2,7 @@
   = render :partial => 'admin/imports/form', :locals => {:@event => @event}
 - else
   .save_button.mdl-card
-    = form_for [:admin, @event, @feedback],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+    = form_for [:admin, @event, @feedback_form, @feedback],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
       .mdl-grid.feedbackinfo.mdl-shadow--1dp
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15

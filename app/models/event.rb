@@ -43,6 +43,7 @@ class Event < ActiveRecord::Base
   has_many :sponsors, :dependent => :destroy
   has_and_belongs_to_many :users
   has_many :feedbacks, :dependent => :destroy
+  has_many :feedback_forms, :dependent => :destroy
   has_many :images, as: :imageable, :dependent => :destroy
   has_many :panels, :dependent => :destroy
   has_many :event_features, :dependent => :destroy
