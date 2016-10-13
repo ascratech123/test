@@ -98,7 +98,7 @@
   - when 'faq'
     = link_to new_admin_event_faq_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       New FAQ
-  - when 'feedback'
+  - when 'feedback' 
     - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
       = link_to new_admin_event_feedback_form_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
         New Feedback

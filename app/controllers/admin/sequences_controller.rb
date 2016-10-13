@@ -13,6 +13,8 @@ class Admin::SequencesController < ApplicationController
       @features = feature_type.where(:award_id => winner.award_id)
     elsif feature_type == Image
       @features = feature_type.where(:imageable_id => @event.id)
+    elsif feature_type == Feedback
+      @features = feature_type.where(:event_id => @event.id, :feedback_form_id => params["feedback_form_id"])
     else
       @features = feature_type.where(:event_id => @event.id)
     end
