@@ -237,7 +237,10 @@ $('.help-popup-overlay').fadeOut();
         }
     });
 
-    
+   /* nilam - popup js - account expired */
+  $('.okButton button').click(function(){
+    $('.account-popup').css('display','none');
+  });  
 
   $('#date').bootstrapMaterialDatePicker
       ({

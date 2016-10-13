@@ -6,14 +6,24 @@
     = javascript_include_tag  "application","ckeditor/init", :media => 'all' #{}"jquery-1.11.3.min", "vendors-min", "demo-min" ,"material" ,"common"
     
   %body.loaded
+    - if session[:licensee_expired].present?
+      .account-popup
+        %p.heading
+          Note
+        %p.content
+          = session[:licensee_expired]# if session[:licensee_expired].present?
+        %p.okButton
+          %button
+            OK
     .demo-layout.mdl-layout.mdl-layout--fixed-drawer.mdl-layout--fixed-header.ng-scope.mdl-js-layout.has-drawer.is-upgraded
       %header.demo-header.mdl-layout__header.mdl-color--white.mdl-color--grey-100.mdl-color-text--grey-600.is-casting-shadow
        
         .mdl-layout__header-row.mdl-color--light-blue-900
           = render :partial => 'layouts/admin_top_header'
 
-          .mdl-layout-spacer{:style => 'text-align:center;font-size:14px;color:#fff'}
-            = session[:licensee_expired] if session[:licensee_expired].present?
+          / {:style => 'text-align:center;font-size:14px;color:#fff'}
+          .mdl-layout-spacer{:style => ''}
+            
           -if false
             %span.mdl-layout-title.mdl-color-text--white.HeaderUserName
               - if get_current_user_role

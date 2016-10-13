@@ -50,7 +50,8 @@ class User < ActiveRecord::Base
   # before_save :set_time
   before_validation :set_password_to_licensee, on: :create
   before_validation :set_status_to_licensee, on: :create
-  #after_create :change_status_for_super_admin
+  after_save :check_status
+  #after_save :change_status_for_super_admin
   
   aasm :column => :status do 
     state :pending, :initial => true
@@ -74,6 +75,20 @@ class User < ActiveRecord::Base
 
   default_scope { order('created_at desc') }
   scope :check_deleted_record, -> { where('deleted != ?', 'true') }
+
+  def check_status
+    if self.has_role? :licensee_admin and self.licensee_end_date.present? and self.licensee_end_date > Date.today and self.status == "deactive"
+      self.update_column(:status, "active")
+    end
+  end
+
+  def self.change_status_for_super_admin
+    users = User.with_role(:licensee_admin)
+    users = users.where("license = ? AND status = ? AND (licensee_start_date > ? OR licensee_end_date < ?)", true, "active", Date.today, Date.today)
+    users.each do |user|
+      user.update_column(:status, "deactive")
+    end
+  end
 
   def self.current
     Thread.current[:user]
@@ -187,7 +202,8 @@ class User < ActiveRecord::Base
     if self.has_role? :licensee_admin
       User.where(:id => self.id).first
     else
-      User.where(:licensee_id => self.licensee_id).first
+      User.where(:id => self.licensee_id).first
+      # User.where(:licensee_id => self.licensee_id).first #ToDeactivate Every User which Belongs To Licensee User Created By Admin
     end
   end
 
@@ -363,5 +379,16 @@ class User < ActiveRecord::Base
 
   def get_roles_for_user_for_checking(user,resource_id,user_id)
     @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
+  end  def get_clients
+    clients = Client.with_roles(self.roles.pluck(:name), self)
+  end
+  
+  def get_roles_for_user(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+  end
+
+  def get_licensee_events_count
+    clients = get_clients
+    event_count = clients.map{|c| c.events.count}.sum
   end
 end
