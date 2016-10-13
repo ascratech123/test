@@ -1,1 +1,4 @@
-%h1 Conatact with the admin
+-if params[:status].present? and params[:status] == "1"
+  %h1 Successful Registration 
+-else
+  %h1 Conatact with the admin

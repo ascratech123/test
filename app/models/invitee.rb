@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration
+  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -16,7 +16,7 @@ class Invitee < ActiveRecord::Base
   has_many :analytics, :dependent => :destroy
 
   
-  before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :set_auto_generated_password, :if => Proc.new{|p|p.visitor_registration.blank?}#, :if => self.new_record? and self.password.blank? and self.email.present?
   before_validation :downcase_email
 
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
@@ -42,11 +42,11 @@ class Invitee < ActiveRecord::Base
   validates_attachment_content_type :qr_code, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :profile_pic, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   # validate :image_dimensions
-  validates :password, presence: { :message => "This field is required." }, :if => Proc.new{|p| p.visitor_registration.present? and p.visitor_registration == "true"}
+  validates :password, presence: { :message => "This field is required." }, :if => Proc.new{|p|p.visitor_registration.present? and p.visitor_registration == "true"}
 
   default_scope { order('created_at desc') }
   
-  before_create :ensure_authentication_token, :generate_key
+  before_create :ensure_authentication_token, :generate_key 
   # after_create :set_event_timezone
   before_save :encrypt_password
   
@@ -270,7 +270,7 @@ class Invitee < ActiveRecord::Base
   end
   
   def clear_password
-    self.password = nil
+    self.password = nil if self.visitor_registration.blank?
   end
 
   def get_event_id(mobile_app_code,submitted_app)
