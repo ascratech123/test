@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration
+  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
   COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture'}
   
   belongs_to :event
@@ -17,7 +17,7 @@ class Invitee < ActiveRecord::Base
   has_many :analytics, :dependent => :destroy
 
   
-  before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :set_auto_generated_password, :if => Proc.new{|p|p.visitor_registration.blank?}#, :if => self.new_record? and self.password.blank? and self.email.present?
   before_validation :downcase_email
 
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
@@ -272,7 +272,7 @@ class Invitee < ActiveRecord::Base
   end
   
   def clear_password
-    self.password = nil
+    self.password = nil if self.visitor_registration.blank?
   end
 
   def get_event_id(mobile_app_code,submitted_app)

@@ -8,11 +8,13 @@
     = f.custom_text_field :last_name, "Last Name"  
     = f.custom_text_field :email, "Email Id"
     = f.custom_text_field :password, "Password"
-    / = f.custom_text_field :confirm_password, " Confirm Password"
     = f.custom_text_field :company_name, "Company"
     = f.custom_text_field :designation, "Designation"
     = f.custom_text_field :mobile_no, "Phone No"
-    = f.hidden_field :event_id , :value => @event.id if params[:event_id].present? or @event_id.present?
+    - if params[:mobile_application_code].present?
+      = f.hidden_field :mobile_application_code, :value => params[:mobile_application_code] 
+    - else
+      = f.hidden_field :mobile_application_code, :value => params[:invitee][:mobile_application_code]
     = f.hidden_field :visitor_registration, :value => "true"
     .submit-btn
       = f.custom_submit_button "SUBMIT" 
