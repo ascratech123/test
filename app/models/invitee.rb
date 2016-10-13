@@ -24,7 +24,8 @@ class Invitee < ActiveRecord::Base
   validates :email,
             :format => {
             :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
-            :message => "Sorry, this doesn't look like a valid email." }
+            :message => "Sorry, this doesn't look like a valid email." },
+            :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :email, uniqueness: {scope: [:event_id]}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
   
@@ -451,7 +452,7 @@ class Invitee < ActiveRecord::Base
     invitees.length
   end
 
-  def self.social_media_data(provider,facebook_id,linkedin_id, google_id, twitter_id,user_email,first_name,last_name,event)
+  def self.social_media_data(provider,facebook_id,linkedin_id, google_id, twitter_id, instagram_id, user_email,first_name, last_name, event)
     if provider == "facebook"
       data = Invitee.facebook_data(provider,facebook_id, user_email, first_name, last_name, event)
     elsif provider == "linkedin"
@@ -459,7 +460,9 @@ class Invitee < ActiveRecord::Base
     elsif (provider == "google+" || provider == "google ")
       data = Invitee.google_data(provider,google_id, user_email, first_name, last_name, event)
     elsif provider == "twitter"
-      data = Invitee.twitter_data(provider,twitter_id, user_email, first_name, last_name, event)
+      data = Invitee.twitter_data(provider,twitter_id, first_name, last_name, event)
+    elsif provider == "instagram"
+      data = Invitee.instagram_data(provider, instagram_id, first_name, last_name, event)
     end
     data
   end
@@ -530,20 +533,34 @@ class Invitee < ActiveRecord::Base
     new_user
   end
 
-  def self.twitter_data(provider,twitter_id, user_email, first_name, last_name, event)
+  def self.twitter_data(provider,twitter_id, first_name, last_name, event)
     if twitter_id.present?
       new_user = nil
       event.each do |e|
-        user = e.invitees.where(:email => user_email) || user.where(:twitter_id => user_email)
+        user = user.where(:twitter_id => twitter_id, :event_id => e.id)
         if user.present?
-          if user.first.twitter_id.blank?
-            user.first.update_column(:twitter_id, user_email)
-            user.first.update_column(:provider, "twitter")
-          end 
-          user = user.first if user.present? 
+          user = user.first
         else
           pwd = Time.now.to_i.to_s
-          user = e.invitees.new(:email => user_email, :twitter_id => user_email, :first_name => first_name, :last_name => last_name, :provider => "twitter", :password => pwd, :invitee_password => pwd)
+          user = e.invitees.new(:twitter_id => twitter_id, :first_name => first_name, :last_name => last_name, :provider => "twitter", :password => pwd, :invitee_password => pwd)
+          user.save
+        end
+        new_user = user
+      end
+    end
+    new_user
+  end
+
+  def self.instagram_data(provider, instagram_id, first_name, last_name, event)
+    if instagram_id.present?
+      new_user = nil
+      event.each do |e|
+        user = user.where(:instagram_id => instagram_id, :event_id => e.id)
+        if user.present?
+          user = user.first
+        else
+          pwd = Time.now.to_i.to_s
+          user = e.invitees.new(:instagram_id => instagram_id, :first_name => first_name, :last_name => last_name, :provider => "instagram", :password => pwd, :invitee_password => pwd)
           user.save
         end
         new_user = user
