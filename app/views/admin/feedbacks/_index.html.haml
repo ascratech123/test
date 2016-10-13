@@ -19,9 +19,9 @@
             =# feedback.sequence.to_i rescue nil
           .orderseq
             - if index != 0
-              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :seq_type => "up", :feature_type => "feedbacks"),:class => "uparrow", :method => "put", :remote => true
+              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :feedback_form_id => feedback.feedback_form_id, :id => feedback.id, :seq_type => "up", :feature_type => "feedbacks"),:class => "uparrow", :method => "put", :remote => true
             - if feedback.sequence.to_i != 0 and (@feedbacks.length - 1) != index
-              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
+              %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :feedback_form_id => feedback.feedback_form_id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
         - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
           %td.description_adjust.font16= show_link(params, feedback.id, feedback.question) rescue nil
         - else
