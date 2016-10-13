@@ -165,14 +165,14 @@ class EventFeature < ActiveRecord::Base
       self.update_column(:menu_visibilty, 'active') 
     end
   end
-
+ 
   # def review_status
   #   features_arr = {'menu_icon' => '', 'main_icon' => '', 'page_title' => '', 'sequence' => '', 'menu_visibilty@@active' => '', 'description' => ''}
   #   ReviewStatus.review(self, features_arr)
   # end
 
   def self.for_sequence_get_model_name
-    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award", 'panels' => 'Panel', 'agenda_tracks' => "AgendaTrack"}
+    {"faqs" => "Faq", "speakers" => "Speaker", "winners" => "Winner", "polls" => "Poll", "event_features" => "EventFeature", 'feedbacks' => 'Feedback', 'feedback_forms' => 'FeedbackForm', "images" => "Image", "quizzes" => "Quiz", "sponsors" => "Sponsor", "exhibitors" => "Exhibitor", "awards" => "Award", 'panels' => 'Panel', 'agenda_tracks' => "AgendaTrack"}
   end
 
   def update_menu_saved_field_when_no_feature_selected

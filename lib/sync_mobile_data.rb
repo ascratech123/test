@@ -7,7 +7,7 @@ module SyncMobileData
       if model_name == 'InviteeNotification'
         update_data = InviteeNotification.where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
       elsif model_name == 'UserFeedback'
-        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"], :feedback_form_id => value["feedback_form_id"]) 
       else
         update_data = get_model_class(model_name).find_by_id(value["id"])
       end
@@ -163,7 +163,7 @@ module SyncMobileData
           if current_user.present?
             feedback_ids = Feedback.where(:event_id => event_ids) rescue nil
             info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id, :feedback_form_id]) rescue []
           end
         when "MobileApplication"  
           if start_event_date != "01/01/1990 13:26:58".to_time.utc
