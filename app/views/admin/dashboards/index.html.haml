@@ -65,26 +65,24 @@
           / -------------- Quick Links --------------
           / - @clients = Client.with_role(current_user.roles.pluck(:name), current_user)
           - client_ids = @clients.pluck('clients.id')
-          / - client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
-          - client_ids += Event.with_roles(session[:current_user_role], current_user).pluck(:client_id)
+          - client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
           - @events = Event.where(:client_id => client_ids)
-          - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
+          - if current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
-            - @mobile_applications = MobileApplication.where(:id => ids)      
-          - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-            -# ids = @count.pluck(:mobile_application_id).compact.uniq rescue []      
-            - ids = @count.map{|a| a.mobile_application_id}.compact.uniq 
+            - @mobile_applications = MobileApplication.where(:id => ids)
+          - elsif current_user.has_role? :db_manager
+            - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)
           - else
             - @mobile_applications = MobileApplication.where(:client_id => client_ids)
           - event_ids = @events.pluck(:id)
           - @registrations = Registration.where(:event_id => event_ids)
-          - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
-            - @users = User.get_managed_user(current_user,client_ids,@count.pluck(:id),session[:current_user_role]) rescue []
+          - if current_user.has_role? :event_admin
+            - @users = User.get_managed_user(current_user,client_ids,@count.pluck(:id)) rescue []
           - else   
-            - @users = User.get_managed_user(current_user,client_ids,event_ids,session[:current_user_role]) rescue []
+            - @users = User.get_managed_user(current_user,client_ids,event_ids) rescue []
           .row.DashPage.eventShowCard
-            - if !(current_user.has_role_without_event("super_admin", client_ids,session[:current_user_role]))#(current_user.has_role? :super_admin)  
+            - if !(current_user.has_role? :super_admin)  
               .col-sm-3.col-xl-3
                 .panel.panel-tile
                   .panel-body
@@ -101,9 +99,9 @@
                           %h6.text-muted Clients
                           %h2.fs30.mt5.mbn
                             = link_to @clients.count('clients.id'), admin_clients_path
-                    .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("client", client_ids,session[:current_user_role]) ? "0px" : "23px"}" }
+                    .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("client") ? "0px" : "23px"}" }
                       .col-xs-12.ph5
-                        - if check_curent_user_role("client", client_ids,session[:current_user_role])
+                        - if check_curent_user_role("client")
                           %a{:href => "/admin/clients/new", :class => "displayBlock"}
                             = 'Add One' if @clients.count('clients.id') <= 0
                             = 'New Client' if @clients.count('clients.id') > 0
@@ -127,29 +125,28 @@
                         - else
                           %h6.text-muted Events
                           %h2.fs30.mt5.mbn
-                            - if current_user.has_role_without_event("moderator", client_ids,session[:current_user_role])#current_user.has_role? :moderator
+                            - if current_user.has_role? :moderator
                               - length = @count.pluck(:id).compact.uniq.count rescue 0
                               = link_to length, admin_clients_path(:feature => 'users',:redirect_page => "index", :role => "moderator", :wall => true)
                             -else
-                              - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])
+                              - if current_user.has_role? :event_admin
                                 - length = @count.pluck(:id).compact.uniq.count rescue 0
                                 = link_to length, admin_clients_path(:feature => 'events')
-                              - elsif current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role])#current_user.has_role? :db_manager
-                                -# length = @count.pluck(:id).compact.uniq.count rescue 0
-                                - length = @count.map{|a| a.id}.compact.uniq.count
+                              - elsif current_user.has_role? :db_manager
+                                - length = @count.pluck(:id).compact.uniq.count rescue 0
                                 = link_to length, admin_clients_path(:feature => 'events')
                               - else  
                                 = link_to @events.length, admin_clients_path(:feature => 'events')
                             =# @events.count
-                    .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("event", client_ids,session[:current_user_role]) ? "0px" : "23px"}" }
+                    .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("event") ? "0px" : "23px"}" }
                       .col-xs-12.ph5
-                        -if current_user.has_role_without_event("client_admin", client_ids,session[:current_user_role]) or current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role])#(current_user.has_role? :client_admin or current_user.has_role? :licensee_admin)
+                        -if (current_user.has_role? :client_admin or current_user.has_role? :licensee_admin)
                           %a{:href => admin_clients_path(:feature => 'events', :redirect_page => "new"), :class => "displayBlock"}
                             = 'Add One' if @events.length <= 0
                             = 'New Event' if @events.length > 0
 
 
-              - if !(current_user.has_role_without_event("moderator", client_ids,session[:current_user_role]))#(current_user.has_role? :moderator)
+              - if !(current_user.has_role? :moderator)
                 .col-sm-3.col-xl-3
                   .panel.panel-tile
                     .panel-body
@@ -172,38 +169,38 @@
                             %h2.fs30.mt5.mbn
                               = link_to @mobile_applications.count, admin_clients_path(:feature => 'mobile_applications')
                               =# @events.count
-                      .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application", client_ids,session[:current_user_role]) ? "0px" : "23px"}" }
+                      .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application") ? "0px" : "23px"}" }
                         .col-xs-12.ph5
-                          -if check_curent_user_role("mobile_application", client_ids,session[:current_user_role]) or current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
+                          -if check_curent_user_role("mobile_application") or current_user.has_role? :event_admin
                             %a{:href => admin_clients_path(:feature => 'mobile_applications', :redirect_page => "new"), :class => "displayBlock"}
                               = 'Add One' if @mobile_applications.count <= 0
                               = 'New Mobile App' if @mobile_applications.count > 0
                               
-                - if !(current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))#(current_user.has_role? :db_manager)                
-                  .col-sm-3.col-xl-3
-                    .panel.panel-tile.manageusers
-                      .panel-body
-                        .row.pv5
-                          .col-xs-5.ph10
-                            = image_tag("coloured_icons/user_3.png")
-                          .col-xs-7.pl5
-                            - if @users.count == 0
-                              %h6.text-muted Manage Users
-                              %h2.fs30.mt5.mbn
-                                = '0'
-                            - else
-                              %h6.text-muted Manage Users
-                              %h2.fs30.mt5.mbn
-                                = link_to @users.count, admin_clients_path(:feature => 'users',:redirect_page => 'index')
-                                =# @events.count
-                        .row.pv5.AddmoreCard
-                          .col-xs-12.ph5
-                            -if true#check_curent_user_role("mobile_application")
-                              %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
-                                = 'Add One' if @users.count <= 0
-                                = 'New User' if @users.count > 0
-                              = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
-              -if !(current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))#(current_user.has_role? :db_manager)              
+              - if !(current_user.has_role? :db_manager)                
+                .col-sm-3.col-xl-3
+                  .panel.panel-tile.manageusers
+                    .panel-body
+                      .row.pv5
+                        .col-xs-5.ph10
+                          = image_tag("coloured_icons/user_3.png")
+                        .col-xs-7.pl5
+                          - if @users.count == 0
+                            %h6.text-muted Manage Users
+                            %h2.fs30.mt5.mbn
+                              = '0'
+                          - else
+                            %h6.text-muted Manage Users
+                            %h2.fs30.mt5.mbn
+                              = link_to @users.count, admin_clients_path(:feature => 'users',:redirect_page => 'index')
+                              =# @events.count
+                      .row.pv5.AddmoreCard
+                        .col-xs-12.ph5
+                          -if true#check_curent_user_role("mobile_application")
+                            %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
+                              = 'Add One' if @users.count <= 0
+                              = 'New User' if @users.count > 0
+                            = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}              
+              -if !(current_user.has_role? :db_manager)              
                 .col-sm-3.col-xl-3
                   .panel.panel-tile
                     .panel-body
@@ -214,7 +211,7 @@
                           %h6.text-muted
                             = link_to 'Analytics', admin_clients_path(:feature => 'analytics')
                             
-                      .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application", client_ids,session[:current_user_role]) ? "0px" : "23px"}" }
+                      .row.pv5.AddmoreCard{:style => "margin-bottom : #{check_curent_user_role("mobile_application") ? "0px" : "23px"}" }
                         .col-xs-12.ph5
                           - if true#check_curent_user_role("mobile_application")
                             %a{:href => admin_clients_path(:feature => 'analytics'), :class => "displayBlock"}
@@ -243,17 +240,17 @@
             / = render :partial => 'admin/layouts/card_event', :locals => {:image_path => "coloured_icons/user_3.png", :page_title => "Leads", :feature_count => "0" }
 
 
-                        
+                      
           - if @clients.blank? or @mobile_applications.blank? or @events.blank?  
             - if @mobile_applications.blank? 
               - title = "Mobile App" 
               - description = ""
               - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "mobile_application")
-            - if @events.blank? and check_curent_user_role("event", client_ids,session[:current_user_role])
+            - if @events.blank? and check_curent_user_role("event")
               - title = "Event" 
               - description = ""
               - url = dashboard_to_page_redirect_url(@clients.count('clients.id'), "event")
-            - if @clients.blank? and check_curent_user_role("client", client_ids,session[:current_user_role])
+            - if @clients.blank? and check_curent_user_role("client")
               - title = "Client"
               - description = ""
               - url = new_admin_client_path
@@ -267,10 +264,10 @@
                   - if false
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, a galley of type and scrambled it to make a type specimen book.
                 .appBtn
-                  %a{:href => url, :class => 'DashAddIcon mdl-color--light-blue-600'}
+                  %a{:href => admin_clients_path(:feature => 'mobile_applications', :redirect_page => "new"), :class => 'DashAddIcon mdl-color--light-blue-600'}
                     %i.material-icons
                       added
-                    = "New #{title}"   
+                    = "New #{title}"
           
 :javascript
   var OVERALL_ENGAGEMENT = [{name: 'Event Listing', data: [40.0, 6, 9, 14, 18, 21.5, 25.2, 66.5, 23.3, 18.3, 13.9, 9.6]}, {name: 'Conversations',data: [3.9, 4.2, 5.7, 8.5, 11.9,19.6, 18.9, 17.3, 60.0, 5.9, 6.0]}, {name: 'Speakers',data: [3, 1, 3.5, 8.4, 13.5, 77.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]}]

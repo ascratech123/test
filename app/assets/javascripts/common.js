@@ -305,15 +305,6 @@ $(window).load(function() {
   });
 });
 
-function add_fields_for_agenda_speakers(link, association, content) {
-  if ($('.venueFields').find("select").length < 5){
-    var new_id = new Date().getTime();
-    var regexp = new RegExp("new_" + association, "g");
-    $(".venueFields").append(content.replace(regexp, new_id));
-  }
-
-}
-
 function flightTime() {
     var hours = [
       '01', 
@@ -681,112 +672,5 @@ $(function () {
         }]
     });
 });      */
-$(document).ready(function(){
-  $('#event_country_name').on('change', function() {
-    var start_date_time = $("#date-start").val();
-    /*alert(start_date_time)*/
-    if (start_date_time)  
-    {  
-      $(".overlayBg").show();
-      city = $("#event_cities").val();
-      country_name = $("#event_country_name").val();
-      $.ajax({
-        url: '/admin/time_zones',
-        type: 'get',
-        data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
-        dataType: 'script',
-        success: function(data){
-          $(".overlayBg").hide();
-        }
-      });
-    }
-    else
-    {
-      alert("Please select event start date");
-      $('select#event_country_name option:selected').prop("selected", false);
-    }
-  });
-});
-
-$(document).ready(function(){
-  $('#event_cities').blur(function(){
-    country_name = $("#event_country_name").val();
-    var country = (country_name != "Please select the Time Zone" && country_name != "");
-    if(country)
-    {  
-      var start_date_time = $("#date-start").val();
-      if(start_date_time)
-      {  
-        $(".overlayBg").show();
-        city = $("#event_cities").val();
-        country_name = $("#event_country_name").val();
-        $.ajax({
-          url: '/admin/time_zones',
-          type: 'get',
-          data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
-          dataType: 'script',
-          success: function(data){
-            $(".overlayBg").hide();
-          },
-          error: function(xhr, status, error) {
-            $(".overlayBg").hide();
-          }         
-        });
-      }
-      else
-      {
-        alert("Please select event start date");
-        $('select#event_country_name option:selected').prop("selected", false);
-      }  
-    }
-  });
-
-  // $(".select-speaker").change(function(){   
-  //   value = $(this).val();
-  //   if(value == 0){
-  //     $(this).next().find('.form-group').show();
-  //   }
-  // });    
-});
-
-$(document).on('click','.select-speaker',function(){
-  $(".select-speaker").change(function(){   
-    value = $(this).val();
-    if(value == 0){
-      $(this).next().find('.form-group').show();
-    }
-  });    
-});
-
-$(document).on('change','#agenda_speaker_id',function(){
-  value = parseInt($(this).val());
-  if(value == 0){
-    console.log(value);
-    $('#add_speaker .form-group').show();
-  }
-});
-
-$(document).on("click", ".addMoreSpeaker", function(){
-  $('#add_speaker .form-group').toggle();
-})
-
-// $(document).on('keyup', "#agenda_speaker_names", function(e) {
-//   value = $(this).val();
-//   selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
-//   allow = 5 - selected_speakers - 1;
-//   if((value.split(",").length - 1) > allow){
-//     $(this).val(value.slice(0, -1));
-//     alert("You cannot add more than " + (allow + 1));
-//   }
-// });
 
 
-/*function agenda_speaker_dropdown() {
-  alert('asdasda');
-  document.getElementById("myDropdown").classList.toggle("show");
-} */
-$(document).ready(function(){
-  $('.usersep').click(function(){
-  $('#myDropdown').toggle();
-  });
-});
