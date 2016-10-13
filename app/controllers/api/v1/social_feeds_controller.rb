@@ -1,7 +1,7 @@
 class Api::V1::SocialFeedsController < ApplicationController
 
 	skip_before_filter :authenticate_user,:load_filter
-	require 'tasks/time_zone_api'
+	require 'social_feed_api'
 
 	def index
 	    @event = Event.find_by_id(params[:event_id]) 
@@ -26,7 +26,7 @@ end
 
 	def get_feacebook_posts(facebook_tags)
 			session[:facebook_post_date] = nil if request.format == "html"
-			@posts = TimeZoneApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
+			@posts = SocialFeedApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
 			session[:facebook_post_date] = @posts["data"].last["created_time"].to_date if @posts.present? && @posts["data"].present?
 			data = []
 			@posts["data"].each do |post|
@@ -44,7 +44,7 @@ end
 		@twitter_posts = @twitter_posts.sort_by{ |k, v| k.created_at}.reverse!
 	  data = []
 	  @twitter_posts.each do |post|
-		 	@posts = TimeZoneApi.get_twitter_posts(post.url)
+		 	@posts = SocialFeedApi.get_twitter_posts(post.url)
 			twitter_data = {:twitter_frame => @posts["html"],:created_at => post.created_at}
 			data << twitter_data  
 		end
