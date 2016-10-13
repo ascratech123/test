@@ -1,6 +1,6 @@
 class Api::V1::SocialFeedsController < ApplicationController
 
-	skip_before_filter :authenticate_user
+	skip_before_filter :authenticate_user,:load_filter
 	require 'tasks/time_zone_api'
 
 	def index
