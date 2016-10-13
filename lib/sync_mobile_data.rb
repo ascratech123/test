@@ -104,7 +104,7 @@ module SyncMobileData
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:option_percentage]) rescue []
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:option010], :methods => [:option_percentage, :option10]) rescue []
         when 'Invitee'
           arr = []
           leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
