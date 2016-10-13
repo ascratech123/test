@@ -11,25 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161012105312) do
+ActiveRecord::Schema.define(version: 20161006050534) do
 
   create_table "abouts", force: :cascade do |t|
-    t.text     "description", limit: 65535
-    t.integer  "event_id",    limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.text     "address",     limit: 65535
+    t.text     "description",                    limit: 65535
+    t.integer  "event_id",                       limit: 4
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.text     "address",                        limit: 65535
+    t.datetime "created_at_with_event_timezone"
+    t.datetime "updated_at_with_event_timezone"
   end
 
   add_index "abouts", ["event_id"], name: "index_abouts_on_event_id", using: :btree
-
-  create_table "agenda_speakers", force: :cascade do |t|
-    t.integer  "agenda_id",    limit: 4
-    t.integer  "speaker_id",   limit: 4
-    t.string   "speaker_name", limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-  end
 
   create_table "agenda_tracks", force: :cascade do |t|
     t.string   "track_name",  limit: 255
@@ -42,6 +36,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   end
 
   add_index "agenda_tracks", ["parent_id"], name: "index_agenda_tracks_on_parent_id", using: :btree
+  add_index "agenda_tracks", ["track_name"], name: "index_track_name_in_agenda_tracks", using: :btree
 
   create_table "agendas", force: :cascade do |t|
     t.string   "event_name",                            limit: 255
@@ -61,22 +56,20 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "end_agenda_date"
     t.string   "rating_status",                         limit: 255,   default: "active"
     t.string   "agenda_type",                           limit: 255
-    t.integer  "sequence",                              limit: 4
-    t.string   "event_timezone",                        limit: 255
     t.integer  "agenda_track_id",                       limit: 4
+    t.string   "event_timezone",                        limit: 255
+    t.integer  "sequence",                              limit: 4
     t.datetime "start_agenda_time_with_event_timezone"
     t.datetime "end_agenda_time_with_event_timezone"
+    t.integer  "parent_id",                             limit: 4
     t.string   "event_timezone_offset",                 limit: 255
     t.string   "event_display_time_zone",               limit: 255
-    t.integer  "parent_id",                             limit: 4
-    t.string   "speaker_ids",                           limit: 255
-    t.string   "speaker_names",                         limit: 255
-    t.text     "all_speaker_names",                     limit: 65535
   end
 
   add_index "agendas", ["event_id"], name: "index_agendas_on_event_id", using: :btree
   add_index "agendas", ["event_id"], name: "index_agendas_on_events_index", using: :btree
   add_index "agendas", ["parent_id"], name: "index_agendas_on_parent_id", using: :btree
+  add_index "agendas", ["start_agenda_date"], name: "index_start_agenda_date_in agendas", using: :btree
   add_index "agendas", ["start_agenda_time"], name: "index_on_start_agenda_time_in_agendas", using: :btree
 
   create_table "agendas_dayoptions", id: false, force: :cascade do |t|
@@ -100,7 +93,11 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "updated_at_with_event_timezone"
   end
 
+  add_index "analytics", ["action", "viewable_type", "invitee_id", "event_id"], name: "index_analytics_columns_in_analytics", using: :btree
+  add_index "analytics", ["action", "viewable_type", "invitee_id", "viewable_id", "event_id"], name: "index_analytics_on_actions1", using: :btree
   add_index "analytics", ["action"], name: "index_on_action_in_analytics", using: :btree
+  add_index "analytics", ["event_id", "action", "created_at"], name: "index_analytics_columns_in_analytic", using: :btree
+  add_index "analytics", ["event_id", "viewable_type", "invitee_id", "viewable_id", "updated_at"], name: "index_analytics_on_actions2", using: :btree
   add_index "analytics", ["event_id"], name: "index_on_event_id_in_analytics", using: :btree
   add_index "analytics", ["invitee_id"], name: "index_on_invitee_id_in_analytics", using: :btree
   add_index "analytics", ["platform"], name: "index_on_platform_in_analytics", using: :btree
@@ -119,9 +116,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "event_timezone",          limit: 255
+    t.integer  "parent_id",               limit: 4
     t.string   "event_timezone_offset",   limit: 255
     t.string   "event_display_time_zone", limit: 255
-    t.integer  "parent_id",               limit: 4
   end
 
   add_index "attendees", ["attendee_name"], name: "index_attendee_name_on_attendees", using: :btree
@@ -138,9 +135,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "updated_at",                            null: false
     t.integer  "sequence",                limit: 4
     t.string   "event_timezone",          limit: 255
+    t.integer  "parent_id",               limit: 4
     t.string   "event_timezone_offset",   limit: 255
     t.string   "event_display_time_zone", limit: 255
-    t.integer  "parent_id",               limit: 4
   end
 
   add_index "awards", ["event_id"], name: "index_awards_on_event_id", using: :btree
@@ -247,8 +244,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "analytic_id",      limit: 4
   end
 
-  add_index "comments", ["commentable_id", "commentable_type", "updated_at"], name: "index_comments_on_events_index", length: {"commentable_id"=>nil, "commentable_type"=>191, "updated_at"=>nil}, using: :btree
+  add_index "comments", ["commentable_id"], name: "index_commentable_id_comments", using: :btree
   add_index "comments", ["commentable_type"], name: "index_on_commentable_type_in_comments", length: {"commentable_type"=>191}, using: :btree
+  add_index "comments", ["updated_at"], name: "index_updated_at_comments", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "contacts", force: :cascade do |t|
@@ -280,7 +278,6 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "background_image_content_type", limit: 255
     t.integer  "background_image_file_size",    limit: 4
     t.datetime "background_image_updated_at"
-    t.string   "sub_text_color",                limit: 255
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -298,14 +295,11 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "event_timezone",                  limit: 255
     t.datetime "created_at_with_event_timezone"
     t.datetime "updated_at_with_event_timezone"
-    t.integer  "event_timezone_offset",           limit: 4
+    t.string   "event_timezone_offset",           limit: 255
+    t.string   "event_display_time_zone",         limit: 255
     t.string   "action",                          limit: 255
     t.string   "last_update_comment_description", limit: 255
     t.integer  "actioner_id",                     limit: 4
-    t.string   "first_name_user",                 limit: 255
-    t.string   "last_name_user",                  limit: 255
-    t.string   "profile_pic_url_user",            limit: 255
-    t.datetime "last_interaction_at"
   end
 
   add_index "conversations", ["description"], name: "index_on_description_in_conversations", length: {"description"=>191}, using: :btree
@@ -399,6 +393,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
 
   add_index "devices", ["client_id"], name: "index_awards_on_client_id", using: :btree
   add_index "devices", ["invitee_id"], name: "index_devices_on_invitee_id", using: :btree
+  add_index "devices", ["platform", "mobile_application_id", "invitee_id"], name: "index_devices_on_platform_and_id", using: :btree
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
 
   create_table "e_kits", force: :cascade do |t|
@@ -416,6 +411,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   end
 
   add_index "e_kits", ["event_id", "updated_at"], name: "index_e_kits_on_event_id_and_updated_at", using: :btree
+  add_index "e_kits", ["event_id", "updated_at"], name: "index_e_kits_on_events_id", using: :btree
   add_index "e_kits", ["event_id"], name: "index_e_kits_on_event_id", using: :btree
   add_index "e_kits", ["updated_at"], name: "index_e_kits_on_events_index", using: :btree
 
@@ -515,6 +511,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "main_icon_interpolate_time_stamp", limit: 255
     t.string   "event_timezone",                   limit: 255
     t.integer  "parent_id",                        limit: 4
+    t.string   "event_timezone_offset",            limit: 255
+    t.string   "event_display_time_zone",          limit: 255
   end
 
   add_index "event_features", ["event_id"], name: "index_event_features_on_event_id", using: :btree
@@ -576,7 +574,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.text     "about",                         limit: 65535
     t.integer  "mobile_application_id",         limit: 4
     t.string   "schedule_type",                 limit: 255
-    t.string   "google_map_link",               limit: 255
+    t.text     "google_map_link",               limit: 65535
     t.text     "remarks",                       limit: 65535
     t.string   "login_at",                      limit: 255
     t.string   "menu_saved",                    limit: 255
@@ -591,9 +589,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.text     "token",                         limit: 65535
     t.string   "timezone",                      limit: 255
     t.string   "event_category",                limit: 255
+    t.integer  "parent_id",                     limit: 4
     t.string   "country_name",                  limit: 255
     t.integer  "timezone_offset",               limit: 4
-    t.integer  "parent_id",                     limit: 4
     t.string   "custom_content",                limit: 255
     t.string   "copy_content",                  limit: 255
     t.string   "copy_event",                    limit: 255
@@ -609,6 +607,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   add_index "events", ["event_name"], name: "index_event_name_on_events", using: :btree
   add_index "events", ["mobile_application_id"], name: "index_events_on_mobile_application_id", using: :btree
   add_index "events", ["parent_id"], name: "index_events_on_parent_id", using: :btree
+  add_index "events", ["start_event_date", "end_event_date"], name: "index_dates_on_events", using: :btree
   add_index "events", ["start_event_date"], name: "index_start_event_date_on_events", using: :btree
   add_index "events", ["start_event_time"], name: "index_start_event_time_on_events", using: :btree
   add_index "events", ["status"], name: "index_status_on_events", using: :btree
@@ -666,6 +665,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "created_at_with_event_timezone"
     t.datetime "updated_at_with_event_timezone"
     t.integer  "parent_id",                      limit: 4
+    t.string   "event_timezone_offset",          limit: 255
+    t.string   "event_display_time_zone",        limit: 255
   end
 
   add_index "faqs", ["answer"], name: "index_on_answer_in_faqs", length: {"answer"=>255}, using: :btree
@@ -685,39 +686,36 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "event_id",         limit: 4
   end
 
+  add_index "favorites", ["created_at"], name: "index_favorites_on_created_at", using: :btree
+  add_index "favorites", ["event_id"], name: "index_favorites_on_event_id", using: :btree
   add_index "favorites", ["favoritable_id", "favoritable_type"], name: "index_favorites_on_favoritable_id_and_favoritable_type", using: :btree
+  add_index "favorites", ["favoritable_type"], name: "index_favorites_on_favoritable_type", using: :btree
   add_index "favorites", ["id"], name: "index_favorites_on_id", using: :btree
   add_index "favorites", ["invitee_id", "updated_at"], name: "index_favorites_on_events_index", using: :btree
-
-  create_table "feedback_forms", force: :cascade do |t|
-    t.integer  "sequence",   limit: 4
-    t.text     "title",      limit: 65535
-    t.integer  "event_id",   limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-  end
+  add_index "favorites", ["invitee_id"], name: "index_favorites_on_invitee_id", using: :btree
 
   create_table "feedbacks", force: :cascade do |t|
-    t.integer  "event_id",         limit: 4
-    t.string   "question",         limit: 255
-    t.string   "option1",          limit: 255
-    t.string   "option2",          limit: 255
-    t.string   "option3",          limit: 255
-    t.string   "option4",          limit: 255
-    t.string   "option5",          limit: 255
-    t.string   "option_type",      limit: 255
-    t.boolean  "description",      limit: 1
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "sequence",         limit: 4
-    t.string   "option6",          limit: 255
-    t.string   "option7",          limit: 255
-    t.string   "option8",          limit: 255
-    t.string   "option9",          limit: 255
-    t.string   "option10",         limit: 255
-    t.string   "event_timezone",   limit: 255
-    t.integer  "parent_id",        limit: 4
-    t.integer  "feedback_form_id", limit: 4
+    t.integer  "event_id",                limit: 4
+    t.string   "question",                limit: 255
+    t.string   "option1",                 limit: 255
+    t.string   "option2",                 limit: 255
+    t.string   "option3",                 limit: 255
+    t.string   "option4",                 limit: 255
+    t.string   "option5",                 limit: 255
+    t.string   "option_type",             limit: 255
+    t.boolean  "description",             limit: 1
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "sequence",                limit: 4
+    t.string   "option6",                 limit: 255
+    t.string   "option7",                 limit: 255
+    t.string   "option8",                 limit: 255
+    t.string   "option9",                 limit: 255
+    t.string   "option10",                limit: 255
+    t.string   "event_timezone",          limit: 255
+    t.integer  "parent_id",               limit: 4
+    t.string   "event_timezone_offset",   limit: 255
+    t.string   "event_display_time_zone", limit: 255
   end
 
   add_index "feedbacks", ["event_id"], name: "index_feedbacks_on_event_id", using: :btree
@@ -725,14 +723,16 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   add_index "feedbacks", ["question"], name: "index_question_on_feedbacks", length: {"question"=>191}, using: :btree
 
   create_table "groupings", force: :cascade do |t|
-    t.integer  "event_id",       limit: 4
-    t.string   "name",           limit: 255
-    t.text     "condition",      limit: 65535
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.string   "default_group",  limit: 255,   default: "false"
-    t.string   "event_timezone", limit: 255
-    t.integer  "parent_id",      limit: 4
+    t.integer  "event_id",                limit: 4
+    t.string   "name",                    limit: 255
+    t.text     "condition",               limit: 65535
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.string   "event_timezone",          limit: 255
+    t.string   "default_group",           limit: 255,   default: "false"
+    t.integer  "parent_id",               limit: 4
+    t.string   "event_timezone_offset",   limit: 255
+    t.string   "event_display_time_zone", limit: 255
   end
 
   add_index "groupings", ["parent_id"], name: "index_groupings_on_parent_id", using: :btree
@@ -834,6 +834,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "parent_id",   limit: 4
   end
 
+  add_index "invitee_groups", ["event_id", "name"], name: "index_columns_on_invitee_groups", using: :btree
+  add_index "invitee_groups", ["event_id"], name: "index_event_id_on_invitee_groups", using: :btree
+  add_index "invitee_groups", ["name"], name: "index_name_on_invitee_groups", using: :btree
   add_index "invitee_groups", ["parent_id"], name: "index_invitee_groups_on_parent_id", using: :btree
 
   create_table "invitee_notifications", force: :cascade do |t|
@@ -922,32 +925,34 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "points",                   limit: 4,        default: 0
     t.string   "first_name",               limit: 255
     t.string   "last_name",                limit: 255
+    t.string   "invitee_password",         limit: 255
+    t.string   "email_send",               limit: 255,      default: "false"
     t.text     "google_id",                limit: 16777215
     t.text     "linkedin_id",              limit: 16777215
     t.string   "provider",                 limit: 255
-    t.string   "invitee_password",         limit: 255
-    t.string   "email_send",               limit: 255,      default: "false"
+    t.datetime "notification_viewed_at"
     t.boolean  "previous_scan",            limit: 1,        default: false
     t.boolean  "successful_scan",          limit: 1,        default: false
-    t.datetime "notification_viewed_at"
     t.text     "remark",                   limit: 65535
     t.boolean  "qr_code_registration",     limit: 1
-    t.string   "event_timezone",           limit: 255
     t.boolean  "onsite_registration",      limit: 1
+    t.string   "event_timezone",           limit: 255
     t.text     "attr1",                    limit: 65535
     t.text     "attr2",                    limit: 65535
     t.text     "attr3",                    limit: 65535
     t.text     "attr4",                    limit: 65535
     t.text     "attr5",                    limit: 65535
     t.integer  "parent_id",                limit: 4
+    t.string   "event_timezone_offset",    limit: 255
+    t.string   "event_display_time_zone",  limit: 255
   end
 
   add_index "invitees", ["authentication_token"], name: "index_on_authentication_token_in_invitees", length: {"authentication_token"=>191}, using: :btree
   add_index "invitees", ["company_name"], name: "index_on_company_name_in_invitees", length: {"company_name"=>191}, using: :btree
   add_index "invitees", ["email"], name: "index_on_email_in_invitees", length: {"email"=>191}, using: :btree
-  add_index "invitees", ["event_id", "email"], name: "index_invitees_on_events_index_api", length: {"event_id"=>nil, "email"=>191}, using: :btree
-  add_index "invitees", ["event_id", "visible_status"], name: "index_invitees_on_events_index", length: {"event_id"=>nil, "visible_status"=>191}, using: :btree
+  add_index "invitees", ["event_id", "email"], name: "index_event_and_email_on_invitees", length: {"event_id"=>nil, "email"=>100}, using: :btree
   add_index "invitees", ["event_id"], name: "index_invitees_on_event_id", using: :btree
+  add_index "invitees", ["last_interation"], name: "index_last_interation_on_invitees", using: :btree
   add_index "invitees", ["name_of_the_invitee"], name: "index_name_of_the_invitee_on_invitees", length: {"name_of_the_invitee"=>191}, using: :btree
   add_index "invitees", ["parent_id"], name: "index_invitees_on_parent_id", using: :btree
   add_index "invitees", ["updated_at"], name: "index_inviteees_on_events_index", using: :btree
@@ -959,8 +964,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   end
 
   add_index "last_updated_models", ["last_updated"], name: "index_last_updated_models_on_last_updated", using: :btree
-  add_index "last_updated_models", ["name", "last_updated"], name: "index_last_updated_models_on_name_and_last_updated", using: :btree
-  add_index "last_updated_models", ["name"], name: "index_last_updated_models_on_name", using: :btree
+  add_index "last_updated_models", ["name", "last_updated"], name: "index_last_updated_models_on_name_and_last_updated", length: {"name"=>191, "last_updated"=>nil}, using: :btree
+  add_index "last_updated_models", ["name"], name: "index_last_updated_models_on_name", length: {"name"=>191}, using: :btree
 
   create_table "licensees", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -983,6 +988,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
 
   add_index "likes", ["likable_id", "likable_type", "updated_at"], name: "index_likes_on_events", using: :btree
   add_index "likes", ["likable_id"], name: "index_likes_on_likable_id", using: :btree
+  add_index "likes", ["likable_type", "likable_id", "created_at"], name: "index_columns_on_likes", using: :btree
+  add_index "likes", ["likable_type", "likable_id", "created_at"], name: "index_likes_on_type_id_and_created", using: :btree
   add_index "likes", ["likable_type"], name: "index_on_likable_type_in_likes", using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
@@ -997,9 +1004,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   end
 
   add_index "log_changes", ["action"], name: "index_on_action_in_log_changes", length: {"action"=>191}, using: :btree
-  add_index "log_changes", ["created_at", "action"], name: "index_log_changes_on_events_index", length: {"created_at"=>nil, "action"=>191}, using: :btree
   add_index "log_changes", ["created_at"], name: "index_on_created_at_in_log_changes", using: :btree
   add_index "log_changes", ["resourse_id"], name: "index_faqs_on_resourse_id", using: :btree
+  add_index "log_changes", ["resourse_type", "resourse_id"], name: "index_resources_on_log_changes", length: {"resourse_type"=>100, "resourse_id"=>nil}, using: :btree
   add_index "log_changes", ["resourse_type"], name: "index_log_changes_on_resourse_type", length: {"resourse_type"=>191}, using: :btree
   add_index "log_changes", ["updated_at"], name: "index_on_updated_at_in_log_changes", using: :btree
   add_index "log_changes", ["user_id"], name: "index_log_changes_on_user_id", using: :btree
@@ -1159,6 +1166,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "comment_box",                limit: 255
     t.string   "event_timezone",             limit: 255
     t.integer  "parent_id",                  limit: 4
+    t.string   "event_timezone_offset",      limit: 255
+    t.string   "event_display_time_zone",    limit: 255
   end
 
   add_index "my_travels", ["event_id"], name: "index_my_travels_on_event_id", using: :btree
@@ -1195,6 +1204,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "open",                                     limit: 255,   default: "false"
     t.string   "unread",                                   limit: 255,   default: "true"
     t.string   "event_timezone",                           limit: 255
+    t.string   "event_timezone_offset",                    limit: 255
+    t.string   "event_display_time_zone",                  limit: 255
     t.boolean  "push",                                     limit: 1
     t.boolean  "show_on_notification_screen",              limit: 1
     t.boolean  "show_on_activity",                         limit: 1
@@ -1202,13 +1213,14 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "image_for_show_notification_content_type", limit: 255
     t.integer  "image_for_show_notification_file_size",    limit: 4
     t.datetime "image_for_show_notification_updated_at"
-    t.string   "actionable_id",                            limit: 255
   end
 
+  add_index "notifications", ["created_at"], name: "index_created_at_on_notifications", using: :btree
   add_index "notifications", ["event_id"], name: "index_faqs_on_event_id", using: :btree
   add_index "notifications", ["page_id"], name: "index_notifications_on_page_id", using: :btree
   add_index "notifications", ["push_datetime"], name: "index_on_push_datetime_in_notifications", using: :btree
   add_index "notifications", ["pushed", "event_id"], name: "index_notifications_on_events_index", using: :btree
+  add_index "notifications", ["pushed", "push_datetime"], name: "index_pushed_date_time_on_notifications", using: :btree
   add_index "notifications", ["pushed"], name: "index_on_pushed_in_notifications", using: :btree
   add_index "notifications", ["updated_at"], name: "index_on_updated_at_in_notifications", using: :btree
 
@@ -1242,7 +1254,6 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "background_image_content_type", limit: 255
     t.integer  "background_image_file_size",    limit: 4
     t.datetime "background_image_updated_at"
-    t.string   "sub_text_color",                limit: 255
   end
 
   create_table "polls", force: :cascade do |t|
@@ -1263,8 +1274,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "poll_start_time"
     t.datetime "poll_end_time"
     t.string   "on_wall",                                  limit: 255
-    t.string   "option_visible",                           limit: 255,   default: "yes"
     t.string   "event_timezone",                           limit: 255
+    t.string   "option_visible",                           limit: 255,   default: "yes"
     t.datetime "poll_start_date_time_with_event_timezone"
     t.datetime "poll_end_date_time_with_event_timezone"
     t.string   "option_type",                              limit: 255
@@ -1272,9 +1283,11 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "option7",                                  limit: 255
     t.string   "option8",                                  limit: 255
     t.string   "option9",                                  limit: 255
-    t.string   "option010",                                limit: 255
+    t.string   "option10",                                 limit: 255
     t.string   "rating_first_text",                        limit: 255
     t.string   "rating_second_text",                       limit: 255
+    t.string   "event_timezone_offset",                    limit: 255
+    t.string   "event_display_time_zone",                  limit: 255
   end
 
   add_index "polls", ["event_id"], name: "index_polls_on_event_id", using: :btree
@@ -1307,6 +1320,8 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "updated_at",                          null: false
   end
 
+  add_index "push_pem_files", ["mobile_application_id"], name: "index_mobile_id_on_push_pem_files", using: :btree
+
   create_table "qna_walls", force: :cascade do |t|
     t.integer  "event_id",                      limit: 4
     t.string   "bg_color",                      limit: 255
@@ -1324,7 +1339,6 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "background_image_file_size",    limit: 4
     t.datetime "background_image_updated_at"
     t.string   "title_color",                   limit: 255
-    t.string   "sub_text_color",                limit: 255
   end
 
   create_table "qnas", force: :cascade do |t|
@@ -1338,14 +1352,18 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.datetime "updated_at",                                                          null: false
     t.string   "on_wall",                        limit: 255
     t.string   "wall_answer",                    limit: 255
+    t.string   "anonymous_on_wall",              limit: 255,      default: "false"
     t.string   "event_timezone",                 limit: 255
     t.datetime "created_at_with_event_timezone"
     t.datetime "updated_at_with_event_timezone"
-    t.string   "anonymous_on_wall",              limit: 255,      default: "false"
+    t.string   "event_timezone_offset",          limit: 255
+    t.string   "event_display_time_zone",        limit: 255
   end
 
   add_index "qnas", ["event_id"], name: "index_qnas_on_event_id", using: :btree
   add_index "qnas", ["question"], name: "index_on_question_in_qnas", length: {"question"=>191}, using: :btree
+  add_index "qnas", ["receiver_id"], name: "index_receiver_id_on_qnas", using: :btree
+  add_index "qnas", ["sender_id"], name: "index_sender_id_on_qnas", using: :btree
   add_index "qnas", ["status"], name: "index_status_on_qnas", length: {"status"=>191}, using: :btree
 
   create_table "quiz_walls", force: :cascade do |t|
@@ -1364,25 +1382,26 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "background_image_content_type", limit: 255
     t.integer  "background_image_file_size",    limit: 4
     t.datetime "background_image_updated_at"
-    t.string   "sub_text_color",                limit: 255
   end
 
   create_table "quizzes", force: :cascade do |t|
-    t.text     "question",       limit: 65535
-    t.string   "option1",        limit: 255
-    t.string   "option2",        limit: 255
-    t.string   "option3",        limit: 255
-    t.string   "option4",        limit: 255
-    t.string   "option5",        limit: 255
-    t.string   "option6",        limit: 255
-    t.string   "status",         limit: 255
-    t.string   "sequence",       limit: 255
-    t.integer  "event_id",       limit: 4
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "correct_answer", limit: 255
-    t.string   "event_timezone", limit: 255
-    t.string   "on_wall",        limit: 255
+    t.text     "question",                limit: 65535
+    t.string   "option1",                 limit: 255
+    t.string   "option2",                 limit: 255
+    t.string   "option3",                 limit: 255
+    t.string   "option4",                 limit: 255
+    t.string   "option5",                 limit: 255
+    t.string   "option6",                 limit: 255
+    t.string   "status",                  limit: 255
+    t.string   "sequence",                limit: 255
+    t.integer  "event_id",                limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.string   "correct_answer",          limit: 255
+    t.string   "event_timezone",          limit: 255
+    t.string   "event_timezone_offset",   limit: 255
+    t.string   "event_display_time_zone", limit: 255
+    t.string   "on_wall",                 limit: 255
   end
 
   add_index "quizzes", ["event_id"], name: "index_on_event_id_in_quizzes", using: :btree
@@ -1425,9 +1444,9 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.text     "external_login_url",  limit: 65535
     t.text     "external_login_surl", limit: 65535
     t.string   "template",            limit: 255
-    t.string   "on_mobile_app",       limit: 255
     t.datetime "start_date"
     t.datetime "end_date"
+    t.string   "on_mobile_app",       limit: 255
     t.string   "auto_approved",       limit: 255
     t.integer  "parent_id",           limit: 4
   end
@@ -1436,31 +1455,31 @@ ActiveRecord::Schema.define(version: 20161012105312) do
 
   create_table "registrations", force: :cascade do |t|
     t.integer  "event_id",           limit: 4
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.text     "field1",             limit: 16777215
-    t.text     "field2",             limit: 16777215
-    t.text     "field3",             limit: 16777215
-    t.text     "field4",             limit: 16777215
-    t.text     "field5",             limit: 16777215
-    t.text     "field6",             limit: 16777215
-    t.text     "field7",             limit: 16777215
-    t.text     "field8",             limit: 16777215
-    t.text     "field9",             limit: 16777215
-    t.text     "field10",            limit: 16777215
-    t.text     "field11",            limit: 16777215
-    t.text     "field12",            limit: 16777215
-    t.text     "field13",            limit: 16777215
-    t.text     "field14",            limit: 16777215
-    t.text     "field15",            limit: 16777215
-    t.text     "field16",            limit: 16777215
-    t.text     "field17",            limit: 16777215
-    t.text     "field18",            limit: 16777215
-    t.text     "field19",            limit: 16777215
-    t.text     "field20",            limit: 16777215
-    t.text     "custom_css",         limit: 16777215
-    t.text     "custom_js",          limit: 16777215
-    t.text     "custom_source_code", limit: 16777215
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.text     "field1",             limit: 65535
+    t.text     "field2",             limit: 65535
+    t.text     "field3",             limit: 65535
+    t.text     "field4",             limit: 65535
+    t.text     "field5",             limit: 65535
+    t.text     "field6",             limit: 65535
+    t.text     "field7",             limit: 65535
+    t.text     "field8",             limit: 65535
+    t.text     "field9",             limit: 65535
+    t.text     "field10",            limit: 65535
+    t.text     "field11",            limit: 65535
+    t.text     "field12",            limit: 65535
+    t.text     "field13",            limit: 65535
+    t.text     "field14",            limit: 65535
+    t.text     "field15",            limit: 65535
+    t.text     "field16",            limit: 65535
+    t.text     "field17",            limit: 65535
+    t.text     "field18",            limit: 65535
+    t.text     "field19",            limit: 65535
+    t.text     "field20",            limit: 65535
+    t.text     "custom_css",         limit: 65535
+    t.text     "custom_js",          limit: 65535
+    t.text     "custom_source_code", limit: 65535
     t.string   "email_field",        limit: 255
     t.integer  "parent_id",          limit: 4
   end
@@ -1505,13 +1524,13 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "speaker_name",             limit: 255
     t.string   "designation",              limit: 255
     t.string   "email_address",            limit: 255
-    t.text     "address",                  limit: 65535
-    t.text     "speaker_info",             limit: 65535
+    t.text     "address",                  limit: 4294967295
+    t.text     "speaker_info",             limit: 4294967295
     t.string   "rating",                   limit: 255
-    t.text     "feedback",                 limit: 65535
+    t.text     "feedback",                 limit: 4294967295
     t.integer  "event_id",                 limit: 4
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
     t.string   "phone_no",                 limit: 255
     t.string   "profile_pic_file_name",    limit: 255
     t.string   "profile_pic_content_type", limit: 255
@@ -1520,21 +1539,21 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.string   "company",                  limit: 255
     t.string   "is_answerable",            limit: 255
     t.float    "sequence",                 limit: 24
-    t.string   "rating_status",            limit: 255,   default: "active"
+    t.string   "rating_status",            limit: 255,        default: "active"
     t.string   "first_name",               limit: 255
     t.string   "last_name",                limit: 255
     t.string   "event_timezone",           limit: 255
     t.integer  "parent_id",                limit: 4
-    t.string   "all_agenda_ids",           limit: 255
-    t.string   "all_speaker_names",        limit: 255
+    t.string   "event_timezone_offset",    limit: 255
+    t.string   "event_display_time_zone",  limit: 255
   end
 
-  add_index "speakers", ["designation"], name: "index_designation_on_speakers", using: :btree
-  add_index "speakers", ["email_address"], name: "index_email_address_on_speakers", using: :btree
+  add_index "speakers", ["designation"], name: "index_designation_on_speakers", length: {"designation"=>191}, using: :btree
+  add_index "speakers", ["email_address"], name: "index_email_address_on_speakers", length: {"email_address"=>191}, using: :btree
   add_index "speakers", ["event_id"], name: "index_speakers_on_event_id", using: :btree
   add_index "speakers", ["parent_id"], name: "index_speakers_on_parent_id", using: :btree
   add_index "speakers", ["sequence"], name: "index_sequence_on_speakers", using: :btree
-  add_index "speakers", ["speaker_name"], name: "index_speaker_name_on_speakers", using: :btree
+  add_index "speakers", ["speaker_name"], name: "index_speaker_name_on_speakers", length: {"speaker_name"=>191}, using: :btree
 
   create_table "sponsors", force: :cascade do |t|
     t.integer  "event_id",            limit: 4
@@ -1680,13 +1699,12 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   add_index "themes", ["updated_at"], name: "index_themes_on_updated_at", using: :btree
 
   create_table "user_feedbacks", force: :cascade do |t|
-    t.integer  "feedback_id",      limit: 4
-    t.integer  "user_id",          limit: 4
-    t.string   "answer",           limit: 255
-    t.text     "description",      limit: 65535
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "feedback_form_id", limit: 4
+    t.integer  "feedback_id", limit: 4
+    t.integer  "user_id",     limit: 4
+    t.string   "answer",      limit: 255
+    t.text     "description", limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "user_feedbacks", ["feedback_id", "updated_at"], name: "index_user_feedbacks_on_events_index", using: :btree
@@ -1813,6 +1831,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
   add_index "users", ["authentication_token"], name: "index_on_authentication_token_in_users", using: :btree
   add_index "users", ["client_id"], name: "index_client_id_on_users", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["first_name", "email"], name: "index_first_name_email_on_users", using: :btree
   add_index "users", ["first_name"], name: "index_first_name_on_users", using: :btree
   add_index "users", ["licensee_id"], name: "index_licensee_id_on_users", using: :btree
   add_index "users", ["package_type"], name: "index_package_type_on_users", using: :btree
@@ -1843,6 +1862,7 @@ ActiveRecord::Schema.define(version: 20161012105312) do
     t.integer  "parent_id",  limit: 4
   end
 
+  add_index "winners", ["award_id", "updated_at"], name: "index_winners_on_award_id_and_updated_at", using: :btree
   add_index "winners", ["award_id"], name: "index_winners_on_award_id", using: :btree
   add_index "winners", ["name"], name: "index_name_on_winners", using: :btree
   add_index "winners", ["parent_id"], name: "index_winners_on_parent_id", using: :btree

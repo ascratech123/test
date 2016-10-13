@@ -50,8 +50,7 @@ class User < ActiveRecord::Base
   # before_save :set_time
   before_validation :set_password_to_licensee, on: :create
   before_validation :set_status_to_licensee, on: :create
-  after_save :check_status
-  #after_save :change_status_for_super_admin
+  #after_create :change_status_for_super_admin
   
   aasm :column => :status do 
     state :pending, :initial => true
@@ -76,31 +75,12 @@ class User < ActiveRecord::Base
   default_scope { order('created_at desc') }
   scope :check_deleted_record, -> { where('deleted != ?', 'true') }
 
-  def check_status
-    if self.has_role? :licensee_admin and self.licensee_end_date.present? and self.licensee_end_date > Date.today and self.status == "deactive"
-      self.update_column(:status, "active")
-    end
-  end
-
-  def self.change_status_for_super_admin
-    users = User.with_role(:licensee_admin)
-    users = users.where("license = ? AND status = ? AND (licensee_start_date > ? OR licensee_end_date < ?)", true, "active", Date.today, Date.today)
-    users.each do |user|
-      user.update_column(:status, "deactive")
-    end
-  end
-
   def self.current
     Thread.current[:user]
   end
 
   def self.current=(user)
     Thread.current[:user] = user
-  end
-
-  def active_for_authentication?
-    licensee_admin = self.get_licensee_admin
-    super and licensee_admin.active? rescue nil
   end
 
   def add_licensee_role
@@ -207,8 +187,7 @@ class User < ActiveRecord::Base
     if self.has_role? :licensee_admin
       User.where(:id => self.id).first
     else
-      User.where(:id => self.licensee_id).first
-      # User.where(:licensee_id => self.licensee_id).first #ToDeactivate Every User which Belongs To Licensee User Created By Admin
+      User.where(:licensee_id => self.licensee_id).first
     end
   end
 
@@ -220,11 +199,6 @@ class User < ActiveRecord::Base
     else
       self.licensee_id
     end
-  end
-
-  def get_smtp_setting
-    licensee_admin = get_licensee_admin
-    smtp_setting = licensee_admin.smtp_setting rescue nil
   end
 
   def perform_event(status)
@@ -265,16 +239,16 @@ class User < ActiveRecord::Base
     Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', resource.class.name, resource.id, self.id).last
   end
 
-  def self.get_managed_user(user,client_ids,event_ids)
-    if user.has_role? :licensee_admin
+  def self.get_managed_user(user,client_ids,event_ids,session_role)
+    if user.has_role_without_event("licensee_admin", client_ids,session_role)#user.has_role? :licensee_admin
       role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
       users = User.where(:licensee_id => user.id)
       users
     else
       users = []
-      if user.has_role? :client_admin
+      if user.has_role_without_event("client_admin", client_ids,session_role)#user.has_role? :client_admin
         users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Event", event_ids, Role.not_manage_user_dropdown("client_admin")).uniq
-      elsif user.has_role? :event_admin
+      elsif user.has_role_without_event("event_admin", client_ids,session_role)#user.has_role? :event_admin
         users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Event", event_ids, Role.not_manage_user_dropdown("event_admin")).uniq
       end  
       #users = User.joins(:roles).where('roles.resource_type = ? and resource_id IN(?) and roles.name NOT IN (?)', "Client", client_ids, Role.not_manage_user_dropdown("client_admin")).uniq rescue nil
@@ -338,31 +312,56 @@ class User < ActiveRecord::Base
     end
   end
 
-  def get_count(telecaller_id,event_id, type)
-    event = Event.find(event_id)
-    telecaller = User.unscoped.find(telecaller_id)
-    grouping = Grouping.find(telecaller.assign_grouping) rescue nil
-    groupings = Grouping.with_role(telecaller.roles.pluck(:name), telecaller)
-    invitee_structure = event.invitee_structures.first if event.invitee_structures.present?
-    invitee_data = invitee_structure.invitee_datum
-    @data = Grouping.get_search_data_count(invitee_data, [grouping]) if groupings.present? and invitee_data.present?
-    @assigned = @data.count
-    @processed = @data.where('status IS NOT NULL').count rescue 0
-    @remaining = @data.where(:status => nil).count rescue 0
-    return @assigned if type == "Assigned"
-    return @processed if type == "Processed"
-    return @remaining if type == "Remaining"
-  end
-  def get_clients
-    clients = Client.with_roles(self.roles.pluck(:name), self)
-  end
-  
-  def get_roles_for_user(user,resource_id,user_id)
-    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name).map{|n| n.humanize}.join(', ')
+  def has_role_for_event?(role_name, event_id, session_role_name)
+    roles = self.roles
+    access = false
+    for role in roles 
+      if role.resource_type == "Event"
+        access = true if role.name == role_name and role.name == session_role_name and role.resource_id == event_id.to_i
+      elsif role.resource_type == "Client"
+        access = true if role.resource.events.pluck(:id).include? event_id.to_i and role.name == role_name and role.name == session_role_name
+      end
+      return true if access 
+    end
+    access
   end
 
-  def get_licensee_events_count
-    clients = get_clients
-    event_count = clients.map{|c| c.events.count}.sum
+  # def has_role_without_event(role_name, client_ids,session_role_name)
+  #   # clients = Client.where(:id => client_ids)
+  #   event_ids = Event.where(:client_id => client_ids).pluck(:id)
+  #   access = false
+  #   roles = self.roles
+  #   for client_id in client_ids
+  #     events = Event.where(:client_id => client_id)#client.events
+  #     for event in events
+  #       for role in roles 
+  #         if role.resource_type == "Event"
+  #           access = true if role.name == role_name and role.name == session_role_name and role.resource_id == event.id
+  #         elsif role.resource_type == "Client"
+  #           access = true if role.resource.events.pluck(:id).include? event.id and role.name == role_name and role.name == session_role_name
+  #         end
+  #         return true if access 
+  #       end
+  #     end
+  #   end
+  #   access
+  # end
+
+  def has_role_without_event(role_name, client_ids,session_role_name)
+    event_ids = Event.where(:client_id => client_ids).pluck(:id)
+    access = false
+    for role in self.roles 
+      if role.resource_type == "Event"
+        access = true if role.name == role_name and role.name == session_role_name and event_ids.include? role.resource_id 
+      elsif role.resource_type == "Client"
+        access = true if (role.resource.events.pluck(:id) & event_ids).present? and role.name == role_name and role.name == session_role_name
+      end
+      return true if access 
+    end
+    access
+  end
+
+  def get_roles_for_user_for_checking(user,resource_id,user_id)
+    @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
   end
 end
