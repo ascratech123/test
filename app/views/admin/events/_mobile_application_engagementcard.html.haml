@@ -6,10 +6,10 @@
       - if show_card("e_kits")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "e-kit.png", :objs => @event.e_kits, :url => "e_kits", :@count => @count}
       - if show_card("feedbacks")
-        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count}
+        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedback_forms, :url => "feedbacks", :@count => @count}
     - if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
       - if show_card("feedbacks")
-        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedbacks, :url => "feedbacks", :@count => @count}
+        = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedback_forms, :url => "feedbacks", :@count => @count}
       - if show_card("leaderboard")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "Leaderboard.png", :objs => @event, :url => "leaderboard", :@count => 0}
       - if show_card("conversations")

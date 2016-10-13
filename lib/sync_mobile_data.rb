@@ -164,7 +164,7 @@ module SyncMobileData
           if current_user.present?
             feedback_ids = Feedback.where(:event_id => event_ids) rescue nil
             info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id, :feedback_form_id]) rescue []
           end
         when "MobileApplication"  
           if start_event_date != "01/01/1990 13:26:58".to_time.utc
