@@ -128,6 +128,18 @@
 				= f.custom_text_area_field :remarks, "Remarks"
 				= f.hidden_field :copy_content, :id => 'copy_content'
 				= f.hidden_field :custom_content, :id => 'custom_content'
+				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+					.mdl-grid.p-v-5
+						.col-lg-4.mdl-typography--text-right
+							%p.displayInlineBlock.multicitytxt Event Type for Registration ? *
+						.col-lg-3.p-h-12   
+							- er = f.object.errors.messages[:event_type_for_registration].join(',') rescue nil
+							- f.object.errors.messages[:event_type_for_registration].clear if f.object.errors.messages[:event_type_for_registration].present?
+							= f.custom_radio_button_menu :event_type_for_registration, "open","Open", :id => "event_type_open", :default_checked => (f.object.event_type_for_registration == 'open') ? 'checked' : ''
+							= f.custom_radio_button_menu :event_type_for_registration, "close","Close", :id => "event_type_close", :default_checked => (f.object.event_type_for_registration == 'close') ? 'checked' : ''
+							.field_with_errors
+								.span{:class => "errorMessage"}
+									= er
 
 				/ - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
 				- if @event_names.present? 

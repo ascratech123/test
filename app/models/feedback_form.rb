@@ -1,5 +1,5 @@
 class FeedbackForm < ActiveRecord::Base
-	belongs_to :event
+	belongs_to :event 
 	has_many :feedbacks
 
 	validates :title, presence: { :message => "This field is required." }

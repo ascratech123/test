@@ -15,13 +15,18 @@ class Api::V1::ActivityFeedsController < ApplicationController
       @analytics = Analytic.where("(invitee_id = ? and viewable_type IN (?) and action IN (?)) or (viewable_type = ? and viewable_id IN (?))", invitee.id,viewable_types,actions, "Conversation", ["like", "comment"]).where("viewable_id is not null").order("created_at desc")
       @analytics = @analytics.paginate(page: params[:page], per_page: 10)
     end
-    if event.present?
+    if event.present? and params[:social].blank?
       if event.event_features.not_hidden_icon.pluck(:name).include? "conversations"
+        logger.warn"--------------------------if---------------------------"
         @event_analytics = event.analytics.where(:viewable_type => ["Conversation","Notification"], :action => ["comment", "conversation post", "like", "share", "notification"]).where("viewable_id is not null").order("created_at desc")
       else
+        logger.warn"--------------------------else---------------------------"
         @event_analytics = event.analytics.where(:viewable_type => ["Notification"]).where("viewable_id is not null").order("created_at desc")
       end
       @event_analytics = @event_analytics.paginate(page: params[:page], per_page: 10)
+      logger.warn @event_analytics.inspect
+    elsif params[:social].present?
+      redirect_to api_v1_event_social_feeds_path(:event_id => params[:event_id])
     end
   end
 end

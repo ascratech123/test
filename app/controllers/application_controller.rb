@@ -215,6 +215,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_super_admin
+    # binding.pry
     unless (user_signed_in? and current_user.roles.present? and current_user.has_role? :super_admin)
      redirect_to admin_dashboards_path
     end

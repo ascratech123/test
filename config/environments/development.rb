@@ -83,9 +83,9 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 APP_URL = "http://localhost:3000"
 SAPP_URL = "http://localhost:3000"
 S3_url = "http://s3.amazonaws.com/shobiz-new-development"
-S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
-S3_secret_access_key = "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"
-S3_bucket = 'shobiz-new-dev'
+S3_access_key = "AKIAIXEZXP4IENEMXA4Q"
+S3_secret_access_key = "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"
+S3_bucket = 'shobiz-new-development'
 
 
 S3_CREDENTIALS = {:access_key_id => S3_access_key,
@@ -198,6 +198,9 @@ Mobile_Application_LOGIN_BACKGROUND_PATH = {:path => "mobile_application/login_b
 
 Mobile_Application_LISTING_SCREEN_BACKGROUND_PATH = {:path => "mobile_application/listing_screen_background/:style/:id-:filename",
                      :url => "#{S3_url}/mobile_application/listing_screen_background/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+Mobile_Application_VISITOR_REGISTRATION_IMAGE_PATH = {:path => "mobile_application/visitor_registration_background_image/:style/:id-:filename",
+                     :url => "#{S3_url}/mobile_application/visitor_registration_background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                     
 
 IMPORT_STORAGE = {:path => "imports/:id-:filename",
                      :url => "#{S3_url}/imports/:id-:basename.:extension"}.merge(PAPERCLIP_SETTINGS)

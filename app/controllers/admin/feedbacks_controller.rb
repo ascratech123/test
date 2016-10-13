@@ -6,7 +6,7 @@ class Admin::FeedbacksController < ApplicationController
   before_filter :find_user_feedback, :only => [:new, :index]
   before_filter :check_for_access, :only => [:index,:new]
   before_filter :check_user_role, :except => [:index]
-  before_action :find_feedback_form
+  before_action :find_feedback_form 
   
 	def index
     @feedbacks = Feedback.search(params,@feedbacks) if params[:search].present?

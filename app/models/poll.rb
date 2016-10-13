@@ -102,6 +102,10 @@ class Poll < ActiveRecord::Base
     data
   end
 
+  def option10
+    self.option010
+  end
+
   def change_status(poll)
     if poll == "activate"
       self.activate!

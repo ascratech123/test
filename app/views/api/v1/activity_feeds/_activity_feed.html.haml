@@ -104,7 +104,7 @@
       - elsif find_notification.present?
         .feed
           - if find_notification.action.present?
-            %a{:href => "#{APP_URL}?resource_type=#{analytic.action}&resource_id="}
+            %a{:href => "#{APP_URL}?resource_type=#{find_notification.action}&resource_id="}
               - icon_url = get_notification_icon_by_action(find_notification)
               - if icon_url.present?
                 .feedIcon

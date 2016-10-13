@@ -1,0 +1,21 @@
+= stylesheet_link_tag "signup.css"
+.mdl-grid.mdl-card.mdl-shadow--1dp.signupDiv
+  .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+    %h4.heading-border.p-t-10.m-b-15
+      Sign Up 
+  = form_for [:admin, @event, @invitee], :url => url_for(:controller => 'visitor_registrations', :action => 'create'), :html => {:class =>'form-horizontal signup-form'}, :builder => CustomFormBuilder do |f|
+    = f.custom_text_field :first_name, "First Name"
+    = f.custom_text_field :last_name, "Last Name"  
+    = f.custom_text_field :email, "Email Id"
+    = f.custom_text_field :password, "Password"
+    / = f.custom_text_field :confirm_password, " Confirm Password"
+    = f.custom_text_field :company_name, "Company"
+    = f.custom_text_field :designation, "Designation"
+    = f.custom_text_field :mobile_no, "Phone No"
+    = f.hidden_field :event_id , :value => @event.id if params[:event_id].present? or @event_id.present?
+    = f.hidden_field :visitor_registration, :value => "true"
+    .submit-btn
+      = f.custom_submit_button "SUBMIT" 
+
+
+  

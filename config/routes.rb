@@ -42,6 +42,10 @@ namespace :admin do
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
     resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:venue_sections,:invitee_accesses,:telecaller_accessible_columns, :invitee_searches, :my_profiles, :qr_scanner_details, :badge_pdfs,:manage_invitee_fields
     
+    resources :feedback_forms do
+      resources :feedbacks
+    end
+    
     resources :polls do
       resources :user_polls
     end
@@ -83,12 +87,13 @@ end
         resources :chats do 
           post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
         end
-        resources :invitee_chats  
+        resources :invitee_chats
+	    resources :social_feeds  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
-      resources :activity_feeds
+      resources :activity_feeds,:visitor_registrations
     end
   end
 end

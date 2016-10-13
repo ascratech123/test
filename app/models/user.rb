@@ -50,6 +50,7 @@ class User < ActiveRecord::Base
   # before_save :set_time
   before_validation :set_password_to_licensee, on: :create
   before_validation :set_status_to_licensee, on: :create
+  after_save :check_status
   #after_save :change_status_for_super_admin
   
   aasm :column => :status do 
@@ -75,6 +76,12 @@ class User < ActiveRecord::Base
   default_scope { order('created_at desc') }
   scope :check_deleted_record, -> { where('deleted != ?', 'true') }
 
+  def check_status
+    if self.has_role? :licensee_admin and self.licensee_end_date.present? and self.licensee_end_date > Date.today and self.status == "deactive"
+      self.update_column(:status, "active")
+    end
+  end
+
   def self.change_status_for_super_admin
     users = User.with_role(:licensee_admin)
     users = users.where("license = ? AND status = ? AND (licensee_start_date > ? OR licensee_end_date < ?)", true, "active", Date.today, Date.today)
@@ -82,7 +89,7 @@ class User < ActiveRecord::Base
       user.update_column(:status, "deactive")
     end
   end
- 
+
   def self.current
     Thread.current[:user]
   end

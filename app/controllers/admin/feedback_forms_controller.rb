@@ -4,7 +4,7 @@ class Admin::FeedbackFormsController < ApplicationController
   before_action :find_event
   
 	def index
-    @feedback_forms = FeedbackForm.where(event_id: params[:event_id])
+    @feedback_forms = FeedbackForm.where(event_id: params[:event_id]) 
 	end
 
 	def new

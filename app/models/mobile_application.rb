@@ -7,7 +7,7 @@ class MobileApplication < ActiveRecord::Base
   USER_ENGAGEMENT_FEATURE = {"abouts" => 'About', "awards" => 'Award', "speakers" => 'Speaker', "polls" => 'Poll', "invitees" => 'Invitee', "faqs" => 'FAQ', "conversations" => 'Conversation', "e_kits" => 'E-Kit', "qnas" => 'Q&A', "agendas" => 'Agenda', "contacts" => 'Contact', "galleries" => 'Gallery', "feedbacks" => 'Feedback', "emergency_exits" => 'Emergency Exit', "event_highlights" => 'Event Highlight', "notes" => 'Note', "sponsors" => 'Sponsor', "my_profile" => 'My Profile', "qr_code" => 'QR Code Scan'}
 
   CARD_IMAGES = {"notifications" => "notification.png", "Notifications sent" => "notification.png", "highlights"=> "event_highlights.png", 'event highlights' => "event_highlights.png", "gallery listings" => 'galler_1y.png', "highlight_images" => "gallery.png","contacts" => "contact_us.png","emergency_exits" => "emergency_exit.png", "About" => "about.png","abouts" => "about.png", 'Speakers' => "speakers.png", 'Speaker' => "speakers.png", "speakers" => "speakers.png", 'Sessions' => 'agenda.png', 'sessions' => 'agenda.png', "Agenda" => "agenda.png", "agendas" => "agenda.png", "invitees" => "invitees.png", "awards" => "awards_2.png", "polls" => "polls_1.png", "Conversation" => "conversations.png", "Conversations" => "conversations.png", "conversations" => "conversations.png", "faqs" => "faq.png", "e_kits" => "e-kit.png", "Questions Asked" => "Q&A.png", "feedbacks" => "feedback.png", "images" => "galler_1y.png", "mobile_applications" => "mobile-app.png", "winners" => "winner.png", "panels" => "panel_1.png", "dashboards" => "dashboard.png", "events" => "event.png", "clients" => "client.png", "users" => "user_3.png", "licensees" => "licensee.png", "imports" => "invitees.png", "push_pem_files" => "user-permission.png", "store_infos" => "mobile-app.png", "menus" => "user-permission.png","sponsor" => "sponsor.png", 'sponsors' => "sponsor.png", "invitee_structures" => "database.png","registrations"=>"registration.png", "my profiles" => "my_profile.png", "quizzes" =>"polls.png", 'Poll' => 'polls_1.png', 'polls' => 'polls_1.png', 'Exhibitors listing' => 'Exhibitor-breadcumb.png', "exhibitors" => "Exhibitor-breadcumb.png", 'qr codes' => 'qr_code.png', 'QR Code scans' => 'qr_code.png', "e-Kit Document Views" => 'e-kit.png', "e-kits" => 'e-kit.png', 'venues' => 'emergency_exit.png', 'notes' => 'note.png', 'emergency exits' => 'emergency_exit.png', 'edit profiles' => 'my_profile.png', 'q&as' => 'Q&A.png', 'galleries' => 'galler_1y.png', "Notifications sent" => "notification.png", 'Q&As' => 'Q&A.png', "E-Kits" => 'e-kit.png', 'Page views' => 'page_view_icon.png', 'Favorites' => "myfavourite.png", 'Session Ratings' => 'feedback.png', 'Speaker Ratings' => 'feedback.png', 'Q&As' => "Q&A-breadcumb.png", 'Polls taken' => "polls_1.png", 'Feedback Submitted' => "feedback-breadcumb.png", 'Quiz' => "polls_breadcumb.png", 'Quiz answered' => 'polls_breadcumb.png', "Ios active users" => "invitees.png", "Ios unique users" => "invitees.png", "Total active users" => "invitees.png", "Total unique users" => "invitees.png", 'my favorites' => 'myfavourite.png'}
-  BREADCRUM_IMAGES = {"themes" => "themes_breadcumb.png","event_features"=>"feature-breadcumb.png","notifications" => "notification-breadcumb.png", "event_highlights"=>"event_highlights-breadcumb.png","highlight_images"=>"gallery.png","contacts"=>"contact_us-breadcumb.png","emergency_exits"=>"venue-breadcumb.png", "abouts" => "about-breadcumb.png", "speakers" => "speakers-breadcumb.png", "agendas" => "agenda-breadcumb.png", "invitees" => "invitees-breadcumb.png", "awards" => "awards_2-breadcumb.png", "polls" => "polls_1-breadcumb.png", "conversations" => "conversations_breadcumb.png", "faqs" => "faq-breadcumb.png", "e_kits" => "e-kit-breadcumb.png", "qnas" => "Q&A-breadcumb.png", "feedbacks" => "feedback-breadcumb.png", "images" => "galler_1y-breadcumb.png", "mobile_applications" => "mobile-app-breadcumb.png", "winners" => "winner-breadcumb.png", "panels" => "panel_1-breadcumb.png", "dashboards" => "dashboard.png", "events" => "event-breadcumb.png", "clients" => "client-breadcumb.png", "users" => "user_3-breadcumb.png", "licensees" => "licensee_breadcumb.png", "imports" => "invitees-breadcumb.png", "push_pem_files" => "user-permission_breadcumb.png", "store_infos" => "mobile-app-breadcumb.png", "menus" => "menu-breadcumb.png","sponsors" => "sponsor-breadcumb.png", "invitee_structures" => "database-breadcumb.png","registrations"=>"registration-breadcumb.png", "profiles" => "my_profile_breadcumb.png", "quizzes" =>"polls_breadcumb.png", "exhibitors" => "Exhibitor-breadcumb.png", "manage_mobile_apps" => "mobile-app-breadcumb.png", "custom_page1s" => "custom.png", "custom_page2s" => "custom.png", "custom_page3s" => "custom.png", "custom_page4s" => "custom.png", "custom_page5s" => "custom.png","registration_settings" => "registration-setting.png","telecallers" => "telecaller.png","invitee_datas" => "telecaller.png","groupings" => "database.png","user_registrations"=>"registration.png","my_travels" => "travel.png","smtp_settings"=>"smtp_setting.png","manage_invitee_fields"=>"manage_invitee.png", 'activity_feeds' => 'activity_feed.png'}
+  BREADCRUM_IMAGES = {"themes" => "themes_breadcumb.png","event_features"=>"feature-breadcumb.png","notifications" => "notification-breadcumb.png", "event_highlights"=>"event_highlights-breadcumb.png","highlight_images"=>"gallery.png","contacts"=>"contact_us-breadcumb.png","emergency_exits"=>"venue-breadcumb.png", "abouts" => "about-breadcumb.png", "speakers" => "speakers-breadcumb.png", "agendas" => "agenda-breadcumb.png", "invitees" => "invitees-breadcumb.png", "awards" => "awards_2-breadcumb.png", "polls" => "polls_1-breadcumb.png", "conversations" => "conversations_breadcumb.png", "faqs" => "faq-breadcumb.png", "e_kits" => "e-kit-breadcumb.png", "qnas" => "Q&A-breadcumb.png", "feedbacks" => "feedback-breadcumb.png", "images" => "galler_1y-breadcumb.png", "mobile_applications" => "mobile-app-breadcumb.png", "winners" => "winner-breadcumb.png", "panels" => "panel_1-breadcumb.png", "dashboards" => "dashboard.png", "events" => "event-breadcumb.png", "clients" => "client-breadcumb.png", "users" => "user_3-breadcumb.png", "licensees" => "licensee_breadcumb.png", "imports" => "invitees-breadcumb.png", "push_pem_files" => "user-permission_breadcumb.png", "store_infos" => "mobile-app-breadcumb.png", "menus" => "menu-breadcumb.png","sponsors" => "sponsor-breadcumb.png", "invitee_structures" => "database-breadcumb.png","registrations"=>"registration-breadcumb.png", "profiles" => "my_profile_breadcumb.png", "quizzes" =>"polls_breadcumb.png", "exhibitors" => "Exhibitor-breadcumb.png", "manage_mobile_apps" => "mobile-app-breadcumb.png", "custom_page1s" => "custom.png", "custom_page2s" => "custom.png", "custom_page3s" => "custom.png", "custom_page4s" => "custom.png", "custom_page5s" => "custom.png","registration_settings" => "registration-setting.png","telecallers" => "telecaller.png","invitee_datas" => "telecaller.png","groupings" => "database.png","user_registrations"=>"registration.png","my_travels" => "travel.png","smtp_settings"=>"smtp_setting.png","manage_invitee_fields"=>"manage_invitee.png", "qna_walls"=>"settings.png", "conversation_walls" =>"settings.png", "quiz_walls"=>"settings.png","poll_walls"=>"settings.png", 'activity_feeds' => 'activity_feed.png' }
   # attr_accessor :template_id
   
   belongs_to :client
@@ -52,9 +52,17 @@ class MobileApplication < ActiveRecord::Base
                                          :thumb => "-strip -quality 80"}
                                          }.merge(Mobile_Application_LISTING_SCREEN_BACKGROUND_PATH)
 
+  has_attached_file :visitor_registration_background_image, {:styles => {:large => "90x90>",
+                                         :small => "60x60>", 
+                                         :thumb => "54x54>"},
+                             :convert_options => {:large => "-strip -quality 90", 
+                                         :small => "-strip -quality 80", 
+                                         :thumb => "-strip -quality 80"}
+                                         }.merge(Mobile_Application_VISITOR_REGISTRATION_IMAGE_PATH)
+
   validates_attachment_content_type :app_icon,:content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :splash_screen, :content_type => ["image/png"],:message => "please select valid format."
-  validates :name, :application_type, :listing_screen_text_color, presence: { :message => "This field is required." }
+  validates :name, :application_type, :listing_screen_text_color, :visitor_registration, presence: { :message => "This field is required." }
   validate :listing_screen_text_color_presentce
   validates :name, uniqueness: {scope: :client_id}
   
@@ -62,6 +70,7 @@ class MobileApplication < ActiveRecord::Base
   validate :image_dimensions_for_splash_screen, :if => Proc.new{|p| p.splash_screen_file_name_changed? and p.splash_screen_file_name.present? }
   validate :image_dimensions_for_login_background, :if => Proc.new{|p| p.login_background_file_name_changed? and p.login_background_file_name.present? }
   validate :image_dimensions_for_screen_background, :if => Proc.new{|p| p.listing_screen_background_file_name_changed? and p.listing_screen_background_file_name.present? }
+  validate :registration_background_image_or_color_present, :if => Proc.new{|p| p.visitor_registration == "yes" and p.visitor_registration_background_image_file_name.blank? and p.visitor_registration_background_color.blank? }
   
   after_save :update_last_updated_model
   
@@ -112,6 +121,14 @@ class MobileApplication < ActiveRecord::Base
 
   def listing_screen_background_url(style=:large)
     style.present? ? self.listing_screen_background.url(style) : self.listing_screen_background.url
+  end
+
+  def visitor_registration_background_image_url
+    self.visitor_registration_background_image.present? ? self.visitor_registration_background_image.url(:large) : " "
+  end
+
+  def visitor_registration_back_color
+    self.visitor_registration_background_color.present? ? self.visitor_registration_background_color : " "
   end
 
   def app_icon_url(style=:large)
@@ -207,6 +224,11 @@ class MobileApplication < ActiveRecord::Base
     mobile_dimension_height_listing_screen_background, mobile_dimension_width_listing_screen_background  = 1600.0, 960.0
     dimensions_listing_screen_background = Paperclip::Geometry.from_file(listing_screen_background.queued_for_write[:original].path)
     errors.add(:listing_screen_background, "Image size should be 960x1600px only")  if (dimensions_listing_screen_background.width != mobile_dimension_width_listing_screen_background or dimensions_listing_screen_background.height != mobile_dimension_height_listing_screen_background)
+  end
+
+  def registration_background_image_or_color_present
+    errors.add(:visitor_registration_background_image, "This field is required.") if (visitor_registration_background_image_file_name.blank?)
+    errors.add(:visitor_registration_background_color, "This field is required.") if (visitor_registration_background_color.blank?)
   end
 
   def change_status(mobile_app)
