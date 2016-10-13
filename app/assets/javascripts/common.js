@@ -968,16 +968,4 @@ function load_products(){
   });
   // return false;
 }
-// below function for social feed loader on page load
-document.onreadystatechange = function () {
-  var state = document.readyState
-  if (state == 'interactive') {
-       document.getElementById('contents-social-feed').style.visibility="hidden";
-  } else if (state == 'complete') {
-      setTimeout(function(){
-         document.getElementById('load-social-feed').style.visibility="hidden";
-         document.getElementById('contents-social-feed').style.visibility="visible";
-      },1000);
-  }
-}
 

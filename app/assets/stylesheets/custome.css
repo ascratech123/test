@@ -158,13 +158,6 @@ p.or-vertical-text{    text-align: center;
     .Regiserror.validationErr .field_with_errors{left:10px;}
 .delete-wall-logo{top:-23px;}
 .twitter-tweet{width:100% !important; max-width:100% !important;}
-#load-social-feed{
-  width:100%;
-  height:100%;
-  position:fixed;
-  z-index:9999;
-  background:url("/assets/spin.gif") no-repeat center center rgba(0,0,0,0.25)
-}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
