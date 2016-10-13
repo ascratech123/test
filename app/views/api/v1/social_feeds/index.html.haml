@@ -1,5 +1,6 @@
 #my-posts
-	= render :partial =>"social_feeds", :locals => {:social_feeds => @social_feeds}
+  = render :partial =>"social_feeds", :locals => {:social_feeds => @social_feeds}
+.centerAlign#loadingText_activity
 #feed_data_social
-	= link_to "Load More", "javascript:void(0);",:class => "load_products"
+  = link_to "", "javascript:void(0);",:class => "load_products"
 #social_event_id{:for => params[:event_id].to_i}

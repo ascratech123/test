@@ -944,6 +944,7 @@ $(document).on("click", ".addMoreSpeaker", function(){
 $(window).scroll(function() {
   console.log("scroll");
   if ($(window).scrollTop() > $(document).height()-1000)  {
+    $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
     $(".load_products").trigger('click');
     $(".load_products").addClass("dont_load_products").removeClass("load_products");
     return false;
@@ -956,10 +957,14 @@ $(document).on('click','.load_products',function(){
 
 function load_products(){
   var event_id = $('#social_event_id').attr('for')
+  $("#loadingText_activity").show();
   $.ajax({
     type: "GET",
     dataType: 'script',
     url: "/api/v1/events/"+event_id+"/social_feeds.js",
+    success: function(data){
+      $("#loadingText_activity").hide();
+    },
   });
   // return false;
 }
