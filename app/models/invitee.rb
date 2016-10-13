@@ -558,7 +558,7 @@ class Invitee < ActiveRecord::Base
     if twitter_id.present?
       new_user = nil
       event.each do |e|
-        user = user.where(:twitter_id => twitter_id, :event_id => e.id)
+        user = Invitee.where(:twitter_id => twitter_id, :event_id => e.id)
         if user.present?
           user = user.first
         else
@@ -576,7 +576,7 @@ class Invitee < ActiveRecord::Base
     if instagram_id.present?
       new_user = nil
       event.each do |e|
-        user = user.where(:instagram_id => instagram_id, :event_id => e.id)
+        user = Invitee.where(:instagram_id => instagram_id, :event_id => e.id)
         if user.present?
           user = user.first
         else
