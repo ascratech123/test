@@ -25,29 +25,29 @@ class Agenda < ActiveRecord::Base
   default_scope { order('start_agenda_time asc') }
 
   def set_speaker_ids
-    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "") if self.speaker_ids.present?
+    self.speaker_ids = self.speaker_ids.gsub("\"", "").sub("[", "").sub("]", "").gsub(" ", "").gsub(",", ", ") if self.speaker_ids.present?
   end
 
   def destroy_id_from_speaker
-    speaker_ids = self.speaker_ids.to_s.split(',')
+    speaker_ids = self.speaker_ids.to_s.split(', ')
     speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
-      agenda_ids = speaker.all_agenda_ids.to_s.split(",")
-      speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(","))
+      agenda_ids = speaker.all_agenda_ids.to_s.split(", ")
+      speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(", "))
     end if speaker_ids.present?
   end
 
   def update_agenda_speakers
-    speaker_ids = self.speaker_ids.to_s.split(',')
+    speaker_ids = self.speaker_ids.to_s.split(', ')
     speaker_names = []
     speaker_ids.each do |speaker_id|
       speaker = Speaker.find(speaker_id)
-      agenda_ids = (speaker.all_agenda_ids.to_s.split(",") + [self.id.to_s]).uniq.join(",")
+      agenda_ids = (speaker.all_agenda_ids.to_s.split(", ") + [self.id.to_s]).uniq.join(", ")
       speaker.update_column(:all_agenda_ids, agenda_ids)
       speaker_names << speaker.speaker_name
     end if speaker_ids.present?
-    all_speaker_names = (self.speaker_names.to_s.split(",") + speaker_names).uniq.join(", ")
+    all_speaker_names = (self.speaker_names.to_s.split(", ") + speaker_names).uniq.join(", ")
     self.update_column("all_speaker_names", all_speaker_names)
   end
 

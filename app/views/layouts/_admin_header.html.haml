@@ -1,7 +1,7 @@
 %header.mdl-color--blue-grey-900.mdl-color-text--blue-grey-50
   .brand-logo.logoImg.leftlicenseeImg
     %a.brand-logo.darken-1{:href => "javascript:void(0);"}
-      %img{:alt => "materialize logo", :src => current_user.get_licensee_admin.licensee_logo.url(:thumb)}
+      %img{:alt => "materialize logo", :src => current_user.get_licensee_admin.licensee_logo.url(:thumb)} rescue nil
   -if false
     .clear.leftlicenseeImg
       .f-left.m-l-30.m-r-10.m-t-5

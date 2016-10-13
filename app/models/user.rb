@@ -379,7 +379,9 @@ class User < ActiveRecord::Base
 
   def get_roles_for_user_for_checking(user,resource_id,user_id)
     @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
-  end  def get_clients
+  end  
+  
+  def get_clients
     clients = Client.with_roles(self.roles.pluck(:name), self)
   end
   

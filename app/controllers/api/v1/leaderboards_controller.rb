@@ -13,7 +13,7 @@ class Api::V1::LeaderboardsController < ApplicationController
   				invitees = Invitee.unscoped.where(:event_id => event.first.id, :visible_status => 'active').order('points desc').first(5) rescue []
   				#invitees = invitees.first(5) if invitees.present?
   				present_ids = invitees.map{|invitee| invitee.id } if invitees.present?
-  				if user.present? and !(present_ids.include?(user.id))
+  				if user.present? and !(present_ids.to_a.include?(user.id))
   					invitees << user
   				end
   				render :staus => 200, :json => {:status => "Success",:invitees => invitees.as_json(:only => [:id,:designation,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :first_name, :last_name], :methods => [:qr_code_url,:profile_pic_url, :rank]) } rescue []

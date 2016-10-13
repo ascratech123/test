@@ -39,12 +39,15 @@ class Speaker < ActiveRecord::Base
   default_scope { order("sequence") }  
 
   def delete_speaker_name_from_agenda
-    agenda_ids = self.all_agenda_ids.split(',')
+    agenda_ids = self.all_agenda_ids.to_s.split(', ')
     agenda_ids = agenda_ids.reject { |e| e.to_s.empty? }
     agenda_ids.each do |agenda_id|
       agenda = Agenda.find(agenda_id)
-      agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
-      agenda.update_column("speaker_ids", (agenda.speaker_ids.to_s.split(", ") - [self.id.to_s]).join(","))
+      agenda_speaker_names = agenda.all_speaker_names.to_s.split(", ")
+      agenda.update_column("speaker_ids", (agenda.speaker_ids.to_s.split(", ") - [self.id.to_s]).uniq.join(", "))
+      agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name]).uniq.join(", "))
+      agenda.update_columns(updated_at: Time.now)
+      agenda.update_last_updated_model
     end if agenda_ids.present?
   end
 
@@ -52,11 +55,11 @@ class Speaker < ActiveRecord::Base
   def update_agenda_speaker_name
     if self.speaker_name_changed?
       # agendas = Agenda.where(event_id:self.event_id,speaker_id:self.id)
-      agendas = Agenda.where(:id => self.all_agenda_ids.to_s.split(","))
+      agendas = Agenda.where(:id => self.all_agenda_ids.to_s.split(", "))
       if agendas.present?
         agendas.each do |agenda|
-          agenda_speaker_names = agenda.all_speaker_names.to_s.split(",")
-          agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name_was] + [self.speaker_name]).join(","))
+          agenda_speaker_names = agenda.all_speaker_names.to_s.split(", ")
+          agenda.update_column("all_speaker_names", (agenda_speaker_names - [self.speaker_name_was] + [self.speaker_name]).uniq.join(", "))
           agenda.update_columns(updated_at: Time.now)
           agenda.update_last_updated_model
         end  
