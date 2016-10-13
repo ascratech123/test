@@ -43,6 +43,7 @@
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
+
 .redText{color:red;}
 .clear{clear: both;}
 /*test*/
@@ -83,20 +84,16 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
- .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
- 
-  
- .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
- 
- .addMoreSpeaker{ border-radius: 50%;
-     display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
-  .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
-  .ckeditor_custom {text-align: left;}
-.copyCustomContent button{background:#1CB1BA; border:0 none; padding:5px; color:#fff; cursor:pointer;}
-.copyCustomContent button:first-child{margin-right:10px;}
+.agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
+.col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
+.col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
+.addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+.col-lg-7.notification.agendaDropdown{height:auto;}
+.form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
 
-.mb10{margin-bottom: 10px;}
-.displayNone{display: none;}
+.addMoreSpeaker{ border-radius: 50%;
+    display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
 .text-left{text-align: left;}
 .addmoretext.text-left{text-align:left; margin-top:8px;}
 .centerAlign{text-align:center;}
@@ -122,53 +119,10 @@
 .error_space_h57{height:57px}
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
-.panel-body.scroller-sm.top3LeaderDiv{height:auto; max-height:initial;}
-.account-popup {background: #fff; color: #444; font-size: 14px; height: auto; left: 0; margin: 0 auto; padding: 18px 15px; position: absolute; right: 0; text-align: center; top: 50%; width: 400px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); -moz-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -webkit-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);z-index: 9999;}
-.account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
-.account-popup .content{padding:18px 0;}
-.account-popup .okButton button{border:0 none; background: #058494; color:#fff; padding:5px 25px;}
-.mdl-menu__item a {color: rgba(0,0,0,0.87); font-weight:400;} 
-.manageMobileAppDiv{background:#fff;}
-.add-data{}
-.select-eventDiv{display:none;}
-.copyCustom-btnDiv{display:none;}
-.selectContentDiv{display:none;}
-#register-form-copyContentPopup.ClientPopup-info {padding: 50px 20px;}
-#register-form-copyContentPopup p{color:#666; margin-bottom: 18px;  line-height: 27px;
-    font-size: 17px;}
-#register-form-copyContentPopup p + .ClickPop {text-transform:uppercase;}
-.eventDetailSection p.orText{color:#a9acbd; font-size:16px; margin:15px auto 5px auto; text-align:center; width:100%;}
-.headerColor{width:100%;}
-.orText + .headerColor .form-group {margin-bottom: 5px;}
-.micrositeTemplateForm .error_space{height: auto;;}
-.select-event{display: none;}
-.min-height-auto{min-height: auto;}
-.save_button h4.m-b-10{margin-bottom: 10px;}
-
-.errorMess #microsite_field1 + .field_with_errors{top:40px;}
-.newMicrositeFieldDiv .mdl-grid .form-group  {margin-bottom: 15px;}
-.back-transparent{background: transparent;}
-p.or-vertical-text{    text-align: center;
-    display: block;
-    margin-top: 15px;
-    width: 100%;
-    color: #a9acbd!important;
-    font-size: 18px;
-    text-transform: capitalize;}
-    .Regiserror.validationErr .field_with_errors{left:10px;}
-.delete-wall-logo{top:-23px;}
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
-
-/*chirag css start */
-
-.feedbackEditColor{color: white}
-
-/*chirag css end*/
-
-
 
 /* notification overlay css - Deepti*/
 .overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}
@@ -387,7 +341,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 
 /* nilam css start here */
 
-.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
+/*.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}*/
 .back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
 
@@ -672,7 +626,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
  .pick-a-color-markup .input-group-btn{position: absolute;right: 30px;top: -2px;}
  .save_button h4,.new_event_feature h4{color:#a9acbd; font-size: 20px; margin-bottom:20px;}
  .p-h-12{padding: 0px 5px !important;}
- .mdl-card.agendaHeight{min-height:auto;background:#fff;}
+ .mdl-card.agendaHeight{min-height:auto;}
  .form-horizontal .mdl-grid.mdl-card.mdl-shadow--1dp{box-sizing:border-box;padding: 5px 20px;}
  .setting .col-xl-3{width: 20%;}
  .topbar-left.blueheaderFont{ margin-left: 60px;}
@@ -1091,9 +1045,9 @@ input[value="SAVE"]{font-size: 14px; font-family: 'Ubuntu', sans-serif;}
 /*============================= menu active link  ======================================= */
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600{-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
 .mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.mdl-js-ripple-effect.mdl-color--light-blue-600:hover{box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);-webkit-transform: scale(0.9,0.9);transform: scale(0.9,0.9);opacity:1;-webkit-transition: all 0.3s ease;transition: all 0.3s ease;}
-.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
-.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;margin-left: 15px;padding: 3px 10px;}
+.stausactive{width:95px;background:#009688; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statuspending{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
+.statusreject{width:95px;background:#f44336; border: none; border-radius: 2px;color: #fff;display: block;padding: 3px 10px;}
 /*============================= Agenda Start css   ======================================= */
 /*.HeaderUserName .mdl-menu__container.is-upgraded.is-visible{max-height: 300px !important; overflow-y:auto;} */ 
 .newRightsearch .mdl-textfield{display:block !important; width:calc(50% - 16px);text-align: right;}
@@ -1479,4 +1433,3 @@ i.incards {font-size: 60px}
 .galleryLayout li:nth-of-type(4n+4){margin-right: 2%;}
 }
 @media only screen and (max-width: 980px) {.galleryLayout{text-align: center;}.newsearchlaypout .f-right{float:none;}}
-.copyEvent{display: none;}

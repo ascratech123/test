@@ -6,7 +6,6 @@
       - page = "e-KIT" if page == "e_kits"
       - page = "#{title}" if page == "manage_mobile_apps"
       - page = "Feedback" if page == "feedbacks"
-      - page = "FeedbackForm" if page == "feedback_forms"
       - page = "Telecaller" if (page == "telecallers" or page == "invitee_datas")
       = render :partial => "/admin/dashboards/breadcumb_links",:locals => {:name => params[:controller],:page => page}   
       / %h3.mdl-color-text--red
