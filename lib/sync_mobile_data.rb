@@ -7,7 +7,7 @@ module SyncMobileData
       if model_name == 'InviteeNotification'
         update_data = InviteeNotification.where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
       elsif model_name == 'UserFeedback'
-        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"])
+        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"], :feedback_form_id => value["feedback_form_id"])
       else
         update_data = get_model_class(model_name).find_by_id(value["id"])
       end
@@ -16,7 +16,7 @@ module SyncMobileData
           update_data.update(params_data(value)) if update_data.present?
         elsif model_name == 'UserFeedback'
           params = params_data(value)
-          update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
+          update_data.update(params.except(:user_id, :feedback_id, :feedback_form_id)) if update_data.present?
         else
           update_data.update(params_data(value)) if update_data.present?
         end
