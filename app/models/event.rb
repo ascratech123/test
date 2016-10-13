@@ -8,12 +8,17 @@ class Event < ActiveRecord::Base
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
-
+  COUNTRIES = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Democratic Republic of the", "Congo", "Republic of the", "Costa Rica", "Cote dIvoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "North", "Korea", "South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territories", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"]
+  
   belongs_to :client
   belongs_to :theme
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_one :qna_wall
+  has_one :conversation_wall
+  has_one :poll_wall
+  has_one :quiz_wall
   has_many :my_profiles, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
@@ -57,11 +62,13 @@ class Event < ActiveRecord::Base
   has_many :campaigns, :dependent => :destroy
   has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
+  has_many :manage_invitee_fields, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 
   
   validates :event_name, :client_id, :cities, :start_event_date,:end_event_date, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :country_name,:timezone, presence:{ :message => "This field is required." }
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 
   #validates_presence_of :login_at, :on => :create
@@ -83,11 +90,11 @@ class Event < ActiveRecord::Base
   validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
-  after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables
+  after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
   #before_validation :set_time
   
-  scope :ordered, -> { order('start_event_time desc') }
+  scope :ordered, -> { order('start_event_date asc') }
   #default_scope { order('created_at desc') }
   
   
@@ -106,7 +113,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => :chage_updated_at do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -118,6 +125,10 @@ class Event < ActiveRecord::Base
   def init
     self.status = "pending"
     self.event_theme = "create your own theme"
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_theme_updated_at
@@ -284,7 +295,7 @@ class Event < ActiveRecord::Base
   end
   
   def set_features_default_list()
-    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings"]
+    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
     default_features
   end
 
@@ -304,12 +315,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_datetime 
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_datetime
+      self.end_event_time = end_event_time.to_datetime 
     end
   end
 
@@ -333,7 +344,7 @@ class Event < ActiveRecord::Base
   end
 
   def check_event_content_status
-    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats']
+    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats', 'activity_feeds']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
     #features += ['contacts', 'emergency_exit', 'event_highlights', 'highlight_images']
     count = 0
@@ -517,6 +528,12 @@ class Event < ActiveRecord::Base
     LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "destroy") rescue nil
   end
 
+  def destroy_log_change_for_publish
+    log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
+    log_changes.each{|l| l.update_column("action", "unpublished")}
+    #log_changes.destroy_all
+  end
+
   def add_default_invitee
     invitee = self.invitees.new(name_of_the_invitee: "Preview", email: "preview@previewapp.com", password: "preview", invitee_password: "preview", :first_name => 'Preview', :last_name => 'Invitee')
     invitee.save rescue ""
@@ -610,38 +627,54 @@ class Event < ActiveRecord::Base
 
   def set_timezone_on_associated_tables
     if self.timezone_changed?
-      self.update_column("timezone", self.timezone.titleize)
-      for table_name in ["agendas", "attendees", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
+      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].at(self.start_event_time).utc_offset)
+      display_time_zone = self.display_time_zone
+      #["agendas", "chats", "conversations", "faqs", "feedbacks", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      for table_name in ["agendas", "chats", "conversations", "notifications"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
+          obj.update_last_updated_model
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
-      end   
+      end
     end
-  end 
+  end
 
-  def about_date   
+  def set_date
+    self.update_column(:start_event_date, self.start_event_time)
+    self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def about_date
     if self.start_event_date.to_date != self.end_event_date.to_date
       "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
     else
       self.start_event_date.strftime('%A, %d %b %Y')
     end
-  end 
+  end
 
   def self.set_event_category
     Event.find_each do |event|
-      time_diff = event.end_event_date.utc_offset - Time.now.in_time_zone(event.timezone).utc_offset
-      hours = (time_diff.to_f/60/60).abs
-      prev_event_category  = event.event_category
-      if event.start_event_date <= Time.now + hours.hours and event.end_event_date >= Time.now + hours.hours
-        event.update_column("event_category","Ongoing")
-      elsif event.start_event_date > Time.now + hours.hours and event.end_event_date > Time.now + hours.hours
-        event.update_column("event_category","Upcoming")
-      else
-        event.update_column("event_category","Past")
+      event.set_event_category rescue nil
+    end
+  end
+
+  def set_event_category
+    time_now = Time.now.in_time_zone(self.timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+    prev_event_category  = self.event_category
+    if self.start_event_time.present? and self.end_event_time.present?
+      if self.start_event_time <= time_now and self.end_event_time >= time_now
+        self.update_column("event_category","Ongoing")
+      elsif self.start_event_time > time_now
+        self.update_column("event_category","Upcoming")
+      elsif self.end_event_time < time_now
+        self.update_column("event_category","Past")
       end
-      event.update_column("updated_at",Time.now) if (prev_event_category != event.event_category)
+      self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
     end
   end
 
@@ -658,22 +691,14 @@ class Event < ActiveRecord::Base
   end
 
   def display_time_zone
-    Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+    event_tz = "GMT +00:00"
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(self.start_event_time).formatted_offset}"]}
+      event_tz = "GMT#{tz.at(self.start_event_time).formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    end
+    return event_tz
   end
 
-  def extra_invitee_attributes
-    h = {}
-    my_profile = self.my_profiles.last
-    ['attr1', 'attr2', 'attr3', 'attr4', 'attr5'].each do |t|
-      h[t] = my_profile.attributes[t] if my_profile.attributes[t].present? and my_profile.attributes['enabled_attr'][t] == 'yes'
-    end if my_profile.present?
-    h
-  end
-
-  def get_invitee_my_profile_attributes
-    h = {}
-    my_profile = self.my_profiles.last
-    h = my_profile.attributes['enabled_attr'] rescue {}
-    h
-  end
+  #def display_time_zone
+  #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  #end
 end

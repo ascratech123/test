@@ -1,4 +1,4 @@
- @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700);
+ @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700); 
  html {font-family: 'Ubuntu', sans-serif;}
  td{word-break:break-all;}
  /*demo css start */
@@ -44,6 +44,8 @@
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
 
+.redText{color:red;}
+.clear{clear: both;}
 /*test*/
 .test{position:relative;}
 .event_select123{position:absolute;top:16px;z-index:99999999999;}
@@ -82,7 +84,20 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+.agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
+.col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
+.col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
+.addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+.col-lg-7.notification.agendaDropdown{height:auto;}
+.form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
 
+.addMoreSpeaker{ border-radius: 50%;
+    display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
+.text-left{text-align: left;}
+.addmoretext.text-left{text-align:left; margin-top:8px;}
+.centerAlign{text-align:center;}
+#loadingText{}
 .titleQuestion{margin-left:15px;}
 /* date calender  and color pick(dropdown) issues on staging nd platform  start here */
 .dtp-content .dtp-date-view{background:#fff;}
@@ -104,6 +119,15 @@
 .error_space_h57{height:57px}
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
+.back-transparent{background: transparent;}
+p.or-vertical-text{    text-align: center;
+    display: block;
+    margin-top: 15px;
+    width: 100%;
+    color: #a9acbd!important;
+    font-size: 18px;
+    text-transform: capitalize;}
+.delete-wall-logo{top:-23px;}
 .account-popup {background: #fff; color: #444; font-size: 14px; height: auto; left: 0; margin: 0 auto; padding: 18px 15px; position: absolute; right: 0; text-align: center; top: 50%; width: 400px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); -moz-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -webkit-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);z-index: 9999;}
 .account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
 .account-popup .content{padding:18px 0;}
@@ -330,9 +354,10 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 
 /* nilam css start here */
 
-.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
+/*.timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}*/
 .back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}
 .search_header + div{width:85px;}
+
 /* nilam css ends here */
 
 .onoffswitch {
@@ -390,6 +415,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .result_statusdiv{width:75px;}
 .back_btn_header{display: inline-block; margin-top: 17px;}
 .search_header + div{width:85px;}
+.select-speaker{margin-bottom: 15px;}
 /* nilam css ends here */
 
 /*nilam*/
