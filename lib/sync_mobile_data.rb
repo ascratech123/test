@@ -16,7 +16,7 @@ module SyncMobileData
           update_data.update(params_data(value)) if update_data.present?
         elsif model_name == 'UserFeedback'
           params = params_data(value)
-          update_data.update(params.except(:user_id, :feedback_id)) if update_data.present?
+          update_data.update(params.except(:user_id, :feedback_id, :feedback_form_id)) if update_data.present?
         else
           update_data.update(params_data(value)) if update_data.present?
         end
