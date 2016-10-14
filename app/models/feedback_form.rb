@@ -7,6 +7,8 @@ class FeedbackForm < ActiveRecord::Base
 	after_save :update_last_updated_model
 	before_create :set_sequence_no
 
+        default_scope { order("sequence") }
+
 	def set_sequence_no
     self.sequence = (Event.find(self.event_id).feedback_forms.pluck(:sequence).compact.max.to_i + 1)rescue nil
   end

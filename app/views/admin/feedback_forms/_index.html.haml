@@ -28,9 +28,3 @@
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback_form.id}"}
             = edit_link(params, feedback_form.id)
             = delete_link(params, feedback_form.id)
-
-:javascript
-
-  $('input[readonly]').dblclick(function() {
-    $(this).removeAttr('readonly');
-  });  
