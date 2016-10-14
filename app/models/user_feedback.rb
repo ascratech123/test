@@ -20,13 +20,12 @@ class UserFeedback < ActiveRecord::Base
   end
 
   def feedback_form_id
-    self.feedback.feedback_form_id.present? ? self.feedback.feedback_form_id : ""
+    self.feedback.feedback_form_id.present? ? self.feedback.feedback_form_id : "" 
   end
   
   def get_event_id
     self.feedback.event_id rescue nil
   end
-
   
   def Timestamp
     feedback = self.feedback
