@@ -714,6 +714,20 @@ class Invitee < ActiveRecord::Base
     invitees
   end
 
+  def all_feedback_forms_last_updated_at(mobile_app_code,submitted_app,event_ids)
+    hsh = []
+    event_ids = get_event_id(mobile_app_code,submitted_app) if event_ids.blank?
+    invitee_ids = get_similar_invitees(event_ids).pluck(:id)
+    feedback_form_ids = UserFeedback.unscoped.where(:user_id => invitee_ids).pluck("distinct feedback_form_id")
+    for invitee_id in invitee_ids
+      for feedback_form_id in feedback_form_ids
+        user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id, :user_id => invitee_id).order("updated_at")
+        hsh << {"invitee_id" => invitee_id,"feedback_form_id" => feedback_form_id, "last_updated" => user_feedbacks.last.updated_at} if user_feedbacks.present?
+      end
+    end
+    hsh
+  end
+
   private
 
   def downcase_email
