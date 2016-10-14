@@ -75,7 +75,7 @@
                             = "#{percentage}%"
                         - bar_color = ((bar_color == @quiz_wall.bar_color)? @quiz_wall.bar_color1 : @quiz_wall.bar_color) if percentage.present? and percentage != 0                      
                       - if quiz.option5.present?
-                        %p 
+                        %p{:style=>"color:#{@quiz_wall.font_color};"} 
                           = quiz.option5
                           / - percentage = get_user_poll_percentage("option5",poll)
                           - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option5")
@@ -160,7 +160,7 @@
                             = "#{percentage}%"
                         - bar_color = ((bar_color == @quiz_wall.bar_color)? @quiz_wall.bar_color1 : @quiz_wall.bar_color) if percentage.present? and percentage != 0                      
                       - if quiz.option5.present?
-                        %p 
+                        %p{:style=>"color:#{@quiz_wall.font_color};"} 
                           = quiz.option5
                           / - percentage = get_user_poll_percentage("option5",poll)
                           - percentage = correct_user_quizzes_for_percentile_for_wall(quiz,"option5")
