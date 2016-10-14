@@ -75,7 +75,7 @@
         - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos","admin/qna_walls","admin/conversation_walls", "admin/poll_walls", "admin/quiz_walls"].exclude?(params[:controller])  
           - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
             %li.breadcrumb-link
-              - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups","admin/activity_feeds"].include?(params["controller"])
+              - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/feedback_forms","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups","admin/activity_feeds"].include?(params["controller"])
                 = link_to "Engagement", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_engagement"), :class => "mdl-color-text--white"
               - else
                 = link_to "Content", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_content"), :class => "mdl-color-text--white"
@@ -95,7 +95,10 @@
                 = link_to "#{@campaign.campaign_name.capitalize} / ", admin_event_campaigns_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - elsif page == "manage_invitee_fields"
                 = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
-              = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
+              - if name == "Feedback"
+                = link_to "Feedback", admin_event_feedback_form_feedbacks_path, :class => "mdl-color-text--white" if @event.present?
+              - else
+                = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
           - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
             = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
             - if params[:action] == "new" and params[:controller] == "admin/telecallers"
