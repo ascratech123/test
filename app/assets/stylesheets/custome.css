@@ -43,6 +43,7 @@
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
 }
+
 .redText{color:red;}
 .clear{clear: both;}
 /*test*/
@@ -83,11 +84,14 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
- .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
- 
-  
- .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
- 
+.agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
+.col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
+.col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
+.addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
+.col-lg-7.notification.agendaDropdown{height:auto;}
+.form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
+
  .addMoreSpeaker{ border-radius: 50%;
      display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
@@ -158,6 +162,10 @@ p.or-vertical-text{    text-align: center;
     .Regiserror.validationErr .field_with_errors{left:10px;}
 .delete-wall-logo{top:-23px;}
 .twitter-tweet{width:100% !important; max-width:100% !important;}
+.account-popup {background: #fff; color: #444; font-size: 14px; height: auto; left: 0; margin: 0 auto; padding: 18px 15px; position: absolute; right: 0; text-align: center; top: 50%; width: 400px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); -moz-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -webkit-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);z-index: 9999;}
+.account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
+.account-popup .content{padding:18px 0;}
+.account-popup .okButton button{border:0 none; background: #058494; color:#fff; padding:5px 25px;}
 /*=======================Nilam CSS End =================================*/
  
 /*chirag css start */
@@ -464,6 +472,16 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .venue_chk_ml0 .md-checkbox{margin-left:0px;}
 .titleQuestion{margin-left:15px;}
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
+.p-h-12.socialchk.paddingChkbox{padding: 0 9px !important;}
+.save_button .socialMediaRadioBtn .mdl-radio {
+    margin: 0;
+    vertical-align: middle;
+}
+.socialMediaRadioBtn .mdl-radio.is-upgraded {
+    padding-left: 24px;
+    padding-right: 15px;
+}
+.form-horizontal .socialchk.paddingChkbox .checkbox{padding-top:0px;}
 /*Azeem CSS Start*/
 
 .m12t{margin-top:12px;}

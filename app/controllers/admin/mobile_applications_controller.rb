@@ -101,6 +101,7 @@ class Admin::MobileApplicationsController < ApplicationController
       @mobile_application.update_attribute(:login_background, nil) if @mobile_application.login_background.present?
       redirect_to edit_admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
     else
+      params[:mobile_application]["social_media_logins"] = nil if !params[:mobile_application].key?(:social_media_logins)
       if @mobile_application.update_attributes(mobile_applications_params)
         redirect_after_update
       else
@@ -174,7 +175,7 @@ protected
     #   params.require(:mobile_application).permit!
     # end
     if params[:mobile_application].present?
-      params.require(:mobile_application).permit!.except(:event) 
+      params.require(:mobile_application).permit!.except(:event)
       params.require(:mobile_application).merge(:template_id => params[:template_id].first) if params[:template_id].present?
     end
   end

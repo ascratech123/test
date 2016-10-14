@@ -65,6 +65,7 @@ class MobileApplication < ActiveRecord::Base
   validates :name, :application_type, :listing_screen_text_color, :visitor_registration, presence: { :message => "This field is required." }
   validate :listing_screen_text_color_presentce
   validates :name, uniqueness: {scope: :client_id}
+  validates :social_media_logins, presence: { :message => "This field is required." },:if => Proc.new{|p| p.social_media_status.present? and p.social_media_status == "active" and p.social_media_logins.blank? }
   
   validate :image_dimensions_for_app_icon, :if => Proc.new{|p| p.app_icon_file_name_changed? and p.app_icon_file_name.present?}
   validate :image_dimensions_for_splash_screen, :if => Proc.new{|p| p.splash_screen_file_name_changed? and p.splash_screen_file_name.present? }
