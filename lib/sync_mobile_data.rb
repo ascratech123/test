@@ -52,7 +52,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite',  'UserMicrosite', 'VenueSection', 'ConversationWall', 'EventVenue', 'PollWall', 'QnaWall', 'QuizWall', 'AgendaSpeaker']#.each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite',  'UserMicrosite', 'VenueSection', 'ConversationWall', 'EventVenue', 'PollWall', 'QnaWall', 'QuizWall', 'AgendaSpeaker', 'InviteeAccess', 'MyProfile']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
     last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
     model_name.each do |model|
@@ -164,7 +164,7 @@ module SyncMobileData
           if current_user.present?
             feedback_ids = Feedback.where(:event_id => event_ids) rescue nil
             info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id, :feedback_form_id]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
           end
         when "MobileApplication"  
           if start_event_date != "01/01/1990 13:26:58".to_time.utc
