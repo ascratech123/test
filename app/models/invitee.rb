@@ -663,6 +663,16 @@ class Invitee < ActiveRecord::Base
     self.updated_at + self.event.timezone_offset.to_i.seconds
   end
 
+  def all_feedback_forms_last_updated_at
+    hsh = {}
+    feedback_form_ids = UserFeedback.unscoped.where(:user_id => self.id).pluck("distinct feedback_form_id")
+    for feedback_form_id in feedback_form_ids
+      user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id).order("updated_at")
+      hsh[feedback_form_id] = user_feedbacks.last.updated_at
+    end
+    hsh
+  end
+
   private
 
   def downcase_email
