@@ -91,7 +91,10 @@
 .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
 .col-lg-7.notification.agendaDropdown{height:auto;}
 .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
-
+.enable_card_eng .fs40.mt5.mbn {
+    display: inline-block;
+    height: 45px;
+}
  .addMoreSpeaker{ border-radius: 50%;
      display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
