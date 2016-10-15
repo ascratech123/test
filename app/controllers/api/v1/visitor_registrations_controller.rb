@@ -39,6 +39,8 @@ class Api::V1::VisitorRegistrationsController < ApplicationController
       end
       if mobile_applications.present?
         @events = Event.where("mobile_application_id IN (?) and event_type_for_registration = ?", [mobile_applications.id], "open")
+        @background_color = mobile_applications.visitor_registration_background_color
+        @background_image = mobile_applications.visitor_registration_background_image.url if mobile_applications.visitor_registration_background_image_file_name.present?
       end
     else
       redirect_to api_v1_visitor_registrations_path
