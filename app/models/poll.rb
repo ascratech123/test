@@ -13,7 +13,7 @@ class Poll < ActiveRecord::Base
   before_save :set_time
   after_save :push_notification, :check_push_to_wall_status, :update_last_updated_model
   before_create :set_sequence_no
-  after_create :set_status#, :set_status_as_per_auto_approve
+  after_create :set_status_as_per_auto_approve, :set_event_timezone
 
   default_scope { order("sequence") }
 
@@ -30,6 +30,10 @@ class Poll < ActiveRecord::Base
     end
   end
 
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
+  end
+
   def set_status
     if self.status.blank?
       self.status = "activate"
@@ -37,10 +41,6 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  def update_last_updated_model
-    LastUpdatedModel.update_record(self.class.name)
-  end
- 
   def self.search(params,polls)
     keyword = params[:search][:keyword]
      polls = polls.where("question like (?) ", "%#{keyword}%") if keyword.present?
@@ -102,6 +102,10 @@ class Poll < ActiveRecord::Base
     data
   end
 
+  def option10
+    self.option010
+  end
+
   def change_status(poll)
     if poll == "activate"
       self.activate!
@@ -133,16 +137,40 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  # def set_status_as_per_auto_approve
-  #   if Event.find(self.event_id).poll_auto_approve == "true"
-  #     self.update_column(:status, "activate") 
-  #   elsif Event.find(self.event_id).poll_auto_approve == "false"
-  #     self.update_column(:status, "deactivate")
-  #   end
-  # end
+  def set_status_as_per_auto_approve
+    if Event.find(self.event_id).poll_auto_approve == "true"
+      self.update_column(:status, "activate") 
+    elsif Event.find(self.event_id).poll_auto_approve == "false"
+      self.update_column(:status, "deactivate")
+    end
+  end
 
-  # def self.set_auto_approve(value,event)
-  #   event.update_column(:poll_auto_approve, value)
-  # end
+  def set_dates_with_event_timezone
+    event = self.event
+    self.update_column("poll_start_date_time_with_event_timezone", self.poll_start_date_time.to_datetime.in_time_zone(event.timezone))
+    self.update_column("poll_end_date_time_with_event_timezone", self.poll_end_date_time.to_datetime.in_time_zone(event.timezone))    
+  end
+
+  def poll_start_date_time_with_event_timezone
+    self.poll_start_date_time.in_time_zone(self.event.timezone)
+  end
+
+  def poll_end_date_time_with_event_timezone
+    self.poll_end_date_time.in_time_zone(event.timezone)
+  end
   
+  def self.set_auto_approve(value,event)
+    event.update_column(:poll_auto_approve, value)
+  end
+
+  def update_event_timezone
+    event = self.event
+    self.update_column("event_timezone", event.timezone)
+    self.event_timezone
+  end
+
+  def set_event_timezone
+    self.update_column(:event_timezone, self.event.timezone)
+  end
+
 end
