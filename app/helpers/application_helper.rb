@@ -12,8 +12,7 @@ module ApplicationHelper
    result+= "<span style='color: "+poll_wall.font_color+"'>" 
    result+= percentage.to_s + '%' 
    result+= "</span>"
-   result+= "</div>"
-   bar_color = ((bar_color == poll_wall.bar_color)? poll_wall.bar_color1 : poll_wall.bar_color) if percentage.present? and percentage != 0  
+   result+= "</div>"  
    return result.html_safe
   end
 
