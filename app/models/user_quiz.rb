@@ -19,7 +19,9 @@ class UserQuiz < ActiveRecord::Base
   default_scope { order('created_at desc') }
 
 	def update_quiz
-		Quiz.find_by_id(self.quiz_id).update_column(:updated_at, self.updated_at) rescue nil
+		quiz = Quiz.find_by_id(self.quiz_id)
+                quiz.update_column(:updated_at, self.updated_at) rescue nil
+                quiz.update_last_updated_model
 	end
 
   def email
@@ -43,7 +45,8 @@ class UserQuiz < ActiveRecord::Base
   end
 
   def Timestamp
-    self.created_at.in_time_zone(self.quiz.event_timezone).strftime("%d/%m/%Y %T")
+    # self.created_at.in_time_zone(self.quiz.event.time_zone).strftime("%d/%m/%Y %T")
+    (self.created_at + self.quiz.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
   
   def question
@@ -52,13 +55,13 @@ class UserQuiz < ActiveRecord::Base
 
 
   def user_answer
-    self.answer.join(', ').to_s
+    self.answer#.join(', ').to_s
     #self.quiz.attributes[self.answer.downcase]
   end
   
-  def answer
-    self.quiz.correct_answer
-  end
+  # def answer
+  #   self.quiz.correct_answer
+  # end
 
   def correct_answer
     self.quiz.correct_answer.join(', ').to_s

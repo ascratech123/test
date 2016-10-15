@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   #protect_from_forgery with: :exception
-  before_action :load_filter, :except => [:mobile_current_user_present]
+  before_action :load_filter, :check_licensee_expiry, :except => [:mobile_current_user_present]
   #before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_filter :set_url_history, :except => :back
@@ -33,11 +33,32 @@ class ApplicationController < ActionController::Base
   def load_filter
     if params[:key].present? 
       authenticate_user_from_token!
-    elsif (params["controller"] == "api/v1/events" and params["key"].blank?)
+    elsif (["api/v1/events", "api/v1/activity_feeds"].include? params["controller"] and params["key"].blank?)
       session['invitee_id'] = nil
     else
       session['invitee_id'] = nil  
       authenticate_user!
+    end
+  end
+
+  def check_licensee_expiry
+    if (current_user.present? and !current_user.has_role? :super_admin)
+      licensee_admin = current_user.get_licensee_admin
+      if licensee_admin.present? and (licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today or licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today) and licensee_admin.status != "active"
+
+        sign_out current_user
+        session[:date_error] = "Your account is deactive, Please contact admin."
+        root_path
+        # if licensee_admin.licensee_start_date.present? and licensee_admin.licensee_start_date > Date.today
+        #   session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
+        #   redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
+        # elsif licensee_admin.licensee_end_date.present? and licensee_admin.licensee_end_date < Date.today
+        #   session[:licensee_expired] = 'Your account has been expired. Kindly connect with hobnob team'
+        #   redirect_to admin_dashboards_path if params[:controller] != 'admin/dashboards' and request.env['REQUEST_METHOD'] == 'POST'
+        # elsif session[:licensee_expired].present?
+        #   session[:licensee_expired] = nil
+        # end
+      end
     end
   end
 
@@ -209,7 +230,9 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :telecaller
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
+      #if resource.roles.pluck(:name).uniq.count > 1 #or session[:current_user_role].blank?
       new_admin_change_role_path# admin_dashboards_path
+      #end
     end
   end
 
@@ -333,7 +356,7 @@ class ApplicationController < ActionController::Base
   def check_for_access
     if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
-    elsif params[:format].present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+    elsif (params[:format].present? and params["export_type"].present? and ["admin/speakers","admin/feedbacks","admin/user_feedbacks"].include? params[:controller] and(!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
     end
     if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))

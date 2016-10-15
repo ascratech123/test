@@ -12,7 +12,6 @@
         .col-xs-7.pl5
           %h6.text-muted.truncate
             = Client::display_hsh[url]  
-            
           - page = params[:controller].split("/").second
           - features = ["speakers", "invitees", "agendas", "polls", "conversations", "faqs", "qnas", "awards", "feedbacks", "e_kits", "images", "abouts", "sponsors", "my_profile", "qr_code","my_calendar", "favourites", 'leaderboard','custom_page1s','custom_page2s','custom_page3s','custom_page4s','custom_page5s']
           - if ["poll_walls","conversation_walls","qna_walls"].exclude? url and show_card_except_event_features(url)
@@ -40,7 +39,8 @@
                 - count = objs.present? ? 1 : 0
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "") 
               - else
-                - count = objs.count  
+                - count = objs.count if url != "activity_feeds"
+                - count = @count if url == "activity_feeds"
                 - redirection = (count == 0 ? "/new?type=dashboard_new" : "")
                 - redirection = "" if (count == 0 and url == 'qnas' and (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])))# !current_user.has_role? :moderator)
               - if ["poll_walls","conversation_walls","qna_walls"].include? (url)
@@ -65,7 +65,7 @@
               - display_title = "Add"
             -elsif url == "venue" and @event.emergency_exit.present?
               - display_title = "Manage"
-            - elsif ["leaderboard"].include?(url)
+            - elsif ["leaderboard", "activity_feeds"].include?(url)
               - display_title = "Manage"
               - redirect_link = ""
             -elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include?(url) 
@@ -82,7 +82,7 @@
             - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |
               = link_to "Disable", admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id,:disable_event => "#{url}", :type => params[:type]), :method => "put", :remote => true 
-            - if ["polls","conversations","qnas"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
+            - if ["polls","conversations","qnas","quizzes"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
               |
               - if url == "polls"
                 = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
@@ -90,6 +90,8 @@
                 = link_to "Go to Wall", admin_event_qnas_path(:event_id => @event.id, :qnas_wall => true),:class => " centerAlign", :target => "_blank"
               - elsif url == "conversations"
                 = link_to "Go to Wall", admin_event_conversations_path(:event_id => @event.id, :conversations_wall => true),:class => " centerAlign", :target => "_blank"
+              - elsif url == "quizzes"
+                = link_to "Go to Wall", admin_event_quizzes_path(:event_id => @event.id, :quiz_wall => true),:class => " centerAlign", :target => "_blank"                
       - elsif false#(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include? (url)
         .row.pv5.AddmoreCard
           .col-xs-12.ph5

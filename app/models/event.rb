@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
   resourcify
   serialize :preferences
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :event_date_limit
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
@@ -15,6 +15,10 @@ class Event < ActiveRecord::Base
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_one :qna_wall
+  has_one :conversation_wall
+  has_one :poll_wall
+  has_one :quiz_wall
   has_many :speakers, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
@@ -81,7 +85,7 @@ class Event < ActiveRecord::Base
                                          }.merge(EVENT_INSIDE_LOGO_PATH)                                       
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
-  validate :event_count_within_limit, :on => :create
+  validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
@@ -289,7 +293,7 @@ class Event < ActiveRecord::Base
   end
   
   def set_features_default_list()
-    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings"]
+    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
     default_features
   end
 
@@ -327,8 +331,18 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def check_event_date
+    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present?)
+      if User.current.licensee_end_date < self.end_event_date
+        errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
+      else
+        self.errors.delete(:event_date_limit)
+      end
+    end
+  end
+
   def check_event_content_status
-    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats']
+    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats', 'activity_feeds']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
     #features += ['contacts', 'emergency_exit', 'event_highlights', 'highlight_images']
     count = 0
@@ -532,11 +546,12 @@ class Event < ActiveRecord::Base
   end
   
   def event_count_within_limit
-    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?)
+    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?) or (self.client.licensee.present? and self.client.licensee.no_of_event.present?)
       clients = Client.with_roles(User.current.roles.pluck(:name), User.current).uniq
       event_count = clients.map{|c| c.events.count}.sum
-      if User.current.no_of_event <= event_count
-        errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
+      if (User.current.no_of_event.present? and User.current.no_of_event <= event_count) or (self.client.licensee.present? and self.client.licensee.no_of_event <= event_count)
+        errors.add(:event_limit, "You have crossed your events limit kindly contact.")
+        # errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
       else
         self.errors.delete(:event_limit)
       end 
@@ -604,22 +619,23 @@ class Event < ActiveRecord::Base
   end
 
   def set_timezone_on_associated_tables
-    #if self.timezone_changed?
+    if self.timezone_changed?
       self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
       self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].at(self.start_event_time).utc_offset)
       display_time_zone = self.display_time_zone
-      for table_name in ["agendas", "attendees", "awards", "chats", "conversations", "event_features", "faqs", "feedbacks", "groupings", "my_travels", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      #["agendas", "chats", "conversations", "faqs", "feedbacks", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      for table_name in ["agendas", "chats", "conversations", "notifications"]
         table_name.classify.constantize.where(:event_id => self.id).each do |obj|
           obj.update_column("event_timezone", self.timezone)
           obj.update_column("event_timezone_offset", self.timezone_offset)
           obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
-          obj.update_last_updated_model rescue nil
+          obj.update_last_updated_model
           obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
         end
-      end   
-    #end
-  end  
+      end
+    end
+  end
 
   def set_date
     self.update_column(:start_event_date, self.start_event_time)

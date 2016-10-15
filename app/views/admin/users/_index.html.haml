@@ -70,7 +70,8 @@
                   %i.material-icons more_vert
                 %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{user.id}"}
                   - if params[:event_id].present?
-                    - current_user_roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Event', @event.id, current_user.id).pluck(:name)
+                    -# current_user_roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Event', @event.id, current_user.id).pluck(:name)
+                    - current_user_roles = user.get_roles_for_user_for_checking('Event',@event.id,current_user.id)
                     - if user.has_role? :telecaller
                       = link_to edit_admin_event_telecaller_path(:event_id => params[:event_id], :id => user.id, :get_role => params["role"]), :class => "mdl-menu__item" do
                         Edit
@@ -80,7 +81,8 @@
                       = link_to admin_event_user_path(:event_id => params[:event_id], :id => user.id, :delete_role => "true", :get_role => params["role"]),:method => "delete", :class => "mdl-menu__item" do
                         Delete 
                   - elsif params[:client_id].present?
-                    - current_user_roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Client', @client.id, current_user.id).pluck(:name)
+                    -# current_user_roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', 'Client', @client.id, current_user.id).pluck(:name)
+                    - current_user_roles = user.get_roles_for_user_for_checking('Client',@client.id,current_user.id)
                     - if current_user_roles.include? 'licensee_admin'
                       = link_to edit_admin_client_user_path(:client_id => params[:client_id], :id => user.id), :class => "mdl-menu__item" do
                         Edit

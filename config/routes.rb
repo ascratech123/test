@@ -35,7 +35,7 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers,:qna_walls,:conversation_walls,:poll_walls,:quiz_walls, :activity_feeds
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
@@ -81,11 +81,15 @@ end
       post 'tokens/twitter_authentication' => 'tokens#twitter_authentication', defaults: {format: 'json'}
       resources :events do 
         post 'delete_mobile_data', on: :collection 
-        resources :chats
+        resources :chats do 
+          post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
+        end
+        resources :invitee_chats  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
+      resources :activity_feeds
     end
   end
 end

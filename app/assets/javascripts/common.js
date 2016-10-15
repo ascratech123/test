@@ -237,7 +237,10 @@ $('.help-popup-overlay').fadeOut();
         }
     });
 
-    
+   /* nilam - popup js - account expired */
+  $('.okButton button').click(function(){
+    $('.account-popup').css('display','none');
+  });  
 
   $('#date').bootstrapMaterialDatePicker
       ({
@@ -301,6 +304,15 @@ $(window).load(function() {
     }
   });
 });
+
+function add_fields_for_agenda_speakers(link, association, content) {
+  if ($('.venueFields').find("select").length < 5){
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_" + association, "g");
+    $(".venueFields").append(content.replace(regexp, new_id));
+  }
+
+}
 
 function flightTime() {
     var hours = [
@@ -727,5 +739,54 @@ $(document).ready(function(){
         $('select#event_country_name option:selected').prop("selected", false);
       }  
     }
+  });
+
+  // $(".select-speaker").change(function(){   
+  //   value = $(this).val();
+  //   if(value == 0){
+  //     $(this).next().find('.form-group').show();
+  //   }
+  // });    
+});
+
+$(document).on('click','.select-speaker',function(){
+  $(".select-speaker").change(function(){   
+    value = $(this).val();
+    if(value == 0){
+      $(this).next().find('.form-group').show();
+    }
+  });    
+});
+
+$(document).on('change','#agenda_speaker_id',function(){
+  value = parseInt($(this).val());
+  if(value == 0){
+    console.log(value);
+    $('#add_speaker .form-group').show();
+  }
+});
+
+$(document).on("click", ".addMoreSpeaker", function(){
+  $('#add_speaker .form-group').toggle();
+})
+
+// $(document).on('keyup', "#agenda_speaker_names", function(e) {
+//   value = $(this).val();
+//   selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
+//   allow = 5 - selected_speakers - 1;
+//   if((value.split(",").length - 1) > allow){
+//     $(this).val(value.slice(0, -1));
+//     alert("You cannot add more than " + (allow + 1));
+//   }
+// });
+
+
+/*function agenda_speaker_dropdown() {
+  alert('asdasda');
+  document.getElementById("myDropdown").classList.toggle("show");
+} */
+$(document).ready(function(){
+  $('.usersep').click(function(){
+  $('#myDropdown').toggle();
   });
 });

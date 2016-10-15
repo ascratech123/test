@@ -1,7 +1,9 @@
 %header.mdl-color--blue-grey-900.mdl-color-text--blue-grey-50
   .brand-logo.logoImg.leftlicenseeImg
-    %a.brand-logo.darken-1{:href => "javascript:void(0);"}
-      %img{:alt => "materialize logo", :src => current_user.get_licensee_admin.licensee_logo.url(:thumb)}
+    - licensee_admin = current_user.get_licensee_admin
+    - if licensee_admin.present?
+      %a.brand-logo.darken-1{:href => "javascript:void(0);"}
+        %img{:alt => "materialize logo", :src => licensee_admin.licensee_logo.url(:thumb)}
   -if false
     .clear.leftlicenseeImg
       .f-left.m-l-30.m-r-10.m-t-5
@@ -106,11 +108,11 @@
         %a.mdl-navigation__link.menuclick{:href => url}
           = image_tag("black_&_white_icons/Analytics_img.png")
           Analytics
-      - if current_user.roles.pluck(:name).uniq.count > 1
-        - url = "/admin/change_roles/new" 
-        %a.mdl-navigation__link.menuclick{:href => url}
-          = image_tag("black_&_white_icons/Role_Change.png")
-          Change Role
+      / - if current_user.roles.pluck(:name).uniq.count > 1
+      /   - url = "/admin/change_roles/new" 
+      /   %a.mdl-navigation__link.menuclick{:href => url}
+      /     = image_tag("black_&_white_icons/Role_Change.png")
+      /     Change Role
   .brand-logo.bdrtop.hobnobBottom
     %a.brand-logo.darken-1{:href => "javascript:void(0);"}
       = image_tag("hb_reverse")
