@@ -129,6 +129,7 @@ class Invitee < ActiveRecord::Base
       end
       break if invitees.values.select{|v| v.first >= 1000}.count > 4
     end
+    return if not invitees.present?
     if invitees.present?
       invitees = invitees.select{|id, val| val[0] > 1000}
       invitees = Invitee.find(invitees.keys).sort_by{|e| e[:created_at]}
