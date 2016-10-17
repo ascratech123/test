@@ -25,5 +25,5 @@ class Admin::LeaderboardsController < ApplicationController
         end
       end
     end
-	end
+	end 
 end
