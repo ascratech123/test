@@ -15,8 +15,8 @@
             -if @event.qna_wall.present?
               - if @qna_wall.logo.present?
                 .QnaImg 
-                  %img.logo{:alt => "LOGO", :src => "#{@qna_wall.logo.url(:large)}"} 
-                  / %img.logo{:alt => "LOGO", :src => "/assets/hob_nob_web.png"}
+                  / %img.logo{:alt => "LOGO", :src => "#{@qna_wall.logo.url(:large)}"} 
+                  = image_tag(@qna_wall.logo.url(:original),style: 'height:30%;width:50%;',:class=>"logo")
             %p.qa.ref-icon
               %a{:href => "", :onclick => "window.location.reload();"}
                 %i.material-icons refresh
@@ -157,7 +157,8 @@
               -if @event.qna_wall.present?
                 - if @qna_wall.logo.present?
                   .QnaImg 
-                    %img.logo{:alt => "LOGO", :src => "#{@qna_wall.logo.url(:large)}"} 
+                    / %img.logo{:alt => "LOGO", :src => "#{@qna_wall.logo.url(:original)}"}
+                    = image_tag(@qna_wall.logo.url(:original),style: 'height:30%;width:50%;',:class=>"logo") 
                     / %img.logo{:alt => "LOGO", :src => "/assets/hob_nob_web.png"}
               %p.qa.ref-icon
                 %a{:href => "", :onclick => "window.location.reload();"}
