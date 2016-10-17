@@ -8,7 +8,7 @@ class Api::V1::MobileApplicationsController < ApplicationController
     @mobile_application = MobileApplication.find_by_submitted_code(params[:id]) || MobileApplication.find_by_preview_code(params[:id]) || MobileApplication.find_by_id(params[:id])
     if @mobile_application.present?
       create_device_token
-      render :status => 200, :json => {:status => "Success", :mobile_application => @mobile_application.as_json(:only => [:id,:login_background_color,:message_above_login_page,:registration_message, :registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status, :visitor_registration,:social_media_logins, :choose_home_page, :home_page_event_id], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url, :visitor_registration_background_image_url, :visitor_registration_back_color ]) }
+      render :status => 200, :json => {:status => "Success", :mobile_application => @mobile_application.as_json(:only => [:id,:login_background_color,:message_above_login_page,:registration_message, :registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status, :visitor_registration,:social_media_logins, :choose_home_page, :home_page_event_id, :app_icon_updated_at,:splash_screen_updated_at,:login_background_updated_at,:listing_screen_background_updated_at], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url, :visitor_registration_background_image_url, :visitor_registration_back_color ]) }   
     else
       render :status => 200, :json => {:status => "Failure", :message => "Mobile Application Not Found."}
     end
