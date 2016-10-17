@@ -87,7 +87,7 @@
 .agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
 .col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
 .col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
-#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7;}
 .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
 .col-lg-7.notification.agendaDropdown{height:auto;}
 .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}

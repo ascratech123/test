@@ -25,6 +25,7 @@ class Admin::AgendasController < ApplicationController
   def new
     agenda_data = Agenda.find(params[:id]) rescue Agenda.new
     @agenda = @event.agendas.build(agenda_data.attributes.except('id', 'created_at', 'updated_at', 'start_agenda_time', 'end_agenda_time'))
+    # @agenda.agenda_speakers.build
     @spearkers = @event.speakers
     @import = Import.new if params[:import].present?
   end
@@ -56,6 +57,7 @@ class Admin::AgendasController < ApplicationController
     # params[:agenda][:speaker_id] = nil if params[:agenda][:speaker_id].to_i == 0
     @agenda.update_column(:end_agenda_time, nil) if params[:agenda][:end_time_hour].blank? and params[:agenda][:end_time_minute].blank? and params[:agenda][:end_time_am].blank?
       @agenda_track_new = AgendaTrack.set_agenda_track(params)
+    params[:agenda]["speaker_ids"] = nil if !params[:agenda].key?(:speaker_ids)
     if @agenda.update_attributes(agenda_params)
        @agenda.update_column('agenda_track_id',@agenda_track_new.id) if @agenda_track_new.present? 
       redirect_to admin_event_agendas_path(:event_id => @agenda.event_id)
