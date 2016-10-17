@@ -92,7 +92,9 @@
             %li
               - if @invitees.present?# and (current_user.has_role? :db_manager or current_user.has_role? :licensee_admin)
                 = link_to admin_event_leaderboards_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
-                  Export      
+                  Export
+                = link_to admin_event_leaderboards_path(:event_id => @event.id, :format => 'xls', :top => '5'),:class => "centerAlign" do
+                  Export Top 5
           - when 'user'
             %li
               - if current_user.has_role? :licensee_admin

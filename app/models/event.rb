@@ -84,14 +84,17 @@ class Event < ActiveRecord::Base
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :on => :create
   before_create :set_preview_theme
-  before_save :check_event_content_status
+  before_save :check_event_content_status, :add_venues_from_event_venues 
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
   after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
+
+  # after_update :update_time, if: -> { points == 10}
+  # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
+
   #before_validation :set_time
   
   scope :ordered, -> { order('start_event_date asc') }
   #default_scope { order('created_at desc') }
-  
   
   include AASM
   aasm :column => :status do
@@ -114,8 +117,35 @@ class Event < ActiveRecord::Base
     event :unpublish, :after => :create_log_change do
       transitions :from => [:published], :to => [:approved]
     end
-  end 
+  end
+  
+  def add_venues_from_event_venues
+    # binding.pry
+    if self.event_venues.present?
+      self.venues = self.event_venues.first.venue
+      # self.venues = event_venue
+    end
+  end
 
+  def event_venue_name
+    # binding.pry
+    self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
+  end
+
+  # def update_time
+  #   self.invitees.each do |invitee|
+  #     # invitee_points = invitee.points == 10
+  #     invitee_points = invitee.update_column('invitee_points_time', Time.now) if invitee.points == 10
+  #   end# if self.invitees.present?
+  # end
+
+  # def invitees_with_thousand_points
+  #   if self.invitees.present? and (self.end_event_date.present? and self.end_event_date >= Date.today)
+  #     self.invitees.where('points >= ? ', 1000)
+  #   elsif self.start_event_date.present? and self.end_event_date.present?
+
+  #   end
+  # end
   
   def init
     self.status = "pending"
