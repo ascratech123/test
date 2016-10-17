@@ -44,13 +44,17 @@
                 .usersep
                   %a{:href => 'javascript:void(0)', :onclick => "agenda_speaker_dropdown()", :class => "dropbtn"}
                     Select Speaker
-                #myDropdown
-                  - for speaker in @event.speakers
-                    .md-checkbox
-                      %label
-                        = check_box_tag "[agenda][speaker_ids][]", speaker.id, (speaker_ids.include? speaker.id.to_s), :class => "", :id => "agenda_speaker_ids#{speaker.id}"
-                        %span.checkbox 
-                        = speaker.speaker_name
+                -if @event.speakers.blank?
+                  #myDropdown
+                    No Speakers available. Click on + sign to add manually.
+                -else
+                  #myDropdown
+                    - for speaker in @event.speakers
+                      .md-checkbox
+                        %label
+                          = check_box_tag "[agenda][speaker_ids][]", speaker.id, (speaker_ids.include? speaker.id.to_s), :class => "", :id => "agenda_speaker_ids#{speaker.id}"
+                          %span.checkbox 
+                          = speaker.speaker_name
               .speakerIdsError.redText
                 = @agenda.errors.messages[:speaker_ids].first if @agenda.errors.present? and @agenda.errors.messages[:speaker_ids].present?
             = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
