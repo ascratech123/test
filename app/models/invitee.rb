@@ -4,8 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
-  COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture'}
+  attr_accessor :password, :invitee_searches_page
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -17,17 +16,15 @@ class Invitee < ActiveRecord::Base
   has_many :analytics, :dependent => :destroy
 
   
-  before_validation :set_auto_generated_password, :if => Proc.new{|p|p.visitor_registration.blank?}#, :if => self.new_record? and self.password.blank? and self.email.present?
+  before_validation :set_auto_generated_password#, :if => self.new_record? and self.password.blank? and self.email.present?
   before_validation :downcase_email
 
   validates_presence_of :first_name, :last_name ,:message => "This field is required."
   validates :email,
             :format => {
             :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
-            :message => "Sorry, this doesn't look like a valid email." },
-            :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
-  validates :email, uniqueness: {scope: [:event_id]},
-            :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
+            :message => "Sorry, this doesn't look like a valid email." }
+  validates :email, uniqueness: {scope: [:event_id]}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
   
   #has_attached_file :qr_code, {:styles => {:large => "200x200>",
@@ -45,7 +42,6 @@ class Invitee < ActiveRecord::Base
   validates_attachment_content_type :qr_code, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :profile_pic, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
   # validate :image_dimensions
-  validates :password, presence: { :message => "This field is required." }, :if => Proc.new{|p| p.visitor_registration.present? and p.visitor_registration == "true"}
 
   default_scope { order('created_at desc') }
   
@@ -60,6 +56,12 @@ class Invitee < ActiveRecord::Base
   after_save :update_conversations_updated_at
   # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
+
+  # after_update :check_thousand_points_club_membership, if: -> { thousand_points_club == '1000' }
+  # after_update :update_time, if: -> { points == 10}
+
+  # scope :thousand_points_club, -> { where(thousand_points_club: true) }
+  # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
   
   aasm :column => :visible_status do  # defaults to aasm_state
     state :active, :initial => true
@@ -71,17 +73,69 @@ class Invitee < ActiveRecord::Base
      event :deactive do
       transitions :from => [:active], :to => [:deactive]
     end
-  end 
-  
-  # def image_dimensions
-  #   if self.profile_pic_file_name_changed? 
-  #     height_profile_pic, width_profile_pic  = 300.0, 300.0
-  #     dimensions_profile_pic = Paperclip::Geometry.from_file(profile_pic.queued_for_write[:original].path)
-  #     if (dimensions_profile_pic.width < width_profile_pic or dimensions_profile_pic.height < height_profile_pic)
-  #       errors.add(:profile_pic, "Width or Height must be 300x300 or greater")
+  end
+
+  # def update_time
+  #   self.update_column('invitee_points_time', Time.now)
+  # end
+
+  # def invitee_points
+  #   a = []
+  #   b = {}
+  #   # c = []
+  #   Invitee.each do |invitee|
+  #     if invitee.analytics.present?
+  #       b['id'] = invitee.id
+  #       b['sum'] = invitee.analytics.sum(:points)
+  #       # d = invitee.analytics.last.created_at
+  #       a << b
+  #       # c << d
   #     end
   #   end
+  #   # [{id => 1, sum => 1000}, {id => 2, sum => 10}, {id => 3, sum => 100}]
+  #   a = []
+  #   Invitee.each do |invitee|
+  #     if invitee.analytics.present?
+  #       a[invitee.id] = invitee.analytics.sum(:points)
+  #     end
+  #   end
+  #   # {6=>0, 4=>20, 1=>7}
   # end
+
+  # def check_thousand_points_club_membership
+  #   # update_attributes(thousand_points_club: sum(:points) >= 1000)
+  #   update_attributes(thousand_points_club: sum(:points) >= 1000)
+  # end
+
+  # def invitee_with_thousand_points
+  #   invitee = Invitee.all
+  #   # points_by_invitee = {}
+  #   invitees_with_thousand_points = []
+  #   invitee.each {|invitee, points|
+  #     points_by_invitee[invitee] += points
+  #     invitees_with_thousand_points |= invitee if points_by_invitee[invitee] >= 1000
+  #     return invitees_with_thousand_points if invitees_with_thousand_points.length >= 5
+  #   end
+  # end
+
+  def self.invitee_with_thousand_or_more_points(event_id)
+    event = Event.find(event_id)
+    invitees = {}
+    event.analytics.where("invitee_id is not null and invitee_id > 0").find_each do |analytic|
+      if invitees[analytic.invitee_id].present? and invitees[analytic.invitee_id].first < 1000
+        invitees[analytic.invitee_id] = [invitees[analytic.invitee_id].first + analytic.points, analytic.created_at]
+      elsif invitees[analytic.invitee_id].blank?
+        invitees[analytic.invitee_id] = [analytic.points, analytic.created_at]
+      end
+      break if invitees.values.select{|v| v.first >= 1000}.count > 4
+    end
+    if invitees.present?
+      invitees = invitees.select{|id, val| val[0] > 1000}
+      invitees = Invitee.find(invitees.keys).sort_by{|e| e[:created_at]}
+      # invitees.select{|id, val| val[0] > 10}.sort_by{|id, val| val[1]}
+      return invitees
+    end
+  end
     
   def update_conversations_updated_at
     conversations = Conversation.where('user_id = ? or actioner_id =?', self.id, self.id)
@@ -273,7 +327,7 @@ class Invitee < ActiveRecord::Base
   end
   
   def clear_password
-    self.password = nil if self.visitor_registration.blank?
+    self.password = nil
   end
 
   def get_event_id(mobile_app_code,submitted_app)
@@ -281,12 +335,10 @@ class Invitee < ActiveRecord::Base
     event_id = []
     mobile_app = MobileApplication.find_by_submitted_code(mobile_app_code)
     if mobile_app.present?
-      event_ids = mobile_app.events.where(:status => event_status).pluck(:id)
-      invitees = get_similar_invitees(event_ids)
-      # events.each do |event|
-      #   event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase)
-      # end if events.present?
-      event_id = invitees.map(&:event_id).uniq
+      events = mobile_app.events.where(:status => event_status)
+      events.each do |event|
+        event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase)
+      end if events.present?
     end
     event_id
   end
@@ -298,13 +350,10 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       change_events = mobile_app.events.where(:status => event_status, :updated_at => start_event_date..end_event_date)
       if change_events.present?
-      #   events = mobile_app.events.where(:status => event_status)
-      #   events.each do |event|
-      #     event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
-      #   end if events.present?
-        event_ids = mobile_app.events.where(:status => event_status).pluck(:id)
-        invitees = get_similar_invitees(event_ids)
-        event_id = invitees.map(&:event_id).uniq
+        events = mobile_app.events.where(:status => event_status)
+        events.each do |event|
+          event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
+        end if events.present?
       end  
     end
     event_id
@@ -317,8 +366,7 @@ class Invitee < ActiveRecord::Base
 
   def get_like(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     conversation_ids = Conversation.where(:event_id => event_ids).pluck(:id) rescue nil
     data = []
     like = Like.where(:user_id => user_ids, :likable_id => conversation_ids , :likable_type => "Conversation") rescue []
@@ -328,8 +376,7 @@ class Invitee < ActiveRecord::Base
   
   def get_user_poll(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     poll_ids = Poll.where(:event_id => event_ids).pluck(:id) rescue nil
     data = []
     user_poll = UserPoll.where(:user_id => user_ids, :poll_id => poll_ids) rescue []
@@ -339,8 +386,7 @@ class Invitee < ActiveRecord::Base
 
   def get_rating(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     rating_ids = Agenda.where(:event_id => event_ids).pluck(:id) rescue nil
     rating_ids << Speaker.where(:event_id => event_ids).pluck(:id) rescue nil  
     data = []
@@ -352,8 +398,7 @@ class Invitee < ActiveRecord::Base
   def get_user_feedback(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     feedback_ids = Feedback.where(:event_id => event_ids).pluck(:id) rescue nil
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     user_feedback = UserFeedback.where(:user_id => user_ids, :feedback_id => feedback_ids) rescue []
     data = user_feedback.as_json(:methods => [:get_event_id]) if user_feedback.present?
@@ -363,8 +408,7 @@ class Invitee < ActiveRecord::Base
   def get_user_quizzes(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
     quiz_ids = Quiz.where(:event_id => event_ids).pluck(:id) rescue nil
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     user_quiz = UserQuiz.where(:user_id => user_ids, :quiz_id => quiz_ids) rescue []
     data = user_quiz.as_json(:methods => [:get_event_id]) if user_quiz.present?
@@ -373,8 +417,7 @@ class Invitee < ActiveRecord::Base
 
   def get_my_travels(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     my_travels = MyTravel.where(:invitee_id => user_ids, :event_id => event_ids) rescue []
     data = my_travels.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_updated_at, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_2_updated_at, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_3_updated_at, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_4_updated_at, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size, :attach_file_5_updated_at], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) if my_travels.present?
@@ -383,8 +426,7 @@ class Invitee < ActiveRecord::Base
 
   def get_analytics(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids) rescue []
     data = analytics.as_json() if analytics.present?
@@ -400,16 +442,14 @@ class Invitee < ActiveRecord::Base
   
   def get_all_mobile_app_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
-    invitees = get_similar_invitees(event_ids)
+    invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
     invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) if invitees.present?
     invitees
   end
 
   def get_favorites(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    invitees = get_similar_invitees(event_ids).pluck(:id)
+    invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
 
     # favorite_ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:id) rescue nil
     # favorite_types = Favorite.find(favorite_ids).map {|a| a.favoritable_type}
@@ -438,16 +478,14 @@ class Invitee < ActiveRecord::Base
    
   def get_my_network_users(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    invitees = get_similar_invitees(event_ids).pluck(:id)
+    invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:favoritable_id)
     Invitee.where(:id => ids).as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url]) rescue nil
   end
 
   def get_my_calender(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    invitees = get_similar_invitees(event_ids).pluck(:id)
+    invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     Favorite.where("invitee_id IN (?) and favoritable_type = ?", invitees, "Agenda").as_json(:only => [:invitee_id , :favoritable_type, :favoritable_id, :event_id])
   end
 
@@ -492,7 +530,7 @@ class Invitee < ActiveRecord::Base
     invitees.length
   end
 
-  def self.social_media_data(provider,facebook_id,linkedin_id, google_id, twitter_id, instagram_id, user_email,first_name, last_name, event)
+  def self.social_media_data(provider,facebook_id,linkedin_id, google_id, twitter_id,user_email,first_name,last_name,event)
     if provider == "facebook"
       data = Invitee.facebook_data(provider,facebook_id, user_email, first_name, last_name, event)
     elsif provider == "linkedin"
@@ -500,9 +538,7 @@ class Invitee < ActiveRecord::Base
     elsif (provider == "google+" || provider == "google ")
       data = Invitee.google_data(provider,google_id, user_email, first_name, last_name, event)
     elsif provider == "twitter"
-      data = Invitee.twitter_data(provider,twitter_id, first_name, last_name, event)
-    elsif provider == "instagram"
-      data = Invitee.instagram_data(provider, instagram_id, first_name, last_name, event)
+      data = Invitee.twitter_data(provider,twitter_id, user_email, first_name, last_name, event)
     end
     data
   end
@@ -573,34 +609,20 @@ class Invitee < ActiveRecord::Base
     new_user
   end
 
-  def self.twitter_data(provider,twitter_id, first_name, last_name, event)
+  def self.twitter_data(provider,twitter_id, user_email, first_name, last_name, event)
     if twitter_id.present?
       new_user = nil
       event.each do |e|
-        user = Invitee.where(:twitter_id => twitter_id, :event_id => e.id)
+        user = e.invitees.where(:email => user_email) || user.where(:twitter_id => user_email)
         if user.present?
-          user = user.first
+          if user.first.twitter_id.blank?
+            user.first.update_column(:twitter_id, user_email)
+            user.first.update_column(:provider, "twitter")
+          end 
+          user = user.first if user.present? 
         else
           pwd = Time.now.to_i.to_s
-          user = e.invitees.new(:twitter_id => twitter_id, :first_name => first_name, :last_name => last_name, :provider => "twitter", :password => pwd, :invitee_password => pwd)
-          user.save
-        end
-        new_user = user
-      end
-    end
-    new_user
-  end
-
-  def self.instagram_data(provider, instagram_id, first_name, last_name, event)
-    if instagram_id.present?
-      new_user = nil
-      event.each do |e|
-        user = Invitee.where(:instagram_id => instagram_id, :event_id => e.id)
-        if user.present?
-          user = user.first
-        else
-          pwd = Time.now.to_i.to_s
-          user = e.invitees.new(:instagram_id => instagram_id, :first_name => first_name, :last_name => last_name, :provider => "instagram", :password => pwd, :invitee_password => pwd)
+          user = e.invitees.new(:email => user_email, :twitter_id => user_email, :first_name => first_name, :last_name => last_name, :provider => "twitter", :password => pwd, :invitee_password => pwd)
           user.save
         end
         new_user = user
@@ -638,8 +660,7 @@ class Invitee < ActiveRecord::Base
     # notifications = notifications.where(:id => notification_ids).as_json(:except => [:group_ids, :created_at, :updated_at, :sender_id, :status, :image_file_name, :ima$
     # notifications.present? ? notifications : []
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
     notifications = Notification.where(:id => invitee_notifications.pluck(:notification_id))
@@ -648,8 +669,7 @@ class Invitee < ActiveRecord::Base
 
   def get_read_notification(mobile_app_code,submitted_app)
     event_ids = get_event_id(mobile_app_code,submitted_app)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     data = []
     invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
@@ -657,8 +677,7 @@ class Invitee < ActiveRecord::Base
   end
 
   def self.get_read_notification(info, event_ids, user)
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
-    user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
     data = []
     invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
@@ -668,8 +687,7 @@ class Invitee < ActiveRecord::Base
   def self.get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
     start_event_date = start_event_date - 5.minutes
     info = InviteeNotification.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)    
-    # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
-    user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
+    user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
     invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
     invitee_notifications.pluck(:notification_id) rescue []
   end
@@ -703,22 +721,12 @@ class Invitee < ActiveRecord::Base
     self.updated_at + self.event.timezone_offset.to_i.seconds
   end
 
-  def get_similar_invitees(event_ids)
-    if self.provider == "instagram"
-      invitees = Invitee.where("event_id IN (?) and  instagram_id = ?", event_ids, self.instagram_id)
-    elsif self.provider == "twitter"
-      invitees = Invitee.where("event_id IN (?) and  twitter_id = ?", event_ids, self.twitter_id)
-    else
-      invitees = Invitee.where("event_id IN (?) and  email = ?", event_ids, self.email)
-    end
-    invitees
-  end
-
   def all_feedback_forms_last_updated_at(mobile_app_code,submitted_app,event_ids)
     hsh = []
     event_ids = get_event_id(mobile_app_code,submitted_app) if event_ids.blank?
-    invitee_ids = get_similar_invitees(event_ids).pluck(:id)
-    feedback_form_ids = UserFeedback.unscoped.where(:user_id => invitee_ids).pluck("distinct feedback_form_id")
+    invitee_ids = Invitee.where("event_id IN (?) and  email = ?", event_ids, self.email).pluck(:id)
+    # invitee_ids = get_similar_invitees(event_ids).pluck(:id)
+    feedback_form_ids = UserFeedback.unscoped.where(:user_id => invitee_ids).where("feedback_form_id is not null").pluck("distinct feedback_form_id")
     for invitee_id in invitee_ids
       for feedback_form_id in feedback_form_ids
         user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id, :user_id => invitee_id).order("updated_at")
@@ -734,4 +742,3 @@ class Invitee < ActiveRecord::Base
     self.email = self.email.downcase if self.email.present?
   end
 end
-
