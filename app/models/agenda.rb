@@ -29,13 +29,15 @@ class Agenda < ActiveRecord::Base
   end
 
   def destroy_id_from_speaker
-    speaker_ids = self.speaker_ids.split(',')
-    speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
-    speaker_ids.each do |speaker_id|
-      speaker = Speaker.find(speaker_id)
-      agenda_ids = speaker.all_agenda_ids.to_s.split(",")
-      speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(","))
-    end if speaker_ids.present?
+    if self.speaker_ids.present?
+      speaker_ids = self.speaker_ids.split(',') 
+      speaker_ids = speaker_ids.reject { |e| e.to_s.empty? }
+      speaker_ids.each do |speaker_id|
+        speaker = Speaker.find(speaker_id)
+        agenda_ids = speaker.all_agenda_ids.to_s.split(",")
+        speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(","))
+      end
+    end
   end
 
   def update_agenda_speakers
