@@ -30,9 +30,9 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
-                          -percentage = get_user_poll_percentage(number,poll)
+                          -percentage = get_user_poll_percentage(number.to_s,poll)
                           = get_percentage(number, poll, bar_color, @poll_wall, 50, percentage)  
-                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)# if percentage.present? and percentage != 0                       
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)if percentage.present? and percentage != 0                       
                       - if poll.option1.present?
                         - percentage = get_user_poll_percentage('option1',poll)
                         = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)   
@@ -111,9 +111,9 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
-                          - percentage = get_user_poll_percentage(number,poll)
+                          - percentage = get_user_poll_percentage(number.to_s,poll)
                           = get_percentage(number, poll, bar_color, @poll_wall, 50, percentage)
-                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)# if percentage.present? and percentage != 0            
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)if percentage.present? and percentage != 0            
                       - if poll.option1.present?
                         - percentage = get_user_poll_percentage('option1',poll)
                         = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)
