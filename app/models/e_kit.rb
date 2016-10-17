@@ -11,6 +11,7 @@ class EKit < ActiveRecord::Base
   validates :name, presence: { :message => "This field is required." }
   #validates_attachment_content_type :attachment, :content_type => %w(application/zip application/msword application/vnd.ms-office application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/xls application/xlsx application/pdf)
   after_save :update_last_updated_model
+  validate :check_attachment_type
   
   #after_create :set_dates_with_event_timezone
   default_scope { order('created_at desc') }
@@ -20,6 +21,14 @@ class EKit < ActiveRecord::Base
     self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
     self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
   end  
+
+  def check_attachment_type
+    hsh = {'jpeg' => 'jpg', 'jpg' => 'jpg', 'doc' => 'docx', 'docb' => 'docb', 'docm' => 'docx', 'dotm' => 'docx', 'docx' => 'docx', 'xls' => 'xls', 'xlsx' => 'xlsx', 'pdf' => 'pdf', 'ppt' => 'ppt', 'pptx' => 'pptx', 'msword' => 'docx', 'vnd.ms-powerpoint' => 'ppt', 'vnd.openxmlformats-officedocument.presentationml.presentation' => 'ppt', 'octet-stream' => 'xls', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xls', 'vnd.ms-excel' => 'xls'}
+    file_type = self.attachment_content_type.split("/").last rescue ""
+    if hsh.key?(file_type) == false
+      errors.add(:attachment, "Only Given attachment types allowed.")
+    end
+  end
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
