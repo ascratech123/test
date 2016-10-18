@@ -16,12 +16,16 @@ class Api::V1::ActivityFeedsController < ApplicationController
       @analytics = @analytics.paginate(page: params[:page], per_page: 10)
     end
     if event.present?
+      # @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Conversation","Notification"].where("viewable_id is not null")
+
       if event.event_features.not_hidden_icon.pluck(:name).include? "conversations"
         logger.warn"--------------------------if---------------------------"
-        @event_analytics = event.analytics.where(:viewable_type => ["Conversation","Notification"], :action => ["comment", "conversation post", "like", "share", "notification"]).where("viewable_id is not null").order("created_at desc")
+        # @event_analytics = event.analytics.where(:viewable_type => ["Conversation","Notification"], :action => ["comment", "conversation post", "like", "share", "notification"]).where("viewable_id is not null").order("created_at desc")
+        @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Conversation","Notification"]).where("viewable_id is not null")
       else
         logger.warn"--------------------------else---------------------------"
         @event_analytics = event.analytics.where(:viewable_type => ["Notification"]).where("viewable_id is not null").order("created_at desc")
+        # @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Notification"]).where("viewable_id is not null")
       end
       @event_analytics = @event_analytics.paginate(page: params[:page], per_page: 10)
       logger.warn @event_analytics.inspect
