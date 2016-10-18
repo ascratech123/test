@@ -996,8 +996,6 @@ $(document).ready(function(){
   $('.usersep').click(function(){
   $('#myDropdown').toggle();
   });
-  // return false;
-}
 
 if($('#visible .form-group ').css('display') == 'none')
   {$('.block').html("add");}
