@@ -15,11 +15,13 @@ class Api::V1::ActivityFeedsController < ApplicationController
       @analytics = Analytic.where("(invitee_id = ? and viewable_type IN (?) and action IN (?)) or (viewable_type = ? and viewable_id IN (?))", invitee.id,viewable_types,actions, "Conversation", ["like", "comment"]).where("viewable_id is not null").order("created_at desc")
       @analytics = @analytics.paginate(page: params[:page], per_page: 10)
     end
-    if event.present? and params[:social].blank?
+    if event.present?  and params[:social].blank?
+      # @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Conversation","Notification"].where("viewable_id is not null")
+
       if event.event_features.not_hidden_icon.pluck(:name).include? "conversations"
         logger.warn"--------------------------if---------------------------"
         # @event_analytics = event.analytics.where(:viewable_type => ["Conversation","Notification"], :action => ["comment", "conversation post", "like", "share", "notification"]).where("viewable_id is not null").order("created_at desc")
-        @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Conversation","Notification"]).where("viewable_id is not null")
+        @event_analytics = event.analytics.desc_ordered.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Conversation","Notification"]).where("viewable_id is not null")
       else
         logger.warn"--------------------------else---------------------------"
         @event_analytics = event.analytics.where(:viewable_type => ["Notification"]).where("viewable_id is not null").order("created_at desc")
