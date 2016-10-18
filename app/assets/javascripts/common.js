@@ -903,6 +903,13 @@ $(document).ready(function(){
       }  
     }
   });
+
+  // $(".select-speaker").change(function(){   
+  //   value = $(this).val();
+  //   if(value == 0){
+  //     $(this).next().find('.form-group').show();
+  //   }
+  // });    
 });
 
 function add_fields_for_event_venue(link, association, content) {
@@ -924,12 +931,14 @@ $(document).on('change','#agenda_speaker_id',function(){
   if(value == 0){
     console.log(value);
     $('#add_speaker .form-group').show();
+    
   }
 });
 
+
 $(document).on("click", ".addMoreSpeaker", function(){
-  $('#add_speaker .form-group').show();
-})
+  $('#add_speaker .form-group').toggle();
+});
 
 // $(document).on('keyup', "#agenda_speaker_names", function(e) {
 //   value = $(this).val();
@@ -951,6 +960,16 @@ $(window).scroll(function() {
   }
 });
 
+$(document).on('keyup', "#agenda_speaker_names", function(e) {
+  value = $(this).val();
+  selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
+  allow = 5 - selected_speakers - 1;
+  if((value.split(",").length - 1) > allow){
+    $(this).val(value.slice(0, -1));
+    alert("You cannot add more than " + (allow + 1));
+  }
+});
+
 $(document).on('click','.load_products',function(){
   load_products();
 });
@@ -969,3 +988,33 @@ function load_products(){
   // return false;
 }
 
+/*function agenda_speaker_dropdown() {
+  alert('asdasda');
+  document.getElementById("myDropdown").classList.toggle("show");
+} */
+$(document).ready(function(){
+  $('.usersep').click(function(){
+  $('#myDropdown').toggle();
+  });
+  // return false;
+}
+
+if($('#visible .form-group ').css('display') == 'none')
+  {$('.block').html("add");}
+
+if($('#visible .form-group ').css('display') == 'block')
+  {$('.block').html("clear");}
+
+$('.addMoreSpeaker').click(function(){
+  if($('.block').html() == "clear") 
+  {
+     $('.block').html("add");
+  }
+  else
+  {
+     $('.block').html("clear");
+  }
+
+});
+
+});
