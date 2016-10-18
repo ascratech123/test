@@ -105,7 +105,7 @@
       - elsif find_notification.present?
         .feed
           - if find_notification.action.present?
-            %a{:href => "#{APP_URL}?resource_type=#{find_notification.action}&resource_id=#{find_notification.actionable_id}"}
+            %a{:href => "#{APP_URL}?resource_type=#{find_notification.action.present? ? find_notification.action : 'home page'}&resource_id=#{find_notification.actionable_id}"}
               - icon_url = get_notification_icon_by_action(find_notification)
               - if icon_url.present?
                 .feedIcon
@@ -113,12 +113,4 @@
               .feedDetail
                 %p= find_notification.description
                 %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
-          - else
-            - icon_url = get_notification_icon_by_action(find_notification)
-            - if icon_url.present?
-              .feedIcon
-                %img{:src => icon_url}/
-            .feedDetail
-              %p= find_notification.description
-              %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
 
