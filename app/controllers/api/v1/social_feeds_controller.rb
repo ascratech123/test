@@ -14,7 +14,7 @@ class Api::V1::SocialFeedsController < ApplicationController
 			end
 		#twitter posts	
 		if @event.twitter_social_tags.present?
-			@twitter_posts = get_twitter_posts(@event.twitter_social_tags)
+			@twitter_posts = get_twitter_posts(@event)
 		else
 			@twitter_posts = []
 		end
@@ -37,10 +37,13 @@ end
 			@facebook_posts = data
 	end	
 
-	def get_twitter_posts(twitter_social_tags)
-		@twitter_tags = twitter_social_tags.gsub(',','+OR+')	
+	def get_twitter_posts(event)
+		@twitter_tags =  event.twitter_social_tags.split(',').map{|x| x + " -rt"}.split(',').join(' +OR+ ')
+
+		#@twitter_tags = twitter_social_tags.gsub(',','+OR+')	
 		session[:last_twitter_id] = nil if request.format == "html"
-		@twitter_posts = CLIENT.search( @twitter_tags , result_type: "recent",max_id:session[:last_twitter_id]).take(4)
+		last_tweet_date = event.last_tweet_date.strftime("%Y-%m-%d") if event.last_tweet_date.present?
+		@twitter_posts = CLIENT.search(@twitter_tags, result_type: "recent",max_id:session[:last_twitter_id]).take(4)
 		session[:last_twitter_id] = @twitter_posts.last.id-1  if @twitter_posts.present?
 		@twitter_posts = @twitter_posts.sort_by{ |k, v| k.created_at}.reverse!
 	  data = []
