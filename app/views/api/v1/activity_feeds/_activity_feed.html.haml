@@ -1,5 +1,6 @@
 - analytics.each do |analytic|
   - if analytic.viewable_type == "Conversation"
+    - analytic = Analytic.where(:viewable_id => analytic.viewable_id, :viewable_type => analytic.viewable_type).last
     - conversation = Conversation.get_approved_conversation(analytic.viewable_id)
     - likes = analytic.get_likes(analytic.viewable_id)
     - comments = analytic.get_comments(analytic.viewable_id)
