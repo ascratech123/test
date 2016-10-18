@@ -60,7 +60,13 @@
             = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
               %i.material-icons.mdl-color-text--white
                 add
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+              %i.material-icons.mdl-color-text--white.none
+                clear
+            / = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
+            /   %i.material-icons.mdl-color-text--white
+            /     clear
+
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.visible#visible
           #add_speaker
             = f.custom_text_field_speaker :speaker_names, "Add Speaker (Comma seperated) *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_names.blank? ? "none" :  "" }", :value => f.object.speaker_names
 
@@ -74,6 +80,7 @@
                     = render 'agenda_speakers_fields', f: field, i: random_number#, val: val
               .col-lg-1.addmoretext.text-left
                 = add_fields_for_agenda_speakers '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :agenda_speakers, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900 abc"#, :onClick => "button_click()"
+              
         %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
           %div.bs-component
             %div.form-group

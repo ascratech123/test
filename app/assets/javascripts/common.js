@@ -765,7 +765,18 @@ $(document).on('change','#agenda_speaker_id',function(){
 
 $(document).on("click", ".addMoreSpeaker", function(){
   $('#add_speaker .form-group').toggle();
-})
+});
+
+$(document).on("click", ".addMoreSpeaker", function(){
+  if ($('#visible').hasClass('visible')) {
+      $('#visible').slideDown().removeClass('visible');
+      $('.addMoreSpeaker i').html('clear');
+  } else {
+      $('#visible').slideUp().addClass('visible');
+      $('.addMoreSpeaker i').html('add');
+  }    
+});
+
 
 $(document).on('keyup', "#agenda_speaker_names", function(e) {
   value = $(this).val();
