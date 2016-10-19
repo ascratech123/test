@@ -74,7 +74,7 @@ class Notification < ActiveRecord::Base
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
     # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
-    notifications = Notification.where(:pushed => false)
+    notifications = Notification.where(:pushed => false, :push => true)
     if notifications.present?
       notifications.each do |notification|
         # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime

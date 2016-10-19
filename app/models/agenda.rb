@@ -35,6 +35,8 @@ class Agenda < ActiveRecord::Base
       speaker = Speaker.find(speaker_id)
       agenda_ids = speaker.all_agenda_ids.to_s.split(", ")
       speaker.update_column("all_agenda_ids", (agenda_ids - [self.id.to_s]).join(", "))
+      speaker.update_column("updated_at", Time.now)
+      speaker.update_last_updated_model
     end if speaker_ids.present?
   end
 
@@ -45,6 +47,8 @@ class Agenda < ActiveRecord::Base
       speaker = Speaker.find(speaker_id)
       agenda_ids = (speaker.all_agenda_ids.to_s.split(", ") + [self.id.to_s]).uniq.join(", ")
       speaker.update_column(:all_agenda_ids, agenda_ids)
+      speaker.update_column("updated_at", Time.now)
+      speaker.update_last_updated_model
       speaker_names << speaker.speaker_name
     end if speaker_ids.present?
     all_speaker_names = (self.speaker_names.to_s.split(", ") + speaker_names).uniq.join(", ")
