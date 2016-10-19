@@ -48,7 +48,7 @@ end
 		session[:last_twitter_id] = @twitter_posts.last.id-1  if @twitter_posts.present?
 		session[:last_handle_id] = @twitter_handle_post.last.id-1  if @twitter_handle_post.present?
 		@twitter_posts = @twitter_posts + @twitter_handle_post 
-		@twitter_posts = @twitter_posts.sort_by{ |k, v| k.created_at}.reverse!
+		@twitter_posts = @twitter_posts.uniq.sort_by{ |k, v| k.created_at}.reverse!
 	  data = []
 	  @twitter_posts.each do |post|
 		 	@posts = SocialFeedApi.get_twitter_posts(post.url)
