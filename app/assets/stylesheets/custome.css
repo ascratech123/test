@@ -84,6 +84,9 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+
+.sequence_update .ClientPopup-info{position: fixed; top:50%;}
+
 #register-form.pollWallForm > form {position: relative;}
 #register-form.pollWallForm .arrow{top:2px;}
 .none{display:none;}
