@@ -88,7 +88,12 @@
                 / - binding.pry
                 / = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank", :remote => true
                 / @event.polls.pluck(:wall_type).uniq.compact!
-                = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign"
+                - if @event.polls.pluck(:wall_type).compact!.present? and @event.polls.pluck(:wall_type).uniq.compact!.count > 1
+                  = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
+                - elsif @event.polls.pluck(:wall_type).uniq.compact!.count == 1
+                  = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
+                - else
+                  = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
               - elsif url == "qnas"
                 = link_to "Go to Wall", admin_event_qnas_path(:event_id => @event.id, :qnas_wall => true),:class => " centerAlign", :target => "_blank"
               - elsif url == "conversations"

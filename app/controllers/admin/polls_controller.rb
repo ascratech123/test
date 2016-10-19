@@ -38,8 +38,8 @@ class Admin::PollsController < ApplicationController
         end
       end
     else
-      @polls = @polls.where(wall_type: params[:wall_type])
-      # @polls = @polls.where(:on_wall => "yes")
+      @polls = @polls.where(wall_type: params[:wall_type], :on_wall => "yes") if params[:wall_type].present?
+      @polls = @polls.where(:on_wall => "yes") if not params[:wall_type].present?
       render :layout => false
     end  
   end
