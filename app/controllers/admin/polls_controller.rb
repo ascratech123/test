@@ -11,7 +11,23 @@ class Admin::PollsController < ApplicationController
   before_filter :find_poll_wall, :only => :index
 
 	def index
-    if params[:type] != "public_wall"
+    # if params[:wall_type].present?
+    #   respond_to do |format|
+    #     format.html  
+    #     format.xls do
+    #       only_columns = [:question, :option1, :option2, :option3, :option4, :option5, :option6, :status]
+    #       method_allowed = []
+    #       @polls = @polls.where(wall_type: params[:wall_type])
+    #       send_data @polls.to_xls(:only => only_columns)
+    #     end
+    #   end
+    # end
+    # binding.pry
+    if params[:option].present? and not params[:wall_type].present?
+      respond_to do |format|
+        format.html
+      end
+    elsif params[:type] != "public_wall" and not params[:wall_type].present?
       @polls = Poll.search(params, @polls) if params[:search].present?
       respond_to do |format|
         format.html  
@@ -22,7 +38,8 @@ class Admin::PollsController < ApplicationController
         end
       end
     else
-      @polls = @polls.where(:on_wall => "yes")   
+      @polls = @polls.where(wall_type: params[:wall_type])
+      # @polls = @polls.where(:on_wall => "yes")
       render :layout => false
     end  
   end
@@ -50,6 +67,11 @@ class Admin::PollsController < ApplicationController
 
 	def update
     if params[:status].present? or params[:on_wall].present? or params[:option_visible].present?
+      if params[:poll].present? and params[:poll][:wall_type].present?
+        @poll.update_column(:wall_type, params[:poll][:wall_type])
+      elsif params[:on_wall].present? and not (params[:poll].present? and params[:poll][:wall_type].present?)
+        @poll.update_column(:wall_type, nil)
+      end
       @poll.update_column(:on_wall, params[:on_wall]) if params[:on_wall].present?
       @poll.change_status(params[:status]) if params[:status].present?
       @poll.update_columns(:option_visible => params[:option_visible], :updated_at => Time.now) if params[:option_visible].present?
@@ -65,12 +87,18 @@ class Admin::PollsController < ApplicationController
 	end
 
 	def show
-    respond_to do |format|
-      format.html  
-      format.xls do
-        only_columns = [:answer]
-        method_allowed = [:email, :question]
-        send_data @poll.user_polls.to_xls(:filename => 'user_polls', :methods => method_allowed, :only => only_columns)
+    if params[:option].present?
+      respond_to do |format|
+        format.js
+      end
+    else
+      respond_to do |format|
+        format.html  
+        format.xls do
+          only_columns = [:answer]
+          method_allowed = [:email, :question]
+          send_data @poll.user_polls.to_xls(:filename => 'user_polls', :methods => method_allowed, :only => only_columns)
+        end
       end
     end
   end

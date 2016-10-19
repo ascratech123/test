@@ -787,6 +787,17 @@ $(document).on("click", ".addMoreSpeaker", function(){
 } */
 $(document).ready(function(){
   $('.usersep').click(function(){
-  $('#myDropdown').toggle();
+    $('#myDropdown').toggle();
   });
+
+ /* $('#register-form').click(function(e){
+    e.stopPropagation();
+  });
+
+  $(document).click(function(e){
+    e.preventDefault();
+    $('#register-form').hide();
+    $('.popup-overlay').hide();
+  });*/
+
 });
