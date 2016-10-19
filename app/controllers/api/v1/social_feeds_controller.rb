@@ -38,18 +38,16 @@ end
 	end	
 
 	def get_twitter_posts(event)
-		#@twitter_tags =  @twitter_tags = event.twitter_social_tags.split(',').map{|x| '#'+x+ " -rt" }.join(' OR ') if event.twitter_social_tags.present?
 		@twitter_tags =  @twitter_tags = event.twitter_social_tags.split(',').map{|x| '#'+x}.join(' OR ') if event.twitter_social_tags.present?
-
-		#@twitter_tags =  event.twitter_social_tags.split(',').split(',').join(' OR ') if event.twitter_social_tags.present?
-		#@tweet_handle = event.twitter_handle if event.twitter_handle.present?
-		#@twitter_tags = @twitter_tags + " OR " +  @tweet_handle if event.twitter_social_tags.present? && event.twitter_handle.present? 
-		#@twitter_tags = event.twitter_handle if event.twitter_social_tags.blank? && event.twitter_handle.present? 
-		#@twitter_tags = twitter_social_tags.gsub(',','+OR+')	
+		@tweet_handle = event.twitter_handle if event.twitter_handle.present?
 		session[:last_twitter_id] = nil if request.format == "html"
+		session[:last_handle_id] = nil if request.format == "html"
 		last_tweet_date = event.last_tweet_date.strftime("%Y-%m-%d") if event.last_tweet_date.present?
-		@twitter_posts = CLIENT.search(@twitter_tags, result_type: "recent",since:"#{last_tweet_date}",max_id:session[:last_twitter_id],exclude:"retweets").take(4)
+		@twitter_posts = CLIENT.search(@twitter_tags, result_type: "recent",since:"#{last_tweet_date}",max_id:session[:last_twitter_id],exclude:"retweets").take(4) rescue[] 
+		@twitter_handle_post = CLIENT.search(@tweet_handle, result_type: "recent",since:"#{last_tweet_date}",max_id:session[:last_handle_id],exclude:"retweets").take(4) rescue[] 		
 		session[:last_twitter_id] = @twitter_posts.last.id-1  if @twitter_posts.present?
+		session[:last_handle_id] = @twitter_handle_post.last.id-1  if @twitter_handle_post.present?
+		@twitter_posts = @twitter_posts + @twitter_handle_post 
 		@twitter_posts = @twitter_posts.sort_by{ |k, v| k.created_at}.reverse!
 	  data = []
 	  @twitter_posts.each do |post|
