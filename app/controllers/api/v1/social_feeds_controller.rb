@@ -13,7 +13,7 @@ class Api::V1::SocialFeedsController < ApplicationController
 				@facebook_posts = []
 			end
 		#twitter posts	
-		if @event.twitter_social_tags.present? or @event.twitter_handle.present? 
+		if @event.twitter_social_tags.present?# or @event.twitter_handle.present? 
 			@twitter_posts = get_twitter_posts(@event)
 		else
 			@twitter_posts = []
@@ -44,7 +44,7 @@ end
 		#@twitter_tags =  event.twitter_social_tags.split(',').split(',').join(' OR ') if event.twitter_social_tags.present?
 		#@tweet_handle = event.twitter_handle if event.twitter_handle.present?
 		#@twitter_tags = @twitter_tags + " OR " +  @tweet_handle if event.twitter_social_tags.present? && event.twitter_handle.present? 
-		@twitter_tags = event.twitter_handle if event.twitter_social_tags.blank? && event.twitter_handle.present? 
+		#@twitter_tags = event.twitter_handle if event.twitter_social_tags.blank? && event.twitter_handle.present? 
 		#@twitter_tags = twitter_social_tags.gsub(',','+OR+')	
 		session[:last_twitter_id] = nil if request.format == "html"
 		last_tweet_date = event.last_tweet_date.strftime("%Y-%m-%d") if event.last_tweet_date.present?
