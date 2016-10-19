@@ -25,10 +25,15 @@ class Api::V1::SocialFeedsController < ApplicationController
 end
 
 	def get_feacebook_posts(facebook_tags)
-			session[:facebook_post_date] = nil if request.format == "html"
+			#session[:facebook_post_date] = (Date.today).to_date if request.format == "html"
+			session[:facebook_post_date] = (Date.today+1).to_date if request.format == "html"
 			@posts = SocialFeedApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
-			session[:facebook_post_date] = @posts["data"].last["created_time"].to_date if @posts.present? && @posts["data"].present?
-			#session[:facebook_post_date] = @posts["data"].last["created_time"].to_time(:utc) - 5 if @posts.present? && @posts["data"].present?
+			#session[:facebook_post_date] = @posts["data"].last["created_time"].to_date if @posts.present? && @posts["data"].present?
+			if 	@posts.present? && @posts["data"].present?
+				session[:facebook_post_date] = @posts["data"].last["created_time"].to_date
+			else
+			  session[:facebook_post_date] = (session[:facebook_post_date]).to_date - 1		
+			end
 			data = []
 			@posts["data"].each do |post|
 				hsh = {:facebook_frames =>post["id"],:created_at=>post["created_time"].to_datetime}
