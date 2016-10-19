@@ -740,13 +740,6 @@ $(document).ready(function(){
       }  
     }
   });
-
-  // $(".select-speaker").change(function(){   
-  //   value = $(this).val();
-  //   if(value == 0){
-  //     $(this).next().find('.form-group').show();
-  //   }
-  // });    
 });
 
 $(document).on('click','.select-speaker',function(){
@@ -790,3 +783,48 @@ $(document).ready(function(){
   $('#myDropdown').toggle();
   });
 });
+
+// $(function() {
+//   if ($('#feed_data_social').size() > 0) {    
+//     $(window).on('scroll', function() {
+//       // if ($(window).scrollTop() > $(document).height() - $(window).height() - 60) {
+//       if ($(window).scrollTop() > $(document).height()-2500)  {
+//         // alert("scorll");
+//         $.ajax({
+//           type: "GET",
+//           dataType: 'script',
+//           url: "/api/v1/social_feeds",
+//         });
+//       }
+//     });
+//   }
+// });
+$(window).scroll(function() {
+  console.log("scroll");
+  if ($(window).scrollTop() > $(document).height()-1000)  {
+    $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
+    $(".load_products").trigger('click');
+    $(".load_products").addClass("dont_load_products").removeClass("load_products");
+    return false;
+  }
+});
+
+$(document).on('click','.load_products',function(){
+  load_products();
+});
+
+function load_products(){
+  var event_id = $('#social_event_id').attr('for')
+  $("#loadingText_activity").show();
+  $.ajax({
+    type: "GET",
+    dataType: 'script',
+    url: "/api/v1/events/"+event_id+"/social_feeds.js",
+    success: function(data){
+      $("#loadingText_activity").hide();
+    },
+  });
+  // return false;
+}
+
+

@@ -38,3 +38,9 @@ module Shobiz
                                           }
   end
 end
+CLIENT = Twitter::REST::Client.new do |config|
+  config.consumer_key        = "l36MiSnVI2UqgAYxOsYFLbm7S"
+  config.consumer_secret     = "wHIrVfUgydhS5P42HAY75GrgNsCuZw9EvtOTX4oMUbyHw0Lk02"
+  config.access_token        = "2933082606-OhYQcv8uwHkOnBKGSiTbTN9fWCJ4JCYe7jB8K8Q"
+  config.access_token_secret = "rXNHhQVO5lxwJCWe3DFbI4U6A9cpPWX0VoE2JsWaNdPpt"
+end

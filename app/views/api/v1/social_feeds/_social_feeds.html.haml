@@ -1,0 +1,7 @@
+- if @social_feeds.present?
+  - social_feeds.each do |post|
+    - if post.first.first == :facebook_frames
+      - ids =  post.first.second.split('_')
+      %iframe{:allowtransparency => "true", :frameborder => "0", :height => "500", :scrolling => "no", :src => "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F#{ids.first}%2Fposts%2F#{ids.second}&width=100%&show_text=true&appId=303479416692337&height=500", :style => "border:none;overflow:hidden", :width => "100%"}
+    - else
+      = post[:twitter_frame].html_safe
