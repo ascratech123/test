@@ -780,11 +780,6 @@ $(document).on("click", ".addMoreSpeaker", function(){
   alert('asdasda');
   document.getElementById("myDropdown").classList.toggle("show");
 } */
-$(document).ready(function(){
-  $('.usersep').click(function(){
-  $('#myDropdown').toggle();
-  });
-});
 
 // $(function() {
 //   if ($('#feed_data_social').size() > 0) {    
@@ -830,21 +825,27 @@ function load_products(){
 }
 
 
+$(document).ready(function(){
+  $('.usersep').click(function(){
+  $('#myDropdown').toggle();
+  });
 
-if($('#visible .form-group ').css('display') == 'none')
-  {$('.block').html("add");}
 
-if($('#visible .form-group ').css('display') == 'block')
-  {$('.block').html("clear");}
+  if($('#visible .form-group ').css('display') == 'none')
+    {$('.block').html("add");}
 
-$('.addMoreSpeaker').click(function(){
-  if($('.block').html() == "clear") 
-  {
-     $('.block').html("add");
-  }
-  else
-  {
-     $('.block').html("clear");
-  }
+  if($('#visible .form-group ').css('display') == 'block')
+    {$('.block').html("clear");}
 
+  $('.addMoreSpeaker').click(function(){
+    if($('.block').html() == "clear") 
+    {
+       $('.block').html("add");
+    }
+    else
+    {
+       $('.block').html("clear");
+    }
+
+  });
 });
