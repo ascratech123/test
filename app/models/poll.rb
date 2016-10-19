@@ -15,6 +15,8 @@ class Poll < ActiveRecord::Base
   before_create :set_sequence_no
   after_create :set_status_as_per_auto_approve, :set_event_timezone
 
+  # POLL_OPTION_TYPE = ['Wall1', 'Wall2', 'Wall3', 'Wall4', 'Wall5']
+
   default_scope { order("sequence") }
 
   include AASM

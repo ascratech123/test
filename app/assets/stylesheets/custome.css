@@ -84,13 +84,15 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+#register-form.pollWallForm > form {position: relative;}
+#register-form.pollWallForm .arrow{top:2px;}
 .none{display:none;}
 .block{display:block;}
 .agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
 .agendaSpeakerCheckboxes #myDropdown{padding: 5px;}
 .col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
 .col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
-#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7;}
+#myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
 .addAgendaSpeaker .form-horizontal .radio, .form-horizontal .checkbox{min-height: 20px;}
 .col-lg-7.notification.agendaDropdown{height:auto;}
 .form-horizontal .addAgendaSpeaker .checkbox{ padding-top: 0}
@@ -185,14 +187,6 @@ p.or-vertical-text{    text-align: center;
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
-
-/*chirag css start */
-
-.feedbackEditColor{color: white}
-
-/*chirag css end*/
-
-
 
 /* notification overlay css - Deepti*/
 .overlayBg{background:rgba(15, 7, 4, 0.8) none repeat scroll 0 0;position: fixed;width:100%;height:100%;left:0;right:0;top:0;bottom:0;z-index: 9999;display: none;}

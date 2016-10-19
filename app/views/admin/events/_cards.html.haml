@@ -94,7 +94,10 @@
             - if ["polls","conversations","qnas","quizzes"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
               |
               - if url == "polls"
-                = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
+                / - binding.pry
+                / = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank", :remote => true
+                / @event.polls.pluck(:wall_type).uniq.compact!
+                = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign"
               - elsif url == "qnas"
                 = link_to "Go to Wall", admin_event_qnas_path(:event_id => @event.id, :qnas_wall => true),:class => " centerAlign", :target => "_blank"
               - elsif url == "conversations"
@@ -229,5 +232,6 @@
         .mdl-card__menu
           %button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
             %i.material-icons more_vert   
+
 
 
