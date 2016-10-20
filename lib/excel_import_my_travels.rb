@@ -56,7 +56,7 @@ module ExcelImportMyTravel
       if objekt["file_name_1"].present?
         #url1 = objekt["file_1_url"] rescue nil
         file_name_1 = objekt["file_name_1"] rescue nil
-        url1 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_1}"
+        url1 = "#{S3_url}/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_1}"
         uri = URI(url1)
         request = Net::HTTP.new uri.host
         response= request.request_head uri.path
@@ -77,7 +77,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_name_2"].present?
         file_name_2 = objekt["file_name_2"] rescue nil
-        url2 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_2}"
+        url2 = "#{S3_url}/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_2}"
         uri = URI(url2)
         request = Net::HTTP.new uri.host
         response= request.request_head uri.path
@@ -98,7 +98,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_name_3"].present?
         file_name_3 = objekt["file_name_3"] rescue nil
-        url3 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_3}"
+        url3 = "#{S3_url}/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_3}"
         uri = URI(url3)
         request = Net::HTTP.new uri.host
         response= request.request_head uri.path
@@ -119,7 +119,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_name_4"].present?
         file_name_4 = objekt["file_name_4"] rescue nil
-        url4 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_4}"
+        url4 = "#{S3_url}/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_4}"
         uri = URI(url4)
         request = Net::HTTP.new uri.host
         response= request.request_head uri.path
@@ -140,7 +140,7 @@ module ExcelImportMyTravel
       end
       if objekt["file_name_5"].present?
         file_name_5 = objekt["file_name_5"] rescue nil
-        url5 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_5}"
+        url5 = "#{S3_url}/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_5}"
         uri = URI(url5)
         request = Net::HTTP.new uri.host
         response= request.request_head uri.path
