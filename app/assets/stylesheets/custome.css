@@ -84,6 +84,14 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+ .generateCodeBtn{width:100%; margin:0 auto; text-align:center;}
+ .generateCodeBtn a{background:#1CB1BA; color:#fff; padding:10px; display:inline-block; margin:18px 0 15px 0; cursor:pointer;}
+ .save_button .generateCodeBtn a{font-size:14px; text-transform:uppercase; }
+  
+ .titleQuestion{margin-left:15px;}
+ .generateCodeBtn + h6{width:100%; margin:0 auto 15px auto; text-align:center; font-size:14px;} 
+ #instagram_code_label{display:none;}
+ #event_instagram_code{display:none;}
 
 .sequence_update .ClientPopup-info{position: fixed; top:50%;}
 
@@ -103,6 +111,8 @@
     display: inline-block;
     height: 45px;
 }
+#my-posts iframe{margin-bottom:20px !important; width:100%;}
+
  .addMoreSpeaker{ border-radius: 50%;
      display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
   .edm_ckeditor {display: inline-block;margin: 0 auto;text-align: center;width: 90%;}
@@ -161,6 +171,7 @@
 .select-event{display: none;}
 .min-height-auto{min-height: auto;}
 .save_button h4.m-b-10{margin-bottom: 10px;}
+ #vmware_logo{background-image:url(/assets/Background_1.png);}
 
 .errorMess #microsite_field1 + .field_with_errors{top:40px;}
 .newMicrositeFieldDiv .mdl-grid .form-group  {margin-bottom: 15px;}

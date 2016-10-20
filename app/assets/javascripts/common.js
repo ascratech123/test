@@ -940,15 +940,27 @@ $(document).on("click", ".addMoreSpeaker", function(){
   $('#add_speaker .form-group').toggle();
 });
 
-// $(document).on('keyup', "#agenda_speaker_names", function(e) {
-//   value = $(this).val();
-//   selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
-//   allow = 5 - selected_speakers - 1;
-//   if((value.split(",").length - 1) > allow){
-//     $(this).val(value.slice(0, -1));
-//     alert("You cannot add more than " + (allow + 1));
-//   }
-// });
+$(document).ready(function(){
+   $('.generateCodeBtn a').click(function(){
+     $('#instagram_code_label').css('display','block');
+     $('#event_instagram_code').css('display','block');
+   });
+ });
+ 
+  $(document).ready(function(){
+   $(document).on("click",".newWindow", function(){
+     var client_id = $("#event_instagram_client_id").val()
+  
+     if(client_id){
+       var link = "https://api.instagram.com/oauth/authorize/?client_id="+ client_id +"&redirect_uri=http://hobnobspace.com&response_type=code&scope=public_content"
+         window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+       }  
+     else
+     {
+       alert('Please enter Instagram Client Id.')
+     }
+   })        
+  });
 
 $(window).scroll(function() {
   console.log("scroll");
