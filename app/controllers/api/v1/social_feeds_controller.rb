@@ -20,31 +20,31 @@ class Api::V1::SocialFeedsController < ApplicationController
 		end
 		#instagram
 	 	if @event.instagram_social_tags.present? and @event.instagram_code.present? and @event.instagram_secret_token.present?  
-      if @event.instagram_access_token.blank?
-      	acess_token = `curl -F 'client_id=#{@event.instagram_client_id}' -F 'client_secret=#{@event.instagram_secret_token}' -F 'grant_type=authorization_code' -F 'redirect_uri=http://hobnobspace.com' -F 'code=#{@event.instagram_code}' -F 'response_type=token' -F 'scope=public_content' https://api.instagram.com/oauth/access_token`
-      	acess_token = JSON.parse acess_token.gsub('=>', ':') 
-      	insta_acess_token = acess_token["access_token"]
-      	@event.update_column('instagram_access_token',insta_acess_token)
-    	end
-      end
-      instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
-        if instagram_posts["data"].present?# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
-      		session[:instagram_time_stamp] = (Date.today).to_datetime.to_i if request.format == "html"
-          data = instagram_posts["data"].select{ |k| k["created_time"].to_i > session[:instagram_time_stamp]}
-          @instgram_embedded_post = get_instagram_posts(data)    
-        else
-          @instgram_embedded_post = ""
-        end
-        previous_date = Time.at(session[:instagram_time_stamp])# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
-        session[:instagram_time_stamp] = (previous_date - 1.day).to_datetime.to_i# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
-        
-			if @instgram_embedded_post.present?
-				@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
-	  	else
-	  		@total_posts = @facebook_posts + @twitter_posts
-	  	end	
-	  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
-	  end	
+	      if @event.instagram_access_token.blank?
+	      	acess_token = `curl -F 'client_id=#{@event.instagram_client_id}' -F 'client_secret=#{@event.instagram_secret_token}' -F 'grant_type=authorization_code' -F 'redirect_uri=http://hobnobspace.com' -F 'code=#{@event.instagram_code}' -F 'response_type=token' -F 'scope=public_content' https://api.instagram.com/oauth/access_token`
+	      	acess_token = JSON.parse acess_token.gsub('=>', ':') 
+	      	insta_acess_token = acess_token["access_token"]
+	      	@event.update_column('instagram_access_token',insta_acess_token)
+	    	end
+	      instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
+	        if instagram_posts["data"].present?# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
+	      		session[:instagram_time_stamp] = (Date.today).to_datetime.to_i if request.format == "html"
+	          data = instagram_posts["data"].select{ |k| k["created_time"].to_i > session[:instagram_time_stamp]}
+	          @instgram_embedded_post = get_instagram_posts(data)    
+	        else
+	          @instgram_embedded_post = ""
+	        end
+	        previous_date = Time.at(session[:instagram_time_stamp])# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
+	        session[:instagram_time_stamp] = (previous_date - 1.day).to_datetime.to_i# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
+	        
+				if @instgram_embedded_post.present?
+					@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
+		  	else
+		  		@total_posts = @facebook_posts + @twitter_posts
+		  	end	
+		  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
+		  end	
+    end
   end
 end
 
