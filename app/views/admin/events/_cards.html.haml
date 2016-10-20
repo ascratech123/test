@@ -48,6 +48,9 @@
                 - url1 = "conversations" if url == "conversation_walls"
                 - url1 = "qnas" if url == "qna_walls"
                 = link_to "#{count}","/admin/events/#{@event.id}/#{url1}#{redirection}", :target => "_blank"
+              - elsif url == "feedbacks"
+                - url1 = "feedback_forms"
+                = link_to "#{count}","/admin/events/#{@event.id}/#{url1}#{redirection}"
               - elsif url != "notes"
                 - url1 = "emergency_exits" if url == "venue"
                 - url1 = url if url != "venue"
@@ -78,6 +81,7 @@
               - url1 = "emergency_exits" if url == "venue"
               - url1 = url if url != "venue"
               - url1 = "leaderboards" if url == "leaderboard"
+              - url1 = "feedback_forms" if url == "feedbacks"
               = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
             - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |

@@ -56,6 +56,12 @@ class Invitee < ActiveRecord::Base
   after_save :update_conversations_updated_at
   # after_create :send_password_to_invitee
   before_destroy :update_event_updated_at
+
+  # after_update :check_thousand_points_club_membership, if: -> { thousand_points_club == '1000' }
+  # after_update :update_time, if: -> { points == 10}
+
+  # scope :thousand_points_club, -> { where(thousand_points_club: true) }
+  # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
   
   aasm :column => :visible_status do  # defaults to aasm_state
     state :active, :initial => true
@@ -67,17 +73,70 @@ class Invitee < ActiveRecord::Base
      event :deactive do
       transitions :from => [:active], :to => [:deactive]
     end
-  end 
-  
-  # def image_dimensions
-  #   if self.profile_pic_file_name_changed? 
-  #     height_profile_pic, width_profile_pic  = 300.0, 300.0
-  #     dimensions_profile_pic = Paperclip::Geometry.from_file(profile_pic.queued_for_write[:original].path)
-  #     if (dimensions_profile_pic.width < width_profile_pic or dimensions_profile_pic.height < height_profile_pic)
-  #       errors.add(:profile_pic, "Width or Height must be 300x300 or greater")
+  end
+
+  # def update_time
+  #   self.update_column('invitee_points_time', Time.now)
+  # end
+
+  # def invitee_points
+  #   a = []
+  #   b = {}
+  #   # c = []
+  #   Invitee.each do |invitee|
+  #     if invitee.analytics.present?
+  #       b['id'] = invitee.id
+  #       b['sum'] = invitee.analytics.sum(:points)
+  #       # d = invitee.analytics.last.created_at
+  #       a << b
+  #       # c << d
   #     end
   #   end
+  #   # [{id => 1, sum => 1000}, {id => 2, sum => 10}, {id => 3, sum => 100}]
+  #   a = []
+  #   Invitee.each do |invitee|
+  #     if invitee.analytics.present?
+  #       a[invitee.id] = invitee.analytics.sum(:points)
+  #     end
+  #   end
+  #   # {6=>0, 4=>20, 1=>7}
   # end
+
+  # def check_thousand_points_club_membership
+  #   # update_attributes(thousand_points_club: sum(:points) >= 1000)
+  #   update_attributes(thousand_points_club: sum(:points) >= 1000)
+  # end
+
+  # def invitee_with_thousand_points
+  #   invitee = Invitee.all
+  #   # points_by_invitee = {}
+  #   invitees_with_thousand_points = []
+  #   invitee.each {|invitee, points|
+  #     points_by_invitee[invitee] += points
+  #     invitees_with_thousand_points |= invitee if points_by_invitee[invitee] >= 1000
+  #     return invitees_with_thousand_points if invitees_with_thousand_points.length >= 5
+  #   end
+  # end
+
+  def self.invitee_with_thousand_or_more_points(event_id)
+    event = Event.find(event_id)
+    invitees = {}
+    event.analytics.where("invitee_id is not null and invitee_id > 0").find_each do |analytic|
+      if invitees[analytic.invitee_id].present? and invitees[analytic.invitee_id].first < 1000
+        invitees[analytic.invitee_id] = [invitees[analytic.invitee_id].first + analytic.points, analytic.created_at]
+      elsif invitees[analytic.invitee_id].blank?
+        invitees[analytic.invitee_id] = [analytic.points, analytic.created_at]
+      end
+      break if invitees.values.select{|v| v.first >= 1000}.count > 4
+    end
+    return if not invitees.present?
+    if invitees.present?
+      invitees = invitees.select{|id, val| val[0] > 1000}
+      invitees = Invitee.find(invitees.keys).sort_by{|e| e[:created_at]}
+      # invitees.select{|id, val| val[0] > 10}.sort_by{|id, val| val[1]}
+      return invitees
+    end
+  end
     
   def update_conversations_updated_at
     conversations = Conversation.where('user_id = ? or actioner_id =?', self.id, self.id)
@@ -661,6 +720,21 @@ class Invitee < ActiveRecord::Base
   def updated_at_with_event_timezone
     # self.updated_at.in_time_zone(self.event_timezone)
     self.updated_at + self.event.timezone_offset.to_i.seconds
+  end
+
+  def all_feedback_forms_last_updated_at(mobile_app_code,submitted_app,event_ids)
+    hsh = []
+    event_ids = get_event_id(mobile_app_code,submitted_app) if event_ids.blank?
+    invitee_ids = Invitee.where("event_id IN (?) and  email = ?", event_ids, self.email).pluck(:id)
+    # invitee_ids = get_similar_invitees(event_ids).pluck(:id)
+    feedback_form_ids = UserFeedback.unscoped.where(:user_id => invitee_ids).where("feedback_form_id is not null").pluck("distinct feedback_form_id")
+    for invitee_id in invitee_ids
+      for feedback_form_id in feedback_form_ids
+        user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id, :user_id => invitee_id).order("updated_at")
+        hsh << {"invitee_id" => invitee_id,"feedback_form_id" => feedback_form_id, "last_updated" => user_feedbacks.last.updated_at} if user_feedbacks.present?
+      end
+    end
+    hsh
   end
 
   private

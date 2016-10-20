@@ -140,6 +140,14 @@ p.or-vertical-text{    text-align: center;
 .account-popup .okButton button{border:0 none; background: #058494; color:#fff; padding:5px 25px;}
 .twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:20px !important;}
 /*=======================Nilam CSS End =================================*/
+
+/*chirag css start */
+
+.feedbackEditColor{color: white}
+
+/*chirag css end*/
+
+
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
@@ -960,6 +968,9 @@ input.upload {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;cursor:pointer
 .save_button .mdl-radio{vertical-align: middle; margin: 0 6px;}
 .sequenceInputWidht input{width: 50%;}
 .sequenceInputWidht th:first-child{width:15%;}
+.sequenceInputWidht th.feedback-title{width:40%;}
+.create-feedback-form th:first-child{width:40%;}
+.save_button.mdl-card.nobg{background:none;}
 .save_button .ekitTab .ekitpage{width: 18%;}
 .pagination .previous_page{font-size: 16px;}
 .pagination > a {font-size: 16px;font-weight: 400;}
