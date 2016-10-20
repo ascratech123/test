@@ -19,7 +19,7 @@
     - @event = Event.get_event_by_id(params[:event_id])
     - @client = @event.client
 
-.topbar-left.blueheaderFont
+.topbar-left.blueheaderFont   
   - if !current_user.has_role? :telecaller
     - if params[:controller] == "admin/prohibited_accesses"
       - if request.referer.present? and (request.referer != "#{APP_URL}/admin/prohibited_accesses")
@@ -95,10 +95,11 @@
                 = link_to "#{@campaign.campaign_name.capitalize} / ", admin_event_campaigns_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - elsif page == "manage_invitee_fields"
                 = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
-              - if name == "Feedback"
+              - elsif name == "Feedback"
                 = link_to "Feedback", admin_event_feedback_form_feedbacks_path, :class => "mdl-color-text--white" if @event.present?
-              - else
-                = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
+              - elsif page == "my_travel_docs"
+                = link_to "My Travel / ", admin_event_my_travels_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+              = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
           - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
             = render :partial => "admin/layouts/breadcrum_new_record" if params[:controller] != "admin/notifications" and params[:controller] != "admin/telecallers"
             - if params[:action] == "new" and params[:controller] == "admin/telecallers"
