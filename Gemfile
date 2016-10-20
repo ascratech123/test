@@ -58,3 +58,4 @@ end
 
 gem 'newrelic_rpm'
 gem 'twitter'
+gem 'instagram'
