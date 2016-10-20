@@ -1027,4 +1027,8 @@ $('.addMoreSpeaker').click(function(){
 
 });
 
+  $('.pushWallForm').click(function(){
+    $('.morefixed-activon-btn').css('z-index','-1');
+  });
+
 });
