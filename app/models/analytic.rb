@@ -40,7 +40,8 @@ class Analytic < ActiveRecord::Base
   end
 
   def invitee_email
-    Invitee.unscoped.find_by_id(self.invitee_id)
+    invitee = Invitee.unscoped.find_by_id(self.invitee_id)
+    invitee.present? ? invitee.email : ' '
   end
 
   def update_points
