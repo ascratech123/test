@@ -27,7 +27,7 @@ class Api::V1::SocialFeedsController < ApplicationController
 	      	@event.update_column('instagram_access_token',insta_acess_token)
 	    	end
 	      instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
-	        if instagram_posts["data"].present?# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
+	        if instagram_posts["data"].present? and instagram_posts["data"] != "data"# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
 	      		session[:instagram_time_stamp] = (Date.today).to_datetime.to_i if request.format == "html"
 	          date2 = Time.at(session[:instagram_time_stamp])
 	          date2 = (date2 + 1.day).to_datetime.to_i
