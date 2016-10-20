@@ -47,7 +47,6 @@ gem 'ransack'
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
-gem 'twitter'
 # gem "bullet", :group => "development"
 
 group :development, :test do
@@ -55,3 +54,7 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
 end
+
+gem 'newrelic_rpm'
+gem 'twitter'
+gem 'instagram'

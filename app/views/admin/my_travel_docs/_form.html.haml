@@ -1,0 +1,18 @@
+.save_button.mdl-card.agendaHeight
+  = form_for [:admin, @event, @my_travel_doc],:html => { multipart: true},:builder => CustomFormBuilder do |f|
+    .mdl-grid.mdl-shadow--1dp.p-b-25
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10.m-b-15
+          General
+      = f.hidden_field :upload_files,:value=> "true"
+      =# f.new_custom_file_browser_field :my_travel_attach_doc, 'import_file', :id => "uploadBtn", :value => f.object.my_travel_attach_doc_file_name, :action=> params[:action]
+      = file_field_tag "my_travel_attach_doc[]",multiple: true, :id => 'fileinput'
+      .field_with_errors
+        .span{:class => "errorMessage"}
+          = @errors.join(',') rescue nil
+    .fixed-activon-btn-new  
+      = f.custom_submit_button "SAVE"
+      .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+          = back_button(:back)
+  

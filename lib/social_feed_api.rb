@@ -16,4 +16,8 @@ class SocialFeedApi
 		enconded_url = URI.encode("https://publish.twitter.com/oembed?url=#{url}")
 		HTTParty.get(enconded_url)
 	end
+
+	def self.get_all_instagram_posts(token,hash_tag)
+		instagram_data = HTTParty.get("https://api.instagram.com/v1/tags/#{hash_tag}/media/recent?&access_token=#{token}") rescue ""
+	end	
 end
