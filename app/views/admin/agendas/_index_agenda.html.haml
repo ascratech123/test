@@ -106,9 +106,9 @@
                                           %td.font16
                                             = track_agenda.all_speaker_names.present? ? track_agenda.all_speaker_names : '-'
                                           %td.font16
-                                            = formatted_time(agenda.start_agenda_time, "%d-%m-%Y %I:%M %p")
+                                            = formatted_time(track_agenda.start_agenda_time, "%d-%m-%Y %I:%M %p")
                                           %td.font16
-                                            = formatted_time(agenda.end_agenda_time, "%d-%m-%Y %I:%M %p")
+                                            = formatted_time(track_agenda.end_agenda_time, "%d-%m-%Y %I:%M %p")
                                           %td.font16
                                             = track_agenda.discription.present? ? track_agenda.discription : '-'
                                           %td.IconDrp.agendtaIconDrp

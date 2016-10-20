@@ -8,7 +8,7 @@ class UserFeedback < ActiveRecord::Base
   validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
   validate :check_answer_or_description_present
-  after_create :create_analytic_record
+  after_create :create_analytic_record, :update_feedback_form_id
   default_scope { order('created_at desc') }
 
   def update_invitee_updated_at
@@ -18,6 +18,15 @@ class UserFeedback < ActiveRecord::Base
       invitee.save
     end
   end
+
+  # def get_feedback_form_id
+  #   self.feedback.feedback_form_id.present? ? self.feedback.feedback_form_id : "" 
+  # end
+
+  def update_feedback_form_id
+    feedback_id = Feedback.find(self.feedback_id)
+    update_feedback_form_id = feedback_id.update_column('feedback_form_id', feedback_id.feedback_form.id)
+  end
   
   def get_event_id
     Rails.cache.fetch("user_feedback_get_event_id_#{self.id}") { get_event_id! }
@@ -26,7 +35,7 @@ class UserFeedback < ActiveRecord::Base
   def get_event_id
     self.feedback.event_id rescue nil
   end
-
+  
   def Timestamp
     feedback = self.feedback
     # feedback.created_at.in_time_zone(feedback.event_timezone).strftime('%m/%d/%Y %T') rescue ""

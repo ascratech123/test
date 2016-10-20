@@ -84,7 +84,10 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+.none{display:none;}
+.block{display:block;}
 .agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
+.agendaSpeakerCheckboxes #myDropdown{padding: 5px;}
 .col-lg-7.notification.agendaDropdown{border:0 none; overflow-y: hidden; padding-left: 10px; padding-right: 10px;}
 .col-lg-7.notification.agendaDropdown .usersep{border:1px solid #d7d7d7;}
 #myDropdown{overflow-y: scroll; border:1px solid #d7d7d7; display:none;}
@@ -135,7 +138,16 @@ p.or-vertical-text{    text-align: center;
 .account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
 .account-popup .content{padding:18px 0;}
 .account-popup .okButton button{border:0 none; background: #058494; color:#fff; padding:5px 25px;}
+.twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:20px !important;}
 /*=======================Nilam CSS End =================================*/
+
+/*chirag css start */
+
+.feedbackEditColor{color: white}
+
+/*chirag css end*/
+
+
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
 form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}*/
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
@@ -596,7 +608,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
  .new_image .table{ max-width: 96%;margin-left: 20px;}
  .new_image .name,.new_image .size{color:rgba(0,0,0,0.66);}
 .featureCreatePage{padding-top: 75px;}
- #new_mobile_application .errorMess .field_with_errors {font-size: 14px;position: absolute;top: 14px;width: 450px; left:0px}
+ #new_mobile_application .errorMess .field_with_errors {font-size: 14px;position: absolute;top:20px;width: 450px; left:0px}
  .eventShowCard h2{line-height:34px;}
  .eventShowCard .panel.panel-tile{height: 145px;}
  .roleName{pointer-events:none; border:none;}
@@ -956,6 +968,9 @@ input.upload {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;cursor:pointer
 .save_button .mdl-radio{vertical-align: middle; margin: 0 6px;}
 .sequenceInputWidht input{width: 50%;}
 .sequenceInputWidht th:first-child{width:15%;}
+.sequenceInputWidht th.feedback-title{width:40%;}
+.create-feedback-form th:first-child{width:40%;}
+.save_button.mdl-card.nobg{background:none;}
 .save_button .ekitTab .ekitpage{width: 18%;}
 .pagination .previous_page{font-size: 16px;}
 .pagination > a {font-size: 16px;font-weight: 400;}

@@ -57,4 +57,4 @@ group :development, :test do
 end
 
 gem 'newrelic_rpm'
-#gem 'ar-octopus'
+gem 'twitter'
