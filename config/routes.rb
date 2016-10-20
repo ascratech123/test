@@ -15,9 +15,8 @@ namespace :admin do
   get '/events/:event_id/success' => 'user_registrations#show'
   get 'bee_editor/token' => 'bee_editors#token'
   get 'bee_editor/template' => 'bee_editors#template'
-  get 'invitees/autocomplete_invitee_name_of_the_invitee'
   # get '/check_email_existance' => 'users#check_email_existance'
-  resources :time_zones, :notification_action_changes
+  resources :time_zones
   resources :dashboards, :themes, :manage_users, :users, :roles, :homes, :smtp_settings
   resources :profiles, :manage_mobile_apps, :downloads, :external_login,:prohibited_accesses,:change_roles
   resources :licensees do
@@ -36,15 +35,11 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers, :microsites, :user_microsites, :microsite_templates, :qna_walls, :conversation_walls, :poll_walls, :quiz_walls, :activity_feeds
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers,:qna_walls,:conversation_walls,:poll_walls,:quiz_walls, :activity_feeds
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
     resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
-    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:venue_sections,:invitee_accesses,:telecaller_accessible_columns, :invitee_searches, :my_profiles, :qr_scanner_details, :badge_pdfs,:manage_invitee_fields
-    
-    resources :feedback_forms do
-      resources :feedbacks
-    end
+    resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:manage_invitee_fields,:my_travel_docs
     
     resources :polls do
       resources :user_polls
@@ -53,6 +48,12 @@ namespace :admin do
     resources :quizzes do
       resources :user_quizzes
     end
+
+    # resources :invitee_datas do
+    #   collection do
+    #     post 'update_details'
+    #   end
+    # end
 
     resources :user_polls, :user_quizzes, :user_feedbacks, :likes, :comments
 
@@ -66,10 +67,6 @@ namespace :admin do
       resources :invitee_datas
     end
     resources :registrations
-    
-    resources :campaigns do
-      resources :edms
-    end
 
   end
   # resources :imports
@@ -87,13 +84,12 @@ end
         resources :chats do 
           post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
         end
-        resources :invitee_chats
-	    resources :social_feeds  
+        resources :invitee_chats  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
-      resources :activity_feeds,:visitor_registrations
+      resources :activity_feeds
     end
   end
 end

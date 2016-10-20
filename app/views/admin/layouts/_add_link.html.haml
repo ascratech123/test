@@ -89,6 +89,8 @@
   - when 'my_travel'
     = link_to new_admin_event_my_travel_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
       New My Travel
+    = link_to new_admin_event_my_travel_doc_path(:event_id => params[:event_id]) ,:class => "rightBtn hvr-sweep-to-right" do
+      Add Files
 
     / = link_to admin_event_manage_feature_status_index_path(:event_id => @event.id, :status => "approved", :feature => "Conversation"),:class => "rightBtn hvr-sweep-to-right" do
     /   Approve All
