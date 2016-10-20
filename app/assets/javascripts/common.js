@@ -800,4 +800,8 @@ $(document).ready(function(){
     $('.popup-overlay').hide();
   });*/
 
+  $('.pushWallForm').click(function(){
+    $('.morefixed-activon-btn').css('z-index','-1');
+  });
+
 });
