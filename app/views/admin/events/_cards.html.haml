@@ -90,9 +90,9 @@
               - url1 = "leaderboards" if url == "leaderboard"
               - url1 = "feedback_forms" if url == "feedbacks"
               - url1 = "qr_code" if url == "qr_code"
-              - if url1 == "qr_code" and @event.analytics.present?
+              - if url1 == "qr_code" and @event.analytics.where('viewable_url IS NOT NULL').present?
                 = link_to display_title, admin_event_export_qr_codes_path(:export => 'export', :format => 'xls')
-              - else
+              - elsif url1 != "qr_code"
                 = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
             - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |
@@ -105,7 +105,7 @@
                 / @event.polls.pluck(:wall_type).uniq.compact!
                 - if @event.polls.pluck(:wall_type).compact!.present? and @event.polls.pluck(:wall_type).uniq.compact!.count > 1
                   = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
-                - elsif @event.polls.pluck(:wall_type).uniq.compact!.count == 1
+                - elsif @event.polls.pluck(:wall_type).compact!.present? and @event.polls.pluck(:wall_type).uniq.compact!.count == 1
                   = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
                 - else
                   = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
