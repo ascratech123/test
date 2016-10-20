@@ -775,3 +775,23 @@ function load_products(){
 }
 
 
+$(document).ready(function(){
+  $('.generateCodeBtn a').click(function(){
+    $('#instagram_code_label').css('display','block');
+    $('#event_instagram_code').css('display','block');
+  });
+});
+
+$(document).ready(function(){
+  $(document).on("click",".newWindow", function(){
+    var client_id = $("#event_instagram_client_id").val()
+    if(client_id){
+      var link = "https://api.instagram.com/oauth/authorize/?client_id="+ client_id +"&redirect_uri=http://hobnobspace.com&response_type=code&scope=public_content"
+        window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+      }  
+    else
+    {
+      alert('Please enter Instagram Client Id.')
+    }
+  })        
+});
