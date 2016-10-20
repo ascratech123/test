@@ -97,7 +97,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack,
  :email => {
    :email_prefix => "Production Shobiz Error Notifier",
    :sender_address => %w{info@hobnobspace.com},
-   :exception_recipients => %w{sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com}
+   :exception_recipients => %w{sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com uday@ascratech.com chirag@ascratech.com}
  }
 
 
@@ -259,7 +259,8 @@ POLLWALL_BG_IMAGE_PATH  = {:path => "poll_walls/background_image/:style/:id-:fil
                      :url => "#{S3_url}/poll_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
 QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:filename",
-                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)                                                                                                                                                     
-
+                     :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+MY_TRAVEL_DOC_FILE  = {:path => "my_travel_docs/my_travel_attach_doc/:style/:event_id/:filename",
+                     :url => "#{S3_url}/my_travel_docs/my_travel_attach_doc/:style/:event_id/:filename"}.merge(PAPERCLIP_SETTINGS)                       
