@@ -40,7 +40,7 @@ class Analytic < ActiveRecord::Base
   end
 
   def invitee_email
-    Invitee.unscoped.find_by_id(self.invitee_id)
+    Invitee.unscoped.find_by_id(self.invitee_id).email rescue ''
   end
 
   def update_points
