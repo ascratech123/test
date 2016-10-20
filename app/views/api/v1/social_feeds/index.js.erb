@@ -2,3 +2,4 @@ $("#my-posts").append('<%= escape_javascript(render :partial => "social_feeds",:
 <% if @social_feeds.present? %>
 	$(".dont_load_products").addClass("load_products")
 <% end %>
+window.instgrm.Embeds.process()

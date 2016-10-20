@@ -31,9 +31,28 @@
       = f.custom_text_field :facebook_social_tags, "Fb page name"
       = f.custom_text_field :twitter_social_tags, "Twitter hashtags(comma seperated)"
       = f.custom_text_field :twitter_handle, "Twitter handle"
-      = f.custom_text_field :last_tweet_date, "Till Tweet date(YYYY-MM-DD format)"
+      = f.custom_text_field :instagram_social_tags, "Instagram hashtag"
+      = f.custom_text_field :instagram_client_id, "Instagram Client ID"
+      = f.custom_text_field :instagram_secret_token, "Instagram Secret token"
+      = f.custom_text_field :instagram_code, "Instagram Code"
+      =# f.custom_text_field :instagram_access_token, "Instagram access token"
+      %a{:href => "javascript:void(0);", :class => "newWindow"} Generate Code
+      %h6
+        Please paste generated code in place of Instagram code
     .fixed-activon-btn-new  
       = f.custom_submit_button "SAVE"
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
+:javascript
+  $(document).on("click",".newWindow", function(){
+    var client_id = $("#event_instagram_client_id").val()
+    if(client_id){
+      var link = "https://api.instagram.com/oauth/authorize/?client_id="+ client_id +"&redirect_uri=http://hobnobspace.com&response_type=code&scope=public_content"
+        window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=400,height=400");
+      }  
+    else
+    {
+      alert('Please enter Instagram Client Id.')
+    }      
+  })
