@@ -110,6 +110,7 @@
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
 .twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:20px !important;}
+#my-posts iframe{margin-bottom:20px !important; width:100%;}
 
 
 /*=======================Nilam CSS End =================================*/
@@ -171,7 +172,7 @@ form#edit_edm_12 div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-
 .category_dropdown .select2-container--default .select2-selection--single .select2-selection__arrow{
 background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;}
 
-
+#vmware_logo{background-image:url(/assets/Background_1.png);}
 
 
 
