@@ -36,15 +36,14 @@ class Api::V1::SocialFeedsController < ApplicationController
 	        end
 	        previous_date = Time.at(session[:instagram_time_stamp])# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
 	        session[:instagram_time_stamp] = (previous_date - 1.day).to_datetime.to_i# if @event.facebook_social_tags.present? or @event.twitter_social_tags.present?
-	        
+	    end
 				if @instgram_embedded_post.present?
 					@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
 		  	else
 		  		@total_posts = @facebook_posts + @twitter_posts
 		  	end	
 		  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
-		  end	
-    end
+		end	
   end
 end
 
