@@ -20,10 +20,13 @@ class UserFeedback < ActiveRecord::Base
   end
   
   def get_event_id
+    Rails.cache.fetch("user_feedback_get_event_id_#{self.id}") { get_event_id! }
+  end  
+
+  def get_event_id
     self.feedback.event_id rescue nil
   end
 
-  
   def Timestamp
     feedback = self.feedback
     # feedback.created_at.in_time_zone(feedback.event_timezone).strftime('%m/%d/%Y %T') rescue ""

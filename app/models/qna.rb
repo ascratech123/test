@@ -6,7 +6,7 @@ class Qna < ActiveRecord::Base
 
   validates :question, :receiver_id,:sender_id, presence: { :message => "This field is required." }
   after_create :set_status_as_per_auto_approve, :create_analytic_record#, :set_event_timezone
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :clear_cache
 
   default_scope { order('created_at desc') }
 
@@ -27,6 +27,13 @@ class Qna < ActiveRecord::Base
     LastUpdatedModel.update_record(self.class.name)
   end
 
+  def clear_cache
+    Rails.cache.delete("qna_get_speaker_name_#{self.id}")
+    Rails.cache.delete("qna_get_panel_name_#{self.id}")
+    Rails.cache.delete("qna_get_user_name_#{self.id}")
+    Rails.cache.delete("qna_get_company_name_#{self.id}")
+  end
+
   def change_status(event)
     if event== "approve"
       self.approve!
@@ -41,20 +48,36 @@ class Qna < ActiveRecord::Base
   end
 
   def get_speaker_name
+    Rails.cache.fetch("qna_get_speaker_name_#{self.id}") { get_speaker_name! }
+  end  
+
+  def get_speaker_name!
     name = Panel.find_by_id(self.receiver_id).name rescue nil
     name = Speaker.find_by_id(self.receiver_id).speaker_name rescue '' if name.blank?
     name
   end
 
   def get_panel_name
+    Rails.cache.fetch("qna_get_panel_name_#{self.id}") { get_panel_name! }
+  end  
+
+  def get_panel_name!
     Panel.find_by_id(self.receiver_id).present? ? Panel.find_by_id(self.receiver_id).name : "" 
   end 
 
   def get_user_name
+    Rails.cache.fetch("qna_get_user_name_#{self.id}") { get_user_name! }
+  end  
+
+  def get_user_name!
     Invitee.find_by_id(self.sender_id).name_of_the_invitee rescue ""
   end
 
   def get_company_name
+    Rails.cache.fetch("qna_get_company_name_#{self.id}") { get_company_name! }
+  end  
+
+  def get_company_name!
     Invitee.find_by_id(self.sender_id).company_name rescue ""
   end
 
