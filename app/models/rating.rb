@@ -1,7 +1,7 @@
 class Rating < ActiveRecord::Base
 
 	attr_accessor :platform
-  belongs_to :ratable, :polymorphic => true
+  belongs_to :ratable, :polymorphic => true, :counter_cache => :ratings_count_cache
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'rated_by'
 
 	validates :rated_by, :ratable_id, :ratable_type, presence: true#, :rating#, :out_of, :comments

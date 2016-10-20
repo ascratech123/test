@@ -76,30 +76,52 @@ class Conversation < ActiveRecord::Base
   end 
 
   def share_count
+    Rails.cache.fetch("invitee_share_count_#{self.id}") { share_count! }
+  end
+
+  def share_count!
     Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation", action: "share").length rescue 0
   end
 
   def like_count
-    Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
+    # Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
+    self.likes_count_cache
   end
   
   def comment_count
-    Comment.where(:commentable_id => self.id, :commentable_type => "Conversation").length rescue 0
+    # Comment.where(:commentable_id => self.id, :commentable_type => "Conversation").length rescue 0
+    self.comments_count_cache
   end
 
   def user_name
+    Rails.cache.fetch("invitee_user_name_#{self.user_id}") { user_name! }
+  end
+
+  def user_name!
     Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
   end
 
   def get_company_name
+    Rails.cache.fetch("invitee_get_company_name_#{self.user_id}") { get_company_name! }
+  end
+
+  def get_company_name!
     Invitee.find_by_id(self.user_id).company_name rescue ""
   end
 
   def company_name
+    Rails.cache.fetch("invitee_company_name_#{self.user_id}") { company_name! }
+  end
+
+  def company_name!
     Invitee.find_by_id(self.user_id).company_name rescue ""
   end
 
   def invitee_email
+    Rails.cache.fetch("invitee_invitee_email_#{self.user_id}") { invitee_email! }
+  end
+
+  def invitee_email!
     Invitee.find_by_id(self.user_id).email rescue nil
   end
 
@@ -207,22 +229,42 @@ class Conversation < ActiveRecord::Base
   end
 
   def email
+    Rails.cache.fetch("invitee_email_#{self.user_id}") { email! }
+  end
+
+  def email!
     Invitee.find_by_id(self.user_id).email rescue ""
   end
 
   def name
+    Rails.cache.fetch("invitee_name_#{self.user_id}") { name! }
+  end
+
+  def name!    
     Invitee.find_by_id(self.user_id).name_of_the_invitee rescue ""
   end
   
   def first_name
+    Rails.cache.fetch("invitee_first_name_#{self.user_id}") { first_name! }
+  end
+
+  def first_name!
     Invitee.find_by_id(self.user_id).first_name rescue ""
   end
 
   def profile_pic_url
+    Rails.cache.fetch("invitee_profile_pic_url_#{self.user_id}") { profile_pic_url! }
+  end
+  
+  def profile_pic_url!
     Invitee.find_by_id(self.user_id).profile_pic.url(:large) rescue ""
   end
   
   def last_name
+    Rails.cache.fetch("invitee_last_name_#{self.user_id}") { last_name! }
+  end
+
+  def last_name!
     Invitee.find_by_id(self.user_id).last_name rescue ""
   end
 

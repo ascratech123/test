@@ -662,7 +662,12 @@ class Event < ActiveRecord::Base
           obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model
-          obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+          # obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+          for c in obj.comments
+            c.update_column("updated_at", Time.now)
+            Rails.cache.delete("formatted_created_at_with_event_timezone_#{c.id}")
+            Rails.cache.delete("formatted_updated_at_with_event_timezone_#{c.id}")
+          end if table_name == "conversations"
         end
       end
     end

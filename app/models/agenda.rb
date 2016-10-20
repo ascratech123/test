@@ -17,7 +17,7 @@ class Agenda < ActiveRecord::Base
   # before_save :set_agenda_speakers
   before_save :set_speaker_ids
   # after_save :set_speaker_name
-  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model, :update_agenda_speakers
+  after_save :set_end_date_if_end_date_not_selected, :update_last_updated_model, :update_agenda_speakers, :clear_cache
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
   before_destroy :destroy_id_from_speaker
@@ -57,6 +57,11 @@ class Agenda < ActiveRecord::Base
     end if speaker_ids.present?
     all_speaker_names = (self.speaker_names.to_s.split(", ") + speaker_names).uniq.join(", ")
     self.update_column("all_speaker_names", all_speaker_names)
+  end
+
+  def clear_cache
+    Rails.cache.delete("agenda_track_sequence_#{self.id}")
+    Rails.cache.delete("agenda_track_name_#{self.id}")
   end
 
   # def speaker_names
@@ -207,10 +212,18 @@ class Agenda < ActiveRecord::Base
   end  
 
   def agenda_track_name
+    Rails.cache.fetch("agenda_track_name_#{self.id}") { agenda_track_name! }
+  end  
+
+  def agenda_track_name!
     self.agenda_track.track_name if self.agenda_track_id.to_i > 0
   end
 
   def track_sequence
+    Rails.cache.fetch("agenda_track_sequence_#{self.id}") { track_sequence! }
+  end  
+
+  def track_sequence!
     self.agenda_track.sequence if self.agenda_track_id.to_i > 0
   end
 

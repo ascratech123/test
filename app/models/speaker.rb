@@ -113,7 +113,8 @@ class Speaker < ActiveRecord::Base
   end
 
   def is_rated
-    self.ratings.present? ? true : false
+    # self.ratings.present? ? true : false
+    (self.ratings_count_cache.to_i > 0)
   end 
 
   def profile_pic_url(style=:large)

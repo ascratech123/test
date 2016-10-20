@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
   
   attr_accessor :platform
-  belongs_to :commentable, polymorphic: true
+  belongs_to :commentable, polymorphic: true, :counter_cache => :comments_count_cache
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
   
   validates :description,:commentable_id,:commentable_type,:user_id,:presence =>true
@@ -69,6 +69,10 @@ class Comment < ActiveRecord::Base
   end
 
   def user_name
+    Rails.cache.fetch("comment_invitee_user_name_#{self.user_id}") { user_name! }
+  end
+
+  def user_name!
     self.user.name_of_the_invitee rescue nil
   end
 
@@ -77,6 +81,10 @@ class Comment < ActiveRecord::Base
   end
 
   def first_name
+    Rails.cache.fetch("comment_invitee_first_name_#{self.user_id}") { first_name! }
+  end  
+
+  def first_name!
     # Invitee.find_by_id(self.user_id).first_name rescue ""
     # user_id = Conversation.find_by_id(self.commentable_id).user_id
     # first_name = Invitee.find_by_id(user_id).first_name rescue ""
@@ -86,6 +94,10 @@ class Comment < ActiveRecord::Base
   end
   
   def last_name
+    Rails.cache.fetch("comment_invitee_last_name_#{self.user_id}") { last_name! }
+  end
+
+  def last_name!
     # user_id = Conversation.find_by_id(self.commentable_id).user_id
     # last_name = Invitee.find_by_id(user_id).last_name rescue ""
     # return last_name
@@ -149,6 +161,10 @@ class Comment < ActiveRecord::Base
   end
 
   def formatted_created_at_with_event_timezone
+    Rails.cache.fetch("formatted_created_at_with_event_timezone_#{self.id}") { formatted_created_at_with_event_timezone! }
+  end
+
+  def formatted_created_at_with_event_timezone!
     # self.created_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # created_at_with_tmz = self.created_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     conversation = Conversation.find(self.commentable_id)
@@ -157,7 +173,11 @@ class Comment < ActiveRecord::Base
     created_at_with_tmz.sub(year, "")    
   end
 
-  def formatted_updated_at_with_event_timezone
+  def formatted_created_at_with_event_timezone
+    Rails.cache.fetch("formatted_updated_at_with_event_timezone_#{self.id}") { formatted_updated_at_with_event_timezone! }
+  end
+
+  def formatted_updated_at_with_event_timezone!
     # self.updated_at_with_event_timezone.strftime("%b %d at %I:%M %p (GMT %:z)")
     # updated_at_with_tmz = self.updated_at_with_event_timezone.strftime("%Y %b %d at %l:%M %p (GMT %:z)")
     conversation = Conversation.find(self.commentable_id)
