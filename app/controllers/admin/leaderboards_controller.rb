@@ -15,13 +15,13 @@ class Admin::LeaderboardsController < ApplicationController
         end
       end
     else
-    @invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc').first(5)
+    @invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc')#.first(5)
       respond_to do |format|
         format.html  
         format.xls do
           only_columns = [:first_name, :last_name, :email, :designation, :company_name, :points]
-          method_allowed = [:rank]
-          send_data @invitees.to_xls(:only => only_columns, :methods => method_allowed)
+          # method_allowed = [:rank]
+          send_data @invitees.to_xls(:only => only_columns)#, :methods => method_allowed)
         end
       end
     end

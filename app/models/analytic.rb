@@ -39,6 +39,10 @@ class Analytic < ActiveRecord::Base
     self.errors.present? ? false : true
   end
 
+  def invitee_email
+    Invitee.unscoped.find_by_id(self.invitee_id)
+  end
+
   def update_points
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
