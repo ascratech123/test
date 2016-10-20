@@ -30,7 +30,7 @@ class Api::V1::SocialFeedsController < ApplicationController
 	        if instagram_posts["data"].present? and instagram_posts["data"] != "data"# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
 	      		session[:instagram_time_stamp] = (Date.today).to_datetime.to_i if request.format == "html"
 	          cuurent_date = Time.at(session[:instagram_time_stamp]) 
-	          date2 = (date2 + 1.day).to_datetime.to_i if cuurent_date.present?
+	          date2 = (cuurent_date + 1.day).to_datetime.to_i if cuurent_date.present?
 	          data = instagram_posts["data"].select{ |k| k["created_time"].to_i.between?(session[:instagram_time_stamp],date2)}
 
 	          @instgram_embedded_post = get_instagram_posts(data)    
