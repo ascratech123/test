@@ -84,6 +84,14 @@
 /*nilam*/
 .titleQuestion{margin-left:15px;}
 /*=======================Nilam CSS Start=================================*/
+ .generateCodeBtn{width:100%; margin:0 auto; text-align:center;}
+ .generateCodeBtn a{background:#1CB1BA; color:#fff; padding:10px; display:inline-block; margin:18px 0 15px 0; cursor:pointer;}
+ .save_button .generateCodeBtn a{font-size:14px; text-transform:uppercase; }
+  
+ .titleQuestion{margin-left:15px;}
+ .generateCodeBtn + h6{width:100%; margin:0 auto 15px auto; text-align:center; font-size:14px;} 
+ #instagram_code_label{display:none;}
+ #event_instagram_code{display:none;}
 
 .sequence_update .ClientPopup-info{position: fixed; top:50%;}
 
