@@ -7,7 +7,7 @@
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "e-kit.png", :objs => @event.e_kits, :url => "e_kits", :@count => @count}
       - if show_card("feedbacks")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "feedback.png", :objs => @event.feedback_forms, :url => "feedbacks", :@count => @count}
-	  - if show_card("chats")
+      - if show_card("chats")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "chat.png", :objs => 0, :url => "chats", :@count => @count}       
       - if show_card("social_sharings")
         = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "social_sharing.png", :objs => 0, :url => "social_sharings", :@count => @count}
