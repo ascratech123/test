@@ -185,7 +185,7 @@ p.or-vertical-text{    text-align: center;
     text-transform: capitalize;}
     .Regiserror.validationErr .field_with_errors{left:10px;}
 .delete-wall-logo{top:-23px;}
-.twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:20px !important;}
+.twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:30px !important;}
 .account-popup {background: #fff; color: #444; font-size: 14px; height: auto; left: 0; margin: 0 auto; padding: 18px 15px; position: absolute; right: 0; text-align: center; top: 50%; width: 400px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); -moz-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -webkit-box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1); -o-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);z-index: 9999;}
 .account-popup .heading{color: #058494; font-size:22px; padding-top:5px; text-transform:uppercase;}
 .account-popup .content{padding:18px 0;}
