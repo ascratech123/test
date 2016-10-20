@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'roo'
 require 'open-uri'
+require 'aws-sdk'
 # require 'zip/zipfilesystem'
 #include ActiveSupport::Inflector
 
@@ -53,74 +54,110 @@ module ExcelImportMyTravel
       event = Event.find_by_id(event_id)
       invitee_id = event.invitees.find_by_email(objekt["invitee_email"]).id rescue nil
       my_travel = MyTravel.find_or_initialize_by(:event_id => event_id,:invitee_id => invitee_id)
-      if objekt["file_1_url"].present?
-        url1 = objekt["file_1_url"] rescue nil
-        data = open(url1).read rescue nil
-        if data.present?
-          write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
-            f.write(data)
+      if objekt["file_name_1"].present?
+        #url1 = objekt["file_1_url"] rescue nil
+        file_name_1 = objekt["file_name_1"] rescue nil
+        url1 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_1}"
+        uri = URI(url1)
+        request = Net::HTTP.new uri.host
+        response= request.request_head uri.path
+        presence = response.code.to_i == 200
+        if presence == true
+          data = open(url1).read rescue nil
+          if data.present?
+            write_file_content = File.open("public/#{url1.split('/').last}", 'wb') do |f|
+              f.write(data)
+            end
+            attach_file_1 = (File.open("public/#{url1.split('/').last}",'rb'))
+            my_travel.attach_file = attach_file_1 
+            my_travel.attach_file_1_name = objekt["file_name_1"]
+          else
+            my_travel.errors.add(:attach_file, "Incorrect URL")
           end
-          attach_file_1 = (File.open("public/#{url1.split('/').last}",'rb'))
-          my_travel.attach_file = attach_file_1 
-          my_travel.attach_file_1_name = objekt["file_name_1"]
-        else
-          my_travel.errors.add(:attach_file, "Incorrect URL")
         end
       end
-      if objekt["file_2_url"].present?
-        url2 = objekt["file_2_url"] rescue nil
-        data = open(url2).read rescue nil
-        if data.present?
-          write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
-            f.write(data)
+      if objekt["file_name_2"].present?
+        file_name_2 = objekt["file_name_2"] rescue nil
+        url2 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_2}"
+        uri = URI(url2)
+        request = Net::HTTP.new uri.host
+        response= request.request_head uri.path
+        presence = response.code.to_i == 200
+        if presence == true
+          data = open(url2).read rescue nil
+          if data.present?
+            write_file_content = File.open("public/#{url2.split('/').last}", 'wb') do |f|
+              f.write(data)
+            end
+            attach_file_2 = (File.open("public/#{url2.split('/').last}",'rb'))
+            my_travel.attach_file_2 = attach_file_2 if attach_file_2.present?
+            my_travel.attach_file_2_name = objekt["file_name_2"] if objekt["file_name_2"].present?
+          else
+            my_travel.errors.add(:attach_file_2, "Incorrect URL")
           end
-          attach_file_2 = (File.open("public/#{url2.split('/').last}",'rb'))
-          my_travel.attach_file_2 = attach_file_2 if attach_file_2.present?
-          my_travel.attach_file_2_name = objekt["file_name_2"] if objekt["file_name_2"].present?
-        else
-          my_travel.errors.add(:attach_file_2, "Incorrect URL")
         end
       end
-      if objekt["file_3_url"].present?
-        url3 = objekt["file_3_url"] rescue nil
-        data = open(url3).read rescue nil
-        if data.present?
-          write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
-            f.write(data)
+      if objekt["file_name_3"].present?
+        file_name_3 = objekt["file_name_3"] rescue nil
+        url3 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_3}"
+        uri = URI(url3)
+        request = Net::HTTP.new uri.host
+        response= request.request_head uri.path
+        presence = response.code.to_i == 200
+        if presence == true
+          data = open(url3).read rescue nil
+          if data.present?
+            write_file_content = File.open("public/#{url3.split('/').last}", 'wb') do |f|
+              f.write(data)
+            end
+            attach_file_3 = (File.open("public/#{url3.split('/').last}",'rb'))
+            my_travel.attach_file_3 = attach_file_3 if attach_file_3.present?
+            my_travel.attach_file_3_name = objekt["file_name_3"] if objekt["file_name_3"].present?
+          else
+            my_travel.errors.add(:attach_file_3, "Incorrect URL")
           end
-          attach_file_3 = (File.open("public/#{url3.split('/').last}",'rb'))
-          my_travel.attach_file_3 = attach_file_3 if attach_file_3.present?
-          my_travel.attach_file_3_name = objekt["file_name_3"] if objekt["file_name_3"].present?
-        else
-          my_travel.errors.add(:attach_file_3, "Incorrect URL")
         end
       end
-      if objekt["file_4_url"].present?
-        url4 = objekt["file_4_url"] rescue nil
-        data = open(url4).read rescue nil
-        if data.present?
-          write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
-            f.write(data)
+      if objekt["file_name_4"].present?
+        file_name_4 = objekt["file_name_4"] rescue nil
+        url4 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_4}"
+        uri = URI(url4)
+        request = Net::HTTP.new uri.host
+        response= request.request_head uri.path
+        presence = response.code.to_i == 200
+        if presence == true
+          data = open(url4).read rescue nil
+          if data.present?
+            write_file_content = File.open("public/#{url4.split('/').last}", 'wb') do |f|
+              f.write(data)
+            end
+            attach_file_4 = (File.open("public/#{url4.split('/').last}",'rb'))
+            my_travel.attach_file_4 = attach_file_4 if attach_file_4.present?
+            my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
+          else
+            my_travel.errors.add(:attach_file_4, "Incorrect URL")
           end
-          attach_file_4 = (File.open("public/#{url4.split('/').last}",'rb'))
-          my_travel.attach_file_4 = attach_file_4 if attach_file_4.present?
-          my_travel.attach_file_4_name = objekt["file_name_4"] if objekt["file_name_4"].present?
-        else
-          my_travel.errors.add(:attach_file_4, "Incorrect URL")
         end
       end
-      if objekt["file_5_url"].present?
-        url5 = objekt["file_5_url"] rescue nil
-        data = open(url5).read rescue nil
-        if data.present?
-          write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
-            f.write(data)
+      if objekt["file_name_5"].present?
+        file_name_5 = objekt["file_name_5"] rescue nil
+        url5 = "http://s3.amazonaws.com/shobiz-new-dev/my_travel_docs/my_travel_attach_doc/original/#{event_id}/#{file_name_5}"
+        uri = URI(url5)
+        request = Net::HTTP.new uri.host
+        response= request.request_head uri.path
+        presence = response.code.to_i == 200
+        if presence == true
+          data = open(url5).read rescue nil
+          if data.present?
+            write_file_content = File.open("public/#{url5.split('/').last}", 'wb') do |f|
+              f.write(data)
+            end
+            attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
+            my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
+            my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
+          else
+            my_travel.errors.add(:attach_file_5, "Incorrect URL")
           end
-          attach_file_5 = (File.open("public/#{url5.split('/').last}",'rb'))
-          my_travel.attach_file_5 = attach_file_5 if attach_file_5.present?
-          my_travel.attach_file_5_name = objekt["file_name_5"] if objekt["file_name_5"].present?
-        else
-          my_travel.errors.add(:attach_file_5, "Incorrect URL")
         end
       end
       # my_travel = MyTravel.new(:event_id => event_id,:invitee_id => invitee_id,:attach_file => attach_file_1,:attach_file_1_name => objekt["file_name_1"],:attach_file_2 => attach_file_2,:attach_file_2_name => objekt["file_name_2"],:attach_file_3 => attach_file_3,:attach_file_3_name => objekt["file_name_3"],:attach_file_4 => attach_file_4,:attach_file_4_name => objekt["file_name_4"],:attach_file_5 => attach_file_5,:attach_file_5_name => objekt["file_name_5"])

@@ -61,6 +61,7 @@ class Event < ActiveRecord::Base
   has_many :campaigns, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
   has_many :manage_invitee_fields, :dependent => :destroy
+  has_many :my_travel_docs, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
 

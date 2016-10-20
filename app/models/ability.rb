@@ -96,6 +96,8 @@ class Ability
 
       can :create, MyTravel
       can :manage, MyTravel, :event_id => e_ids
+      can :create, MyTravelDoc
+      can :manage, MyTravelDoc, :event_id => e_ids
 
       s_ids = Speaker.where(:event_id => e_ids).pluck(:id).uniq
       can :manage, Rating, :ratable_id => s_ids, :ratable_type => 'Speaker'
@@ -516,7 +518,7 @@ class Ability
       can :read, :all
     elsif user.has_role? :db_manager
       can :read, :all
-      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee,InviteeGroup,Quiz,Import]
+      can :manage, [Speaker,Agenda,MyTravel,Feedback,Invitee,InviteeGroup,Quiz,Import,MyTravelDoc]
     elsif user.has_role? :db_executive
       can :read, :all
     elsif user.has_role? :response_manager
