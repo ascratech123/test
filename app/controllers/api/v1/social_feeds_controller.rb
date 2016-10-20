@@ -29,7 +29,11 @@ class Api::V1::SocialFeedsController < ApplicationController
 	      instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
 	        if instagram_posts["data"].present?# and @event.facebook_social_tags.present? or  @event.twitter_social_tags.present?
 	      		session[:instagram_time_stamp] = (Date.today).to_datetime.to_i if request.format == "html"
-	          data = instagram_posts["data"].select{ |k| k["created_time"].to_i > session[:instagram_time_stamp]}
+	          date2 = Time.at(session[:instagram_time_stamp])
+	          date2 = (date2 + 1.day).to_datetime.to_i
+	          data = instagram_posts["data"].select{ |k| k["created_time"].to_i.between?(session[:instagram_time_stamp],date2)}
+	          #data = instagram_posts["data"].select{|entry| entry["Date"].to_date.between?(start_date.to_date, end_date.to_date) }
+
 	          @instgram_embedded_post = get_instagram_posts(data)    
 	        else
 	          @instgram_embedded_post = ""
