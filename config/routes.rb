@@ -36,9 +36,9 @@ namespace :admin do
     resources :external_login
   end
   resources :events do
-    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers,:qna_walls,:conversation_walls,:poll_walls,:quiz_walls, :activity_feeds, :microsites, :user_microsites, :microsite_templates, :export_qr_codes
+    resources :abouts, :event_highlights, :emergency_exits, :themes, :sequences,:leaderboards, :chats, :invitee_groups, :qr_code_scanners, :warehouse_timers,:qna_walls,:conversation_walls,:poll_walls,:quiz_walls, :activity_feeds, :feedback_forms, :export_qr_codes, :microsites, :user_microsites, :microsite_templates
     resources :speakers, :attendees, :invitees, :agendas, :conversations, :users, :notifications
-    resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas, :feedbacks
+    resources :event_features, :menus, :faqs, :images, :highlight_images, :feedbacks, :sponsors, :qnas
     resources :e_kits, :contacts, :panels, :imports, :user_registrations
     resources :groupings, :exhibitors, :manage_feature_status, :analytics, :registration_settings, :custom_page1s, :custom_page2s, :custom_page3s, :custom_page4s, :custom_page5s,:telecallers,:invitee_datas,:my_travels,:venue_sections,:invitee_accesses,:telecaller_accessible_columns, :invitee_searches, :my_profiles, :qr_scanner_details, :badge_pdfs,:manage_invitee_fields,:my_travel_docs
      
@@ -73,10 +73,6 @@ namespace :admin do
     end
     resources :registrations
 
-    resources :campaigns do
-      resources :edms
-    end
-
   end
   # resources :imports
 end
@@ -93,13 +89,12 @@ end
         resources :chats do 
           post 'update_chat_read_status', on: :collection # method used for update msg read status for api.
         end
-        resources :invitee_chats 
-        resources :social_feeds 
+        resources :invitee_chats,:social_feeds  
       end
       resources :tokens, :social_media_authentications, :abouts, :agendas, :speakers, :invitees, :leaderboards, :attendees, :images, :ratings, defaults: {format: 'json'} 
       resources :faqs, :notifications, :conversations, :comments, :qnas, :polls,:invitee_trackings, defaults: {format: 'json'}
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
-      resources :activity_feeds,:visitor_registrations
+      resources :activity_feeds
     end
   end
 end

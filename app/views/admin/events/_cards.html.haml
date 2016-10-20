@@ -90,9 +90,9 @@
               - url1 = "leaderboards" if url == "leaderboard"
               - url1 = "feedback_forms" if url == "feedbacks"
               - url1 = "qr_code" if url == "qr_code"
-              - if url1 == "qr_code" and @event.analytics.present?
+              - if url1 == "qr_code" and @event.analytics.where('viewable_url IS NOT NULL').present?
                 = link_to display_title, admin_event_export_qr_codes_path(:export => 'export', :format => 'xls')
-              - else
+              - elsif url1 != "qr_code"
                 = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
             - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |
