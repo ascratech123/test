@@ -32,7 +32,7 @@
           = poll.status.capitalize rescue nil
         %td.font16
           - if poll.on_wall == "yes" and poll.status != "rejected" 
-            = "Pushed on Wall"
+            = "Pushed on #{poll.wall_type}"
           - else 
             = "" 
         - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
