@@ -44,6 +44,10 @@ class Analytic < ActiveRecord::Base
     invitee.present? ? invitee.email : ' '
   end
 
+  def url
+    self.viewable_url.present? ? self.viewable_url : ' '
+  end
+
   def update_points
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
