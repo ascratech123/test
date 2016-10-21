@@ -26,7 +26,9 @@ class Api::V1::SocialFeedsController < ApplicationController
 	      	insta_acess_token = acess_token["access_token"]
 	      	@event.update_column('instagram_access_token',insta_acess_token)
 	    	end
-      	instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
+      	#instagram_posts = SocialFeedApi.get_all_instagram_posts(@event.instagram_access_token,@event.instagram_social_tags) rescue []
+      	instagram_posts = SocialFeedApi.get_own_instgram_posts(@event) rescue []
+
       	if @facebook_posts.blank? and @twitter_posts.blank? and request.format == "html"
 					@instgram_embedded_post = get_instagram_posts(instagram_posts["data"])
 				elsif instagram_posts["data"].present? and instagram_posts["data"] != "data" 
