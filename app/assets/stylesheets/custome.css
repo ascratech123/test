@@ -111,7 +111,10 @@
     display: inline-block;
     height: 45px;
 }
-#my-posts iframe{margin-bottom:20px !important; width:100%;}
+ #my-posts iframe{margin-bottom:20px !important; width:100% !important; max-width:100% !important;padding-bottom:0px !important;}
+ .pluginSkinLight.pluginFontHelvetica{background:#fff !important;}
+ body.plugin{background:#fff !important;}
+ ._2_1h{margin-top:0px !important;}
 
  .addMoreSpeaker{ border-radius: 50%;
      display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
