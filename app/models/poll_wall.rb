@@ -4,7 +4,7 @@ class PollWall < ActiveRecord::Base
 	
 	has_attached_file :logo
   validates_attachment_content_type :logo, :content_type => ["image/png", "image/jpg", "image/jpeg"],:message => "please select valid format."
-  has_attached_file :logo, {:styles => {:large => "200x200>", 
+  has_attached_file :logo, {:styles => {:large => "600x400>", 
                                        :thumb => "60x60>"}
                                        }.merge(POLLWALL_LOGO_PATH)
   has_attached_file :background_image
