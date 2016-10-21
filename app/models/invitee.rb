@@ -127,9 +127,10 @@ class Invitee < ActiveRecord::Base
       if invitees[analytic.invitee_id].present? and invitees[analytic.invitee_id].first < 1000
         invitees[analytic.invitee_id] = [invitees[analytic.invitee_id].first + analytic.points, analytic.created_at]
       elsif invitees[analytic.invitee_id].blank?
-        invitees[analytic.invitee_id] = [analytic.points, analytic.created_at]
+        invitees[analytic.invitee_id] = [analytic.points, analytic.created_at] if analytic.points.present?
       end
       break if invitees.values.select{|v| v.first >= 1000}.count > 4
+      # break if invitees.values.select{|v| v.first != nil and v.first >= 1000}.count > 4
     end
     return if not invitees.present?
     if invitees.present?

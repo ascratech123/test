@@ -68,6 +68,8 @@
               - display_title = "Add"
             -elsif url == "venue" and @event.emergency_exit.present?
               - display_title = "Manage"
+            - elsif url == "qr_code"
+              - display_title = "Export"
             - elsif ["leaderboard", "activity_feeds"].include?(url)
               - display_title = "Manage"
               - redirect_link = ""
@@ -77,12 +79,16 @@
               - display_title = "Manage" if url == "custom_page3s" and @event.custom_page3s.present?
               - display_title = "Manage" if url == "custom_page4s" and @event.custom_page4s.present?
               - display_title = "Manage" if url == "custom_page5s" and @event.custom_page5s.present?
-            - if ["notes","qr_code","my_profile","my_calendar", "favourites","chats","social_sharings"].exclude? (url)
+            - if ["notes","my_profile","my_calendar", "favourites","chats","social_sharings"].exclude? (url)
               - url1 = "emergency_exits" if url == "venue"
               - url1 = url if url != "venue"
               - url1 = "leaderboards" if url == "leaderboard"
               - url1 = "feedback_forms" if url == "feedbacks"
-              = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
+              - url1 = "qr_code" if url == "qr_code"
+              - if url1 == "qr_code" and @event.analytics.select('distinct invitee_id, viewable_url').where.not(viewable_url: [nil, ""]).present?
+                = link_to display_title, admin_event_export_qr_codes_path(:export => 'export', :format => 'xls')
+              - elsif url1 != "qr_code"
+                = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
             - if (!current_user.has_role_for_event?("moderator", @event.id,session[:current_user_role])) #!(current_user.has_role? :moderator)
               |
               = link_to "Disable", admin_event_mobile_application_path(:event_id => @event.id, :id => @mobile_application.id,:disable_event => "#{url}", :type => params[:type]), :method => "put", :remote => true 

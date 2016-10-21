@@ -15,7 +15,7 @@ class Admin::LeaderboardsController < ApplicationController
         end
       end
     else
-    @invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc').first(5)
+    @invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc')#.first(5)
       respond_to do |format|
         format.html  
         format.xls do
