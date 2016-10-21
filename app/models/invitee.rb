@@ -664,6 +664,14 @@ class Invitee < ActiveRecord::Base
   end
 
   def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
+    if user.present?
+      Rails.cache.fetch("#{user.id}-#{notifications.pluck(:id).join('-')}") { self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date) }
+    else
+      Rails.cache.fetch("#{notifications.pluck(:id).join('-')}") { self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date) }
+    end
+  end
+
+  def self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
     notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
     notifications.each do |notification|
