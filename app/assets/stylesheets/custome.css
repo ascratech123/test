@@ -89,7 +89,7 @@
 
 .sequence_update .ClientPopup-info{position: fixed; top:50%;}
 
-#register-form.pollWallForm > form {position: relative;}
+#register-form.pollWallForm form {position: relative;}
 #register-form.pollWallForm .arrow{top:2px;}
 .agendaSpeakerCheckboxes a{color :#666666; font-weight:400;}
 .agendaSpeakerCheckboxes #myDropdown{padding: 5px;}
