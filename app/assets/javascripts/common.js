@@ -827,7 +827,7 @@ function load_products(){
 
 $(document).ready(function(){
   $('.usersep').click(function(){
-  $('#myDropdown').toggle();
+    $('#myDropdown').toggle();
   });
 
 
@@ -848,4 +848,18 @@ $(document).ready(function(){
     }
 
   });
+ /* $('#register-form').click(function(e){
+    e.stopPropagation();
+  });
+
+  $(document).click(function(e){
+    e.preventDefault();
+    $('#register-form').hide();
+    $('.popup-overlay').hide();
+  });*/
+
+  $('.pushWallForm').click(function(){
+    $('.morefixed-activon-btn').css('z-index','-1');
+  });
+
 });

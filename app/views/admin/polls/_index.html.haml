@@ -13,7 +13,7 @@
       %th On Wall
       - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
         %th Result Status
-      %th 
+      %th
     - objs.each_with_index do |poll,index|
       %tr
         %td.sortable
@@ -32,7 +32,7 @@
           = poll.status.capitalize rescue nil
         %td.font16
           - if poll.on_wall == "yes" and poll.status != "rejected" 
-            = "Pushed on Wall"
+            = "Pushed on #{poll.wall_type}"
           - else 
             = "" 
         - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
@@ -60,15 +60,17 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
               = edit_link(params, poll.id)
               = delete_link(params, poll.id)
+              / - binding.pry
               - if poll.on_wall == "yes" 
                 = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
-              - elsif ((poll.on_wall == "no" or poll.on_wall == nil ) and poll.event.polls.pluck(:on_wall).exclude?("yes"))
+              - elsif ((poll.on_wall == "no" or poll.on_wall == nil ) and (objs.pluck(:on_wall).count("yes") <= 4 ))#poll.event.polls.pluck(:on_wall).exclude?("yes"))
                 - if poll.status != "deactivate"
-                  = link_to "Push To Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item"
+                  / = link_to "Push To Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "yes",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Push To Wall.'},:class => "mdl-menu__item", :remote => true
+                  = link_to "Push To Wall", admin_event_poll_path(:id => poll.id, option: "partial") , :class => "mdl-menu__item pushWallForm", :remote => true
               - poll.aasm.events.each do |eve|
                 = link_to "#{eve.name.to_s.titlecase}".html_safe,{:action=>"update", :controller=>"admin/polls", :id => poll.id, :status => eve.name.to_s, :page => params[:page]}, :method => "put", :data => { confirm: 'Are you sure, you want to change the status.'},:class => "mdl-menu__item"
   =# will_paginate objs   
-
+.render_partial
 :javascript
 
   $('input[readonly]').dblclick(function() {

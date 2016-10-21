@@ -22,7 +22,8 @@
                     .col-xs-4.col-sm-12.col-md-12.col-lg-12.pollHeading
                       - if @poll_wall.logo.present? 
                         %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
-                  %hr
+                  %P
+                  %p
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
                       %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
@@ -30,9 +31,9 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
-                          -percentage = get_user_poll_percentage(number,poll)
+                          -percentage = get_user_poll_percentage(number.to_s,poll)
                           = get_percentage(number, poll, bar_color, @poll_wall, 50, percentage)  
-                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0                       
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)if percentage.present? and percentage != 0                       
                       - if poll.option1.present?
                         - percentage = get_user_poll_percentage('option1',poll)
                         = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)   
@@ -103,7 +104,8 @@
                         %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
                     / .col-xs-8.col-sm-10.col-md-10.col-lg-10.pollHeading
                     /   %h3 Polls
-                  %hr
+                  %P
+                  %p
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
                       %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
@@ -111,10 +113,9 @@
                           = poll.question
                       - if poll.option_type == "Rating"
                         - for number in 1..5
-                          - percentage = get_user_poll_percentage(number,poll)
+                          - percentage = get_user_poll_percentage(number.to_s,poll)
                           = get_percentage(number, poll, bar_color, @poll_wall, 50, percentage)
-                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
-                        
+                          - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color)if percentage.present? and percentage != 0            
                       - if poll.option1.present?
                         - percentage = get_user_poll_percentage('option1',poll)
                         = get_percentage('option1', poll, bar_color, @poll_wall, 50, percentage)
@@ -166,6 +167,92 @@
                         - bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
    
                       %span{:style=>"color:#{@poll_wall.font_color};"}   
+                        = show_field("Total responses: ", poll.user_polls.count) rescue nil
+                    
+      %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
+      %script{:src => "js/bootstrap.min.js"}
+      %script{:src => "js/docs.min.js"}
+      / IE10 viewport hack for Surface/desktop Windows 8 bug
+      %script{:src => "js/ie10-viewport-bug-workaround.js"}
+      %script{:src => "js/base.min.js"}      
+  - else
+    %body.main-events{:style=>"background-color: #808080;"}    
+      .container.poll-container{:role => "main", :style =>"display:inline-block;width:100%;"}
+        .col-xs-12.col-lg-12
+          .row
+            .col-lg-8.col-lg-offset-2
+              .row
+                .col-sm-12
+                  .row.heightpoll
+                    .col-xs-4.col-sm-12.col-md-12.col-lg-12.pollHeading
+                      / - if @poll_wall.logo.present? 
+                      /   %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
+                    / .col-xs-8.col-sm-10.col-md-10.col-lg-10.pollHeading
+                    /   %h3 Polls
+                  %P
+                  %p
+                    -# bar_color = @poll_wall.bar_color
+                    - @polls.each do |poll|
+                      %p.poll-question{:style=>""}  
+                        %strong
+                          = poll.question
+                      - if poll.option_type == "Rating"
+                        - for number in 1..5
+                          - percentage = get_user_poll_percentage(number.to_s,poll)
+                          = get_default_poll_wall_get_percentage(number, poll, 50, percentage)
+                          -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                        
+                      - if poll.option1.present?
+                        - percentage = get_user_poll_percentage('option1',poll)
+                        = get_default_poll_wall_get_percentage('option1', poll, 50, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                        
+                      - if poll.option2.present?
+                        - percentage = get_user_poll_percentage('option2',poll)
+                        = get_default_poll_wall_get_percentage('option2', poll, 40, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                      
+                      - if poll.option3.present?
+                        - percentage = get_user_poll_percentage('option3',poll)
+                        = get_default_poll_wall_get_percentage('option3', poll, 50, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                      
+                      - if poll.option4.present?
+                        - percentage = get_user_poll_percentage('option4',poll)
+                        = get_default_poll_wall_get_percentage('option4', poll, 40, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                      
+                      - if poll.option5.present?
+                        - percentage = get_user_poll_percentage('option5',poll)
+                        = get_default_poll_wall_get_percentage('option5', poll, 40, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+
+                      - if poll.option6.present?
+                        - percentage = get_user_poll_percentage('option6',poll)
+                        = get_default_poll_wall_get_percentage('option6', poll, 50, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+
+                      - if poll.option7.present?
+                        - percentage = get_user_poll_percentage('option7',poll)
+                        = get_default_poll_wall_get_percentage('option7', poll, 50, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+
+                      - if poll.option8.present?
+                        - percentage = get_user_poll_percentage('option8',poll)
+                        = get_default_poll_wall_get_percentage('option8', poll, 50, percentage)
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+                        
+                      - if poll.option9.present?
+                        - percentage = get_user_poll_percentage('option9',poll)
+                        = get_default_poll_wall_get_percentage('option9', poll, 50, percentage)   
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+
+                      - if poll.option010.present?
+                        - percentage = get_user_poll_percentage('option010',poll)
+                        = get_default_poll_wall_get_percentage('option010', poll, 50, percentage)    
+                        -# bar_color = ((bar_color == @poll_wall.bar_color)? @poll_wall.bar_color1 : @poll_wall.bar_color) if percentage.present? and percentage != 0            
+   
+                      %span{:style=>""}   
                         = show_field("Total responses: ", poll.user_polls.count) rescue nil
                     
       %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"}
