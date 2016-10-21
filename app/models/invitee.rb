@@ -662,6 +662,14 @@ class Invitee < ActiveRecord::Base
   end
 
   def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
+    if user.present?
+      Rails.cache.fetch("#{user.id}-#{notifications.pluck(:id).join('-')}") { self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date) }
+    else
+      Rails.cache.fetch("#{notifications.pluck(:id).join('-')}") { self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date) }
+    end
+  end
+
+  def self.get_notification!(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
     notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
     notifications.each do |notification|
@@ -710,7 +718,7 @@ class Invitee < ActiveRecord::Base
 
   def self.get_read_notification(info, event_ids, user)
     # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
     data = []
     invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
@@ -721,7 +729,7 @@ class Invitee < ActiveRecord::Base
     start_event_date = start_event_date - 5.minutes
     info = InviteeNotification.where(:updated_at => start_event_date..end_event_date, event_id: event_ids)    
     # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
-    user_ids = get_similar_invitees(event_ids).pluck(:id)
+    user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
     invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
     invitee_notifications.pluck(:notification_id) rescue []
   end

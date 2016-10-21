@@ -32,7 +32,7 @@ class UserFeedback < ActiveRecord::Base
     Rails.cache.fetch("user_feedback_get_event_id_#{self.id}") { get_event_id! }
   end  
 
-  def get_event_id
+  def get_event_id!
     self.feedback.event_id rescue nil
   end
   
