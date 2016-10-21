@@ -4,7 +4,7 @@
   %p.txtcenter.m-b-30
     Please select wall to continue
   %span
-    = link_to back_path, :class => 'closeclick' do 
+    = link_to back_path, :class => 'closeclick' do  
       X
   = form_tag admin_event_polls_path, :method => 'get' do
     - if @event.polls.pluck(:wall_type).uniq.compact.present?
