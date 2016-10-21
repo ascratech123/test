@@ -62,6 +62,7 @@ class Agenda < ActiveRecord::Base
   def clear_cache
     Rails.cache.delete("agenda_track_sequence_#{self.id}")
     Rails.cache.delete("agenda_track_name_#{self.id}")
+    Rails.cache.delete("agenda_agenda_type_#{self.id}")
   end
 
   # def speaker_names
@@ -201,6 +202,10 @@ class Agenda < ActiveRecord::Base
   end
 
   def agenda_type
+    Rails.cache.fetch("agenda_agenda_type_#{self.id}") { agenda_type! }
+  end  
+
+  def agenda_type!
     self.agenda_track.present? ? self.agenda_track.track_name : ""
   end
 
