@@ -21,7 +21,7 @@ class Admin::ConversationsController < ApplicationController
       format.html if params[:conversations_wall].blank?
       format.xls do
         only_columns = []
-        method_allowed = [:post_id, :timestamp, :email, :first_name, :last_name, :conversation, :image_url, :Status, :like_count, :comment, :commented_user_email, :commented_user_name]
+        method_allowed = [:post_id, :timestamp, :email_id, :invitee_first_name, :invitee_last_name, :conversation, :image_url, :Status, :like_count, :comment, :commented_user_email, :commented_user_name]
         object = Conversation.get_export_object(@conversations).flatten
         send_data object.to_xls(:only => only_columns, :methods => method_allowed)
       end

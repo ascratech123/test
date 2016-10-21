@@ -23,7 +23,7 @@ class Conversation < ActiveRecord::Base
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
   after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :set_last_interaction_at
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -43,6 +43,10 @@ class Conversation < ActiveRecord::Base
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
+  end
+
+  def set_last_interaction_at
+    self.update_column("last_interaction_at",Time.now)
   end
 
   def perform_conversation(conversation)
@@ -236,6 +240,10 @@ class Conversation < ActiveRecord::Base
     Invitee.find_by_id(self.user_id).email rescue ""
   end
 
+  def email_id
+    Invitee.find_by_id(self.user_id).email rescue ""
+  end
+
   def name
     Rails.cache.fetch("invitee_name_#{self.user_id}") { name! }
   end
@@ -252,6 +260,10 @@ class Conversation < ActiveRecord::Base
     Invitee.find_by_id(self.user_id).first_name rescue ""
   end
 
+  def invitee_first_name
+    Invitee.find_by_id(self.user_id).first_name rescue ""
+  end
+
   def profile_pic_url
     Rails.cache.fetch("invitee_profile_pic_url_#{self.user_id}") { profile_pic_url! }
   end
@@ -265,6 +277,10 @@ class Conversation < ActiveRecord::Base
   end
 
   def last_name!
+    Invitee.find_by_id(self.user_id).last_name rescue ""
+  end
+
+  def invitee_last_name
     Invitee.find_by_id(self.user_id).last_name rescue ""
   end
 
