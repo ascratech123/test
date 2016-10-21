@@ -4,7 +4,7 @@ class Admin::ExportQrCodesController < ApplicationController
 
 	def index
 		if params[:export].present?
-      @qr_codes = @event.analytics.where('viewable_url IS NOT NULL')
+      @qr_codes = @event.analytics.where.not(viewable_url: [nil, ""])
       respond_to do |format|
         format.xls do
           only_columns = [:viewable_url]
