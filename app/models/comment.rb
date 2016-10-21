@@ -68,6 +68,12 @@ class Comment < ActiveRecord::Base
     return email
   end
 
+  def email_id
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    email = Invitee.find_by_id(user_id).email rescue ""
+    return email
+  end
+
   def user_name
     Rails.cache.fetch("comment_invitee_user_name_#{self.user_id}") { user_name! }
   end
@@ -93,6 +99,12 @@ class Comment < ActiveRecord::Base
     (user.present? ? user.first_name : "")
   end
   
+  def invitee_first_name
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    invitee_first_name = Invitee.find_by_id(user_id).first_name rescue ""
+    return invitee_first_name
+  end
+
   def last_name
     Rails.cache.fetch("comment_invitee_last_name_#{self.user_id}") { last_name! }
   end
@@ -106,6 +118,12 @@ class Comment < ActiveRecord::Base
     (user.present? ? user.last_name : "")
   end
   
+  def invitee_last_name
+    user_id = Conversation.find_by_id(self.commentable_id).user_id
+    invitee_last_name = Invitee.find_by_id(user_id).last_name rescue ""
+    return invitee_last_name
+  end
+
   def conversation
     conversation = self.commentable.description
     return conversation.gsub(/[\r\n]/, '')
