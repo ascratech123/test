@@ -215,7 +215,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_super_admin
-    # binding.pry
     unless (user_signed_in? and current_user.roles.present? and current_user.has_role? :super_admin)
      redirect_to admin_dashboards_path
     end
@@ -353,6 +352,8 @@ class ApplicationController < ActionController::Base
     if (params[:format].present? and params["export_type"].blank? and ["admin/speakers","admin/feedbacks"].include? params[:controller] and (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
     elsif (params[:format].present? and params["export_type"].present? and ["admin/speakers","admin/feedbacks","admin/user_feedbacks"].include? params[:controller] and(!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
+      redirect_to admin_prohibited_accesses_path
+    elsif (params[:format].present? and ["admin/speakers","admin/feedbacks"].exclude? params[:controller]and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])))
       redirect_to admin_prohibited_accesses_path
     end
     if (params[:import].present? and params[:controller] == "admin/invitees") and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
