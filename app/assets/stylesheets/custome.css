@@ -115,6 +115,9 @@
  .pluginSkinLight.pluginFontHelvetica{background:#fff !important;}
  body.plugin{background:#fff !important;}
  ._2_1h{margin-top:0px !important;}
+ #my-posts{background-image:url(/assets/Background_1.png); }
+ .userContentWrapper img{width:100%;}
+ .pluginSkinLight img{width:100%;}
 
  .addMoreSpeaker{ border-radius: 50%;
      display: inline-block;  background-color: #00b1bb !important; float:right; margin-right:35px;}
