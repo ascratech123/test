@@ -85,12 +85,12 @@ class Conversation < ActiveRecord::Base
 
   def like_count
     # Like.where(:likable_id => self.id, :likable_type => "Conversation").length rescue 0
-    self.likes_count_cache
+    self.likes_count_cache.to_i
   end
   
   def comment_count
     # Comment.where(:commentable_id => self.id, :commentable_type => "Conversation").length rescue 0
-    self.comments_count_cache
+    self.comments_count_cache.to_i
   end
 
   def user_name
