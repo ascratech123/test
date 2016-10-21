@@ -110,8 +110,11 @@
 .socialIconChkbox .md-checkbox{margin-left:0px;}
 .save_button.bgWhite{background: #fff;}
 .twitter-tweet{width:100% !important; max-width:100% !important;padding-bottom:5px !important;}
-#my-posts iframe{margin-bottom:20px !important; width:100%;}
-
+#my-posts iframe{margin-bottom:20px !important; width:100% !important; max-width:100% !important; 
+  padding-bottom:0px !important;}
+.pluginSkinLight.pluginFontHelvetica{background:#fff !important;}
+body.plugin{background:#fff !important;}
+._2_1h{margin-top:0px !important;}
 
 /*=======================Nilam CSS End =================================*/
 /*form#new_edm.form-horizontal div.mdl-grid.mdl-shadow--1dp div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8{margin-bottom: 0px !important;}
