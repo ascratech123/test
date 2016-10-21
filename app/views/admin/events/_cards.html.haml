@@ -90,7 +90,7 @@
               - url1 = "leaderboards" if url == "leaderboard"
               - url1 = "feedback_forms" if url == "feedbacks"
               - url1 = "qr_code" if url == "qr_code"
-              - if url1 == "qr_code" and @event.analytics.where('viewable_url IS NOT NULL').present?
+              - if url1 == "qr_code" and @event.analytics.select('distinct invitee_id, viewable_url').where.not(viewable_url: [nil, ""]).present?
                 = link_to display_title, admin_event_export_qr_codes_path(:export => 'export', :format => 'xls')
               - elsif url1 != "qr_code"
                 = link_to display_title, "/admin/events/#{@event.id}/#{url1}#{redirect_link}?type=dashboard_new"#,:class => "displayInlineBlock"
@@ -243,6 +243,5 @@
         .mdl-card__menu
           %button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
             %i.material-icons more_vert   
-
 
 
