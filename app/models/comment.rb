@@ -101,7 +101,7 @@ class Comment < ActiveRecord::Base
   
   def invitee_first_name
     user_id = Conversation.find_by_id(self.commentable_id).user_id
-    invitee_first_name = Invitee.find_by_id(self.user_id).first_name rescue ""
+    invitee_first_name = Invitee.find_by_id(user_id).first_name rescue ""
     return invitee_first_name
   end
 
@@ -120,7 +120,7 @@ class Comment < ActiveRecord::Base
   
   def invitee_last_name
     user_id = Conversation.find_by_id(self.commentable_id).user_id
-    invitee_last_name = Invitee.find_by_id(self.user_id).last_name rescue ""
+    invitee_last_name = Invitee.find_by_id(user_id).last_name rescue ""
     return invitee_last_name
   end
 
