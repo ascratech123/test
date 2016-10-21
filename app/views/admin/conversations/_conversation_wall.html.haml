@@ -82,5 +82,42 @@
                               = user.company_name rescue nil
                           .qstnDivBack
                             %p{:style=>"color:#{@conversation_wall.sub_text_color};"}
-                              = conversation.description                                  
+                              = conversation.description 
+  - else
+    %body.newcoversationwallImg{:style=>"background-color: #808080;"} 
+      %main.mdl-layout__content.mdl-color--grey-100.page.ng-scope
+        %section{:id => "content_wrapper", :class =>"conversations_wrapper"}
+          / - if @conversation_wall.logo.present?
+          /   %p.conv-logo
+          /     %img.logo{:alt => "LOGO", :src => "#{@conversation_wall.logo.url(:large)}"}            
+          %section#content.covesationPage
+            - @conversations.each do |conversation|
+              - event = conversation.event
+              .col
+                #one.card{:style=>""}
+                  .flip-container
+                    .flipper
+                      .front
+                        .usrDiv
+                          / %img.tataL{:alt => "", :src => event.inside_logo_url}
+                          %p.userName{:style=>""}
+                            - user = conversation.user
+                            = user.name_of_the_invitee rescue nil
+                          %p.companyName{:style=>""}
+                            = user.company_name rescue nil
+                        .qstnDiv
+                          %p{:style=>""}
+                            = conversation.description
+                      .back.back-img
+                        - if conversation.image.present?
+                          %img.backImg{:src => conversation.image.url}
+                        - else
+                          .usrDivBack
+                            %p.userNameBack{:style=>""}
+                              = user.name_of_the_invitee rescue nil
+                            %p.companyNameBack{:style=>""}
+                              = user.company_name rescue nil
+                          .qstnDivBack
+                            %p{:style=>""}
+                              = conversation.description                                                                
                        
