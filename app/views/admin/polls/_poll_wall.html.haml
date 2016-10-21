@@ -22,7 +22,6 @@
                     .col-xs-4.col-sm-12.col-md-12.col-lg-12.pollHeading
                       - if @poll_wall.logo.present? 
                         %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
-                  %hr
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
                       %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
@@ -103,7 +102,6 @@
                         %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
                     / .col-xs-8.col-sm-10.col-md-10.col-lg-10.pollHeading
                     /   %h3 Polls
-                  %hr
                     - bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
                       %p.poll-question{:style=>"color:#{@poll_wall.font_color};"}  
@@ -188,7 +186,6 @@
                       /   %img.logo.img-responsive.center-block{:src => "#{@poll_wall.logo.url(:large)}"}
                     / .col-xs-8.col-sm-10.col-md-10.col-lg-10.pollHeading
                     /   %h3 Polls
-                  %hr
                     -# bar_color = @poll_wall.bar_color
                     - @polls.each do |poll|
                       %p.poll-question{:style=>""}  
