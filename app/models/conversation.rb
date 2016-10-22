@@ -33,12 +33,20 @@ class Conversation < ActiveRecord::Base
     state :approved
     state :rejected
     
-    event :approve do
+    event :approve, :after => [:update_analytics] do
       transitions :from => [:pending,:rejected], :to => [:approved]
     end 
-    event :reject do
+    event :reject, :after => [:update_analytics]  do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end 
+  end
+
+  def update_analytics
+    if self.status == "rejected"
+      Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation").each{|a| a.update_column("status", "rejected")}
+    elsif self.status == "approved"
+      Analytic.where(:viewable_id => self.id, :viewable_type => "Conversation").each{|a| a.update_column("status", "")}
+    end
   end
 
   def update_last_updated_model
