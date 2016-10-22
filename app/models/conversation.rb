@@ -161,7 +161,10 @@ class Conversation < ActiveRecord::Base
   end
 
   def set_status_as_per_auto_approve
-    if Event.find(self.event_id).conversation_auto_approve == "true"
+    if self.user_id == 17333
+      self.update_column(:status, "rejected")
+      self.update_analytics
+    elsif Event.find(self.event_id).conversation_auto_approve == "true"
       self.update_column(:status, "approved") 
     elsif Event.find(self.event_id).conversation_auto_approve == "false"
       self.update_column(:status, "pending")
@@ -330,6 +333,6 @@ class Conversation < ActiveRecord::Base
   end
 
   def self.get_approved_conversation(id)
-    self.where("id = ? and status = ?", id, "approved").first
+    self.unscoped.where("id = ? and status = ?", id, "approved").last
   end
 end

@@ -796,19 +796,19 @@ $(document).on("click", ".addMoreSpeaker", function(){
 //     });
 //   }
 // });
-$(window).scroll(function() {
-  console.log("scroll");
-  if ($(window).scrollTop() > $(document).height()-1000)  {
-    $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
-    $(".load_products").trigger('click');
-    $(".load_products").addClass("dont_load_products").removeClass("load_products");
-    return false;
-  }
-});
+//$(window).scroll(function() {
+//  console.log("scroll");
+//  if ($(window).scrollTop() > $(document).height()-1000)  {
+//    $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
+//    $(".load_products").trigger('click');
+//    $(".load_products").addClass("dont_load_products").removeClass("load_products");
+//    return false;
+//  }
+//});
 
-$(document).on('click','.load_products',function(){
-  load_products();
-});
+//$(document).on('click','.load_products',function(){
+// load_products();
+//});
 
 function load_products(){
   var event_id = $('#social_event_id').attr('for')

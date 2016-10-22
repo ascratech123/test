@@ -1,5 +1,5 @@
 - analytics.each do |selected_analytic|
-  - analytic = Analytic.where(:viewable_id => selected_analytic.viewable_id, :viewable_type => selected_analytic.viewable_type).last
+  - analytic = Analytic.unscoped.where(:viewable_id => selected_analytic.viewable_id, :viewable_type => selected_analytic.viewable_type).last
   - if analytic.viewable_type == "Conversation"
     - conversation = Conversation.get_approved_conversation(analytic.viewable_id)
     - likes = analytic.get_likes(analytic.viewable_id)
@@ -9,6 +9,7 @@
     - find_notification = Notification.find(analytic.viewable_id) rescue nil
   - elsif analytic.viewable_type == "InviteeNotification"
     - find_notification = InviteeNotification.find(analytic.viewable_id).notification
+  - logger.warn conversation.inspect
   -if conversation.present? or find_notification.present?
     .myFeedDiv.post{:class => ("subBoxAdd" if analytic.action == "like" or analytic.action == "comment")}  
       -if conversation.present? 

@@ -75,6 +75,7 @@ namespace :admin do
   end
   # resources :imports
 end
+get "/api/v1/activity_feeds?event_id=:event_id&social=true" => redirect("/api/v1/events/:event_id/social_feeds")
   namespace :api do
     namespace :v1 do
       get 'tokens/destroy_token' => 'tokens#destroy_token', defaults: {format: 'json'}
