@@ -125,7 +125,7 @@ class Invitee < ActiveRecord::Base
     invitees = {}
     event.analytics.where("invitee_id is not null and invitee_id > 0").find_each do |analytic|
       if invitees[analytic.invitee_id].present? and invitees[analytic.invitee_id].first < 1000
-        invitees[analytic.invitee_id] = [invitees[analytic.invitee_id].first + analytic.points, analytic.created_at]
+        invitees[analytic.invitee_id] = [invitees[analytic.invitee_id].first + analytic.points, analytic.created_at] if analytic.points.present?
       elsif invitees[analytic.invitee_id].blank?
         invitees[analytic.invitee_id] = [analytic.points, analytic.created_at] if analytic.points.present?
       end
