@@ -2,8 +2,8 @@
   - social_feeds.each do |post|
     - if post.first.first == :facebook_frames
       - ids =  post.first.second.split('_')
-      .fbiframe{:style => "overflow: auto !important; width:100%; word-wrap: break-word;height:auto !important;"}
-        %iframe{:allowtransparency => "true", :frameborder => "0", :height => "535", :scrolling => "no", :src => "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F#{ids.first}%2Fposts%2F#{ids.second}&width=1px&show_text=true&appId=303479416692337&height=525", :style => "border:none;overflow:hidden;background:#fff; padding-bottom:10px;"}
+      .fbiframe{:style => "width:98% !important; word-wrap: break-word;height:auto !important;"}
+        %iframe{:allowtransparency => "true", :frameborder => "0", :height => "535", :scrolling => "no", :src => "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2F#{ids.first}%2Fposts%2F#{ids.second}&width=340&show_text=true&appId=303479416692337&height=525", :style => "border:none;overflow:hidden;background:#fff; padding-bottom:10px;", "data-width" => "100%"}
     - elsif post.first.first == :twitter_frame
       = post[:twitter_frame].html_safe
     - elsif post.first.first == :insta_frame
@@ -12,3 +12,5 @@
 :javascript
   $('iframe').find('#facebook').css("word-wrap", "break-word");
 
+:css
+  .vmware_bg .fbiframe{background-image:url(/assets/Background_1.png); } 
