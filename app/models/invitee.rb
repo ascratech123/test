@@ -511,17 +511,25 @@ class Invitee < ActiveRecord::Base
     favorites.update_all(updated_at: Time.now)  if favorites.present?
   end
 
+  # def rank
+  #   count = 0
+  #   invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc') rescue nil
+  #   if invitees.present?
+  #     invitees.each do |inv|
+  #       count += 1
+  #       if inv.email == self.email
+  #         break
+  #       end
+  #     end
+  #   end
+  #   count
+  # end
+
   def rank
     count = 0
-    invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc') rescue nil
-    if invitees.present?
-      invitees.each do |inv|
-        count += 1
-        if inv.email == self.email
-          break
-        end
-      end
-    end
+    invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:email) rescue nil
+    index = invitees.find_index(self.email)
+    count = index + 1 if index.present?
     count
   end
 
