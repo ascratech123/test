@@ -17,13 +17,12 @@ class SocialFeedApi
 		HTTParty.get(enconded_url)
 	end
 
-	def self.get_all_instagram_posts(token,hash_tag)
-		instagram_data = HTTParty.get("https://api.instagram.com/v1/tags/#{hash_tag}/media/recent?&access_token=#{token}") rescue ""
+	def self.get_own_instgram_posts(event,max_insta_id,user_id)
+		if max_insta_id.blank?
+		instagram_data = HTTParty.get("https://api.instagram.com/v1/users/#{user_id}/media/recent?count=2&access_token=#{event.instagram_access_token}") rescue ""
+		else
+		instagram_data = HTTParty.get("https://api.instagram.com/v1/users/#{user_id}/media/recent?count=2&max_id=#{max_insta_id}&access_token=#{event.instagram_access_token}") rescue ""
+		end	
 	end
 
-	def self.get_own_instgram_posts(event)
-		user_details = HTTParty.get("https://api.instagram.com/v1/users/self/?access_token=#{event.instagram_access_token}")
-		user_id = user_details["data"]["id"] if user_details.present?
-		instagram_data = HTTParty.get("https://api.instagram.com/v1/users/#{user_id}/media/recent/?access_token=#{event.instagram_access_token}") rescue ""
-	end	
 end
