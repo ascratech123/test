@@ -1,5 +1,6 @@
 - analytics.each do |selected_analytic|
   - analytic = Analytic.unscoped.where(:viewable_id => selected_analytic.viewable_id, :viewable_type => selected_analytic.viewable_type).last
+  - logger.warn analytic
   - if analytic.viewable_type == "Conversation"
     - conversation = Conversation.get_approved_conversation(analytic.viewable_id)
     - likes = analytic.get_likes(analytic.viewable_id)

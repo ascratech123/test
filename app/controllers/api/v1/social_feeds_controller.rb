@@ -28,7 +28,7 @@ class Api::V1::SocialFeedsController < ApplicationController
 end
 
 	def get_feacebook_posts(facebook_tags)
-               Rails.cache.fetch("facebook_posts_#{request.url}", :expires_in => 1.minutes) do
+               Rails.cache.fetch("facebook_posts_#{request.url}", :expires_in => 3.minutes) do
 			#session[:facebook_post_date] = (Date.today).to_date if request.format == "html"
 			session[:facebook_post_date] = (Date.today+1).to_date if request.format == "html"
 			@posts = SocialFeedApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
@@ -48,7 +48,7 @@ end
 	end	
 
 	def get_twitter_posts(event)
-               Rails.cache.fetch("twitter_posts_#{request.url}", :expires_in => 1.minutes) do
+               Rails.cache.fetch("twitter_posts_#{request.url}", :expires_in => 3.minutes) do
 		@twitter_tags =  @twitter_tags = event.twitter_social_tags.split(',').map{|x| '#'+x}.join(' OR ') if event.twitter_social_tags.present?
 		@tweet_handle = event.twitter_handle if event.twitter_handle.present?
 		session[:last_twitter_id] = nil if request.format == "html"

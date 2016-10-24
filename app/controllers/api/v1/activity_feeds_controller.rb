@@ -20,7 +20,7 @@ class Api::V1::ActivityFeedsController < ApplicationController
 
       if event.event_features.not_hidden_icon.pluck(:name).include? "conversations"
         # @event_analytics = event.analytics.where(:viewable_type => ["Conversation","Notification"], :action => ["comment", "conversation post", "like", "share", "notification"]).where("viewable_id is not null").order("created_at desc")
-        @event_analytics = event.analytics.desc_ordered.select("distinct viewable_id, viewable_type, status").where(:viewable_type => ["Conversation","Notification"]).where("viewable_id is not null and status != 'rejected'")
+        @event_analytics = event.analytics.desc_ordered.activity_feed_actions.select("distinct viewable_id, viewable_type, status").where(:viewable_type => ["Conversation","Notification"]).where("viewable_id is not null and status != 'rejected'")
       else
         @event_analytics = event.analytics.where(:viewable_type => ["Notification"]).where("viewable_id is not null").order("created_at desc")
         # @event_analytics = event.analytics.select("distinct viewable_id, viewable_type").where(:viewable_type => ["Notification"]).where("viewable_id is not null")
