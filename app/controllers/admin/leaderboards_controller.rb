@@ -20,9 +20,9 @@ class Admin::LeaderboardsController < ApplicationController
         format.html  
         format.xls do
           @invitees = Invitee.unscoped.where(:event_id => @event.id, :visible_status => 'active').order('points desc')
-          only_columns = [:first_name, :last_name, :email, :designation, :company_name, :points]
-          method_allowed = [:rank]
-          send_data @invitees.to_xls(:only => only_columns, :methods => method_allowed)
+          # only_columns = [:first_name, :last_name, :email, :designation, :company_name, :points]
+          method_allowed = [:name_of_the_invitee, :email, :designation, :company_name, :points, :rank]
+          send_data @invitees.to_xls(:methods => method_allowed)#:only => only_columns, )
         end
       end
     end
