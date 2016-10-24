@@ -69,7 +69,7 @@
                             %img{:src => "/profile_pics/thumb/missing.png"}/
                       .userDetail
                         %p.userName= invitee.name_of_the_invitee 
-                        %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
+                        %p= datetime_with_adjusted_offset_and_display_timezone(conversation.created_at , @event_timezone_offset, @event_display_timezone)
                     .feed-post
                       %p= conversation.description
                       - if conversation.image_file_name.present?
