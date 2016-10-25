@@ -42,6 +42,7 @@ class Admin::EventsController < ApplicationController
       @event.add_default_invitee if @event.mobile_application.present?
       redirect_to admin_client_event_path(:client_id => @event.client_id, :id => @event.id)
     else
+      @landing_page = @event.landing_page if @event.landing_page.present?
       @default_features = @event.set_features_default_list
       @present_feature = @event.set_features rescue []
       render :action => 'new'

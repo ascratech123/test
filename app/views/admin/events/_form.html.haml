@@ -37,6 +37,7 @@
                       = f.object.errors.messages[:event_date_limit].join("") rescue nil
         = f.custom_text_field :event_name, "Event Name *"
         =# f.custom_text_field :event_code, "Event Code"
+        - landing_page = params[:landing_page] || @event.landing_page 
         - if f.object.new_record? and params[:mobile_application_id].present?
           = f.hidden_field :mobile_application_id, :value => "#{params[:mobile_application_id].to_i rescue nil}"
         - if false
@@ -52,7 +53,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
+              %label.col-lg-4.control-label{:for => "_Event Start Date"}="#{landing_page.present? ? "Start Date" : "Start Date *"}"
               = f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab
@@ -75,7 +76,7 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group.timeZoneP-l-0
-              %label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
+              %label.col-lg-4.control-label{:for => "_Event End Date"}="#{landing_page.present? ? "End Date" : "End Date *"}"
               = f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
               .col-lg-3.timeDropdown
                 .timeTab  
@@ -113,6 +114,7 @@
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
         = f.custom_text_area_field :remarks, "Remarks"
+        = f.hidden_field :landing_page, :value => landing_page if (params[:landing_page].present? or @event.landing_page.present?)
     - elsif false  
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
