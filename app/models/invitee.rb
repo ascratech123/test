@@ -534,23 +534,47 @@ class Invitee < ActiveRecord::Base
 
   # def rank
   #   count = 0
-  #   invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc') rescue nil
-  #   if invitees.present?
-  #     invitees.each do |inv|
-  #       count += 1
-  #       if inv.email == self.email
-  #         break
-  #       end
-  #     end
-  #   end
+  #   invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:email) rescue nil
+  #   # if invitees.present?
+  #   #   invitees.each do |inv|
+  #   #     count += 1
+  #   #     if inv.email == self.email
+  #   #       break
+  #   #     end
+  #   #   end
+  #   # end
+  #   index = invitees.find_index(self.email)
+  #   count = index + 1 if index.present?
   #   count
   # end
 
-  def rank
+  def rank  
     count = 0
-    invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:email) rescue nil
-    index = invitees.find_index(self.email)
-    count = index + 1 if index.present?
+    if self.email.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:email) rescue nil
+      index = invitees.find_index(self.email)
+      count = index + 1 if index.present?
+    elsif self.instagram_id.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:instagram_id) rescue nil
+      index = invitees.find_index(self.instagram_id)
+      count = index + 1 if index.present?
+    elsif self.twitter_id.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:twitter_id) rescue nil
+      index = invitees.find_index(self.twitter_id)
+      count = index + 1 if index.present?
+    elsif self.facebook_id.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:facebook_id) rescue nil
+      index = invitees.find_index(self.facebook_id)
+      count = index + 1 if index.present?
+    elsif self.linkedin_id.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:linkedin_id) rescue nil
+      index = invitees.find_index(self.linkedin_id)
+      count = index + 1 if index.present?
+    elsif self.google_id.present?
+      invitees = Invitee.unscoped.where(:event_id => self.event_id, :visible_status => 'active').order('points desc').pluck(:google_id) rescue nil
+      index = invitees.find_index(self.google_id)
+      count = index + 1 if index.present?
+    end
     count
   end
 
