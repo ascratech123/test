@@ -28,6 +28,7 @@ class Api::V1::TokensController < ApplicationController
       status = TataLogin.validate_email_password(@email, @password)
       @user.save if @user.present?
       if status == "Valid user" #or (@user.present? and @user.encrypted_password == BCrypt::Engine.hash_secret('password', @user.salt))
+        @user = Invitee.unscoped.where(event_id:nil).first if @user.present?
         respond_to do |format|
           format.js {render :js => "window.location.href = '#{@registration_setting.login_surl}?key=#{@user.key rescue nil}&secret_key=#{@user.secret_key rescue nil}'" }
           format.html{redirect_to "#{@registration_setting.login_surl}?key=#{@user.key rescue nil}&secret_key=#{@user.secret_key rescue nil}"}
