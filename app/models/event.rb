@@ -82,7 +82,8 @@ class Event < ActiveRecord::Base
   accepts_nested_attributes_for :event_venues
 
   
-  validates :event_name, :client_id, :cities, :start_event_date,:end_event_date,:event_type_for_registration, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :event_name, :client_id, :cities,:event_type_for_registration, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :start_event_date,:end_event_date, presence:{ :message => "This field is required." }, :if => Proc.new{|p|p.landing_page.blank?}
   validates :country_name,:timezone, presence:{ :message => "This field is required." }
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 

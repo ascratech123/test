@@ -37,6 +37,7 @@
 											= f.object.errors.messages[:event_date_limit].join("") rescue nil
 				= f.custom_text_field :event_name, "Event Name *"
 				=# f.custom_text_field :event_code, "Event Code"
+				- landing_page = params[:landing_page] || @event.landing_page 
 				- if f.object.new_record? and params[:mobile_application_id].present?
 					= f.hidden_field :mobile_application_id, :value => "#{params[:mobile_application_id].to_i rescue nil}"
 				- if false
@@ -52,7 +53,7 @@
 				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
 					.bs-component
 						.form-group.timeZoneP-l-0
-							%label.col-lg-4.control-label{:for => "_Event Start Date"} Start date *
+							%label.col-lg-4.control-label{:for => "_Event Start Date"}="#{landing_page.present? ? "Start Date" : "Start Date *"}"
 							= f.custom_text_field_date :start_event_date, "Event Start Date", :id => "date-start", :value => f.object.start_event_date.present? ? f.object.start_event_date.strftime('%d/%m/%Y') : ''
 							.col-lg-3.timeDropdown
 								.timeTab
@@ -75,7 +76,7 @@
 				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
 					.bs-component
 						.form-group.timeZoneP-l-0
-							%label.col-lg-4.control-label{:for => "_Event End Date"} End Date *
+							%label.col-lg-4.control-label{:for => "_Event End Date"}="#{landing_page.present? ? "End Date" : "End Date *"}"
 							= f.custom_text_field_date :end_event_date, "Event End Date", :id => "date-end", :value => f.object.end_event_date.present? ? f.object.end_event_date.strftime('%d/%m/%Y') : ''
 							.col-lg-3.timeDropdown
 								.timeTab  
@@ -227,6 +228,7 @@
 									/       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
 									/       %span.checkbox 
 									/       = group[0]
+				= f.hidden_field :landing_page, :value => landing_page if (params[:landing_page].present? or @event.landing_page.present?)
 		- elsif false  
 			.mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
 				.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
@@ -255,53 +257,3 @@
 			.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
 				.mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
 					= back_button(:back)
-
-.copyEvent.displayNone
-	.popup-overlay
-	.ClientPopup
-		#register-form-copyContentPopup.col.s12.ClientPopup-info
-			%p.txtcenter.m-b-30 Are you sure you want to copy all the content of this event?          
-			%a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
-				ok
-
-:javascript
-	$(window).load(function(){
-		flightTime();
-		minutes();
-		times();  
-	})
-	$('#selectAll').click(function() {
-		$(':checkbox').each(function() {
-			this.checked = true;                        
-		});
-	});  
-	$('#unSelectAll').click(function() {
-		$(':checkbox').each(function() {
-			this.checked = false;                        
-		});
-	});     
-	$(document).ready(function(){  
-		if("{@event.errors[:event_id].present?}")
-		{
-			$('#yes').trigger('click');
-		}      
-	});
-
-- if params[:action] == 'edit'
-	:javascript
-		$("#event_event_id").attr('disabled','disabled')
-		document.getElementById("copyButton").disabled = true;      
-		document.getElementById("customButton").disabled = true;
-	- if @event.copy_event == 'no'
-		:javascript
-			document.getElementById("no").disabled = true;  
-	- elsif @event.copy_event == 'yes'
-		:javascript
-			document.getElementById("no").disabled = true;        
-	-else
-		:javascript
-			document.getElementById("yes").disabled = true;      
-			document.getElementById("no").checked = true;    
-			$(document).ready(function(){  
-				$(".select-eventDiv, .copyCustom-btnDiv").hide()
-			});  
