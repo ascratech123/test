@@ -580,7 +580,7 @@ class Invitee < ActiveRecord::Base
 
   def self.get_leaderboard_count(event)
     invitees = []
-    invitees = Invitee.unscoped.where(:event_id => event.id, :visible_status => 'active').order('points desc').first(5)
+    invitees = Invitee.unscoped.where(:event_id => event.id, :visible_status => 'active').order('points desc')#.first(5)
     invitees.length
   end
 
