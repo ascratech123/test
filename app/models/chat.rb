@@ -79,7 +79,9 @@ class Chat < ActiveRecord::Base
     if mobile_application.present? and mobile_application.android_push_service == "fcm"
       #gcm_obj = GCM.new(push_pem_file.android_push_key)
       fcm_obj = FCM.new(push_pem_file.android_push_key)  
-      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
+      # options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
+      options = {'to'=> tokens,'notification' => {'body' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')},'data'=>{'type'=>'fcm'}}
+
       response = fcm_obj.send(tokens, options)
       Rails.logger.info("******************************#{response}***************response of fcm*************************************")
     else  
@@ -97,14 +99,25 @@ class Chat < ActiveRecord::Base
     end
   end
 
-  def created_at_with_event_timezone
-    # self.created_at.in_time_zone(self.event_timezone)
-    self.created_at + self.event_timezone_offset.to_i.seconds
-  end
+    def set_dates_with_event_timezone
+    	event = self.event
+			self.update_column("created_at_with_event_timezone", self.created_at.in_time_zone(event.timezone))
+    	self.update_column("updated_at_with_event_timezone", self.updated_at.in_time_zone(event.timezone))    
+    end  
+ 
+	  def date_time_with_event_timezone
+	    self.date_time.in_time_zone(self.event_timezone)
+	  end
+	 
 
-  def updated_at_with_event_timezone
-    # self.updated_at.in_time_zone(self.event_timezone)
-    self.updated_at + self.event_timezone_offset.to_i.seconds
-  end
+	  def created_at_with_event_timezone
+	    # self.created_at.in_time_zone(self.event_timezone)
+	    self.created_at + self.event_timezone_offset.to_i.seconds
+	  end
+
+	  def updated_at_with_event_timezone
+	    # self.updated_at.in_time_zone(self.event_timezone)
+	    self.updated_at + self.event_timezone_offset.to_i.seconds
+	  end
 
 end
