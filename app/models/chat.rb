@@ -2,6 +2,7 @@ class Chat < ActiveRecord::Base
   require 'rubygems'
   require 'aws-sdk'
   require 'push_notification'
+  require 'fcm'
   attr_accessor :platform
 
   belongs_to :event
@@ -73,10 +74,20 @@ class Chat < ActiveRecord::Base
   end
 
   def self.push_to_android(tokens, msg, push_pem_file, b_count=1, push_page='', page_id='', sender, member_ids, event_id, title)
-    gcm_obj = GCM.new(push_pem_file.android_push_key)
-    options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')}}
-    response = gcm_obj.send(tokens, options)
-    Rails.logger.info("******************************#{response}***************response of gcm*************************************")
+    event = Event.find_by_id(event_id)
+    mobile_application = event.mobile_application
+    if mobile_application.present? and mobile_application.android_push_service == "fcm"
+      #gcm_obj = GCM.new(push_pem_file.android_push_key)
+      fcm_obj = FCM.new(push_pem_file.android_push_key)  
+      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
+      response = fcm_obj.send(tokens, options)
+      Rails.logger.info("******************************#{response}***************response of fcm*************************************")
+    else  
+      gcm_obj = GCM.new(push_pem_file.android_push_key)
+      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')}}
+      response = gcm_obj.send(tokens, options)
+      Rails.logger.info("******************************#{response}***************response of gcm*************************************")
+    end
   end
 
   def create_analytic_record
