@@ -80,8 +80,8 @@ class Chat < ActiveRecord::Base
       #gcm_obj = GCM.new(push_pem_file.android_push_key)
       fcm_obj = FCM.new(push_pem_file.android_push_key)  
       # options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
-      options = {'to'=> tokens,'notification' => {'body' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')},'data'=>{'type'=>'fcm'}}
-
+      #options = {'to'=> tokens,'notification' => {'body' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')},'data'=>{'type'=>'fcm'}}
+      options = {'to'=>"ciVif04l0gg:APA91bEhZxxHOnD6BBqIO0R6e07XuIMsK3PD5oeueAOwvW2uR7LVTquBzoMWTCOySxJI_UdK765hdbeDA5ioPSSVWT2iAOy9BXV5wzz1Wfh6oACfhKV0uGF_uVtXQBt2YepNPrTgCSxm","notification" =>{"body" => "Your hvae just now created screening of MASAAN. Lets make it happen!","title" => "HOBNOB!","icon" =>"ic_launcher","color" => "#622D83"},"data" => {"is_from_notification" => "true"}}
       response = fcm_obj.send(tokens, options)
       Rails.logger.info("******************************#{response}***************response of fcm*************************************")
     else  
