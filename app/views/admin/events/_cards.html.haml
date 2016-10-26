@@ -100,13 +100,12 @@
             - if ["polls","conversations","qnas","quizzes"].include?(url) and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)#!(current_user.has_role? :moderator) and ["polls","conversations","qnas"].include?(url)
               |
               - if url == "polls"
-                / - binding.pry
                 / = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank", :remote => true
                 / @event.polls.pluck(:wall_type).uniq.compact!
                 - if @event.polls.pluck(:wall_type).compact!.present? and @event.polls.pluck(:wall_type).uniq.compact!.count > 1
                   = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
                 - elsif @event.polls.pluck(:wall_type).compact!.present? and @event.polls.pluck(:wall_type).uniq.compact!.count == 1
-                  = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall"),:class => " centerAlign", :target => "_blank"
+                  = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall",:wall_type=>"#{@event.polls.pluck(:wall_type).compact!.first}"),:class => " centerAlign", :target => "_blank"
                 - else
                   = link_to "Go to Wall", admin_event_polls_path(:event_id => @event.id, :type => "public_wall", option: "partial", redirect_page: "new") , :class => "centerAlign", :target => "_blank"
               - elsif url == "qnas"
@@ -243,5 +242,4 @@
         .mdl-card__menu
           %button.mdl-button.mdl-button--icon.mdl-js-button.mdl-js-ripple-effect
             %i.material-icons more_vert   
-
 
