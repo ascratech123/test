@@ -79,9 +79,12 @@ class Chat < ActiveRecord::Base
     if mobile_application.present? and mobile_application.android_push_service == "fcm"
       #gcm_obj = GCM.new(push_pem_file.android_push_key)
       fcm_obj = FCM.new(push_pem_file.android_push_key)  
-      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
+      # options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M'),'type' => "FCM"}}
+      # response = fcm_obj.send(tokens, options)
+      # Rails.logger.info("******************************#{response}***************response of fcm*************************************")
+      options = {'to'=>tokens, {'notification' => {'body' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')},'data'=>{'type'=>'fcm'}}}
       response = fcm_obj.send(tokens, options)
-      Rails.logger.info("******************************#{response}***************response of fcm*************************************")
+      Rails.logger.info("******************************#{response}***************response of fcm*************************************")      
     else  
       gcm_obj = GCM.new(push_pem_file.android_push_key)
       options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => 0, 'title' => title, 'sender_id' => sender.id, 'sender_name' => sender.get_invitee_name, 'member_ids' => member_ids, 'event_id' => event_id, 'time' => Time.now.strftime('%d/%m/%Y %H:%M')}}
