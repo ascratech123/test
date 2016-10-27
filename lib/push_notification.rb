@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'aws-sdk'
-
+require 'fcm'
 module PushNotification
   
   
