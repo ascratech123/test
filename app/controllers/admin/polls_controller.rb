@@ -22,7 +22,6 @@ class Admin::PollsController < ApplicationController
     #     end
     #   end
     # end
-    # binding.pry
     if params[:option].present? and not params[:wall_type].present?
       respond_to do |format|
         format.html
@@ -37,10 +36,12 @@ class Admin::PollsController < ApplicationController
           send_data @polls.to_xls(:only => only_columns)
         end
       end
-    else
-      @polls = @polls.where(wall_type: params[:wall_type], :on_wall => "yes") if params[:wall_type].present?
-      @polls = @polls.where(:on_wall => "yes") if not params[:wall_type].present?
+    elsif params[:wall_type].present?
+      @polls = @polls.where(wall_type: params[:wall_type], :on_wall => "yes") #if params[:wall_type].present?
+      #@polls = @polls.where(:on_wall => "yes") if not params[:wall_type].present?
       render :layout => false
+    else params[:wall_type].blank?
+      redirect_to admin_event_polls_path(:event_id => @event.id, :type => "public_wall",:wall_type=>"#{@event.polls.pluck(:wall_type).compact!.first}")
     end  
   end
 
