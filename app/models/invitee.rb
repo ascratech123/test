@@ -574,7 +574,7 @@ class Invitee < ActiveRecord::Base
   def self.get_leaderboard_count(event)
     invitees = []
     invitees = Invitee.unscoped.where(:event_id => event.id, :visible_status => 'active').order('points desc')#.first(5)
-    invitees.length
+    invitees.count
   end
 
   def self.social_media_data(provider,facebook_id,linkedin_id, google_id, twitter_id, instagram_id, user_email,first_name, last_name, event)
