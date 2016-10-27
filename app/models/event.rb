@@ -151,7 +151,6 @@ def content_is_present
   end
   
   def add_venues_from_event_venues
-    # binding.pry
     if self.event_venues.present?
       self.venues = self.event_venues.first.venue
       # self.venues = event_venue
@@ -159,7 +158,6 @@ def content_is_present
   end
 
   def event_venue_name
-    # binding.pry
     self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
   end
 
@@ -734,8 +732,6 @@ def content_is_present
     end
   end
 
-
-
   def event_start_time_in_utc
     event_time_in_timezone = self.start_event_time
     difference_in_seconds = Time.now.utc.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
@@ -913,5 +909,20 @@ def content_is_present
     h = my_profile.attributes['enabled_attr'] rescue {}
     h
   end
-
+  
+  def create_marketing_app_event
+    self.landing_page = true
+    self.event_name = "test"
+    self.cities = "Mumbai"
+    #self.start_event_date = "2016-10-11 00:00:00"
+    self.start_event_time = "2016-10-11 00:00:00"
+    self.country_name = "India"
+    self.timezone = "Chennai"
+    if self.save
+      result = "true"
+    else
+      result = "false"
+    end
+    result
+  end
 end

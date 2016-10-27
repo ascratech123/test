@@ -32,7 +32,15 @@ class Admin::EventsController < ApplicationController
     @event.event_venues.build
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
-    @present_feature = @event.set_features rescue []    
+    @present_feature = @event.set_features rescue []
+    if (params[:landing_page].present? and params[:landing_page] == "true")
+      result = @event.create_marketing_app_event
+      if result == "true"
+        redirect_to new_admin_event_mobile_application_path(:event_id=>@event.id,:old_one => true)
+      else
+        redirect_to :back
+      end
+    end
   end
   
   def create
