@@ -109,6 +109,9 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.9.2)
       faraday (>= 0.7.4, < 0.10)
+    fcm (0.0.2)
+      httparty
+      json
     gcm (0.1.1)
       httparty
       json
@@ -338,6 +341,7 @@ DEPENDENCIES
   devise
   exception_notification
   execjs
+  fcm
   gcm
   grocer
   haml
