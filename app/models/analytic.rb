@@ -139,7 +139,8 @@ class Analytic < ActiveRecord::Base
   end
 
   def self.get_top_three_actions(event_id, from_date, to_date)
-    analytics = Analytic.where('action != ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'page view', event_id, from_date, to_date)
+    #analytics = Analytic.where('action != ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'page view', event_id, from_date, to_date)
+    analytics = Analytic.where('action NOT IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', ['page view', 'notification'], event_id, from_date, to_date)
     arr = analytics.group(:action).count.sort_by{|k, v| v}.last(3).reverse
     [analytics.count, arr]
   end
@@ -151,7 +152,8 @@ class Analytic < ActiveRecord::Base
   end
 
   def self.get_top_actions(count, event_id, from_date, to_date)
-    analytics = Analytic.where('action != ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'page view', event_id, from_date, to_date)
+    #analytics = Analytic.where('action != ? and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', 'page view', event_id, from_date, to_date)
+    analytics = Analytic.where('action NOT IN (?) and event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', ['page view', 'notification'], event_id, from_date, to_date)
     arr = analytics.group(:action).count.sort_by{|k, v| v}.last(count).reverse
     [analytics.count, arr]
   end
@@ -359,7 +361,8 @@ class Analytic < ActiveRecord::Base
     hsh['e-Kit Document Views'] = Analytic.where('event_id = ? and viewable_type = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ? and viewable_id IS NOT NULL', event_id, 'E-Kit', 'page view', start_date, end_date).count if features.include? 'e_kits'
     hsh['Quiz answered'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'played', start_date, end_date).count if features.include? 'quizzes'
     hsh['QR Code scans'] = Analytic.where('event_id = ? and action = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, 'qr code scan', start_date, end_date).count if features.include? 'qr_code'
-    hsh['Notifications sent'] = Notification.where('event_id = ? and pushed = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, true, start_date, end_date).count #if features.include? 'agendas'
+    #hsh['Notifications sent'] = Notification.where('event_id = ? and pushed = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, true, start_date, end_date).count #if features.include? 'agendas'
+    hsh['Notifications sent'] = Notification.where('event_id = ? and Date(created_at) >= ? and Date(created_at) <= ?', event_id, start_date, end_date).count #if features.include? 'agendas'
     all_hsh['user_engagements'] = Analytic.get_user_engagements(event_id, params[:start_date], params[:end_date], params[:filter_date])
     all_hsh['feature_count'] = Analytic.get_features_count(event_id, params[:start_date], params[:end_date])
     all_hsh['xaxis_interval_labels_and_interval'] = Analytic.get_x_axis_labels_and_interval(params)

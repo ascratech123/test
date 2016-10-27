@@ -25,7 +25,7 @@ class UserFeedback < ActiveRecord::Base
 
   def update_feedback_form_id
     feedback_id = Feedback.find(self.feedback_id)
-    update_feedback_form_id = feedback_id.update_column('feedback_form_id', feedback_id.feedback_form.id)
+    update_feedback_form_id = feedback_id.update_column('feedback_form_id', feedback_id.feedback_form.id) rescue nil
   end
   
   def get_event_id
