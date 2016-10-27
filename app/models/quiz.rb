@@ -82,6 +82,10 @@ class Quiz < ActiveRecord::Base
   end
 
   def get_correct_answer_percentage
+    Rails.cache.fetch("Quiz_get_correct_answer_percentage#{self.id}") { get_correct_answer_percentage! }
+  end
+
+  def get_correct_answer_percentage!
     correct_percentage = 0
     count = 0
     total_ans = self.user_quizzes
@@ -96,10 +100,15 @@ class Quiz < ActiveRecord::Base
   end
 
   def get_total_answer
-    self.user_quizzes.length rescue 0
+    # self.user_quizzes.length rescue 0
+    self.user_quizzes_count_cache
   end
 
-  def get_correct_answer_count
+  def set_correct_answer
+    Rails.cache.fetch("Quiz_get_correct_answer_count#{self.id}") { get_correct_answer_count! }
+  end
+
+  def get_correct_answer_count!
     count = 0
     total_ans = self.user_quizzes
     total_ans.each do |ans|

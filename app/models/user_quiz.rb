@@ -1,6 +1,6 @@
 class UserQuiz < ActiveRecord::Base
 	attr_accessor :platform
-  belongs_to :quiz
+  belongs_to :quiz, :counter_cache => :user_quizzes_count_cache
 	belongs_to :user
   after_create :create_analytic_record
 	validates :user_id,
@@ -14,7 +14,7 @@ class UserQuiz < ActiveRecord::Base
 
 	validates_uniqueness_of :user_id, :scope => [:quiz_id], :message => 'Quiz already answered'
 
-  after_save :update_quiz
+  after_save :update_quiz, :clear_quiz_cache
 
   default_scope { order('created_at desc') }
 
@@ -23,6 +23,11 @@ class UserQuiz < ActiveRecord::Base
                 quiz.update_column(:updated_at, self.updated_at) rescue nil
                 quiz.update_last_updated_model
 	end
+
+  def clear_quiz_cache
+    Rails.cache.delete("Quiz_get_correct_answer_percentage#{self.quiz_id}") { set_correct_answer! }
+    Rails.cache.delete("Quiz_get_correct_answer_count#{self.id}")
+  end
 
   def email
     event = self.quiz.event
