@@ -514,10 +514,12 @@ class Invitee < ActiveRecord::Base
   
   def generate_qr_code
     # self.qr_code = QRCode.generate_qr_code(self.name_of_the_invitee, self.location, self.street, self.locality, self.country, self.mobile_no, self.email, self.website)
-    if self.event.mobile_application.present? and self.qr_code.blank?
-      self.qr_code = QRCode.generate_qr_code(self.event.mobile_application.id, self.id)
-      self.save
-    end
+    if self.event.present?
+      if self.event.mobile_application.present? and self.qr_code.blank?
+        self.qr_code = QRCode.generate_qr_code(self.event.mobile_application.id, self.id)
+        self.save
+      end
+    end  
   end
 
   def update_favorite
