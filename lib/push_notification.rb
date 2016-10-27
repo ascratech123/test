@@ -65,7 +65,7 @@ module PushNotification
       type = notification.group_ids.present? ? notification.group_ids : 'All'
       page_id = 0
       time = notification.push_datetime
-      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, :formatted_push_datetime_with_event_timezone => notification.formatted_push_datetime_with_event_timezone}}
+      options = {'data' => {'message' => msg, 'page' => push_page, 'page_id' => page_id, 'title' => title, 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, :formatted_push_datetime_with_event_timezone => notification.formatted_push_datetime_with_event_timezone, 'push_type' => "fcm"}}
       response = fcm_obj.send(tokens, options)
       puts "******************************#{response}*************response of fcm***************************************"
       Rails.logger.info("******************************#{response}***************response of fcm*************************************")
