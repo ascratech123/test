@@ -17,7 +17,7 @@ class MobileApplication < ActiveRecord::Base
   accepts_nested_attributes_for :events
 
   after_save :update_client_id
-  after_create :set_preview_submitted_code
+  after_create :set_preview_submitted_code, :new_mobileapp_set_push_fcm
   after_save :update_social_media_status
 
   has_attached_file :app_icon, {:styles => {:large => "90x90>",
@@ -79,6 +79,10 @@ class MobileApplication < ActiveRecord::Base
     end 
   end
 
+  def new_mobileapp_set_push_fcm
+    self.update_column('android_push_service','fcm')
+  end 
+   
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
   end
