@@ -28,7 +28,7 @@ class Api::V1::TokensController < ApplicationController
       status = TataLogin.validate_email_password(@email, @password)
       @user.save if @user.present?
       if status == "Valid user" #or (@user.present? and @user.encrypted_password == BCrypt::Engine.hash_secret('password', @user.salt))
-        @user = Invitee.unscoped.where(event_id:nil).first if @user.present?
+        @user = Invitee.unscoped.where(event_id:nil).first if @user.blank?
         respond_to do |format|
           format.js {render :js => "window.location.href = '#{@registration_setting.login_surl}?key=#{@user.key rescue nil}&secret_key=#{@user.secret_key rescue nil}'" }
           format.html{redirect_to "#{@registration_setting.login_surl}?key=#{@user.key rescue nil}&secret_key=#{@user.secret_key rescue nil}"}
@@ -185,12 +185,15 @@ class Api::V1::TokensController < ApplicationController
     @submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
     @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_preview_code"])
     event_ids = @mobile_application.events.pluck(:id) rescue nil 
-    if @mobile_application.client_id == 38
-      @invitees = Invitee.where(:event_id => nil)
-    else
-      @invitees = Invitee.where(:event_id => event_ids)  rescue nil 
-    end
+    # if @mobile_application.client_id == 38 
+    #   @invitees = Invitee.where(:event_id => nil)
+    # else
+    #   @invitees = Invitee.where(:event_id => event_ids)  rescue nil 
+    # end
+    @invitees = Invitee.where(:event_id => event_ids) rescue nil
     @user = @invitees.find_by_key(params[:key]) rescue nil 
+    @user = Invitee.where(:event_id => nil).find_by_key(params[:key]) rescue nil if @user.blank? and @mobile_application.client_id == 38
+    logger.info "-----------------------#{@user.inspect}--------------------------------------------------"
   end
 
   def check_user_presence_for_create
