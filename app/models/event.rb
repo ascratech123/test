@@ -125,7 +125,6 @@ class Event < ActiveRecord::Base
   end
   
   def add_venues_from_event_venues
-    # binding.pry
     if self.event_venues.present?
       self.venues = self.event_venues.first.venue
       # self.venues = event_venue
@@ -133,7 +132,6 @@ class Event < ActiveRecord::Base
   end
 
   def event_venue_name
-    # binding.pry
     self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
   end
 
@@ -731,4 +729,19 @@ class Event < ActiveRecord::Base
   #def display_time_zone
   #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
   #end
+  def create_marketing_app_event
+    self.landing_page = true
+    self.event_name = "test"
+    self.cities = "Mumbai"
+    #self.start_event_date = "2016-10-11 00:00:00"
+    self.start_event_time = "2016-10-11 00:00:00"
+    self.country_name = "India"
+    self.timezone = "Chennai"
+    if self.save
+      result = "true"
+    else
+      result = "false"
+    end
+    result
+  end
 end
