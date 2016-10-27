@@ -68,6 +68,10 @@ class Poll < ActiveRecord::Base
   end
   
   def option_percentage
+    Rails.cache.fetch("poll_option_percentage#{self.id}") { option_percentage! }
+  end
+
+  def option_percentage!
     data = {}
     option1=option2=option3=option4=option5=option6=option7=option8=option9=option10=0
     data["total"] = self.user_polls.count
@@ -153,13 +157,13 @@ class Poll < ActiveRecord::Base
     self.update_column("poll_end_date_time_with_event_timezone", self.poll_end_date_time.to_datetime.in_time_zone(event.timezone))    
   end
 
-  def poll_start_date_time_with_event_timezone
-    self.poll_start_date_time.in_time_zone(self.event.timezone)
-  end
+  # def poll_start_date_time_with_event_timezone
+  #   self.poll_start_date_time.in_time_zone(self.event.timezone)
+  # end
 
-  def poll_end_date_time_with_event_timezone
-    self.poll_end_date_time.in_time_zone(event.timezone)
-  end
+  # def poll_end_date_time_with_event_timezone
+  #   self.poll_end_date_time.in_time_zone(event.timezone)
+  # end
   
   def self.set_auto_approve(value,event)
     event.update_column(:poll_auto_approve, value)

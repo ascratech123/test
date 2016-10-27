@@ -14,7 +14,7 @@ class UserPoll < ActiveRecord::Base
 
   validates_uniqueness_of :user_id, :scope => [:poll_id], :message => 'Poll already taken'
 
-  after_save :update_poll
+  after_save :update_poll, :clear_poll_cache
 
   default_scope { order('created_at desc') }
 
@@ -24,6 +24,10 @@ class UserPoll < ActiveRecord::Base
       poll.update_column(:updated_at, self.updated_at)
       poll.update_last_updated_model     
     end
+  end
+
+  def clear_poll_cache
+    Rails.cache.delete("poll_option_percentage#{self.id}")
   end
 
   def Timestamp
