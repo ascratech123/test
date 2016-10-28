@@ -67,7 +67,7 @@ class Event < ActiveRecord::Base
 
   
   validates :event_name, :client_id, :cities, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
-  validates :start_event_date,:end_event_date, presence:{ :message => "This field is required." }, :if => Proc.new{|p|p.landing_page.blank?}
+  validates :start_event_date,:end_event_date, presence:{ :message => "This field is required." }, :if => Proc.new{|p|p.marketing_app.blank?}
   validates :country_name,:timezone, presence:{ :message => "This field is required." }
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 
@@ -324,7 +324,7 @@ class Event < ActiveRecord::Base
   
   def set_features_default_list()
     default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
-    default_features
+    self.marketing_app == true ? default_features.push("all_events") : default_features
   end
 
   def set_features_static_list()
@@ -372,7 +372,7 @@ class Event < ActiveRecord::Base
   end
 
   def check_event_content_status
-    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats', 'activity_feeds']
+    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats', 'activity_feeds','all_events']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
     #features += ['contacts', 'emergency_exit', 'event_highlights', 'highlight_images']
     count = 0
@@ -380,7 +380,7 @@ class Event < ActiveRecord::Base
     content_missing_arr = []
     features.each do |feature|
       feature = 'images' if feature == 'galleries'
-      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings') and (feature != 'emergency_exits' and feature != 'emergency_exit')
+      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings' or feature == 'all_events') and (feature != 'emergency_exits' and feature != 'emergency_exit')
       condition, feature = EmergencyExit.where(:event_id => self.id).blank?, 'emergency_exits' if feature == 'emergency_exits' or feature == 'emergency_exit'
       if (condition or (feature == 'abouts' and self.about.blank? or ((feature == 'event_highlights' and self.description.blank?) )))
         count += 1
@@ -730,7 +730,7 @@ class Event < ActiveRecord::Base
   #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
   #end
   def create_marketing_app_event
-    self.landing_page = true
+    self.marketing_app = true
     self.event_name = "test"
     self.cities = "Mumbai"
     #self.start_event_date = "2016-10-11 00:00:00"

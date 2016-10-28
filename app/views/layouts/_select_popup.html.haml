@@ -54,4 +54,4 @@
         - if (!current_user.has_role? :moderator and !current_user.has_role? :event_admin) and params[:wall] != "true"
           - if prompt_message == 'Select Event'
             Want to add a new Marketing App? 
-            = link_to "Click here", new_admin_client_event_path(:client_id => params[:client_id],:landing_page => true)  
+            = link_to "Click here", new_admin_client_event_path(:client_id => params[:client_id],:marketing_app => true)  
