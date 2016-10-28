@@ -12,6 +12,8 @@ class AgendaTrack < ActiveRecord::Base
   def save_agendas
     for agenda in self.agendas
       agenda.update_column(:updated_at, Time.now.in_time_zone("UTC"))
+      agenda.update_last_updated_model
+      agenda.clear_cache
     end 
   end 
 
