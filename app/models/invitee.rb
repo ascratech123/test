@@ -148,7 +148,17 @@ class Invitee < ActiveRecord::Base
         conversation.update_column(:first_name_user, self.first_name) if self.first_name.present? and self.first_name_changed?
         conversation.update_column(:last_name_user, self.last_name) if self.last_name.present? and self.last_name_changed?
         conversation.update_column(:profile_pic_url_user, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
+        conversation.update_json_data
       end
+      Rails.cache.delete("invitee_first_name_#{self.id}")
+      Rails.cache.delete("invitee_profile_pic_url_#{self.id}")
+      Rails.cache.delete("invitee_last_name_#{self.id}")
+      Rails.cache.delete("invitee_user_name_#{self.id}")
+      Rails.cache.delete("invitee_company_name_#{self.id}")
+      Rails.cache.delete("invitee_get_company_name_#{self.id}")
+      Rails.cache.delete("invitee_invitee_email_#{self.id}")
+      Rails.cache.delete("invitee_email_#{self.id}")
+      Rails.cache.delete("invitee_name_#{self.id}")
     end
   end
 

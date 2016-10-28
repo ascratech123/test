@@ -64,8 +64,17 @@ module SyncMobileData
       end
       case model
         when 'Conversation'
-          # info = info.where(:status => 'approved')
+          info = info.where(:status => 'approved')
           data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :profile_pic_url, :share_count])
+          # data[:"#{name_table(model)}"] = info.collect{|c| c.get_json_data}
+          conversation_ids = info.map(&:id)
+          info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
+          #info = Comment.get_comments(conversation_ids,start_event_date, end_event_date) rescue []
+          data[:"comments"] = info.as_json(:methods => [:user_name, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name]) rescue []
+          if current_user.present?
+            info = Like.where(:likable_id => conversation_ids, likable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
+            data[:"#{name_table(model)}"] = info.as_json() rescue []
+          end
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
@@ -85,14 +94,11 @@ module SyncMobileData
           themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
           data[:"#{name_table(model)}"] = themes.as_json(:except => [:event_background_image_file_name, :event_background_image_content_type, :event_background_image_file_size],:methods => [:event_background_image_url]) rescue []  
         when 'Winner'
-          award_ids = Award.where(:event_id => event_ids) rescue nil
+          award_ids = Award.where(:event_id => event_ids).pluck(:id) rescue nil
           info = Winner.where(:award_id => award_ids, :updated_at => start_event_date..end_event_date) rescue nil
           data[:"#{name_table(model)}"] = info.as_json() rescue []
         when 'Comment'
-          conversation_ids = Conversation.where(:event_id => event_ids) rescue nil
-          info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
-          #info = Comment.get_comments(conversation_ids,start_event_date, end_event_date) rescue []
-          data[:"#{name_table(model)}"] = info.as_json(:methods => [:user_name, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name]) rescue []
+          # conversation_ids = Conversation.where(:event_id => event_ids, :status => "approved").pluck(:id) rescue nil
         when 'Sponsor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at], :methods => [:image_url]) rescue []  
         when 'Exhibitor'
@@ -104,6 +110,7 @@ module SyncMobileData
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
+          polls = info
           data[:"#{name_table(model)}"] = info.as_json(:except => [:option010], :methods => [:option_percentage, :option10]) rescue []
         when 'Invitee'
           arr = []
@@ -123,6 +130,7 @@ module SyncMobileData
             data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url]) rescue []
           end
         when 'Quiz'
+          quizzes = info
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_correct_answer_percentage, :get_total_answer, :get_correct_answer_count]) rescue []  
         when 'LogChange'
           if not (start_event_date == "01/01/1990 13:26:58".to_time.utc)
@@ -137,21 +145,21 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info.as_json(:only=> [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id], :methods => [:image_url]) rescue []
           end
         when 'Like'
-          if current_user.present?
-            conversation_ids = Conversation.where(:event_id => event_ids) rescue nil
-            info = Like.where(:likable_id => conversation_ids, likable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json() rescue []
-          end
+          # if current_user.present?
+          #   conversation_ids = Conversation.where(:event_id => event_ids) rescue nil
+          #   info = Like.where(:likable_id => conversation_ids, likable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
+          #   data[:"#{name_table(model)}"] = info.as_json() rescue []
+          # end
         when 'UserPoll'
           if current_user.present?
-            poll_ids = Poll.where(:event_id => event_ids) rescue nil
-            info = UserPoll.where(:poll_id => poll_ids, :updated_at => start_event_date..end_event_date) rescue []
+            polls = Poll.where(:event_id => event_ids) if polls.blank?
+            info = UserPoll.where(:poll_id => polls.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json() rescue []
           end
         when 'UserQuiz'
           if current_user.present?
-            quiz_ids = Quiz.where(:event_id => event_ids) rescue nil
-            info = UserQuiz.where(:quiz_id => quiz_ids, :updated_at => start_event_date..end_event_date) rescue []
+            quizzes = Quiz.where(:event_id => event_ids) rescue nil if quizzes.blank?
+            info = UserQuiz.where(:quiz_id => quizzes.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json() rescue []
           end  
         when 'Rating'

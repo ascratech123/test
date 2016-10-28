@@ -25,6 +25,7 @@ class Analytic < ActiveRecord::Base
        conversation.update_column(:first_name_user, invitee.first_name)
        conversation.update_column(:last_name_user, invitee.last_name)
        conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url)
+       Rails.cache.delete("invitee_share_count_#{conversation.id}")
      end
    end
 

@@ -26,6 +26,7 @@ class Like < ActiveRecord::Base
       conversation.update_column(:profile_pic_url_user, invitee.profile_pic.url(:large))      
       conversation.update_column(:updated_at, self.updated_at)
       conversation.update_last_updated_model
+      conversation.update_json_data
     end
   end
 
@@ -33,6 +34,7 @@ class Like < ActiveRecord::Base
     conversation = Conversation.find_by_id(self.likable_id) rescue nil    
     conversation.update_column(:action, nil) if conversation.present?
     conversation.update_column(:updated_at, self.updated_at)
+    conversation.update_json_data
   end
 	
   def email

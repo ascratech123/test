@@ -23,7 +23,7 @@ class Conversation < ActiveRecord::Base
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
   after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :update_json_data
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -43,6 +43,11 @@ class Conversation < ActiveRecord::Base
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
+  end
+
+  def update_json_data
+    json = self.to_json(:except => [:image_file_name, :image_content_type, :image_file_size, :json_data], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :profile_pic_url, :share_count])
+    self.update_column("json_data", json)
   end
 
   def perform_conversation(conversation)
@@ -308,4 +313,13 @@ class Conversation < ActiveRecord::Base
   def self.get_approved_conversation(id)
     self.where("id = ? and status = ?", id, "approved").first
   end
+
+  def get_json_data
+    if self.json_data.present?
+      JSON.parse(self.json_data)
+    else  
+      ""
+    end
+  end
+
 end

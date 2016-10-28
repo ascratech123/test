@@ -24,6 +24,7 @@ class Comment < ActiveRecord::Base
       conversation.update_column(:last_update_comment_description, self.description)
       conversation.update_last_updated_model
       conversation.update_column(:updated_at, self.updated_at)
+      conversation.update_json_data
     end
   end
 
@@ -32,6 +33,7 @@ class Comment < ActiveRecord::Base
     conversation.update_column(:action, nil) if conversation.present?
     conversation.update_column(:updated_at, self.updated_at)
     conversation.update_column(:last_interaction_at, self.updated_at)
+    conversation.update_json_data
   end
 
 
@@ -173,7 +175,7 @@ class Comment < ActiveRecord::Base
     created_at_with_tmz.sub(year, "")    
   end
 
-  def formatted_created_at_with_event_timezone
+  def formatted_updated_at_with_event_timezone
     Rails.cache.fetch("formatted_updated_at_with_event_timezone_#{self.id}") { formatted_updated_at_with_event_timezone! }
   end
 

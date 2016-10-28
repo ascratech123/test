@@ -662,6 +662,7 @@ class Event < ActiveRecord::Base
           obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model
+          obj.update_json_data if table_name == "conversations"
           # obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
           for c in obj.comments
             c.update_column("updated_at", Time.now)
