@@ -104,7 +104,7 @@ class Quiz < ActiveRecord::Base
     self.user_quizzes_count_cache
   end
 
-  def set_correct_answer
+  def get_correct_answer_count
     Rails.cache.fetch("Quiz_get_correct_answer_count#{self.id}") { get_correct_answer_count! }
   end
 
