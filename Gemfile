@@ -47,6 +47,10 @@ gem 'ransack'
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+gem 'newrelic_rpm'
+gem 'twitter'
+gem 'instagram'
+gem 'actionpack-action_caching'
 
 # gem "bullet", :group => "development"
 
@@ -56,6 +60,3 @@ group :development, :test do
   gem 'spring'
 end
 
-gem 'newrelic_rpm'
-gem 'twitter'
-gem 'instagram'
