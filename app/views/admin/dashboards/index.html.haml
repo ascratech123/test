@@ -67,7 +67,8 @@
           - client_ids = @clients.pluck('clients.id')
           / - client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
           - client_ids += Event.with_roles(session[:current_user_role], current_user).pluck(:client_id)
-          - @events = Event.where(:client_id => client_ids)
+          - @events = Event.where(:client_id => client_ids,:marketing_app => nil)
+          - @marketing_apps = Event.where(:client_id => client_ids,:marketing_app => true)
           - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)      
@@ -219,6 +220,25 @@
                           - if true#check_curent_user_role("mobile_application")
                             %a{:href => admin_clients_path(:feature => 'analytics'), :class => "displayBlock"}
                               = 'View Analytics'
+                - if @marketing_apps.present?
+                  .col-sm-3.col-xl-3
+                    .panel.panel-tile.manageusers
+                      .panel-body
+                        .row.pv5
+                          .col-xs-5.ph10
+                            = image_tag("coloured_icons/user_3.png")
+                          .col-xs-7.pl5
+                            %h6.text-muted Marketing Apps
+                            %h2.fs30.mt5.mbn
+                              = link_to @marketing_apps.count, admin_clients_path(:feature => 'marketing_apps')
+                              =# @events.count
+                        .row.pv5.AddmoreCard
+                          .col-xs-12.ph5
+                            / -if true#check_curent_user_role("mobile_application")
+                            /   %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
+                            /     = 'Add One' if @users.count <= 0
+                            /     = 'New User' if @users.count > 0
+                            /   = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}  
               =# render :partial => 'admin/layouts/card_event', :locals => {:image_path => "coloured_icons/analytics.png", :page_title => "Analytics", :feature_count => "" }
 
 
