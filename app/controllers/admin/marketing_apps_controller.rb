@@ -8,7 +8,7 @@ class Admin::MarketingAppsController < ApplicationController
 
 
   def index
-    @marketing_events = Event.where(:client_id => @client.id,:marketing_app => true)
+    @marketing_events = Event.where(:client_id => @client.id,:marketing_app => true).where("mobile_application_id is not NULL")
     @marketing_events = @marketing_events.ordered.paginate(page: params[:page], per_page: 10)
   end
 

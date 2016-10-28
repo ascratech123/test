@@ -1,16 +1,24 @@
 %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.sequenceInputWidht{"template-pagination" => "custom/pager"}
   %tr
-    %th Event Name
+    %th Application Name
+    %th Application Type
+    %th Preview ID
+    %th Status
     %th 
   - objs.each_with_index do |marketing_app,index|
     %tr
-      - if marketing_app.mobile_application_id.present?
-        %td.font16= link_to marketing_app.event_name, admin_event_mobile_application_path(:event_id => marketing_app.id, :id => marketing_app.mobile_application_id)
-      -else
-        %td.font16= marketing_app.event_name
+      - mobile_application = MobileApplication.get_mobile_application_name(marketing_app.mobile_application_id)
+      %td.font16= link_to mobile_application.name, admin_event_mobile_application_path(:event_id => marketing_app.id, :id => marketing_app.mobile_application_id)
+      %td.font16= mobile_application.application_type.capitalize rescue nil
+      %td.font16= mobile_application.preview_code
+      %td.font16= mobile_application.status.humanize.capitalize rescue nil
       %td.IconDrp
-        =# more_vert_button(marketing_app.id)
+        = more_vert_button(marketing_app.id)
         %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{marketing_app.id}"}
-          =# edit_link(params, marketing_app.id)
-          =# delete_link(params, marketing_app.id)
+          .mdl-menu__item.mdl-js-ripple-effect
+            = link_to edit_admin_event_mobile_application_path(:event_id => marketing_app.id,:id => mobile_application.id),class: "mdl-menu__item"  do
+              Edit
+          / .mdl-menu__item.mdl-js-ripple-effect
+          /   = link_to admin_event_mobile_application_path(:event_id => marketing_app.id,:id => mobile_application.id),'data-method' => :delete , data: { confirm: 'Are you sure?' },class: "mdl-menu__item" do
+          /     Delete
 = will_paginate objs

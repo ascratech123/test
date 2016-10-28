@@ -68,7 +68,7 @@
           / - client_ids += Event.with_roles(current_user.roles.pluck(:name), current_user).pluck(:client_id)
           - client_ids += Event.with_roles(session[:current_user_role], current_user).pluck(:client_id)
           - @events = Event.where(:client_id => client_ids,:marketing_app => nil)
-          - @marketing_apps = Event.where(:client_id => client_ids,:marketing_app => true)
+          - @marketing_apps = Event.where(:client_id => client_ids,:marketing_app => true).where("mobile_application_id is not NULL")
           - if current_user.has_role_without_event("event_admin", client_ids,session[:current_user_role])#current_user.has_role? :event_admin
             - ids = @count.pluck(:mobile_application_id).compact.uniq rescue []
             - @mobile_applications = MobileApplication.where(:id => ids)      
