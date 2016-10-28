@@ -248,4 +248,9 @@ class MobileApplication < ActiveRecord::Base
     end  
     apps
   end
+
+  def self.get_mobile_application_name(id)
+    MobileApplication.find_by_id(id)
+  end
+
 end
