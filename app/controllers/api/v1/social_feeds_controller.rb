@@ -1,10 +1,12 @@
 class Api::V1::SocialFeedsController < ApplicationController
 
 	skip_before_filter :authenticate_user,:load_filter
-	require 'social_feed_api'
+	caches_action :index, :expires_in => 5.minutes, cache_path: Proc.new {|controller_instance| "#{request.url.split('?').first}/#{controller_instance.params[:page]}"}
+  
+  require 'social_feed_api'
 
 	def index
-	  @event = Event.find_by_id(params[:event_id]) 
+		@event = Event.find_by_id(params[:event_id]) 
 		if @event.present? or @event.facebook_social_tags.present? or @event.twitter_social_tags.present? or @event.twitter_handle.present? or @event.instagram_social_tags.present?
 			#@facebook_posts
 			if @event.facebook_social_tags.present?
@@ -19,48 +21,52 @@ class Api::V1::SocialFeedsController < ApplicationController
 			@twitter_posts = []
 		end
 		#instagram
-	 		if @event.instagram_client_id and @event.instagram_code.present? and @event.instagram_secret_token.present?  
-	      if @event.instagram_access_token.blank?
-	      	acess_token = `curl -F 'client_id=#{@event.instagram_client_id}' -F 'client_secret=#{@event.instagram_secret_token}' -F 'grant_type=authorization_code' -F 'redirect_uri=http://hobnobspace.com' -F 'code=#{@event.instagram_code}' -F 'response_type=token' -F 'scope=public_content' https://api.instagram.com/oauth/access_token`
-	      	acess_token = JSON.parse acess_token.gsub('=>', ':') 
-	      	insta_acess_token = acess_token["access_token"]
-	      	@event.update_column('instagram_access_token',insta_acess_token)
-	    	end
-      	if request.format == "html"
-      	 	session[:max_instagram_id] = nil
-					user_details = HTTParty.get("https://api.instagram.com/v1/users/self/?access_token=#{@event.instagram_access_token}")
-					user_id = user_details["data"]["id"] if user_details.present?
-					session[:insta_user_id] = user_id if user_id.present? 
-      	end
-      	instagram_posts = SocialFeedApi.get_own_instgram_posts(@event,session[:max_instagram_id],session[:insta_user_id]) rescue []
-      	if instagram_posts["data"].present? and instagram_posts["data"] != "data"
-      		@instgram_embedded_post = get_instagram_posts(instagram_posts["data"])
-      		session[:max_instagram_id] = instagram_posts["data"].last["id"]
-      	else
-					@instgram_embedded_post = []
-      	end	
-				@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
-		  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
-			end
-		end	
+ 		if @event.instagram_client_id and @event.instagram_code.present? and @event.instagram_secret_token.present?  
+      if @event.instagram_access_token.blank?
+      	acess_token = `curl -F 'client_id=#{@event.instagram_client_id}' -F 'client_secret=#{@event.instagram_secret_token}' -F 'grant_type=authorization_code' -F 'redirect_uri=http://hobnobspace.com' -F 'code=#{@event.instagram_code}' -F 'response_type=token' -F 'scope=public_content' https://api.instagram.com/oauth/access_token`
+      	acess_token = JSON.parse acess_token.gsub('=>', ':') 
+      	insta_acess_token = acess_token["access_token"]
+      	@event.update_column('instagram_access_token',insta_acess_token)
+    	end
+    	if request.format == "html"
+    	 	session[:max_instagram_id] = nil
+				user_details = HTTParty.get("https://api.instagram.com/v1/users/self/?access_token=#{@event.instagram_access_token}")
+				user_id = user_details["data"]["id"] if user_details.present?
+				session[:insta_user_id] = user_id if user_id.present? 
+    	end
+    	instagram_posts = SocialFeedApi.get_own_instgram_posts(@event,session[:max_instagram_id],session[:insta_user_id]) rescue []
+    	if instagram_posts["data"].present? and instagram_posts["data"] != "data"
+    		@instgram_embedded_post = get_instagram_posts(instagram_posts["data"])
+    		session[:max_instagram_id] = instagram_posts["data"].last["id"]
+    	else
+				@instgram_embedded_post = []
+    	end	
+		else
+			@instgram_embedded_post = []
+		end
+			@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
+	  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
+		end
+		# end		
   end
 
-end
 
 	def get_feacebook_posts(facebook_tags)
-		session[:facebook_post_date] = (Date.today+1).to_date if request.format == "html"
-		@posts = SocialFeedApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
-		if 	@posts.present? && @posts["data"].present?
-			session[:facebook_post_date] = @posts["data"].last["created_time"].to_date
-		else
-		  session[:facebook_post_date] = (session[:facebook_post_date]).to_date - 1		
-		end
-		data = []
-		@posts["data"].each do |post|
-			hsh = {:facebook_frames =>post["id"],:created_at=>post["created_time"].to_datetime}
-			data << hsh
-		end if @posts["data"].present?
-		@facebook_posts = data
+		#Rails.cache.fetch("facebook_posts_#{request.url}", :expires_in => 5.minutes) do
+			session[:facebook_post_date] = (Date.today+1).to_date if request.format == "html"
+			@posts = SocialFeedApi.get_facebook_posts(facebook_tags,session[:facebook_post_date])
+			if 	@posts.present? && @posts["data"].present?
+				session[:facebook_post_date] = @posts["data"].last["created_time"].to_date
+			else
+			  session[:facebook_post_date] = (session[:facebook_post_date]).to_date - 1		
+			end
+			data = []
+			@posts["data"].each do |post|
+				hsh = {:facebook_frames =>post["id"],:created_at=>post["created_time"].to_datetime}
+				data << hsh
+			end if @posts["data"].present?
+			@facebook_posts = data
+		#end	
 	end	
 
 	def get_twitter_posts(event)
@@ -92,6 +98,7 @@ end
         hash = { :insta_frame=>embedded_post["html"],:created_at=>Time.at(post["created_time"].to_i)}
         instgram_embedded_post << hash if embedded_post.present?
     end
-    @instgram_embedded_post = instgram_embedded_post     
+	  @instgram_embedded_post = instgram_embedded_post     
+	end
 
-end  
+end

@@ -51,6 +51,7 @@ gem 'newrelic_rpm'
 gem 'twitter'
 gem 'instagram'
 gem 'fcm'
+gem 'actionpack-action_caching'
 
 # gem "bullet", :group => "development"
 
