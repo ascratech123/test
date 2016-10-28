@@ -34,9 +34,11 @@ class Api::V1::SocialFeedsController < ApplicationController
     	else
 				@instgram_embedded_post = []
     	end	
+		else
+			@instgram_embedded_post = []	
+		end
 			@total_posts = @facebook_posts + @twitter_posts + @instgram_embedded_post
 	  	@social_feeds =  @total_posts.sort_by { |hsh| hsh[:created_at] }.reverse!
-		end
 		# end
 		render :layout => false		
   end
