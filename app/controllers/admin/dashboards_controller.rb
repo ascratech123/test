@@ -15,7 +15,7 @@ class Admin::DashboardsController < ApplicationController
     @count = Event.with_role(session[:current_user_role], current_user)
     client_ids = Client.with_role(session[:current_user_role], current_user).pluck(:id)
     if client_ids.present?
-      @count += Event.where(:client_id => client_ids)
+      @count += Event.where(:client_id => client_ids,:marketing_app => nil)
       @count = @count.flatten.uniq
     end
   end

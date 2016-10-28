@@ -23,34 +23,19 @@
                           = "#{@event.review_status(feature[0])}%"
       
       -else
-        - if (@event.present? and @event.landing_page == true and name[feature[0]] != "Features")
-          .col-sm-3.col-xl-3{:id => "active_card#{index}"}
-            %a{:href => "#{redirect_urls[feature[0]]}"}
-              .panel.panel-tile
-                .panel-body
-                  .row.pv5
-                    .col-xs-5.ph5
-                      = image_tag("coloured_icons/#{feature[1]}", :size => "60x60")
-                    .col-xs-7.pl5
-                      %h6.text-muted.truncate
-                        = "#{name[feature[0]]}"
-                      - if "#{name[feature[0]]}" != "Engagement"
-                        %h2.fs30.mt5.mbn
-                          = "#{@event.review_status(feature[0])}%"
-        - elsif (@event.present? and @event.landing_page.blank?)   
-          .col-sm-3.col-xl-3{:id => "active_card#{index}"}
-            %a{:href => "#{redirect_urls[feature[0]]}"}
-              .panel.panel-tile
-                .panel-body
-                  .row.pv5
-                    .col-xs-5.ph5
-                      = image_tag("coloured_icons/#{feature[1]}", :size => "60x60")
-                    .col-xs-7.pl5
-                      %h6.text-muted.truncate
-                        = "#{name[feature[0]]}"
-                      - if "#{name[feature[0]]}" != "Engagement"
-                        %h2.fs30.mt5.mbn
-                          = "#{@event.review_status(feature[0])}%"    
+        .col-sm-3.col-xl-3{:id => "active_card#{index}"}
+          %a{:href => "#{redirect_urls[feature[0]]}"}
+            .panel.panel-tile
+              .panel-body
+                .row.pv5
+                  .col-xs-5.ph5
+                    = image_tag("coloured_icons/#{feature[1]}", :size => "60x60")
+                  .col-xs-7.pl5
+                    %h6.text-muted.truncate
+                      = "#{name[feature[0]]}"
+                    - if "#{name[feature[0]]}" != "Engagement"
+                      %h2.fs30.mt5.mbn
+                        = "#{@event.review_status(feature[0])}%"
   - if ((@event.check_event_content_status[0].present? or @mobile_application.review_status[1].present?) or @mobile_application.review_status[1] and ["show_content","show_engagement"].exclude?(params[:type])) and params[:analytics].blank? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#(!current_user.has_role? :db_manager)
     - if @mobile_application.review_status[1].present? or (@event.review_look_and_feel[1].present? or @event.check_event_content_status[0].present? or @event.review_menus[1].present? )
       .row
