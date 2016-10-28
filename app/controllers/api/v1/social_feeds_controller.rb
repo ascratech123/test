@@ -1,7 +1,7 @@
 class Api::V1::SocialFeedsController < ApplicationController
 
 	skip_before_filter :authenticate_user,:load_filter
-	#caches_action :index, :expires_in => 5.minutes, cache_path: Proc.new {|controller_instance| "#{request.url.split('?').first}/#{controller_instance.params[:page]}"}
+	caches_action :index, :expires_in => 4.minutes, cache_path: Proc.new {|controller_instance| "#{request.url.split('?').first}/#{controller_instance.params[:page]}"}
   
   require 'social_feed_api'
 
