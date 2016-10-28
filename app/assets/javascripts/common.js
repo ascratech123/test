@@ -962,16 +962,16 @@ $(document).ready(function(){
    })        
   });
 
-  var load_page = 0
-  $(window).scroll(function() {
-    console.log("scroll");
-    if ($(window).scrollTop() > $(document).height()-1000)  {
-    $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
-     $(".load_products").trigger('click',load_page);
-    $(".load_products").addClass("dont_load_products").removeClass("load_products");
-    return false;
-    }
-  });
+  // var load_page = 0
+  // $(window).scroll(function() {
+  //   console.log("scroll");
+  //   if ($(window).scrollTop() > $(document).height()-1000)  {
+  //   $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
+  //    $(".load_products").trigger('click',load_page);
+  //   $(".load_products").addClass("dont_load_products").removeClass("load_products");
+  //   return false;
+  //   }
+  // });
 
 $(document).on('keyup', "#agenda_speaker_names", function(e) {
   value = $(this).val();
@@ -983,24 +983,24 @@ $(document).on('keyup', "#agenda_speaker_names", function(e) {
   }
 });
 
-  $(document).on('click','.load_products',function(){
-    load_page += 1;
-    load_products(load_page);
-  });
+//   $(document).on('click','.load_products',function(){
+//     load_page += 1;
+//     load_products(load_page);
+//   });
 
-function load_products(load_page){
-  var event_id = $('#social_event_id').attr('for')
-  $("#loadingText_activity").show();
-  $.ajax({
-    type: "GET",
-    dataType: 'script',
-    url: "/api/v1/events/"+event_id+"/social_feeds.js?page="+load_page,
-    success: function(data){
-      $("#loadingText_activity").hide();
-    },
-  });
-  // return false;
-}
+// function load_products(load_page){
+//   var event_id = $('#social_event_id').attr('for')
+//   $("#loadingText_activity").show();
+//   $.ajax({
+//     type: "GET",
+//     dataType: 'script',
+//     url: "/api/v1/events/"+event_id+"/social_feeds.js?page="+load_page,
+//     success: function(data){
+//       $("#loadingText_activity").hide();
+//     },
+//   });
+//   // return false;
+// }
 
 /*function agenda_speaker_dropdown() {
   alert('asdasda');
