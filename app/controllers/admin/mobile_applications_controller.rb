@@ -190,6 +190,7 @@ protected
     @event.update_column(:login_at , params['event']['login_at']) if params['event']['login_at'].present?
     @event.add_default_invitee
     @event.update_login_at_for_app_level
+    @mobile_application.update_column(:marketing_app_event_id, @event.id) if @event.marketing_app == true
     redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
   end
 
