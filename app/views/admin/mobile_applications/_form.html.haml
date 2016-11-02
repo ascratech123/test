@@ -42,7 +42,7 @@
               = link_to("?" ,"/whats_this/app_info/general_information/AppInfo_SelectTemplate.png", rel: "selecte_template", title: "Selecte Template", :class =>"fancybox whatsImg")
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
           .bs-component
-            .form-group{:class => "#{@mobile_application.app_icon_file_name.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+            .form-group{:class => "#{@mobile_application.app_icon_file_name.present? ? "has-success" : "#{@mobile_application.new_record? ? "div-none" : "has-warning"}"}"}
               .span.col-lg-4
                 = f.label "App Icon (180x180px) png only ",:class =>"control-label", style: "float: right;"
                 - if (current_user.has_role? :licensee_admin and @mobile_application.app_icon_file_name.present? and ["edit","update"].include? params[:action])
@@ -68,7 +68,7 @@
         = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Master Screen 2" => "AppInfo_MasterScreens_2.JPG","Master Screen 3" => "AppInfo_MasterScreens_3.JPG"}, :section_id => "mobil_app_master_section", :path => "app_info/master_screens"}
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
           .bs-component
-            .form-group{:class => "#{@mobile_application.splash_screen_file_name.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+            .form-group{:class => "#{@mobile_application.splash_screen_file_name.present? ? "has-success" : "#{@mobile_application.new_record? ? "div-none" : "has-warning"}"}"}
               .span.col-lg-4
                 = f.label "Splash Screen (960X1600px) png only ",:class =>"control-label", style: "float: right;"
                 - if (current_user.has_role? :licensee_admin and @mobile_application.splash_screen_file_name.present? and ["edit","update"].include? params[:action])
@@ -96,7 +96,7 @@
 
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.allcp-form.m-8.m-b-15
           .bs-component{:style => "display: #{(f.object.application_type == 'multi event' or params[:action] == "new") ? "" : "none"}"}
-            .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "none" : "has-warning"}"}"}
+            .form-group{:class => "#{@mobile_application.listing_screen_background.present? ? "has-success" : "#{@mobile_application.new_record? ? "div-none" : "has-warning"}"}"}
               .span.col-lg-4#listing_screen_background_label
                 = f.label "Listing Screen Background (960X1600px) only ",:class =>"control-label", style: "float: right;"
                 - if (current_user.has_role? :licensee_admin and @mobile_application.listing_screen_background.present? and ["edit","update"].include? params[:action])
