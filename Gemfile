@@ -47,6 +47,7 @@ gem 'ransack'
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+gem 'ar-octopus'
 
 # gem "bullet", :group => "development"
 
