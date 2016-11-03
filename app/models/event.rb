@@ -919,6 +919,7 @@ def content_is_present
     self.country_name = "India"
     self.timezone = "Chennai"
     self.event_type_for_registration = "close"
+    self.status = "approved" 
     if self.save
       result = "true"
     else

@@ -234,11 +234,9 @@
                               =# @events.count
                         .row.pv5.AddmoreCard
                           .col-xs-12.ph5
-                            / -if true#check_curent_user_role("mobile_application")
-                            /   %a{:href => 'javascript:void(0);', :class => "displayBlock", :id => 'add_user_popup'}
-                            /     = 'Add One' if @users.count <= 0
-                            /     = 'New User' if @users.count > 0
-                            /   = render :partial => '/admin/users/add_user_with_role', :locals => {:page_id => 'add_user_popup'}  
+                            %a{:href => admin_clients_path(:feature => 'marketing_apps', :redirect_page => "new"), :class => "displayBlock"}
+                              = 'New Marketing App'
+
               =# render :partial => 'admin/layouts/card_event', :locals => {:image_path => "coloured_icons/analytics.png", :page_title => "Analytics", :feature_count => "" }
 
 

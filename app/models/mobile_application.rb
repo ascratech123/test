@@ -62,7 +62,7 @@ class MobileApplication < ActiveRecord::Base
 
   validates_attachment_content_type :app_icon,:content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :splash_screen, :content_type => ["image/png"],:message => "please select valid format."
-  validates :name, :application_type, :listing_screen_text_color, :visitor_registration, presence: { :message => "This field is required." }
+  validates :name, :application_type, :listing_screen_text_color, :visitor_registration,presence: { :message => "This field is required." }
   validate :listing_screen_text_color_presentce
   validates :name, uniqueness: {scope: :client_id}
   validates :social_media_logins, presence: { :message => "This field is required." },:if => Proc.new{|p| p.social_media_status.present? and p.social_media_status == "active" and p.social_media_logins.blank? }
@@ -244,7 +244,16 @@ class MobileApplication < ActiveRecord::Base
     if user.has_role? :moderator or user.has_role? :event_admin or user.has_role? :db_manager
       apps = self.events.where(:id => events.pluck(:id)).order(start_event_date: :desc) rescue []
     else
-      apps = self.events.order(start_event_date: :desc) rescue []
+      apps = self.events.where(:marketing_app => nil).order(start_event_date: :desc) rescue []
+    end  
+    apps
+  end
+
+  def get_events_for_marketing_app(user,events)
+    if user.has_role? :moderator or user.has_role? :event_admin or user.has_role? :db_manager
+      apps = self.events.where(:id => events.pluck(:id)).order(start_event_date: :desc) rescue []
+    else
+      apps = self.events.where(:marketing_app => nil).order(start_event_date: :desc) rescue []
     end  
     apps
   end

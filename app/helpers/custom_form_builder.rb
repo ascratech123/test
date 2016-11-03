@@ -47,6 +47,13 @@ class CustomFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def custom_radio_button_for_marketing_app(method, tag_value, options = {}, *args)
+    @template.content_tag :label, class: "mdl-radio mdl-js-radio mdl-js-ripple-effect", for: "#{args[0].values[0]}" do
+     str = @template.radio_button(@object_name, method, tag_value, :checked => "#{(args[0].values[1]== "true" ? "checked" : false)}",:disabled => "#{args[0].values[1] == "true" ? true : false}", id: "#{args[0].values[0]}", class: "mdl-radio__button")
+      str += label(options)   
+    end
+  end
+
   def old_custom_text_field(name, title, *args)
     args[0] ||= {}
     args.first[:col] ||= "8"
