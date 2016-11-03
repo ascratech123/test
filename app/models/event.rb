@@ -731,10 +731,12 @@ class Event < ActiveRecord::Base
   #end
   def create_marketing_app_event
     self.marketing_app = true
-    self.event_name = "test"
+    self.event_name = "Landing App"
     self.cities = "Mumbai"
-    #self.start_event_date = "2016-10-11 00:00:00"
-    self.start_event_time = "2016-10-11 00:00:00"
+    self.start_event_date = Time.now
+    self.start_event_time = Time.now
+    self.end_event_date = "31/12/2050".to_datetime
+    self.end_event_time = "31/12/2050".to_datetime
     self.country_name = "India"
     self.timezone = "Chennai"
     self.status = "approved" 
