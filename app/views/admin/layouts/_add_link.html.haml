@@ -192,3 +192,6 @@
   - when 'edm'
     = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
       New eDM
+  - when 'marketing_app'
+    = link_to new_admin_client_event_path(:client_id => params[:client_id],:marketing_app => true),:class => "rightBtn hvr-sweep-to-right" do
+      New Marketing App

@@ -737,6 +737,7 @@ class Event < ActiveRecord::Base
     self.start_event_time = "2016-10-11 00:00:00"
     self.country_name = "India"
     self.timezone = "Chennai"
+    self.status = "approved" 
     if self.save
       result = "true"
     else

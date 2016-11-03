@@ -20,10 +20,14 @@
             .mdl-grid.p-v-5.form-group.mobiappstype
               .col-lg-4.mdl-typography--text-right 
                 %p.displayInlineBlock.multicitytxt  Application type *
-                
-              .col-lg-7.p-h-12 
-                = f.custom_radio_button :application_type, "single event", "Single Event", :id => "option1"
-                = f.custom_radio_button :application_type, "multi event", "Multi Event", :id => "option2"
+              - if @event.marketing_app.blank?  
+                .col-lg-7.p-h-12 
+                  = f.custom_radio_button :application_type, "single event", "Single Event", :id => "option1"
+                  = f.custom_radio_button :application_type, "multi event", "Multi Event", :id => "option2"
+              - elsif @event.marketing_app == true
+                .col-lg-7.p-h-12 
+                  = f.custom_radio_button_for_marketing_app :application_type, "single event", "Single Event", :id => "option1", "default" => "false","read_only" => "true"
+                  = f.custom_radio_button_menu :application_type, "multi event", "Multi Event",:id => "option2",:default_checked => 'checked'
               .col-lg-1  
                 = link_to "?" ,"/whats_this/app_info/general_information/AppInfo_ApplicationType.jpg", rel: "event_bg_image", title: "Application type", :class =>'fancybox whatsImg appwhatsthis'  
         = f.custom_text_field :name, "Application Name *", :view_popup => {:image_path => "app_info/general_information/AppInfo_Application_Name.jpg", :rel=> "mobil_app_application_name", :title => "Application Name"}
@@ -155,13 +159,14 @@
           %p.OrTxt{:style => "display: #{(@event.login_at == 'Before Interaction' or @event.login_at == 'After Highlight') ? "none" : "" if @event.present?} "}
             or
           = f.custom_text_field_display1 :login_background_color, "Login screen background Color", :value => @mobile_application.login_background_color, :class => 'pick-a-color', :display => "#{(@event.login_at == 'Before Interaction'or @event.login_at == 'After Highlight') ? "false" : "true" if @event.present?}", :view_popup => {:image_path => "app_info/master_screens/AppInfo_LoginScreenBackground.png", :rel=> "login_background_color", :title => "Login screen background Color"}, :highlight_class => "#{get_highlight_class1(f.object)}"
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          .mdl-grid.p-v-5
-            .col-lg-4.mdl-typography--text-right
-              %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
-            .col-lg-3.p-h-12   
-              = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
-              = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
+        - if @event.marketing_app.blank?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+            .mdl-grid.p-v-5
+              .col-lg-4.mdl-typography--text-right
+                %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
+              .col-lg-3.p-h-12   
+                = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
+                = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
 
       / .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
@@ -209,7 +214,6 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
-
 :javascript
   $(window).load(function(){
     $(".pick-a-color").pickAColor({
