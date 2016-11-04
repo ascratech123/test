@@ -29,7 +29,7 @@
               - else
                 = mob_application.name
             -#%td.font16= mob_application.name.capitalize rescue nil
-            %td.font16= mob_application.application_type.capitalize rescue nil
+            %td.font16= (mob_application.marketing_app_event_id.blank? ? mob_application.application_type.capitalize : mob_application.application_type == "multi event" ? "Landing App" : "Multi event") rescue nil 
             %td.font16= mob_application.preview_code
             %td.font16
               - mob_application.get_events(current_user,@events).each_with_index do |event, index|
