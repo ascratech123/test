@@ -21,6 +21,7 @@ class Agenda < ActiveRecord::Base
   before_save :check_category_present_if_new_category_select_from_dropdown
   after_create :set_event_timezone
   before_destroy :destroy_id_from_speaker
+  after_destroy :clear_cache
 
   default_scope { order('start_agenda_time asc') }
 
@@ -63,6 +64,8 @@ class Agenda < ActiveRecord::Base
     Rails.cache.delete("agenda_track_sequence_#{self.id}")
     Rails.cache.delete("agenda_track_name_#{self.id}")
     Rails.cache.delete("agenda_agenda_type_#{self.id}")
+    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_#{published}")
+    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_#{approved_published}")
   end
 
   # def speaker_names

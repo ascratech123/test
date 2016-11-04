@@ -29,12 +29,18 @@ class Sponsor < ActiveRecord::Base
   validate :check_logo_is_present
   accepts_nested_attributes_for :images
   before_create :set_sequence_no
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :clear_cache
+  after_destroy :clear_cache
 
   default_scope { order("sequence") }
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
+  end
+
+  def clear_cache
+    Rails.cache.delete("sponsors_json_#{self.event.mobile_application_id}_#{published}")
+    Rails.cache.delete("sponsors_json_#{self.event.mobile_application_id}_#{approved_published}")
   end
 
   def self.search(params,sponsors)

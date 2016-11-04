@@ -14,12 +14,18 @@ class Exhibitor < ActiveRecord::Base
             :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
   validate :image_dimensions
   before_create :set_sequence_no
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :clear_cache
+  after_destroy :clear_cache
   
   default_scope { order('sequence') }
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
+  end
+
+  def clear_cache
+    Rails.cache.delete("exhibitors_json_#{self.event.mobile_application_id}_#{published}")
+    Rails.cache.delete("exhibitors_json_#{self.event.mobile_application_id}_#{approved_published}")
   end
 
   def image_url(style=:small)

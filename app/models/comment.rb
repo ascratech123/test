@@ -191,7 +191,7 @@ class Comment < ActiveRecord::Base
     created_at_with_tmz.sub(year, "")    
   end
 
-  def formatted_created_at_with_event_timezone
+  def formatted_updated_at_with_event_timezone
     Rails.cache.fetch("formatted_updated_at_with_event_timezone_#{self.id}") { formatted_updated_at_with_event_timezone! }
   end
 

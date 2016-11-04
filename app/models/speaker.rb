@@ -32,9 +32,9 @@ class Speaker < ActiveRecord::Base
   before_create :set_sequence_no
   # after_create :set_event_timezone
   before_save :set_full_name
-  after_save :update_last_updated_model
+  after_save :update_last_updated_model, :clear_cache
   after_update :update_agenda_speaker_name
-  after_destroy :empty_agenda_speaker_name_and_id
+  after_destroy :empty_agenda_speaker_name_and_id, :clear_cache
   before_destroy :delete_speaker_name_from_agenda
   default_scope { order("sequence") }  
 
@@ -51,6 +51,10 @@ class Speaker < ActiveRecord::Base
     end if agenda_ids.present?
   end
 
+  def clear_cache
+    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_#{published}")
+    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_#{approved_published}")
+  end
 
   def update_agenda_speaker_name
     if self.speaker_name_changed?

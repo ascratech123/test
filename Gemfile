@@ -13,17 +13,12 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise'
-gem "kaminari"
 gem 'cancancan'
 gem 'rolify'
-gem 'pry'
-# gem 'haml'
 gem 'haml-rails'
 gem 'rails-observers'
 gem "paperclip", "~> 4.3"
 gem 'rmagick'
-# gem "ckeditor", :git => "https://github.com/adamico/ckeditor.git", :branch => "rails-4-compatibility"
-# gem 'ckeditor'#, '~> 4.1.1'
 gem 'ckeditor', github: 'galetahub/ckeditor'
 gem 'aws-sdk', '< 2.0'
 gem 'exception_notification'
@@ -47,6 +42,7 @@ gem 'ransack'
 gem 'rails4-autocomplete'
 gem 'jquery-ui-rails'
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+#gem 'ar-octopus'
 
 # gem "bullet", :group => "development"
 
@@ -54,6 +50,7 @@ group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem "pry"
 end
 
 # gem 'newrelic_rpm'
