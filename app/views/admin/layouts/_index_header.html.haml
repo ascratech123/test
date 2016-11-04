@@ -64,7 +64,7 @@
                       - elsif ["custom_page1s","custom_page2s","custom_page3s","custom_page4s","custom_page5s"].include? page
                         = page.humanize.singularize rescue nil
                       -elsif page == "marketing_apps"
-                        Landing Page
+                        Landing Pages
                       -else
                         = page.humanize == "E kits" ? page.humanize.gsub(" ","-") : page.humanize rescue nil
                     -elsif (page == "polls" or page == "faqs")
