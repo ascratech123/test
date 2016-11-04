@@ -1,1 +1,1 @@
-= render :partial => 'layouts/layout_form', :locals => {:page => 'Edit Mobile Application'}
+= render :partial => 'layouts/layout_form', :locals => {:page => "#{@event.marketing_app.blank? ? 'Edit Mobile Application' : 'Edit Landing page'}"}

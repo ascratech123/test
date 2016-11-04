@@ -11,7 +11,7 @@
     %tr
       - mobile_application = MobileApplication.get_mobile_application_name(marketing_app.mobile_application_id)
       %td.font16= link_to mobile_application.name, admin_event_mobile_application_path(:event_id => marketing_app.id, :id => marketing_app.mobile_application_id)
-      %td.font16= mobile_application.application_type.capitalize rescue nil
+      %td.font16= mobile_application.application_type == "multi event" ? "Landing App" : "Multi event"
       %td.font16= mobile_application.preview_code
       %td.font16
         - mobile_application.get_events_for_marketing_app(current_user,@events).each_with_index do |event, index|
