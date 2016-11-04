@@ -25,8 +25,8 @@ class EventFeature < ActiveRecord::Base
   after_destroy :update_menu_saved_field_when_no_feature_selected, :update_points
   # after_update :update_menu_icon_for_emergency_exit
   before_save :set_menu_icon_visibility
-  after_save :venue_menu_icon_selection, :update_last_updated_model, :update_event_activity_feed
-  after_destroy :delete_default_invitee_groups, :hide_event_activity_feed
+  after_save :venue_menu_icon_selection, :update_last_updated_model, :update_event_activity_feed, :clear_cache
+  after_destroy :delete_default_invitee_groups, :hide_event_activity_feed, :clear_cache
 
   default_scope { order("sequence") }
   scope :not_hidden_icon, -> { where(menu_visibilty: "active",status: "active") }
@@ -55,6 +55,11 @@ class EventFeature < ActiveRecord::Base
     if (self.status == "deactive" or self.menu_visibilty == "inactive") 
       self.hide_event_activity_feed
     end
+  end
+
+  def clear_cache
+    Rails.cache.delete("event_features_json_#{self.event.mobile_application_id}_#{published}")
+    Rails.cache.delete("event_features_json_#{self.event.mobile_application_id}_#{approved_published}")
   end
 
   def hide_event_activity_feed
