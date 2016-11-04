@@ -36,7 +36,7 @@
       = f.custom_text_field :instagram_secret_token, "Instagram Secret token"
       .generateCodeBtn
         %a{:href => "javascript:void(0);", :class => "newWindow"} Generate Code
-      %h6
+      %h6.genrateText
         Please paste generated code in place of Instagram code
       = f.custom_text_field :instagram_code, "Instagram Code"
       =# f.custom_text_field :instagram_access_token, "Instagram access token"
@@ -56,5 +56,14 @@
     else{
       $('#instagram_code_label').css('display','none');
       $('#event_instagram_code').css('display','none');
+    }
+    if($('#social-option-2').is(':checked')){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_handle').parent().parent().parent().parent().hide();
+      $('#event_instagram_client_id').parent().parent().parent().parent().hide();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().hide();
+      $(".generateCodeBtn").hide();
+      $(".genrateText").hide();
     }
   });
