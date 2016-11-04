@@ -863,3 +863,27 @@ $(document).ready(function(){
   });
 
 });
+
+/* Activity feed js start */
+  $(document).ready(function(){
+    $("#social-option-2").click(function(){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_handle').parent().parent().parent().parent().hide();
+      $('#event_instagram_client_id').parent().parent().parent().parent().hide();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().hide();
+      $(".generateCodeBtn").hide();
+      $(".genrateText").hide();
+    });
+
+    $("#social-option-1").click(function(){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().show();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().show();
+      $('#event_twitter_handle').parent().parent().parent().parent().show();
+      $('#event_instagram_client_id').parent().parent().parent().parent().show();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().show();
+      $(".generateCodeBtn").show();
+      $(".genrateText").show();
+    });
+  });
+/* Activity feed js end */

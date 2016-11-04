@@ -37,3 +37,16 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
+
+:javascript
+  $( document ).ready(function() {
+    if($('#social-option-2').is(':checked')){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_handle').parent().parent().parent().parent().hide();
+      $('#event_instagram_client_id').parent().parent().parent().parent().hide();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().hide();
+      $(".generateCodeBtn").hide();
+      $(".genrateText").hide();
+    }
+  });
