@@ -57,6 +57,7 @@ module PushNotification
   end
 
   def self.push_to_android(tokens, notification, push_pem_file, title, b_count=1)
+    Rails.logger.info("******************************android*************************************")
     mobile_application = notification.event.mobile_application
     if mobile_application.present? and mobile_application.android_push_service == "fcm"
       fcm_obj = FCM.new(push_pem_file.android_push_key)  
