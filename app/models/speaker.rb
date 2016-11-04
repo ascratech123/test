@@ -52,8 +52,8 @@ class Speaker < ActiveRecord::Base
   end
 
   def clear_cache
-    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_#{published}")
-    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_#{approved_published}")
+    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_published")
+    Rails.cache.delete("speakers_json_#{self.event.mobile_application_id}_approved_published")
   end
 
   def update_agenda_speaker_name

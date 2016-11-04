@@ -64,8 +64,8 @@ class Agenda < ActiveRecord::Base
     Rails.cache.delete("agenda_track_sequence_#{self.id}")
     Rails.cache.delete("agenda_track_name_#{self.id}")
     Rails.cache.delete("agenda_agenda_type_#{self.id}")
-    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_#{published}")
-    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_#{approved_published}")
+    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_published")
+    Rails.cache.delete("agendas_json_#{self.event.mobile_application_id}_approved_published")
   end
 
   # def speaker_names
