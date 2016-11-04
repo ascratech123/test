@@ -17,7 +17,7 @@ gem "kaminari"
 gem 'cancancan'
 gem 'rolify'
 gem 'pry'
-gem 'haml'
+# gem 'haml'
 gem 'haml-rails'
 gem 'rails-observers'
 gem "paperclip", "~> 4.3"
@@ -56,5 +56,5 @@ group :development, :test do
   gem 'spring'
 end
 
-gem 'newrelic_rpm'
+# gem 'newrelic_rpm'
 gem 'twitter'
