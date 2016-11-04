@@ -28,9 +28,9 @@ class Admin::EventsController < ApplicationController
 
   def new
     @event = @client.events.build
-    @event.images.build
-    @event.event_venues.build
-    @themes = Theme.find_themes()
+    @event.images.build unless (params[:marketing_app].present? and params[:marketing_app] == "true")
+	@event.event_venues.build    
+	@themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
     if (params[:marketing_app].present? and params[:marketing_app] == "true")
