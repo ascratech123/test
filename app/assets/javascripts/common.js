@@ -1043,6 +1043,7 @@ $('.addMoreSpeaker').click(function(){
       $('#event_twitter_handle').parent().parent().parent().parent().hide();
       $('#event_instagram_client_id').parent().parent().parent().parent().hide();
       $('#event_instagram_secret_token').parent().parent().parent().parent().hide();
+      $('#event_instagram_code').parent().parent().parent().parent().hide();
       $(".generateCodeBtn").hide();
       $(".genrateText").hide();
     });
@@ -1053,6 +1054,7 @@ $('.addMoreSpeaker').click(function(){
       $('#event_twitter_handle').parent().parent().parent().parent().show();
       $('#event_instagram_client_id').parent().parent().parent().parent().show();
       $('#event_instagram_secret_token').parent().parent().parent().parent().show();
+      $('#event_instagram_code').parent().parent().parent().parent().show();
       $(".generateCodeBtn").show();
       $(".genrateText").show();
     });
