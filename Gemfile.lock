@@ -153,9 +153,6 @@ GEM
     jquery-ui-rails (5.0.5)
       railties (>= 3.2.16)
     json (1.8.3)
-    kaminari (0.16.3)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
     libv8 (3.16.14.13)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
@@ -338,7 +335,6 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   json
-  kaminari
   mysql2 (~> 0.3.18)
   nested_form
   paperclip (~> 4.3)
