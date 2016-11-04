@@ -45,13 +45,17 @@ module SyncMobileData
     return message
   end
 
+#def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app)
+#end
+
   def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
     event_ids = events.pluck(:id) rescue nil
     model_name = []
     data = {}
-    model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
+    # model_name = ['Agenda','Award', 'Conversation', 'Comment', 'EventFeature', 'Event', 'Faq','ManageInviteeField','Panel','Speaker','Theme']
+    model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}#.first(5)
     models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite',  'UserMicrosite', 'VenueSection', 'ConversationWall', 'EventVenue', 'PollWall', 'QnaWall', 'QuizWall', 'AgendaSpeaker']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
     last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
@@ -65,8 +69,8 @@ module SyncMobileData
       case model
         when 'Conversation'
           info = info.where(:status => 'approved')
-          data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :profile_pic_url, :share_count])
-          # data[:"#{name_table(model)}"] = info.collect{|c| c.get_json_data}
+          #data[:"#{name_table(model)}"] = info.as_json(:except => [:image_file_name, :image_content_type, :image_file_size], :methods => [:image_url,:company_name,:like_count,:user_name,:comment_count, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name, :profile_pic_url, :share_count])
+          data[:"#{name_table(model)}"] = info.collect{|c| c.get_json_data}
           conversation_ids = info.map(&:id)
           info = Comment.where(:commentable_id => conversation_ids, commentable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
           #info = Comment.get_comments(conversation_ids,start_event_date, end_event_date) rescue []
@@ -78,8 +82,8 @@ module SyncMobileData
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
         when 'Event'
-          event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status ) rescue []
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone, :event_venue_name]) rescue []
+          event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status )
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone, :event_venue_name])
         when 'EventFeature'
           data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url]) rescue []
         when 'Speaker'
@@ -104,8 +108,8 @@ module SyncMobileData
         when 'Exhibitor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url]) rescue []  
         when 'Notification'
-          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
-          data[:"notifications"] = info
+          #info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
+          #data[:"notifications"] = info
         when 'InviteeNotification'
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info

@@ -13,6 +13,7 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+  config.cache_store = :dalli_store, {:compress => true}
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -92,13 +93,13 @@ end
 
 
 #Error Notifier
-Rails.application.config.middleware.use ExceptionNotification::Rack,
+#Rails.application.config.middleware.use ExceptionNotification::Rack,
  # :ignore_exceptions => ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
- :email => {
-   :email_prefix => "Production Shobiz Error Notifier",
-   :sender_address => %w{info@hobnobspace.com},
-   :exception_recipients => %w{sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com uday@ascratech.com chirag@ascratech.com}
- }
+# :email => {
+#   :email_prefix => "Production Shobiz Error Notifier",
+#   :sender_address => %w{info@hobnobspace.com},
+#   :exception_recipients => %w{sushil@ascratech.in atul@ascratech.com gayatri@ascratech.com uday@ascratech.com chirag@ascratech.com}
+# }
 
 
 # Push Notification

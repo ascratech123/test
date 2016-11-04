@@ -4,6 +4,10 @@ class Api::V1::EventsController < ApplicationController
   respond_to :json
   before_filter :check_date, :only => :index
 
+  def index_test
+    render :staus => 200, :json => {:status => "Success"}
+  end
+
   def index
     mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     submitted_app = "Yes" if params[:mobile_application_code].present?
@@ -24,7 +28,7 @@ class Api::V1::EventsController < ApplicationController
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
       end  
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app) 
-      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :data => data }
+      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 

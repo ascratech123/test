@@ -88,7 +88,7 @@ class Event < ActiveRecord::Base
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
-  before_save :check_event_content_status, :add_venues_from_event_venues 
+  before_save :check_event_content_status#, :add_venues_from_event_venues 
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
   after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
 
@@ -133,7 +133,7 @@ class Event < ActiveRecord::Base
 
   def event_venue_name
     # binding.pry
-    self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
+    # self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
   end
 
   # def update_time
