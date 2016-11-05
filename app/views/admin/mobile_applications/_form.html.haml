@@ -159,7 +159,7 @@
           %p.OrTxt{:style => "display: #{(@event.login_at == 'Before Interaction' or @event.login_at == 'After Highlight') ? "none" : "" if @event.present?} "}
             or
           = f.custom_text_field_display1 :login_background_color, "Login screen background Color", :value => @mobile_application.login_background_color, :class => 'pick-a-color', :display => "#{(@event.login_at == 'Before Interaction'or @event.login_at == 'After Highlight') ? "false" : "true" if @event.present?}", :view_popup => {:image_path => "app_info/master_screens/AppInfo_LoginScreenBackground.png", :rel=> "login_background_color", :title => "Login screen background Color"}, :highlight_class => "#{get_highlight_class1(f.object)}"
-        - if @event.marketing_app.blank?
+        -if (f.object.marketing_app_event_id.blank? and @event.marketing_app.blank?)
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             .mdl-grid.p-v-5
               .col-lg-4.mdl-typography--text-right
