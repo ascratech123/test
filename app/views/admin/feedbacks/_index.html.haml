@@ -1,6 +1,6 @@
 - if !objs.present? and !params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
-    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "feedbacks", :url => "/admin/events/#{params[:event_id]}/feedback_forms/#{params[:feedback_form_id]}/feedbacks/new", :msg => 'test'}
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "feedbacks", :url => "/admin/events/#{params[:event_id]}/feedbacks/new", :msg => 'test'}
 -elsif !objs.present? and params[:admin_search].present?
   .mdl-typography--text-center.BlnkTxt.p-t-10
     = get_search_data("feedbacks")
@@ -24,8 +24,7 @@
               %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :feedback_form_id => feedback.feedback_form_id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
         - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
           %td.description_adjust.font16
-            / - binding.pry
-            %a{'href' => "/admin/events/#{@event.id}/feedback_forms/#{feedback.feedback_form_id}/feedbacks/#{feedback.id}"}
+            %a{'href' => "/admin/events/#{@event.id}//feedbacks/#{feedback.id}"}
               = feedback.question rescue nil
         - else
           %td.font16= feedback.question
@@ -37,9 +36,9 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback.id}"}
               / = edit_link(params, feedback.id)
               / = delete_link(params, feedback.id)
-              = link_to edit_admin_event_feedback_form_feedback_path(:id => feedback.id, :feedback_form_id => params[:feedback_form_id]), :class => "mdl-menu__item" do
+              = link_to edit_admin_event_feedback_path(:id => feedback.id), :class => "mdl-menu__item" do
                 Edit
-              = link_to admin_event_feedback_form_feedback_path(:id => feedback.id, :feedback_form_id => params[:feedback_form_id]), method: :delete, data: { confirm: 'Are you sure?' }, :class => "mdl-menu__item" do
+              = link_to admin_event_feedback_path(:id => feedback.id), method: :delete, data: { confirm: 'Are you sure?' }, :class => "mdl-menu__item" do
                 Delete
   =# will_paginate objs
 

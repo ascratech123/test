@@ -424,6 +424,7 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .editsetting .mdl-cell--12-col.mdl-cell--12-col-tablet{width: 100%;}
 
 /* nilam css start here */
+.save_button.mdl-card.feedbackFormPage{background:none;}
 
 .timeZoneP-l-0 div.col-lg-4{padding-left: 0px;}
 .back_btn_header{display: inline-block; margin-top: 17px; color:#fff;}

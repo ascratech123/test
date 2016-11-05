@@ -1,9 +1,50 @@
 - if params[:import].present?
   = render :partial => 'admin/imports/form', :locals => {:@event => @event}
 - else
-  .save_button.mdl-card
-    = form_for [:admin, @event, @feedback_form, @feedback],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
-      .mdl-grid.feedbackinfo.mdl-shadow--1dp
+  .save_button.mdl-card.feedbackFormPage
+    = form_for [:admin, @event, @feedback],:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
+      .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10
+            Title
+            / %a{:href => '/whats_this/feedback/general_information/feedback_generalInfo.jpg', :class =>'helpTag testhelp fancybox'}
+            /   what's this?
+        = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "feedback_generalInfo.jpg", :section_id => "feedback_general_section"}
+        / - if params[:action] == "edit" or params[:action] == "update"
+        /   = text_field_tag :feedback_form_title,@feedback.feedback_form.title,:readonly => true
+        / -elsif params[:feedback_form_id].present?
+        /   - @feedback_form = FeedbackForm.find_by_id(params[:feedback_form_id])
+        /   = text_field_tag :feedback_form_title,@feedback_form.title,:readonly => true
+        / -else
+        = fields_for :feedback_form do |fm|
+          - if params[:action] == "edit" or params[:action] == "update" 
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8 
+              .bs-component
+                .form-group
+                  = fm.label :title, "Title *", class: "col-lg-4 control-label"
+                  .col-lg-7
+                    = fm.text_field :title,:value=>@feedback.feedback_form.title,:readonly => true,class: "form-control"
+                    = fm.hidden_field :event_id,:value=>params[:event_id]
+          - elsif params[:feedback_form_id].present?    
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8 
+              .bs-component
+                .form-group
+                  = fm.label :title, "Title *", class: "col-lg-4 control-label"
+                  .col-lg-7
+                    - @title = FeedbackForm.find_by_id(params[:feedback_form_id]).title
+                    = fm.text_field :title,:value=>@title,:readonly => true, class: "form-control"
+                    = fm.hidden_field :event_id,:value=>params[:event_id]
+                    = fm.hidden_field :feedback_form_id,:value=>params[:feedback_form_id]
+          -else
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8 
+              .bs-component
+                .form-group
+                  = fm.label :title, "Title *", class: "col-lg-4 control-label"
+                  .col-lg-7
+                    = fm.text_field :title, class: "form-control"
+                    = fm.hidden_field :event_id,:value=>params[:event_id]
+      
+      .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
             General Information
@@ -11,6 +52,18 @@
             /   what's this?
         = #render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => "feedback_generalInfo.jpg", :section_id => "feedback_general_section"}
         = f.custom_text_field :question, "Question *","background" => "false"
+        - if session[:feed_que_error].present?
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+            .bs-component{:style => "display: "}
+              .form-group{:style => "margin-top:-7px;"}
+                %label#question_label.col-lg-4.control-label{:for => "_Question *"}
+                .col-lg-7
+                  .field_with_errors
+                    %span.errorMessage{:for => "feedback_question"}
+                      = session[:feed_que_error].join('')
+                      = session[:feed_que_error] = nil
+                %span.col-lg-1
+
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
             %label.col-lg-4.control-label.ml-color--shades-white
@@ -18,6 +71,16 @@
             .col-lg-7
               %i.arrow.single
               = f.select("feedback", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
+              - if session[:feed_type_error].present?
+                .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+                  .bs-component{:style => "display: "}
+                    .form-group{:style => "margin-top:7px;"}
+                      .col-lg-7
+                        .field_with_errors
+                          %span.errorMessage{:for => "feedback_option_type"}
+                            = session[:feed_type_error].join('')
+                            = session[:feed_type_error] = nil
+                      %span.col-lg-1              
               - if @feedback.present? and @feedback.errors.present? and @feedback.errors.messages.include? :option_type
                 .field_with_errors{:style => 'color:red'}
                   %span{:for => "feedback_option2", :class => "errorMessage"} 
