@@ -6,11 +6,16 @@ class Admin::FeedbacksController < ApplicationController
   before_filter :find_user_feedback, :only => [:new, :index]
   before_filter :check_for_access, :only => [:index,:new]
   before_filter :check_user_role, :except => [:index]
-  before_action :find_feedback_form
+  #before_action :find_feedback_form
   
 	def index
     @feedbacks = Feedback.search(params,@feedbacks) if params[:search].present?
-    @feedbacks = @feedbacks.where(feedback_form_id: params[:feedback_form_id])#@feedbacks#.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
+    if params[:feedback_form_id].present?
+      @feedbacks = @feedbacks.where(event_id:params[:event_id],feedback_form_id:params[:feedback_form_id])
+    else
+      @feedbacks = @feedbacks.where(event_id:@event.id )#@feedbacks#.
+    end
+    #@feedbacks = @feedbacks.where(feedback_form_id: params[:feedback_form_id])#@feedbacks#.paginate(:page => params[:page], :per_page => 10) if params["format"] != "xls"
     respond_to do |format|
       format.html  
       format.xls do
@@ -21,32 +26,68 @@ class Admin::FeedbacksController < ApplicationController
     end
 	end
 
-	def new
-    @feedback = @event.feedbacks.build
-    @feedback = @feedback_form.feedbacks.build
+	# def new
+ #    @feedback = @event.feedbacks.build
+ #    @feedback = @feedback_form.feedbacks.build
+ #    @import = Import.new if params[:import].present?
+	# end
+  def new
+    @feedback = Feedback.new
     @import = Import.new if params[:import].present?
-	end
+  end
 
-	def create
-    @feedback = @event.feedbacks.build(feedback_params)
-    @feedback.feedback_form_id = params[:feedback_form_id] if params[:feedback_form_id].present?
-    if @feedback.save
-      if params[:type].present?
-        redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_engagement")
+  def create
+    if feedback_form_params[:feedback_form_id].present?
+      @feedback = @event.feedbacks.build(feedback_params)
+      @feedback.feedback_form_id = feedback_form_params[:feedback_form_id]
+      if @feedback.save
+        redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
       else
-        redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
+        session[:feed_que_error] = @feedback.errors[:question]
+        session[:feed_type_error] = @feedback.errors[:option_type]
+        redirect_to :back
+      end    
+    else 
+      @feedback_form = FeedbackForm.new(feedback_form_params) 
+      @feedback = @event.feedbacks.build(feedback_params)
+
+      if @feedback.valid? and @feedback_form.valid?
+        @feedback_form.save
+        @feedback.save
+        @feedback.update_column('feedback_form_id',@feedback_form.id)
+        if params[:type].present?
+          redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_engagement")
+        else
+          redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+        end
+      else
+        if !@feedback_form.valid?    #do not delete this line
+        end  
+        render :action => 'new'
       end
-    else
-      render :action => 'new'
-    end
-	end
+    end  
+  end
+
+# def create
+ #    @feedback = @event.feedbacks.build(feedback_params)
+ #    @feedback.feedback_form_id = params[:feedback_form_id] if params[:feedback_form_id].present?
+ #    if @feedback.save
+ #      if params[:type].present?
+ #        redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_engagement")
+ #      else
+ #        redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
+ #      end
+ #    else
+ #      render :action => 'new'
+ #    end
+	# end
 
 	def edit
 	end
 
 	def update
 	  if @feedback.update_attributes(feedback_params)
-      redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
     else
       render :action => "edit"
     end
@@ -68,7 +109,7 @@ class Admin::FeedbacksController < ApplicationController
 
   def destroy
     if @feedback.destroy
-      redirect_to admin_event_feedback_form_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
     end
   end
 
@@ -85,6 +126,11 @@ class Admin::FeedbacksController < ApplicationController
   def feedback_params
     params.require(:feedback).permit!
   end
+  
+  def feedback_form_params
+    params.require(:feedback_form).permit!
+  end
+
   def check_user_role
     if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #current_user.has_role? :db_manager 
       redirect_to admin_dashboards_path

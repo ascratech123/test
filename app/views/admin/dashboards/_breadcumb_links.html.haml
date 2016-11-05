@@ -54,7 +54,7 @@
           - if params[:action] == "show" and params[:controller] != "admin/mobile_applications" and params[:controller] != "admin/manage_mobile_apps" and params[:controller] != "admin/telecallers"
             - if !(current_user.has_role? :db_manager)
               - if params["controller"] == "admin/feedbacks"
-                = link_to edit_admin_event_feedback_form_feedback_path(:id => params["id"], :feedback_form_id => params["feedback_form_id"]) do
+                = link_to edit_admin_event_feedback_path(:id => params["id"]) do
                   %i.material-icons.feedbackEditColor
                     edit
               - else
