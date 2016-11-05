@@ -156,7 +156,7 @@
               .span.col-lg-1
                 = link_to("?" ,"/whats_this/app_info/master_screens/AppInfo_LoginScreenBackground.png", rel: "login_background_popup", title: "Login screen background", :class =>"fancybox whatsImg") 
         - if true
-          %p.OrTxt{:style => "display: #{(@event.login_at == 'Before Interaction' or @event.login_at == 'After Highlight') ? "none" : "" if @event.present?} "}
+          %p.OrTxt.login_background_color{:style => "display: #{(@event.login_at == 'Before Interaction' or @event.login_at == 'After Highlight') ? "none" : "" if @event.present?} "}
             or
           = f.custom_text_field_display1 :login_background_color, "Login screen background Color", :value => @mobile_application.login_background_color, :class => 'pick-a-color', :display => "#{(@event.login_at == 'Before Interaction'or @event.login_at == 'After Highlight') ? "false" : "true" if @event.present?}", :view_popup => {:image_path => "app_info/master_screens/AppInfo_LoginScreenBackground.png", :rel=> "login_background_color", :title => "Login screen background Color"}, :highlight_class => "#{get_highlight_class1(f.object)}"
         -if (f.object.marketing_app_event_id.blank? and @event.marketing_app.blank?)
@@ -207,7 +207,7 @@
                 .field_with_errors
                   .span{:class => "errorMessage"}
                     = er
-      - if (f.object.marketing_app_event_id.blank? and @event.marketing_app.blank?)
+      - if false#(f.object.marketing_app_event_id.blank? and @event.marketing_app.blank?)
         .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15.min-height-auto.choose-home-page{:style => f.object.application_type == 'multi event' ? 'display : block' : 'display : none'}
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
             %h4.heading-border.displaybolck.p-t-10.m-b-10
@@ -365,21 +365,21 @@
     if(answer[answer.selectedIndex].value=="Before Interaction"){
       $("#login_background_uploadBtn").parent().parent().parent().hide();
       $("#mobile_application_login_background_color").parent().parent().parent().hide();
-      $(".OrTxt").hide();
+      $(".login_background_color").hide();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().hide()
       $("#displayhighlight_message").hide()
     }
     if(answer[answer.selectedIndex].value=="After Splash"){
       $("#login_background_uploadBtn").parent().parent().parent().show();
       $("#mobile_application_login_background_color").parent().parent().parent().show();
-      $(".OrTxt").show();
+      $(".login_background_color").show();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().show()
       $("#displayhighlight_message").hide()
     }
     if(answer[answer.selectedIndex].value=="After Highlight"){
       $("#login_background_uploadBtn").parent().parent().parent().hide();
       $("#mobile_application_login_background_color").parent().parent().parent().hide();
-      $(".OrTxt").hide();
+      $(".login_background_color").hide();
       $("#eventlisting_screen_uploadBtn").parent().parent().parent().parent().hide()
       $("#displayhighlight_message").show()
     }
