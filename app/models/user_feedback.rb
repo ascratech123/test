@@ -6,7 +6,7 @@ class UserFeedback < ActiveRecord::Base
   after_save :update_invitee_updated_at
 
   validates :user_id, :feedback_id, presence: true
-  validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
+  validates_uniqueness_of :user_id, :scope => [:feedback_id, :feedback_form_id], :message => 'Feedback already submitted'
   validate :check_answer_or_description_present
   after_create :create_analytic_record, :update_feedback_form_id
   default_scope { order('created_at desc') }

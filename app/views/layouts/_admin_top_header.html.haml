@@ -102,7 +102,7 @@
                 = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - elsif name == "Feedback"
                 / = link_to "Feedback", admin_event_feedback_form_feedbacks_path, :class => "mdl-color-text--white" if @event.present?
-                = link_to "Feedback", new_admin_event_feedback_path, :class => "mdl-color-text--white" if @event.present?                
+                =# link_to "Feedback", new_admin_event_feedback_path, :class => "mdl-color-text--white" if @event.present?                
               - elsif page == "my_travel_docs"
                 = link_to "My Travel / ", admin_event_my_travels_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"

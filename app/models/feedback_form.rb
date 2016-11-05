@@ -1,6 +1,6 @@
 class FeedbackForm < ActiveRecord::Base
 	belongs_to :event 
-	has_many :feedbacks, :dependent => :destroy 
+	has_many :feedbacks, :dependent => :destroy
 
 	validates :title, presence: { :message => "This field is required." }
 

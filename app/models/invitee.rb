@@ -814,7 +814,7 @@ class Invitee < ActiveRecord::Base
     for invitee_id in invitee_ids
       for feedback_form_id in feedback_form_ids
         user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id, :user_id => invitee_id).order("updated_at")
-        hsh << {"invitee_id" => invitee_id,"feedback_form_id" => feedback_form_id, "last_updated" => user_feedbacks.last.updated_at} if user_feedbacks.present?
+        hsh << {"invitee_id" => invitee_id,"feedback_form_id" => feedback_form_id, "last_updated" => user_feedbacks.first.updated_at} if user_feedbacks.present?
       end
     end
     hsh
