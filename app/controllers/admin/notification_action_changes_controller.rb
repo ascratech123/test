@@ -5,8 +5,14 @@ class Admin::NotificationActionChangesController < ApplicationController
       feature_name = params[:feature_name].downcase.pluralize if params[:feature_name] != "E-Kit"
       feature_name = "e_kits" if params[:feature_name] == "E-Kit"
       event = Event.find(params[:event_id])
-      if ["speakers","polls","quizzes","agendas","e_kits"].include? feature_name
+      if ["speakers","polls","quizzes","agendas","e_kits","feedbacks"].include? feature_name
         @associated_data = instance_variable_set("@"+feature_name, event.send(feature_name))
+        if feature_name == "feedbacks"
+          feedback_form_ids = @associated_data.pluck(:feedback_form_id).uniq.compact
+          if feedback_form_ids.present?
+            @associated_data = FeedbackForm.where("id IN (?) and status = ? ",feedback_form_ids,"active")
+          end
+        end
       end
     end
   end

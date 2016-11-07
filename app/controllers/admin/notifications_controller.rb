@@ -73,8 +73,14 @@ class Admin::NotificationsController < ApplicationController
     if @notification.action.present?
       feature_name = @notification.action.downcase.pluralize if @notification.action != "E-Kit"
       feature_name = "e_kits" if @notification.action == "E-Kit"
-      if ["speakers","polls","quizzes","agendas","e_kits"].include? feature_name
+      if ["speakers","polls","quizzes","agendas","e_kits","feedbacks"].include? feature_name
         @data = instance_variable_set("@"+feature_name, @event.send(feature_name))
+        if feature_name == "feedbacks"
+          feedback_form_ids = @data.pluck(:feedback_form_id).uniq.compact
+          if feedback_form_ids.present?
+            @data = FeedbackForm.where("id IN (?) and status = ? ",feedback_form_ids,"active")
+          end
+        end
       end
     end
   end
