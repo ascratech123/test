@@ -108,6 +108,9 @@
                 - if params[:feedback_form_id].present?
                   - feedback = FeedbackForm.find_by_id(params[:feedback_form_id])
                   = link_to "/ #{feedback.title}", admin_event_feedbacks_path(:feedback_form_id=>feedback.id), :class => "mdl-color-text--white" if @event.present?
+              - elsif page == "my_travel_docs"
+                = link_to "My Travel / ", admin_event_my_travels_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
+                = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
               - else
                 = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
           - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
