@@ -5,7 +5,7 @@
         .mdl-cell.mdl-cell--6-col.mdl-cell--12-col-tablet
           %h3.mdl-color-text--white.m-t-15.p-l-40.p-v-20
             - page = params[:controller].split("/").second
-            - display_page_name = {"qnas" => "Q&A", "abouts" => "About", "contacts" => "Contact Us", "feedbacks" => "Feedback","quizzes" => "Quiz","faqs" => "FAQ","manage_mobile_apps" => "Mobile Apps","custom_page1s"=> "Custom Page 1","custom_page2s"=> "Custom Page 2","custom_page3s"=> "Custom Page 3","custom_page4s"=> "Custom Page 4","custom_page5s"=> "Custom Page 5", "chats" => "Chat", "invitee_groups" => "Invitee Group"}
+            - display_page_name = {"qnas" => "Q&A", "abouts" => "About", "contacts" => "Contact Us","quizzes" => "Quiz","faqs" => "FAQ","manage_mobile_apps" => "Mobile Apps","custom_page1s"=> "Custom Page 1","custom_page2s"=> "Custom Page 2","custom_page3s"=> "Custom Page 3","custom_page4s"=> "Custom Page 4","custom_page5s"=> "Custom Page 5", "chats" => "Chat", "invitee_groups" => "Invitee Group"}
             -if display_page_name.keys.include?(page)
               Manage 
               = display_page_name[page]
@@ -19,6 +19,10 @@
               Manage Users
             - elsif page == "prohibited_accesses"
               Restricted Access
+            - elsif page == "feedback_forms"
+              Manage Feedback Form
+            - elsif page == "feedbacks"
+              Manage Question                            
             -else
               Manage
               = page.humanize.titleize == "E Kits" ? "e-KIT" : page.humanize.titleize

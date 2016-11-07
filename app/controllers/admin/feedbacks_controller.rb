@@ -41,7 +41,7 @@ class Admin::FeedbacksController < ApplicationController
       @feedback = @event.feedbacks.build(feedback_params)
       @feedback.feedback_form_id = feedback_form_params[:feedback_form_id]
       if @feedback.save
-        redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+        redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id,:feedback_form_id=> @feedback.feedback_form_id)
       else
         session[:feed_que_error] = @feedback.errors[:question]
         session[:feed_type_error] = @feedback.errors[:option_type]
@@ -58,7 +58,7 @@ class Admin::FeedbacksController < ApplicationController
         if params[:type].present?
           redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_engagement")
         else
-          redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+          redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id,:feedback_form_id=> @feedback.feedback_form_id)
         end
       else
         if !@feedback_form.valid?    #do not delete this line
@@ -109,7 +109,7 @@ class Admin::FeedbacksController < ApplicationController
 
   def destroy
     if @feedback.destroy
-      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id,:feedback_form_id=>@feedback.feedback_form_id)
     end
   end
 
