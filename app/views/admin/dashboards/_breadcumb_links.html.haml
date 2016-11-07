@@ -58,7 +58,7 @@
                 - feedback = Feedback.find_by_id(params[:id])
                 = link_to edit_admin_event_feedback_path(:id => params["id"],:feedback_form_id=>feedback.feedback_form_id) do
                   %i.material-icons.feedbackEditColor
-                  edit
+                    edit
               - else
                 = show_edit_link(params)
           - if (params[:controller] == "admin/mobile_applications" and ["show","edit"].include?(params[:action])) or (params[:controller] == "admin/themes" and params[:step] == "event_theme") or (params[:controller] == "admin/event_features" and params[:action] == "new") or (params[:controller] == "admin/menus" and params[:action] == "index") 
