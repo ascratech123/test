@@ -97,7 +97,7 @@
                 = link_to "Invitees / ", admin_event_invitees_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - if name == "Feedback"
                 / = link_to "Feedback", admin_event_feedback_form_feedbacks_path, :class => "mdl-color-text--white" if @event.present?
-                = link_to "Feedback", new_admin_event_feedback_path, :class => "mdl-color-text--white" if @event.present?                
+                = link_to "Feedback", admin_event_feedbacks_path, :class => "mdl-color-text--white" if @event.present?                
               - else
                 = link_to "#{name}", get_feature_url(page, params), :class => "mdl-color-text--white" if @event.present? and page != "telecallers" and page != "telecaller_accessible_columns"
           - if params[:action] == "new" or (params[:controller] == "admin/themes" and params[:step] == "event_theme") and (name != "Look & Feel") and (page != "telecaller_accessible_columns")
