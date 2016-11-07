@@ -105,17 +105,17 @@
       / = link_to new_admin_event_feedback_form_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
       - if  params[:feedback_form_id].present?
         = link_to new_admin_event_feedback_path(:event_id => @event.id,:feedback_form_id=>params[:feedback_form_id]),:class => "rightBtn hvr-sweep-to-right" do      
-          New Feedback
+          New Question
         = link_to admin_event_feedback_forms_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
           Back to Feedback form         
       - else 
         = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
-          New Feedback
+          New Question
         = link_to admin_event_feedback_forms_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
           Back to Feedback form          
   - when 'feedback_form'
     = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      New Feedback
+      New Feedback Form
   - when 'image'   
     - if @event.present?
       = link_to  new_admin_event_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
@@ -203,6 +203,3 @@
   - when 'edm'
     = link_to new_admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => @campaign.id),:class => "rightBtn hvr-sweep-to-right" do
       New eDM
-  - when 'marketing_app'
-    = link_to new_admin_client_event_path(:client_id => params[:client_id],:marketing_app => true),:class => "rightBtn hvr-sweep-to-right" do
-      New Landing page    

@@ -24,7 +24,7 @@
               %span= link_to "",admin_event_sequence_path(:event_id => feedback.event_id, :id => feedback.id, :feedback_form_id => feedback.feedback_form_id, :type => "down", :feature_type => "feedbacks"),:class => "downarrow", :method => "put", :remote => true
         - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
           %td.description_adjust.font16
-            %a{'href' => "/admin/events/#{@event.id}//feedbacks/#{feedback.id}"}
+            %a{'href' => "/admin/events/#{@event.id}/feedbacks/#{feedback.id}?feedback_form_id=#{feedback.feedback_form_id}"}
               = feedback.question rescue nil
         - else
           %td.font16= feedback.question
@@ -36,7 +36,7 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback.id}"}
               / = edit_link(params, feedback.id)
               / = delete_link(params, feedback.id)
-              = link_to edit_admin_event_feedback_path(:id => feedback.id), :class => "mdl-menu__item" do
+              = link_to edit_admin_event_feedback_path(:id => feedback.id,:feedback_form_id=>feedback.feedback_form_id), :class => "mdl-menu__item" do
                 Edit
               = link_to admin_event_feedback_path(:id => feedback.id), method: :delete, data: { confirm: 'Are you sure?' }, :class => "mdl-menu__item" do
                 Delete

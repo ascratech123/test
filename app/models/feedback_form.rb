@@ -4,7 +4,7 @@ class FeedbackForm < ActiveRecord::Base
 
 	validates :title, presence: { :message => "This field is required." }
 
-	validates :title, uniqueness: {scope: :event_id, :case_sensitive => true}
+	validates :title, uniqueness: {scope: :event_id, :case_sensitive => false}
 
 	after_save :update_last_updated_model
 	before_create :set_sequence_no
