@@ -55,7 +55,7 @@ module SyncMobileData
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
-    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite',  'UserMicrosite', 'VenueSection', 'ConversationWall', 'EventVenue', 'PollWall', 'QnaWall', 'QuizWall', 'AgendaSpeaker']#.each {|value| model_name.delete(value)}
+    models_array = ["CkeditorAsset" ,"UserRegistration","SmtpSetting","Grouping","StoreInfo","LoggingObserver","StoreScreenshot","PushPemFile","EventGroup","EventFeatureList","Import","Device","User","Note","EventIcon","EventsUser","AgendasDayoption","ClientsUser","SchemaMigration","UsersRole","Attendee","Client", "City","Dayoption", "Licensee", "Role", "About","Tagging","Tag", 'EventsMobileApplication','PushNotification', 'InviteeStructure', 'InviteeDatum', 'Chat', 'InviteeGroup', 'Campaign', 'EdmMailSent', 'Edm', 'TelecallerAccessibleColumn', 'Gallery', 'CustomPage', 'RegistrationField','Session', 'AgendaTrack', 'BadgePdf', 'LastUpdatedModel', 'Microsite',  'UserMicrosite', 'VenueSection', 'ConversationWall', 'EventVenue', 'PollWall', 'QnaWall', 'QuizWall', 'AgendaSpeaker', 'InviteeAccess', 'MyProfile', 'MyTravelDoc']#.each {|value| model_name.delete(value)}
     model_name = model_name - models_array
     if latest_published_event_ids.present?
       last_updated_models = LastUpdatedModel.pluck("DISTINCT name")
@@ -106,7 +106,8 @@ module SyncMobileData
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           if latest_published_event_ids.present?
-            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", event_ids, start_event_date, end_event_date, latest_published_event_ids)
+            updated_theme_ids = Event.where(:id => latest_published_event_ids).pluck(:theme_id)
+            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", event_ids, start_event_date, end_event_date, updated_theme_ids)
           else
             themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
           end
