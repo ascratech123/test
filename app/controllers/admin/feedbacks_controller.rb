@@ -87,7 +87,7 @@ class Admin::FeedbacksController < ApplicationController
 
 	def update
 	  if @feedback.update_attributes(feedback_params)
-      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id)
+      redirect_to admin_event_feedbacks_path(:event_id => @feedback.event_id,:feedback_form_id=> @feedback.feedback_form_id)
     else
       render :action => "edit"
     end
