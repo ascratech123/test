@@ -112,9 +112,14 @@ module SyncMobileData
           end
           data[:"#{name_table(model)}"] = themes.as_json(:except => [:event_background_image_file_name, :event_background_image_content_type, :event_background_image_file_size],:methods => [:event_background_image_url]) rescue []  
         when 'Winner'
-          award_ids = Award.where(:event_id => all_event_ids).pluck(:id) rescue nil
-          info = Winner.where(:award_id => award_ids, :updated_at => start_event_date..end_event_date) rescue nil
-          data[:"#{name_table(model)}"] = info.as_json() rescue []
+          award_ids = Award.where(:event_id => event_ids).pluck(:id) rescue nil
+          published_award_ids = Award.where(:event_id => latest_published_event_ids).pluck(:id) if latest_published_event_ids.present?
+          if published_award_ids.present?
+            info = Winner.where("(award_id IN (?) and updated_at between ? and ?) or award_id IN (?)", award_ids, start_event_date, end_event_date, published_award_ids)
+          else
+            info = Winner.where(:award_id => award_ids, :updated_at => start_event_date..end_event_date)
+          end
+          data[:"#{name_table(model)}"] = info.as_json()
         when 'Comment'
           # conversation_ids = Conversation.where(:event_id => event_ids, :status => "approved").pluck(:id) rescue nil
         when 'Sponsor'

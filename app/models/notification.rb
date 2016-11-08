@@ -107,7 +107,9 @@ class Notification < ActiveRecord::Base
     self.create_notification_in_analytic
     # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
-    invitees = Invitee.where(:event_id => self.event_id)
+    event_ids = self.event.mobile_application.events.pluck(:id)
+    invitees = Invitee.where(:event_id => event_ids)
+    # invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
     if mobile_application_id.present?

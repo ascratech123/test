@@ -39,6 +39,7 @@ class Api::V1::TokensController < ApplicationController
       render :status=>200, :json=>{:status=>"Failure",:message=>"Invalid password."} and return
     else
       if @user.present?
+        logger.info @user.inspect
         @user.save
         render :status=>200, :json=>{:status=>"Success",:secret_key=>@user.secret_key,:key=>@user.key} and return
       end
@@ -46,6 +47,7 @@ class Api::V1::TokensController < ApplicationController
   end
 
   def create
+    logger.info @user.inspect
     @user.ensure_authentication_token
     if @user and (@user.get_secret_key.present? and params[:secret_key].present? and @user.get_secret_key.bytesize == params[:secret_key].bytesize ) and @user.authentication_token.present?
       session['invitee_id'] = @user.id
