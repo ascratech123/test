@@ -115,7 +115,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish, :update_event_last_updated] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -124,7 +124,6 @@ class Event < ActiveRecord::Base
   end
   
   def add_venues_from_event_venues
-    # binding.pry
     if self.event_venues.present?
       self.venues = self.event_venues.first.venue
       # self.venues = event_venue
@@ -132,7 +131,6 @@ class Event < ActiveRecord::Base
   end
 
   def event_venue_name
-    # binding.pry
     self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
   end
 
@@ -561,6 +559,10 @@ class Event < ActiveRecord::Base
     log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
     log_changes.each{|l| l.update_column("action", "unpublished")}
     #log_changes.destroy_all
+  end
+
+  def update_event_last_updated
+    self.update_column("published_at", Time.now)
   end
 
   def add_default_invitee
