@@ -136,7 +136,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish] do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish, :update_event_last_updated] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -584,8 +584,12 @@ def content_is_present
 
   def destroy_log_change_for_publish
     log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
-    #log_changes.each{|l| l.update_column("action", "unpublished")}
-    log_changes.destroy_all
+    log_changes.each{|l| l.update_column("action", "unpublished")}
+    #log_changes.destroy_all
+  end
+
+  def update_event_last_updated
+    self.update_column("published_at", Time.now)
   end
 
   def add_default_invitee
@@ -692,7 +696,12 @@ def content_is_present
           obj.update_column("event_display_time_zone", display_time_zone)
           obj.update_column("updated_at", Time.now)
           obj.update_last_updated_model
-          obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+          # obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+          for c in obj.comments
+            c.update_column("updated_at", Time.now)
+            Rails.cache.delete("formatted_created_at_with_event_timezone_#{c.id}")
+            Rails.cache.delete("formatted_updated_at_with_event_timezone_#{c.id}")
+          end if table_name == "conversations"
         end
       end
     end
