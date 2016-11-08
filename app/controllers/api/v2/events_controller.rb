@@ -1,5 +1,5 @@
-class Api::V1::NewEventsController < ApplicationController
-  require "sync_mobile_data"
+class Api::V2::EventsController < ApplicationController
+	  require "sync_mobile_data"
  
   respond_to :json
   before_filter :check_date, :only => :index
@@ -51,12 +51,31 @@ class Api::V1::NewEventsController < ApplicationController
     end
   end
 
+  # def get_event_ids(event_ids)
+  #   hsh = {}
+  #   for event in Event.where(:id => event_ids)
+  #   	binding.pry
+  #     hsh[event.id] = ((Time.now + event.timezone_offset) - event.start_event_time.strftime("%d %m %Y %H:%M %P").to_datetime).abs
+  #   end
+  #   closest_event_id = hsh.sort_by(&:last).first.first  
+  #   [closest_event_id]
+  # end
+
   def get_event_ids(event_ids)
-    hsh = {}
-    for event in Event.where(:id => event_ids)
-      hsh[event.id] = ((Time.now + event.timezone_offset) - event.start_event_time.strftime("%d %m %Y %H:%M %P").to_datetime).abs
-    end
-    closest_event_id = hsh.sort_by(&:last).first.first  
-    [closest_event_id]
-  end
+   ongoing = Event.where(:id => event_ids,:event_category=>"Ongoing")
+   if ongoing.present?
+   	closest_event_id = ongoing.first.id
+   	return [closest_event_id]
+   end
+   upcoming = Event.where(:id => event_ids,:event_category=>"Upcoming")
+   if upcoming.present?
+   	closest_event_id = upcoming.first.id
+   	return [closest_event_id]
+   end
+   past = Event.where(:id => event_ids,:event_category=>"Past")
+   if past.present?
+   	closest_event_id = past.last.id
+   	return [closest_event_id]
+   end
+  end	
 end

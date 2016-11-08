@@ -48,7 +48,7 @@ module SyncMobileData
   def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     event_status_str = event_status.join("_")
-    if event_ids.present?
+    if event_ids.present?  
       events = Event.where(:id => event_ids)
     else
       events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
@@ -85,13 +85,9 @@ module SyncMobileData
           event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status )
           data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone])
         when 'EventFeature'
-          data[:"#{name_table(model)}"] = Rails.cache.fetch("event_features_json_#{mobile_application_id}_#{event_status_str}") { 
-              info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url])
-            }
+          data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility], :methods => [:main_icon_url, :menu_icon_url])
         when 'Speaker'
-          data[:"#{name_table(model)}"] = Rails.cache.fetch("speakers_json_#{mobile_application_id}_#{event_status_str}") {
-            info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated])
-          }
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:profile_pic_file_name, :profile_pic_content_type, :profile_pic_file_size], :methods => [:profile_pic_url, :is_rated])
         when 'Image'
           images = Image.where(:updated_at => start_event_date..end_event_date) rescue []
           data[:"#{name_table(model)}"] = images.where(:imageable_id => event_ids, :imageable_type => "Event").as_json(:only => [:id, :name, :imageable_id, :imageable_type, :image_updated_at], :methods => [:image_url]) rescue []  
@@ -108,13 +104,9 @@ module SyncMobileData
         when 'Comment'
           # conversation_ids = Conversation.where(:event_id => event_ids, :status => "approved").pluck(:id) rescue nil
         when 'Sponsor'
-          data[:"#{name_table(model)}"] = Rails.cache.fetch("sponsors_json_#{mobile_application_id}_#{event_status_str}") {
-            info.as_json(:except => [:updated_at, :created_at], :methods => [:image_url])
-          }
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at], :methods => [:image_url])
         when 'Exhibitor'
-          data[:"#{name_table(model)}"] = Rails.cache.fetch("exhibitors_json_#{mobile_application_id}_#{event_status_str}") {
-            info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url])
-          }
+          data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url])
         when 'Notification'
           info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
           data[:"notifications"] = info
