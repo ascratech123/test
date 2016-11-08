@@ -178,7 +178,7 @@
                   Import
               - if params[:action] == "index" and @feedbacks.present?# and ( current_user.has_role? :licensee_admin or current_user.has_role? :db_manager)
                 / - if !(current_user.has_role? :db_manager)
-                = link_to admin_event_feedbacks_path(:event_id => @event.id, :format => 'xls'),:class => "centerAlign" do
+                = link_to admin_event_feedbacks_path(:event_id => @event.id,:feedback_form_id=>params[:feedback_form_id], :format => 'xls'),:class => "centerAlign" do
                   Export  
                 - if false
                   = link_to new_admin_event_feedback_path(:event_id => @event.id, :importable_type => 'user_feedbacks', :import => "xls") ,:class => "centerAlign" do
