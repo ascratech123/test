@@ -9,6 +9,7 @@
     %tr.create-feedback-form
       %th Sequence
       %th.feedback-title Feedback Title 
+      %th Status
       %th 
     - objs.each_with_index do |feedback_form,index|
       %tr
@@ -25,6 +26,8 @@
           %a{'href' => admin_event_feedbacks_path(:event_id => params[:event_id],:feedback_form_id=>feedback_form.id)}
 
             = feedback_form.title
+        %td.font16
+          = feedback_form.status    
         %td.IconDrp
           = more_vert_button(feedback_form.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback_form.id}"}
