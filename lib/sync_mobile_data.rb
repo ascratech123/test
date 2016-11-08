@@ -7,7 +7,7 @@ module SyncMobileData
       if model_name == 'InviteeNotification'
         update_data = InviteeNotification.where(:notification_id => value["notification_id"], :invitee_id => value["invitee_id"]).last
       elsif model_name == 'UserFeedback'
-        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"], :feedback_form_id => value["feedback_form_id"]) 
+        update_data = UserFeedback.find_or_create_by(:feedback_id => value["feedback_id"], :user_id => value["user_id"], :feedback_form_id => value["feedback_form_id"])
       else
         update_data = get_model_class(model_name).find_by_id(value["id"])
       end
@@ -45,10 +45,15 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app)
+  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
-    events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
-    event_ids = events.pluck(:id) rescue nil
+    event_status_str = event_status.join("_")
+    if event_ids.present?
+      events = Event.where(:id => event_ids)
+    else
+      events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
+      event_ids = events.pluck(:id) rescue nil
+    end
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
@@ -104,6 +109,7 @@ module SyncMobileData
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
+          polls = info
           data[:"#{name_table(model)}"] = info.as_json(:except => [:option010], :methods => [:option_percentage, :option10]) rescue []
         when 'Invitee'
           arr = []
@@ -123,6 +129,7 @@ module SyncMobileData
             data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url]) rescue []
           end
         when 'Quiz'
+          quizzes = info
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_correct_answer_percentage, :get_total_answer, :get_correct_answer_count]) rescue []  
         when 'LogChange'
           if not (start_event_date == "01/01/1990 13:26:58".to_time.utc)
