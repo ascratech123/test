@@ -27,7 +27,7 @@
 
             = feedback_form.title
         %td.font16
-          = feedback_form.status    
+          = feedback_form.status.titleize     
         %td.IconDrp
           = more_vert_button(feedback_form.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback_form.id}"}
