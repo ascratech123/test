@@ -18,7 +18,8 @@ class Admin::UserFeedbacksController < ApplicationController
   private
 
   def find_features
-    @feedbacks = @event.feedbacks
+    #@feedbacks = @event.feedbacks
+    @feedbacks = @event.feedbacks.where(:feedback_form_id=>params[:feedback_form_id])
     @user_feedbacks = UserFeedback.where(:feedback_id => @feedbacks.pluck(:id))
   end
 end
