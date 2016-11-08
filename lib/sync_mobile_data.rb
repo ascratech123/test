@@ -45,11 +45,15 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app)
+  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     event_status_str = event_status.join("_")
-    events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
-    event_ids = events.pluck(:id) rescue nil
+    if event_ids.present?
+      events = Event.where(:id => event_ids)
+    else
+      events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
+      event_ids = events.pluck(:id) rescue nil
+    end
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
