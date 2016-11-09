@@ -35,7 +35,7 @@ class UserFeedback < ActiveRecord::Base
   def Timestamp
     feedback = self.feedback
     # feedback.created_at.in_time_zone(feedback.event_timezone).strftime('%m/%d/%Y %T') rescue ""
-    (feedback.created_at + feedback.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
+    (self.created_at + feedback.event.timezone_offset.to_i.seconds).strftime("%d/%m/%Y %T")
   end
 
 	def email

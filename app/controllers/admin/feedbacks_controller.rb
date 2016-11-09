@@ -116,7 +116,9 @@ class Admin::FeedbacksController < ApplicationController
 	protected
 
   def find_user_feedback
-    @user_feedbacks = UserFeedback.where(:feedback_id => @feedbacks.pluck(:id)) if @feedbacks.present?
+    @feedback_ids = Feedback.where(:feedback_form_id=>params[:feedback_form_id])
+    @user_feedbacks = UserFeedback.where(:feedback_id => @feedback_ids.pluck(:id)) if @feedback_ids.present?
+    #@user_feedbacks = UserFeedback.where(:feedback_id => @feedbacks.pluck(:id)) if @feedbacks.present?
   end
 
   def find_feedback_form
@@ -133,7 +135,8 @@ class Admin::FeedbacksController < ApplicationController
 
   def check_user_role
     if (current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #current_user.has_role? :db_manager 
-      redirect_to admin_dashboards_path
+      redirect_to admin_prohibited_accesses_path
+      #redirect_to admin_dashboards_path
     end  
   end
 end
