@@ -235,7 +235,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
     end
-    data["all_events"] = Event.where(:id => all_mobile_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app], :methods => [:logo_url,:inside_logo_url]) if all_mobile_event_ids.present?
+    data["all_events"] = Event.where(:id => all_mobile_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app,:start_event_time], :methods => [:logo_url,:inside_logo_url]) if all_mobile_event_ids.present?
     return data
   end  
 
