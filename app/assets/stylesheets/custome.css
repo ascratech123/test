@@ -86,7 +86,7 @@
 /*=======================Nilam CSS Start=================================*/
 .none{display:none;}
 .block{display:block;}
-
+.save_button.mdl-card.feedbackFormPage{background:none;}
 .sequence_update .ClientPopup-info{position: fixed; top:50%;}
 
 #register-form.pollWallForm form {position: relative;}

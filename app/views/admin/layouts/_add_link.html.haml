@@ -100,11 +100,20 @@
       New FAQ
   - when 'feedback' 
     - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role])) #!(current_user.has_role? :db_manager)
-      = link_to new_admin_event_feedback_form_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-        New Feedback
+      / = link_to new_admin_event_feedback_form_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      - if  params[:feedback_form_id].present?
+        = link_to new_admin_event_feedback_path(:event_id => @event.id,:feedback_form_id=>params[:feedback_form_id]),:class => "rightBtn hvr-sweep-to-right" do      
+          New Question
+        = link_to admin_event_feedback_forms_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
+          Back to Feedback form         
+      - else 
+        = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
+          New Question
+        = link_to admin_event_feedback_forms_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do      
+          Back to Feedback form          
   - when 'feedback_form'
-    = link_to new_admin_event_feedback_form_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
-      Create Feedback Form
+    = link_to new_admin_event_feedback_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+      New Feedback Form
   - when 'image'   
     - if @event.present?
       = link_to  new_admin_event_image_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do

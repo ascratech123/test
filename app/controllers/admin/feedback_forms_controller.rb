@@ -24,9 +24,12 @@ class Admin::FeedbackFormsController < ApplicationController
 		@feedback_form = FeedbackForm.find(params[:id])
 	end
 
-	def update
-		@feedback_form = FeedbackForm.find(params[:id])
-	  if @feedback_form.update_attributes(feedback_form_params)
+  def update
+    @feedback_form = FeedbackForm.find(params[:id])
+    if params[:feedback_form_status].present? and params[:feedback_form_status] =="true"
+      @feedback_form.update_attribute('status',params[:status])
+      redirect_to admin_event_feedback_forms_path(:event_id => @feedback_form.event_id)
+	  elsif @feedback_form.update_attributes(feedback_form_params)
       redirect_to admin_event_feedback_forms_path(:event_id => @feedback_form.event_id)
     else
       render :action => "edit"
