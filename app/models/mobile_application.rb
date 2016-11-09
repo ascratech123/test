@@ -52,9 +52,17 @@ class MobileApplication < ActiveRecord::Base
                                          :thumb => "-strip -quality 80"}
                                          }.merge(Mobile_Application_LISTING_SCREEN_BACKGROUND_PATH)
 
+  has_attached_file :visitor_registration_background_image, {:styles => {:large => "90x90>",
+                                         :small => "60x60>", 
+                                         :thumb => "54x54>"},
+                             :convert_options => {:large => "-strip -quality 90", 
+                                         :small => "-strip -quality 80", 
+                                         :thumb => "-strip -quality 80"}
+                                         }.merge(Mobile_Application_VISITOR_REGISTRATION_IMAGE_PATH)
+
   validates_attachment_content_type :app_icon,:content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :splash_screen, :content_type => ["image/png"],:message => "please select valid format."
-  validates :name, :application_type, :listing_screen_text_color, presence: { :message => "This field is required." }
+  validates :name, :application_type, :listing_screen_text_color, :visitor_registration, presence: { :message => "This field is required." }
   validate :listing_screen_text_color_presentce
   validates :name, uniqueness: {scope: :client_id}
   validates :social_media_logins, presence: { :message => "This field is required." },:if => Proc.new{|p| p.social_media_status.present? and p.social_media_status == "active" and p.social_media_logins.blank? }
@@ -63,6 +71,7 @@ class MobileApplication < ActiveRecord::Base
   validate :image_dimensions_for_splash_screen, :if => Proc.new{|p| p.splash_screen_file_name_changed? and p.splash_screen_file_name.present? }
   validate :image_dimensions_for_login_background, :if => Proc.new{|p| p.login_background_file_name_changed? and p.login_background_file_name.present? }
   validate :image_dimensions_for_screen_background, :if => Proc.new{|p| p.listing_screen_background_file_name_changed? and p.listing_screen_background_file_name.present? }
+  validate :registration_background_image_or_color_present, :if => Proc.new{|p| p.visitor_registration == "yes" and p.visitor_registration_background_image_file_name.blank? and p.visitor_registration_background_color.blank? }
   
   after_save :update_last_updated_model
   
@@ -113,6 +122,14 @@ class MobileApplication < ActiveRecord::Base
 
   def listing_screen_background_url(style=:large)
     style.present? ? self.listing_screen_background.url(style) : self.listing_screen_background.url
+  end
+
+  def visitor_registration_background_image_url
+    self.visitor_registration_background_image.present? ? self.visitor_registration_background_image.url(:large) : " "
+  end
+
+  def visitor_registration_back_color
+    self.visitor_registration_background_color.present? ? self.visitor_registration_background_color : " "
   end
 
   def app_icon_url(style=:large)
@@ -208,6 +225,11 @@ class MobileApplication < ActiveRecord::Base
     mobile_dimension_height_listing_screen_background, mobile_dimension_width_listing_screen_background  = 1600.0, 960.0
     dimensions_listing_screen_background = Paperclip::Geometry.from_file(listing_screen_background.queued_for_write[:original].path)
     errors.add(:listing_screen_background, "Image size should be 960x1600px only")  if (dimensions_listing_screen_background.width != mobile_dimension_width_listing_screen_background or dimensions_listing_screen_background.height != mobile_dimension_height_listing_screen_background)
+  end
+
+  def registration_background_image_or_color_present
+    errors.add(:visitor_registration_background_image, "This field is required.") if (visitor_registration_background_image_file_name.blank?)
+    errors.add(:visitor_registration_background_color, "This field is required.") if (visitor_registration_background_color.blank?)
   end
 
   def change_status(mobile_app)

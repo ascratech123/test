@@ -113,6 +113,19 @@
         = f.custom_text_field :venues, "Venue"
         = f.custom_text_field :google_map_link, "Google Map"
         = f.custom_text_area_field :remarks, "Remarks"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-10
+          .mdl-grid.p-v-5
+            .col-lg-4.mdl-typography--text-right
+              %p.displayInlineBlock.multicitytxt Event Type for Registration ? *
+            .col-lg-3.p-h-12   
+              - er = f.object.errors.messages[:event_type_for_registration].join(',') rescue nil
+              - f.object.errors.messages[:event_type_for_registration].clear if f.object.errors.messages[:event_type_for_registration].present?
+              = f.custom_radio_button_menu :event_type_for_registration, "open","Open", :id => "event_type_open", :default_checked => (f.object.event_type_for_registration == 'open') ? 'checked' : ''
+              = f.custom_radio_button_menu :event_type_for_registration, "close","Close", :id => "event_type_close", :default_checked => (f.object.event_type_for_registration == 'close') ? 'checked' : ''
+              .field_with_errors
+                .span{:class => "errorMessage"}
+                  = er
+
     - elsif false  
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
