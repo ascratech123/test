@@ -25,7 +25,7 @@ class Api::V2::EventsController < ApplicationController
       all_event_ids = (params[:event_id].present? ? [] : all_event_ids)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i
-          render :status => 200, :json => {:message => "Invalid event_id"}
+          render :status => 200, :json => {:message => "Invalid event_id"} and return
         else
           event_ids = [params[:event_id].to_i]
         end
