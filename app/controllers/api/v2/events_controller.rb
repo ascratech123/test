@@ -18,7 +18,8 @@ class Api::V2::EventsController < ApplicationController
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
         event_ids = allow_ids
       end 
-      all_events = mobile_application.events
+      status = (submitted_app == "Yes" ? ["published"] : ["approved", "published"])
+      all_events = mobile_application.events.where(:status => status)
       event_ids ||= all_events.pluck(:id)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i
