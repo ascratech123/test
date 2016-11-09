@@ -450,6 +450,16 @@ background:url(/assets/funnel.png) no-repeat; height:17px; top:18px; right:-8px;
 .venue_chk_ml0 .md-checkbox{margin-left:0px;}
 .titleQuestion{margin-left:15px;}
 .col-lg-7.notification.m-l-10.inviteewidth{ width: 56.88%;}
+.p-h-12.socialchk.paddingChkbox{padding: 0 9px !important;}
+.save_button .socialMediaRadioBtn .mdl-radio {
+    margin: 0;
+    vertical-align: middle;
+}
+.socialMediaRadioBtn .mdl-radio.is-upgraded {
+    padding-left: 24px;
+    padding-right: 15px;
+}
+.form-horizontal .socialchk.paddingChkbox .checkbox{padding-top:0px;}
 /*Azeem CSS Start*/
 
 .m12t{margin-top:12px;}

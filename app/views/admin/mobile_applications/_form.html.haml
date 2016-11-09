@@ -156,12 +156,53 @@
             or
           = f.custom_text_field_display1 :login_background_color, "Login screen background Color", :value => @mobile_application.login_background_color, :class => 'pick-a-color', :display => "#{(@event.login_at == 'Before Interaction'or @event.login_at == 'After Highlight') ? "false" : "true" if @event.present?}", :view_popup => {:image_path => "app_info/master_screens/AppInfo_LoginScreenBackground.png", :rel=> "login_background_color", :title => "Login screen background Color"}, :highlight_class => "#{get_highlight_class1(f.object)}"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          .mdl-grid.p-v-5
+          .mdl-grid.p-v-5.socialMediaRadioBtn
             .col-lg-4.mdl-typography--text-right
               %p.displayInlineBlock.multicitytxt  Do you need Social Media Login?
             .col-lg-3.p-h-12   
               = f.custom_radio_button_menu :social_media_status, "active","Yes", :id => "url_page_type", :default_checked => (f.object.social_media_status == 'active') ? 'checked' : ''
               = f.custom_radio_button_menu :social_media_status, "deactive","No", :id => "build_new_page_type", :default_checked => (f.object.social_media_status == 'deactive') ? 'checked' : ''
+
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck.socialIconChkbox.socialMedialogins{:style => "display: #{(f.object.social_media_status.present? and f.object.social_media_status == "active") ? "" : "none"}"}
+          .form-group.mobiappstype
+            .col-lg-4.mdl-typography--text-right
+            .col-lg-7.p-h-12.socialchk.paddingChkbox
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                - er = f.object.errors.messages[:social_media_logins].join(',') rescue nil
+                - f.object.errors.messages[:social_media_logins].clear if f.object.errors.messages[:social_media_logins].present?
+                %label.help-tip{:for => "social_login_1"}
+                  = check_box_tag "mobile_application[social_media_logins][]","facebook",(f.object.social_media_logins.present? and f.object.social_media_logins.include?("facebook") ? "checked" : false), :id => "social_login_1"
+                  %span.checkbox
+                  %span.top3
+                    Facebook
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                %label.help-tip{:for => "social_login_2"}
+                  = check_box_tag "mobile_application[social_media_logins][]","twitter",(f.object.social_media_logins.present? and f.object.social_media_logins.include?("twitter") ? "checked" : false), :id => "social_login_2" 
+                  %span.checkbox
+                  %span.top3
+                    Twitter
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                %label.help-tip{:for => "social_login_3"}
+                  = check_box_tag "mobile_application[social_media_logins][]","instagram",(f.object.social_media_logins.present? and f.object.social_media_logins.include?("instagram") ? "checked" : false), :id => "social_login_3"
+                  %span.checkbox
+                  %span.top3
+                    Instagram      
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                %label.help-tip{:for => "social_login_4"}
+                  = check_box_tag "mobile_application[social_media_logins][]","google_plus",(f.object.social_media_logins.present? and f.object.social_media_logins.include?("google_plus") ? "checked" : false), :id => "social_login_4"
+                  %span.checkbox
+                  %span.top3
+                    Google +
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                %label.help-tip{:for => "social_login_5"}
+                  = check_box_tag "mobile_application[social_media_logins][]","linked_in",(f.object.social_media_logins.present? and f.object.social_media_logins.include?("linked_in") ? "checked" : false), :id => "social_login_5" 
+                  %span.checkbox
+                  %span.top3
+                    LinkedIn
+                .field_with_errors
+                  .span{:class => "errorMessage"}
+                    = er
+
 
       / .mdl-grid.mdl-shadow--1dp.mdl-card.m-t-40.p-b-15
       /   .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5
@@ -302,4 +343,12 @@
       $("#event_login_at").append($("<option value='After Highlight'>After Event Highlights</option>"));
     }
     $("#mobile_application_listing_screen_text_color").parent().parent().parent().show();
+  });
+
+  $("#url_page_type").click(function(){
+    $(".socialMedialogins").show()
+  });
+
+  $("#build_new_page_type").click(function(){
+    $(".socialMedialogins").hide()
   });
