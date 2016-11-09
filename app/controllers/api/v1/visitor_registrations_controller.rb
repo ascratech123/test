@@ -10,6 +10,8 @@ class Api::V1::VisitorRegistrationsController < ApplicationController
       @events.each do |event|
         @invitee = event.invitees.build
       end
+    else
+      @invitee = Invitee.new
     end
   end
 
