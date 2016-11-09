@@ -104,8 +104,12 @@ class EKit < ActiveRecord::Base
   #   data  
   # end
 
-  def self.get_e_kits_all_events(event_ids, start_event_date, end_event_date)
-    tags = EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).tag_counts_on(:tags) rescue []
+  def self.get_e_kits_all_events(event_ids, start_event_date, end_event_date, latest_published_event_ids)
+    if latest_published_event_ids.present?
+      tags = EKit.where("(event_id IN (?) and updated_at between ? and ?) or event_id IN (?)", event_ids, start_event_date, end_event_date, latest_published_event_ids).tag_counts_on(:tags)
+    else
+      tags = EKit.where(:event_id => event_ids, :updated_at => start_event_date..end_event_date).tag_counts_on(:tags)
+    end
     data = []
     value = {}
     tags.each do |tag|

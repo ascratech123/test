@@ -88,7 +88,7 @@ module SyncMobileData
           data[:"comments"] = info.as_json(:methods => [:user_name, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name]) rescue []
           if current_user.present?
             info = Like.where(:likable_id => conversation_ids, likable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json() rescue []
+            data[:"likes"] = info.as_json() rescue []
           end
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
@@ -111,7 +111,8 @@ module SyncMobileData
         when 'Theme'
           theme_ids = events.pluck(:theme_id)
           if latest_published_event_ids.present?
-            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", event_ids, start_event_date, end_event_date, latest_published_event_ids)
+            updated_theme_ids = Event.where(:id => latest_published_event_ids).pluck(:theme_id)
+            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", event_ids, start_event_date, end_event_date, updated_theme_ids)
           else
             themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
           end
@@ -218,8 +219,8 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
           end
         when 'EKit' 
-          info = EKit.get_e_kits_all_events(all_event_ids, start_event_date, end_event_date)
-          data[:"#{name_table(model)}"] = info rescue []
+          info = EKit.get_e_kits_all_events(event_ids, start_event_date, end_event_date, latest_published_event_ids)
+          data[:"#{name_table(model)}"] = info
         when 'Analytic'  
           if current_user.present?
             # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, current_user.email).pluck(:id) rescue nil

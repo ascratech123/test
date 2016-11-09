@@ -1,7 +1,7 @@
 class Like < ActiveRecord::Base
 	
   attr_accessor :platform
-  belongs_to :likable, polymorphic: true
+  belongs_to :likable, polymorphic: true, :counter_cache => :likes_count_cache
   belongs_to :user, :class_name => 'Invitee', :foreign_key => 'user_id'
   
   validates :user_id, :likable_type, :likable_id, presence: true
