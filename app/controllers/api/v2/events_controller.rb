@@ -19,8 +19,10 @@ class Api::V2::EventsController < ApplicationController
         event_ids = allow_ids
       end 
       status = (submitted_app == "Yes" ? ["published"] : ["approved", "published"])
-      all_events = mobile_application.events.where(:status => status)
-      event_ids ||= all_events.pluck(:id)
+      all_events = mobile_application.events.where(:status => status, :updated_at => start_event_date...end_event_date)
+      all_event_ids = all_events.pluck(:id)
+      event_ids ||= all_event_ids
+      all_event_ids = (params[:event_id].present? ? [] : all_event_ids)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i
           render :status => 200, :json => {:message => "Invalid event_id"}
@@ -34,8 +36,8 @@ class Api::V2::EventsController < ApplicationController
           event_ids = get_event_ids(event_ids)
         end
       end
-      data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids) 
-      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :data => data, :all_events_data => all_events.as_json(:only => [:id, :event_category], :methods => [:logo_url]) }
+      data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_event_ids) 
+      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 

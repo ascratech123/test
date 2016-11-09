@@ -45,7 +45,7 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil)
+  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil, all_mobile_event_ids = nil)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     event_status_str = event_status.join("_")
     if event_ids.present?  
@@ -235,6 +235,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json() rescue []
       end  
     end
+    data["all_events"] = Event.where(:id => all_mobile_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app], :methods => [:logo_url,:inside_logo_url]) if all_mobile_event_ids.present?
     return data
   end  
 
