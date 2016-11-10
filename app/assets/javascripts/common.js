@@ -819,8 +819,10 @@ $(document).ready(function(){
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
   });
-  $('.customButton').click(function(){
+  $('#customButton').click(function(){
     $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
+    $('.selectContentDiv').show();
+    $('.copyEvent, .ClientPopup, .popup-overlay').hide();
   });
   $('.add-data #no').click(function(){
     $('.selectContentDiv').hide()
@@ -829,7 +831,7 @@ $(document).ready(function(){
   });
 
   /* Added by hemant */
-  $(document).on('click', '.copyButton', function(){
+  $(document).on('click', '#copyButton', function(){
     $('.selectContentDiv').hide();
     $('.copyEvent, .ClientPopup, .popup-overlay').show();
   });
@@ -839,7 +841,7 @@ $(document).on('click', '.ClickPop', function(){
   $('#copy_content').val(true);
   $('#custom_content').val('');
 })
-$(document).on('click', '.customButton', function(){
+$(document).on('click', '#customButton', function(){
   $('#custom_content').val(true);
   $('#copy_content').val('');
 })
