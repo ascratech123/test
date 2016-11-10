@@ -1,5 +1,18 @@
 
 $(document).ready(function(){
+  $('#home_page_type1').click(function(){
+    $('.select-event').show()
+  })
+  $('#home_page_type2').click(function(){
+    $('.select-event').hide()
+  })
+  $('#option1').click(function(){
+    $('.choose-home-page').hide()
+  })
+  $('#option2').click(function(){
+    $('.choose-home-page').show()
+  })
+
   // $("a[href$='.jpg'],a[href$='.png'],a[href$='.gif']").attr('rel', 'gallery')
   $(".fancybox").fancybox({
     openEffect  : 'none',
@@ -36,17 +49,17 @@ $(document).ready(function(){
                
   });
 
-	$('.tabclick').click(function(){
-	var el = $(this).attr('for');
-	var DetailsEvent = $('.'+el).css('display');
-		if(DetailsEvent == 'none'){
-				$('.tabularlist').slideUp(500);
-				$('.'+el).slideDown(500);
-			}
-			else{
-				$('.'+el).slideUp(500);
-				}
-	});
+  $('.tabclick').click(function(){
+  var el = $(this).attr('for');
+  var DetailsEvent = $('.'+el).css('display');
+    if(DetailsEvent == 'none'){
+        $('.tabularlist').slideUp(500);
+        $('.'+el).slideDown(500);
+      }
+      else{
+        $('.'+el).slideUp(500);
+        }
+  });
   /*$('.closeclick').click(function() {
     $('.popup-overlay').hide();
     $('.ClientPopup-info').hide();
@@ -111,16 +124,16 @@ $('.help-popup-overlay').fadeOut();
 })
 
 
-	$('.menuclick').click(function(){
-		var menudsp =$('.collapseHide').css('display');
-		if(menudsp =='none'){
-			$('.collapseHide').slideDown(500);
-		}	
-		else{
+  $('.menuclick').click(function(){
+    var menudsp =$('.collapseHide').css('display');
+    if(menudsp =='none'){
+      $('.collapseHide').slideDown(500);
+    } 
+    else{
 
-			$('.collapseHide').slideUp(500);
-		}
-	})
+      $('.collapseHide').slideUp(500);
+    }
+  })
   $('.menuSubclick').click(function(){
     var menudsp =$('.SubMenucollapseHide').css('display');
     if(menudsp =='none'){
@@ -132,7 +145,7 @@ $('.help-popup-overlay').fadeOut();
     }
   })
   
-	$('.FeedBackHide').click(function(){
+  $('.FeedBackHide').click(function(){
     var feed = $(this).parent().parent('.feed').next('.FeedBackComment').css('display');
       if(feed == 'none'){
       $('.FeedBackHide').html('show')
@@ -159,21 +172,21 @@ $('.help-popup-overlay').fadeOut();
           }
   });
   $('.toggleDiv').css("display","none");
-		$('.viewMoreLink').click(function(){
-			$('.viewMoreLink').html("<span>view less</span>")
-			var dsp = $(".toggleDiv").css('display');
-			if(dsp == 'flex'){
-				$('.toggleDiv').slideUp(500)
-				$('.viewMoreLink').html("<span>view more</span>")
-			}
-			else{
-				$('.toggleDiv').slideDown(500)
-				$('.viewMoreLink').html("<span>view less</span>")
-			}
-		})
+    $('.viewMoreLink').click(function(){
+      $('.viewMoreLink').html("<span>view less</span>")
+      var dsp = $(".toggleDiv").css('display');
+      if(dsp == 'flex'){
+        $('.toggleDiv').slideUp(500)
+        $('.viewMoreLink').html("<span>view more</span>")
+      }
+      else{
+        $('.toggleDiv').slideDown(500)
+        $('.viewMoreLink').html("<span>view less</span>")
+      }
+    })
      
   /*$('.datePicker').each(function() {
-  	new Pikaday({
+    new Pikaday({
       field: $(this)[0]
     })
   })   
@@ -181,25 +194,25 @@ $('.help-popup-overlay').fadeOut();
   $('.datePicker').trigger('click')*/
 
 
-	$(".dropDownDiv").click(function(){
-		$(this).children('.dropDownUl').slideToggle('fast');
-		$('.dropDownDiv').not(this).children('.dropDownUl').slideUp("fast");
-	});
+  $(".dropDownDiv").click(function(){
+    $(this).children('.dropDownUl').slideToggle('fast');
+    $('.dropDownDiv').not(this).children('.dropDownUl').slideUp("fast");
+  });
 
 
-	$(".dropDownUl li").click(function(){
+  $(".dropDownUl li").click(function(){
        var selectedText = $(this).html();
         $(this).parent().prev().html(selectedText);
     })
-	$('.headerdrop').click(function(){
-		var droptxt = $(".dropDownUl").css('display');
-		if(droptxt == 'none'){
-			$('.dropDownUl').slideDown(500)
-		}
-		else{
-			$('.dropDownUl').slideUp(500)
-			}
-	})
+  $('.headerdrop').click(function(){
+    var droptxt = $(".dropDownUl").css('display');
+    if(droptxt == 'none'){
+      $('.dropDownUl').slideDown(500)
+    }
+    else{
+      $('.dropDownUl').slideUp(500)
+      }
+  })
 
     $('.adminClick').click(function(){
        var selectedText = $('.HideSearchBlog').css('display');
@@ -237,7 +250,10 @@ $('.help-popup-overlay').fadeOut();
         }
     });
 
-    
+   /* nilam - popup js - account expired */
+  $('.okButton button').click(function(){
+    $('.account-popup').css('display','none');
+  });  
 
   $('#date').bootstrapMaterialDatePicker
       ({
@@ -301,6 +317,15 @@ $(window).load(function() {
     }
   });
 });
+
+function add_fields_for_agenda_speakers(link, association, content) {
+  if ($('.venueFields').find("select").length < 5){
+    var new_id = new Date().getTime();
+    var regexp = new RegExp("new_" + association, "g");
+    $(".venueFields").append(content.replace(regexp, new_id));
+  }
+
+}
 
 function flightTime() {
     var hours = [
@@ -447,7 +472,125 @@ function flightTime() {
     }
   });
 
-    /* js for events/invitee/speakers listing filter */ 
+/* EDM Form JS start */
+
+  $("#default_template_for_edm").click(function(){
+    value = $("#default_template_for_edm").val();
+    if (value == "default_template"){
+      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().show();
+      $("#banner_image_uploadBtn").parent().parent().parent().parent().parent().show();
+      $("#footer_image_uploadBtn").parent().parent().parent().parent().show();
+      $("#edm_templ_select").parent().parent().parent().show();
+      $("#edm_font_select").parent().parent().parent().show();
+      $(".ckeditor_custom").hide();
+      $(".without_social_icons").show();
+      $(".md-checkboxregistrationcheck").show();
+      $(".custome_hide").parent().parent().parent().parent().show();
+      $(".ckeditor_custome_hide").show();
+      $('.orText').show();
+      checked = document.getElementById("need_social_icon_yes_for_edm").checked;
+      if (checked == "true"){
+        $(".md-checkboxsocialcheck").show();    
+      }
+    $(".custome_hide").parent().parent().parent().parent().parent().show();
+    }
+  }); 
+  $("#custom_template_for_edm").click(function(){
+    value = $("#custom_template_for_edm").val();
+    if (value == "custom_template"){
+      $(".ckeditor_custom").show();
+      $("#header_image_uploadBtn").parent().parent().parent().parent().parent().hide();
+      $("#banner_image_uploadBtn").parent().parent().parent().parent().parent().hide();
+      $("#footer_image_uploadBtn").parent().parent().parent().parent().hide();
+      $("#edm_templ_select").parent().parent().parent().hide();
+      $("#edm_font_select").parent().parent().parent().hide();
+      $(".without_social_icons").hide();
+      $(".md-checkboxregistrationcheck").hide();
+      $(".custome_hide").parent().parent().parent().parent().hide();
+      $(".ckeditor_custome_hide").hide();
+      $('.orText').hide();
+      checked = document.getElementById("need_social_icon_no_for_edm").checked;
+      if (checked == "true"){
+        $(".md-checkboxsocialcheck").hide();    
+      }
+    }
+  });
+  $("#edm_broadcast_time_now").click(function(){
+    value = $("#edm_broadcast_time_now").val();
+    if (value == "now"){
+      $("#date-start").parent().parent().parent().parent().hide();
+    }
+  }); 
+  $("#edm_broadcast_time_scheduled").click(function(){
+    value = $("#edm_broadcast_time_scheduled").val();
+    if (value == "scheduled"){
+      $("#date-start").parent().parent().parent().parent().show();
+    }
+  });
+  $("#group_type_all_option").click(function(){
+    value = $("#group_type_all_option").val();
+    if (value == "all"){
+      // $("#edm_group_id").parent().parent().parent().hide();
+    }
+  });
+  $("#group_type_group_option").click(function(){
+    value = $("#group_type_group_option").val();
+    if (value == "group"){
+      // $("#edm_group_id").parent().parent().parent().show();
+    }
+  }); 
+  $("#group_type_group_option").click(function(){
+    $(".apply_filterCls").show();
+  });
+  $("#group_type_all_option").click(function(){
+    $(".apply_filterCls").hide();
+  });
+  $("#need_social_icon_yes_for_edm").click(function(){
+    $(".md-checkboxsocialcheck").show();
+  });
+  $("#need_social_icon_no_for_edm").click(function(){
+    $(".md-checkboxsocialcheck").hide();
+  });
+  $("#custom_template_for_edm").click(function(){
+    $(".md-checkboxsocialcheck").hide();
+  });
+  $('input,textarea').attr('autocomplete', 'off');
+  $('input[type="radio"][checked="checked"]').prop('checked', true);
+
+
+  $("#need_registration_form_yes_for_edm").click(function(){
+    checked = document.getElementById("need_registration_form_yes_for_edm").checked;
+    if (checked == "true"){
+      $(".md-checkboxregistrationcheck").show();    
+    }
+  }); 
+  $("#need_registration_form_no_for_edm").click(function(){
+    checked = document.getElementById("need_registration_form_no_for_edm").checked;
+    if (checked == "true"){
+      $(".md-checkboxregistrationcheck").hide();
+    }
+  });
+
+  $("#need_registration_form_yes_for_edm").click(function(){
+    $(".md-checkboxregistrationcheck").show();
+  });
+  $("#need_registration_form_no_for_edm").click(function(){
+    $(".md-checkboxregistrationcheck").hide();
+  });
+
+
+  $(document).ready(function (){
+   $('.chkbox_input_div  input[type="checkbox"]').click(function() { 
+    if ($(this).is(':checked')) {
+        $(this).parent().next('.input_box_url').css('display','inline-block');
+    } else {
+        $(this).parent().next('.input_box_url').css('display','none');
+    }
+  });
+});
+/* EDM Form JS end */
+
+ /* js for events/invitee/speakers listing filter */ 
   $( document ).ready(function() {   
     $('#search_order_by').on('change', function(){        
       $(".event_index_category_filter_form").submit();            
@@ -676,26 +819,246 @@ $(document).ready(function(){
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
   });
-  $('#copy_all_content_option-2').click(function(){
+  $('#customButton').click(function(){
     $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
+    $('.selectContentDiv').show();
+    $('.copyEvent, .ClientPopup, .popup-overlay').hide();
   });
   $('.add-data #no').click(function(){
+    $('.selectContentDiv').hide()
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
   });
 
   /* Added by hemant */
-  $(document).on('click', '#copy_all_content_option-1', function(){
-    $('.hideDiv').hide();
-    // $('.copyEvent, .ClientPopup, .popup-overlay').show();
+  $(document).on('click', '#copyButton', function(){
+    $('.selectContentDiv').hide();
+    $('.copyEvent, .ClientPopup, .popup-overlay').show();
   });
 });
 
-// $(document).on('click', '#copy_all', function(){
-//   $('#copy_content').val(true);
-//   $('#custom_content').val('');
-// })
-// $(document).on('click', '.customButton', function(){
-//   $('#custom_content').val(true);
-//   $('#copy_content').val('');
-// })
+$(document).on('click', '.ClickPop', function(){
+  $('#copy_content').val(true);
+  $('#custom_content').val('');
+})
+$(document).on('click', '#customButton', function(){
+  $('#custom_content').val(true);
+  $('#copy_content').val('');
+})
+
+$(document).ready(function(){
+  $('#event_country_name').on('change', function() {
+    var start_date_time = $("#date-start").val();
+    /*alert(start_date_time)*/
+    if (start_date_time)  
+    {  
+      $(".overlayBg").show();
+      city = $("#event_cities").val();
+      country_name = $("#event_country_name").val();
+      $.ajax({
+        url: '/admin/time_zones',
+        type: 'get',
+        data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
+        dataType: 'script',
+        success: function(data){
+          $(".overlayBg").hide();
+        }
+      });
+    }
+    else
+    {
+      alert("Please select event start date");
+      $('select#event_country_name option:selected').prop("selected", false);
+    }
+  });
+});
+
+$(document).ready(function(){
+  $('#event_cities').blur(function(){
+    country_name = $("#event_country_name").val();
+    var country = (country_name != "Please select the Time Zone" && country_name != "");
+    if(country)
+    {  
+      var start_date_time = $("#date-start").val();
+      if(start_date_time)
+      {  
+        $(".overlayBg").show();
+        city = $("#event_cities").val();
+        country_name = $("#event_country_name").val();
+        $.ajax({
+          url: '/admin/time_zones',
+          type: 'get',
+          data: {'city_name' : city, 'country_name' : country_name, 'timestamp' :start_date_time},
+          dataType: 'script',
+          success: function(data){
+            $(".overlayBg").hide();
+          },
+          error: function(xhr, status, error) {
+            $(".overlayBg").hide();
+          }         
+        });
+      }
+      else
+      {
+        alert("Please select event start date");
+        $('select#event_country_name option:selected').prop("selected", false);
+      }  
+    }
+  });
+
+  // $(".select-speaker").change(function(){   
+  //   value = $(this).val();
+  //   if(value == 0){
+  //     $(this).next().find('.form-group').show();
+  //   }
+  // });    
+});
+
+function add_fields_for_event_venue(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  $(".venueFields").append(content.replace(regexp, new_id));
+}
+$(document).on('click','.select-speaker',function(){
+  $(".select-speaker").change(function(){   
+    value = $(this).val();
+    if(value == 0){
+      $(this).next().find('.form-group').show();
+    }
+  });    
+});
+
+$(document).on('change','#agenda_speaker_id',function(){
+  value = parseInt($(this).val());
+  if(value == 0){
+    console.log(value);
+    $('#add_speaker .form-group').show();
+    
+  }
+});
+
+
+$(document).on("click", ".addMoreSpeaker", function(){
+  $('#add_speaker .form-group').toggle();
+});
+
+$(document).ready(function(){
+   $('.generateCodeBtn a').click(function(){
+     $('#instagram_code_label').css('display','block');
+     $('#event_instagram_code').css('display','block');
+   });
+ });
+ 
+  $(document).ready(function(){
+   $(document).on("click",".newWindow", function(){
+     var client_id = $("#event_instagram_client_id").val()
+  
+     if(client_id){
+       var link = "https://api.instagram.com/oauth/authorize/?client_id="+ client_id +"&redirect_uri=http://hobnobspace.com&response_type=code&scope=public_content"
+         window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+       }  
+     else
+     {
+       alert('Please enter Instagram Client Id.')
+     }
+   })        
+  });
+
+  // var load_page = 0
+  // $(window).scroll(function() {
+  //   console.log("scroll");
+  //   if ($(window).scrollTop() > $(document).height()-1000)  {
+  //   $("#loadingText_activity").html('<img src="/assets/spin.gif" width="60" />');     
+  //    $(".load_products").trigger('click',load_page);
+  //   $(".load_products").addClass("dont_load_products").removeClass("load_products");
+  //   return false;
+  //   }
+  // });
+
+$(document).on('keyup', "#agenda_speaker_names", function(e) {
+  value = $(this).val();
+  selected_speakers = $(".agendaSpeakerCheckboxes input:checkbox:checked").length;
+  allow = 5 - selected_speakers - 1;
+  if((value.split(",").length - 1) > allow){
+    $(this).val(value.slice(0, -1));
+    alert("You cannot add more than " + (allow + 1));
+  }
+});
+
+//   $(document).on('click','.load_products',function(){
+//     load_page += 1;
+//     load_products(load_page);
+//   });
+
+// function load_products(load_page){
+//   var event_id = $('#social_event_id').attr('for')
+//   $("#loadingText_activity").show();
+//   $.ajax({
+//     type: "GET",
+//     dataType: 'script',
+//     url: "/api/v1/events/"+event_id+"/social_feeds.js?page="+load_page,
+//     success: function(data){
+//       $("#loadingText_activity").hide();
+//     },
+//   });
+//   // return false;
+// }
+
+/*function agenda_speaker_dropdown() {
+  alert('asdasda');
+  document.getElementById("myDropdown").classList.toggle("show");
+} */
+$(document).ready(function(){
+  $('.usersep').click(function(){
+  $('#myDropdown').toggle();
+  });
+
+if($('#visible .form-group ').css('display') == 'none')
+  {$('.block').html("add");}
+
+if($('#visible .form-group ').css('display') == 'block')
+  {$('.block').html("clear");}
+
+$('.addMoreSpeaker').click(function(){
+  if($('.block').html() == "clear") 
+  {
+     $('.block').html("add");
+  }
+  else
+  {
+     $('.block').html("clear");
+  }
+
+});
+
+  $('.pushWallForm').click(function(){
+    $('.morefixed-activon-btn').css('z-index','-1');
+  });
+
+});
+
+/* Activity feed js start */
+  $(document).ready(function(){
+    $("#social-option-2").click(function(){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().hide();
+      $('#event_twitter_handle').parent().parent().parent().parent().hide();
+      $('#event_instagram_client_id').parent().parent().parent().parent().hide();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().hide();
+      $('#event_instagram_code').parent().parent().parent().parent().hide();
+      $(".generateCodeBtn").hide();
+      $(".genrateText").hide();
+    });
+
+    $("#social-option-1").click(function(){
+      $('#event_facebook_social_tags').parent().parent().parent().parent().show();
+      $('#event_twitter_social_tags').parent().parent().parent().parent().show();
+      $('#event_twitter_handle').parent().parent().parent().parent().show();
+      $('#event_instagram_client_id').parent().parent().parent().parent().show();
+      $('#event_instagram_secret_token').parent().parent().parent().parent().show();
+      $('#event_instagram_code').parent().parent().parent().parent().show();
+      $(".generateCodeBtn").show();
+      $(".genrateText").show();
+    });
+  });
+/* Activity feed js end */

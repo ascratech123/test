@@ -4,47 +4,60 @@ class Event < ActiveRecord::Base
   resourcify
   serialize :preferences
   
-  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :copy_event, :event_id, :copy_content, :custom_content
+  attr_accessor :start_time_hour, :start_time_minute ,:start_time_am, :end_time_hour, :end_time_minute ,:end_time_am, :event_theme, :event_limit, :event_id, :copy_content_button
   EVENT_FEATURE_ARR = ['speakers', 'invitees', 'agendas', 'polls', 'conversations', 'faqs', 'awards', 'qnas','feedbacks', 'e_kits', 'abouts', 'galleries', 'notes', 'contacts', 'event_highlights', 'highlight_images', 'emergency_exits','venue']
   REVIEW_ATTRIBUTES = {'template_id' => 'Template', 'app_icon_file_name' => 'App Icon', 'app_icon' => 'App Icon', 'name' => 'Name', 'application_type' => 'Application Type', 'listing_screen_background_file_name' => 'Listing Screen Background', 'listing_screen_background' => 'Listing Screen Background', 'login_background' => 'Login Background', 'login_background_file_name' => 'Login Background', 'login_at' => 'Login At', 'logo' => 'Event Listing Logo', 'inside_logo' => 'Inside Logo', 'logo_file_name' => 'Event Listing Logo', 'inside_logo_file_name' => 'Inside Logo', 'theme_id' => 'Preview Theme', "splash_screen_file_name" => "Splash Screen"}
   FEATURE_TO_MODEL = {"contacts" => 'Contact',"speakers" => 'Speaker',"invitees" => 'Invitee',"agendas" => 'Agenda',"faqs" => 'Faq',"qnas" => 'Qna',"conversations" => 'Conversation',"polls" => 'Poll',"awards" => 'Award',"sponsors" => 'Sponsor',"feedbacks" => 'Feedback',"panels" => 'Panel',"event_features" => 'EventFeature',"e_kits" => 'EKit',"quizzes" => 'Quiz',"favorites" => 'Favorite',"exhibitors" => 'Exhibitor', 'galleries' => 'Image', 'emergency_exits' => 'EmergencyExit', 'attendees' => 'Attendee', 'my_travels' => 'MyTravel', 'custom_page1s' => 'CustomPage1', 'custom_page2s' => 'CustomPage2', 'custom_page3s' => 'CustomPage3', 'custom_page4s' => 'CustomPage4', 'custom_page5s' => 'CustomPage5'}
   EVENT_ASSOCIATIONS = ['speakers', 'invitees', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'user registrations', 'sponsors', 'registrations', 'registration settings', 'my travels', 'invitee structures', 'invitee groups', 'images', 'groupings', 'exhibitors', 'features', 'custom page1s', 'custom page2s', 'custom page3s', 'custom page4s', 'custom page5s', 'campaigns', 'attendees', 'mobile application']
+  COUNTRIES = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Democratic Republic of the", "Congo", "Republic of the", "Costa Rica", "Cote dIvoire", "Croatia", "Cuba", "Curacao", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea", "North", "Korea", "South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territories", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"]
 
-  MOBILE_APPLICATIONS = ['invitees', 'speakers', 'agendas', 'faqs', 'awards', 'contacts', 'highlight images', 'emergency exits', 'sponsors', 'my travels', 'gallery', 'exhibitors', 'features', 'custom page1', 'custom page2', 'custom page3', 'custom page4', 'custom page5']
-  # DATABASES = ['invitee structures', 'groupings']
-  # INVITEE_STRUCTURES=['registrations', 'registration settings']
+  MOBILE_APPLICATIONS = ['invitees', 'speakers', 'agendas', 'faqs', 'awards', 'contacts', 'event highlights', 'emergency exits', 'sponsors', 'my travels', 'gallery', 'exhibitors', 'custom page1', 'custom page2', 'custom page3', 'custom page4', 'custom page5']#, 'features']
+
+  DATABASES = ['invitee structures', 'groupings']
+
+  INVITEE_STRUCTURES=['registrations', 'registration settings']
+  GROUPINGS = ['campaigns']
 
   belongs_to :client
   belongs_to :theme
   belongs_to :mobile_application
   has_one :contact
   has_one :emergency_exit
+  has_one :qna_wall
+  has_one :conversation_wall
+  has_one :poll_wall
+  has_one :quiz_wall
+  has_many :my_profiles, :dependent => :destroy
+  has_many :microsites, :dependent => :destroy
+  has_many :user_microsites, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
+  has_many :event_venues, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
-  has_many :attendees, :dependent => :destroy 
+  has_many :attendees, :dependent => :destroy
   has_many :agendas, :dependent => :destroy
   has_many :faqs, :dependent => :destroy
-  has_many :qnas, :dependent => :destroy #e
-  has_many :conversations, :dependent => :destroy #e
-  has_many :polls, :dependent => :destroy #e
-  has_many :awards, :dependent => :destroy 
+  has_many :qnas, :dependent => :destroy
+  has_many :conversations, :dependent => :destroy
+  has_many :polls, :dependent => :destroy
+  has_many :awards, :dependent => :destroy
   has_many :sponsors, :dependent => :destroy
-  has_and_belongs_to_many :users #not done
-  has_many :feedbacks, :dependent => :destroy #e
+  has_and_belongs_to_many :users
+  has_many :feedbacks, :dependent => :destroy
+  has_many :feedback_forms, :dependent => :destroy
   has_many :images, as: :imageable, :dependent => :destroy
-  has_many :panels, :dependent => :destroy #e
+  has_many :panels, :dependent => :destroy
   has_many :event_features, :dependent => :destroy
-  has_many :feedbacks, :dependent => :destroy #e
-  has_many :e_kits, :dependent => :destroy #e
-  has_many :contacts, :dependent => :destroy  
-  has_many :notifications, :dependent => :destroy #e
-  has_many :highlight_images, :dependent => :destroy 
-  has_many :groupings, :dependent => :destroy    
-  has_many :quizzes, :dependent => :destroy #e 
-  has_many :invitee_structures, :dependent => :destroy 
-  has_many :favorites, :dependent => :destroy 
-  has_many :groupings, :dependent => :destroy 
-  has_many :exhibitors, :dependent => :destroy 
+  has_many :feedbacks, :dependent => :destroy
+  has_many :e_kits, :dependent => :destroy
+  has_many :contacts, :dependent => :destroy 
+  has_many :notifications, :dependent => :destroy
+  has_many :highlight_images, :dependent => :destroy
+  has_many :groupings, :dependent => :destroy
+  has_many :quizzes, :dependent => :destroy
+  has_many :invitee_structures, :dependent => :destroy
+  has_many :favorites, :dependent => :destroy
+  has_many :groupings, :dependent => :destroy
+  has_many :exhibitors, :dependent => :destroy
   has_many :registration_settings, :dependent => :destroy
   has_many :registrations, :dependent => :destroy
   has_many :user_registrations, :dependent => :destroy
@@ -54,17 +67,24 @@ class Event < ActiveRecord::Base
   has_many :custom_page3s, :dependent => :destroy
   has_many :custom_page4s, :dependent => :destroy
   has_many :custom_page5s, :dependent => :destroy
-  has_many :chats, :dependent => :destroy #e
-  has_many :invitee_groups, :dependent => :destroy 
-  has_many :my_travels, :dependent => :destroy 
+  has_many :chats, :dependent => :destroy
+  has_many :invitee_groups, :dependent => :destroy
+  has_many :my_travels, :dependent => :destroy
   has_many :telecaller_accessible_columns, :dependent => :destroy
   has_many :campaigns, :dependent => :destroy
+  has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
+  has_one :badge_pdf, :dependent => :destroy
+  has_many :manage_invitee_fields, :dependent => :destroy
+  has_many :my_travel_docs, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
+  accepts_nested_attributes_for :event_venues
 
   
-  validates :event_name, :client_id, :cities, :start_event_date,:end_event_date, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :event_name, :client_id, :cities,:event_type_for_registration, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
+  validates :start_event_date,:end_event_date, presence:{ :message => "This field is required." }, :if => Proc.new{|p|p.marketing_app.blank?}
+  validates :country_name,:timezone, presence:{ :message => "This field is required." }
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 
   #validates_presence_of :login_at, :on => :create
@@ -86,14 +106,18 @@ class Event < ActiveRecord::Base
                                          }.merge(EVENT_INSIDE_LOGO_PATH)                                       
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
-  validate :event_count_within_limit, :on => :create
+  validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
-  before_save :check_event_content_status
-  after_create :update_theme_updated_at, :set_uniq_token
-  after_save :update_login_at_for_app_level, :set_date
+  before_save :check_event_content_status, :add_venues_from_event_venues 
+  after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
+
+  # after_update :update_time, if: -> { points == 10}
+  # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
+
   #before_validation :set_time
   
-  scope :ordered, -> { order('start_event_date asc') }
+  scope :ordered, -> { order('start_event_time desc') }
   #default_scope { order('created_at desc') }
   
   
@@ -112,7 +136,7 @@ class Event < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end
-    event :publish, :after => :chage_updated_at do
+    event :publish, :after => [:chage_updated_at, :destroy_log_change_for_publish, :update_event_last_updated] do
       transitions :from => [:approved], :to => [:published]
     end
     event :unpublish, :after => :create_log_change do
@@ -120,15 +144,45 @@ class Event < ActiveRecord::Base
     end
   end 
 
-  def content_is_present
+def content_is_present
     unless copy_content.blank? ^ custom_content.blank?
-      errors.add(:copy_content, "Choose one of the options.")
+      errors.add(:copy_content, "This field is required.")
+    end
+  end
+  
+  def add_venues_from_event_venues
+    if self.event_venues.present?
+      self.venues = self.event_venues.first.venue
+      # self.venues = event_venue
     end
   end
 
+  def event_venue_name
+    self.event_venues.pluck(:venue).join('$$$$') if self.event_venues.present?
+  end
+
+  # def update_time
+  #   self.invitees.each do |invitee|
+  #     # invitee_points = invitee.points == 10
+  #     invitee_points = invitee.update_column('invitee_points_time', Time.now) if invitee.points == 10
+  #   end# if self.invitees.present?
+  # end
+
+  # def invitees_with_thousand_points
+  #   if self.invitees.present? and (self.end_event_date.present? and self.end_event_date >= Date.today)
+  #     self.invitees.where('points >= ? ', 1000)
+  #   elsif self.start_event_date.present? and self.end_event_date.present?
+
+  #   end
+  # end
+  
   def init
     self.status = "pending"
     self.event_theme = "create your own theme"
+  end
+
+  def update_last_updated_model
+    LastUpdatedModel.update_record(self.class.name)
   end
 
   def update_theme_updated_at
@@ -295,8 +349,8 @@ class Event < ActiveRecord::Base
   end
   
   def set_features_default_list()
-    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings"]
-    default_features
+    default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
+    self.marketing_app == true ? default_features.push("all_events") : default_features
   end
 
   def set_features_static_list()
@@ -315,12 +369,12 @@ class Event < ActiveRecord::Base
     if start_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.start_event_time = start_event_time
     elsif start_event_date.present?
-      self.start_event_time = start_event_time.to_time
+      self.start_event_time = start_event_time.to_datetime
     end
     if end_event_date.present? and [345, 360, 367, 173, 165, 168, 364, 365, 368, 333].include? self.id
       self.end_event_time = end_event_time
     elsif end_event_date.present?
-      self.end_event_time = end_event_time.to_time 
+      self.end_event_time = end_event_time.to_datetime
     end
   end
 
@@ -333,8 +387,18 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def check_event_date
+    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present?)
+      if User.current.licensee_end_date < self.end_event_date
+        errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
+      else
+        self.errors.delete(:event_date_limit)
+      end
+    end
+  end
+
   def check_event_content_status
-    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats']
+    features = self.event_features.pluck(:name) - ['qnas', 'conversations', 'my_profile', 'qr_code','networks','favourites','my_calendar', 'leaderboard', 'custom_page1s', 'custom_page2s', 'custom_page3s', 'custom_page4s', 'custom_page5s', 'social_sharings', 'notes', 'chats', 'activity_feeds','all_events']
     not_enabled_feature = Event::EVENT_FEATURE_ARR - features
     #features += ['contacts', 'emergency_exit', 'event_highlights', 'highlight_images']
     count = 0
@@ -342,7 +406,7 @@ class Event < ActiveRecord::Base
     content_missing_arr = []
     features.each do |feature|
       feature = 'images' if feature == 'galleries'
-      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings') and (feature != 'emergency_exits' and feature != 'emergency_exit')
+      condition = self.association(feature).count <= 0 if !(feature == 'abouts' or feature == 'qr_codes' or feature == 'notes' or feature == 'event_highlights' or feature == 'my_calendar' or feature == 'venue' or feature == 'social_sharings' or feature == 'all_events') and (feature != 'emergency_exits' and feature != 'emergency_exit')
       condition, feature = EmergencyExit.where(:event_id => self.id).blank?, 'emergency_exits' if feature == 'emergency_exits' or feature == 'emergency_exit'
       if (condition or (feature == 'abouts' and self.about.blank? or ((feature == 'event_highlights' and self.description.blank?) )))
         count += 1
@@ -518,6 +582,16 @@ class Event < ActiveRecord::Base
     LogChange.create(:changed_data => nil, :resourse_type => "Event", :resourse_id => self.id, :user_id => nil, :action => "destroy") rescue nil
   end
 
+  def destroy_log_change_for_publish
+    log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
+    log_changes.each{|l| l.update_column("action", "unpublished")}
+    #log_changes.destroy_all
+  end
+
+  def update_event_last_updated
+    self.update_column("published_at", Time.now)
+  end
+
   def add_default_invitee
     invitee = self.invitees.new(name_of_the_invitee: "Preview", email: "preview@previewapp.com", password: "preview", invitee_password: "preview", :first_name => 'Preview', :last_name => 'Invitee')
     invitee.save rescue ""
@@ -532,11 +606,12 @@ class Event < ActiveRecord::Base
   end
   
   def event_count_within_limit
-    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?)
+    if (User.current.has_role? "licensee_admin" and User.current.no_of_event.present?) or (self.client.licensee.present? and self.client.licensee.no_of_event.present?)
       clients = Client.with_roles(User.current.roles.pluck(:name), User.current).uniq
       event_count = clients.map{|c| c.events.count}.sum
-      if User.current.no_of_event <= event_count
-        errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
+      if (User.current.no_of_event.present? and User.current.no_of_event <= event_count) or (self.client.licensee.present? and self.client.licensee.no_of_event <= event_count)
+        errors.add(:event_limit, "You have crossed your events limit kindly contact.")
+        # errors.add(:event_limit, "Exceeded the event limit: #{User.current.no_of_event} ")
       else
         self.errors.delete(:event_limit)
       end 
@@ -608,8 +683,92 @@ class Event < ActiveRecord::Base
     self.update_column(:end_event_date, self.end_event_time)
   end
 
-  def copy_event_associations_from(event)
-    # event.copy_association(event.campaigns, self.id) if event.campaigns.present?
+  def set_timezone_on_associated_tables
+    if self.timezone_changed?
+      self.update_column("timezone", self.timezone.titleize) if !self.timezone.include? "US"
+      self.update_column("timezone_offset", ActiveSupport::TimeZone[self.timezone].at(self.start_event_time).utc_offset)
+      display_time_zone = self.display_time_zone
+      #["agendas", "chats", "conversations", "faqs", "feedbacks", "polls", "qnas", "quizzes", "notifications", "invitees", "speakers"]
+      for table_name in ["agendas", "chats", "conversations", "notifications"]
+        table_name.classify.constantize.where(:event_id => self.id).each do |obj|
+          obj.update_column("event_timezone", self.timezone)
+          obj.update_column("event_timezone_offset", self.timezone_offset)
+          obj.update_column("event_display_time_zone", display_time_zone)
+          obj.update_column("updated_at", Time.now)
+          obj.update_last_updated_model
+          # obj.comments.each{|c| c.update_column("updated_at", Time.now)} if table_name == "conversations"
+          for c in obj.comments
+            c.update_column("updated_at", Time.now)
+            Rails.cache.delete("formatted_created_at_with_event_timezone_#{c.id}")
+            Rails.cache.delete("formatted_updated_at_with_event_timezone_#{c.id}")
+          end if table_name == "conversations"
+        end
+      end
+    end
+  end
+
+  def set_date
+    self.update_column(:start_event_date, self.start_event_time)
+    self.update_column(:end_event_date, self.end_event_time)
+  end
+
+  def about_date
+    if self.start_event_date.present? and self.end_event_date.present?
+      if self.start_event_date.to_date != self.end_event_date.to_date
+        "#{self.start_event_date.strftime('%d %b')} - #{self.end_event_date.strftime('%d %b %Y')}"
+      else
+        self.start_event_date.strftime('%A, %d %b %Y')
+      end
+    end
+  end
+
+  def self.set_event_category
+    Event.find_each do |event|
+      event.set_event_category rescue nil
+    end
+  end
+
+  def set_event_category
+    time_now = Time.now.in_time_zone(self.timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+      if self.start_event_time.present? and self.end_event_time.present?
+        prev_event_category  = self.event_category
+        if self.start_event_time <= time_now and self.end_event_time >= time_now
+          self.update_column("event_category","Ongoing")
+        elsif self.start_event_time > time_now
+          self.update_column("event_category","Upcoming")
+        elsif self.end_event_time < time_now
+          self.update_column("event_category","Past")
+        end
+      self.update_column("updated_at",Time.now) if (prev_event_category != self.event_category)
+    end
+  end
+
+  def event_start_time_in_utc
+    event_time_in_timezone = self.start_event_time
+    difference_in_seconds = Time.now.utc.utc_offset - Time.now.in_time_zone(self.timezone).utc_offset
+    if difference_in_seconds < 0
+      difference_in_hours = (difference_in_seconds.to_f/60/60).abs
+      self.start_event_date - difference_in_hours.hours
+    else
+      difference_in_hours = (difference_in_seconds.to_f/60/60)
+      self.start_event_date + difference_in_hours.hours
+    end
+  end
+
+  def display_time_zone
+    event_tz = "GMT +00:00"
+    for tz in ActiveSupport::TimeZone.all.uniq{|e| ["GMT#{e.at(self.start_event_time).formatted_offset}"]}
+      event_tz = "GMT#{tz.at(self.start_event_time).formatted_offset}".gsub("GMT", "GMT ") if tz.name == self.timezone
+    end
+    return event_tz
+  end
+
+  #def display_time_zone
+  #  Time.now.in_time_zone(self.timezone).strftime("GMT %:z")
+  #end
+
+ def copy_event_associations_from(event)
+    event.copy_association(event.campaigns, self.id) if event.campaigns.present?
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present?
     event.copy_association(event.attendees, self.id) if event.attendees.present?
     event.copy_awards_association(event.awards, self.id) if event.awards.present?
@@ -621,7 +780,7 @@ class Event < ActiveRecord::Base
     event.copy_association(event.custom_page3s, self.id) if event.custom_page3s.present?
     event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present?
     event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present?
-    event.copy_association(event.event_features, self.id) if event.event_features.present?
+    # event.copy_association(event.event_features, self.id) if event.event_features.present?
     event.copy_association(event.exhibitors, self.id) if event.exhibitors.present?
     event.copy_association(event.faqs, self.id) if event.faqs.present?
     event.copy_association(event.groupings, self.id) if event.groupings.present?
@@ -639,24 +798,23 @@ class Event < ActiveRecord::Base
   end
 
     def copy_custom_event_associations_from(event, params)
-    # event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
-    event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? and params[:associations].include?('mobile application')
+    event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
+    event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? 
     event.copy_association(event.attendees, self.id) if event.attendees.present? and params[:associations].include?('attendees')
     event.copy_awards_association(event.awards, self.id) if event.awards.present? and params[:associations].include?('awards')
     event.copy_images_association(event.images, self.id) if event.images.present? and params[:associations].include?('gallery')
     event.copy_agendas_association(event.agendas, self.id) if event.agendas.present? and params[:associations].include?('agendas')
     event.copy_association(event.contacts, self.id) if event.contacts.present? and params[:associations].include?('contacts')
-    event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1s')
-    event.copy_association(event.custom_page2s, self.id) if event.custom_page2s.present? and params[:associations].include?('custom page2s')
-    event.copy_association(event.custom_page3s, self.id) if event.custom_page3s.present? and params[:associations].include?('custom page3s')
-    event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present? and params[:associations].include?('custom page4s')
-    event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present? and params[:associations].include?('custom page5s')
-    event.copy_association(event.event_features, self.id) if event.event_features.present? and params[:associations].include?('features')
+    event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1')
+    event.copy_association(event.custom_page2s, self.id) if event.custom_page2s.present? and params[:associations].include?('custom page2')
+    event.copy_association(event.custom_page3s, self.id) if event.custom_page3s.present? and params[:associations].include?('custom page3')
+    event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present? and params[:associations].include?('custom page4')
+    event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present? and params[:associations].include?('custom page5')
+    # event.copy_association(event.event_features, self.id) if event.event_features.present? and params[:associations].include?('features')
     event.copy_association(event.exhibitors, self.id) if event.exhibitors.present? and params[:associations].include?('exhibitors')
     event.copy_association(event.faqs, self.id) if event.faqs.present? and params[:associations].include?('faqs')
     event.copy_association(event.groupings, self.id) if event.groupings.present? and params[:associations].include?('groupings')
-    event.copy_association(event.highlight_images, self.id) if event.highlight_images.present? and params[:associations].include?('highlight images')
-    event.copy_association(event.invitee_groups, self.id) if event.invitee_groups.present? and params[:associations].include?('invitee groups')
+    event.copy_association(event.highlight_images, self.id) if event.highlight_images.present? and params[:associations].include?('event highlights')    
     event.copy_association(event.invitee_structures, self.id) if event.invitee_structures.present? and params[:associations].include?('invitee structures')
     event.copy_association(event.invitees, self.id) if event.invitees.present? and params[:associations].include?('invitees')
     event.copy_association(event.my_travels, self.id) if event.my_travels.present? and params[:associations].include?('my travels')
@@ -664,8 +822,7 @@ class Event < ActiveRecord::Base
     event.copy_association(event.registrations, self.id) if event.registrations.present? and params[:associations].include?('registrations')
     event.copy_association(event.speakers, self.id) if event.speakers.present? and params[:associations].include?('speakers')
     event.copy_association(event.sponsors, self.id) if event.sponsors.present? and params[:associations].include?('sponsors')
-    event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('emergency exit')
-    event.copy_association(event.user_registrations, self.id) if event.user_registrations.present? and params[:associations].include?('user registrations')
+    event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('emergency exit')    
   end
 
 
@@ -677,22 +834,22 @@ class Event < ActiveRecord::Base
       new_objekt.save
     end
   end
-
+ 
   def copy_mobile_application_association(event, copy_event)
     if event.mobile_application_id.present?
       mobile_application = MobileApplication.find(event.mobile_application_id)
       if mobile_application.application_type == 'single event' 
         new_copy = mobile_application.dup
-        new_copy.name = mobile_application.name + ' copy'
-        copy_event.update_column('mobile_application_id', new_copy.id)        
-        new_copy.update_column('parent_id', mobile_application.id)          
+        new_copy.name = mobile_application.name + ' copy'                
+        new_copy.parent_id = mobile_application.id        
         new_copy.save  
+        copy_event.update_column('mobile_application_id', new_copy.id)
       else
         copy_event.update_column('mobile_application_id', mobile_application.id)
       end
     end
   end
-
+ 
   def copy_images_association(objekts, event_id)
     objekts.each do |objekt|
       new_objekt = objekt.dup
@@ -702,7 +859,7 @@ class Event < ActiveRecord::Base
       new_objekt.save
     end
   end
-
+ 
   def copy_awards_association(awards, event_id)    
     awards.each do |award|
       new_award = award.dup
@@ -719,7 +876,7 @@ class Event < ActiveRecord::Base
       end
     end
   end
-
+ 
   def copy_agendas_association(objekts, event_id)
     event = Event.find(event_id)
     objekts.each do |objekt|
@@ -734,19 +891,53 @@ class Event < ActiveRecord::Base
       if objekt.agenda_track_id.present?
         agenda_track = AgendaTrack.find_or_initialize_by(:id => objekt.agenda_track_id, :event_id => event_id)
         agenda_track.id = nil
-        if agenda_track.new_record?
-          agenda_track_1 = AgendaTrack.find(objekt.agenda_track_id)
-          agenda_track.track_name = agenda_track_1.track_name + ' copy'
-          agenda_track.sequence = agenda_track_1.sequence
-          agenda_track.agenda_date = agenda_track_1.agenda_date 
-          agenda_track.parent_id = agenda_track_1.id
-          agenda_track.save
-          new_objekt.update_column('agenda_track_id', agenda_track.id) 
-        else
-          new_objekt.update_column('agenda_track_id', agenda_track.id)
-        end
-      end
-    end
+         if agenda_track.new_record?
+           agenda_track_1 = AgendaTrack.find(objekt.agenda_track_id)
+           agenda_track.track_name = agenda_track_1.track_name + ' copy'
+           agenda_track.sequence = agenda_track_1.sequence
+           agenda_track.agenda_date = agenda_track_1.agenda_date 
+           agenda_track.parent_id = agenda_track_1.id
+           agenda_track.save
+           new_objekt.update_column('agenda_track_id', agenda_track.id) 
+         else
+           new_objekt.update_column('agenda_track_id', agenda_track.id)
+         end
+       end
+     end
+   end
+  def extra_invitee_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    ['attr1', 'attr2', 'attr3', 'attr4', 'attr5'].each do |t|
+      h[t] = my_profile.attributes[t] if my_profile.attributes[t].present? and my_profile.attributes['enabled_attr'][t] == 'yes'
+    end if my_profile.present?
+    h
   end
 
+  def get_invitee_my_profile_attributes
+    h = {}
+    my_profile = self.my_profiles.last
+    h = my_profile.attributes['enabled_attr'] rescue {}
+    h
+  end
+  
+  def create_marketing_app_event
+    self.marketing_app = true
+    self.event_name = "Landing App"
+    self.cities = "Mumbai"
+    self.start_event_date = Time.now
+    self.start_event_time = Time.now
+    self.end_event_date = "31/12/2050".to_datetime
+    self.end_event_time = "31/12/2050".to_datetime
+    self.country_name = "India"
+    self.timezone = "Chennai"
+    self.event_type_for_registration = "close"
+    self.status = "approved" 
+    if self.save
+      result = "true"
+    else
+      result = "false"
+    end
+    result
+  end
 end
