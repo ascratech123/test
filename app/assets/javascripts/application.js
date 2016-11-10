@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
-//= require autocomplete-rails
 //= require "jquery-1.11.3.min"
 //= require 'vendors-min' 
 //= require 'demo-min'

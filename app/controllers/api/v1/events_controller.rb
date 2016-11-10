@@ -8,6 +8,10 @@ class Api::V1::EventsController < ApplicationController
     render :staus => 200, :json => {:status => "Success"}
   end
 
+  skip_filter :find_clients
+  skip_filter :telecaller_is_login
+  caches_action :index, :cache_path => Proc.new { |c| c.params }
+
   def index
     mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     submitted_app = "Yes" if params[:mobile_application_code].present?

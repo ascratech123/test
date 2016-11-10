@@ -559,8 +559,8 @@ class Event < ActiveRecord::Base
 
   def destroy_log_change_for_publish
     log_changes = LogChange.where(:resourse_type => "Event", :resourse_id => self.id, :action => "destroy")
-    log_changes.each{|l| l.update_column("action", "unpublished")}
-    #log_changes.destroy_all
+    #log_changes.each{|l| l.update_column("action", "unpublished")}
+    log_changes.destroy_all
   end
 
   def add_default_invitee

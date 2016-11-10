@@ -117,8 +117,8 @@ module SyncMobileData
             info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url])
           }
         when 'Notification'
-          #info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
-          #data[:"notifications"] = info
+          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
+          data[:"notifications"] = info
         when 'InviteeNotification'
           info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info

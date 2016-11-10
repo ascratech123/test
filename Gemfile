@@ -55,4 +55,4 @@ end
 
 # gem 'newrelic_rpm'
 gem 'twitter'
-gem 'dalli'
+gem 'actionpack-action_caching'
