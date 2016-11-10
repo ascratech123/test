@@ -23,7 +23,7 @@ class Conversation < ActiveRecord::Base
   validates :event_id, :user_id, presence: { :message => "This field is required." }
 
   after_create :set_status_as_per_auto_approve, :create_analytic_record, :set_event_timezone#, :set_dates_with_event_timezone
-  after_save :update_last_updated_model, :set_last_interaction_at
+  after_save :update_last_updated_model, :set_last_interaction_at, :update_log_changes_when_reject
 
   scope :desc_ordered, -> { order('updated_at DESC') }
   scope :asc_ordered, -> { order('updated_at ASC') }
@@ -39,6 +39,15 @@ class Conversation < ActiveRecord::Base
     event :reject do
       transitions :from => [:pending,:approved], :to => [:rejected]
     end 
+  end
+
+  def update_log_changes_when_reject
+    if self.status == "rejected"
+      LogChange.create(:resourse_type => "conversation", :resourse_id => self.id, :action => "destroy")
+    elsif self.status == "approved"
+      log_changes = LogChange.where(:resourse_type => "conversation", :resourse_id => self.id, :action => "destroy")
+      log_changes.destroy_all
+    end
   end
 
   def update_last_updated_model
