@@ -16,7 +16,11 @@ class Api::V2::EventsController < ApplicationController
       if invitee.present?
         submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
-        event_ids = allow_ids
+        if allow_ids.exclude? params[:event_id].to_i
+          render :status => 200, :json => {:message => "Invitee does not have access to that Event"} and return
+        else
+          event_ids = allow_ids
+        end
       end 
       status = (submitted_app == "Yes" ? ["published"] : ["approved", "published"])
       all_events = mobile_application.events.where(:status => status, :updated_at => start_event_date...end_event_date)
