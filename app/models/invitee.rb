@@ -349,10 +349,12 @@ class Invitee < ActiveRecord::Base
     event_id = []
     mobile_app = MobileApplication.find_by_submitted_code(mobile_app_code)
     if mobile_app.present?
-      events = mobile_app.events.where(:status => event_status)
-      events.each do |event|
-        event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase)
-      end if events.present?
+      event_ids = mobile_app.events.where(:status => event_status).pluck(:id)
+      invitees = get_similar_invitees(event_ids)
+      # events.each do |event|
+      #   event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase)
+      # end if events.present?
+      event_id = invitees.map(&:event_id).uniq
     end
     event_id
   end
@@ -364,11 +366,14 @@ class Invitee < ActiveRecord::Base
     if mobile_app.present?
       change_events = mobile_app.events.where(:status => event_status, :updated_at => start_event_date..end_event_date)
       if change_events.present?
-        events = mobile_app.events.where(:status => event_status)
-        events.each do |event|
-          event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.downcase)
-        end if events.present?
-      end  
+      #   events = mobile_app.events.where(:status => event_status)
+      #   events.each do |event|
+      #     event_id << event.id if event.invitees.pluck("lower(email)").include?(self.email.downcase) #event.invitees.map{|n| n.email.downcase}.include?(self.email.dow$
+      #   end if events.present?
+        event_ids = mobile_app.events.where(:status => event_status).pluck(:id)
+        invitees = get_similar_invitees(event_ids)
+        event_id = invitees.map(&:event_id).uniq
+      end
     end
     event_id
   end
