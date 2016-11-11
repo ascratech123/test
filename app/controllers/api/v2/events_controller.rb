@@ -17,7 +17,7 @@ class Api::V2::EventsController < ApplicationController
         submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
         allow_ids = invitee.get_event_id(mobile_application.submitted_code, submitted_app)
         if allow_ids.exclude? params[:event_id].to_i
-          render :status => 200, :json => {:message => "Invitee does not have access to that Event"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
         else
           event_ids = allow_ids
         end
@@ -29,7 +29,7 @@ class Api::V2::EventsController < ApplicationController
       all_event_ids = (params[:event_id].present? ? [] : all_event_ids)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i and event_ids.present?
-          render :status => 200, :json => {:message => "Invalid event_id"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invalid event_id"} and return
         else
           event_ids = [params[:event_id].to_i]
         end
@@ -41,7 +41,7 @@ class Api::V2::EventsController < ApplicationController
         end
       end
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_event_ids) 
-      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []) ,:data => data}
+      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []),:data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 
