@@ -155,8 +155,12 @@
                 %label.col-lg-4.control-label.ml-color--shades-white
                   Do you want to add data from another event?
                 .col-lg-7
-                  = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
-                  = f.custom_radio_button :copy_event, "no", "No", :id => "no"
+                  - if params[:action] == 'edit'
+                    = f.custom_radio_button :copy_event, "yes","Yes", :disabled => true
+                    = f.custom_radio_button :copy_event, "no", "No", :disabled => true
+                  - else
+                    = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
+                    = f.custom_radio_button :copy_event, "no", "No", :id => "no"
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.select-eventDiv
             .bs-componet
               .form-group.set_highlight_select
@@ -167,7 +171,11 @@
                   -# default_remarks << 'New Category'
                   %i.arrow.single
                   - event_name = Event.find(@event.parent_id).event_name rescue nil
-                  = f.select("event", "event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
+                  - if event_name.present? and params[:action] == 'edit'
+                    .select2-single.form-control
+                      = event_name
+                  - else
+                    = f.select("event", "event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
                   - if @event.errors[:event_id].present?
                     .p.errorMessage
                       = 'This field is required.'
@@ -177,10 +185,12 @@
               %label.col-lg-4.control-label.ml-color--shades-white
                 Do you want to copy all content from this event?    
               .col-lg-7.sdfsdfs
-                / .copyButton
-                = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
-                / .customButton
-                = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
+                - if params[:action] == 'edit'
+                  = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
+                  = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
+                - else
+                  = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
+                  = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
                 / %button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Yes
                 / %button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} No, choose content to copy
                 - if @event.errors[:copy_content].present?
@@ -266,3 +276,8 @@
       .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
+
+- if params[:action] == 'edit'
+  :javascript
+    $('.select-eventDiv').css('display','block');
+    $('.select-eventDiv').next().css('display','block');
