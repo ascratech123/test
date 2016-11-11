@@ -51,7 +51,7 @@ class Conversation < ActiveRecord::Base
 
   def update_log_changes_when_reject
     if self.status == "rejected"
-      LogChange.create(:resourse_type => "conversation", :resourse_id => self.id, :action => "destroy")
+      LogChange.create(:resourse_type => "Conversation", :resourse_id => self.id, :action => "destroy")
     elsif self.status == "approved"
       log_changes = LogChange.where(:resourse_type => "conversation", :resourse_id => self.id, :action => "destroy")
       log_changes.destroy_all
