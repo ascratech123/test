@@ -4,27 +4,21 @@ class Api::V1::EventsController < ApplicationController
   respond_to :json
   before_filter :check_date, :only => :index
 
+  skip_filter :find_clients, :set_current_user
+  skip_filter :telecaller_is_login
+  caches_action :index, :cache_path => Proc.new { |c| c.params }, :expires_in => 2.minutes
+
   def index_test
     render :staus => 200, :json => {:status => "Success"}
   end
-
-  skip_filter :find_clients
-  skip_filter :telecaller_is_login
-  caches_action :index, :cache_path => Proc.new { |c| c.params }
 
   def index
     mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     submitted_app = "Yes" if params[:mobile_application_code].present?
     if mobile_application.present?
-#======mine
-#      sync_time = Time.now.to_s
-#      start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
-#      end_event_date = Time.now + 2.minutes
-#=======
-      sync_time = Time.now.utc.to_s
+      sync_time = Time.now.utc.beginning_of_minute.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
       end_event_date = Time.now.utc + 2.minutes
-#>>>>>>> .r4012
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key])
       if invitee.present?
