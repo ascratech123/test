@@ -17,7 +17,7 @@ class Api::V2::EventsController < ApplicationController
         submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
         if allow_ids.exclude? params[:event_id].to_i
-          render :status => 200, :json => {:message => "Invitee does not have access to that Event"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
         else
           event_ids = allow_ids
         end
@@ -29,7 +29,7 @@ class Api::V2::EventsController < ApplicationController
       all_event_ids = (params[:event_id].present? ? [] : all_event_ids)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i and event_ids.present?
-          render :status => 200, :json => {:message => "Invalid event_id"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invalid event_id"} and return
         else
           event_ids = [params[:event_id].to_i]
         end
