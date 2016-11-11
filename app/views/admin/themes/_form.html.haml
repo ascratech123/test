@@ -14,7 +14,8 @@
         - nested_attr_obj = (f.object.new_record? ? @theme.events.build : @event)
         = f.fields_for :events, nested_attr_obj  do |event|
           - if @event.present? and @event.mobile_application.present? and @event.mobile_application.application_type == "multi event" 
-            = event.new_custom_file_browser_field "logo", "Event listing logo (200x200px) png only ", :id => "uploadBtn", :value => (params[:action] == "create" and @logo_file_name.present?) ? @logo_file_name : nested_attr_obj.logo_file_name, :action => params[:action], "background" => "false", :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventListingLogo.jpg", :rel=> "event_logo", :title => "Event Logo"}
+            - if (@event.mobile_application.marketing_app_event_id.blank? and @event.marketing_app.blank?)
+              = event.new_custom_file_browser_field "logo", "Event listing logo (200x200px) png only ", :id => "uploadBtn", :value => (params[:action] == "create" and @logo_file_name.present?) ? @logo_file_name : nested_attr_obj.logo_file_name, :action => params[:action], "background" => "false", :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventListingLogo.jpg", :rel=> "event_logo", :title => "Event Logo"}
             - if old_event.present?
               .field_with_errors{:style => "margin-left: 35%;"}
                 .span{:class => "errorMessage"}
