@@ -27,7 +27,7 @@ class UserPoll < ActiveRecord::Base
   end
 
   def clear_poll_cache
-    Rails.cache.delete("poll_option_percentage#{self.id}")
+    Rails.cache.delete("poll_option_percentage#{self.poll_id}")
   end
 
   def Timestamp

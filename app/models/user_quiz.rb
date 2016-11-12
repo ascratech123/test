@@ -25,8 +25,8 @@ class UserQuiz < ActiveRecord::Base
 	end
 
   def clear_quiz_cache
-    Rails.cache.delete("Quiz_get_correct_answer_percentage#{self.quiz_id}") { set_correct_answer! }
-    Rails.cache.delete("Quiz_get_correct_answer_count#{self.id}")
+    Rails.cache.delete("Quiz_get_correct_answer_percentage#{self.quiz_id}")
+    Rails.cache.delete("Quiz_get_correct_answer_count#{self.quiz_id}")
   end
 
   def email
