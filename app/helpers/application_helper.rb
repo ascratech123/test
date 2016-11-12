@@ -545,11 +545,12 @@ module ApplicationHelper
   def correct_user_polls_for_percentile(poll,option)
     percentage = 0
     user_polls = poll.user_polls if poll.user_polls.present?
+    # total = user_polls.pluck(:answer).join(",").split(",").count
     if user_polls.present?
       total = user_polls.count
       count = 0
       user_polls.each do |ans|
-        count = count + 1 if ans.answer.split(',').include?(option)
+        count = count + 1 if ans.answer.downcase.split(',').include?(option.downcase)
       end
       percentage = (count.to_f/total) * 100 rescue 0
     end
@@ -561,7 +562,7 @@ module ApplicationHelper
     if user_polls.present?
       count = 0
       user_polls.each do |ans|
-        count = count + 1 if ans.answer.split(',').include?(option)
+        count = count + 1 if ans.answer.downcase.split(',').include?(option.downcase)
       end
     end
     return count
@@ -914,3 +915,5 @@ end
       ""
     end
   end
+#end
+
