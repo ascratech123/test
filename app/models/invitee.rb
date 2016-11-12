@@ -764,6 +764,8 @@ class Invitee < ActiveRecord::Base
     user_ids = get_similar_invitees(event_ids).pluck(:id)
     data = []
     invitee_notifications = InviteeNotification.where(:event_id => event_ids, :invitee_id => user_ids) rescue nil
+    notification_ids = Notification.where(:id => invitee_notifications.map(&:notification_id), :show_on_notification_screen => true).pluck(:id)
+    invitee_notifications = invitee_notifications.where(:notification_id => notification_ids) if invitee_notifications.present?
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
     data
   end
@@ -772,7 +774,8 @@ class Invitee < ActiveRecord::Base
     # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, user.email).pluck(:id) rescue nil
     user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
     data = []
-    invitee_notifications = info.where(:invitee_id => user_ids) rescue nil
+    notification_ids = Notification.where(:id => info.map(&:notification_id), :show_on_notification_screen => true).pluck(:id)
+    invitee_notifications = info.where(:invitee_id => user_ids, :notification_id => notification_ids)
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
     data
   end
