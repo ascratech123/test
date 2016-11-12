@@ -207,7 +207,7 @@ module SyncMobileData
             data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
           end
         when "MobileApplication"  
-          if start_event_date != "01/01/1990 13:26:58".to_time.utc
+          if start_event_date != "01/01/1990 13:26:58".to_time.utc or submitted_app != "Yes"
             mobile_application_ids = events.pluck(:mobile_application_id) rescue nil
             info = MobileApplication.where(:id => mobile_application_ids, :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json(:only => [:name,:application_type,:client_id,:id,:login_background_color,:message_above_login_page,:registration_message,:registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status, :login_background_updated_at, :listing_screen_background_updated_at, :visitor_registration,:social_media_logins, :choose_home_page, :home_page_event_id, :app_icon_updated_at, :splash_screen_updated_at], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url, :visitor_registration_background_image_url, :visitor_registration_back_color ,:marketing_app_event_id]) rescue []
