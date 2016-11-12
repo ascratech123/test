@@ -45,10 +45,10 @@ class Api::V1::ActivityFeedsController < ApplicationController
 
   def get_analytics_ids(notification_ids,event)
     actions = event.notifications.where("id IN (?)",notification_ids).pluck(:action).uniq.map(&:pluralize)
-    actions = actions.map{|x| x == "Venues" ? "Venue" : x == "Custom Page1s" ? "custom_page1s" : x == "Custom Page2s" ? "custom_page2s" : x == "Custom Page3s" ? "custom_page3s" : x == "Custom Page4s" ? "custom_page4s" : x == "Custom Page5s" ? "custom_page5s" : x =="E-Kits" ? "e_kits" : x }
+    actions = actions.map{|x| x == "Venues" ? "Venue" : x == "Custom Page1s" ? "custom_page1s" : x == "Custom Page2s" ? "custom_page2s" : x == "Custom Page3s" ? "custom_page3s" : x == "Custom Page4s" ? "custom_page4s" : x == "Custom Page5s" ? "custom_page5s" : x =="E-Kits" ? "e_kits" : x == "Q&As" ? "qnas" : x == "QR codes" ? "qr_code" : x == "My Favorites" ? "favourites" : x == "Profiles" ? "my_profile" : x == "My Travels" ? "my_travels" : x == "Leaderboards" ? "leaderboard" : x}
     event_features = event.event_features.not_hidden_icon.where("name IN (?)",actions).pluck(:name)
     event_features1 = event_features.map(&:singularize)
-    event_features1 = event_features1.map{|x| x == "venue" ? "Venue" : x == "custom_page1" ? "Custom Page1" : x == "custom_page2" ? "Custom Page2" : x == "custom_page3" ? "Custom Page3" : x == "custom_page4" ? "Custom Page4" : x == "custom_page5" ? "Custom Page5" : x == "e_kit" ? "E-Kit" : x}
+    event_features1 = event_features1.map{|x| x == "venue" ? "Venue" : x == "custom_page1" ? "Custom Page1" : x == "custom_page2" ? "Custom Page2" : x == "custom_page3" ? "Custom Page3" : x == "custom_page4" ? "Custom Page4" : x == "custom_page5" ? "Custom Page5" : x == "e_kit" ? "E-Kit" : x == "qna" ? "Q&A" : x == "qr_code" ? "QR code" : x == "favourite" ? "My Favorite" : x == "my_profile" ? "Profile" : x=="my_travel" ? "My Travel" : x == "leaderboard" ? "Leaderboard" : x }
     ids = event.notifications.where("action = ? or action IN (?)","Home Page",event_features1).pluck(:id)  
     ids
   end
