@@ -53,5 +53,5 @@
       %p
         - if (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin) and params[:wall] != "true"
           - if prompt_message == 'Select Event' and (params[:new_marketing_app].present? and params[:new_marketing_app] == "true")#(params[:feature].present? and  params[:feature] == "mobile_applications")
-            Want to add a new Landing App? 
+            %b Want to add a new Landing App? 
             = link_to "Click here", new_admin_client_event_path(:client_id => params[:client_id],:marketing_app => true)  

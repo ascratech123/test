@@ -5,8 +5,12 @@ class Api::V2::EventsController < ApplicationController
   before_filter :check_date, :only => :index
 
   def index
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    submitted_app = "Yes" if params[:mobile_application_code].present?
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    if mobile_application.present? 
+      submitted_app = "Yes" 
+    else
+      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code])
+    end
     if mobile_application.present?
       sync_time = Time.now.utc.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
@@ -14,22 +18,24 @@ class Api::V2::EventsController < ApplicationController
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key]) if params[:key].present?
       if invitee.present?
-        submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
-        allow_ids = invitee.get_event_id(mobile_application.submitted_code, submitted_app)
+        #submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
+        allow_ids = invitee.get_event_id(mobile_application.submitted_code,submitted_app)
         if allow_ids.exclude? params[:event_id].to_i
-          render :status => 200, :json => {:message => "Invitee does not have access to that Event"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
         else
           event_ids = allow_ids
         end
       end 
       status = (submitted_app == "Yes" ? ["published"] : ["approved", "published"])
-      all_events = mobile_application.events.where(:status => status, :updated_at => start_event_date...end_event_date)
+      all_events = mobile_application.events.where(:status => status)
+      all_updated_events = all_events.where(:updated_at => start_event_date...end_event_date)
       all_event_ids = all_events.pluck(:id)
+      all_updated_event_ids = all_updated_events.pluck(:id)
       event_ids ||= all_event_ids
       all_event_ids = (params[:event_id].present? ? [] : all_event_ids)
       if params[:event_id].present?
         if !event_ids.include? params[:event_id].to_i and event_ids.present?
-          render :status => 200, :json => {:message => "Invalid event_id"} and return
+          render :status => 200, :json => {:status => "Failure",:message => "Invalid event_id"} and return
         else
           event_ids = [params[:event_id].to_i]
         end
@@ -40,8 +46,8 @@ class Api::V2::EventsController < ApplicationController
           event_ids = get_event_ids(event_ids)
         end
       end
-      data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_event_ids) 
-      render :staus => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :data => data}
+      data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_updated_event_ids) 
+      render :status => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []),:data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 

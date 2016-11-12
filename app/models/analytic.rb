@@ -10,6 +10,9 @@ class Analytic < ActiveRecord::Base
   # validates_uniqueness_of :user_id, :scope => [:quiz_id], :message => 'Quiz already answered'
 
   scope :desc_ordered, -> { order('created_at DESC') }
+  scope :activity_feed_actions, -> { where('action IN (?)', ["comment", "conversation post", "like", "notification"])}
+  scope :include_not_rejected, -> { where(status:[nil,"","approved"]) }
+
 
   belongs_to :event
   before_create :update_points
