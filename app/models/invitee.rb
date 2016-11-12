@@ -211,6 +211,10 @@ class Invitee < ActiveRecord::Base
     self.remark
   end
 
+  def instagram
+    self.instagram_id.present? ? self.instagram_id : ""
+  end
+
   def feedback_last_updated_at
     feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
     feedbacks.last.updated_at if feedbacks.present?
