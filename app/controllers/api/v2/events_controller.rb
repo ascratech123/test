@@ -5,8 +5,12 @@ class Api::V2::EventsController < ApplicationController
   before_filter :check_date, :only => :index
 
   def index
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    submitted_app = "Yes" if params[:mobile_application_code].present?
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    if mobile_application.present? 
+      submitted_app = "Yes" 
+    else
+      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code])
+    end
     if mobile_application.present?
       sync_time = Time.now.utc.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
@@ -14,8 +18,8 @@ class Api::V2::EventsController < ApplicationController
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key]) if params[:key].present?
       if invitee.present?
-        submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
-        allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
+        #submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
+        allow_ids = invitee.get_event_id(mobile_application.submitted_code,submitted_app)
         if allow_ids.exclude? params[:event_id].to_i
           render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
         else
