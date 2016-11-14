@@ -78,7 +78,7 @@ module SyncMobileData
           data[:"comments"] = info.as_json(:methods => [:user_name, :formatted_created_at_with_event_timezone, :formatted_updated_at_with_event_timezone, :first_name, :last_name]) rescue []
           if current_user.present?
             info = Like.where(:likable_id => conversation_ids, likable_type: "Conversation", :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json() rescue []
+            data[:"likes"] = info.as_json() rescue []
           end
         when 'EmergencyExit'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:icon_file_name,:icon_content_type,:icon_file_size,:emergency_exit_file_name, :emergency_exit_content_type, :emergency_exit_size, :uber_link], :methods => [:emergency_exit_url,:icon_url, :attachment_type])
