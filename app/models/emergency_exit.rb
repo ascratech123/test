@@ -33,6 +33,11 @@ class EmergencyExit < ActiveRecord::Base
     self.icon.url
   end
 
+  def attachment_type
+    file_type = self.emergency_exit_content_type.split("/").last rescue ""
+    file_type
+  end
+
    def image_dimensions
     if self.icon_file_name_changed?  
       icon_dimension_height  = 288.0
