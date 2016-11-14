@@ -1,5 +1,5 @@
 - analytics.each do |selected_analytic|
-  - analytic = Analytic.where(:viewable_id => selected_analytic.viewable_id, :viewable_type => selected_analytic.viewable_type).last
+  - analytic = Analytic.unscoped.where(:viewable_id => selected_analytic.viewable_id, :viewable_type => selected_analytic.viewable_type).last
   - logger.warn analytic
   - if analytic.viewable_type == "Conversation"
     - conversation = Conversation.get_approved_conversation(analytic.viewable_id)
@@ -69,7 +69,7 @@
                             %img{:src => "/profile_pics/thumb/missing.png"}/
                       .userDetail
                         %p.userName= invitee.name_of_the_invitee 
-                        %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
+                        %p= datetime_with_adjusted_offset_and_display_timezone(conversation.created_at , @event_timezone_offset, @event_display_timezone)
                     .feed-post
                       %p= conversation.description
                       - if conversation.image_file_name.present?
@@ -109,11 +109,12 @@
       - elsif find_notification.present?
         .feed
           - if true#find_notification.action.present?
-            %a{:href => "#{APP_URL}?resource_type=#{find_notification.action.present? ? find_notification.action : 'home page'}&resource_id=#{find_notification.actionable_id}"}
+            %a{:href => "#{APP_URL}?resource_type=#{find_notification.action.present? ? find_notification.action : 'Home Page'}&resource_id="}
               - icon_url = get_notification_icon_by_action(find_notification)
               - if icon_url.present?
                 .feedIcon
                   %img{:src => icon_url}/
               .feedDetail
                 %p= find_notification.description
-                %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.push_datetime , @event_timezone_offset, @event_display_timezone)
+                / %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.push_datetime , @event_timezone_offset, @event_display_timezone)
+                %p= find_notification.push_datetime.strftime('%b %d at %l:%M %P')
