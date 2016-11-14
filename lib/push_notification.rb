@@ -12,6 +12,7 @@ module PushNotification
       if objekts.present?
         arr = objekts.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
         InviteeNotification.create(arr)
+        ClearMainSyncCache.clear_cache(mobile_application_id)
         push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
         event = notification.event
         title = push_pem_file.title.present? ? push_pem_file.title : event.event_name

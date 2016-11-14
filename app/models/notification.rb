@@ -46,38 +46,15 @@ class Notification < ActiveRecord::Base
 
   def push_notification
     if self.push_datetime.blank?
-      # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
       self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
-      # if self.group_ids.present?
-      #   groups = InviteeGroup.where("id IN(?)", self.group_ids)
-      #   invitee_ids = []
-      #   groups.each do |group|
-      #     invitee_ids = invitee_ids + group.get_invitee_ids
-      #   end  
-      #   invitee_ids = invitee_ids.uniq rescue []
-      #   invitees = Invitee.where("id IN(?)", invitee_ids)
-      #   mobile_application = self.event.mobile_application
-      #   push_pem_file = mobile_application.push_pem_file if mobile_application.present?
-      # # invitees = Notification.get_action_based_invitees(invitees, self.action)
-      #   if mobile_application.present? and mobile_application.push_pem_file.present?
-      #     PushNotification.push_notification(self, invitees, mobile_application.id)
-      #   end
-      # else
-      #   invitees = self.event.invitees
-      #   objects = event.invitees
-      #   self.send_to_all
-      # end
     end
   end
 
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
-    # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
-    # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
     notifications = Notification.where(:pushed => false, :push => true)
     if notifications.present?
       notifications.each do |notification|
-        # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
         current_time_in_time_zone = Time.now + notification.event_timezone_offset.to_i.seconds
         if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
           event = notification.event
@@ -105,11 +82,12 @@ class Notification < ActiveRecord::Base
     mobile_application_id = self.event.mobile_application_id rescue nil
     self.update_column(:pushed, true)
     self.create_notification_in_analytic
-    # self.update_column(:push_datetime, Time.now.in_time_zone(self.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime)
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
-    invitees = Invitee.where(:event_id => self.event_id)
+    event_ids = self.event.mobile_application.events.pluck(:id)
+    invitees = Invitee.where(:event_id => event_ids)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
+    ClearMainSyncCache.clear_cache(mobile_application_id)
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
