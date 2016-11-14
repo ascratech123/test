@@ -49,7 +49,7 @@ class Api::V1::ActivityFeedsController < ApplicationController
     event_features = event.event_features.not_hidden_icon.where("name IN (?)",actions).pluck(:name)
     event_features1 = event_features.map(&:singularize)
     event_features1 = event_features1.map{|x| x == "venue" ? "Venue" : x == "custom_page1" ? "Custom Page1" : x == "custom_page2" ? "Custom Page2" : x == "custom_page3" ? "Custom Page3" : x == "custom_page4" ? "Custom Page4" : x == "custom_page5" ? "Custom Page5" : x == "e_kit" ? "E-Kit" : x == "qna" ? "Q&A" : x == "qr_code" ? "QR code" : x == "favourite" ? "My Favorite" : x == "my_profile" ? "Profile" : x=="my_travel" ? "My Travel" : x == "leaderboard" ? "Leaderboard" : x }
-    ids = event.notifications.where("action = ? or action IN (?)","Home Page",event_features1).pluck(:id)  
+    ids = event.notifications.where("action = ? or action IN (?) or action = ?","Home Page",event_features1,"").pluck(:id)  
     ids
   end
     
