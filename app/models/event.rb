@@ -402,7 +402,7 @@ class Event < ActiveRecord::Base
 
   
   def review_look_and_feel
-    if self.mobile_application.present? and self.mobile_application.application_type == 'multi event'
+    if self.mobile_application.present? and self.mobile_application.application_type == 'multi event' and self.mobile_application.marketing_app_event_id.blank?
       feature_arr = ['logo_file_name', 'inside_logo_file_name']
     else
       feature_arr = ['inside_logo_file_name']
@@ -733,8 +733,8 @@ class Event < ActiveRecord::Base
     self.marketing_app = true
     self.event_name = "Landing App"
     self.cities = "Mumbai"
-    self.start_event_date = Time.now
-    self.start_event_time = Time.now
+    self.start_event_date = Time.now + 5.5.hours
+    self.start_event_time = Time.now + 5.5.hours
     self.end_event_date = "31/12/2050".to_datetime
     self.end_event_time = "31/12/2050".to_datetime
     self.country_name = "India"

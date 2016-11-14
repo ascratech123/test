@@ -220,7 +220,7 @@
                           - if true#check_curent_user_role("mobile_application")
                             %a{:href => admin_clients_path(:feature => 'analytics'), :class => "displayBlock"}
                               = 'View Analytics'
-              - if @marketing_apps.present? and (current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role]) or current_user.has_role_without_event("client_admin", client_ids,session[:current_user_role])or current_user.has_role_without_event("db_manager", client_ids,session[:current_user_role]))
+              - if @marketing_apps.present? and (current_user.has_role_without_event("licensee_admin", client_ids,session[:current_user_role]) or current_user.has_role_without_event("client_admin", client_ids,session[:current_user_role])or current_user.has_role_client_db_manager_landing_page_dashbord("db_manager", client_ids,session[:current_user_role]))
                 .col-sm-3.col-xl-3
                   .panel.panel-tile.manageusers
                     .panel-body
