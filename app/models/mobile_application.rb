@@ -174,7 +174,7 @@ class MobileApplication < ActiveRecord::Base
     else
       extra_count += 1 if self.login_at.present?
     end
-    features_arr += ['listing_screen_background_file_name', 'listing_screen_text_color'] if self.application_type == 'multi event'
+    features_arr += ['listing_screen_background_file_name', 'listing_screen_text_color'] if (self.application_type == 'multi event' and self.marketing_app_event_id.blank?)
     ReviewStatus.review(self, features_arr, extra_count, (features_arr.length + extra_count))
   end
 

@@ -419,6 +419,18 @@ class User < ActiveRecord::Base
      access
    end
 
+    def has_role_client_db_manager_landing_page_dashbord(role_name, client_ids,session_role_name)
+      event_ids = Event.where(:client_id => client_ids).pluck(:id)
+      access = false
+      for role in self.roles 
+        if role.resource_type == "Client"
+          access = true if (role.resource.events.pluck(:id) & event_ids).present? and role.name == role_name and role.name == session_role_name
+        end
+        return true if access 
+      end
+      access
+    end
+
   def get_roles_for_user_for_checking(user,resource_id,user_id)
     @roles = Role.joins(:users).where('roles.resource_type = ? and resource_id = ? and users.id = ?', user, resource_id, user_id).pluck(:name)
   end
