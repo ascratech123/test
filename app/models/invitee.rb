@@ -775,7 +775,7 @@ class Invitee < ActiveRecord::Base
     user_ids = user.get_similar_invitees(event_ids).pluck(:id) rescue nil
     data = []
     notification_ids = Notification.where(:id => info.map(&:notification_id), :show_on_notification_screen => true).pluck(:id)
-    invitee_notifications = info.where(:invitee_id => user_ids, :notification_id => notification_ids)
+    invitee_notifications = info.where(:invitee_id => user_ids, :notification_id => notification_ids) if info.present?
     data = invitee_notifications.as_json(:except => [:updated_at, :created_at]) if invitee_notifications.present?
     data
   end
