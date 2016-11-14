@@ -5,7 +5,7 @@ class Invitee < ActiveRecord::Base
   require 'qr_code' 
   
   attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
-  COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture'}
+  COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture','instagram_id'=> 'instagram'}
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'

@@ -38,6 +38,8 @@
           = f.custom_text_field :google_id, "Google+ link ","background" => "false"
         - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'linkedin_id' and @my_profile_attributes['linkedin_id'] == 'no') 
           = f.custom_text_field :linkedin_id, "LinkedIn link ","background" => "false"
+        - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'instagram_id' and @my_profile_attributes['instagram_id'] == 'no')
+          = f.custom_text_field :instagram_id, "Instagram ","background" => "false"
         - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'street' and @my_profile_attributes['street'] == 'no') 
           = f.custom_text_field :street, "City ","background" => "false"
         - if !(@my_profile_attributes.present? and @my_profile_attributes.include? 'country' and @my_profile_attributes['country'] == 'no') 

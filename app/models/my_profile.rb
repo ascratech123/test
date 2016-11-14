@@ -1,7 +1,7 @@
 class MyProfile < ActiveRecord::Base
   serialize :enabled_attr, Hash
 
-  DISPLAY_FIELD_NAME = {"name_of_the_invitee"=>"Full Name", "email"=>"Email", "first_name"=>"First Name", "last_name"=>"Last Name", "company_name"=>"Company Name", "designation"=>"Designation", "mobile_no"=>"Mobile No", "website"=>"Website", "street"=>"Street", "locality"=>"Locality", "location"=>"Location", "country"=>"Country", "about"=>"About", "interested_topics"=>"Interested Topics", "twitter_id"=>"Twitter Id", "facebook_id"=>"Facebook Id", "google_id"=>"Google Id", "linkedin_id"=>"Linkedin Id", "remark"=>'Remark'}
+  DISPLAY_FIELD_NAME = {"name_of_the_invitee"=>"Full Name", "email"=>"Email", "first_name"=>"First Name", "last_name"=>"Last Name", "company_name"=>"Company Name", "designation"=>"Designation", "mobile_no"=>"Mobile No", "website"=>"Website", "street"=>"Street", "locality"=>"Locality", "location"=>"Location", "country"=>"Country", "about"=>"About", "interested_topics"=>"Interested Topics", "twitter_id"=>"Twitter Id", "facebook_id"=>"Facebook Id", "google_id"=>"Google Id", "linkedin_id"=>"Linkedin Id", "remark"=>'Remark','instagram_id'=>'Instagram'}
 
   belongs_to :event
 
@@ -9,7 +9,7 @@ class MyProfile < ActiveRecord::Base
 
 
   def set_default_enabled_attr
-    self.enabled_attr = {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'no', "about"=>'no', "interested_topics"=>'yes', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no'}
+    self.enabled_attr = {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'no', "about"=>'no', "interested_topics"=>'yes', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no','instagram_id'=>'no'}
     self
   end
 
@@ -25,7 +25,7 @@ class MyProfile < ActiveRecord::Base
 
   def self.get_default_grouping_fields(event)
     my_profile = event.my_profiles.last
-    arr = my_profile.enabled_attr rescue {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'yes', "about"=>'no', "interested_topics"=>'no', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no'}
+    arr = my_profile.enabled_attr rescue {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'yes', "about"=>'no', "interested_topics"=>'no', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no',"instagram_id"=>'no'}
     if arr.include? nil
       arr = arr.compact
     else
@@ -40,7 +40,7 @@ class MyProfile < ActiveRecord::Base
   end
 
   def self.get_my_profile(event)
-    my_profile = event.my_profiles.last || event.my_profiles.build(:enabled_attr => {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'no', "about"=>'no', "interested_topics"=>'no', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no'})
+    my_profile = event.my_profiles.last || event.my_profiles.build(:enabled_attr => {"name_of_the_invitee"=>"yes", "email"=>"yes", "first_name"=>"yes", "last_name"=>"yes", "company_name"=>"yes", "designation"=>'no', "mobile_no"=>'no', "website"=>'no', "street"=>'no', "locality"=>'no', "location"=>'no', "country"=>'no', "about"=>'no', "interested_topics"=>'no', "twitter_id"=>'no', "facebook_id"=>'no', "google_id"=>'no', "linkedin_id"=>'no', "remark"=>'no','instagram_id'=>'no'})
     my_profile
   end
 
@@ -56,7 +56,7 @@ class MyProfile < ActiveRecord::Base
 
     hsh = self.enabled_attr
     if true#hsh.blank?
-      ["name_of_the_invitee", "email", "first_name", "last_name", "company_name", "designation", "mobile_no", "website", "street", "locality", "location", "country", "about", "interested_topics", "twitter_id", "facebook_id", "google_id", "linkedin_id", "remark"].map{|key| hsh[key] = params[:my_profile][:enabled_attr][key].present? ? params[:my_profile][:enabled_attr][key] : 'no'} if params[:my_profile][:enabled_attr].present?
+      ["name_of_the_invitee", "email", "first_name", "last_name", "company_name", "designation", "mobile_no", "website", "street", "locality", "location", "country", "about", "interested_topics", "twitter_id", "facebook_id", "google_id", "linkedin_id", "remark","instagram_id"].map{|key| hsh[key] = params[:my_profile][:enabled_attr][key].present? ? params[:my_profile][:enabled_attr][key] : 'no'} if params[:my_profile][:enabled_attr].present?
     end
     (self.attr1.present? ? (params[:my_profile][:enabled_attr].present? and params[:my_profile][:enabled_attr][:attr1] == 'yes' ? hsh.merge!('attr1' => 'yes') : hsh.merge!('attr1' => 'no')) : '')
     (self.attr2.present? ? (params[:my_profile][:enabled_attr].present? and params[:my_profile][:enabled_attr][:attr2] == 'yes' ? hsh.merge!('attr2' => 'yes') : hsh.merge!('attr2' => 'no')) : '')

@@ -66,7 +66,7 @@ module ExcelInvitee
         end
         profile_picture = (File.open("public/#{profile_url.split('/').last}",'rb'))
       end
-      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_link"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_link"], :twitter_id => objekt["twitter_link"],:invitee_password => password,:password => password, :profile_pic => profile_picture,:remark => objekt["remark"])
+      invitee.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company_name => objekt['company_name'], :designation => objekt['designation'], :about => objekt["description"], :street => objekt["city"], :country => objekt["country"], :mobile_no => objekt["phone_number"], :website => objekt["website"], :google_id => objekt["google_link"], :facebook_id => objekt["facebook_link"], :linkedin_id => objekt["linkedin_link"], :twitter_id => objekt["twitter_link"],:invitee_password => password,:password => password, :profile_pic => profile_picture,:remark => objekt["remark"],:instagram_id => objekt["instagram"])
       my_profile = MyProfile.where(:event_id => event_id).last
       if my_profile.present?
         my_profile_attr = my_profile.attributes.except('id', 'enabled_attr', 'event_id', 'created_at', 'updated_at')

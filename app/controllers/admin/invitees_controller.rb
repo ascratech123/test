@@ -138,7 +138,7 @@ class Admin::InviteesController < ApplicationController
         header_columns = @only_columns.map{ |x| (['attr1','attr2','attr3','attr4','attr5'].include? x) ? @my_profile.attributes[x] : x }
         @export_array = [header_columns + ['Logged In', 'profile_picture']]
       else
-        @only_columns = ["email", "first_name", "last_name", "company_name", "designation", "mobile_no", "website", "street", "locality", "location", "country", "about", "interested_topics", "twitter_id", "facebook_id", "google_id", "linkedin_id"]
+        @only_columns = ["email", "first_name", "last_name", "company_name", "designation", "mobile_no", "website", "street", "locality", "location", "country", "about", "interested_topics", "twitter_id", "facebook_id", "google_id", "linkedin_id", "instagram_id"]
         @export_array = [@only_columns + ['Logged In', 'profile_picture']]
       end
       if params[:sample_download].present?
