@@ -713,7 +713,7 @@ class Invitee < ActiveRecord::Base
       end
     end
     notification_ids << get_read_notification_notification_ids(event_ids, user, start_event_date, end_event_date)
-     notifications = Notification.where(:id => notification_ids.flatten).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
+     notifications = Notification.where(:id => notification_ids.flatten, :show_on_notification_screen => true).as_json(:except => [:group_ids, :sender_id, :status, :image_file_name, :image_content_type, :image_file_size, :image_updated_at], :methods => [:get_invitee_ids, :formatted_push_datetime_with_event_timezone])
     notifications.present? ? notifications : []
   end
 
