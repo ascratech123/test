@@ -68,11 +68,13 @@ class Sponsor < ActiveRecord::Base
     if self.logo_file_name_changed?  
       logo_dimension_height  = 300.0
       logo_dimension_width = 300.0
-      dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path)
-      if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
-        errors.add(:logo, "Image size should be 300x300px only")
-      else
-        self.errors.delete(:logo)
+      if logo.queued_for_write[:original].present?
+        dimensions = Paperclip::Geometry.from_file(logo.queued_for_write[:original].path)
+        if (dimensions.width != logo_dimension_width or dimensions.height != logo_dimension_height)
+          errors.add(:logo, "Image size should be 300x300px only")
+        else
+          self.errors.delete(:logo)
+        end
       end
     end
   end
