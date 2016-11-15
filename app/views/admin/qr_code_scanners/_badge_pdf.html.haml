@@ -3,7 +3,7 @@
 %title Disha
 %body.qr-scanner-page#print
   - @badge_pdf = BadgePdf.find_by_event_id(params[:event_id])
-  - if @badge_pdf.present? and @event.present? and params[:qr_code_preview].blank? and (@badge_pdf.column1.present? && @badge_pdf.column1 == "active" or @badge_pdf.column2.present? && @badge_pdf.column2 == "active" or @badge_pdf.column3.present? && @badge_pdf.column3 == "active" or @badge_pdf.badge_image.present?)
+  - if @badge_pdf.present? and @event.present? and params[:qr_code_preview].present? and (@badge_pdf.column1.present? && @badge_pdf.column1 == "active" or @badge_pdf.column2.present? && @badge_pdf.column2 == "active" or @badge_pdf.column3.present? && @badge_pdf.column3 == "active" or @badge_pdf.badge_image.present?)
     .container.printPage{:style => "background-image:url(#{@badge_pdf.badge_image.url(:large)})"}
       .title
         %img{:src => @event.logo.url}
