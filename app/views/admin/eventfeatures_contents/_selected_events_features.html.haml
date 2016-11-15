@@ -1,0 +1,15 @@
+.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+  .form-group
+    %label.col-lg-4.control-label.ml-color--shades-white
+      Select Content
+    .col-lg-7.notification
+      - if local_assigns[:event_features].present?
+        - event_features.each_with_index do |group, index|
+          - if index == 0
+            .usersep
+              Mobile Application
+          .md-checkbox
+            %label
+              = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+              %span.checkbox 
+              = group.titleize
