@@ -167,10 +167,15 @@ class MobileApplication < ActiveRecord::Base
   end
 
   def review_status
-    features_arr = ['name', 'application_type', 'template_id', 'app_icon_file_name', 'splash_screen_file_name']
+    features_arr = ['name', 'application_type', 'template_id', 'app_icon_file_name', 'splash_screen_file_name','social_media_status','visitor_registration']
     extra_count = 0
     if self.login_at == 'Yes'
-      features_arr += ['login_background_file_name']
+      if self.login_background_file_name.present? or self.login_background_color.present?
+        features_arr += ['login_background_file_name'] if self.login_background_file_name.present?
+        features_arr += ['login_background_color'] if self.login_background_color.present?
+      else
+        features_arr += ['login_background_file_name']
+      end
     else
       extra_count += 1 if self.login_at.present?
     end
