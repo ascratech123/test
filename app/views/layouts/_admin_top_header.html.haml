@@ -60,7 +60,7 @@
                   = link_to "Landing App", admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id), :class => "mdl-color-text--white"
                 -else
                   = link_to "Landing App", new_admin_event_mobile_application_path(:event_id=>@event.id,:old_one => true), :class => "mdl-color-text--white"
-        - if @mobile_application.present? and ["admin/registrations","admin/invitee_structures","admin/groupings","admin/users","admin/manage_mobile_apps","admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns','admin/invitee_datas',"admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls"].exclude?(params[:controller])
+        - if @mobile_application.present? and ["admin/registrations","admin/invitee_structures","admin/groupings","admin/users","admin/manage_mobile_apps","admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns','admin/invitee_datas',"admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls","admin/qr_scanner_details"].exclude?(params[:controller])
           - mobile_application_name = "#{@mobile_application.name}" rescue ""
           - if @event.present? and @mobile_application.present?
             - if @mobile_application.new_record?
@@ -79,7 +79,7 @@
         - name = Client::display_hsh[page]
         - name = "Look & Feel" if name == "Theme"
         - if params[:event_id].present? and ["admin/mobile_applications", "admin/menus","admin/event_features", "admin/store_infos","admin/qna_walls","admin/conversation_walls", "admin/poll_walls", "admin/quiz_walls"].exclude?(params[:controller])  
-          - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
+          - if ["admin/registrations","admin/invitee_structures","admin/groupings", "admin/notifications","admin/users", "admin/registration_settings","admin/telecallers", 'admin/user_registrations','admin/telecaller_accessible_columns',"admin/invitee_datas","admin/campaigns","admin/edms","admin/qna_walls","admin/conversation_walls","admin/poll_walls","admin/quiz_walls","admin/qr_scanner_details"].exclude? params[:controller] and (name != "Look & Feel") and @mobile_application.present?
             %li.breadcrumb-link
               - if ["admin/notifications", "admin/e_kits","admin/feedbacks","admin/feedback_forms","admin/conversations","admin/qnas","admin/quizzes","admin/polls","admin/panels", "admin/leaderboards", "admin/chats", "admin/invitee_groups","admin/activity_feeds"].include?(params["controller"])
                 = link_to "Engagement", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_engagement"), :class => "mdl-color-text--white"
