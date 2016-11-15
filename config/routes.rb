@@ -22,7 +22,7 @@ namespace :admin do
     resources :clients    
   end
   resources :clients do
-    resources :users
+    resources :users, :eventfeatures_contents
     resources :mobile_applications do
       resources :push_pem_files
     end

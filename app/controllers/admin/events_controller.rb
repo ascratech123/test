@@ -5,15 +5,16 @@ class Admin::EventsController < ApplicationController
   before_filter :authenticate_user
   before_filter :authorize_client_role, :find_client_association
   before_filter :check_moderator_role, :feature_redirect_on_condition, :only => [:index]
+  before_filter :get_event_names, :only => [:new, :create, :edit]
 
   def index
     if params["type"].present?
       @events = Event.sort_by_type(params["type"], @events)
     end
     if (params[:search].present? && params[:search][:order_by].present? && params[:search][:order_by] == "All") || (params[:search].present? && params[:search][:order_by_status].present? && params[:search][:order_by_status] == "All")
-    	@events
+      @events
     else 
-    	@events = Event.search(params, @events) if params[:search].present?
+      @events = Event.search(params, @events) if params[:search].present?
     end
     @events = @events.ordered.paginate(page: params[:page], per_page: 10) if @select != true
     mobile_application_ids = @events.pluck(:mobile_application_id)
@@ -26,11 +27,20 @@ class Admin::EventsController < ApplicationController
   end
 
   def new
-    @event = @client.events.build  
-    @event.images.build
-    @themes = Theme.find_themes()
+    @event = @client.events.build
+    @event.images.build unless (params[:marketing_app].present? and params[:marketing_app] == "true")
+  # @event.event_venues.build    
+  @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
+    if (params[:marketing_app].present? and params[:marketing_app] == "true")
+      result = @event.create_marketing_app_event
+      if result == "true"
+        redirect_to new_admin_event_mobile_application_path(:event_id=>@event.id,:old_one => true)
+      else
+        redirect_to :back
+      end
+    end
   end
   
   def create
@@ -42,18 +52,17 @@ class Admin::EventsController < ApplicationController
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
         event = Event.find(params[:event][:event_id])
         @event.update_column('parent_id', event.id)      
-        if params[:event][:copy_all_content].present?
-          if params[:event][:copy_all_content] == "yes"
-            @event.copy_event_associations_from(event)
-          else
-            @event.copy_custom_event_associations_from(event, params)
-          end  
+        if params[:event][:copy_content].present?
+          @event.copy_event_associations_from(event)
+        elsif params[:event][:custom_content].present?
+          @event.copy_custom_event_associations_from(event, params)
         end
       end
 
       @event.add_default_invitee if @event.mobile_application.present?
       redirect_to admin_client_event_path(:client_id => @event.client_id, :id => @event.id)
     else
+      #@landing_page = @event.landing_page if @event.landing_page.present?
       @default_features = @event.set_features_default_list
       @present_feature = @event.set_features rescue []
       render :action => 'new'
@@ -61,7 +70,7 @@ class Admin::EventsController < ApplicationController
   end
     
   def show
-    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present?
+    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
     mobile_application_ids = @events.pluck(:mobile_application_id).compact
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)
     @multi_mobile_applications = single_mobile_application_ids.present? ? @client.mobile_applications.where('id NOT IN (?)', single_mobile_application_ids) : @client.mobile_applications
@@ -82,6 +91,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features
+    # @event.event_venues.build
   end
 
   def update
@@ -92,9 +102,15 @@ class Admin::EventsController < ApplicationController
       @event.update(:start_event_date => schedule_date) rescue nil
       redirect_to admin_client_events_path(:client_id => @client.id, :page => params[:page]) rescue nil
     else
-      @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
+      if params["event"]["start_event_date"].present?
+        @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
+      end
       if @event.update_attributes(events_params)
-        redirect_to admin_client_events_path(:client_id => @client.id)
+        if params[:set_activity_feed_bool].present?
+          redirect_to admin_event_mobile_application_path(:id => @event.mobile_application.id, :event_id => @event.id, :type => "show_engagement")
+        else
+          redirect_to admin_client_events_path(:client_id => @client.id)
+        end
       else
         @default_features = @event.set_features_default_list
         @present_feature = @event.set_features
@@ -112,9 +128,13 @@ class Admin::EventsController < ApplicationController
 
   protected
 
+  def get_event_names
+    @event_names = @client.events.where.not(status: 'rejected').pluck(:event_name, :id)    
+  end
+
   def feature_redirect_on_condition
     if params[:feature].present? and params[:feature]  != "events"
-      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller") ? @events.count("events.id") : @events.count
+      event_count = (current_user.has_role? "moderator" or current_user.has_role? :event_admin or current_user.has_role? "telecaller" or current_user.has_role? :db_manager) ? @events.count("events.id") : @events.count
       if params[:event_id].present? or (@events.present? and event_count == 1 and params[:feature] != "mobile_application" and params[:feature] != "mobile_applications")
         @event = (event_count == 1) ? @events.first : @events.find(params[:event_id])
         if params[:feature] == "mobile_application"
@@ -188,7 +208,7 @@ class Admin::EventsController < ApplicationController
   end
 
   def check_moderator_role
-    @events = Event.with_role(:moderator, current_user).where(:client_id => params[:client_id]) if current_user.has_role? :moderator
+    @events = Event.with_role(session[:current_user_role].to_sym, current_user).where(:client_id => params[:client_id]) if session[:current_user_role] == "moderator"
   end
 
   def events_params
