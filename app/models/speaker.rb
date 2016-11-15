@@ -75,9 +75,11 @@ class Speaker < ActiveRecord::Base
     if self.profile_pic_file_name_changed?  
       speaker_dimension_height  = 400.0
       speaker_dimension_width = 400.0
-      dimensions = Paperclip::Geometry.from_file(profile_pic.queued_for_write[:original].path)
-      if (dimensions.width != speaker_dimension_width or dimensions.height != speaker_dimension_height)
-        errors.add(:profile_pic, "Image size should be 400x400px only")
+      if profile_pic.queued_for_write[:original].present?
+        dimensions = Paperclip::Geometry.from_file(profile_pic.queued_for_write[:original].path)
+        if (dimensions.width != speaker_dimension_width or dimensions.height != speaker_dimension_height)
+          errors.add(:profile_pic, "Image size should be 400x400px only")
+        end
       end
     end
   end
