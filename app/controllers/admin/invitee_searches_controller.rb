@@ -25,9 +25,10 @@ class Admin::InviteeSearchesController < ApplicationController
     respond_to do |format| 
       format.html  
       format.xls do
-        only_columns = [:name_of_the_invitee, :company_name, :designation, :mobile_no, :email]
-        method_allowed = [:timestamp]
-        send_data @attendees.to_xls(:only => only_columns, :methods => method_allowed, :filename => "asd.xls")
+        #only_columns = [:name_of_the_invitee, :company_name, :designation, :mobile_no, :email]
+        method_allowed = [:timestamp, :name_of_the_invitee, :company_name, :designation, :mobile_no, :email]
+        # send_data @attendees.to_xls(:methods => method_allowed, :only => only_columns, :filename => "asd.xls")
+        send_data @attendees.to_xls(:methods => method_allowed, :filename => "asd.xls")
       end
     end
   end
