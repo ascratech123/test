@@ -116,4 +116,5 @@
                   %img{:src => icon_url}/
               .feedDetail
                 %p= find_notification.description
-                %p= datetime_with_adjusted_offset_and_display_timezone(find_notification.created_at , @event_timezone_offset, @event_display_timezone)
+                %p= datetime_with_display_timezone(find_notification.push_datetime, @event_display_timezone)
+                / %p= find_notification.push_datetime.strftime('%b %d at %l:%M %P')
