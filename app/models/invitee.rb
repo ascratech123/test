@@ -583,6 +583,9 @@ class Invitee < ActiveRecord::Base
     user = "#{self.first_name.to_s + " " + self.last_name.to_s} (#{self.email})"
   end
 
+  def timestamp
+    self.qr_code_registration_time.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
+  end  
 
   private
 
