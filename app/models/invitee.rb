@@ -832,6 +832,10 @@ class Invitee < ActiveRecord::Base
     hsh
   end
 
+  def timestamp
+    self.qr_code_registration_time.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
+  end  
+
   private
 
   def downcase_email

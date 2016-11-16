@@ -9,7 +9,8 @@ class Admin::QrCodeScannersController < ApplicationController
     if params[:page].present? && params[:page]=="print_preview"
       invitee_registration = Invitee.find_by_id(params[:invitee_id])
       if invitee_registration.present?
-        invitee_registration.update_column('qr_code_registration',true) 
+        #invitee_registration.update_column('qr_code_registration',true) 
+        invitee_registration.update_columns(qr_code_registration:true, qr_code_registration_time:Time.now)
         invitee_registration.update_column('updated_at',Time.now)
       end
     end  
