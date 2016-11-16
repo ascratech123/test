@@ -136,7 +136,7 @@ class Notification < ActiveRecord::Base
 
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
     puts "------------------------------#{title}------------------------------------"
-    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, 'actionable_id' => notification.actionable_id})
+    notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, 'actionable_id' => notification.actionable_id.to_s})
     response = ios_obj.push(notification)
     Rails.logger.info("******************************#{response}****************************************************")
   end

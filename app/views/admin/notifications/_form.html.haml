@@ -97,21 +97,22 @@
             = select_tag "notification[action]", options_for_select(grouped_options, :selected => f.object.action), :prompt => 'Select Destination Page', :class =>"select2-single form-control"
           .span.col-lg-1
             = link_to("?" ,"/whats_this/notification/general_information/select_root_destination.png", rel: "selecte_template", title: "Destination", :class =>"fancybox whatsImg")
-  
-      .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8#notification_action_change
-        - if f.object.actionable_id.present? and ["edit","update"].include?(params[:action]) and ["Agenda","Speaker","Poll","Quiz","E-Kit","Feedback"].include?(f.object.action)
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Select Screen
-            .col-lg-7 
-              - @data = @data.collect{|p| [ p.title, p.id ]} if f.object.action == "Agenda"
-              - @data = @data.collect{|p| [ p.speaker_name, p.id ]} if f.object.action == "Speaker"
-              - @data = @data.collect{|p| [ p.question, p.id ]} if f.object.action == "Poll"
-              - @data = @data.collect{|p| [ p.question, p.id ]} if f.object.action == "Quiz"
-              - @data = @data.collect{|p| [ p.name, p.id ]} if f.object.action == "E-Kit"
-              - @data = @data.collect{|p| [ p.title, p.id ]} if f.object.action == "Feedback"
-              %i.arrow.single
-              = select_tag "notification[actionable_id]", options_for_select(@data,:selected => f.object.actionable_id), :prompt => 'Select Screen', :class =>"select2-single form-control"
+
+      -if false  
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8#notification_action_change
+          - if f.object.actionable_id.present? and ["edit","update"].include?(params[:action]) and ["Agenda","Speaker","Poll","Quiz","E-Kit","Feedback"].include?(f.object.action)
+            .form-group
+              %label.col-lg-4.control-label.ml-color--shades-white
+                Select Screen
+              .col-lg-7 
+                - @data = @data.collect{|p| [ p.title, p.id ]} if f.object.action == "Agenda"
+                - @data = @data.collect{|p| [ p.speaker_name, p.id ]} if f.object.action == "Speaker"
+                - @data = @data.collect{|p| [ p.question, p.id ]} if f.object.action == "Poll"
+                - @data = @data.collect{|p| [ p.question, p.id ]} if f.object.action == "Quiz"
+                - @data = @data.collect{|p| [ p.name, p.id ]} if f.object.action == "E-Kit"
+                - @data = @data.collect{|p| [ p.title, p.id ]} if f.object.action == "Feedback"
+                %i.arrow.single
+                = select_tag "notification[actionable_id]", options_for_select(@data,:selected => f.object.actionable_id), :prompt => 'Select Screen', :class =>"select2-single form-control"
     .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-15
       .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
         %h4.heading-border.p-t-10.m-b-15
