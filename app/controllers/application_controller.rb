@@ -89,7 +89,8 @@ class ApplicationController < ActionController::Base
     client_ids = Client.with_roles(session[:current_user_role], current_user).pluck(:id)
     @events = Event.with_roles(session[:current_user_role], current_user)
     if client_ids.present?
-      @events += Event.where(:client_id => client_ids,:marketing_app => nil)
+      #@events += Event.where(:client_id => client_ids,:marketing_app => nil)
+      @events += Event.where(:client_id => client_ids)
       @events = @events.flatten.uniq
     end
     
@@ -101,8 +102,9 @@ class ApplicationController < ActionController::Base
   
     #@events = @events.where(:client_id => @client.id)
     event_ids = @events.map{|a|a.id}.compact.uniq
-    @events = Event.where('client_id IN (?) and id IN (?)', @client.id,event_ids).where(:marketing_app => nil)
-    @events = @client.events.where(:marketing_app => nil) if @events.blank? and @client.present?
+    #@events = Event.where('client_id IN (?) and id IN (?)', @client.id,event_ids).where(:marketing_app => nil)
+    @events = Event.where('client_id IN (?) and id IN (?)', @client.id,event_ids)
+    #@events = @client.events.where(:marketing_app => nil) if @events.blank? and @client.present?
     @event = @events.find_by_id(params[:id]) if params[:id].present? and @events.present?
 
     @log_changes = LogChange.get_changes('Event', @event.id) if params[:id].present? and @event.present?
