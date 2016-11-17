@@ -54,7 +54,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def self.get_default_grouping_fields(event)
-    arr = event.invitee_structures.first.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|st| st[1].to_s.length > 0 ? st : nil}
+    arr = event.invitee_structures.first.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier','email_field').map{|st| st[1].to_s.length > 0 ? st : nil}
     if arr.include?nil
       arr.compact!
     else
