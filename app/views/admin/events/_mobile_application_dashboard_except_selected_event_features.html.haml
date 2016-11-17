@@ -22,8 +22,9 @@
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "event_highlights.png", :objs => @event, :url => "event_highlights", :@count => @count}
       / - if show_card_except_event_features("emergency_exits")
       /   = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "emergency_exit.png", :objs => @event.emergency_exit, :url => "emergency_exits", :@count => @count}
-      - if show_card_except_event_features("venue")
-        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "venue.png", :objs => @event, :url => "venue", :@count => 0}
+      - if @event.marketing_app.blank?
+        - if show_card_except_event_features("venue")
+          = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "venue.png", :objs => @event, :url => "venue", :@count => 0}
       - if show_card_except_event_features("sponsors")
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img => "sponsor.png", :objs => @event.sponsors, :url => "sponsors", :@count => @count}
       - if show_card_except_event_features("notes")

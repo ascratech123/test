@@ -45,8 +45,9 @@
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "galler_1y.png", :objs => @event.highlight_images, :url => "highlight_images", :@count => @count}
         - if show_card("event_highlights")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "event_highlights.png", :objs => @event, :url => "event_highlights", :@count => @count}
-        - if show_card("venue")
-          = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "venue.png", :objs => @event, :url => "venue", :@count => 0} 
+        - if @event.marketing_app.blank?
+          - if show_card("venue")
+            = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "venue.png", :objs => @event, :url => "venue", :@count => 0} 
         - if show_card("sponsors")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "sponsor.png", :objs => @event.sponsors, :url => "sponsors", :@count => @count}
         - if show_card("notes")
