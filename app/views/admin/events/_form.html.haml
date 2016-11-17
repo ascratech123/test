@@ -175,6 +175,8 @@
                     .select2-single.form-control
                       = event_name
                   - else
+                    / - binding.pry
+                    / - event_namess = @event_names.reject{|key, val| key == "Landing App"}
                     = f.select("event", "event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control', :id => 'add_event_features'})
                   - if @event.errors[:event_id].present?
                     .p.errorMessage

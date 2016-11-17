@@ -129,7 +129,7 @@ class Admin::EventsController < ApplicationController
   protected
 
   def get_event_names
-    @event_names = @client.events.where.not(status: 'rejected').pluck(:event_name, :id)    
+    @event_names = @client.events.where(marketing_app: nil).where.not(status: 'rejected').pluck(:event_name, :id)
   end
 
   def feature_redirect_on_condition
