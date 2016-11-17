@@ -351,6 +351,7 @@ def content_is_present
   def set_features_default_list()
     default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
     self.marketing_app == true ? default_features.push("all_events") : default_features
+    self.marketing_app == true ? default_features - ["venue"] : default_features
   end
 
   def set_features_static_list()
