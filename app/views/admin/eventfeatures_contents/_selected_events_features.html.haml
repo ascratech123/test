@@ -10,7 +10,9 @@
 
         / - features = event_features.map{|word| word.singularize}
 
-        - event_features = ["abouts", "agendas", "faqs", "galleries", "feedbacks", "e_kits", "conversations", "contacts", "quizzes", "activity_feeds", "my_travels", "custom_page2s", "custom_page3s", "custom_page4s", "custom_page1s", "custom_page5s"]
+        / - ["invitees", "polls", "faqs", "abouts", "speakers", "conversations", "e_kits", "my_calendar", "awards", "qnas", "leaderboard", "agendas", "About", "galleries", "feedbacks", "sponsors", "event_highlights", "custom_page4s", "activity_feeds", "custom_page5s", "contacts", "notes", "custom_page1s", "my_travels", "my_profile", "Faqs", "qr_code", "all_events", "emergency_exits", "chats", "custom_page2s", "venue", "attendees", "favourites", "exhibitors", "custom_page3s", "quizzes", "social_sharings"]
+
+        / - event_features = ["invitees", "all_events", "sponsors", "event_highlights", "About", "awards", "qnas", "leaderboard", "my_calendar", "polls", "abouts", "speakers", "agendas", "faqs", "galleries", "feedbacks", "e_kits", "conversations", "contacts", "quizzes", "activity_feeds", "my_travels", "custom_page2s", "custom_page3s", "custom_page4s", "custom_page1s", "custom_page5s"]
         - renames = Hash.new { |_,key| key }
         - renames['abouts'] = 'about'
         - renames['agendas'] = 'agenda'
