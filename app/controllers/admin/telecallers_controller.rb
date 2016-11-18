@@ -62,7 +62,7 @@ class Admin::TelecallersController < ApplicationController
     @invitee_data = @invitee_structure.invitee_datum
     data = Grouping.get_search_data_count(@invitee_data, @groupings) if @groupings.present? and @invitee_data.present?
     @data = data.where(:status => nil).first rescue nil
-    callback = data.where("status IN (?) and callback_datetime < ?",["CALL BACK","FOLLOW UP"], (Time.now + 15.minutes).to_formatted_s(:db)) rescue nil
+    callback = data.where("status IN (?) and callback_datetime < ?",["CALL BACK","FOLLOW UP"], (Time.now + 15.minutes + @event.timezone_offset).to_formatted_s(:db)) rescue nil
     if callback.present?
       @data = callback.first
       @need_to_call = "true"
