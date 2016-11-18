@@ -46,7 +46,7 @@ class InviteeDatum < ActiveRecord::Base
   end
 
   def check_callback_time_and_date(invitee_datum)
-    if invitee_datum[:status] == "Call Back" or invitee_datum[:status] == "Follow up"
+    if invitee_datum[:status] == "CALL BACK" or invitee_datum[:status] == "FOLLOW UP"
       errors.add(:callback_date, "This field is required.") if invitee_datum[:callback_date].blank? 
     end
   end

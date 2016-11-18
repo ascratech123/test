@@ -228,6 +228,7 @@ class ApplicationController < ActionController::Base
     elsif resource.has_role? :super_admin
       admin_licensees_path
     elsif resource.has_role? :telecaller
+      session[:current_user_role] = "telecaller"
       admin_event_telecaller_path(:event_id => resource.roles.second.resource_id,:id => resource.id)
     else
       #if resource.roles.pluck(:name).uniq.count > 1 #or session[:current_user_role].blank?

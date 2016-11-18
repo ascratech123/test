@@ -46,6 +46,7 @@ class Admin::InviteeDatasController < ApplicationController
         @telecaller = User.unscoped.find(current_user.id)
         @grouping = Grouping.find(@telecaller.assign_grouping) 
         @data = @invitee_data
+        @telecaller_accessible_columns = @event.telecaller_accessible_columns.first.accessible_attribute if @event.telecaller_accessible_columns.present?
         render 'admin/telecallers/show'
       end
     else

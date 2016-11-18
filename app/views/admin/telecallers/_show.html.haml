@@ -3,19 +3,56 @@
   - if obj.blank?
     %p.txtcenter.Thankpop
       Thank You
+  -elsif @telecaller_accessible_columns.blank?
+    %p.txtcenter.Thankpop
+      Please Contact with your admin
   - else
     - obj1 = obj.attributes.except('id', 'created_at', 'updated_at', 'invitee_structure_id')
     .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-t-15 
-      =# form_for obj, :url=>update_details_admin_event_invitee_datas_path(:event_id => @event.id), :method => :post,:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
       = form_for obj, :url=>admin_event_invitee_data_path(:event_id => @event.id,:id=> obj.id), :method => :put,:html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
         - session[:invitee_datum_id] = @data.id
-        = f.custom_text_field :attr1, "Email id *", :value => f.object.attr1.present? ? f.object.attr1 : "","background" => "false"
-        = f.custom_text_field :attr2, "First Name *", :value => f.object.attr2.present? ? f.object.attr2 : "","background" => "false"
-        = f.custom_text_field :attr3, "Last Name *", :value => f.object.attr3.present? ? f.object.attr3 : "","background" => "false"
-        = f.custom_text_field :attr4, "Designation *", :value => f.object.attr3.present? ? f.object.attr4 : "","background" => "false"
-        = f.custom_text_field :attr6, "Company *", :value => f.object.attr6.present? ? f.object.attr6 : "","background" => "false"
-        = f.custom_text_field :attr11, "Landline Number *", :value => f.object.attr11.present? ? f.object.attr11 : "","background" => "false"
-        = f.custom_text_field :attr12, "Mobile Number *", :value => f.object.attr12.present? ? f.object.attr12 : "","background" => "false"
+        = f.custom_text_field :attr1, @telecaller_accessible_columns["attr1"][0], :value => f.object.attr1.present? ? f.object.attr1 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr1")
+
+        = f.custom_text_field :attr2, @telecaller_accessible_columns["attr2"][0], :value => f.object.attr2.present? ? f.object.attr2 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr2")
+        
+        = f.custom_text_field :attr3, @telecaller_accessible_columns["attr3"][0], :value => f.object.attr3.present? ? f.object.attr3 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr3")
+        
+        = f.custom_text_field :attr4, @telecaller_accessible_columns["attr4"][0], :value => f.object.attr4.present? ? f.object.attr4 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr4")
+        
+        = f.custom_text_field :attr5, @telecaller_accessible_columns["attr5"][0], :value => f.object.attr5.present? ? f.object.attr5 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr5")
+        
+        = f.custom_text_field :attr6, @telecaller_accessible_columns["attr6"][0], :value => f.object.attr6.present? ? f.object.attr6 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr6")
+        
+        = f.custom_text_field :attr7, @telecaller_accessible_columns["attr7"][0], :value => f.object.attr7.present? ? f.object.attr7 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr7")
+
+        = f.custom_text_field :attr8, @telecaller_accessible_columns["attr8"][0], :value => f.object.attr8.present? ? f.object.attr8 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr8")
+
+        = f.custom_text_field :attr9, @telecaller_accessible_columns["attr9"][0], :value => f.object.attr9.present? ? f.object.attr9 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr9")
+
+        = f.custom_text_field :attr10, @telecaller_accessible_columns["attr10"][0], :value => f.object.attr10.present? ? f.object.attr10 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr10")
+
+        = f.custom_text_field :attr11, @telecaller_accessible_columns["attr11"][0], :value => f.object.attr11.present? ? f.object.attr11 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr11")
+        
+        = f.custom_text_field :attr12, @telecaller_accessible_columns["attr12"][0], :value => f.object.attr12.present? ? f.object.attr12 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr12")
+        
+        = f.custom_text_field :attr13, @telecaller_accessible_columns["attr13"][0], :value => f.object.attr13.present? ? f.object.attr13 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr13")
+
+        = f.custom_text_field :attr14, @telecaller_accessible_columns["attr14"][0], :value => f.object.attr14.present? ? f.object.attr14 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr14")
+
+        = f.custom_text_field :attr15, @telecaller_accessible_columns["attr15"][0], :value => f.object.attr15.present? ? f.object.attr15 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr15")
+
+        = f.custom_text_field :attr16, @telecaller_accessible_columns["attr16"][0], :value => f.object.attr16.present? ? f.object.attr16 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr16")
+
+        = f.custom_text_field :attr17, @telecaller_accessible_columns["attr17"][0], :value => f.object.attr17.present? ? f.object.attr17 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr17")
+
+        = f.custom_text_field :attr18, @telecaller_accessible_columns["attr18"][0], :value => f.object.attr18.present? ? f.object.attr18 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr18")
+
+        = f.custom_text_field :attr19, @telecaller_accessible_columns["attr19"][0], :value => f.object.attr19.present? ? f.object.attr19 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr19")
+
+        = f.custom_text_field :attr20, @telecaller_accessible_columns["attr20"][0], :value => f.object.attr20.present? ? f.object.attr20 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr20")
+
+        = f.custom_text_field :attr21, @telecaller_accessible_columns["attr21"][0], :value => f.object.attr21.present? ? f.object.attr21 : "","background" => "false",:disabled=>"disabled",:class => "disable_column" if @telecaller_accessible_columns.keys.include?("attr21")
+        
         = f.custom_text_field :remark, "Remark *", "background" => "false"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
           .form-group
@@ -30,7 +67,6 @@
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:status].join("") rescue nil
-        / = f.custom_text_field :callback_datetime, "Callback Datetime *", "background" => "false"
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .bs-component
             .form-group
@@ -42,13 +78,14 @@
                   = f.custom_text_field_date :callback_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => "#{get_hour_minute_second_ampm(f.object.callback_datetime, 'minute')}", :col => '2',:maxlength => "2"
                   = f.custom_text_field_date :callback_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => "#{get_hour_minute_second_ampm(f.object.callback_datetime, 'ampm')}", :col => '3',:maxlength => "2"   
         = f.hidden_field :check_remark_and_status_present , :value => "true"
-        .fixed-activon-btn-new.teleclick  
-          = f.custom_submit_button "NEXT"
+        .fixed-activon-btn-new.btn-bottom.tellbgnone.teleclick  
+          = f.custom_submit_button1 "NEXT"
           .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
-              = link_to admin_dashboards_path, :class => "waves-effect waves-light btn" do
-                Cancel
-              
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn.editButton
+              = back_button(:back)
+          .mdl-button.mdl-js-button.mdl-button--raised.mdl-color--light-blue-600.mdl-js-ripple-effect.btnsubmit.editsetting.editButton.m-l-18
+            = link_to "Edit","javascript:void(0);"
+
 - if @need_to_call == "true" and obj.present?
   .popup-overlay
   .ClientPopup
@@ -63,15 +100,14 @@
             %td.popupLeft= obj.status        
           %tr
             %td.popTxtRight Date / Time : 
-            %td.popupLeft= get_datetime_in_ampm(obj.callback_datetime) rescue nil
+            %td.popupLeft= time_with_zone(obj.callback_datetime, 'IST', '%d-%m-%Y %I:%M %p') rescue nil
           %tr
             %td.popTxtRight Remark : 
             %td.popupLeft= obj.remark
       %a.txtcenter.ClickPop.mdl-color--light-blue-900{:href =>"javascript:void(0);"}
         ok
       
-
-- if params[:action] == "update_details" and (params[:invitee_datum][:status] == "CALL BACK"  or params[:invitee_datum][:status] == "FOLLOW UP")
+- if params[:action] == "update" and (params[:invitee_datum][:status] == "CALL BACK"  or params[:invitee_datum][:status] == "FOLLOW UP")
   :javascript
     $('#date-start,#date-start1').parent().parent().parent().show();
 - elsif (obj.present? and params[:action] == "show") and (obj.status == "CALL BACK" or obj.status == "FOLLOW UP")
@@ -80,3 +116,27 @@
 - else params[:action] == "edit" 
   :javascript
     $('#date-start,#date-start1').parent().parent().parent().hide();
+
+:javascript
+  $('#invitee_datum_status').on('change', function() {
+    val = $(this).val();
+    if(val == "CALL BACK" || val == "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().show();
+    }
+    if(val != "CALL BACK" && val != "FOLLOW UP"){
+      $('#date-start,#date-start1').parent().parent().parent().hide();
+    }
+  });
+  
+
+:javascript
+  $(window).load(function(){
+  flightTime();
+  minutes();
+  times(); 
+  
+  })
+  $('.disable_column').attr("disabled","disable"); 
+   $('.editButton').click(function(){
+    $('.disable_column').removeAttr("disabled");
+   });

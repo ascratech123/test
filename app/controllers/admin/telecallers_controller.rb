@@ -16,15 +16,20 @@ class Admin::TelecallersController < ApplicationController
 
 
   def create
-    @telecaller = User.new(telecaller_params)
-    @grouping = Grouping.where(:id => params[:user][:assign_grouping])
+    @telecaller = User.find_or_initialize_by(:email => params[:user][:email])
+    if @telecaller.new_record?
+      @telecaller = User.new(telecaller_params)
+      @grouping = Grouping.where(:id => params[:user][:assign_grouping])
+    else
+      @grouping = Grouping.where(:id => params[:user][:assign_grouping])
+    end
     @telecaller.status = "active"
     if @telecaller.save
       @telecaller.add_role_to_telecaller(@telecaller,@event)
       @telecaller.add_role :telecaller,@grouping.first
       redirect_to admin_event_users_path(:event_id => @event.id,:role => "all") if params[:get_role].present?
-      redirect_to admin_event_users_path(:event_id => @event.id) if !params[:get_role].present?
-      #redirect_to admin_event_telecallers_path(:event_id => @event.id)
+      redirect_to admin_event_users_path(:event_id => @event.id) if (!params[:get_role].present? and !params[:telecaller_index].present?)
+      # redirect_to admin_event_telecallers_path(:event_id => @event.id) if params[:telecaller_index].present?
     else
       render :action => 'new'
     end
@@ -39,11 +44,9 @@ class Admin::TelecallersController < ApplicationController
     @grouping = Grouping.where(:id => params[:user][:assign_grouping])
     if @telecaller.update_attributes(telecaller_params)
       @telecaller.add_role :telecaller,@grouping.first
-      if params[:get_role].present?
-        redirect_to admin_event_users_path(:event_id => @event.id,:role=>"all")
-      else
-        redirect_to admin_event_users_path(:event_id => @event.id)
-      end
+      redirect_to admin_event_users_path(:event_id => @event.id,:role=>"all") if params[:get_role].present?
+      redirect_to admin_event_users_path(:event_id => @event.id) if (!params[:get_role].present? and !params[:telecaller_index].present?)
+      # redirect_to admin_event_telecallers_path(:event_id => @event.id) if params[:telecaller_index].present?
     else
       render :action => "edit"
     end
@@ -52,18 +55,19 @@ class Admin::TelecallersController < ApplicationController
 
   def show
     @telecaller = User.unscoped.find(params[:id])
+    @telecaller_accessible_columns = @event.telecaller_accessible_columns.first.accessible_attribute if @event.telecaller_accessible_columns.present?
     @grouping = Grouping.find(@telecaller.assign_grouping) rescue nil
     @groupings = Grouping.with_role(@telecaller.roles.pluck(:name), @telecaller)
     @invitee_structure = @event.invitee_structures.first if @event.invitee_structures.present?
     @invitee_data = @invitee_structure.invitee_datum
     data = Grouping.get_search_data_count(@invitee_data, @groupings) if @groupings.present? and @invitee_data.present?
     @data = data.where(:status => nil).first rescue nil
-    callback = data.where("status IN (?) and callback_datetime < ?",["CALL BACK","FOLLOW UP"], (Time.now + 5.minutes).to_formatted_s(:db)) rescue nil
+    callback = data.where("status IN (?) and callback_datetime < ?",["CALL BACK","FOLLOW UP"], (Time.now + 15.minutes).to_formatted_s(:db)) rescue nil
     if callback.present?
       @data = callback.first
       @need_to_call = "true"
     end
-    @data = data.find_by_id(session[:current_invitee_datum_id]) if session[:current_invitee_datum_id].present? rescue nil
+    #@data = data.find_by_id(session[:current_invitee_datum_id]) if session[:current_invitee_datum_id].present? rescue nil
     session[:current_invitee_datum_id] = @data.id rescue nil
     @invitee_structure = @data.invitee_structure if @data.present?
 
