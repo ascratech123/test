@@ -351,6 +351,7 @@ def content_is_present
   def set_features_default_list()
     default_features = ["abouts", "agendas", "speakers", "faqs", "galleries", "feedbacks", "e_kits","conversations","polls","awards","invitees","qnas", "notes", "contacts", "event_highlights","sponsors", "my_profile", "qr_code","quizzes","favourites","exhibitors",'venue', 'leaderboard', "custom_page1s", "custom_page2s", "custom_page3s","custom_page4s","custom_page5s", "chats", "my_travels","social_sharings", "activity_feeds"]
     self.marketing_app == true ? default_features.push("all_events") : default_features
+    self.marketing_app == true ? default_features - ["venue"] : default_features
   end
 
   def set_features_static_list()
@@ -388,7 +389,7 @@ def content_is_present
   end
 
   def check_event_date
-    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present?)
+    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present? and self.marketing_app.blank?)
       if User.current.licensee_end_date < self.end_event_date
         errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
       else
