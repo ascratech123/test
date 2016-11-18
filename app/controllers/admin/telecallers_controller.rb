@@ -67,7 +67,7 @@ class Admin::TelecallersController < ApplicationController
       @data = callback.first
       @need_to_call = "true"
     end
-    @data = data.find_by_id(session[:current_invitee_datum_id]) if session[:current_invitee_datum_id].present? rescue nil
+    #@data = data.find_by_id(session[:current_invitee_datum_id]) if session[:current_invitee_datum_id].present? rescue nil
     session[:current_invitee_datum_id] = @data.id rescue nil
     @invitee_structure = @data.invitee_structure if @data.present?
 
