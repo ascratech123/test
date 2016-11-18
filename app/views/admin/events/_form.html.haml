@@ -6,7 +6,7 @@
     .rect3
     .rect4
     .rect5
-.save_button.mdl-card.eventExceedLimit
+.save_button.mdl-card.eventExceedLimit.eventFeaturesTransparent
   = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
       .mdl-grid.mdl-card.mdl-shadow--1dp
@@ -144,7 +144,7 @@
 
         / - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
       - if @event_names.present? 
-        .mdl-grid.mdl-shadow--1dp
+        .mdl-grid.mdl-shadow--1dp.eventFeaturesCard
           / .mdl-grid.mdl-card.mdl-shadow--1dp
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
