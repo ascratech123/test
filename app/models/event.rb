@@ -388,11 +388,13 @@ def content_is_present
   end
 
   def check_event_date
-    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present?)
-      if User.current.licensee_end_date < self.end_event_date
-        errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
-      else
-        self.errors.delete(:event_date_limit)
+    if (User.current.has_role? "licensee_admin" and User.current.licensee_end_date.present? and self.marketing_app.blank?)
+      if User.current.licensee_end_date.present? and self.end_event_date.present?
+        if User.current.licensee_end_date < self.end_event_date
+          errors.add(:event_date_limit, "Events end date needs to be between your licenseed end date.")
+        else
+          self.errors.delete(:event_date_limit)
+        end
       end
     end
   end
