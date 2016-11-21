@@ -14,7 +14,7 @@ module PushNotification
         InviteeNotification.create(arr)
         push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
         event = notification.event
-        title = push_pem_file.title.present? ? push_pem_file.title : event.event_name
+        title = (push_pem_file.title.present? ? push_pem_file.title : (event.marketing_app.blank? ? event.event_name : event.mobile_application.name))
         ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
         objekts.each do |objekt|
           PushNotification.push_to_user(objekt, notification, mobile_application_id, push_pem_file, ios_obj, title)
