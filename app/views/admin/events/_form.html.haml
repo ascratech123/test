@@ -293,7 +293,7 @@
     });
   });
 
-- if params[:action] == 'edit' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
+- if params[:action] == 'edit' or params[:action] == 'update' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
   :javascript
     $('.select-eventDiv').css('display','block');
     $('.select-eventDiv').next().css('display','block');

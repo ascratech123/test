@@ -5,7 +5,7 @@ class Admin::EventsController < ApplicationController
   before_filter :authenticate_user
   before_filter :authorize_client_role, :find_client_association
   before_filter :check_moderator_role, :feature_redirect_on_condition, :only => [:index]
-  before_filter :get_event_names, :only => [:new, :create, :edit]
+  before_filter :get_event_names, :only => [:new, :create, :edit, :update]
 
   def index
     if params["type"].present?
