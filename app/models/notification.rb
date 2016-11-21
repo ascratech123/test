@@ -115,8 +115,8 @@ class Notification < ActiveRecord::Base
     invitees = Invitee.get_all_similar_invitees(invitees, mobile_application.events.pluck(:id)) if mobile_application.application_type == "multi event"
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
-      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id))
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id))
       event = self.event
       title = (push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : (event.marketing_app.blank? ? event.event_name : event.mobile_application.name))
       Rails.logger.info("***********ios***********************************")
