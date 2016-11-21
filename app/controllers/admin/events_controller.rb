@@ -29,7 +29,7 @@ class Admin::EventsController < ApplicationController
   def new
     @event = @client.events.build
     @event.images.build unless (params[:marketing_app].present? and params[:marketing_app] == "true")
-  # @event.event_venues.build    
+  @event.event_venues.build    
   @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
@@ -50,7 +50,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     if @event.save  
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
-        event = Event.find(params[:event][:event_id])
+        event = Event.find(params[:event][:parent_event_id])
         @event.update_column('parent_id', event.id)      
         if params[:event][:copy_content].present?
           @event.copy_event_associations_from(event)
@@ -91,7 +91,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features
-    # @event.event_venues.build
+    @event.event_venues.build
   end
 
   def update
