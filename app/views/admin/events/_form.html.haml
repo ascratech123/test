@@ -171,7 +171,7 @@
                   -# default_remarks << 'New Category'
                   %i.arrow.single
                   - event_name = Event.find(@event.parent_id).event_name rescue nil
-                  - if event_name.present? and params[:action] == 'edit'
+                  - if event_name.present? and (params[:action] == 'edit' or params[:action] == 'update')
                     .select2-single.form-control
                       = event_name
                   - else
@@ -188,7 +188,7 @@
                 %label.col-lg-4.control-label.ml-color--shades-white
                   Do you want to copy all content from this event? *
                 .col-lg-7.sdfsdfs
-                  - if params[:action] == 'edit'
+                  - if params[:action] == 'edit' or params[:action] == 'update'
                     = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
                     = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
                   - else
