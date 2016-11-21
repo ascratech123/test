@@ -144,13 +144,20 @@ class Invitee < ActiveRecord::Base
   end
     
   def update_conversations_updated_at
-    conversations = Conversation.where('user_id = ? or actioner_id =?', self.id, self.id)
+    conversations_actioners = Conversation.where('actioner_id =?', self.id)
+    conversations = Conversation.where('user_id = ?', self.id)
+    conversations_actioners.each do |conversations_actioner|
+      conversations_actioner.update_column(:updated_at, self.updated_at)
+      conversations_actioner.update_column(:first_name_user, self.first_name) if self.first_name.present? and self.first_name_changed?
+      conversations_actioner.update_column(:last_name_user, self.last_name) if self.last_name.present? and self.last_name_changed?
+      conversations_actioner.update_column(:profile_pic_url_user, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
+    end if conversations_actioners.present?
     if conversations.present?
       conversations.each do |conversation|
         conversation.update_column(:updated_at, self.updated_at)
-        conversation.update_column(:first_name_user, self.first_name) if self.first_name.present? and self.first_name_changed?
-        conversation.update_column(:last_name_user, self.last_name) if self.last_name.present? and self.last_name_changed?
-        conversation.update_column(:profile_pic_url_user, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
+        conversation.update_column(:first_name, self.first_name) if self.first_name.present? and self.first_name_changed?
+        conversation.update_column(:last_name, self.last_name) if self.last_name.present? and self.last_name_changed?
+        conversation.update_column(:profile_pic_url, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
       end
       Rails.cache.delete("invitee_first_name_#{self.id}")
       Rails.cache.delete("invitee_profile_pic_url_#{self.id}")
