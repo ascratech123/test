@@ -33,52 +33,52 @@ class Admin::InviteeSearchesController < ApplicationController
     end
   end
 
-  def new
-    if @event.present? and @event.custom_page1s.present?
-      redirect_to edit_admin_event_custom_page1_path(:event_id => params[:event_id],:id => @event.custom_page1s.last.id)
-    else
-      @custom_page1 = @event.custom_page1s.build
-    end
-  end
+  # def new
+  #   if @event.present? and @event.custom_page1s.present?
+  #     redirect_to edit_admin_event_custom_page1_path(:event_id => params[:event_id],:id => @event.custom_page1s.last.id)
+  #   else
+  #     @custom_page1 = @event.custom_page1s.build
+  #   end
+  # end
 
-  def create
-    @custom_page1 = @event.custom_page1s.build(custom_page_params)
-    if @custom_page1.save
-      if params[:type].present?
-        redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
-      else
-        redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
-      end
-    else
-      render :action => 'new'
-    end
-  end
+  # def create
+  #   @custom_page1 = @event.custom_page1s.build(custom_page_params)
+  #   if @custom_page1.save
+  #     if params[:type].present?
+  #       redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
+  #     else
+  #       redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
+  #     end
+  #   else
+  #     render :action => 'new'
+  #   end
+  # end
 
-  def edit
+  #def edit
     # @custom_page1 = @event.custom_page1s.last
-  end
+  #end
 
-  def update
-    if @custom_page1.update_attributes(custom_page_params)
-      redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
-    else
-      render :action => "edit"
-    end
-  end
+  # def update
+  #   if @custom_page1.update_attributes(custom_page_params)
+  #     redirect_to admin_event_mobile_application_path(:event_id => @event.id,:id => @event.mobile_application_id,:type => "show_content")
+  #   else
+  #     render :action => "edit"
+  #   end
+  # end
 
   def show
     #render html: @custom_page1.description.html_safe
     # respond_to do |format|
     #   format.html { render :show => @custom_page1.description.html_safe , :layout => false }
     # end
-    render :layout => false
+    #render :layout => false
   end
 
-  def destroy
-    if @custom_page1.destroy
-      redirect_to admin_event_custom_page1s_path(:event_id => @custom_page1.event_id)
-    end
-  end
+  # def destroy
+  #   if @custom_page1.destroy
+  #     redirect_to admin_event_custom_page1s_path(:event_id => @custom_page1.event_id)
+  #   end
+  # end
 
   protected
 
@@ -86,7 +86,8 @@ class Admin::InviteeSearchesController < ApplicationController
     @event = Event.find_by_id(params[:event_id])  
   end
 
-  def custom_page_params
-    params.require(:custom_page1).permit!
-  end
+  # def custom_page_params
+  #   params.require(:custom_page1).permit!
+  # end
+  
 end
