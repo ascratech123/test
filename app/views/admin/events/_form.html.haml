@@ -155,7 +155,7 @@
                 %label.col-lg-4.control-label.ml-color--shades-white
                   Do you want to add data from another event?
                 .col-lg-7
-                  - if params[:action] == 'edit'
+                  - if params[:action] == 'edit' or params[:action] == 'update'
                     = f.custom_radio_button :copy_event, "yes","Yes", :disabled => true
                     = f.custom_radio_button :copy_event, "no", "No", :disabled => true
                   - else
@@ -179,7 +179,7 @@
                     / - event_namess = @event_names.reject{|key, val| key == "Landing App"}
                     = f.select("event", "parent_event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control', :id => 'add_event_features'})
                     / - binding.pry
-                  - if @event.errors[:parent_event_id].present?
+                  - if @event.errors[:parent_event_id].present? and not (params[:action] == 'edit' or params[:action] == 'update')
                     .p.errorMessage
                       = 'This field is required.'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
@@ -196,7 +196,7 @@
                     = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
                   / %button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Yes
                   / %button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} No, choose content to copy
-                  - if @event.errors[:copy_content].present?
+                  - if @event.errors[:copy_content].present? and not (params[:action] == 'edit' or params[:action] == 'update')
                     .p.errorMessage
                       = @event.errors[:copy_content].first
             #render_events
