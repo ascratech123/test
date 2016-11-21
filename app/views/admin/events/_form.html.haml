@@ -177,8 +177,9 @@
                   - else
                     / - binding.pry
                     / - event_namess = @event_names.reject{|key, val| key == "Landing App"}
-                    = f.select("event", "event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control', :id => 'add_event_features'})
-                  - if @event.errors[:event_id].present?
+                    = f.select("event", "parent_event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control', :id => 'add_event_features'})
+                    / - binding.pry
+                  - if @event.errors[:parent_event_id].present?
                     .p.errorMessage
                       = 'This field is required.'
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
@@ -284,15 +285,15 @@
 :javascript
   $(document).on('change', '#add_event_features', function(){
     var event_name = $(this).find("option:selected").text();
-    var event_id = $(this).val();
+    var parent_event_id = $(this).val();
     $.ajax({
       type: "GET",
       url: "/admin/clients/#{params[:client_id]}/eventfeatures_contents",
-      data: {event_name, event_id}
+      data: {event_name, parent_event_id}
     });
   });
 
-- if params[:action] == 'edit' or @event.errors[:event_id].present? or @event.errors[:copy_content].present?
+- if params[:action] == 'edit' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
   :javascript
     $('.select-eventDiv').css('display','block');
     $('.select-eventDiv').next().css('display','block');

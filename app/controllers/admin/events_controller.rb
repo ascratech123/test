@@ -50,7 +50,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     if @event.save  
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
-        event = Event.find(params[:event][:event_id])
+        event = Event.find(params[:event][:parent_event_id])
         @event.update_column('parent_id', event.id)      
         if params[:event][:copy_content].present?
           @event.copy_event_associations_from(event)
