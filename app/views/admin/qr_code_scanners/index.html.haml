@@ -1,7 +1,7 @@
 - if params[:page] == 'print_preview'
   = render :partial => "/admin/qr_code_scanners/badge_pdf"
 - elsif @event.id == 358 
-  %body{:class => (params[:qr_code_preview].present? ? "" : "qr-scanner-page"),:style=>"background-image: url('/assets/em_Badge.jpg');background-size: cover;"}
+  %body{:class => (params[:qr_code_preview].present? ? "" : "qr-scanner-page"),:style=>"background-image: url('/assets/em_Badge.jpg');background-size: cover; background-attachment:fixed;"}
   - if params[:page] == 'manual_search'
     - if true
       .container
