@@ -187,7 +187,7 @@ body{
   }
 .subText.place{margin-top:0px; line-height:0px;}
 .qr-scanner-page#print{background:none;}
-#print .container.printPage{background: url("/assets/delegate-blank.jpg") no-repeat; width:396px; height: 566px;
+#print .container.printPage{background: url("/assets/Badge_1.jpg") no-repeat; width:396px; height: 566px;
  margin:2% auto 4%; text-align: left; }
 #print .description{padding:10px; text-align:left;}
 #print .printPage .title{width:28%; margin:0 auto; display:none}
