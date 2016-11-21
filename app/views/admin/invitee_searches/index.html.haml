@@ -21,7 +21,7 @@
         %ul.tabs
           / %li.tab-link.current.printBadge#printBadge{"data-tab" => "tab-1"} Print Badge
           %li.tab-link.current.attendee#attendee{"data-tab" => "tab-3"} Attendee
-          %li.tab-link{"data-tab" => "tab-2"} Score card
+          %li.tab-link#score_card{"data-tab" => "tab-2"} Score card
           %li.tab-link#qr_scaner{"data-tab" => "tab-5"} QR Code Scanner
           %li.tab-link#registration_tab{"data-tab" => "tab-4"} Onsite Registration
         / #tab-1.tab-content.current
@@ -109,8 +109,12 @@
                   %td.foot{:align => "left", :style => "text-align:center;padding-top:5px;padding-bottom:5px;"}
                     = will_paginate @attendees, :param_name => 'attendees_page'
                   %td{:style => "text-align:right;padding-right:5px;", :width => "80"}
-        #tab-5.tab-content
-          = render :partial => "admin/qr_code_scanners/qr_scanner_index" 
+        - if @event.id == 358
+          #tab-5.tab-content{:style=>"background-image: url('/assets/badge_1600x600.png'); background-size:cover;"}
+            = render :partial => "admin/qr_code_scanners/qr_scanner_index" 
+        - else
+          #tab-5.tab-content
+            = render :partial => "admin/qr_code_scanners/qr_scanner_index" 
         #tab-4.tab-content
           %table{:width => "100%"}
             %tr
@@ -166,7 +170,7 @@
                           - if params[:params_value].present? && session[:invitee_serach_email].present?
                             #{session[:invitee_serach_email]}
                             #{session[:invitee_serach_email] = nil}                         
-                    %tr.formbutton{:align => "center"} 
+                    %tr.formbutton{:align => "center"}
                       %td.tab4Btn{:align => "center", :colspan => "6"}
                         %input{:name => "submit", :type => "submit", :value => "Submit"}/
                         %input{:name => "Submit2", :type => "reset", :value => "Reset"}/
@@ -197,3 +201,4 @@
       window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=400,height=800");
     })
   })
+

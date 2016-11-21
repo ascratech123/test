@@ -109,9 +109,10 @@ class Notification < ActiveRecord::Base
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     event_ids = self.event.mobile_application.events.pluck(:id)
     invitees = Invitee.where(:event_id => event_ids)
-    # invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
+    mobile_application = MobileApplication.find(mobile_application_id)
+    invitees = Invitee.get_all_similar_invitees(invitees, mobile_application.events.pluck(:id)) if mobile_application.application_type == "multi event"
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))

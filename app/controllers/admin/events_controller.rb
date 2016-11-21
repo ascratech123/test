@@ -5,7 +5,7 @@ class Admin::EventsController < ApplicationController
   before_filter :authenticate_user
   before_filter :authorize_client_role, :find_client_association
   before_filter :check_moderator_role, :feature_redirect_on_condition, :only => [:index]
-  before_filter :get_event_names, :only => [:new, :create, :edit]
+  before_filter :get_event_names, :only => [:new, :create, :edit, :update]
 
   def index
     if params["type"].present?
@@ -50,7 +50,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     if @event.save  
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
-        event = Event.find(params[:event][:event_id])
+        event = Event.find(params[:event][:parent_event_id])
         @event.update_column('parent_id', event.id)      
         if params[:event][:copy_content].present?
           @event.copy_event_associations_from(event)

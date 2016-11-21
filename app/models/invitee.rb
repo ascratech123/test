@@ -832,6 +832,14 @@ class Invitee < ActiveRecord::Base
     hsh
   end
 
+  def self.get_all_similar_invitees(invitees, event_ids)
+    final_invitees = []
+    for invitee in invitees
+      final_invitees << invitee.get_similar_invitees(event_ids)
+    end
+    final_invitees.flatten
+  end
+
   def timestamp
     self.qr_code_registration_time.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
   end  
