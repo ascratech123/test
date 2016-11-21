@@ -111,20 +111,20 @@
                   .field_with_errors
                     %span.errorMessage{:for => "event_timezone"} This field is required.  
         = f.custom_text_field :pax, "Nbr. of people"
-        %div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          - count = f.object.event_venues.count 
-          - val = 1
-          .venueFields
-            = f.fields_for :event_venues do |venue|
-              - if val <= count or f.object.new_record?
-                = render 'venue_fields', f: venue, val: val
-              - val = val + 1
-          %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
-            %div.bs-component
-              %div.form-group
-                %label.col-lg-4.control-label.ml-color--shades-white
-                %div.col-lg-7.addmoretext
-                  = link_to_add_fields_for_event_field '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :event_venues, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900"       
+        / %div.mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        /   - count = f.object.event_venues.count 
+        /   - val = 1
+        /   .venueFields
+        /     = f.fields_for :event_venues do |venue|
+        /       - if val <= count or f.object.new_record?
+        /         = render 'venue_fields', f: venue, val: val
+        /       - val = val + 1
+        /   %div.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.addnew
+        /     %div.bs-component
+        /       %div.form-group
+        /         %label.col-lg-4.control-label.ml-color--shades-white
+        /         %div.col-lg-7.addmoretext
+        /           = link_to_add_fields_for_event_field '<i class= "material-icons mdl-color-text--white">add</i>'.html_safe, f, :event_venues, true, "options_form_tag_for_new field1_for_text_area link_to_add_more_option registration_field_option_3  mdl-color--light-blue-900"       
         = f.custom_text_field :google_map_link, "Google Map"
         = f.custom_text_area_field :remarks, "Remarks"
         = f.hidden_field :copy_content, :id => 'copy_content'
@@ -292,8 +292,7 @@
       data: {event_name, parent_event_id}
     });
   });
-
-- if params[:action] == 'edit' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
+- if params[:action] == 'edit' or params[:action] == 'update' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
   :javascript
     $('.select-eventDiv').css('display','block');
     $('.select-eventDiv').next().css('display','block');
