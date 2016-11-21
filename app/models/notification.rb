@@ -111,10 +111,12 @@ class Notification < ActiveRecord::Base
     invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
+    mobile_application = MobileApplication.find(mobile_application_id)
+    invitees = Invitee.get_all_similar_invitees(invitees, mobile_application.events.pluck(:id)) if mobile_application.application_type == "multi event"
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id)).where.not(:enabled => "false")
-      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id)).where.not(:enabled => "false")
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id)).where.not(:enabled => "false")
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id)).where.not(:enabled => "false")
       event = self.event
       title = push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : event.event_name
       if ios_devices.present? and push_pem_file.present?

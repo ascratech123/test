@@ -844,6 +844,14 @@ class Invitee < ActiveRecord::Base
     invitees
   end
 
+  def self.get_all_similar_invitees(invitees, event_ids)
+    final_invitees = []
+    for invitee in invitees
+      final_invitees << invitee.get_similar_invitees(event_ids)
+    end
+    final_invitees.flatten
+  end
+
   private
 
   def downcase_email
