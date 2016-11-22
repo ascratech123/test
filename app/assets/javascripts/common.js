@@ -432,7 +432,7 @@ function flightTime() {
     }) 
   });
 
-/* menu index show hide on radio button*/
+/* menu index show hide on radio button
   $(window).load(function(){
     $(".menu_status_deactive,.menu_status_active").click(function(){
       value = $(this).val() 
@@ -443,7 +443,35 @@ function flightTime() {
         $(this).parent().parent().parent().parent().next().children().show();
       }
     });
+  });*/
+  /* new js for menu */
+
+  /* menu index show hide on radio button*/
+  $(window).load(function(){
+    $(".menu_status_deactive,.menu_status_active").click(function(){
+      value = $(this).val() 
+      if (value == "active"){
+        $(this).parent().parent().parent().parent().next().children().hide();
+         $(this).parent().parent().parent().parent().next().next().next().show();
+      }
+      if(value == "deactive"){
+        $(this).parent().parent().parent().parent().next().children().show();
+        $(this).parent().parent().parent().parent().next().next().next().hide();
+      }
+    });
   });
+  $(window).load(function(){
+    $(".menu_status_deactive1,.menu_status_active1").click(function(){
+      value = $(this).val() 
+      if (value == "active"){
+        $(this).parent().parent().parent().parent().next().children().show();
+      }
+      if(value == "inactive"){
+        $(this).parent().parent().parent().parent().next().children().hide();
+      }
+    });
+  });
+
 
   /* agenda index page */
   $(window).load(function(){
