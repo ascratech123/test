@@ -49,8 +49,7 @@ class Api::V2::EventsController < ApplicationController
           # event_ids = [mobile_application.marketing_app_event_id.to_i]
           event_ids  = [0]
         else
-          #event_ids = get_event_ids(event_ids)
-          event_ids  = [0]
+          event_ids  = [0] if mobile_application.application_type != "single event"
         end
       end
       all_events_data = Event.where(:id => all_updated_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app, :start_event_time, :end_event_time], :methods => [:logo_url,:inside_logo_url])
