@@ -20,10 +20,15 @@ class Admin::MenusController < ApplicationController
       #########set feature as homepage changes ##########
       @homepage_feature_name = get_feature_name(event_params[:event_features_attributes])
       @home_page = @homepage_feature_name.map{|x|x[:status]}.count
+      @active_feature = @homepage_feature_name.collect{|x|x[:status] if x[:status]=="active"}.compact.count
+      @inactive_feature = @homepage_feature_name.collect{|x|x[:status] if x[:status]=="deactive"}.compact.count
       if @home_page == 1 && @event.update_attributes(event_params)#@home_page == 1 && @event.update_attributes(event_params)
         set_home_page_event_features(@homepage_feature_name)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
-      elsif @home_page > 1
+      elsif @home_page > 1 and (@active_feature == 1 and @inactive_feature == 1)
+        set_home_page_event_features(@homepage_feature_name)
+        redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
+      elsif @home_page > 1 and (@active_feature == 2 or @inactive_feature == 2)  
         @homepage_error = "You can set only one feature as home page feature" 
         render :action => 'index'
       elsif @event.update_attributes(event_params)
@@ -73,7 +78,7 @@ class Admin::MenusController < ApplicationController
   end
 
   def set_home_page_event_features(homepage_feature_name)
-    homepage_feature_name.each do |feature|
+    homepage_feature_name.sort_by{|k| k[:status]}.reverse!.each do |feature|
       @home_feature = @event.event_features.where(id: feature[:feature_id]).first
       if feature[:status] == "deactive"
         @event.update_attributes(homepage_feature_name: nil, homepage_feature_id: nil)
