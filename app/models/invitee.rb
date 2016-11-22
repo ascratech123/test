@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
+  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code,:invitee_import_password
   COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture','instagram_id'=> 'instagram'}
   
   belongs_to :event
@@ -29,6 +29,8 @@ class Invitee < ActiveRecord::Base
   validates :email, uniqueness: {scope: [:event_id]},
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
+
+  validate :invitee_password_validation, :if => Proc.new{|p|p.invitee_import_password.present? and p.invitee_import_password == true}
   
   #has_attached_file :qr_code, {:styles => {:large => "200x200>",
   #                                       :small => "60x60>", 
@@ -842,7 +844,13 @@ class Invitee < ActiveRecord::Base
 
   def timestamp
     self.qr_code_registration_time.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
-  end  
+  end 
+
+  def invitee_password_validation
+    if self.invitee_password.present? and self.invitee_password.length <= 6 
+      errors.add(:password, "Password must be at least 6 character")
+    end  
+  end 
 
   private
 
