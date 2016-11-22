@@ -848,7 +848,7 @@ class Invitee < ActiveRecord::Base
 
   def invitee_password_validation
     if self.invitee_password.present? and self.invitee_password.length <= 6 
-      errors.add(:password, "Password must be at least 6 character")
+      errors.add(:password, "must be at least 6 character")
     end  
   end 
 
