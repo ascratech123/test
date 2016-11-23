@@ -403,7 +403,7 @@ class Event < ActiveRecord::Base
 
   
   def review_look_and_feel
-    if self.mobile_application.present? and self.mobile_application.application_type == 'multi event' and self.mobile_application.marketing_app_event_id.blank?
+    if self.mobile_application.present? and self.mobile_application.application_type == 'multi event' and self.marketing_app.blank?#and self.mobile_application.marketing_app_event_id.blank?
       feature_arr = ['logo_file_name', 'inside_logo_file_name']
     else
       feature_arr = ['inside_logo_file_name']
