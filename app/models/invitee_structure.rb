@@ -21,7 +21,7 @@ class InviteeStructure < ActiveRecord::Base
 
   def create_default_group
     if self.new_record?
-      Grouping.create(name: "Default Group", event_id: self.event_id)
+      Grouping.create(name: "All Data", event_id: self.event_id)
     end
   end
 end
