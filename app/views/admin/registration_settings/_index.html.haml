@@ -18,7 +18,7 @@
         %td.font16= time_with_zone(regi_setting.start_date,"IST")
         %td.font16= time_with_zone(regi_setting.end_date,"IST")
         - regi_setti_url = (regi_setting.registration == "hobnob" ? regi_setting.reg_url : regi_setting.external_reg_url) rescue nil
-        %td.font16= regi_setti_url if @event.registrations.present?
+        %td.font16= link_to regi_setti_url,regi_setti_url, target: "_blank" if @event.registrations.present?
         %td.IconDrp
           = more_vert_button(regi_setting.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{regi_setting.id}"}
