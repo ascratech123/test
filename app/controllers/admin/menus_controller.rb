@@ -19,16 +19,14 @@ class Admin::MenusController < ApplicationController
       EventFeature.set_icon_to_feature(@event,default_icon,change)
       #########set feature as homepage changes ##########
       @homepage_feature_name = get_feature_name(event_params[:event_features_attributes])
-      @home_page = @homepage_feature_name.map{|x|x[:status]}.count
       @active_feature = @homepage_feature_name.collect{|x|x[:status] if x[:status]=="active"}.compact.count
-      @inactive_feature = @homepage_feature_name.collect{|x|x[:status] if x[:status]=="deactive"}.compact.count
-      if @home_page == 1 && @event.update_attributes(event_params)#@home_page == 1 && @event.update_attributes(event_params)
+      if @active_feature == 1 && @event.update_attributes(event_params)#@home_page == 1 && @event.update_attributes(event_params)
         set_home_page_event_features(@homepage_feature_name)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
-      elsif @home_page > 1 and (@active_feature == 1 and @inactive_feature == 1)
+      elsif @active_feature == 0 && @event.update_attributes(event_params)
         set_home_page_event_features(@homepage_feature_name)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
-      elsif @home_page > 1 and (@active_feature >= 2 or @inactive_feature >= 2)
+      elsif @active_feature > 1 
         @homepage_error = "You can set only one feature as home page feature" 
         render :action => 'index'
       elsif @event.update_attributes(event_params)
@@ -36,7 +34,7 @@ class Admin::MenusController < ApplicationController
       else
         render :action => 'index'
       end
-      ##############
+      ###################################
       # if @event.update_attributes(event_params)
       #   redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
       # else
@@ -70,7 +68,7 @@ class Admin::MenusController < ApplicationController
   def get_feature_name(event_features)
     homepage_feature_name = []
     event_features.each do |name|
-      if name.second["homepage_feature_name"].present?
+      if name.second["homepage_feature_name"] == "active"
         homepage_feature_name << {:status=>name.second["homepage_feature_name"],:title=>name.second["page_title"],:feature_id =>name.second["id"].to_i} 
       end
     end
@@ -78,14 +76,12 @@ class Admin::MenusController < ApplicationController
   end
 
   def set_home_page_event_features(homepage_feature_name)
-    homepage_feature_name.sort_by{|k| k[:status]}.reverse!.each do |feature|
-      @home_feature = @event.event_features.where(id: feature[:feature_id]).first
-      if feature[:status] == "deactive"
-        @event.update_attributes(homepage_feature_name: nil, homepage_feature_id: nil)
-      elsif feature[:status] == "active"
-        @event.update_attributes(homepage_feature_name: @home_feature.name, homepage_feature_id: @home_feature.id)
-      end
-    end
+    if homepage_feature_name.present? 
+      @home_feature = @event.event_features.where(id: homepage_feature_name.first[:feature_id]).first
+      @event.update_attributes(homepage_feature_name: @home_feature.name, homepage_feature_id: @home_feature.id)
+    else
+      @event.update_attributes(homepage_feature_name: nil, homepage_feature_id: nil)
+    end  
   end 
-   
+
 end
