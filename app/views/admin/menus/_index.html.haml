@@ -73,7 +73,7 @@
                 .col-lg-7.p-h-12.m-8
                   = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Yes", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive1"
                   = builder.custom_radio_button_menu :menu_visibilty, "active","No", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active1"
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_icon_visibility == "yes" && builder.object.status == "active") ? 'display:block' : 'display:none'}
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_visibilty == "active" && builder.object.status == "active") ? 'display:block' : 'display:none'}
               .mdl-grid.p-v-5.form-group
                 .col-lg-4.mdl-typography--text-right
                   %p.displayInlineBlock.multicitytxt Set as home page feature
@@ -81,7 +81,7 @@
                   / - fields_for :event do |event_builder| 
                   - @count = @count ||=0 
                   = builder.custom_radio_button_menu :homepage_feature_name, "active","Yes", :id => "option-1#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "checked" : ""}",:class => "menu_homepage_feature_active"
-                  = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "",:class => "menu_homepage_feature_deactive"
+                  = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "" : "checked"}",:class => "menu_homepage_feature_deactive"
                   - @count = @count + 1
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
