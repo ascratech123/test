@@ -29,6 +29,7 @@
         = f.hidden_field :telecaller, :value => true
         = f.hidden_field_tag :get_role, params[:get_role] if params[:get_role].present?
         = f.hidden_field_tag :telecaller_index, true if (params[:telecaller_index].present? or (Rails.application.routes.recognize_path(request.referrer)[:controller] == "admin/telecallers" and ["index","new","edit"].include?(Rails.application.routes.recognize_path(request.referrer)[:action])))
+        = f.hidden_field :licensee_id, :value => current_user.get_licensee
 
       .fixed-activon-btn-new  
         = f.custom_submit_button "SAVE"

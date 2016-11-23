@@ -100,7 +100,8 @@
             %td.popupLeft= obj.status        
           %tr
             %td.popTxtRight Date / Time : 
-            %td.popupLeft= time_with_zone(obj.callback_datetime, 'IST', '%d-%m-%Y %I:%M %p') rescue nil
+            %td.popupLeft= obj.callback_datetime.present? ? obj.callback_datetime.strftime('%d-%m-%Y %I:%M %p') : ""
+            =# time_with_zone(obj.callback_datetime, 'IST', '%d-%m-%Y %I:%M %p') rescue nil
           %tr
             %td.popTxtRight Remark : 
             %td.popupLeft= obj.remark

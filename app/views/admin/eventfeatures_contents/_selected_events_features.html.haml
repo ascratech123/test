@@ -1,0 +1,82 @@
+.mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+  .form-group
+    %label.col-lg-4.control-label.ml-color--shades-white
+      Select Content
+    .col-lg-7.notification
+      - if local_assigns[:event_features].present?
+        - event_features -= %w{notes my_profile qr_code chats qnas favourites social_sharings conversations leaderboard}
+        / - binding.pry
+        / - features = event_features.collect! { |feature| ((feature == "abouts") ? "about" : feature) and ((feature == "agendas") ? "agenda" : feature) and ((feature == "faqs") ? "faq" : feature) and ((feature == "galleries") ? "gallery" : feature) and ((feature == "feedbacks") ? "feedback" : feature) and ((feature == "e_kits") ? "e_kit" : feature) and ((feature == "conversations") ? "conversation" : feature) and ((feature == "contacts") ? "contact us" : feature) and ((feature == "quizzes") ? "quiz" : feature) and ((feature == "activity_feeds") ? "activity_feed" : feature) and ((feature == "my_travels") ? "my_travel" : feature) and ((feature == "custom_page1s") ? "custom_page1" : feature) and ((feature == "custom_page5s") ? "custom_page5" : feature) and ((feature == "custom_page2s") ? "custom_page2" : feature) and ((feature == "custom_page4s") ? "custom_page4" : feature) and ((feature == "custom_page3s") ? "custom_page3" : feature) }
+
+        / - features = event_features.map{|word| word.singularize}
+
+        / - ["invitees", "polls", "faqs", "abouts", "speakers", "conversations", "e_kits", "my_calendar", "awards", "qnas", "leaderboard", "agendas", "About", "galleries", "feedbacks", "sponsors", "event_highlights", "custom_page4s", "activity_feeds", "custom_page5s", "contacts", "notes", "custom_page1s", "my_travels", "my_profile", "Faqs", "qr_code", "all_events", "emergency_exits", "chats", "custom_page2s", "venue", "attendees", "favourites", "exhibitors", "custom_page3s", "quizzes", "social_sharings"]
+
+        / - event_features = ["invitees", "all_events", "sponsors", "event_highlights", "About", "awards", "qnas", "leaderboard", "my_calendar", "polls", "abouts", "speakers", "agendas", "faqs", "galleries", "feedbacks", "e_kits", "conversations", "contacts", "quizzes", "activity_feeds", "my_travels", "custom_page2s", "custom_page3s", "custom_page4s", "custom_page1s", "custom_page5s"]
+        - renames = Hash.new { |_,key| key }
+        - renames['abouts'] = 'about'
+        - renames['agendas'] = 'agenda'
+        - renames['faqs'] = 'faq'
+        - renames['galleries'] = 'gallery'
+        - renames['feedbacks'] = 'feedback'
+        - renames['e_kits'] = 'e_kit'
+        - renames['conversations'] = 'conversation'
+        - renames['contacts'] = 'contact us'
+        - renames['quizzes'] = 'quiz'
+        - renames['activity_feeds'] = 'activity_feed'
+        - renames['my_travels'] = 'my_travel'
+        - renames['custom_page2s'] = 'custom_page2'
+        - renames['custom_page3s'] = 'custom_page3'
+        - renames['custom_page4s'] = 'custom_page4'
+        - renames['custom_page1s'] = 'custom_page1'
+        - renames['custom_page5s'] = 'custom_page5'
+        - features = renames.values_at(*event_features)
+        / - binding.pry
+        - features.each_with_index do |group, index|
+          - if index == 0
+            .usersep
+              Mobile Application
+          .md-checkbox
+            %label
+              = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+              %span.checkbox 
+              = group.titleize#.singularize
+
+/ contacts to contact us
+
+/ - event_features.collect! do |element|
+/   - case element
+/     - when 'abouts'
+/       = 'about'
+/     - when 'agendas'
+/       = 'agenda'
+/     - when 'faqs'
+/       = 'faq'
+/     - when 'galleries'
+/       = 'gallery'
+/     - when 'feedbacks'
+/       = 'feedback'
+/     - when 'e_kits'
+/       = 'e_kit'
+/     - when 'conversations'
+/       = 'conversation'
+/     - when 'contacts'
+/       = 'contact us'
+/     - when 'quizzes'
+/       = 'quiz'
+/     - when 'activity_feeds'
+/       = 'activity_feed'
+/     - when 'my_travels'
+/       = 'my_travel'
+/     - when 'custom_page1s'
+/       = 'custom_page1'
+/     - when 'custom_page5s'
+/       = 'custom_page5'
+/     - when 'custom_page2s'
+/       = 'custom_page2'
+/     - when 'custom_page4s'
+/       = 'custom_page4'
+/     - when 'custom_page3s'
+/       = 'custom_page3'
+/     - else
+/       = element

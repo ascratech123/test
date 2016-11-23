@@ -10,7 +10,7 @@ class Admin::InviteeStructuresController < ApplicationController
       respond_to do |format|
         if @invitee_structure.present? and params[:sample_download].present?
           format.xls do
-            only_columns = @invitee_structure.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? v.downcase : nil}.compact
+            only_columns = @invitee_structure.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier','email_field').map{|k, v| v.to_s.length > 0 ? v.downcase : nil}.compact
             @invitee_structure = InviteeStructure.where(:event_id => @event.id)
             send_data @invitee_structure.to_xls(:only => only_columns)
           end

@@ -62,7 +62,7 @@ class MobileApplication < ActiveRecord::Base
 
   validates_attachment_content_type :app_icon,:content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :splash_screen, :content_type => ["image/png"],:message => "please select valid format."
-  validates :name, :application_type, :listing_screen_text_color, :visitor_registration,presence: { :message => "This field is required." }
+  validates :name, :application_type, :listing_screen_text_color, :visitor_registration, presence: { :message => "This field is required." }
   validate :listing_screen_text_color_presentce
   validates :name, uniqueness: {scope: :client_id}
   validates :social_media_logins, presence: { :message => "This field is required." },:if => Proc.new{|p| p.social_media_status.present? and p.social_media_status == "active" and p.social_media_logins.blank? }
@@ -167,10 +167,15 @@ class MobileApplication < ActiveRecord::Base
   end
 
   def review_status
-    features_arr = ['name', 'application_type', 'template_id', 'app_icon_file_name', 'splash_screen_file_name']
+    features_arr = ['name', 'application_type', 'template_id', 'app_icon_file_name', 'splash_screen_file_name','social_media_status','visitor_registration']
     extra_count = 0
     if self.login_at == 'Yes'
-      features_arr += ['login_background_file_name']
+      if self.login_background_file_name.present? or self.login_background_color.present?
+        features_arr += ['login_background_file_name'] if self.login_background_file_name.present?
+        features_arr += ['login_background_color'] if self.login_background_color.present?
+      else
+        features_arr += ['login_background_file_name']
+      end
     else
       extra_count += 1 if self.login_at.present?
     end

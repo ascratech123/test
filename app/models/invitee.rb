@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
+  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code,:invitee_import_password
   COLUMN_FOR_IMPORT_SAMPLE = {'email' => 'email', 'first_name' => 'first_name', 'last_name' => 'last_name', 'company_name' => 'company_name', 'designation' => 'designation', 'about' => 'description', 'street' => 'city', 'country' => 'country', 'website' => 'website', 'mobile_no' => 'phone_number', 'twitter_id' => 'twitter_link', 'facebook_id' => 'facebook_link', 'google_id' => 'google+_link', 'linkedin_id' => 'linkedin_link', 'password' => 'password', 'attr1' => 'attr1', 'attr2' => 'attr2', 'attr3' => 'attr3', 'attr4' => 'attr4', 'attr5' => 'attr5', 'remark' => 'remark', 'profile_picture' => 'profile_picture','instagram_id'=> 'instagram'}
   
   belongs_to :event
@@ -29,6 +29,8 @@ class Invitee < ActiveRecord::Base
   validates :email, uniqueness: {scope: [:event_id]},
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
+
+  validate :invitee_password_validation, :if => Proc.new{|p|p.invitee_import_password.present? and p.invitee_import_password == true}
   
   #has_attached_file :qr_code, {:styles => {:large => "200x200>",
   #                                       :small => "60x60>", 
@@ -152,6 +154,15 @@ class Invitee < ActiveRecord::Base
         conversation.update_column(:last_name_user, self.last_name) if self.last_name.present? and self.last_name_changed?
         conversation.update_column(:profile_pic_url_user, self.profile_pic.url) if self.profile_pic.present? and self.profile_pic_file_name_changed? 
       end
+      Rails.cache.delete("invitee_first_name_#{self.id}")
+      Rails.cache.delete("invitee_profile_pic_url_#{self.id}")
+      Rails.cache.delete("invitee_last_name_#{self.id}")
+      Rails.cache.delete("invitee_user_name_#{self.id}")
+      Rails.cache.delete("invitee_company_name_#{self.id}")
+      Rails.cache.delete("invitee_get_company_name_#{self.id}")
+      Rails.cache.delete("invitee_invitee_email_#{self.id}")
+      Rails.cache.delete("invitee_email_#{self.id}")
+      Rails.cache.delete("invitee_name_#{self.id}")
     end
   end
 
@@ -453,7 +464,7 @@ class Invitee < ActiveRecord::Base
 
   def get_my_profile(mobile_app_code,submitted_app)
     data = {}
-    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url, :rank])
+    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id], :methods => [:qr_code_url,:profile_pic_url, :rank])
     data[:invitees] = get_all_mobile_app_users(mobile_app_code,submitted_app)
     data
   end
@@ -462,7 +473,7 @@ class Invitee < ActiveRecord::Base
     event_ids = get_event_id(mobile_app_code,submitted_app)
     # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email) rescue nil
     invitees = get_similar_invitees(event_ids)
-    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) if invitees.present?
+    invitees = invitees.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :created_at, :updated_at, :instagram_id], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at, :feedback_last_updated_at_with_event_timezone, :created_at_with_event_timezone, :updated_at_with_event_timezone]) if invitees.present?
     invitees
   end
 
@@ -501,7 +512,7 @@ class Invitee < ActiveRecord::Base
     # invitees = Invitee.where("event_id IN (?) and  email = ?",event_ids, self.email).pluck(:id) rescue nil
     invitees = get_similar_invitees(event_ids).pluck(:id)
     ids = Favorite.where("invitee_id IN (?)", invitees).pluck(:favoritable_id)
-    Invitee.where(:id => ids).as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points], :methods => [:qr_code_url,:profile_pic_url]) rescue nil
+    Invitee.where(:id => ids).as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id], :methods => [:qr_code_url,:profile_pic_url]) rescue nil
   end
 
   def get_my_calender(mobile_app_code,submitted_app)
@@ -822,6 +833,24 @@ class Invitee < ActiveRecord::Base
     end
     hsh
   end
+
+  def self.get_all_similar_invitees(invitees, event_ids)
+    final_invitees = []
+    for invitee in invitees
+      final_invitees << invitee.get_similar_invitees(event_ids)
+    end
+    final_invitees.flatten
+  end
+
+  def timestamp
+    self.qr_code_registration_time.in_time_zone(self.event_timezone).strftime('%m/%d/%Y %H:%M') rescue ""
+  end 
+
+  def invitee_password_validation
+    if self.invitee_password.present? and self.invitee_password.length < 6
+      errors.add(:password, "must be at least 6 character")
+    end  
+  end 
 
   private
 

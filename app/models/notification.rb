@@ -74,7 +74,7 @@ class Notification < ActiveRecord::Base
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
     # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
-    notifications = Notification.where(:pushed => false)
+    notifications = Notification.where(:pushed => false, :push => true)
     if notifications.present?
       notifications.each do |notification|
         # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
@@ -109,15 +109,16 @@ class Notification < ActiveRecord::Base
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     event_ids = self.event.mobile_application.events.pluck(:id)
     invitees = Invitee.where(:event_id => event_ids)
-    # invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
     InviteeNotification.create(arr)
+    mobile_application = MobileApplication.find(mobile_application_id)
+    invitees = Invitee.get_all_similar_invitees(invitees, mobile_application.events.pluck(:id)) if mobile_application.application_type == "multi event"
     if mobile_application_id.present?
       push_pem_file = PushPemFile.where(:mobile_application_id => mobile_application_id).last
-      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
-      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.pluck(:id))
+      ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id))
+      android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id))
       event = self.event
-      title = push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : event.event_name
+      title = (push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : (event.marketing_app.blank? ? event.event_name : event.mobile_application.name))
       Rails.logger.info("***********ios***********************************")
       Rails.logger.info("***********#{ios_devices.inspect}***********************************")
       if ios_devices.present? and push_pem_file.present?
@@ -141,7 +142,7 @@ class Notification < ActiveRecord::Base
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
     notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, "actionable_id" => notification.actionable_id})
     response = ios_obj.push(notification) rescue nil
-    Rails.logger.info("******************************#{response}****************************************************")
+    Rails.logger.info("**IOS****************************#{response}****************************************************")
   end
 
   def self.get_action_based_invitees(invitees, notification_type)

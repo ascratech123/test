@@ -36,7 +36,7 @@ class RegistrationSetting < ActiveRecord::Base
   def check_external_regi_and_login_present
     if self.registration == "external"
       errors.add(:external_reg_url, "This field is required.") if self.external_reg_url.blank?
-      errors.add(:external_reg_surl, "This field is required.") if self.external_reg_surl.blank?
+      #errors.add(:external_reg_surl, "This field is required.") if self.external_reg_surl.blank?
     end
     if self.login == "external"
       errors.add(:external_login_url, "This field is required.") if self.external_login_url.blank?

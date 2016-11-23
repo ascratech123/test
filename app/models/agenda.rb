@@ -48,7 +48,7 @@ class Agenda < ActiveRecord::Base
       agenda_ids = (speaker.all_agenda_ids.to_s.split(",") + [self.id.to_s]).uniq.join(",")
       speaker.update_column(:all_agenda_ids, agenda_ids)
       speaker_names << speaker.speaker_name
-    end if speaker_ids.present?
+    end if speaker_ids.present? and not speaker_ids.include? "0"
     all_speaker_names = (self.speaker_names.to_s.split(",") + speaker_names).uniq.join(",")
     self.update_column("all_speaker_names", all_speaker_names)
   end

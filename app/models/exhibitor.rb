@@ -34,11 +34,13 @@ class Exhibitor < ActiveRecord::Base
     if self.image_file_name_changed?  
       image_dimension_height  = 300.0
       image_dimension_width = 300.0
-      dimensions = Paperclip::Geometry.from_file(image.queued_for_write[:original].path)
-      if (dimensions.width != image_dimension_width or dimensions.height != image_dimension_height)
-        errors.add(:image, "Image size should be 300x300px only")
-      else
-        self.errors.delete(:image)
+      if image.queued_for_write[:original].present?
+        dimensions = Paperclip::Geometry.from_file(image.queued_for_write[:original].path) 
+        if (dimensions.width != image_dimension_width or dimensions.height != image_dimension_height)
+          errors.add(:image, "Image size should be 300x300px only")
+        else
+          self.errors.delete(:image)
+        end
       end
     end
   end

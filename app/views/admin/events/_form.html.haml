@@ -6,7 +6,7 @@
     .rect3
     .rect4
     .rect5
-.save_button.mdl-card.eventExceedLimit
+.save_button.mdl-card.eventExceedLimit.eventFeaturesTransparent
   = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
     - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
       .mdl-grid.mdl-card.mdl-shadow--1dp
@@ -143,19 +143,19 @@
                   = er
 
         / - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
-      .mdl-grid.mdl-shadow--1dp
-        / .mdl-grid.mdl-card.mdl-shadow--1dp
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
-          %h4.heading-border.p-t-10.m-b-15
-            Copy Content
-        - if @event_names.present? 
+      - if @event_names.present? 
+        .mdl-grid.mdl-shadow--1dp.eventFeaturesCard
+          / .mdl-grid.mdl-card.mdl-shadow--1dp
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+            %h4.heading-border.p-t-10.m-b-15
+              Copy Content
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
             .bs-componet
               .form-group.set_highlight_select
                 %label.col-lg-4.control-label.ml-color--shades-white
                   Do you want to add data from another event?
                 .col-lg-7
-                  - if params[:action] == 'edit'
+                  - if params[:action] == 'edit' or params[:action] == 'update'
                     = f.custom_radio_button :copy_event, "yes","Yes", :disabled => true
                     = f.custom_radio_button :copy_event, "no", "No", :disabled => true
                   - else
@@ -165,88 +165,93 @@
             .bs-componet
               .form-group.set_highlight_select
                 %label.col-lg-4.control-label.ml-color--shades-white
-                  Select Event
+                  Select Event *
                 .col-lg-7
                   -# default_remarks = ['ABC','PQR','XYZ']
                   -# default_remarks << 'New Category'
                   %i.arrow.single
                   - event_name = Event.find(@event.parent_id).event_name rescue nil
-                  - if event_name.present? and params[:action] == 'edit'
+                  - if event_name.present? and (params[:action] == 'edit' or params[:action] == 'update')
                     .select2-single.form-control
                       = event_name
                   - else
-                    = f.select("event", "event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control'})
-                  - if @event.errors[:event_id].present?
+                    / - binding.pry
+                    / - event_namess = @event_names.reject{|key, val| key == "Landing App"}
+                    = f.select("event", "parent_event_id", @event_names, {:prompt => params[:action] == 'edit' ? event_name : "Select Event"}, {include_blank: 'None',:class=> 'select2-single form-control', :id => 'add_event_features'})
+                    / - binding.pry
+                  - if @event.errors[:parent_event_id].present? and not (params[:action] == 'edit' or params[:action] == 'update')
                     .p.errorMessage
                       = 'This field is required.'
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
-          .bs-componet
-            .form-group.set_highlight_select 
-              %label.col-lg-4.control-label.ml-color--shades-white
-                Do you want to copy all content from this event?    
-              .col-lg-7.sdfsdfs
-                - if params[:action] == 'edit'
-                  = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
-                  = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
-                - else
-                  = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
-                  = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
-                / %button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Yes
-                / %button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} No, choose content to copy
-                - if @event.errors[:copy_content].present?
-                  .p.errorMessage
-                    = @event.errors[:copy_content].first
-        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
-          .form-group
-            %label.col-lg-4.control-label.ml-color--shades-white
-              Select Content
-            .col-lg-7.notification                
-              - Event::MOBILE_APPLICATIONS.each_with_index do |group, index|
-                - if index == 0
-                  .usersep
-                    Mobile Application
-                .md-checkbox
-                  %label
-                    = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
-                    %span.checkbox 
-                    = group
-                  / - Event::DATABASES.each_with_index do |group, index|
-                  /   - if index == 0
-                  /     .usersep
-                  /       Database
-                  /   .md-checkbox
-                  /     %label
-                  /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
-                  /       %span.checkbox 
-                  /       = group  
-                  / - Event::INVITEE_STRUCTURES.each_with_index do |group, index|
-                  /   - if index == 0
-                  /     .usersep
-                  /       Registration
-                  /   .md-checkbox
-                  /     %label
-                  /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
-                  /       %span.checkbox 
-                  /       = group       
-                  / - Event::GROUPINGS.each_with_index do |group, index|
-                  /   - if index == 0
-                  /     .usersep
-                  /       Communication
-                  /   .md-checkbox
-                  /     %label
-                  /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
-                  /       %span.checkbox 
-                  /       = group                  
-                  / - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
-                  / - default_group_list.each_with_index do |group, index|
-                  /   - if index == 0
-                  /     .usersep
-                  /       Groups created by you
-                  /   .md-checkbox
-                  /     %label
-                  /       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
-                  /       %span.checkbox 
-                  /       = group[0]
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.copyCustom-btnDiv
+            .bs-componet
+              .form-group.set_highlight_select 
+                %label.col-lg-4.control-label.ml-color--shades-white
+                  Do you want to copy all content from this event? *
+                .col-lg-7.sdfsdfs
+                  - if params[:action] == 'edit' or params[:action] == 'update'
+                    = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
+                    = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
+                  - else
+                    = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
+                    = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
+                  / %button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Yes
+                  / %button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} No, choose content to copy
+                  - if @event.errors[:copy_content].present? and not (params[:action] == 'edit' or params[:action] == 'update')
+                    .p.errorMessage
+                      = @event.errors[:copy_content].first
+            #render_events
+              = render :partial => 'admin/eventfeatures_contents/selected_events_features'
+            / .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.selectContentDiv
+            /   .form-group
+            /     %label.col-lg-4.control-label.ml-color--shades-white
+            /       Select Content
+            /     .col-lg-7.notification        
+            /       - Event::MOBILE_APPLICATIONS.each_with_index do |group, index|
+            /         - if index == 0
+            /           .usersep
+            /             Mobile Application
+            /         .md-checkbox
+            /           %label
+            /             = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+            /             %span.checkbox 
+            /             = group.titleize
+            / - Event::DATABASES.each_with_index do |group, index|
+            /   - if index == 0
+            /     .usersep
+            /       Database
+            /   .md-checkbox
+            /     %label
+            /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+            /       %span.checkbox 
+            /       = group  
+            / - Event::INVITEE_STRUCTURES.each_with_index do |group, index|
+            /   - if index == 0
+            /     .usersep
+            /       Registration
+            /   .md-checkbox
+            /     %label
+            /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+            /       %span.checkbox 
+            /       = group       
+            / - Event::GROUPINGS.each_with_index do |group, index|
+            /   - if index == 0
+            /     .usersep
+            /       Communication
+            /   .md-checkbox
+            /     %label
+            /       = check_box_tag "[associations][]", group, true, :class => "", :id => "event_user_ids_#{group}"
+            /       %span.checkbox 
+            /       = group                  
+            / - default_group_list = @other_groups.collect{|group| [ group.name, group.id ]}
+            / - default_group_list.each_with_index do |group, index|
+            /   - if index == 0
+            /     .usersep
+            /       Groups created by you
+            /   .md-checkbox
+            /     %label
+            /       = check_box_tag "notification[group_ids][]", group[1], (f.object.group_ids.include?(group[1].to_s)), :class => "", :id => "event_user_ids_#{group[0]}"
+            /       %span.checkbox 
+            /       = group[0]
         = f.hidden_field :marketing_app, :value => marketing_app if (params[:marketing_app].present? or @event.marketing_app.present?)
     - elsif false  
       .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40
@@ -277,7 +282,18 @@
         .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
           = back_button(:back)
 
-- if params[:action] == 'edit'
+:javascript
+  $(document).on('change', '#add_event_features', function(){
+    var event_name = $(this).find("option:selected").text();
+    var parent_event_id = $(this).val();
+    $.ajax({
+      type: "GET",
+      url: "/admin/clients/#{params[:client_id]}/eventfeatures_contents",
+      data: {event_name, parent_event_id}
+    });
+  });
+
+- if params[:action] == 'edit' or params[:action] == 'update' or @event.errors[:parent_event_id].present? or @event.errors[:copy_content].present?
   :javascript
     $('.select-eventDiv').css('display','block');
     $('.select-eventDiv').next().css('display','block');

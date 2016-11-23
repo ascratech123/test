@@ -3,6 +3,8 @@
     %h2
       - if params[:controller] == "admin/events" and params[:feature] == "mobile_application" and params[:mobile_application_id].present? 
         All Event Added in Mobile App, create New to Add
+      - elsif params[:controller] == "admin/campaigns" and params[:action] == "index"
+        Create your first Campaign
       - else
         Create Your first
         %span.AppName

@@ -18,6 +18,10 @@
               = f.object.errors.messages[:default_feature_icon].join("") rescue nil
         -else
           = f.select("event", "default_feature_icon", [["Library 1","custom"],["Library 2","blue"],["Library 3", "red"],["Upload your own icon","owns"]], {selected: f.object.default_feature_icon},{class: 'select2-single form-control', id: "default_feature_icon"})
+          .field_with_errors
+            - if @homepage_error.present?
+              .span{:class => "errorMessage"}
+                = @homepage_error
         
 
   = f.fields_for :event_features do |builder|
@@ -67,8 +71,18 @@
                 .col-lg-4.mdl-typography--text-right
                   %p.displayInlineBlock.multicitytxt Hide this Icon
                 .col-lg-7.p-h-12.m-8
-                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Yes", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive"
-                  = builder.custom_radio_button_menu :menu_visibilty, "active","No", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active"
+                  = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Yes", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive1"
+                  = builder.custom_radio_button_menu :menu_visibilty, "active","No", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active1"
+            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_visibilty == "active" && builder.object.status == "active") ? 'display:block' : 'display:none'}
+              .mdl-grid.p-v-5.form-group
+                .col-lg-4.mdl-typography--text-right
+                  %p.displayInlineBlock.multicitytxt Set as home page feature
+                .col-lg-7.p-h-12.m-8
+                  / - fields_for :event do |event_builder| 
+                  - @count = @count ||=0 
+                  = builder.custom_radio_button_menu :homepage_feature_name, "active","Yes", :id => "option-1#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "checked" : ""}",:class => "menu_homepage_feature_active"
+                  = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "" : "checked"}",:class => "menu_homepage_feature_deactive"
+                  - @count = @count + 1
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg

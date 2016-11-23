@@ -112,7 +112,7 @@ module SyncMobileData
           theme_ids = events.pluck(:theme_id)
           if latest_published_event_ids.present?
             updated_theme_ids = Event.where(:id => latest_published_event_ids).pluck(:theme_id)
-            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", event_ids, start_event_date, end_event_date, updated_theme_ids)
+            themes = Theme.where("(id IN (?) and updated_at between ? and ?) or id IN (?)", theme_ids, start_event_date, end_event_date, updated_theme_ids)
           else
             themes = Theme.where(:id => theme_ids, :updated_at => start_event_date..end_event_date) rescue []
           end
