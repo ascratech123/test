@@ -35,7 +35,7 @@
           - when 'invitee_structure'
             %li
               = link_to new_admin_event_grouping_path(:event_id => @event.id) ,:class => "centerAlign" do
-                Create Grouping
+                Create Group
               = link_to new_admin_event_invitee_structure_path(:importable_type => 'invitee_data', :event_id => @event.id,:import => 'xls') ,:class => "centerAlign" do
                 Import Data
           - when 'theme'
