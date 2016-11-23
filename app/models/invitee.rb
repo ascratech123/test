@@ -4,7 +4,7 @@ class Invitee < ActiveRecord::Base
   require 'rqrcode_png'
   require 'qr_code' 
   
-  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code
+  attr_accessor :password, :invitee_searches_page,:visitor_registration,:mobile_application_code,:invitee_import_password
   
   belongs_to :event
   has_many :devices, :class_name => 'Device', :foreign_key => 'email', :primary_key => 'email'
@@ -28,6 +28,8 @@ class Invitee < ActiveRecord::Base
   validates :email, uniqueness: {scope: [:event_id]},
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
+
+  validate :invitee_password_validation, :if => Proc.new{|p|p.invitee_import_password.present? and p.invitee_import_password == true}
   
   #has_attached_file :qr_code, {:styles => {:large => "200x200>",
   #                                       :small => "60x60>", 
@@ -851,6 +853,12 @@ class Invitee < ActiveRecord::Base
     end
     final_invitees.flatten
   end
+
+  def invitee_password_validation
+    if self.invitee_password.present? and self.invitee_password.length <= 6 
+      errors.add(:password, "must be at least 6 character")
+    end  
+  end 
 
   private
 
