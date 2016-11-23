@@ -32,5 +32,5 @@
                 Edit Form
             -if (@event.registrations.present? and regi_setting.template == "custom" and regi_setting.registration == "hobnob")
               = link_to edit_admin_event_registration_path(:event_id=> @event.id,:id => @event.registrations.first.id,:change_code => "true"), :class => "mdl-menu__item mdl-js-ripple-effect" do
-                Extract Code
+                Edit Source Code
   = will_paginate objs
