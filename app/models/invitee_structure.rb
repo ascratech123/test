@@ -26,4 +26,3 @@ class InviteeStructure < ActiveRecord::Base
     end
   end
 end
-Default Group
