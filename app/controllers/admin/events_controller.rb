@@ -27,10 +27,18 @@ class Admin::EventsController < ApplicationController
 
   def new
     @event = @client.events.build
-    @event.images.build
+    @event.images.build unless (params[:marketing_app].present? and params[:marketing_app] == "true")
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
+    if (params[:marketing_app].present? and params[:marketing_app] == "true")
+      result = @event.create_marketing_app_event
+      if result == "true"
+        redirect_to new_admin_event_mobile_application_path(:event_id=>@event.id,:old_one => true)
+      else
+        redirect_to :back
+      end
+    end
   end
   
   def create
@@ -42,6 +50,7 @@ class Admin::EventsController < ApplicationController
       @event.add_default_invitee if @event.mobile_application.present?
       redirect_to admin_client_event_path(:client_id => @event.client_id, :id => @event.id)
     else
+      #@landing_page = @event.landing_page if @event.landing_page.present?
       @default_features = @event.set_features_default_list
       @present_feature = @event.set_features rescue []
       render :action => 'new'

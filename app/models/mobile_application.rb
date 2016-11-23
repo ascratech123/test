@@ -174,7 +174,7 @@ class MobileApplication < ActiveRecord::Base
     else
       extra_count += 1 if self.login_at.present?
     end
-    features_arr += ['listing_screen_background_file_name', 'listing_screen_text_color'] if self.application_type == 'multi event'
+    features_arr += ['listing_screen_background_file_name', 'listing_screen_text_color'] if (self.application_type == 'multi event' and self.marketing_app_event_id.blank?)
     ReviewStatus.review(self, features_arr, extra_count, (features_arr.length + extra_count))
   end
 
@@ -244,8 +244,22 @@ class MobileApplication < ActiveRecord::Base
     if user.has_role? :moderator or user.has_role? :event_admin or user.has_role? :db_manager
       apps = self.events.where(:id => events.pluck(:id)).order(start_event_date: :desc) rescue []
     else
-      apps = self.events.order(start_event_date: :desc) rescue []
+      apps = self.events.where(:marketing_app => nil).order(start_event_date: :desc) rescue []
     end  
     apps
   end
+
+  def get_events_for_marketing_app(user,events)
+    if user.has_role? :moderator or user.has_role? :event_admin or user.has_role? :db_manager
+      apps = self.events.where(:id => events.pluck(:id)).order(start_event_date: :desc) rescue []
+    else
+      apps = self.events.where(:marketing_app => nil).order(start_event_date: :desc) rescue []
+    end  
+    apps
+  end
+
+  def self.get_mobile_application_name(id)
+    MobileApplication.find_by_id(id)
+  end
+
 end

@@ -21,6 +21,7 @@
                       - if "#{name[feature[0]]}" != "Engagement"
                         %h2.fs30.mt5.mbn
                           = "#{@event.review_status(feature[0])}%"
+      
       -else
         .col-sm-3.col-xl-3{:id => "active_card#{index}"}
           %a{:href => "#{redirect_urls[feature[0]]}"}
