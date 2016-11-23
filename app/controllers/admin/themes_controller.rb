@@ -40,11 +40,13 @@ class Admin::ThemesController < ApplicationController
         elsif themes_event_params.blank?
           redirect_to admin_event_mobile_application_path(:event_id => params[:event_id], :id => @event.mobile_application_id)
         elsif @event.mobile_application.present?
+          check_footer_image_error
           check_event_logo_error
           check_event_inside_logo_error
           render :action => "edit"
         end
       else
+        check_footer_image_error
         check_event_logo_error
         check_event_inside_logo_error
         @old_event = true
@@ -76,14 +78,19 @@ class Admin::ThemesController < ApplicationController
     @old_theme = @theme
     if params[:step] == "event_theme"
       if @theme.update_attributes(theme_params.except(:events_attributes)) 
-        if @event.update_attributes(themes_event_params) 
+        @event.update_attributes(:event_type_for_registration => "close") if @event.event_type_for_registration.blank?
+        # binding.pry
+        # @event.update(params[:theme]["events_attributes"]) if params[:theme]["events_attributes"].present? and (params[:theme]["events_attributes"]["0"].present? and params[:theme]["events_attributes"]["0"]["logo"].present? or params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["1"]["footer_image"].present?)
+        if @event.update_attributes(themes_event_params)
           redirect_to admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id)
         else
+          check_footer_image_error
           check_event_logo_error
           check_event_inside_logo_error
           render :action => "edit"
         end if themes_event_params.present?
       else
+        check_footer_image_error
         check_event_logo_error
         check_event_inside_logo_error
         render :action => "edit"
@@ -128,7 +135,11 @@ class Admin::ThemesController < ApplicationController
 
   def themes_event_params
     if params[:theme].present? and params[:theme][:events_attributes].present?
-      params[:theme][:events_attributes].require("0").permit!
+      if params[:theme][:events_attributes]["1"].present?
+        params[:theme][:events_attributes].require("1").permit!
+      else
+        params[:theme][:events_attributes].require("0").permit!
+      end
     end
   end
 
@@ -148,6 +159,20 @@ class Admin::ThemesController < ApplicationController
         @event.errors.add(:logo, "Selected icon is not in correct format.")
       end  
     end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["0"].present? and params[:theme]["events_attributes"]["0"]["logo"].present?
+  end
+
+  def check_footer_image_error
+    if params[:theme]["events_attributes"]["1"]["footer_image"].content_type == "image/jpeg"
+      if @event.errors.messages.present?
+        if @event.errors.messages[:footer_image].present? and @event.errors.messages[:footer_image][1].present?
+          @event.errors.messages[:footer_image][1] = "Selected icon is not in correct format."
+        else
+          @event.errors.add(:footer_image, "Selected icon is not in correct format.")
+        end
+      else  
+        @event.errors.add(:footer_image, "Selected icon is not in correct format.")
+      end  
+    end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["0"]["logo"].present?
   end
 
   def check_event_inside_logo_error

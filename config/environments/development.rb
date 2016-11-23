@@ -83,9 +83,9 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 APP_URL = "http://localhost:3000"
 SAPP_URL = "http://localhost:3000"
 S3_url = "http://s3.amazonaws.com/shobiz-new-development"
-S3_access_key = "AKIAIXEZXP4IENEMXA4Q"
-S3_secret_access_key = "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"
-S3_bucket = 'shobiz-new-development'
+S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
+S3_secret_access_key = "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"
+S3_bucket = 'shobiz-new-dev'
 
 
 S3_CREDENTIALS = {:access_key_id => S3_access_key,
@@ -145,7 +145,6 @@ EXHIBITOR_IMAGE_PATH=   {:path => "exhibitor/image/:style/:id-:filename",
 
 THEME_IMAGE_PATH =   {:path => "theme/:style/:id-:filename",
                      :url => "#{S3_url}/theme/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)           
-
 HIGHLIGHT_IMAGE_PATH =   {:path => "highlight_image/:style/:id-:filename",
                      :url => "#{S3_url}/highlight_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
@@ -158,6 +157,8 @@ EVENT_LOGO_PATH =   {:path => "event/logo/:style/:id-:filename",
 EVENT_INSIDE_LOGO_PATH =   {:path => "event/inside_logo/:style/:id-:filename",
                      :url => "#{S3_url}/event/inside_logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
+EVENT_FOOTER_IMAGE_PATH =   {:path => "event/footer_image/:style/:id-:filename",
+                     :url => "#{S3_url}/event/footer_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
                                         
 CONVERSATION_IMAGE_PATH =   {:path => "conversation/:style/:id-:filename",
                      :url => "#{S3_url}/conversation/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
