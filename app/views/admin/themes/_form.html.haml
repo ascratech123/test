@@ -105,6 +105,21 @@
       
       = f.custom_text_field :content_font_color, "Text Font Color *", :value => @old_theme.content_font_color, :class => 'pick-a-color' , :view_popup => {:image_path => "look_and_feel/buttons_&_content/Help_Look&Feel_TextFontColor.jpg", :rel=> "text_font_color", :title => "Text Font Color"}, :admin_theme => "#{@old_theme.content_font_color.present? ? "has-success" : ""}"
 
+    .mdl-grid.mdl-card.mdl-shadow--1dp.m-t-40.p-b-35
+      .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+        %h4.heading-border.p-t-10
+          Footer
+          %span.editThemelinks  
+      / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Event Logo 1" => "Look&Feel_EventLogos_2.JPG"}, :section_id => "theme_general_section", :path => "look_and_feel/event_logos" }
+      - old_event = @event if @old_event.present? and @old_event == true
+      - nested_attr_obj = (f.object.new_record? ? @theme.events.build : @event)
+      = f.fields_for :events, nested_attr_obj  do |event|
+        = event.new_custom_file_browser_field "footer_image", "Event footer image (500x150px) png only ", :id => "uploadBtn3", :value => (params[:action] == "create" and @footer_image_file_name.present?) ? @footer_image_file_name : nested_attr_obj.footer_image_file_name, :action => params[:action], :view_popup => {:image_path => "look_and_feel/event_logos/Look&Feel_EventListingLogo.jpg", :rel=> "event_footer_image", :title => "Event footer image"}
+        - if old_event.present?
+          .field_with_errors{:style => "margin-left: 35%;"}
+            .span{:class => "errorMessage"}
+              = old_event.errors.messages[:footer_image].join("") rescue nil
+
       -if current_user.has_role? :super_admin
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           .mdl-grid.p-v-5

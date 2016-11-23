@@ -23,8 +23,10 @@ $(document).ready(function(){
   });
   bg_color_class = $("#theme_background_color").parent().parent().attr("class")
   bg_img_class = $("#1uploadBtn2").parent().parent().parent().parent().attr("class")
+  bg_img_class = $("#1uploadBtn3").parent().parent().parent().parent().attr("class")
   if (bg_color_class == "form-group has-success"){
     $("#1uploadBtn2").parent().parent().parent().parent().removeClass("has-warning");
+    $("#1uploadBtn3").parent().parent().parent().parent().removeClass("has-warning");
   }
   if (bg_img_class == "form-group has-success"){
     $("#theme_background_color").parent().parent().parent().removeClass("has-warning");

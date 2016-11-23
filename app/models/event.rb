@@ -88,7 +88,7 @@ class Event < ActiveRecord::Base
   validates :pax, :numericality => { :greater_than_or_equal_to => 0}, :allow_blank => true
   validate :end_event_time_is_after_start_event_time 
   #validates_presence_of :login_at, :on => :create
-  validate :image_dimensions
+  validate :image_dimensions, :footer_image_dimensions
   #validates :event_code, uniqueness: {scope: :client_id}, :allow_blank => true
   # validates :start_event_date, presence: true
   validates :event_id, presence: true, :if => Proc.new{|e| e.copy_event.present? and e.copy_event == 'yes' }
@@ -103,9 +103,15 @@ class Event < ActiveRecord::Base
                                          :thumb => "60x60>"},
                              :convert_options => {:small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
-                                         }.merge(EVENT_INSIDE_LOGO_PATH)                                       
+                                         }.merge(EVENT_INSIDE_LOGO_PATH)
+  has_attached_file :footer_image, {:styles => {:small => "200x200>", 
+                                         :thumb => "60x60>"},
+                             :convert_options => {:small => "-strip -quality 80", 
+                                         :thumb => "-strip -quality 80"}
+                                         }.merge(EVENT_FOOTER_IMAGE_PATH)                                       
   validates_attachment_content_type :logo, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
+  validates_attachment_content_type :footer_image, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
   before_save :check_event_content_status, :add_venues_from_event_venues 
@@ -258,6 +264,9 @@ def content_is_present
     style.present? ? self.inside_logo.url(style) : self.inside_logo.url
   end
 
+  def footer_image_url(style=:original)
+    style.present? ? self.footer_image.url(style) : self.footer_image.url
+  end
 
   def perform_event(event)
     self.approve! if event== "approve"
@@ -513,6 +522,18 @@ def content_is_present
         errors.add(:logo, "Image size should be 200x200px only") if self.errors['logo'].blank?
       else
         self.errors.delete(:logo)  
+      end
+    end
+  end
+
+  def footer_image_dimensions
+    # binding.pry
+    if self.footer_image_file_name_changed?
+      theme_dimension_width = 500.0
+      theme_dimension_height  = 150.0
+      dimensions = Paperclip::Geometry.from_file(footer_image.queued_for_write[:original].path) rescue "Creating copy" 
+      if (dimensions != "Creating copy" and (dimensions.width != theme_dimension_width or dimensions.height != theme_dimension_height))
+        errors.add(:footer_image, "Image size should be 500x150 px only")
       end
     end
   end
