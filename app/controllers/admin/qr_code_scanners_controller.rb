@@ -19,8 +19,8 @@ class Admin::QrCodeScannersController < ApplicationController
 
   def show
     @invitee = @event.invitees.find_by_id(params[:id])
-    @invitee.update_column('qr_code_registration',true)
-    @invitee.update_column('updated_at',Time.now)
+    @invitee.update_column('qr_code_registration',true) if @invitee.present?
+    @invitee.update_column('updated_at',Time.now) if @invitee.present?
     respond_to do |format|
       message = @invitee.present? ? "valid" : 'invalid'
       # format.js{render :js => "window.location.href = #{admin_event_qr_code_scanners_path(:event_id => @event.id, :page => 'thank_you', :meassge => message)}" }
