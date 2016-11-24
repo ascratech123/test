@@ -172,7 +172,7 @@ class Admin::ThemesController < ApplicationController
       else  
         @event.errors.add(:footer_image, "Selected icon is not in correct format.")
       end  
-    end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["0"]["logo"].present?
+    end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["1"]["footer_image"].present?
   end
 
   def check_event_inside_logo_error
