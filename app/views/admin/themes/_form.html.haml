@@ -93,7 +93,7 @@
       - old_event = @event if @old_event.present? and @old_event == true
       - nested_attr_obj = (f.object.new_record? ? @theme.events.build : @event)
       = f.fields_for :events, nested_attr_obj  do |event|
-        = event.new_custom_file_browser_field "footer_image", "Drawer footer image (500x150px) png only ", :id => "uploadBtn3", :value => (params[:action] == "create" and @footer_image_file_name.present?) ? @footer_image_file_name : nested_attr_obj.footer_image_file_name, :action => params[:action], :view_popup => {:image_path => "/whats_this/template/fpo.jpg", :rel=> "event_footer_image", :title => "Event footer image"}
+        = event.new_custom_file_browser_field "footer_image", "Drawer footer image (500x75px) png only ", :id => "uploadBtn3", :value => (params[:action] == "create" and @footer_image_file_name.present?) ? @footer_image_file_name : nested_attr_obj.footer_image_file_name, :action => params[:action], :view_popup => {:image_path => "/whats_this/template/fpo.jpg", :rel=> "event_footer_image", :title => "Event footer image"}
         - if old_event.present?
           .field_with_errors{:style => "margin-left: 35%;"}
             .span{:class => "errorMessage"}
