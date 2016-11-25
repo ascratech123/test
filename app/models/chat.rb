@@ -54,15 +54,16 @@ class Chat < ActiveRecord::Base
         b_count = receiver.get_badge_count
         ios_devices = receiver.devices.where(:platform => 'ios', :mobile_application_id => mobile_application.id).where.not(:enabled => "false")
         android_devices = receiver.devices.where(:platform => 'android', :mobile_application_id => mobile_application.id).where.not(:enabled => "false")
+        title = (event.marketing_app ? mobile_application.name : event.event_name)
         if ios_devices.present?
           ios_devices.each do |device|
             Rails.logger.info("***********#{device.platform}*******************#{device.token}***************#{device.email}*************************************")
-            Chat.push_to_ios(device.token, self.message, push_pem_file, ios_obj, b_count, 'chat', 0, sender, self.member_ids,self.event_id, event.event_name)
+            Chat.push_to_ios(device.token, self.message, push_pem_file, ios_obj, b_count, 'chat', 0, sender, self.member_ids,self.event_id, title)
           end
         end
         if android_devices.present?
           Rails.logger.info("***********#{android_devices.pluck(:platform)}*******************#{android_devices.pluck(:token)}***************#{android_devices.pluck(:email)}*************************************")
-          Chat.push_to_android(android_devices.pluck(:token), self.message, push_pem_file, b_count, 'chat', 0, sender, self.member_ids,self.event_id, event.event_name)
+          Chat.push_to_android(android_devices.pluck(:token), self.message, push_pem_file, b_count, 'chat', 0, sender, self.member_ids,self.event_id, title)
         end
       end
     end

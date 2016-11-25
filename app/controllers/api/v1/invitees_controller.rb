@@ -61,7 +61,7 @@ class Api::V1::InviteesController < ApplicationController
           platform = (params["platform"].present? ? params["platform"] : "")
           favorite.qr_code_analytics(platform)
           invitee = Invitee.find_by_id(favorite.favoritable_id)
-          render :staus => 200, :json => {:status => "Success",:favorite => favorite.as_json(:only => [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id]), :invitee => invitee.as_json(:only => [:first_name, :last_name, :designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points,:instagram_id], :methods => [:qr_code_url,:profile_pic_url])} rescue []
+          render :staus => 200, :json => {:status => "Success",:favorite => favorite.as_json(:only => [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id]), :invitee => invitee.as_json(:only => [:first_name, :last_name, :designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points,:instagram_id, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url])} rescue []
         else
           render :status=>200,:json=>{:status=>"Failure",:message=>"You need to pass these values: #{favorite.errors.full_messages.join(" , ")}"}
         end
@@ -81,7 +81,7 @@ class Api::V1::InviteesController < ApplicationController
   def show
     invitee = Invitee.find_by_id(params["invitee_id"])
     if invitee.present?
-      render :staus => 200, :json => {:status => "Success",:invitee => invitee.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id,:instagram_id], :methods => [:qr_code_url,:profile_pic_url]) } rescue []
+      render :staus => 200, :json => {:status => "Success",:invitee => invitee.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id,:instagram_id, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url]) } rescue []
     else
       render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee Not Found."}
     end

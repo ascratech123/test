@@ -447,8 +447,8 @@ def content_is_present
     end
     review_arr = ReviewStatus.review(self, feature_arr)
     review_arr[0] = (review_arr[0]/2)
-    review_arr[0] = review_arr[0].to_i + 50 if !self.theme.is_preview?
-    review_arr[1] << 'theme_id' if self.theme.is_preview?
+    review_arr[0] = review_arr[0].to_i + 50 if !self.theme.is_preview? rescue nil
+    review_arr[1] << 'theme_id' if self.theme.is_preview? rescue nil
     review_arr
   end
 
