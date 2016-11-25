@@ -18,7 +18,7 @@ class Course < ActiveRecord::Base
   end
 
   def set_sequence_no
-    self.sequence = self.event.courses.pluck(:sequence).compact.max.to_i + 1)
+    self.sequence = (self.event.courses.pluck(:sequence).compact.max.to_i + 1)
   end
 
   def correct_speaker_ids
