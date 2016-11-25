@@ -79,8 +79,6 @@ class Admin::ThemesController < ApplicationController
     if params[:step] == "event_theme"
       if @theme.update_attributes(theme_params.except(:events_attributes)) 
         @event.update_attributes(:event_type_for_registration => "close") if @event.event_type_for_registration.blank?
-        # binding.pry
-        # @event.update(params[:theme]["events_attributes"]) if params[:theme]["events_attributes"].present? and (params[:theme]["events_attributes"]["0"].present? and params[:theme]["events_attributes"]["0"]["logo"].present? or params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["1"]["footer_image"].present?)
         if @event.update_attributes(themes_event_params)
           redirect_to admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id)
         else
@@ -97,6 +95,9 @@ class Admin::ThemesController < ApplicationController
       end
     elsif params[:remove_image] == "true"
       @theme.update_attribute(:event_background_image, nil) if @theme.event_background_image.present?
+      redirect_to edit_admin_event_theme_path(:event_id => @event.id, :id => @theme.id, :step => "event_theme")
+    elsif params[:remove_footer_image] == "true"
+      @event.update_attribute(:footer_image, nil) if @event.footer_image.present?
       redirect_to edit_admin_event_theme_path(:event_id => @event.id, :id => @theme.id, :step => "event_theme")
     else
       if @theme.update_attributes(theme_params.except(:event))
