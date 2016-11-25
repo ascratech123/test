@@ -90,7 +90,7 @@ class Grouping < ActiveRecord::Base
     conditions = []
     invitee_data_ids = []
     if groupings.present?
-      if groupings.map{|g| g.name}.include? "Default Group"
+      if groupings.map{|g| g.name}.include? "All Group"
         invitee_data = invitee_data
       else
         groupings.each do |grouping|
