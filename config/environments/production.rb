@@ -266,3 +266,5 @@ NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_s
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 MY_TRAVEL_DOC_FILE  = {:path => "my_travel_docs/my_travel_attach_doc/:style/:event_id/:filename",
                      :url => "#{S3_url}/my_travel_docs/my_travel_attach_doc/:style/:event_id/:filename"}.merge(PAPERCLIP_SETTINGS)                       
+COURSE_PROVIDER_LOGO_PATH = {:path => "course_providers/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/course_providers/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)

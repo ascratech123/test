@@ -61,6 +61,16 @@
         New Session
       = link_to new_admin_event_event_feature_path(:event_id => @event.id, :feature => "my_calender"),:class => "rightBtn hvr-sweep-to-right" do
         Calendar Settings  
+  - when 'course'
+    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
+      = link_to new_admin_event_course_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Course
+      = link_to admin_event_course_providers_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        Course Providers
+  - when 'course_provider'
+    - if @event.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
+      = link_to new_admin_event_course_provider_path(:event_id => @event.id),:class => "rightBtn hvr-sweep-to-right" do
+        New Course Provider
   - when 'invitee'
     = link_to new_admin_event_invitee_path(:event_id => @event.id) ,:class => "rightBtn hvr-sweep-to-right" do
       New Invitee

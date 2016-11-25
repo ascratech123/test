@@ -1,0 +1,31 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "courses", :url => "/admin/events/#{params[:event_id]}/courses/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("courses")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.font16.ng-scope.ng-table.manage-event{"template-pagination" => "custom/pager"}
+    %tr
+      %th Sequence
+      %th Course Title 
+      %th Start Date/Time
+      %th Lecturers
+      %th
+        - objs.each_with_index do |course, index|
+          %tr
+            %td.sortable
+              .orderseq
+                - if index != 0
+                  %span= link_to "",admin_event_sequence_path(:event_id => course.event_id, :id => course.id, :seq_type => "up", :feature_type => "courses"),:class => "uparrow", :method => "put", :remote => true
+                - if course.sequence.to_i != 0 and (@courses.length - 1) != index
+                  %span= link_to "",admin_event_sequence_path(:event_id => course.event_id, :id => course.id, :type => "down", :feature_type => "courses"),:class => "downarrow", :method => "put", :remote => true
+            %td.font16= course.title
+            %td.font16= formatted_time(course.start_time, "%d-%m-%Y %l:%M %p")
+            %td.font16= course.all_speaker_names
+            %td.IconDrp
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+                = more_vert_button(course.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{course.id}"}
+                  = edit_link(params, course.id)
+                  = delete_link(params, course.id)
