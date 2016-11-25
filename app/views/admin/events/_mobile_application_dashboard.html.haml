@@ -77,3 +77,5 @@
 
         - if show_card("my_travels")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "travel.png", :objs => @event.my_travels, :url => "my_travels", :@count => 0}   
+        - if show_card("courses")
+          = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "", :objs => @event.courses, :url => "courses", :@count => 0}             

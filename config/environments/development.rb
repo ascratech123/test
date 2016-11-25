@@ -83,9 +83,9 @@ Gcm_obj = GCM.new('AIzaSyCurn11MPwTfQCF4RCnyOhbrDUJAqOLVWw')
 APP_URL = "http://localhost:3000"
 SAPP_URL = "http://localhost:3000"
 S3_url = "http://s3.amazonaws.com/shobiz-new-development"
-S3_access_key = "AKIAIXEZXP4IENEMXA4Q"
-S3_secret_access_key = "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"
-S3_bucket = 'shobiz-new-development'
+S3_access_key = "AKIAI53KXYDOTGKHBAGQ"
+S3_secret_access_key = "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"
+S3_bucket = 'shobiz-new-dev'
 
 
 S3_CREDENTIALS = {:access_key_id => S3_access_key,
@@ -237,3 +237,5 @@ QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:fil
                      :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+COURSE_PROVIDER_LOGO_PATH = {:path => "course_providers/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/course_providers/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)

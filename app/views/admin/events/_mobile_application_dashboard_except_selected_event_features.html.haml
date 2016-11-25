@@ -55,3 +55,6 @@
 
       - if show_card_except_event_features("my_travels")
         = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"travel.png", :objs => @event.my_travels, :url => "my_travels"}   
+
+      - if show_card_except_event_features("courses")
+        = render :partial => "admin/events/cards", :locals => {:icon => 'b_&_w', :img =>"travel.png", :objs => @event.courses, :url => "courses"}           

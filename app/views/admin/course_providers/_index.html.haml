@@ -1,0 +1,20 @@
+- if !objs.present? and !params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = render :partial => 'admin/layouts/index_no_data_message', :locals => {:title => "course_providers", :url => "/admin/events/#{params[:event_id]}/course_providers/new", :msg => 'test'}
+-elsif !objs.present? and params[:admin_search].present?
+  .mdl-typography--text-center.BlnkTxt.p-t-10
+    = get_search_data("course_providers")
+- else  
+  %table.table.mdl-data-table.fullwidth.ml-table-striped.ml-table-bordered.font16.ng-scope.ng-table.manage-event{"template-pagination" => "custom/pager"}
+    %tr
+      %th Name 
+      %th
+        - objs.each_with_index do |course_provider, index|
+          %tr
+            %td.font16= course_provider.provider_name
+            %td.IconDrp
+              - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))#!(current_user.has_role? :db_manager)
+                = more_vert_button(course_provider.id)
+                %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{course_provider.id}"}
+                  = edit_link(params, course_provider.id)
+                  = delete_link(params, course_provider.id)

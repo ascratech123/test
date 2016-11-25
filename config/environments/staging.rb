@@ -235,3 +235,6 @@ QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:fil
                      :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+COURSE_PROVIDER_LOGO_PATH = {:path => "course_providers/logo/:style/:id-:filename",
+                     :url => "#{S3_url}/course_providers/logo/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+                     
