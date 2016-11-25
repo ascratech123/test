@@ -76,8 +76,10 @@ class Grouping < ActiveRecord::Base
             invitee_data_ids += invitee_data.where("#{k} #{c} (?)", value).pluck(:id)
           end
           invitee_data = invitee_data.where(:id => invitee_data_ids) 
-        else
+        elsif c.present?
           invitee_data = invitee_data.where("#{k} #{c} (?)", v)
+        else
+          invitee_data.present? ? invitee_data : []     
         end
       end
     end
