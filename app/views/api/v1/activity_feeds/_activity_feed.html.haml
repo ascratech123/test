@@ -87,7 +87,9 @@
                       %p
                         %span
                           %img{:src => "/assets/comment.png"}/
-                        %span= comments.present? ? comments.count : ""
+                        / %span= comments.present? ? comments.count : ""
+                        - @comment_count = conversation.comments_count_cache
+                        %span= @comment_count.present? ? @comment_count : ""
                 - if analytic.action == "comment"
                   -# action_invitee = Invitee.find(analytic.invitee_id) rescue nil
                   - #if action_invitee.present?
