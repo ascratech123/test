@@ -148,7 +148,7 @@ class Admin::ThemesController < ApplicationController
   end
 
   def check_event_logo_error
-    if params[:theme]["events_attributes"]["0"]["logo"].content_type == "image/jpeg"
+    if params[:theme]["events_attributes"]["0"]["logo"].content_type != "image/png"
       if @event.errors.messages.present?
         if @event.errors.messages[:logo].present? and @event.errors.messages[:logo][0].present?
           @event.errors.messages[:logo][0] = "Selected icon is not in correct format."
@@ -162,7 +162,7 @@ class Admin::ThemesController < ApplicationController
   end
 
   def check_footer_image_error
-    if params[:theme]["events_attributes"]["1"]["footer_image"].content_type == "image/jpeg"
+    if params[:theme]["events_attributes"]["1"]["footer_image"].content_type != "image/png"
       if @event.errors.messages.present?
         if @event.errors.messages[:footer_image].present? and @event.errors.messages[:footer_image][1].present?
           @event.errors.messages[:footer_image][1] = "Selected icon is not in correct format."
@@ -176,7 +176,7 @@ class Admin::ThemesController < ApplicationController
   end
 
   def check_event_inside_logo_error
-    if params[:theme]["events_attributes"]["0"]["inside_logo"].content_type == "image/jpeg"
+    if params[:theme]["events_attributes"]["0"]["inside_logo"].content_type != "image/png"
       if @event.errors.messages.present?
         if @event.errors.messages[:inside_logo].present? and @event.errors.messages[:inside_logo][0].present?
           @event.errors.messages[:inside_logo][0] = "Selected icon is not in correct format." 
