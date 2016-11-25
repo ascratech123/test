@@ -66,8 +66,10 @@ class Grouping < ActiveRecord::Base
           v.each do |value|
             invitee_data = invitee_data.where("#{k} #{c} (?)", value)
           end 
-        else
+        elsif c.present?
           invitee_data = invitee_data.where("#{k} #{c} (?)", v)
+        else
+          invitee_data.present? ? invitee_data : []     
         end
       end
     end
