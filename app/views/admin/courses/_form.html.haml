@@ -1,0 +1,102 @@
+- if params[:import].present?
+  = render :partial => 'admin/imports/form', :locals => {:@event => @event}
+- else
+  = javascript_include_tag "jquery.fancybox"
+  .save_button.mdl-card
+    = form_for [:admin, @event ,@course], :builder => CustomFormBuilder do |f|
+      = f.hidden_field :event_id, :value => params[:event_id]
+      .mdl-grid.mdl-card.mdl-shadow--1dp.p-b-15
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
+          %h4.heading-border.p-t-10.m-b-15
+            General Information
+        = f.custom_text_field :title, "Title *","background" => "false"
+        = f.custom_text_field :code, "Code *","background" => "false"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8
+          .bs-component
+            .form-group
+              %label.col-lg-4.control-label{:for => "Start Time"} Start Date/Time *
+              = f.custom_text_field_date :start_time_date, "Start Time", :id => "date-start1",:value => f.object.start_time.present? ? f.object.start_time.strftime('%d/%m/%Y') : ''
+              .col-lg-3.timeDropdown
+                .timeTab
+                  = f.custom_text_field_date :start_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => get_hour_minute_second_ampm(f.object.start_time, 'hour'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => get_hour_minute_second_ampm(f.object.start_time, 'minute'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :start_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => get_hour_minute_second_ampm(f.object.start_time, 'ampm'), :col => '3',:maxlength => "2"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8      
+          .bs-component
+            .form-group
+              %label.col-lg-4.control-label{:for => "End Time"} End Date/Time *
+              = f.custom_text_field_date :end_time_date, "End Time", :id => "date-end",:value => f.object.end_time.present? ? f.object.end_time.strftime('%d/%m/%Y') : ''
+              .col-lg-3.timeDropdown
+                .timeTab
+                  = f.custom_text_field_date :end_time_hour, " ", :class => "hours inputs is-focused", :placeholder => 'HH ', :value => get_hour_minute_second_ampm(f.object.end_time, 'hour'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_minute, " ", :class => "minutes inputs is-focused", :placeholder => 'MM ', :value => get_hour_minute_second_ampm(f.object.end_time, 'minute'), :col => '2',:maxlength => "2"
+                  = f.custom_text_field_date :end_time_am, " ", :class => "ampm inputs is-focused", :placeholder => 'AM/PM', :value => get_hour_minute_second_ampm(f.object.end_time, 'ampm'), :col => '3',:maxlength => "2"
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8      
+          .bs-component{:style => "display: "}
+            .form-group
+              %label#title_label.col-lg-4.control-label{:for => "_type *"} Type *
+              .col-lg-7
+                = f.select(:course_type, "", [["Course","course"], ["Course with Exam", "course with exam"], ["Exam","exam"]], {:selected => @course.course_type},{:class=> 'select2-single form-control'})
+              %span.col-lg-1
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8{ :id => 'group_check_boxes'}
+          .form-group
+            %label.col-lg-4.control-label.ml-color--shades-white
+              Speaker
+            .col-lg-7.notification.courseDropdown
+              - list_of_speakers = event_speakers_list(@event.id)
+              - speaker_name = list_of_speakers.collect{|p| [ p.speaker_name, p.id ]}
+              - speaker_ids = f.object.speaker_ids.to_s.gsub("\"", "").sub("[", "").sub("]", "").split(", ")
+              .courseSpeakerCheckboxes
+                .usersep
+                  %a{:href => 'javascript:void(0)', :onclick => "course_speaker_dropdown()", :class => "dropbtn"}
+                    Select Speaker
+                -if @event.speakers.blank?
+                  #myDropdown
+                    No Lecturers available. Click on + sign to add manually.
+                -else
+                  #myDropdown
+                    - for speaker in @event.speakers
+                      .md-checkbox
+                        %label
+                          = check_box_tag "[course][speaker_ids][]", speaker.id, (speaker_ids.include? speaker.id.to_s), :class => "", :id => "course_speaker_ids#{speaker.id}"
+                          %span.checkbox 
+                          = speaker.speaker_name
+              .speakerIdsError.redText
+                = @course.errors.messages[:speaker_ids].first if @course.errors.present? and @course.errors.messages[:speaker_ids].present?
+            = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
+              %i.material-icons.mdl-color-text--white.block
+                add
+              
+            / = link_to "javascript:void(0)", :class => "addMoreSpeaker" do
+            /   %i.material-icons.mdl-color-text--white
+            /     clear
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8.visible#visible
+          #add_speaker
+            = f.custom_text_field_speaker :speaker_names, "Add Speaker (Comma seperated) *","background" => "false", :col => '12', :display_field => "#{f.object.speaker_names.blank? ? "none" :  "" }", :value => f.object.speaker_names
+        .mdl-cell--12-col.mdl-cell--12-col-tablet.m-8      
+          .bs-component{:style => "display: "}
+            .form-group
+              %label#title_label.col-lg-4.control-label{:for => "_type *"} Course Provider
+              .col-lg-7
+                = f.select(:course_provider_id, "", @event.course_providers.pluck(:provider_name, :id), {:selected => @course.course_provider_id},{:class=> 'select2-single form-control'})
+              %span.col-lg-1
+        = f.custom_text_field :venue, "Venue","background" => "false"
+        = f.custom_text_field :price, "Price","background" => "false"
+        = f.custom_text_field :offers, "Offers","background" => "false"
+        = f.custom_text_field :hours_per_day, "Hours Per Day","background" => "false"
+        = f.custom_text_field :tags, "Tags","background" => "false"
+
+      .fixed-activon-btn-new  
+        = f.custom_submit_button "SAVE"
+        .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.cancelbtn
+            = back_button(:back)
+  = render :partial => 'admin/layouts/more_links'   
+:javascript
+  
+  $(window).load(function(){
+    $('.gui-file').change(function(){
+      filename = $(this)[0].files[0].name;
+      $(".gui-input").val(filename);
+    });
+  }) 
