@@ -8,7 +8,7 @@ module ExcelImportInviteeData
   def self.save(file_path, klass_name, event_id,attributes=[], operation='add', options={})
     event = Event.find(event_id)
     event_structure = event.invitee_structures.first
-    attributes = event_structure.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier').map{|k, v| v.to_s.length > 0 ? v : nil}.compact
+    attributes = event_structure.attributes.except('id', 'created_at', 'updated_at', 'event_id', 'uniq_identifier','email_field').map{|k, v| v.to_s.length > 0 ? v : nil}.compact
     objekts = self.prepare_objekts(file_path, klass_name, event_id, attributes, operation, options)
     errors = ExcelImportInviteeData.validate_objekts(objekts)
     if errors.blank?
