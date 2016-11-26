@@ -93,7 +93,7 @@ module SyncMobileData
           else
             event_info = Event.where(:id => event_ids,:updated_at => start_event_date..end_event_date, :status => event_status)
           end
-          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone])
+          data[:"#{name_table(model)}"] = event_info.as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone, :footer_image_url, :footer_image_updated_at])
         when 'EventFeature'
           data[:"#{name_table(model)}"] = info.as_json(:only => [:id,:name,:event_id,:page_title,:sequence, :status, :description, :menu_visibilty, :menu_icon_visibility, :main_icon_updated_at, :menu_icon_updated_at], :methods => [:main_icon_url, :menu_icon_url])
         when 'Speaker'

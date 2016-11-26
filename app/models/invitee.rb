@@ -461,7 +461,7 @@ class Invitee < ActiveRecord::Base
 
   def get_my_profile(mobile_app_code,submitted_app)
     data = {}
-    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id], :methods => [:qr_code_url,:profile_pic_url, :rank])
+    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id, :qr_code_updated_at, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank])
     data[:invitees] = get_all_mobile_app_users(mobile_app_code,submitted_app)
     data
   end
