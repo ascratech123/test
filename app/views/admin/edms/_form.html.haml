@@ -144,7 +144,7 @@
             / = render :partial => "admin/layouts/whats_this_popup", :locals => {:image_name => {"Template2" => "template2.jpg","Template3" => "template3.jpg"}, :section_id => "edm_view_template",:path => "edm"}
             .col-lg-7  
               %i.arrow.single
-              = f.select("edm", "default_template", ['Template 1'], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})
+              = f.select("edm", "default_template", [['Template 1'], ['Template 2'], ['Template 3']], {:selected => f.object.default_template,:prompt => 'Select template Type'},{:class=> 'select2-single form-control',:id=> "edm_templ_select"})
               .field_with_errors
                 .span{:class => "errorMessage"}
                   = f.object.errors.messages[:default_template].join("") rescue nil
