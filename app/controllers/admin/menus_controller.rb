@@ -27,7 +27,7 @@ class Admin::MenusController < ApplicationController
         set_home_page_event_features(@homepage_feature_name)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
       elsif @active_feature > 1 
-        @homepage_error = "You can set only one feature as home page feature" 
+        @homepage_error = "You can set only one feature as a home page. Please do the required changes to continue." 
         render :action => 'index'
       elsif @event.update_attributes(event_params)
         redirect_to admin_event_mobile_application_path(:event_id => @event.id, :id => @event.mobile_application_id)
