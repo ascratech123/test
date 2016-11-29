@@ -86,8 +86,8 @@
                 = link_to "Content", admin_event_mobile_application_path(:event_id => @event.id, :id=> @mobile_application.id, :type => "show_content"), :class => "mdl-color-text--white"
           - if !(["admin/invitee_structures", 'admin/user_registrations'].include? params[:controller] and ["new","create"].include?(params[:action]))
             %li.breadcrumb-link
-              - if name == "Winner" 
-                = link_to "#{@award.title.capitalize} / ", admin_event_awards_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present? 
+              - if name == "Winner"
+                = link_to "#{@award.title.capitalize}  / Winner", admin_event_awards_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - elsif name == "Panel"
                 = link_to "Q&A / ", admin_event_qnas_path(:event_id => @event.id), :class => "mdl-color-text--white" if @event.present?
               - elsif page == "telecallers"
