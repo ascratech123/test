@@ -35,9 +35,11 @@ class Api::V1::VisitorRegistrationsController < ApplicationController
   def get_events
     if (params[:mobile_application_code].present? || (params[:invitee].present? and params[:invitee][:mobile_application_code].present?))
       if params[:mobile_application_code].present?
-        mobile_applications = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) 
+        # mobile_applications = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) 
+        mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
       else
-        mobile_applications = MobileApplication.find_by_submitted_code(params[:invitee][:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:invitee][:mobile_application_code])
+        # mobile_applications = MobileApplication.find_by_submitted_code(params[:invitee][:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:invitee][:mobile_application_code])
+        mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:invitee][:mobile_application_code], params[:invitee][:mobile_application_code]).first
       end
       if mobile_applications.present?
         @events = Event.where("mobile_application_id IN (?) and event_type_for_registration = ?", [mobile_applications.id], "open")

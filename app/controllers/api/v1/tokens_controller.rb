@@ -39,7 +39,6 @@ class Api::V1::TokensController < ApplicationController
       render :status=>200, :json=>{:status=>"Failure",:message=>"Invalid password."} and return
     else
       if @user.present?
-        logger.info @user.inspect
         @user.save
         render :status=>200, :json=>{:status=>"Success",:secret_key=>@user.secret_key,:key=>@user.key} and return
       end
@@ -47,14 +46,13 @@ class Api::V1::TokensController < ApplicationController
   end
 
   def create
-    logger.info @user.inspect
     @user.ensure_authentication_token
     if @user and (@user.get_secret_key.present? and params[:secret_key].present? and @user.get_secret_key.bytesize == params[:secret_key].bytesize ) and @user.authentication_token.present?
       session['invitee_id'] = @user.id
       @new_user = "false"
       event = @user.event rescue nil
       check_invitee_first_login
-      render :status=>200, :json=>{:status=>"Success", :authentication_token=> @user.authentication_token, :user_id => @user.id, :user_name => @user.name_of_the_invitee, :new_user => @new_user, :event_ids => @user.get_event_id(@mobile_application.submitted_code,@submitted_app), :likes => @user.get_like(@mobile_application.submitted_code,@submitted_app), :user_polls => @user.get_user_poll(@mobile_application.submitted_code,@submitted_app), :ratings => @user.get_rating(@mobile_application.submitted_code,@submitted_app), :user_feedbacks => @user.get_user_feedback(@mobile_application.submitted_code,@submitted_app), :my_profile => @user.get_all_mobile_app_users(@mobile_application.submitted_code,@submitted_app), :my_network_invitee =>@user.get_my_network_users(@mobile_application.submitted_code,@submitted_app), :favorites => @user.get_favorites(@mobile_application.submitted_code,@submitted_app), :user_quizzes => @user.get_user_quizzes(@mobile_application.submitted_code,@submitted_app), :notifications => @user.get_notification(@mobile_application.submitted_code,@submitted_app), :invitee_notifications => @user.get_read_notification(@mobile_application.submitted_code,@submitted_app), :my_travels => @user.get_my_travels(@mobile_application.submitted_code,@submitted_app), :analytics => @user.get_analytics(@mobile_application.submitted_code,@submitted_app), :all_feedback_forms_last_updated_at => @user.all_feedback_forms_last_updated_at(@mobile_application.submitted_code,@submitted_app, nil)} and return
+      render :status=>200, :json=>{:status=>"Success", :authentication_token=> @user.authentication_token, :user_id => @user.id, :user_name => @user.name_of_the_invitee, :new_user => @new_user, :event_ids => @user.get_event_id(@mobile_application.submitted_code,@submitted_app), :likes => @user.get_like(@mobile_application.submitted_code,@submitted_app), :user_polls => @user.get_user_poll(@mobile_application.submitted_code,@submitted_app), :ratings => @user.get_rating(@mobile_application.submitted_code,@submitted_app), :user_feedbacks => @user.get_user_feedback(@mobile_application.submitted_code,@submitted_app), :my_profile => @user.get_all_mobile_app_users(@mobile_application.submitted_code,@submitted_app), :my_network_invitee =>@user.get_my_network_users(@mobile_application.submitted_code,@submitted_app), :favorites => @user.get_favorites(@mobile_application.submitted_code,@submitted_app), :user_quizzes => @user.get_user_quizzes(@mobile_application.submitted_code,@submitted_app), :notifications => @user.get_notification(@mobile_application.submitted_code,@submitted_app), :invitee_notifications => @user.get_read_notification(@mobile_application.submitted_code,@submitted_app), :my_travels => @user.get_my_travels(@mobile_application.submitted_code,@submitted_app), :analytics => @user.get_analytics(@mobile_application.submitted_code,@submitted_app)} and return
     else
       render :status=>200, :json=>{:status=>"Failure",:message=>"Invalid Scecret Key."} and return
     end
@@ -154,11 +152,11 @@ class Api::V1::TokensController < ApplicationController
     if params["mobile_application_code"].present? or params["mobile_application_preview_code"].present? or params[:mobile_application_id].present?
       
       # @mobile_application = MobileApplication.find_by_preview_code(params["mobile_application_preview_code"]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find(params[:mobile_application_id])
-      if params[:mobile_application_preview_code].present?
-        @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-      elsif params[:mobile_application_code].present? or params[:mobile_application_id].present?
-        @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params[:mobile_application_id]).first
-      end
+      # if params[:mobile_application_preview_code].present?
+      #   @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+      # if params[:mobile_application_code].present? or params[:mobile_application_id].present?
+      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params[:mobile_application_id]).first if params[:mobile_application_code].present? or params[:mobile_application_id].present?
+      # end
 
       @event = Event.find_by_id(params[:event_id]) if params[:event_id].present?
       event_ids = [@event.id] if params[:event_id].present? and @event.present?
@@ -190,11 +188,11 @@ class Api::V1::TokensController < ApplicationController
   end
 
   def set_instances_for_create
-    if params[:mobile_application_preview_code].present?
-      @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    elsif params[:mobile_application_code].present?
-      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
-    end
+    # if params[:mobile_application_preview_code].present?
+    #   @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # if params[:mobile_application_code].present?
+    @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first if params[:mobile_application_code].present?
+    # end
 
     # @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_preview_code"])
 
