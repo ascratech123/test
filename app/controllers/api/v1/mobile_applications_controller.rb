@@ -5,7 +5,11 @@ class Api::V1::MobileApplicationsController < ApplicationController
   respond_to :json
 
   def show
-    @mobile_application = MobileApplication.find_by_submitted_code(params[:id]) || MobileApplication.find_by_preview_code(params[:id]) || MobileApplication.find_by_id(params[:id])
+    if params[:mobile_application_preview_code].present? 
+      @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
+      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
+    end
     if @mobile_application.present?
       create_device_token
       render :status => 200, :json => {:status => "Success", :mobile_application => @mobile_application.as_json(:only => [:id,:login_background_color,:message_above_login_page,:registration_message, :registration_link, :login_button_color, :login_button_text_color, :listing_screen_text_color, :social_media_status], :methods => [:app_icon_url, :splash_screen_url, :login_background_url, :listing_screen_background_url ]) }
