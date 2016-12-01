@@ -4,7 +4,12 @@ class Api::V1::PasswordsController < ApplicationController
 	respond_to :json
 
 	def index
-		mobile_application = MobileApplication.find_by_preview_code(params['mobile_app_code']) || MobileApplication.find_by_submitted_code(params['mobile_app_code'])
+		if params[:mobile_application_preview_code].present? 
+      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    elsif params[:mobile_application_code].present?
+			mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params['mobile_app_code'], params['mobile_app_code']).first
+		end
+		# mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params['mobile_app_code'], params['mobile_app_code']).first
 		if mobile_application.present?
 			event = Event.find_by_id(params[:event_id]) if params[:event_id].present?
 			event_ids = event.present? ? [event.id] : mobile_application.events.pluck(:id) rescue []
