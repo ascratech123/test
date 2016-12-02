@@ -56,7 +56,7 @@ class EKit < ActiveRecord::Base
   end
 
   def attachment_type
-    hsh = {'png' => 'png', 'jpeg' => 'jpg', 'jpg' => 'jpg', 'doc' => 'docx', 'docm' => 'docx', 'docx' => 'docx', 'xls' => 'xls', 'xlsx' => 'xlx', 'pdf' => 'pdf', 'ppt' => 'ppt', 'msword' => 'docx', 'vnd.ms-powerpoint' => 'ppt', 'vnd.openxmlformats-officedocument.presentationml.presentation' => 'ppt', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xls', 'vnd.ms-excel' => 'xls'}
+    hsh = {'png' => 'png', 'jpeg' => 'jpg', 'jpg' => 'jpg', 'doc' => 'docx', 'docm' => 'docx', 'docx' => 'docx', 'xls' => 'xls', 'xlsx' => 'xls', 'pdf' => 'pdf', 'ppt' => 'ppt', 'msword' => 'docx', 'vnd.ms-powerpoint' => 'ppt', 'vnd.openxmlformats-officedocument.presentationml.presentation' => 'ppt', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xls', 'vnd.ms-excel' => 'xls'}
     file_type = self.attachment_content_type.split("/").last rescue ""
     file_type = self.attachment_file_name.split(".").last if file_type.to_s == "octet-stream"
     file_type = hsh[file_type.downcase].present? ? hsh[file_type.downcase] : file_type
