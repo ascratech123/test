@@ -8,7 +8,9 @@ class Api::V1::MobileApplicationsController < ApplicationController
     if params[:mobile_application_preview_code].present? 
       @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
-      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
+      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code, params["mobile_application_id"]).first
+    elsif params["id"].present?
+      @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:id], params[:id]).first
     end
     if @mobile_application.present?
       create_device_token
