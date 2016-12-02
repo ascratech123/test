@@ -535,10 +535,10 @@ def content_is_present
   def footer_image_dimensions
     if self.footer_image_file_name_changed?
       theme_dimension_width = 500.0
-      theme_dimension_height  = 150.0
+      theme_dimension_height  = 180.0
       dimensions = Paperclip::Geometry.from_file(footer_image.queued_for_write[:original].path) rescue "Creating copy" 
       if (dimensions != "Creating copy" and (dimensions.width != theme_dimension_width or dimensions.height != theme_dimension_height))
-        errors.add(:footer_image, "Image size should be 500x150 px only")
+        errors.add(:footer_image, "Image size should be 500x180 px only")
       end
     end
   end
