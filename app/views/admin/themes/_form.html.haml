@@ -96,13 +96,14 @@
             - nested_attr_obj = (f.object.new_record? ? @theme.events.build : @event)
             = f.fields_for :events, nested_attr_obj  do |event|
               .span.col-lg-4
-                = f.label "Drawer footer image (500x150px) png only ",:class =>"control-label", style: "float: right;"
+                = f.label "Drawer footer image (500x180px) png only ",:class =>"control-label", style: "float: right;"
               .col-lg-7.Closetheme
                 %label.field.file
                   %span.button.btn-primary
                     Choose File 
                   = event.file_field :footer_image, :id => "uploadBtn3", :class=>"gui-file"
                   = text_field_tag("text_file_name","", id: "1uploadBtn3", class: "gui-input", :value => "#{event.object.footer_image_file_name.nil? ? "there is no Attachment Available !" : event.object.footer_image_file_name}", :read_only => true)
+                .themeerrormessage &nbsp;
                 - if old_event.present?
                   .field_with_errors
                     .span{:class => "errorMessage"}
