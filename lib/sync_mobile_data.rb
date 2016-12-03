@@ -176,15 +176,17 @@ module SyncMobileData
           # end
         when 'UserPoll'
           if current_user.present?
+            invitee_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id) if invitee_ids.blank?
             polls = Poll.where(:event_id => all_event_ids) if polls.blank?
-            info = UserPoll.where(:poll_id => polls.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json() rescue []
+            info = UserPoll.where(:poll_id => polls.pluck(:id), :updated_at => start_event_date..end_event_date, :user_id => invitee_ids)
+            data[:"#{name_table(model)}"] = info.as_json()
           end
         when 'UserQuiz'
           if current_user.present?
-            quizzes = Quiz.where(:event_id => all_event_ids) rescue nil if quizzes.blank?
-            info = UserQuiz.where(:quiz_id => quizzes.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json() rescue []
+            invitee_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id) if invitee_ids.blank?
+            quizzes = Quiz.where(:event_id => all_event_ids)  if quizzes.blank?
+            info = UserQuiz.where(:quiz_id => quizzes.pluck(:id), :updated_at => start_event_date..end_event_date, :user_id => invitee_ids) 
+            data[:"#{name_table(model)}"] = info.as_json() 
           end  
         when 'Rating'
           if current_user.present?
@@ -197,9 +199,10 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_speaker_name, :get_user_name, :get_company_name]) rescue []
         when 'UserFeedback'  
           if current_user.present?
-            feedback_ids = Feedback.where(:event_id => all_event_ids) rescue nil
-            info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
+            invitee_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id) if invitee_ids.blank?
+            feedback_ids = Feedback.where(:event_id => all_event_ids)
+            info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date, :user_id => invitee_ids)
+            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id])
           end
         when "MobileApplication"  
           if start_event_date != "01/01/1990 13:26:58".to_time.utc or submitted_app != "Yes"
