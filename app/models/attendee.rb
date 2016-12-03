@@ -5,7 +5,7 @@ class Attendee < ActiveRecord::Base
   validates :email_address,
             :presence => true,
             :format => {
-            :with    => /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net|gov|mil|biz|info|in))\z/i,
+            :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
             :message => "Sorry, this doesn't look like a valid email." }
   validates :phone_number,
               :uniqueness => true,
