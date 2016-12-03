@@ -46,8 +46,8 @@ class Api::V2::EventsController < ApplicationController
         end
       else
         if mobile_application.marketing_app_event_id.present?# and event_ids.include?(mobile_application.marketing_app_event_id.to_i)
-          #event_ids = [mobile_application.marketing_app_event_id.to_i]
-          event_ids  = [0]
+          event_ids = [mobile_application.marketing_app_event_id.to_i]
+          #event_ids  = [0]
         else
           event_ids  = [0] if mobile_application.application_type != "single event"
         end
