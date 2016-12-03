@@ -8,7 +8,7 @@ class Sponsor < ActiveRecord::Base
   validates :email,
             :allow_blank => true,
             :format => {
-              :with    => /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net|gov|mil|biz|info|in))\z/i,
+              :with    => /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net|gov|mil|biz|info|in|au))\z/i,
               :message => "Sorry, this doesn't look like a valid email." }
   validate :image_dimensions 
   validate :check_category_in_present             
