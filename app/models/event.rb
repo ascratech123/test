@@ -242,10 +242,6 @@ class Event < ActiveRecord::Base
     style.present? ? self.footer_image.url(style) : self.footer_image.url
   end
 
-  def footer_image_updated_at
-    ""
-  end
-	
   def perform_event(event)
     self.approve! if event== "approve"
     self.reject! if event== "reject"
