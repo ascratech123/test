@@ -21,14 +21,6 @@ class Rating < ActiveRecord::Base
 		Invitee.find_by_id(self.rated_by).name_of_the_invitee rescue nil
 	end
 
-  def speaker_name
-    if self.ratable_type == 'Agenda'
-      self.ratable.speaker.speaker_name rescue nil
-    else
-      self.ratable.speaker_name rescue nil
-    end
-  end
-
   def star_rating
     self.rating
   end
@@ -70,7 +62,7 @@ class Rating < ActiveRecord::Base
   
   def speaker_name
     if self.ratable_type == 'Agenda'
-      return self.ratable.speaker_name rescue ""
+      return self.ratable.all_speaker_names
     end
     if self.ratable_type == "Speaker"
       return self.ratable.speaker_name rescue ""

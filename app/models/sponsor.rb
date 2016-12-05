@@ -3,13 +3,7 @@ class Sponsor < ActiveRecord::Base
   has_many :images, as: :imageable, :dependent => :destroy
   attr_accessor :new_category,:image
 
-  before_save :add_new_category
 
-  validates :email,
-            :allow_blank => true,
-            :format => {
-              :with    => /\A[\w]([^@\s,;]+)@(([\w-]+\.)+(com|edu|org|net|gov|mil|biz|info|in))\z/i,
-              :message => "Sorry, this doesn't look like a valid email." }
   validate :image_dimensions 
   validate :check_category_in_present             
   has_attached_file :logo, {:styles => {:large => "640x640>",
@@ -19,7 +13,6 @@ class Sponsor < ActiveRecord::Base
                                          :small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(SPONSOR_IMAGE_PATH)
-
   validates_attachment_content_type :logo, :content_type => ["image/jpg", "image/jpeg", "image/png"],:message => "please select valid format."
   validates :sponsor_type,:name, presence: { :message => "This field is required." }
   validates :email,
@@ -28,7 +21,9 @@ class Sponsor < ActiveRecord::Base
             :message => "Sorry, this doesn't look like a valid email." }, :allow_blank => true
   validate :check_logo_is_present
   accepts_nested_attributes_for :images
+
   before_create :set_sequence_no
+  before_save :add_new_category
   after_save :update_last_updated_model, :clear_cache
   after_destroy :clear_cache
 

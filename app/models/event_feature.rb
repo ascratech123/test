@@ -15,7 +15,7 @@ class EventFeature < ActiveRecord::Base
                              :convert_options => {:small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(FEATURE_MAIN_ICON_IMAGE_PATH)                                         
-  
+  attr_accessor :homepage_feature_name
   validates_attachment_content_type :menu_icon, :content_type => ["image/png"],:message => "please select valid format."
   validates_attachment_content_type :main_icon, :content_type => ["image/png"],:message => "please select valid format."
   validate :image_dimensions

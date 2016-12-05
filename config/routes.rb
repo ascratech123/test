@@ -23,7 +23,7 @@ namespace :admin do
     resources :clients    
   end
   resources :clients do
-    resources :users, :microsites
+    resources :users, :microsites,:marketing_apps
     resources :mobile_applications do
       resources :push_pem_files
     end

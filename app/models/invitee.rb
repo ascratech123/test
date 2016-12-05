@@ -211,6 +211,10 @@ class Invitee < ActiveRecord::Base
     self.remark
   end
 
+  def instagram
+    self.instagram_id.present? ? self.instagram_id : ""
+  end
+
   def feedback_last_updated_at
     feedbacks = UserFeedback.unscoped.where(:user_id => self.id).order("updated_at")
     feedbacks.last.updated_at if feedbacks.present?
@@ -461,7 +465,7 @@ class Invitee < ActiveRecord::Base
 
   def get_my_profile(mobile_app_code,submitted_app)
     data = {}
-    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id], :methods => [:qr_code_url,:profile_pic_url, :rank])
+    data[:current_user] = self.as_json(:only => [:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :points, :instagram_id, :qr_code_updated_at, :profile_pic_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank])
     data[:invitees] = get_all_mobile_app_users(mobile_app_code,submitted_app)
     data
   end
@@ -723,7 +727,7 @@ class Invitee < ActiveRecord::Base
 
   def self.get_notification(notifications, event_ids, user, start_event_date, end_event_date)
     notification_ids = []
-    notifications = notifications.where("pushed is true or show_on_notification_screen is true") if notifications.present?
+    notifications = notifications.where("((pushed is true and push is true) or push is not true) and show_on_notification_screen is true") if notifications.present?
     notifications.each do |notification|
       invitee_notification_ids = InviteeNotification.where(:notification_id => notification.id).pluck(:invitee_id)
       if notification.group_ids.present?

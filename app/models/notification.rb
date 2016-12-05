@@ -118,7 +118,7 @@ class Notification < ActiveRecord::Base
       ios_devices = Device.where(:platform => 'ios', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id)).where.not(:enabled => "false")
       android_devices = Device.where(:platform => 'android', :mobile_application_id => mobile_application_id, :invitee_id => invitees.map(&:id)).where.not(:enabled => "false")
       event = self.event
-      title = push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : event.event_name
+      title = (push_pem_file.present? and push_pem_file.title.present? ? push_pem_file.title : (event.marketing_app.blank? ? event.event_name : event.mobile_application.name))
       if ios_devices.present? and push_pem_file.present?
         msg = self.description
         push_page = self.push_page

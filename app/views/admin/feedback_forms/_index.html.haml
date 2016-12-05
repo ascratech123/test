@@ -31,13 +31,14 @@
         %td.IconDrp
           = more_vert_button(feedback_form.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{feedback_form.id}"}
-            = edit_link(params, feedback_form.id)
-            = delete_link(params, feedback_form.id)
+            - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+              = edit_link(params, feedback_form.id)
+              = delete_link(params, feedback_form.id)
 
-            =link_to "Manage Question",admin_event_feedbacks_path(:event_id=>feedback_form.event_id,:feedback_form_id=>feedback_form.id),:class => "mdl-menu__item"
-            
-            - if feedback_form.status == "active" 
-              = link_to "Deactivate",{:action=>"update", :controller=>"admin/feedback_forms", :id => feedback_form.id,:status=> "deactive", :feedback_form_status => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want change status.'},:class => "mdl-menu__item"
-            - else
-              = link_to "Activate",{:action=>"update", :controller=>"admin/feedback_forms", :id => feedback_form.id,:status=> "active", :feedback_form_status => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want change status.'},:class => "mdl-menu__item"
-                
+            = link_to "Manage Question",admin_event_feedbacks_path(:event_id=>feedback_form.event_id,:feedback_form_id=>feedback_form.id),:class => "mdl-menu__item"
+            - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))               
+              - if feedback_form.status == "active" 
+                = link_to "Deactivate",{:action=>"update", :controller=>"admin/feedback_forms", :id => feedback_form.id,:status=> "deactive", :feedback_form_status => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want change status.'},:class => "mdl-menu__item"
+              - else
+                = link_to "Activate",{:action=>"update", :controller=>"admin/feedback_forms", :id => feedback_form.id,:status=> "active", :feedback_form_status => "true",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want change status.'},:class => "mdl-menu__item"
+                  
