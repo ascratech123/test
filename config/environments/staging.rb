@@ -138,7 +138,10 @@ LICENSEE_IMAGE_PATH =   {:path => "licensee/:style/:id-:filename",
                      :url => "#{S3_url}/licensee/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
                      
 THEME_IMAGE_PATH =   {:path => "theme/:style/:id-:filename",
-                     :url => "#{S3_url}/theme/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)           
+                     :url => "#{S3_url}/theme/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+
+EVENT_FOOTER_IMAGE_PATH =   {:path => "event/footer_image/:style/:id-:filename",
+                     :url => "#{S3_url}/event/footer_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 
 HIGHLIGHT_IMAGE_PATH =   {:path => "highlight_image/:style/:id-:filename",
                      :url => "#{S3_url}/highlight_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)

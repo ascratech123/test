@@ -40,11 +40,13 @@ class Admin::ThemesController < ApplicationController
         elsif themes_event_params.blank?
           redirect_to admin_event_mobile_application_path(:event_id => params[:event_id], :id => @event.mobile_application_id)
         elsif @event.mobile_application.present?
+          check_footer_image_error
           check_event_logo_error
           check_event_inside_logo_error
           render :action => "edit"
         end
       else
+        check_footer_image_error
         check_event_logo_error
         check_event_inside_logo_error
         @old_event = true
@@ -76,20 +78,26 @@ class Admin::ThemesController < ApplicationController
     @old_theme = @theme
     if params[:step] == "event_theme"
       if @theme.update_attributes(theme_params.except(:events_attributes)) 
-        if @event.update_attributes(themes_event_params) 
+        @event.update_attributes(:event_type_for_registration => "close") if @event.event_type_for_registration.blank?
+        if @event.update_attributes(themes_event_params)
           redirect_to admin_event_mobile_application_path(:event_id => @event, :id => @event.mobile_application_id)
         else
+          check_footer_image_error
           check_event_logo_error
           check_event_inside_logo_error
           render :action => "edit"
         end if themes_event_params.present?
       else
+        check_footer_image_error
         check_event_logo_error
         check_event_inside_logo_error
         render :action => "edit"
       end
     elsif params[:remove_image] == "true"
       @theme.update_attribute(:event_background_image, nil) if @theme.event_background_image.present?
+      redirect_to edit_admin_event_theme_path(:event_id => @event.id, :id => @theme.id, :step => "event_theme")
+    elsif params[:remove_footer_image] == "true"
+      @event.update_attribute(:footer_image, nil) if @event.footer_image.present?
       redirect_to edit_admin_event_theme_path(:event_id => @event.id, :id => @theme.id, :step => "event_theme")
     else
       if @theme.update_attributes(theme_params.except(:event))
@@ -128,7 +136,11 @@ class Admin::ThemesController < ApplicationController
 
   def themes_event_params
     if params[:theme].present? and params[:theme][:events_attributes].present?
-      params[:theme][:events_attributes].require("0").permit!
+      if params[:theme][:events_attributes]["1"].present?
+        params[:theme][:events_attributes].require("1").permit!
+      else
+        params[:theme][:events_attributes].require("0").permit!
+      end
     end
   end
 
@@ -137,7 +149,7 @@ class Admin::ThemesController < ApplicationController
   end
 
   def check_event_logo_error
-    if params[:theme]["events_attributes"]["0"]["logo"].content_type == "image/jpeg"
+    if params[:theme]["events_attributes"]["0"]["logo"].content_type != "image/png"
       if @event.errors.messages.present?
         if @event.errors.messages[:logo].present? and @event.errors.messages[:logo][0].present?
           @event.errors.messages[:logo][0] = "Selected icon is not in correct format."
@@ -150,8 +162,22 @@ class Admin::ThemesController < ApplicationController
     end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["0"].present? and params[:theme]["events_attributes"]["0"]["logo"].present?
   end
 
+  def check_footer_image_error
+    if params[:theme]["events_attributes"]["1"]["footer_image"].content_type != "image/png"
+      if @event.errors.messages.present?
+        if @event.errors.messages[:footer_image].present? and @event.errors.messages[:footer_image][1].present?
+          @event.errors.messages[:footer_image][1] = "Selected icon is not in correct format."
+        else
+          @event.errors.add(:footer_image, "Selected icon is not in correct format.")
+        end
+      else  
+        @event.errors.add(:footer_image, "Selected icon is not in correct format.")
+      end  
+    end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["1"].present? and params[:theme]["events_attributes"]["1"]["footer_image"].present?
+  end
+
   def check_event_inside_logo_error
-    if params[:theme]["events_attributes"]["0"]["inside_logo"].content_type == "image/jpeg"
+    if params[:theme]["events_attributes"]["0"]["inside_logo"].content_type != "image/png"
       if @event.errors.messages.present?
         if @event.errors.messages[:inside_logo].present? and @event.errors.messages[:inside_logo][0].present?
           @event.errors.messages[:inside_logo][0] = "Selected icon is not in correct format." 
@@ -165,4 +191,13 @@ class Admin::ThemesController < ApplicationController
       end
     end if params[:theme].present? and params[:theme]["events_attributes"].present? and params[:theme]["events_attributes"]["0"].present? and params[:theme]["events_attributes"]["0"]["inside_logo"].present? 
   end
+
+  # def check_attachment_type
+  #   hsh = {'jpeg' => 'jpg', 'jpg' => 'jpg', 'doc' => 'docx', 'docb' => 'docb', 'docm' => 'docx', 'dotm' => 'docx', 'docx' => 'docx', 'xls' => 'xls', 'xlsx' => 'xlsx', 'pdf' => 'pdf', 'ppt' => 'ppt', 'pptx' => 'pptx', 'msword' => 'docx', 'vnd.ms-powerpoint' => 'ppt', 'vnd.openxmlformats-officedocument.presentationml.presentation' => 'ppt', 'octet-stream' => 'xls', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xls', 'vnd.ms-excel' => 'xls', 'vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx'}
+  #   file_type = self.attachment_content_type.split("/").last rescue ""
+  #   if hsh.key?(file_type) == false
+  #     errors.add(:attachment, "Please select valid file format.")
+  #   end
+  # end
+
 end
