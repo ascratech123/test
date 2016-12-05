@@ -136,10 +136,10 @@ class Admin::ThemesController < ApplicationController
 
   def themes_event_params
     if params[:theme].present? and params[:theme][:events_attributes].present?
-      if params[:theme][:events_attributes]["1"].present?
-        params[:theme][:events_attributes].require("1").permit!
-      else
+      if params[:theme][:events_attributes]["0"].present? and params[:theme][:events_attributes]["0"].except("id").present?
         params[:theme][:events_attributes].require("0").permit!
+      else
+        params[:theme][:events_attributes].require("1").permit!
       end
     end
   end
