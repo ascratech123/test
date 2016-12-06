@@ -24,42 +24,51 @@ class Client < ActiveRecord::Base
   def self.upcoming_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
-      events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      #events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      events.where(:event_category => "Upcoming").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
-      events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      #events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      events.where(:event_category => "Upcoming").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Client.get_events_for_db_manager(client,user,session_role, category = "Upcoming")
     else
-      client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      #client.events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      client.events.where(:event_category => "Upcoming").where('marketing_app is null')
     end
   end
 
   def self.ongoing_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
-      events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      #events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      events.where(:event_category => "Ongoing").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
-      events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      #events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      events.where(:event_category => "Ongoing").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Client.get_events_for_db_manager(client,user,session_role, category = "Ongoing")
     else
-      client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      #client.events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
+      client.events.where(:event_category => "Ongoing").where('marketing_app is null')
     end
   end
 
   def self.past_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
       events = Event.with_roles("event_admin", user)
-      events.where('end_event_date < ?',Date.today)
+      #events.where('end_event_date < ?',Date.today)
+      events.where(:event_category => "Past").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
       events = Event.with_roles("moderator", user)
-      events.where('end_event_date < ?',Date.today)
+      #events.where('end_event_date < ?',Date.today)
+      events.where(:event_category => "Past").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
       events = Client.get_events_for_db_manager(client,user,session_role, category = "Past")
     else
-      client.events.where('end_event_date < ?',Date.today)
+      #client.events.where('end_event_date < ?',Date.today)
+      client.events.where(:event_category => "Past").where('marketing_app is null')
     end
   end
 
@@ -132,6 +141,6 @@ class Client < ActiveRecord::Base
     if clients.pluck(:id).include? client.id
       event_ids += Event.where(:client_id => client.id).pluck(:id)
     end
-    events = Event.where(:id => event_ids, :event_category => category)
+    events = Event.where(:id => event_ids, :event_category => category).where('marketing_app is null')
   end
 end

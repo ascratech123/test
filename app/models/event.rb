@@ -318,11 +318,14 @@ class Event < ActiveRecord::Base
 
   def self.sort_by_type(type,events)
     if type == "upcoming_event"
-      events = events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      #events = events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
+      events = events.where(:event_category => "Upcoming")
     elsif type == "ongoing_event"
-      events = events.where('start_event_date <= ? and end_event_date >= ?',Date.today,Date.today)
+      #events = events.where('start_event_date <= ? and end_event_date >= ?',Date.today,Date.today)
+      events = events.where(:event_category => "Ongoing")
     else
-      events = events.where('end_event_date < ?',Date.today)
+      #events = events.where('end_event_date < ?',Date.today)
+      events = events.where(:event_category => "Past")
     end
     events
   end
