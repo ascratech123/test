@@ -23,11 +23,11 @@ class Client < ActiveRecord::Base
   
   def self.upcoming_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
-      events = Event.with_roles("event_admin", user)
+      events = Event.with_roles("event_admin", user).where(:client_id => client.id)
       #events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
       events.where(:event_category => "Upcoming").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
-      events = Event.with_roles("moderator", user)
+      events = Event.with_roles("moderator", user).where(:client_id => client.id)
       #events.where('start_event_date > ? and end_event_date > ?',Date.today, Date.today)
       events.where(:event_category => "Upcoming").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
@@ -40,11 +40,11 @@ class Client < ActiveRecord::Base
 
   def self.ongoing_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
-      events = Event.with_roles("event_admin", user)
+      events = Event.with_roles("event_admin", user).where(:client_id => client.id)
       #events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
       events.where(:event_category => "Ongoing").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
-      events = Event.with_roles("moderator", user)
+      events = Event.with_roles("moderator", user).where(:client_id => client.id)
       #events.where('start_event_date <= ? and end_event_date >= ?',Date.today, Date.today)
       events.where(:event_category => "Ongoing").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
@@ -57,11 +57,11 @@ class Client < ActiveRecord::Base
 
   def self.past_event(client,user,session_role)
     if user.has_role_without_event("event_admin", client,session_role)#user.has_role? :event_admin
-      events = Event.with_roles("event_admin", user)
+      events = Event.with_roles("event_admin", user).where(:client_id => client.id)
       #events.where('end_event_date < ?',Date.today)
       events.where(:event_category => "Past").where('marketing_app is null')
     elsif user.has_role_without_event("moderator", client,session_role)#user.has_role? :moderator
-      events = Event.with_roles("moderator", user)
+      events = Event.with_roles("moderator", user).where(:client_id => client.id)
       #events.where('end_event_date < ?',Date.today)
       events.where(:event_category => "Past").where('marketing_app is null')
     elsif user.has_role_without_event("db_manager", client,session_role)#user.has_role? :db_manager
