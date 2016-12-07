@@ -46,7 +46,7 @@ class Api::V1::EventsController < ApplicationController
     changes_done = {}
     params["data"].each do |key, value|
       data = SyncMobileData.select_model(key,value,params[:platform])
-      changes_done[key] = data if ["UserFeedback", "UserQuiz", "UserPoll"].include? data
+      changes_done[key.constantize.table_name] = data if ["UserFeedback", "UserQuiz", "UserPoll"].include? key
     end 
     render :status => 200, :json => {:status => "Success", :response => changes_done}
     return
