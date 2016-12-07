@@ -72,7 +72,7 @@
                                           %td.font16= link_to agenda.title, admin_event_agenda_path(agenda.event_id,agenda.id)
                                         - else
                                           %td.font16= agenda.title
-                                        %td.font16= agenda.all_speaker_names 
+                                        %td.font16= agenda.all_speaker_names
                                         / %td.font16= agenda.start_agenda_time
                                         %td.font16= formatted_time(agenda.start_agenda_time, "%d-%m-%Y %I:%M %p")
                                         / %td.font16= agenda.end_agenda_time
@@ -84,6 +84,8 @@
                                             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
                                               = edit_link(params, agenda.id)
                                               = delete_link(params, agenda.id)
+                                              = link_to admin_log_change_path(:id => agenda.id,:resourse_type => "Agenda"), :method => "put", :class => "mdl-menu__item" do
+                                                Force Destroy
                                     - with_track = with_track.uniq { |obj| obj.agenda_track} 
                                     - with_track.each_with_index do |agenda, index|          
                                       %tr
@@ -117,7 +119,8 @@
                                               %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
                                                 = edit_link(params, track_agenda.id)
                                                 = delete_link(params, track_agenda.id)        
-
+                                                = link_to admin_log_change_path(:id => agenda.id,:resourse_type => "Agenda"), :method => "put", :class => "mdl-menu__item" do
+                                                  Force Destroy
     / - if @feedbacks.present?
     = render :partial => 'admin/layouts/more_links'
 :javascript                          

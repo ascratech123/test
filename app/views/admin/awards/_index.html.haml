@@ -32,5 +32,7 @@
             = edit_link(params, award.id)
             = link_to admin_event_award_winners_path(award.event_id, award.id),:class => "mdl-menu__item" do
               Manage Winner
-            = delete_link(params, award.id)    
+            = delete_link(params, award.id)  
+            = link_to admin_log_change_path(:id => award.id,:resourse_type => "Award"), :method => "put", :class => "mdl-menu__item" do
+              Force Destroy  
   =# will_paginate objs

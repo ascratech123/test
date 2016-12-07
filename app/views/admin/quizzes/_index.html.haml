@@ -36,6 +36,8 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{quizze.id}"}
               = edit_link(params, quizze.id)
               = delete_link(params, quizze.id)
+              = link_to admin_log_change_path(:id => quizze.id,:resourse_type => "Quiz"), :method => "put", :class => "mdl-menu__item" do
+                Force Destroy
               - if quizze.on_wall == "yes" 
                 = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/quizzes", :id => quizze.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
               - elsif ((quizze.on_wall == "no" or quizze.on_wall == nil ) and quizze.event.quizzes.pluck(:on_wall).exclude?("yes"))

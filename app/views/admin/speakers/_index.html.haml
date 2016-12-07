@@ -50,6 +50,8 @@
                 %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{speaker.id}"}
                   = edit_link(params, speaker.id)
                   = delete_link(params, speaker.id)
+                  = link_to admin_log_change_path(:id => speaker.id,:resourse_type => "Speaker"), :method => "put", :class => "mdl-menu__item" do
+                    Force Destroy
 
 :javascript
 

@@ -29,6 +29,8 @@
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{faq.id}"}
             = edit_link(params, faq.id)
             = delete_link(params, faq.id)
+            = link_to admin_log_change_path(:id => faq.id,:resourse_type => "Faq"), :method => "put", :class => "mdl-menu__item" do
+              Force Destroy
   =# will_paginate objs 
 
 :javascript
