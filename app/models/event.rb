@@ -118,7 +118,7 @@ class Event < ActiveRecord::Base
   before_create :set_preview_theme
   before_save :check_event_content_status, :add_venues_from_event_venues 
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model, :update_footer_updated_at
 
   # after_update :update_time, if: -> { points == 10}
   # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
@@ -191,6 +191,12 @@ def content_is_present
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
+  end
+
+  def update_footer_updated_at
+    if self.footer_image_file_name_changed? and self.footer_image_file_name.to_s == ""
+      self.update_column("footer_image_updated_at", Time.now)
+    end
   end
 
   def update_theme_updated_at
