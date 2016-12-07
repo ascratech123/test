@@ -109,7 +109,6 @@ class Notification < ActiveRecord::Base
     self.update_column(:push_datetime, Time.now + self.event_timezone_offset.to_i.seconds)
     invitees = Invitee.where(:event_id => self.event_id)
     arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:self.id,event_id:self.event_id}}
-    puts invitees
     InviteeNotification.create(arr)
     mobile_application = MobileApplication.find(mobile_application_id)
     invitees = Invitee.get_all_similar_invitees(invitees, mobile_application.events.pluck(:id)) if mobile_application.application_type == "multi event"
@@ -142,8 +141,9 @@ class Notification < ActiveRecord::Base
   def push_to_ios(token, notification, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
     puts "------------------IOS Title ---------------------------#{title}"
     notification = Grocer::Notification.new("device_token" => token, "alert"=>{"title"=> title, "body"=> msg, "action"=> "Read"}, 'content_available' => true, "badge" => b_count, "sound" => "siren.aiff", "custom" => {"push_page" => push_page, "id" => '1', 'event_id' => notification.event_id, 'image_url' => notification.image.url, 'type' => type, 'created_at' => time, 'notification_id' => notification.id, "actionable_id" => notification.actionable_id})
-    response = ios_obj.push(notification) rescue nil
+    response = ios_obj.push(notification)
     Rails.logger.info("**IOS****************************#{response}****************************************************")
+    puts "**IOS****************************#{response}****************************************************"
   end
 
   def self.get_action_based_invitees(invitees, notification_type)
