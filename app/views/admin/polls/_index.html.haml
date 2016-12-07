@@ -60,7 +60,8 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{poll.id}"}
               = edit_link(params, poll.id)
               = delete_link(params, poll.id)
-              / - binding.pry
+              = link_to admin_log_change_path(:id => poll.id,:resourse_type => "Poll"), :method => "put", :class => "mdl-menu__item" do
+                Force Destroy
               - if poll.on_wall == "yes" 
                 = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/polls", :id => poll.id, :on_wall => "no",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
               - elsif ((poll.on_wall == "no" or poll.on_wall == nil ) and (objs.pluck(:on_wall).count("yes") <= 4 ))#poll.event.polls.pluck(:on_wall).exclude?("yes"))

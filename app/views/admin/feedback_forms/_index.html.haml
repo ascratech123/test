@@ -34,7 +34,8 @@
             - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
               = edit_link(params, feedback_form.id)
               = delete_link(params, feedback_form.id)
-
+              = link_to admin_log_change_path(:id => feedback_form.id,:resourse_type => "FeedbackForm"), :method => "put", :class => "mdl-menu__item" do
+                Force Destroy
             = link_to "Manage Question",admin_event_feedbacks_path(:event_id=>feedback_form.event_id,:feedback_form_id=>feedback_form.id),:class => "mdl-menu__item"
             - if (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))               
               - if feedback_form.status == "active" 

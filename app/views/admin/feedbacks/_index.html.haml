@@ -40,6 +40,8 @@
                 Edit
               = link_to admin_event_feedback_path(:id => feedback.id), method: :delete, data: { confirm: 'Are you sure?' }, :class => "mdl-menu__item" do
                 Delete
+              = link_to admin_log_change_path(:id => feedback.id,:resourse_type => "Feedback"), :method => "put", :class => "mdl-menu__item" do
+                Force Destroy
   =# will_paginate objs
 
 :javascript

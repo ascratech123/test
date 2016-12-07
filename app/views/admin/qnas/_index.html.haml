@@ -37,6 +37,8 @@
             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{ques_answer.id}"}
               = edit_link(params, ques_answer.id)
               = delete_link(params, ques_answer.id)
+              = link_to admin_log_change_path(:id => ques_answer.id,:resourse_type => "Qna"), :method => "put", :class => "mdl-menu__item" do
+                Force Destroy
               - if (ques_answer.on_wall == "yes" and ques_answer.status == "approved")and ques_answer.status == "approved" 
                 = link_to "Remove From Wall",{:action=>"update", :controller=>"admin/qnas", :id => ques_answer.id, :on_wall => "no",:anonymous_on_wall => "false",:page => params[:page]}, :method => "patch", :data => { confirm: 'Are you sure, you want Remove From Wall.'},:class => "mdl-menu__item" 
               - elsif (ques_answer.on_wall == "no" or ques_answer.on_wall.blank?) and ques_answer.status == "approved"

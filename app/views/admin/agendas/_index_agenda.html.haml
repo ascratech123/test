@@ -84,6 +84,8 @@
                                             %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{agenda.id}"}
                                               = edit_link(params, agenda.id)
                                               = delete_link(params, agenda.id)
+                                              = link_to admin_log_change_path(:id => agenda.id,:resourse_type => "Agenda"), :method => "put", :class => "mdl-menu__item" do
+                                                Force Destroy
                                     - with_track = with_track.uniq { |obj| obj.agenda_track} 
                                     - with_track.each_with_index do |agenda, index|          
                                       %tr
@@ -117,7 +119,8 @@
                                               %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{track_agenda.id}"}
                                                 = edit_link(params, track_agenda.id)
                                                 = delete_link(params, track_agenda.id)        
-
+                                                = link_to admin_log_change_path(:id => agenda.id,:resourse_type => "Agenda"), :method => "put", :class => "mdl-menu__item" do
+                                                  Force Destroy
     / - if @feedbacks.present?
     = render :partial => 'admin/layouts/more_links'
 :javascript                          

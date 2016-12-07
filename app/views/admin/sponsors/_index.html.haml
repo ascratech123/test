@@ -36,3 +36,5 @@
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{sponsor.id}"}
             = edit_link(params, sponsor.id)
             = delete_link(params, sponsor.id)
+            = link_to admin_log_change_path(:id => sponsor.id,:resourse_type => "Sponsor"), :method => "put", :class => "mdl-menu__item" do
+              Force Destroy
