@@ -192,7 +192,7 @@ class Api::V1::TokensController < ApplicationController
     # end
     @invitees = Invitee.where(:event_id => event_ids) rescue nil
     @user = @invitees.find_by_key(params[:key]) rescue nil 
-    @user = Invitee.where(:event_id => nil).find_by_key(params[:key]) rescue nil if @user.blank? and @mobile_application.client_id == 38
+    @user = Invitee.where(:event_id => nil).find_by_key(params[:key]) rescue nil if @user.blank? and @mobile_application.present? and @mobile_application.client_id == 38
     logger.info "-----------------------#{@user.inspect}--------------------------------------------------"
   end
 

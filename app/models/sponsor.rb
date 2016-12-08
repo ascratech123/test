@@ -24,10 +24,18 @@ class Sponsor < ActiveRecord::Base
 
   before_create :set_sequence_no
   before_save :add_new_category
-  after_save :update_last_updated_model, :clear_cache
+  after_save :update_last_updated_model, :clear_cache#, :create_log_change_records_and_update_event_features
   after_destroy :clear_cache
 
   default_scope { order("sequence") }
+
+  def create_log_change_records_and_update_event_features ##### quick fix for sponsor update issue andriod
+    if self.event_id == 490
+      LogChange.create(:changed_data => self.changed_attributes, :resourse_type => self.class.name, :resourse_id => self.id, :action => "destroy")
+      event_features = self.event.event_features
+      event_features.each{|ef| ef.update_attributes(:menu_icon_updated_at => Time.now, :main_icon_updated_at => Time.now)}
+    end
+  end
 
   def update_last_updated_model
     LastUpdatedModel.update_record(self.class.name)
