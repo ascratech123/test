@@ -50,7 +50,6 @@
         - if @event.present? #and !@event.new_record?
           - if @event.new_record?
             = render :partial => "admin/layouts/breadcrum_new_record"
-          
           - else 
             %li.breadcrumb-link
               - if @event.marketing_app.blank?
