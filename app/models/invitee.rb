@@ -28,7 +28,7 @@ class Invitee < ActiveRecord::Base
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :email, uniqueness: {scope: [:event_id]},
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
-  validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
+  #validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
 
   validate :invitee_password_validation, :if => Proc.new{|p|p.invitee_import_password.present? and p.invitee_import_password == true}
   
