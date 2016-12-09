@@ -27,7 +27,7 @@ class Invitee < ActiveRecord::Base
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
   validates :email, uniqueness: {scope: [:event_id]},
             :unless => Proc.new{|i| i.provider == "instagram" or i.provider == "twitter"}
-  validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
+  #validates :mobile_no,:numericality => true,:length => { :minimum => 10, :maximum => 10}, :allow_blank => true
   
   #has_attached_file :qr_code, {:styles => {:large => "200x200>",
   #                                       :small => "60x60>", 
