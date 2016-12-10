@@ -45,7 +45,7 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(params_start_event_date, params_end_event_date,mobile_application_id,current_user,submitted_app)
+  def self.sync_records(params_start_event_date, params_end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil, all_mobile_event_ids = nil)
     start_event_date = params_start_event_date
     end_event_date = params_end_event_date
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
