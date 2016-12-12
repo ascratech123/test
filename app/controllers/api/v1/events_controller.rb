@@ -30,8 +30,10 @@ class Api::V1::EventsController < ApplicationController
   def create
     chanages_done = []
     params[:platform] = params[:platform].present? ? params[:platform] : "" 
+    changes_done = {}
     params["data"].each do |key, value|
-      chanages_done = SyncMobileData.select_model(key,value,params[:platform])
+      data = SyncMobileData.select_model(key,value,params[:platform])
+      changes_done[key.constantize.table_name] = data if ["UserFeedback", "UserQuiz", "UserPoll","Rating","MyProfile","Invitee","Favorite","InviteeNotification"].include? key
     end 
     render :status => 200, :json => {:status => "Success", :response => chanages_done}
     return
