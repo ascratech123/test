@@ -3,7 +3,7 @@ module ApplicationHelper
   def get_percentage(num, poll, bar_color, poll_wall, size, percentage)
    result= "<p style='color:"+poll_wall.font_color+"'>"
    (num.is_a? Numeric) ? result+= num.to_s : result+= poll.send(num)
-   percentage = get_user_poll_percentage(num,poll)
+   percentage = get_user_poll_percentage(num.to_s,poll)
    result+= "</p>"
    result+= "<div class='progress'>"
    result+= "<div class='pollwidth' style='width: 90%'>"
