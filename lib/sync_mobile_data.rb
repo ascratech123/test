@@ -1,6 +1,7 @@
 module SyncMobileData
 
   def self.create_record(values, model_name)
+    #message = {}
     message = []
     values.each do |value|
       update_data = nil
@@ -20,10 +21,14 @@ module SyncMobileData
         else
           update_data.update(params_data(value)) if update_data.present?
         end
+        #message[:message] = (update_data.errors.messages.blank? ? "Updated" : "#{update_data.errors.full_messages.join(",")}") rescue nil
+        #message[:data] =  update_data.as_json() rescue nil
         message <<  update_data.as_json() rescue nil
       else
         create_data = get_model_class(model_name).new(params_data(value))
         create_data.save
+        #message[:message] = (create_data.errors.messages.blank? ? "Created" : "#{create_data.errors.full_messages.join(",")}") rescue nil
+        #message[:data] =  create_data.as_json() rescue nil
         message << create_data.as_json() 
       end      
     end if values.present?
