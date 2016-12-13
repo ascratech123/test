@@ -6,18 +6,31 @@ class Api::V1::EventsController < ApplicationController
 
   skip_filter :find_clients, :set_current_user
   skip_filter :telecaller_is_login
+  caches_action :index, :cache_path => Proc.new { |c| c.params }, :expires_in => 2.minutes.to_i
 
   def index
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    submitted_app = "Yes" if params[:mobile_application_code].present?
+    # mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # submitted_app = "Yes" if params[:mobile_application_code].present? 
+    if params[:mobile_application_preview_code].present?
+      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    elsif params[:mobile_application_code].present?
+      mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    end
+    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]
     if mobile_application.present?
+#======mine
+#      sync_time = Time.now.to_s
+#      start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
+#      end_event_date = Time.now + 2.minutes
+#=======
       sync_time = Time.now.utc.beginning_of_minute.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
       end_event_date = Time.now.utc + 2.minutes
+#>>>>>>> .r4012
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key])
       if invitee.present?
-        submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
+        submitted_app = ((params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No")
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
       end  
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app) 
@@ -33,9 +46,33 @@ class Api::V1::EventsController < ApplicationController
     changes_done = {}
     params["data"].each do |key, value|
       data = SyncMobileData.select_model(key,value,params[:platform])
-      changes_done[key.constantize.table_name] = data if ["UserFeedback", "UserQuiz", "UserPoll","Rating","MyProfile","Invitee","Favorite","InviteeNotification"].include? key
+      changes_done[key.constantize.table_name] = data if ["UserFeedback", "UserQuiz", "UserPoll","Rating","MyProfile","Invitee","Favorite","InviteeNotification","Comment","Conversation","Like"].include? key
+      if ["UserFeedback"].include? key
+        feddback_data = []
+        data.first.each do |d|
+          feddback_data << {:feedback_form_id=>d["feedback_form_id"],:user_id=>d["user_id"]}
+        end
+        invitee_ids = feddback_data.uniq
+        # invitees = Invitee.where("id IN (?)",invitee_ids)
+        # feedback_form_ids = feddback_data.map{|data| data[:feedback_form_id]}.uniq #UserFeedback.unscoped.where(:user_id => invitee_ids).pluck("distinct feedback_form_id")
+        hsh = []
+        invitee_ids.each do |invitee|
+            user_feedbacks = UserFeedback.where(:feedback_form_id => invitee[:feedback_form_id], :user_id => invitee[:user_id]).order("updated_at")
+            hsh << {"invitee_id" => invitee[:user_id],"feedback_form_id" => invitee[:feedback_form_id], "last_updated" => user_feedbacks.first.updated_at} #if user_feedbacks.present?
+        end 
+        changes_done["all_feedback_forms_last_updated_at"] = hsh #if ["UserFeedback"].include? key
+      end
+      if ["Analytic"].include? key
+        hsh = []
+        data.first.each do |d|
+          if d["viewable_type"] == "E-Kit" and d["viewable_id"].blank?
+            hsh << d
+          end
+        end
+        changes_done[key.constantize.table_name] = hsh
+      end
     end 
-    render :status => 200, :json => {:status => "Success", :response => chanages_done}
+    render :status => 200, :json => {:status => "Success", :response => changes_done}
     return
   end
 
