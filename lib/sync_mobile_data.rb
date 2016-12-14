@@ -41,7 +41,8 @@ module SyncMobileData
       values.each do |value|
         deleted_value = model_name.constantize.find_by_id(value["id"])
         if deleted_value.destroy
-          message << deleted_value.id
+          #message << deleted_value.id
+          message << {:action => "destroy","resourse_id" => deleted_value.id,"resourse_type" => deleted_value.favoritable_type}
         end if deleted_value.present?
       end
     end  
