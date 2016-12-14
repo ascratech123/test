@@ -51,6 +51,11 @@ class Analytic < ActiveRecord::Base
     self.viewable_url.present? ? self.viewable_url : ' '
   end
 
+  def timestamp
+    event = Event.find(self.event_id)
+    (self.created_at + event.timezone_offset.to_i.seconds).strftime('%m/%d/%Y %H:%M')
+  end 
+
   def update_points
     error = []
     error << false if self.action == 'Login' and Analytic.where(:action => 'Login', :viewable_type => "Invitee", :invitee_id => self.invitee_id, :event_id => self.event_id).present?
