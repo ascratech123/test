@@ -4,14 +4,14 @@ class Api::V1::InviteesController < ApplicationController
   before_action :qr_code_access , :only => [:create]
 	respond_to :json
 	def index
-		# mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-		# event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"]) 
+		mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
+		#event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"]) 
 
-    if params[:mobile_application_preview_code].present?
-      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
-      mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
-    end
+    # if params[:mobile_application_preview_code].present?
+    #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
+    #   mobile_application = MobileApplication.where('submitted_code =? or preview_code =? or id =?', params[:mobile_application_code], params[:mobile_application_code], params["mobile_application_id"]).first
+    # end
     
     event_status = (params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? ["published"] : ["approved","published"]
 
@@ -88,13 +88,14 @@ class Api::V1::InviteesController < ApplicationController
   private
 
   def qr_code_access 
-    # binding.pry
-    # mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
-    if params[:mobile_application_preview_code].present?
-      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    elsif params[:mobile_application_code].present?
-      mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
-    end
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
+
+    # if params[:mobile_application_preview_code].present?
+    #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # elsif params[:mobile_application_code].present?
+    #   mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    # end
+
     favoritable_invitee = Invitee.find_by_id(params[:favoritable_id])
     if (params["qr_code_scan"] == "true") and mobile_application.present?
       event = favoritable_invitee.event
