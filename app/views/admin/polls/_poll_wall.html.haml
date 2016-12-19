@@ -1,4 +1,4 @@
-%html{:lang => "en"}
+%html{:lang => "en", :class=> "poll-wall"}
   %head
     %title Hobnob
     %meta{:charset => "utf-8"}
@@ -11,7 +11,7 @@
     = stylesheet_link_tag "css/bootstrap_polls.min.css"
   - @poll_wall = PollWall.find_by_event_id(params[:event_id])
   -if @poll_wall.present? and @poll_wall.background_image.present?
-    %body.main-events{:style=>"background-image: url(#{@poll_wall.background_image.url(:large)});background-size:cover;background-repeat: no-repeat;"}  
+    %body.main-events{:style=>"background-image: url(#{@poll_wall.background_image.url(:large)});background-size:cover;background-repeat: no-repeat;background-attachment:fixed;"}  
       .container.poll-container{:role => "main"}
         .col-xs-12.col-lg-12
           .row
@@ -261,3 +261,6 @@
       / IE10 viewport hack for Surface/desktop Windows 8 bug
       %script{:src => "js/ie10-viewport-bug-workaround.js"}
       %script{:src => "js/base.min.js"}      
+
+:css
+  .poll-wall{height:auto;}
