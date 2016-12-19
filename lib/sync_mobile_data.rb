@@ -199,7 +199,7 @@ module SyncMobileData
           if current_user.present?
             feedback_ids = Feedback.where(:event_id => all_event_ids) rescue nil
             info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
-            data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
+            data[:"#{name_table(model)}"] = info.as_json(:except=> [:image_file_name,:image_content_type,:image_file_size,:image_updated_at],:methods => [:image_url,:get_event_id]) rescue []
           end
         when "MobileApplication"  
           if start_event_date != "01/01/1990 13:26:58".to_time.utc or submitted_app != "Yes"

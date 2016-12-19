@@ -252,3 +252,5 @@ QUIZWALL_BG_IMAGE_PATH  = {:path => "quiz_walls/background_image/:style/:id-:fil
                      :url => "#{S3_url}/quiz_walls/background_image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
 NOTIFICATION_IMAGE_FOR_SHOW_NOTIFICATION  = {:path => "notifications/image_for_show_notification/:style/:id-:filename",
                      :url => "#{S3_url}/notifications/image_for_show_notification/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)
+USER_FEEDBACK_IMAGE_PATH  = {:path => "user_feedbacks/image/:style/:id-:filename",
+                     :url => "#{S3_url}/user_feedbacks/image/:style/:id-:filename"}.merge(PAPERCLIP_SETTINGS)

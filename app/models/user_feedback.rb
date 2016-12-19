@@ -8,6 +8,14 @@ class UserFeedback < ActiveRecord::Base
   validates :user_id, :feedback_id, presence: true
   validates_uniqueness_of :user_id, :scope => [:feedback_id], :message => 'Feedback already submitted'
   validate :check_answer_or_description_present
+  has_attached_file :image, {:styles => {:small => "200x200>", 
+                                         :thumb => "60x60>"},
+                             :convert_options => {:small => "-strip -quality 80", 
+                                         :thumb => "-strip -quality 80"}
+                                         }.merge(USER_FEEDBACK_IMAGE_PATH)
+                                         
+  validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"],:message => "please select valid format."
+
   after_create :create_analytic_record, :update_feedback_form_id
   default_scope { order('created_at desc') }
 
@@ -92,9 +100,13 @@ class UserFeedback < ActiveRecord::Base
   end
 
   def check_answer_or_description_present
-    if self.answer.blank? and self.description.blank?
+    if self.answer.blank? and self.description.blank? and self.image.blank?
       errors.add(:answer, "This field is required.") if self.answer.blank?
       errors.add(:description, "This field is required.") if self.description.blank?
     end
+  end
+
+  def image_url
+    self.image_file_name.present? ? self.image.url : ""
   end
 end

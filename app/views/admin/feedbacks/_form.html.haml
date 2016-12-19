@@ -70,7 +70,7 @@
               Select Option Type*
             .col-lg-7
               %i.arrow.single
-              = f.select("feedback", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
+              = f.select("feedback", "option_type", [["Radio buttons (for single choice)","Radio"], ["Checkboxes (for multiple choice)","Checkbox"], ["Textbox","Textbox"], ["Image Upload","Image"]], {:selected => f.object.option_type, :prompt => 'Select Option Type'}, {include_blank: 'None', :class=> 'select2-single form-control'})
               - if session[:feed_type_error].present?
                 .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
                   .bs-component{:style => "display: "}
