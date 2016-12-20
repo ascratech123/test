@@ -12,6 +12,7 @@ class Notification < ActiveRecord::Base
                              :convert_options => {:small => "-strip -quality 80", 
                                          :thumb => "-strip -quality 80"}
                                          }.merge(NOTIFICATION_IMAGE_PATH)
+
   
   has_attached_file :image_for_show_notification, {:styles => {:small => "200x200>", 
                                          :thumb => "60x60>"},
@@ -70,10 +71,75 @@ class Notification < ActiveRecord::Base
     end
   end
 
+  # def self.push_notification_time_basis
+  #   puts "*************PushNotification********#{Time.now}**********************"
+  #   # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
+  #   # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+  #   notifications = Notification.where(:pushed => false, :push => true)
+  #   if notifications.present?
+  #     notifications.each do |notification|
+  #       # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+  #       current_time_in_time_zone = Time.now + notification.event_timezone_offset.to_i.seconds
+  #       if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
+  #         event = notification.event
+  #         if event.mobile_application_id.present?
+  #           if notification.group_ids.present?
+  #             groups = InviteeGroup.where("id IN(?)", notification.group_ids)
+  #             invitee_ids = []
+  #             groups.each do |group|
+  #               invitee_ids = invitee_ids + group.get_invitee_ids
+  #             end  
+  #             invitee_ids = invitee_ids.uniq rescue []
+  #             objects = Invitee.where("id IN(?)", invitee_ids)
+  #             PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
+  #           else
+  #             objects = event.invitees
+  #             notification.send_to_all
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+
   def self.push_notification_time_basis
     puts "*************PushNotification********#{Time.now}**********************"
     # notifications = Notification.where(:pushed => false, :push_datetime => Time.now..Time.now + 30.minutes)
     # notifications = Notification.where("pushed = ? and push_datetime < ? and push_datetime > ?", false, (Time.now).utc.to_formatted_s(:db), (Time.now - 10.minutes).utc.to_formatted_s(:db))
+    
+    ###################### for push=false notifications ############ 
+    notifications = Notification.where(:pushed => false, :push => false)
+    if notifications.present?
+      notifications.each do |notification|
+        # current_time_in_time_zone = Time.now.in_time_zone(notification.event_timezone).strftime("%d-%m-%Y %H:%M").to_datetime
+        current_time_in_time_zone = Time.now + notification.event_timezone_offset.to_i.seconds
+        if notification.push_datetime.present? and notification.push_datetime <= current_time_in_time_zone and notification.push_datetime >= (current_time_in_time_zone - 20.minutes)
+          event = notification.event
+          if event.mobile_application_id.present?
+            if false#notification.group_ids.present?
+              groups = InviteeGroup.where("id IN(?)", notification.group_ids)
+              invitee_ids = []
+              groups.each do |group|
+                invitee_ids = invitee_ids + group.get_invitee_ids
+              end  
+              invitee_ids = invitee_ids.uniq rescue []
+              objects = Invitee.where("id IN(?)", invitee_ids)
+              PushNotification.push_notification(notification, objects, event.mobile_application_id) if objects.present?
+            else
+              objects = event.invitees
+              #notification.send_to_all
+              mobile_application_id = notification.event.mobile_application_id rescue nil
+              notification.create_notification_in_analytic
+              invitees = Invitee.where(:event_id => notification.event_id)
+              arr = invitees.map{|invitee| {invitee_id:invitee.id,notification_id:notification.id,event_id:notification.event_id}}
+              InviteeNotification.create(arr)
+            end
+          end
+        end
+      end
+    end
+
+    ##########################for push=true notifications #######################
     notifications = Notification.where(:pushed => false, :push => true)
     if notifications.present?
       notifications.each do |notification|
@@ -131,6 +197,7 @@ class Notification < ActiveRecord::Base
         ios_devices.each do |device|
           ios_obj = Grocer.pusher("certificate" => push_pem_file.pem_file.url.split('?').first, "passphrase" => push_pem_file.pass_phrase, "gateway" => push_pem_file.push_url)
           Rails.logger.info("***********#{device.token}***************#{device.email}********************")
+          puts("***********#{device.token}***************#{device.email}********************")
           self.push_to_ios(device.token, self, push_pem_file, ios_obj, b_count, msg, push_page, type, time, title)
         end
       end
