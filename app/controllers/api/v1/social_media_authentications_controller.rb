@@ -8,7 +8,7 @@ class Api::V1::SocialMediaAuthenticationsController < ApplicationController
     provider = params[:provider]
     email = params[:email]
     
-    mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     
     # if params[:mobile_application_preview_code].present?
     #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])

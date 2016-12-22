@@ -4,7 +4,7 @@ class Api::V1::InviteesController < ApplicationController
   before_action :qr_code_access , :only => [:create]
 	respond_to :json
 	def index
-		mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
+		mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
 		#event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"]) 
 
     # if params[:mobile_application_preview_code].present?
@@ -88,7 +88,7 @@ class Api::V1::InviteesController < ApplicationController
   private
 
   def qr_code_access 
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code])
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
 
     # if params[:mobile_application_preview_code].present?
     #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
