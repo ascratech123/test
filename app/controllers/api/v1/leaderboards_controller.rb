@@ -2,12 +2,13 @@ class Api::V1::LeaderboardsController < ApplicationController
 	respond_to :json
 
 	def index
-		# mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code]) 
-    if params[:mobile_application_preview_code].present? 
-      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
-      mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
-    end
+		mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_id(params["mobile_application_id"])
+    
+    # if params[:mobile_application_preview_code].present? 
+    #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # elsif params[:mobile_application_code].present? or params["mobile_application_id"].present?
+    #   mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    # end
 
 		# event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"])
 
