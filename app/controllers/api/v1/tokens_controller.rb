@@ -151,7 +151,7 @@ class Api::V1::TokensController < ApplicationController
   def set_instances_for_get_key
     if params["mobile_application_code"].present? or params[:mobile_application_id].present? or params["mobile_application_preview_code"].present?
 
-      @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find(params[:mobile_application_id]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+      @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code]) || MobileApplication.find(params[:mobile_application_id]) 
 
       # if params[:mobile_application_preview_code].present?
       #   @mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
@@ -194,7 +194,6 @@ class Api::V1::TokensController < ApplicationController
     # elsif params[:mobile_application_code].present?
     #   @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
     # end
-
     @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_code"]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
     @submitted_app = ((params[:mobile_application_code].present? and @mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No")
     event_ids = @mobile_application.events.pluck(:id) rescue nil 
