@@ -3,14 +3,18 @@ class Api::V2::EventsController < ApplicationController
  
   respond_to :json
   before_filter :check_date, :only => :index
+  caches_action :index, :cache_path => Proc.new { |c| c.params }, :expires_in => 2.minutes.to_i
 
   def index
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code])
-    if mobile_application.present? 
-      submitted_app = "Yes" 
-    else
-      mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code])
-    end
+    # mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code])
+    # if mobile_application.present? 
+    #   submitted_app = "Yes" 
+    # else
+    #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code])
+    # end
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]
+
     if mobile_application.present?
       sync_time = Time.now.utc.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
