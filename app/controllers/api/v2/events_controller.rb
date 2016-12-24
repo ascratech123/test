@@ -13,7 +13,7 @@ class Api::V2::EventsController < ApplicationController
     #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_code])
     # end
     mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]
+    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.present? and  mobile_application.submitted_code == params[:mobile_application_code]
 
     if mobile_application.present?
       sync_time = Time.now.utc.to_s
