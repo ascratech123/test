@@ -14,7 +14,7 @@ class Api::V1::EventsController < ApplicationController
     #   mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
     # end
 
-    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]
+    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.present? and mobile_application.submitted_code == params[:mobile_application_code]
     if mobile_application.present?
 #======mine
 #      sync_time = Time.now.to_s

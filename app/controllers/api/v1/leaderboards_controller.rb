@@ -12,7 +12,7 @@ class Api::V1::LeaderboardsController < ApplicationController
 
 		# event_status = (params[:mobile_application_code].present? ? ["published"] : ["approved","published"])
 
-    event_status = (params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code]) ? ["published"] : ["approved","published"]
+    event_status = (params[:mobile_application_code].present? and mobile_application.present? and mobile_application.submitted_code == params[:mobile_application_code]) ? ["published"] : ["approved","published"]
     
 		if mobile_application.present?
 			events = mobile_application.events
