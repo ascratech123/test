@@ -13,7 +13,7 @@ class Admin::ChangeRolesController < ApplicationController
   def create
     #return redirect_to :back if params[:role].blank?
     session[:current_user_role] = params[:role]
-    params[:previous_url].include?("/users/sign_in") ? (redirect_to admin_dashboards_path) : (redirect_to params[:previous_url])
+    (params[:previous_url].include?("/users/sign_in") or params[:previous_url].include?("/admin/prohibited_accesses")) ? (redirect_to admin_dashboards_path) : (redirect_to params[:previous_url])
   end
 
   protected
