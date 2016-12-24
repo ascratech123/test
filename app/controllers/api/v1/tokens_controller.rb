@@ -195,7 +195,7 @@ class Api::V1::TokensController < ApplicationController
     #   @mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
     # end
     @mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params["mobile_application_code"]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    @submitted_app = ((params[:mobile_application_code].present? and @mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No")
+    @submitted_app = ((params[:mobile_application_code].present? and @mobile_application.present? and @mobile_application.submitted_code == params[:mobile_application_code]) ? "Yes" : "No")
     event_ids = @mobile_application.events.pluck(:id) rescue nil 
     @invitees = Invitee.where(:event_id => event_ids)  rescue nil 
     @user = @invitees.find_by_key(params[:key]) rescue nil 
