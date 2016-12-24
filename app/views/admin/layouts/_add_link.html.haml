@@ -216,4 +216,4 @@
   - when 'marketing_app'
     -if (!current_user.has_role_without_event("db_manager", params[:client_id],session[:current_user_role]))
       = link_to new_admin_client_event_path(:client_id => params[:client_id],:marketing_app => true),:class => "rightBtn hvr-sweep-to-right" do
-        New Landing App
+        New Hub Space
