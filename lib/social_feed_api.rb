@@ -9,7 +9,7 @@ class SocialFeedApi
 		# else	
 		# 	facebook_data = HTTParty.get("https://graph.facebook.com/#{facebook_tags}/posts?access_token=EAAEUA07UHnEBABbXziqZBHoQ5sBQBBWsE1u8WQlFrydxcB4FpxWFI5BRV786UwuTkLfVdAIYUF67ZBsEGJB2BZA3KVGkDIlKcxOA48rZA0AUszqvZCLnQbswMgyV2EhMx0wZCoNKs5kGEeApEcWcjaaaK5uVGpS2kZD&limit=4&until=#{date}") rescue ""
 		# end
-			facebook_data = HTTParty.get("https://graph.facebook.com/#{facebook_tags}/posts?access_token=EAAJLHgicUhoBAGsQ1HvnhAmZBCfPIF7oP9zTiJBnbGbTG5Qhje9LFyJU5vuiCAEaaGDWaZAZCxVryXsiN3DUskhDitocjpLM6mz5Iv72khPkpsFWIfbswhMpiTPLxKp2ys8fOaNt27eFt7i8TDQTnEStUtfXpaffZAeNe1PouZCbqJxz8Mqfm&limit=20") rescue ""
+			facebook_data = HTTParty.get("https://graph.facebook.com/#{facebook_tags}/posts?access_token=EAAJLHgicUhoBAKmyX1dd8W7DsXrHGDAxLZBRtbcZCjNNvtLlZBFit8jfKXp5XsxSkdtyG3RY0upicQ1ZC0ByNVwq8fZA7w728XJZAB2UUm4OnDOtlbZCWo8bZCqINXShoIOY2ZBrsJLsxCC812fZACISJB4ks17KTGX8XJTUUeQGBhcIZCaxs6QWwBM&limit=20") rescue ""
 	end	
 
 	def self.get_twitter_posts(url)
