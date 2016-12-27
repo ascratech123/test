@@ -30,6 +30,7 @@ class Api::V2::EventsController < ApplicationController
           event = Event.where(:id => params[:event_id]).as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone])
           theme_id = Event.where(:id => params[:event_id]).pluck(:theme_id)
           theme = Theme.where(:id => theme_id).as_json(:except => [:event_background_image_file_name, :event_background_image_content_type, :event_background_image_file_size],:methods => [:event_background_image_url])
+          highlight_image = HighlightImage.where(:event_id => params[:event_id]).as_json(:only => [:id, :name,:event_id, :highlight_image_updated_at], :methods => [:highlight_image_url])
         elsif allow_ids.exclude?(invitee.event_id)
           # render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
           event_ids  = [0]
@@ -61,7 +62,7 @@ class Api::V2::EventsController < ApplicationController
       end
       all_events_data = Event.where(:id => all_updated_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app, :start_event_time, :end_event_time], :methods => [:logo_url,:inside_logo_url])
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_updated_event_ids) 
-      render :status => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []), :all_events => (params[:event_id].present? ? [] : all_events_data),:event => (event.present? ? event : []),:theme => (theme.present? ? theme : []),:data => data}
+      render :status => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []), :all_events => (params[:event_id].present? ? [] : all_events_data),:event => (event.present? ? event : []),:theme => (theme.present? ? theme : []),:highlight_image => (highlight_image.present? ? highlight_image : []),:data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 
