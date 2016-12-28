@@ -31,7 +31,7 @@ class Api::V2::EventsController < ApplicationController
           # render :status => 200, :json => {:status => "Failure",:message => "Invitee does not have access to that Event"} and return
           event_ids  = [0]
         else
-          event_ids = allow_ids
+          event_ids = allow_ids  
         end
       end 
       status = (submitted_app == "Yes" ? ["published"] : ["approved", "published"])
@@ -56,9 +56,10 @@ class Api::V2::EventsController < ApplicationController
           event_ids  = [0] if mobile_application.application_type != "single event"
         end
       end
+      event = Event.where(:id => event_ids).as_json(:except => [:multi_city, :city_id, :logo_file_name, :logo_content_type, :logo_file_size,:inside_logo_file_name,:inside_logo_content_type,:inside_logo_file_size], :methods => [:logo_url,:inside_logo_url, :about_date, :event_start_time_in_utc, :display_time_zone]) if params[:event_id].present?
       all_events_data = Event.where(:id => all_updated_event_ids).as_json(:only => [:id, :event_name, :cities, :venues, :logo_updated_at, :status, :inside_logo_updated_at, :theme_id, :login_at, :event_category, :marketing_app, :start_event_time, :end_event_time], :methods => [:logo_url,:inside_logo_url])
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app, event_ids, all_updated_event_ids) 
-      render :status => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []), :all_events => (params[:event_id].present? ? [] : all_events_data),:data => data}
+      render :status => 200, :json => {:status => "Success", :sync_time => sync_time, :application_type => mobile_application.application_type, :social_media_status => mobile_application.social_media_status, :login_at_after_splash => mobile_application.login_at, :event_ids => allow_ids, :selected_event => (event_ids.present? ? event_ids : []), :all_events => (params[:event_id].present? ? [] : all_events_data),:event => (event.present? ? event : []),:data => data}
     else
       render :status => 200, :json => {:status => "Failure", :message => "Provide mobile application preview code or submitted code."}
     end 
