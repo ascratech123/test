@@ -45,13 +45,17 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app)
+  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil, all_mobile_event_ids = nil)
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     event_status_str = event_status.join("_")
-    events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
-    event_ids = events.pluck(:id) rescue nil
-    latest_published_event_ids = events.where(:published_at => start_event_date...end_event_date).pluck(:id) if submitted_app == "Yes"
-    all_event_ids = latest_published_event_ids.present? ? (event_ids + latest_published_event_ids.to_a).uniq : event_ids
+    if event_ids.present?  
+      events = Event.where(:id => event_ids)
+    else
+      events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
+      event_ids = events.pluck(:id) rescue nil
+	  latest_published_event_ids = events.where(:published_at => start_event_date...end_event_date).pluck(:id) if submitted_app == "Yes" 
+	  all_event_ids = latest_published_event_ids.present? ? (event_ids + latest_published_event_ids.to_a).uniq : event_ids  
+   end
     model_name = []
     data = {}
     model_name = ActiveRecord::Base.connection.tables.map {|m| m.capitalize.singularize.camelize}
@@ -128,27 +132,27 @@ module SyncMobileData
         when 'Exhibitor'
           data[:"#{name_table(model)}"] = info.as_json(:except => [:updated_at, :created_at, :image_file_name, :image_content_type, :image_file_size], :methods => [:image_url])
         when 'Notification'
-          info = Invitee.get_notification(info, all_event_ids, current_user, start_event_date, end_event_date)
+          info = Invitee.get_notification(info, event_ids, current_user, start_event_date, end_event_date)
           data[:"notifications"] = info
         when 'InviteeNotification'
-          info = Invitee.get_read_notification(info, all_event_ids, current_user)
+          info = Invitee.get_read_notification(info, event_ids, current_user)
           data[:"invitee_notifications"] = info
         when 'Poll'
           polls = info
           data[:"#{name_table(model)}"] = info.as_json(:except => [:option010], :methods => [:option_percentage, :option10]) rescue []
         when 'Invitee'
           arr = []
-          leaders = Invitee.unscoped.where(:event_id => all_event_ids, :visible_status => 'active').order('points desc') rescue []
-          all_event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee, :first_name, :last_name, :company_name,:event_id, :points, :profile_pic_updated_at], :methods => [:profile_pic_url])}
+          leaders = Invitee.unscoped.where(:event_id => event_ids, :visible_status => 'active').order('points desc') rescue []
+          event_ids.map{|id| arr = arr + leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee, :first_name, :last_name, :company_name,:event_id, :points, :profile_pic_updated_at], :methods => [:profile_pic_url])}
           data[:"leaderboard"] = arr#event_ids.map{|id| {'id' => id, 'data'=> leaders.where(:event_id => id).order('points desc').first(5).as_json(:only => [:id,:name_of_the_invitee,:company_name,:event_id, :points], :methods => [:profile_pic_url])}}
           if current_user.present? and (start_event_date != "01/01/1990 13:26:58".to_time.utc)
             # my_profiles = Invitee.where("event_id IN (?) and email = ?",event_ids, current_user.email) rescue nil
-            my_profiles = current_user.get_similar_invitees(all_event_ids)
+            my_profiles = current_user.get_similar_invitees(event_ids)
             my_profiles = my_profiles.where(:updated_at => start_event_date..end_event_date) if my_profiles.present?
           data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :instagram_id, :points, :created_at, :updated_at, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at])
-          data[:"all_feedback_forms_last_updated_at"] = current_user.all_feedback_forms_last_updated_at(nil, nil, all_event_ids)
+          data[:"all_feedback_forms_last_updated_at"] = current_user.all_feedback_forms_last_updated_at(nil, nil, event_ids)
             # invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
-            invitee_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id)
+            invitee_ids = current_user.get_similar_invitees(event_ids).pluck(:id)
             ids = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date).pluck(:favoritable_id) rescue [] 
             info = Invitee.where(:id => ids) rescue []
             data[:"my_network_invitee"] = info.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :instagram_id, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url]) rescue []
@@ -164,7 +168,7 @@ module SyncMobileData
         when 'Favorite'
           if current_user.present?
             # invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
-            invitee_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id)
+            invitee_ids = current_user.get_similar_invitees(event_ids).pluck(:id)
             info = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json(:only=> [:id,:invitee_id, :favoritable_id, :favoritable_type, :status, :event_id], :methods => [:image_url]) rescue []
           end
@@ -176,20 +180,20 @@ module SyncMobileData
           # end
         when 'UserPoll'
           if current_user.present?
-            polls = Poll.where(:event_id => all_event_ids) if polls.blank?
+            polls = Poll.where(:event_id => event_ids) if polls.blank?
             info = UserPoll.where(:poll_id => polls.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json() rescue []
           end
         when 'UserQuiz'
           if current_user.present?
-            quizzes = Quiz.where(:event_id => all_event_ids) rescue nil if quizzes.blank?
+            quizzes = Quiz.where(:event_id => event_ids) rescue nil if quizzes.blank?
             info = UserQuiz.where(:quiz_id => quizzes.pluck(:id), :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json() rescue []
           end  
         when 'Rating'
           if current_user.present?
-            speaker_ids = Speaker.where(:event_id => all_event_ids) rescue nil
-            agenda_ids = Agenda.where(:event_id => all_event_ids) rescue nil
+            speaker_ids = Speaker.where(:event_id => event_ids) rescue nil
+            agenda_ids = Agenda.where(:event_id => event_ids) rescue nil
             info = Rating.where(:ratable_id => [speaker_ids,agenda_ids].flatten, :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json() rescue []
           end
@@ -197,7 +201,7 @@ module SyncMobileData
           data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_speaker_name, :get_user_name, :get_company_name]) rescue []
         when 'UserFeedback'  
           if current_user.present?
-            feedback_ids = Feedback.where(:event_id => all_event_ids) rescue nil
+            feedback_ids = Feedback.where(:event_id => event_ids) rescue nil
             info = UserFeedback.where(:feedback_id => feedback_ids, :updated_at => start_event_date..end_event_date) rescue []
             data[:"#{name_table(model)}"] = info.as_json(:methods => [:get_event_id]) rescue []
           end
@@ -209,7 +213,7 @@ module SyncMobileData
           end
         when 'MyTravel'  
           if current_user.present?
-            invitee_ids = Invitee.where(:event_id => all_event_ids, :email => current_user.email).pluck(:id)
+            invitee_ids = Invitee.where(:event_id => event_ids, :email => current_user.email).pluck(:id)
             info = info.where(:invitee_id => invitee_ids) if info.present?
             data[:"#{name_table(model)}"] = info.as_json(:except => [:created_at, :updated_at, :attach_file_content_type, :attach_file_file_name, :attach_file_file_size, :attach_file_2_file_name, :attach_file_2_content_type, :attach_file_2_file_size, :attach_file_3_file_name, :attach_file_3_content_type, :attach_file_3_file_size, :attach_file_4_file_name, :attach_file_4_content_type, :attach_file_4_file_size, :attach_file_5_file_name, :attach_file_5_content_type, :attach_file_5_file_size], :methods => [:attached_url,:attached_url_2,:attached_url_3,:attached_url_4,:attached_url_5, :attachment_type]) rescue []
           end
@@ -219,8 +223,8 @@ module SyncMobileData
         when 'Analytic'  
           if current_user.present?
             # user_ids = Invitee.where("event_id IN (?) and  email = ?",event_ids, current_user.email).pluck(:id) rescue nil
-            user_ids = current_user.get_similar_invitees(all_event_ids).pluck(:id)
-            analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",all_event_ids, 'E-Kit', user_ids).where(:updated_at => start_event_date..end_event_date) rescue []
+            user_ids = current_user.get_similar_invitees(event_ids).pluck(:id)
+            analytics = Analytic.where("event_id IN (?) and viewable_type = ? and invitee_id IN (?) and viewable_id IS NOT NULL",event_ids, 'E-Kit', user_ids).where(:updated_at => start_event_date..end_event_date) rescue []
             info = analytics.as_json() rescue []
             data[:"#{name_table(model)}"] = info
           end

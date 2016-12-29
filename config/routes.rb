@@ -91,5 +91,8 @@ get "/api/v1/activity_feeds?event_id=:event_id&social=true" => redirect("/api/v1
       resources :awards, :event_features, :sponsors, :likes, :notes, :user_feedbacks,:e_kits, :mobile_applications, :passwords, :my_travels, defaults: {format: 'json'}
       resources :activity_feeds,:visitor_registrations
     end
+    namespace :v2 do
+      resources :events
+    end
   end
 end
