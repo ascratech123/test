@@ -9,8 +9,16 @@ class Api::V1::EventsController < ApplicationController
   caches_action :index, :cache_path => Proc.new { |c| c.params }, :expires_in => 2.minutes.to_i
 
   def index
-    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
-    submitted_app = "Yes" if params[:mobile_application_code].present?
+    mobile_application = MobileApplication.find_by_submitted_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_code]) || MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # submitted_app = "Yes" if params[:mobile_application_code].present? 
+    
+    # if params[:mobile_application_preview_code].present?
+    #   mobile_application = MobileApplication.find_by_preview_code(params[:mobile_application_preview_code])
+    # elsif params[:mobile_application_code].present?
+    #   mobile_application = MobileApplication.where('submitted_code =? or preview_code =?', params[:mobile_application_code], params[:mobile_application_code]).first
+    # end
+
+    submitted_app = "Yes" if params[:mobile_application_code].present? and mobile_application.present? and mobile_application.submitted_code == params[:mobile_application_code].upcase
     if mobile_application.present?
       sync_time = Time.now.utc.beginning_of_minute.to_s
       start_event_date = params[:previous_date_time].present? ? (params[:previous_date_time]) : "01/01/1990 13:26:58".to_time.utc
@@ -18,7 +26,7 @@ class Api::V1::EventsController < ApplicationController
       allow_ids = []
       invitee = Invitee.find_by_key(params[:key])
       if invitee.present?
-        submitted_app = (params[:mobile_application_code].present? ? "Yes" : "No")
+        submitted_app = ((params[:mobile_application_code].present? and mobile_application.submitted_code == params[:mobile_application_code].upcase) ? "Yes" : "No")
         allow_ids = invitee.get_event_id_api(mobile_application.submitted_code,submitted_app,start_event_date,end_event_date)
       end  
       data = SyncMobileData.sync_records(start_event_date, end_event_date, mobile_application.id, mobile_current_user,submitted_app) 
