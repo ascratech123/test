@@ -80,6 +80,10 @@ class Admin::NotificationsController < ApplicationController
           if feedback_form_ids.present?
             @data = FeedbackForm.where("id IN (?) and status = ? ",feedback_form_ids,"active")
           end
+        elsif feature_name == "polls"
+          @associated_data = @data.where(:status => "activate")
+        elsif feature_name == "quizzes"
+          @associated_data = @data.where(:status => "activate")
         end
       end
     end
