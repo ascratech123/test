@@ -45,7 +45,9 @@ module SyncMobileData
     return message
   end
 
-  def self.sync_records(start_event_date, end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil, all_mobile_event_ids = nil)
+  def self.sync_records(params_start_event_date, params_end_event_date,mobile_application_id,current_user,submitted_app, event_ids = nil, all_mobile_event_ids = nil)
+    start_event_date = params_start_event_date
+    end_event_date = params_end_event_date
     event_status = (submitted_app == "Yes" ? ["published"] : ["approved","published"])
     event_status_str = event_status.join("_")
     if event_ids.present?  
@@ -67,7 +69,11 @@ module SyncMobileData
       last_updated_models = LastUpdatedModel.where(:last_updated => start_event_date..end_event_date).pluck("DISTINCT name")
     end
     model_name.each do |model|
-      start_event_date = start_event_date.to_datetime - 5.minutes if (model == 'Notification' or model == 'InviteeNotification') and start_event_date.present? and not start_event_date == "01/01/1990 13:26:58".to_time.utc
+      if (model == 'Notification' or model == 'InviteeNotification') and start_event_date.present? and not start_event_date == "01/01/1990 13:26:58".to_time.utc
+        start_event_date = params_start_event_date.to_datetime - 5.minutes 
+      else
+        start_event_date = params_start_event_date
+      end
       if last_updated_models.include? model
         if latest_published_event_ids.present?
           info = self.get_model_class(model).where("(updated_at between ? and ? and event_id IN (?)) or event_id IN (?)", start_event_date, end_event_date, event_ids, latest_published_event_ids)
