@@ -836,6 +836,22 @@ class Invitee < ActiveRecord::Base
     end
     hsh
   end
+
+  def all_feedback_forms_last_updated_at_on_time_basis(mobile_app_code,submitted_app,event_ids,start_event_date = nil, end_event_date = nil)
+    hsh = []
+    event_ids = get_event_id(mobile_app_code,submitted_app) if event_ids.blank?
+    # invitee_ids = Invitee.where("event_id IN (?) and  email = ?", event_ids, self.email).pluck(:id)
+    invitee_ids = get_similar_invitees(event_ids).pluck(:id)
+    feedback_form_ids = UserFeedback.unscoped.where(:user_id => invitee_ids,:updated_at => start_event_date..end_event_date).where("feedback_form_id is not null").pluck("distinct feedback_form_id")
+    for invitee_id in invitee_ids
+      for feedback_form_id in feedback_form_ids
+        user_feedbacks = UserFeedback.where(:feedback_form_id => feedback_form_id, :user_id => invitee_id).order("updated_at")
+        hsh << {"invitee_id" => invitee_id,"feedback_form_id" => feedback_form_id, "last_updated" => user_feedbacks.last.updated_at} if user_feedbacks.present?
+      end
+    end
+    hsh
+  end
+
   
   def get_similar_invitees(event_ids)
     if self.provider == "instagram"

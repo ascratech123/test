@@ -162,7 +162,7 @@ module SyncMobileData
             my_profiles = current_user.get_similar_invitees(event_ids)
             my_profiles = my_profiles.where(:updated_at => start_event_date..end_event_date) if my_profiles.present?
           data[:"invitees"] = my_profiles.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location,:invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id, :instagram_id, :points, :created_at, :updated_at, :profile_pic_updated_at, :qr_code_updated_at], :methods => [:qr_code_url,:profile_pic_url, :rank, :feedback_last_updated_at])
-          data[:"all_feedback_forms_last_updated_at"] = current_user.all_feedback_forms_last_updated_at(nil, nil, event_ids)
+          data[:"all_feedback_forms_last_updated_at"] = current_user.all_feedback_forms_last_updated_at_on_time_basis(nil, nil, all_event_ids,start_event_date,end_event_date)
             # invitee_ids = Invitee.where("event_id IN (?) and email =?", event_ids, current_user.email).pluck(:id) rescue nil
             invitee_ids = current_user.get_similar_invitees(event_ids).pluck(:id)
             ids = Favorite.where(:invitee_id => invitee_ids, :updated_at => start_event_date..end_event_date).pluck(:favoritable_id) rescue [] 
