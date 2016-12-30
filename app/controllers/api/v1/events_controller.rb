@@ -45,7 +45,7 @@ class Api::V1::EventsController < ApplicationController
       changes_done[key.constantize.table_name] = data if ["UserFeedback", "UserQuiz", "UserPoll","Rating","MyProfile","Invitee","Favorite","InviteeNotification","Comment","Conversation","Like"].include? key
       if ["UserFeedback"].include? key
         feddback_data = []
-        data.first.each do |d|
+        data.each do |d|
           feddback_data << {:feedback_form_id=>d["feedback_form_id"],:user_id=>d["user_id"]}
         end
         invitee_ids = feddback_data.uniq
@@ -60,7 +60,7 @@ class Api::V1::EventsController < ApplicationController
       end
       if ["Analytic"].include? key
         hsh = []
-        data.first.each do |d|
+        data.each do |d|
           if d["viewable_type"] == "E-Kit" and d["viewable_id"].blank?
             hsh << d
           end

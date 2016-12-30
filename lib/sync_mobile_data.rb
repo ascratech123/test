@@ -58,11 +58,12 @@ module SyncMobileData
     event_status_str = event_status.join("_")
     if event_ids.present?  
       events = Event.where(:id => event_ids)
+      all_event_ids = event_ids
     else
       events = Event.where(:mobile_application_id => mobile_application_id, :status =>  event_status)
       event_ids = events.pluck(:id) rescue nil
-	  latest_published_event_ids = events.where(:published_at => start_event_date...end_event_date).pluck(:id) if submitted_app == "Yes" 
-	  all_event_ids = latest_published_event_ids.present? ? (event_ids + latest_published_event_ids.to_a).uniq : event_ids  
+      latest_published_event_ids = events.where(:published_at => start_event_date...end_event_date).pluck(:id) if submitted_app == "Yes" 
+      all_event_ids = latest_published_event_ids.present? ? (event_ids + latest_published_event_ids.to_a).uniq : event_ids  
    end
     model_name = []
     data = {}
@@ -339,39 +340,39 @@ module SyncMobileData
     end
     case key
       when "Note"
-        chanages_done << SyncMobileData.create_record(value,"Note")
+        chanages_done = SyncMobileData.create_record(value,"Note")
       when "Rating" 
-        chanages_done << SyncMobileData.create_record(value,"Rating")
+        chanages_done = SyncMobileData.create_record(value,"Rating")
       when "Qna" 
-        chanages_done << SyncMobileData.create_record(value,"Qna")  
+        chanages_done = SyncMobileData.create_record(value,"Qna")  
       when "Comment" 
-        chanages_done << SyncMobileData.create_record(value,"Comment")
+        chanages_done = SyncMobileData.create_record(value,"Comment")
       when "Conversation" 
-        chanages_done << SyncMobileData.create_record(value,"Conversation") 
+        chanages_done = SyncMobileData.create_record(value,"Conversation") 
       when "Poll" 
-        chanages_done << SyncMobileData.create_record(value,"Poll")
+        chanages_done = SyncMobileData.create_record(value,"Poll")
       when "UserPoll" 
-        chanages_done << SyncMobileData.create_record(value,"UserPoll")  
+        chanages_done = SyncMobileData.create_record(value,"UserPoll")  
       when "Favorite"
-        chanages_done << SyncMobileData.create_record(value,"Favorite")
+        chanages_done = SyncMobileData.create_record(value,"Favorite")
       when "Like"
-        chanages_done << SyncMobileData.create_record(value,"Like")
+        chanages_done = SyncMobileData.create_record(value,"Like")
       when "Feedback"
-        chanages_done << SyncMobileData.create_record(value,"Feedback")
+        chanages_done = SyncMobileData.create_record(value,"Feedback")
       when "UserFeedback"
-        chanages_done << SyncMobileData.create_record(value,"UserFeedback") 
+        chanages_done = SyncMobileData.create_record(value,"UserFeedback") 
       when "MyProfile"
-        chanages_done << SyncMobileData.create_record(value,"Invitee") 
+        chanages_done = SyncMobileData.create_record(value,"Invitee") 
       when "Quiz" 
-        chanages_done << SyncMobileData.create_record(value,"Quiz")
+        chanages_done = SyncMobileData.create_record(value,"Quiz")
       when "UserQuiz" 
-        chanages_done << SyncMobileData.create_record(value,"UserQuiz")
+        chanages_done = SyncMobileData.create_record(value,"UserQuiz")
       when "Invitee" 
-        chanages_done << SyncMobileData.create_record(value,"Invitee")  
+        chanages_done = SyncMobileData.create_record(value,"Invitee")  
       when "Analytic" 
-        chanages_done << SyncMobileData.create_record(value,"Analytic")  
+        chanages_done = SyncMobileData.create_record(value,"Analytic")  
       when "InviteeNotification" 
-        chanages_done << SyncMobileData.create_record(value,"InviteeNotification")  
+        chanages_done = SyncMobileData.create_record(value,"InviteeNotification")  
       end
     chanages_done  
   end
