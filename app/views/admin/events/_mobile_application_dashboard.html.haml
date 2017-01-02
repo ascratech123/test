@@ -23,6 +23,8 @@
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "invitees.png", :objs => @event.invitees, :url => "invitees", :@count => @count}
         - if show_card("my_travels")
           = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "travel.png", :objs => @event.my_travels, :url => "my_travels", :@count => 0}
+        - if show_card("qr_code")
+          = render :partial => "admin/events/cards", :locals => {:icon => '', :img => "qr_code.png", :objs => @event, :url => "qr_code", :@count => 0}
         / -elsif !(current_user.has_role? "db_manager")  
       -elsif (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
         - if show_card("abouts")  
