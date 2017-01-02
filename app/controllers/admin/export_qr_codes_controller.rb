@@ -4,10 +4,10 @@ class Admin::ExportQrCodesController < ApplicationController
 
 	def index
 		if params[:export].present?
-      @qr_codes = @event.analytics.select('distinct invitee_id, viewable_url').where.not(viewable_url: [nil, ""])
+      @qr_codes = @event.analytics.select('distinct invitee_id, viewable_url, created_at, event_id').where.not(viewable_url: [nil, ""])
       respond_to do |format|
         format.xls do
-          method_allowed = [:invitee_email, :url]
+          method_allowed = [:invitee_email, :url, :timestamp]
           # only_columns = [:viewable_url]
           send_data @qr_codes.to_xls(:methods => method_allowed)#, :only => only_columns)
         end
