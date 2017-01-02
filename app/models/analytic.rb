@@ -53,7 +53,7 @@ class Analytic < ActiveRecord::Base
 
   def timestamp
     event = Event.find(self.event_id)
-    (self.created_at + event.timezone_offset.to_i.seconds).strftime('%m/%d/%Y %H:%M')
+    (self.created_at + event.timezone_offset.to_i.seconds).strftime('%d/%m/%Y %H:%M')
   end 
 
   def update_points
