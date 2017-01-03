@@ -72,7 +72,7 @@ class Api::V1::InviteesController < ApplicationController
         if my_network_invitee.present?
           render :staus => 200, :json => {:status => "Success",:invitee => my_network_invitee.as_json(:only => [:first_name, :last_name,:designation,:id,:event_name,:name_of_the_invitee,:email,:company_name,:event_id,:about,:interested_topics,:country,:mobile_no,:website,:street,:locality,:location, :invitee_status, :provider, :linkedin_id, :google_id, :twitter_id, :facebook_id,:instagram_id], :methods => [:qr_code_url,:profile_pic_url]) } rescue []
         else
-          render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee not Found."}
+          render :status=>200,:json=>{:status=>"Failure",:message=>"Invitee not Found."}   
         end
       end  
     else
