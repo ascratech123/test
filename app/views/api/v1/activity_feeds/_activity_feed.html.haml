@@ -35,7 +35,7 @@
                         %p.userPicImage
                           %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"}
                             %img{:src => "/profile_pics/thumb/missing.png"}/
-                    .userDetail
+                    .userDetail.nobold
                       %p.userName
                         %span.boldText= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"
                         %span.normal liked this
@@ -54,7 +54,7 @@
                     /   .userPic
                     /     %p.userPicImage
                     /       %img{:src => "/profile_pics/thumb/missing.png"}/
-                    .userDetail
+                    .userDetail.nobold
                       %p.userName
                         %span.boldText= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"
                         %span.normal commented on this 
@@ -74,7 +74,7 @@
                           %p.userPicImage
                             %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"}
                               %img{:src => "/profile_pics/thumb/missing.png"}/
-                      .userDetail
+                      .userDetail.nobold
                         %p.userName= link_to invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"
                         %p= datetime_with_adjusted_offset_and_display_timezone(conversation.created_at , @event_timezone_offset, @event_display_timezone)
                     .feed-post
@@ -110,7 +110,7 @@
                           %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"}
                             %img{:src => "/profile_pics/thumb/missing.png"}/
                     .commentDiv
-                      .userDetail
+                      .userDetail.nobold
                         %p.userName= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"
                         %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
                       .commentText
