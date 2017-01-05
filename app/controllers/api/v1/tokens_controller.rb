@@ -161,7 +161,7 @@ class Api::V1::TokensController < ApplicationController
 
       @event = Event.find_by_id(params[:event_id]) if params[:event_id].present?
       event_ids = [@event.id] if params[:event_id].present? and @event.present?
-      event_ids = @mobile_application.events.pluck(:id) rescue nil if event_ids.blank?
+      event_ids = @mobile_application.events.where("status !=?","rejected").pluck(:id) rescue nil if event_ids.blank?
       @invitees = Invitee.where(:event_id => event_ids) rescue nil 
       @user = @invitees.find_by_email(params[:email].downcase) rescue nil 
       @registration_setting = RegistrationSetting.where(:event_id => params[:event_id]).last

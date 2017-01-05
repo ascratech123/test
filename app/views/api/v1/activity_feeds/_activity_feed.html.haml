@@ -23,28 +23,26 @@
                 - #action_invitee = Invitee.find(analytic.invitee_id) rescue nil
                 -# if action_invitee.present?
                 / %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
-                .card.test{:for => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
+                %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"}
                   .feedHeading
                     - if action_invitee.profile_pic_file_name.present?
                       .userPic
                         %p.userPicImage
-                          %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"}
-                            %img{:src => action_invitee.profile_pic.url}/
+                          %img{:src => action_invitee.profile_pic.url}/
                     -else
                       .userPic
                         %p.userPicImage
-                          %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"}
-                            %img{:src => "/profile_pics/thumb/missing.png"}/
-                    .userDetail.nobold
+                          %img{:src => "/profile_pics/thumb/missing.png"}/
+                    .userDetail
                       %p.userName
-                        %span.boldText= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"
+                        %span.boldText= action_invitee.name_of_the_invitee
                         %span.normal liked this
                       %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
               - if analytic.action == "comment"
                 -# action_invitee = Invitee.find(analytic.invitee_id) rescue nil
                 -# if action_invitee.present? 
                 / %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
-                .card.test{:for => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{analytic.invitee_id}"}
+                %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"}
                   .feedHeading
                     / - if action_invitee.profile_pic_file_name.present?
                     /   .userPic
@@ -54,35 +52,35 @@
                     /   .userPic
                     /     %p.userPicImage
                     /       %img{:src => "/profile_pics/thumb/missing.png"}/
-                    .userDetail.nobold
+                    .userDetail
                       %p.userName
-                        %span.boldText= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{analytic.invitee_id}"
+                        %span.boldText= action_invitee.name_of_the_invitee
                         %span.normal commented on this 
                       / %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
               - if invitee.present?
                 .subBoxNone{:class => ("subBox" if analytic.action == "like" or analytic.action == "comment")}
                   / %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{invitee.id}"}
-                  .card.test{:for => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{invitee.id}"}
+                  %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"}
                     .feedHeading
                       - if invitee.profile_pic_file_name.present?
                         .userPic
                           %p.userPicImage
-                            %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"}
-                              %img{:src => invitee.profile_pic.url}/
+                            %img{:src => invitee.profile_pic.url}/
                       -else
                         .userPic
                           %p.userPicImage
-                            %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"}
-                              %img{:src => "/profile_pics/thumb/missing.png"}/
-                      .userDetail.nobold
-                        %p.userName= link_to invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{invitee.id}"
+                            %img{:src => "/profile_pics/thumb/missing.png"}/
+                      .userDetail
+                        %p.userName= invitee.name_of_the_invitee
                         %p= datetime_with_adjusted_offset_and_display_timezone(conversation.created_at , @event_timezone_offset, @event_display_timezone)
-                    .feed-post
+                  .feed-post
+                    %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{invitee.id}"}
                       %p= conversation.description
                       - if conversation.image_file_name.present?
                         %p
                           %img{:src => conversation.image.url}/ 
-                    .feed-activiity
+                  .feed-activiity
+                    %a{:href => "#{APP_URL}?resource_type=#{analytic.viewable_type}&resource_id=#{analytic.viewable_id}&action=#{analytic.action}&invitee_id=#{invitee.id}"}
                       %p
                         %span
                           %img{:src => "/assets/share.png"}/
@@ -100,23 +98,22 @@
                 - if analytic.action == "comment"
                   -# action_invitee = Invitee.find(analytic.invitee_id) rescue nil
                   - #if action_invitee.present?
-                  .feedHeading.comment
-                    - if action_invitee.profile_pic_file_name.present?
-                      .userPic
-                        %p.userPicImage
-                          %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"}
+                  %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"}
+                    .feedHeading.comment
+                      - if action_invitee.profile_pic_file_name.present?
+                        .userPic
+                          %p.userPicImage
                             %img{:src => action_invitee.profile_pic.url}/
-                    -else
-                      .userPic
-                        %p.userPicImage
-                          %a{:href => "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"}
+                      -else
+                        .userPic
+                          %p.userPicImage
                             %img{:src => "/profile_pics/thumb/missing.png"}/
-                    .commentDiv
-                      .userDetail.nobold
-                        %p.userName= link_to action_invitee.name_of_the_invitee, "#{APP_URL}?resource_type=invitee&resource_id=#{action_invitee.id}"
-                        %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
-                      .commentText
-                        %p= comments.first.description rescue nil
+                      .commentDiv
+                        .userDetail
+                          %p.userName= action_invitee.name_of_the_invitee
+                          %p= datetime_with_adjusted_offset_and_display_timezone(analytic.created_at , @event_timezone_offset, @event_display_timezone)
+                        .commentText
+                          %p= comments.first.description rescue nil
       - elsif find_notification.present?
         .feed
           - if true#find_notification.action.present?
@@ -129,8 +126,3 @@
                 %p= find_notification.description
                 %p= datetime_with_display_timezone(find_notification.push_datetime, @event_display_timezone)
                 / %p= find_notification.push_datetime.strftime('%b %d at %l:%M %P')
-
-:javascript
-  $(document).on('click','.test', function(){
-    window.location.assign($(this).attr("for"))
-  });
