@@ -73,16 +73,28 @@
                 .col-lg-7.p-h-12.m-8
                   = builder.custom_radio_button_menu :menu_visibilty, "inactive", "Yes", :id => "option_2#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "inactive" ? "checked" : ""}",:class => "menu_status_deactive1"
                   = builder.custom_radio_button_menu :menu_visibilty, "active","No", :id => "option_1#{builder.object.id}", :default_checked => "#{builder.object.menu_visibilty == "active" ? "checked" : ""}",:class => "menu_status_active1"
-            .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_visibilty == "active" && builder.object.status == "active") ? 'display:block' : 'display:none'}
-              .mdl-grid.p-v-5.form-group
-                .col-lg-4.mdl-typography--text-right
-                  %p.displayInlineBlock.multicitytxt Set as home page
-                .col-lg-7.p-h-12.m-8
-                  / - fields_for :event do |event_builder| 
-                  - @count = @count ||=0 
-                  = builder.custom_radio_button_menu :homepage_feature_name, "active","Yes", :id => "option-1#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "checked" : ""}",:class => "menu_homepage_feature_active"
-                  = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "" : "checked"}",:class => "menu_homepage_feature_deactive"
-                  - @count = @count + 1
+            - if (@event.login_at == "Before Interaction" and ["e_kits","feedbacks","chats","leaderboard","quizzes","conversations","qnas","polls","invitees","my_profile","qr_code","favourites","my_travels"].exclude?(builder.object.name))
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_visibilty == "active" && builder.object.status == "active") ? 'display:block' : 'display:none'}
+                .mdl-grid.p-v-5.form-group
+                  .col-lg-4.mdl-typography--text-right
+                    %p.displayInlineBlock.multicitytxt Set as home page
+                  .col-lg-7.p-h-12.m-8
+                    / - fields_for :event do |event_builder| 
+                    - @count = @count ||=0 
+                    = builder.custom_radio_button_menu :homepage_feature_name, "active","Yes", :id => "option-1#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "checked" : ""}",:class => "menu_homepage_feature_active"
+                    = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "" : "checked"}",:class => "menu_homepage_feature_deactive"
+                    - @count = @count + 1
+            - elsif (@event.login_at != "Before Interaction")
+              .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-t-15#homepage_feature_menu_index{:style => (builder.object.menu_visibilty == "active" && builder.object.status == "active") ? 'display:block' : 'display:none'}
+                .mdl-grid.p-v-5.form-group
+                  .col-lg-4.mdl-typography--text-right
+                    %p.displayInlineBlock.multicitytxt Set as home page
+                  .col-lg-7.p-h-12.m-8
+                    / - fields_for :event do |event_builder| 
+                    - @count = @count ||=0 
+                    = builder.custom_radio_button_menu :homepage_feature_name, "active","Yes", :id => "option-1#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "checked" : ""}",:class => "menu_homepage_feature_active"
+                    = builder.custom_radio_button_menu :homepage_feature_name, "deactive", "No", :id => "option-2#{@count}", :default_checked => "#{builder.object.name == @event.homepage_feature_name ? "" : "checked"}",:class => "menu_homepage_feature_deactive"
+                    - @count = @count + 1
   .fixed-activon-btn-new  
     = f.custom_submit_button "SAVE"
     .mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.btnsubmit.m-l-18.cancelBg
