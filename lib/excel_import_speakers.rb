@@ -52,7 +52,7 @@ module ExcelImportSpeaker
         objekt[attrib.parameterize('_').strip] = workbook.cell(line, letters_array[index]).is_a?(Numeric) ? (workbook.cell(line, letters_array[index]).to_s.strip rescue '') : (workbook.cell(line, letters_array[index]).strip rescue '')
       end
       email = objekt['email_address'].downcase rescue nil
-      speaker = Speaker.find_or_initialize_by(:email_address => email, :event_id => event_id)
+      speaker = ( email.present? ? Speaker.find_or_initialize_by(:email_address => email, :event_id => event_id) : Speaker.new)
       if objekt["profile_picture"].present?
         profile_url = objekt["profile_picture"] rescue nil
         data = open(profile_url).read rescue nil
@@ -66,7 +66,7 @@ module ExcelImportSpeaker
           speaker.errors.add(:profile_pic, "Incorrect URL")
         end
       end
-      speaker.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company => objekt['company'], :designation => objekt['designation'], :phone_no => objekt["phone_no"],:speaker_info => objekt['speaker_bio'], :rating_status => objekt['rating'])
+      speaker.assign_attributes(:first_name => objekt['first_name'], :last_name => objekt['last_name'],:company => objekt['company'], :designation => objekt['designation'], :phone_no => objekt["phone_no"],:speaker_info => objekt['speaker_bio'], :rating_status => objekt['rating'],:event_id => event_id)
       objekts << speaker
       File.delete("public/#{profile_url.split('/').last}") if profile_url.present? and File.exist?("public/#{profile_url.split('/').last}")
     end
