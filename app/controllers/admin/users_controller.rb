@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
   before_filter :authenticate_user
   before_filter :find_client, :only => [:index, :new, :create, :new, :edit, :update, :add_role_to_user]
 
-  def index
+  def index   
     @source = @event.present? ? @event : @client
     if current_user.has_role? :licensee_admin
       @role = Role.where(:resource_type => nil, :resource_id => nil, :name => 'licensee_admin').first
