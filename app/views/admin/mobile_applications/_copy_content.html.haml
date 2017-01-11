@@ -1,0 +1,18 @@
+.popup-overlay
+.ClientPopup
+#register-form.col.s12.ClientPopup-info
+  %p.txtcenter.m-b-30
+    Do you want to copy app details from another event?
+  %span 
+    = link_to back_path, :class => 'closeclick' do 
+      X  
+    = form_for admin_client_events_path(:client_id => Event.find(params[:event_id]).client_id), :class => "caret", :method => :post do |f|
+      = f.radio_button 'copy_event', 'yes'
+      = f.radio_button 'copy_event', 'no'
+      %i.arrow.single                       
+        =# select_tag :, options_for_select(objs.map{|c| [c.event_name,c.id]}), :prompt => "#{prompt_message}"
+      
+      =# hidden_field_tag :role, params[:role]
+    
+    .row.txtcenter.UserSubmit.m-t-40
+      = f.submit_button "SAVE", :class => "mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect mdl-color--light-blue-600 disbtn"

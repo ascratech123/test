@@ -1,1 +1,4 @@
-= render :partial => 'layouts/layout_form', :locals => {:page => 'New Event'}
+- if (params[:feature].present? and params[:redirect_page].present? and params[:redirect_page] == "copy_event")
+  = render :partial => 'layouts/layout_form', :locals => {:page => 'Copy Event'}
+-else
+  = render :partial => 'layouts/layout_form', :locals => {:page => 'New Event'}

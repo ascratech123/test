@@ -27,11 +27,11 @@ class Event < ActiveRecord::Base
   has_one :conversation_wall
   has_one :poll_wall
   has_one :quiz_wall
-  has_many :my_profiles, :dependent => :destroy
-  has_many :microsites, :dependent => :destroy
-  has_many :user_microsites, :dependent => :destroy
+  #has_many :my_profiles, :dependent => :destroy
+  #has_many :microsites, :dependent => :destroy
+  #has_many :user_microsites, :dependent => :destroy
   has_many :speakers, :dependent => :destroy
-  has_many :event_venues, :dependent => :destroy
+  #has_many :event_venues, :dependent => :destroy
   has_many :invitees, :dependent => :destroy
   has_many :attendees, :dependent => :destroy
   has_many :agendas, :dependent => :destroy
@@ -43,7 +43,7 @@ class Event < ActiveRecord::Base
   has_many :sponsors, :dependent => :destroy
   has_and_belongs_to_many :users
   has_many :feedbacks, :dependent => :destroy
-  has_many :feedback_forms, :dependent => :destroy
+  #has_many :feedback_forms, :dependent => :destroy
   has_many :images, as: :imageable, :dependent => :destroy
   has_many :panels, :dependent => :destroy
   has_many :event_features, :dependent => :destroy
@@ -70,16 +70,16 @@ class Event < ActiveRecord::Base
   has_many :chats, :dependent => :destroy
   has_many :invitee_groups, :dependent => :destroy
   has_many :my_travels, :dependent => :destroy
-  has_many :telecaller_accessible_columns, :dependent => :destroy
-  has_many :campaigns, :dependent => :destroy
-  has_many :venue_sections, :dependent => :destroy
+  #has_many :telecaller_accessible_columns, :dependent => :destroy
+  #has_many :campaigns, :dependent => :destroy
+  #has_many :venue_sections, :dependent => :destroy
   has_many :agenda_tracks, :dependent => :destroy
-  has_one :badge_pdf, :dependent => :destroy
-  has_many :manage_invitee_fields, :dependent => :destroy
-  has_many :my_travel_docs, :dependent => :destroy
+  #has_one :badge_pdf, :dependent => :destroy
+  #has_many :manage_invitee_fields, :dependent => :destroy
+  #has_many :my_travel_docs, :dependent => :destroy
   accepts_nested_attributes_for :images
   accepts_nested_attributes_for :event_features
-  accepts_nested_attributes_for :event_venues
+#  accepts_nested_attributes_for :event_venues
 
   
   validates :event_name, :client_id, :cities,:event_type_for_registration, presence:{ :message => "This field is required." } #:event_code, :start_event_date, :end_event_date, :venues, :pax
@@ -108,9 +108,9 @@ class Event < ActiveRecord::Base
   validates_attachment_content_type :inside_logo, :content_type => ["image/png"],:message => "please select valid format."
   validate :event_count_within_limit, :check_event_date, :on => :create
   before_create :set_preview_theme
-  before_save :check_event_content_status, :add_venues_from_event_venues 
+  before_save :check_event_content_status#, :add_venues_from_event_venues 
   after_create :update_theme_updated_at, :set_uniq_token, :set_event_category
-  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables, :update_last_updated_model
+  after_save :update_login_at_for_app_level, :set_date, :set_timezone_on_associated_tables#, :update_last_updated_model
 
   # after_update :update_time, if: -> { points == 10}
   # scope :thousand_points, -> { where(points: '10').order('invitee_points_time DESC') }
@@ -144,10 +144,11 @@ class Event < ActiveRecord::Base
     end
   end
 
-def content_is_present
-    unless copy_content.blank? ^ custom_content.blank?
-      errors.add(:copy_content, "This field is required.")
-    end
+  def content_is_present
+    # unless copy_content.blank? ^ custom_content.blank?
+    #   errors.add(:copy_content, "This field is required.")
+    # end
+    errors.add(:copy_content, "This field is required.") if self.copy_content_button.blank?
   end
   
   def add_venues_from_event_venues
@@ -770,7 +771,7 @@ def content_is_present
   #end
 
  def copy_event_associations_from(event)
-    event.copy_association(event.campaigns, self.id) if event.campaigns.present?
+    #event.copy_association(event.campaigns, self.id) if event.campaigns.present?
     event.copy_mobile_application_association(event, self) if event.mobile_application_id.present?
     event.copy_association(event.attendees, self.id) if event.attendees.present?
     event.copy_awards_association(event.awards, self.id) if event.awards.present?
@@ -783,7 +784,7 @@ def content_is_present
     event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present?
     event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present?
     # event.copy_association(event.event_features, self.id) if event.event_features.present?
-    event.copy_association(event.exhibitors, self.id) if event.exhibitors.present?
+    event.copy_exhibitors_association(event.exhibitors, self.id) if event.exhibitors.present?
     event.copy_association(event.faqs, self.id) if event.faqs.present?
     event.copy_association(event.groupings, self.id) if event.groupings.present?
     event.copy_association(event.highlight_images, self.id) if event.highlight_images.present?
@@ -794,19 +795,21 @@ def content_is_present
     event.copy_association(event.registration_settings, self.id) if event.registration_settings.present?
     event.copy_association(event.registrations, self.id) if event.registrations.present?
     event.copy_association(event.speakers, self.id) if event.speakers.present?
-    event.copy_association(event.sponsors, self.id) if event.sponsors.present?
-    event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present?
-    event.copy_association(event.user_registrations, self.id) if event.user_registrations.present?
+    event.copy_sponsors_association(event.sponsors, self.id) if event.sponsors.present?
+    event.copy_venue(event.emergency_exit, self.id) if event.emergency_exit.present?
+    #event.copy_association(event.user_registrations, self.id) if event.user_registrations.present?
+    event.copy_theme(self)
+    event.create_event_features_for_all(event.event_features,self)
   end
 
   def copy_custom_event_associations_from(event, params)
     if params[:associations].present?
-      event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
+      #event.copy_association(event.campaigns, self.id) if event.campaigns.present? and params[:associations].include?('campaigns')
       event.copy_mobile_application_association(event, self) if event.mobile_application_id.present? 
       event.copy_association(event.attendees, self.id) if event.attendees.present? and params[:associations].include?('attendees')
       event.copy_awards_association(event.awards, self.id) if event.awards.present? and params[:associations].include?('awards')
       event.copy_images_association(event.images, self.id) if event.images.present? and params[:associations].include?('gallery')
-      event.copy_agendas_association(event.agendas, self.id) if event.agendas.present? and params[:associations].include?('agendas')
+      event.copy_agendas_association(event.agendas, self.id) if event.agendas.present? and params[:associations].include?('agenda')
       event.copy_association(event.contacts, self.id) if event.contacts.present? and params[:associations].include?('contacts')
       event.copy_association(event.custom_page1s, self.id) if event.custom_page1s.present? and params[:associations].include?('custom page1')
       event.copy_association(event.custom_page2s, self.id) if event.custom_page2s.present? and params[:associations].include?('custom page2')
@@ -814,7 +817,7 @@ def content_is_present
       event.copy_association(event.custom_page4s, self.id) if event.custom_page4s.present? and params[:associations].include?('custom page4')
       event.copy_association(event.custom_page5s, self.id) if event.custom_page5s.present? and params[:associations].include?('custom page5')
       # event.copy_association(event.event_features, self.id) if event.event_features.present? and params[:associations].include?('features')
-      event.copy_association(event.exhibitors, self.id) if event.exhibitors.present? and params[:associations].include?('exhibitors')
+      event.copy_exhibitors_association(event.exhibitors, self.id) if event.exhibitors.present? and params[:associations].include?('exhibitors')
       event.copy_association(event.faqs, self.id) if event.faqs.present? and params[:associations].include?('faqs')
       event.copy_association(event.groupings, self.id) if event.groupings.present? and params[:associations].include?('groupings')
       event.copy_association(event.highlight_images, self.id) if event.highlight_images.present? and params[:associations].include?('event highlights')    
@@ -824,13 +827,53 @@ def content_is_present
       event.copy_association(event.registration_settings, self.id) if event.registration_settings.present? and params[:associations].include?('registration settings')
       event.copy_association(event.registrations, self.id) if event.registrations.present? and params[:associations].include?('registrations')
       event.copy_association(event.speakers, self.id) if event.speakers.present? and params[:associations].include?('speakers')
-      event.copy_association(event.sponsors, self.id) if event.sponsors.present? and params[:associations].include?('sponsors')
-      event.copy_association(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('emergency exit')
+      event.copy_sponsors_association(event.sponsors, self.id) if event.sponsors.present? and params[:associations].include?('sponsors')
+      event.copy_venue(event.emergency_exit, self.id) if event.emergency_exit.present? and params[:associations].include?('venue')
+      event.copy_theme(self)
+      event.create_event_features_for_custom(event.event_features,self,params[:associations])
     end
   end
 
+  def create_event_features_for_custom(event_features,new_event,selected_feature)
+    new_hsh = {"feedback" => "feedbacks","agenda" => "agendas","about"=>"abouts","e_kit" => "e_kits","my_travel" => "my_travels","faq" => "faqs", "gallery"=> "galleries", "awards" => "awards", "contact us" => "contacts", "quiz" => "quizzes","custom_page1" => "custom_page1s" ,"custom_page2" => "custom_page2s","custom_page3" => "custom_page3s","custom_page4" => "custom_page4s" ,"custom_page5" => "custom_page5s", "activity_feed" => "activity_feeds","invitees" => "invitees","event_highlights" => "event_highlights","polls" => "polls","speakers" => "speakers","sponsors" => "sponsors","exhibitors" => "exhibitors","venue" => "venue"}
+    event_features_names = event_features.pluck(:name)
+    #feature_delete = event_features_names.select { |elem| (!.include?(elem))  }
+    #feature_delete.each {|f| self.event_features.where(:name => f).destroy_all}
+    #feature_to_add = params[:event][:features] - event_features_names if params[:event][:features].present?
+    new_event.event_features.destroy_all if new_event.event_features.present? 
+    selected_feature.each do |feature|
+      feature_name = new_hsh[feature]
+      if event_features_names.include?(new_hsh[feature])
+        event_feature = event_features.find_by_name(new_hsh[feature])
+        main_icon = event_feature.main_icon if event_feature.main_icon_file_name.present?
+        menu_icon = event_feature.menu_icon if event_feature.menu_icon_file_name.present?
+      end
+      new_event.event_features.create(:name => feature_name,:main_icon => main_icon,:menu_icon => menu_icon,:page_title => Client::display_hsh1[new_hsh[feature]])
+    end
+  end
 
-  def copy_association(objekts, event_id)    
+  def create_event_features_for_all(event_features,new_event)
+    event_features_names = event_features.pluck(:name)
+    event_features_names -= %w{notes my_profile qr_code chats qnas favourites social_sharings conversations leaderboard}
+    new_event.event_features.destroy_all if new_event.event_features.present?
+    event_features_names.each do |feature|
+      event_feature = event_features.find_by_name(feature)
+      main_icon = event_feature.main_icon if event_feature.main_icon_file_name.present?
+      menu_icon = event_feature.menu_icon if event_feature.menu_icon_file_name.present?
+      new_event.event_features.create(:name => feature,:main_icon => main_icon,:menu_icon => menu_icon,:page_title => Client::display_hsh1[feature])
+    end
+  end
+
+  def copy_theme(new_event)
+    old_event = self
+    new_event.theme_id = old_event.theme_id
+    new_event.logo = old_event.logo if old_event.logo_file_name.present?
+    new_event.inside_logo = old_event.inside_logo if old_event.inside_logo_file_name.present?
+    #new_event.footer_image = old_event.footer_image if old_event.footer_image_file_name.present?
+    new_event.save
+  end
+
+  def copy_association(objekts, event_id)
     objekts.each do |objekt|
       new_objekt = objekt.dup
       new_objekt.event_id = event_id
@@ -943,5 +986,41 @@ def content_is_present
       result = "false"
     end
     result
+  end
+
+  def copy_venue(objekt, event_id)
+    new_objekt = objekt.dup
+    new_objekt.event_id = event_id
+    new_objekt.parent_id = objekt.id
+    new_objekt.emergency_exit = objekt.emergency_exit 
+    new_objekt.icon = objekt.icon if objekt.icon_file_name.present?
+    new_objekt.save
+  end
+
+  def copy_exhibitors_association(objekts, event_id)
+    objekts.each do |objekt|
+      new_objekt = objekt.dup
+      new_objekt.event_id = event_id
+      new_objekt.parent_id = objekt.id
+      new_objekt.image = objekt.image if objekt.image_file_name.present?
+      new_objekt.save
+    end
+  end
+
+  def copy_sponsors_association(objekts, event_id)
+    objekts.each do |objekt|
+      new_objekt = objekt.dup
+      new_objekt.event_id = event_id
+      new_objekt.parent_id = objekt.id
+      new_objekt.logo = objekt.image if objekt.logo_file_name.present?
+      new_objekt.save
+    end
+  end
+
+  def get_active_module
+    hsh = []
+    hsh << self.invitee_structures.first.id if self.invitee_structures.present? 
+    hsh << self.registration_settings.first.id if self.registration_settings.present?
+    #hsh << {"campaigns" => self.campaigns.first.id} if self.campaigns.present?  
   end
 end

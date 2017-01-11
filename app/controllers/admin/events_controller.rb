@@ -16,7 +16,8 @@ class Admin::EventsController < ApplicationController
     else 
       @events = Event.search(params, @events) if params[:search].present?
     end
-    @events = @events.ordered.paginate(page: params[:page], per_page: 10) if @select != true
+    @select = true if (params[:feature].present? and params[:redirect_page].present? and params[:redirect_page] == "copy_event")
+    @events = @events.ordered.paginate(page: params[:page], per_page: 10) if (@select != true)
     mobile_application_ids = @events.pluck(:mobile_application_id)
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)
     if single_mobile_application_ids.present?
@@ -29,7 +30,7 @@ class Admin::EventsController < ApplicationController
   def new
     @event = @client.events.build
     @event.images.build unless (params[:marketing_app].present? and params[:marketing_app] == "true")
-  @event.event_venues.build    
+  #@event.event_venues.build    
   @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features rescue []
@@ -48,10 +49,10 @@ class Admin::EventsController < ApplicationController
     @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
     @event.set_status_for_licensee if current_user.has_role? :licensee_admin
     @themes = Theme.find_themes()
-    if @event.save  
+    if @event.save 
       if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
         event = Event.find(params[:event][:parent_event_id])
-        @event.update_column('parent_id', event.id)      
+        @event.update_columns(parent_id: event.id,default_feature_icon: event.default_feature_icon,about: event.about)
         if params[:event][:copy_content].present?
           @event.copy_event_associations_from(event)
         elsif params[:event][:custom_content].present?
@@ -70,7 +71,7 @@ class Admin::EventsController < ApplicationController
   end
     
   def show
-    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present? and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
+    redirect_to admin_client_event_path(:client_id => @client.id, :id => @event.id, :analytics => "true") if params[:detailed_analytics].nil? and params[:analytics].nil? and @event.mobile_application.present? #and (!current_user.has_role_for_event?("db_manager", @event.id,session[:current_user_role]))
     mobile_application_ids = @events.pluck(:mobile_application_id).compact
     single_mobile_application_ids = @client.mobile_applications.where('id IN (?) and application_type = ?', mobile_application_ids, 'single event').pluck(:id)
     @multi_mobile_applications = single_mobile_application_ids.present? ? @client.mobile_applications.where('id NOT IN (?)', single_mobile_application_ids) : @client.mobile_applications
@@ -91,7 +92,7 @@ class Admin::EventsController < ApplicationController
     @themes = Theme.find_themes()
     @default_features = @event.set_features_default_list
     @present_feature = @event.set_features
-    @event.event_venues.build
+    #@event.event_venues.build
   end
 
   def update
@@ -106,7 +107,16 @@ class Admin::EventsController < ApplicationController
         @event.set_time(params["event"]["start_event_date"], params["event"]["start_time_hour"], params["event"]["start_time_minute"], params["event"]["start_time_am"], params["event"]["end_event_date"], params["event"]["end_time_hour"], params["event"]["end_time_minute"], params["event"]["end_time_am"]) rescue nil
       end
       if @event.update_attributes(events_params)
-        if params[:set_activity_feed_bool].present?
+        if params[:event][:copy_event].present? and params[:event][:copy_event] == 'yes'
+          event = Event.find(params[:event][:parent_event_id])
+          @event.update_columns(parent_id: event.id,default_feature_icon: event.default_feature_icon)   
+          if params[:event][:copy_content].present?
+            @event.copy_event_associations_from(event)
+          elsif params[:event][:custom_content].present?
+            @event.copy_custom_event_associations_from(event, params)
+          end
+          redirect_to admin_event_mobile_application_path(:id => @event.mobile_application.id, :event_id => @event.id, :type => "show_engagement")
+        elsif params[:set_activity_feed_bool].present?
           redirect_to admin_event_mobile_application_path(:id => @event.mobile_application.id, :event_id => @event.id, :type => "show_engagement")
         else
           redirect_to admin_client_events_path(:client_id => @client.id)
@@ -130,6 +140,8 @@ class Admin::EventsController < ApplicationController
 
   def get_event_names
     @event_names = @client.events.where(marketing_app: nil).where.not(status: 'rejected').pluck(:event_name, :id)
+    source_event = Event.find(params[:event_id])
+    @active_modules = source_event.get_active_module
   end
 
   def feature_redirect_on_condition

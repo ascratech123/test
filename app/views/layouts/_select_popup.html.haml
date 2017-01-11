@@ -13,7 +13,8 @@
     = link_to back_path, :class => 'closeclick' do 
       X  
   = form_tag  url, :class => "caret",:method => :get do
-    %i.arrow.single                        
+    %i.arrow.single  
+    
     - if prompt_message == 'Select Event'
       - if params[:role] == "moderator" and params[:wall] == "true"
         - new_event_not_having_mob_appli = []

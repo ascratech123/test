@@ -1,4 +1,7 @@
-- if @select.present? and ( @events.present? or ["mobile_applications","mobile_application"].include?(params[:feature]) )
-  = render :partial => '/layouts/select_popup', :locals => {:url => "/admin/clients/#{params[:client_id]}/events", :objs => @events, :prompt_message => 'Select Event'}
+- if @select.present? and ( @events.present? or ["mobile_applications","mobile_application"].include?(params[:feature]))
+  - if (params[:redirect_page].present? and params[:redirect_page] != "copy_event")
+    = render :partial => '/layouts/select_popup', :locals => {:url => "/admin/clients/#{params[:client_id]}/events", :objs => @events, :prompt_message => 'Select Event'}
+  -elsif (params[:redirect_page].present? and params[:redirect_page] == "copy_event")
+    = render :partial => '/layouts/select_popup', :locals => {:url => "/admin/clients/#{params[:client_id]}/events/new", :objs => @events, :prompt_message => 'Select Event'}
 - else
   = render :partial => 'admin/layouts/index_header', :locals => {:objs => @events} 

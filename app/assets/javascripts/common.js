@@ -814,30 +814,26 @@ $(function () {
 });      */
 
 /* nilam - new event form - copy ad custom content */
-$(document).ready(function(){  
-  $('.add-data #yes').click(function(){
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
-  });
-  $('#customButton').click(function(){
-    $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
-    $('.selectContentDiv').show();
-    $('.copyEvent, .ClientPopup, .popup-overlay').hide();
-  });
-  $('.add-data #no').click(function(){
-    $('.selectContentDiv').hide()
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
-    $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
-  });
+// $(document).ready(function(){  
+//   $('.add-data #yes').click(function(){
+//     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','block');
+//     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','block');
+//   });
+//   $('#customButton').click(function(){
+//     $(this).parent().parent().parent().parent().next('.selectContentDiv').css('display','block');
+//     $('.selectContentDiv').show();
+//     $('.copyEvent, .ClientPopup, .popup-overlay').hide();
+//   });
+//   $('.add-data #no').click(function(){
+//     $('.selectContentDiv').hide()
+//     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').css('display','none');
+//     $(this).parent().parent().parent().parent().parent().next('.select-eventDiv').next().css('display','none');
+//   });
 
-  /* Added by hemant */
-  $(document).on('click', '#copyButton', function(){
-    $('.selectContentDiv').hide();
-    $('.copyEvent, .ClientPopup, .popup-overlay').show();
-  });
-});
 
-$(document).on('click', '.ClickPop', function(){
+// });
+
+$(document).on('click', '#copyButton', function(){
   $('#copy_content').val(true);
   $('#custom_content').val('');
 })

@@ -8,7 +8,7 @@
     .rect5
 .save_button.mdl-card.eventExceedLimit.eventFeaturesTransparent
   = form_for [:admin, @client, @event], :html => {:class =>'form-horizontal'}, :builder => CustomFormBuilder do |f|
-    - if true #params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
+    - if params[:redirect_page].blank?#params[:type] == "general" or (params["controller"] == "admin/events" and params["action"] == "create")
       .mdl-grid.mdl-card.mdl-shadow--1dp
         .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
           %h4.heading-border.p-t-10.m-b-15
@@ -143,24 +143,39 @@
                   = er
 
         / - if (event_names.present? and params[:action] == "new") or (event_names.present? and params[:action] == "create")
-      - if @event_names.present? 
+    - elsif (params[:redirect_page].present? and params[:redirect_page] == "copy_event")
+      - if @event_names.present?
         .mdl-grid.mdl-shadow--1dp.eventFeaturesCard
           / .mdl-grid.mdl-card.mdl-shadow--1dp
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8
             %h4.heading-border.p-t-10.m-b-15
               Copy Content
-          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
-            .bs-componet
-              .form-group.set_highlight_select
-                %label.col-lg-4.control-label.ml-color--shades-white
-                  Do you want to add data from another event?
-                .col-lg-7
-                  - if params[:action] == 'edit' or params[:action] == 'update'
-                    = f.custom_radio_button :copy_event, "yes","Yes", :disabled => true
-                    = f.custom_radio_button :copy_event, "no", "No", :disabled => true
-                  - else
-                    = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
-                    = f.custom_radio_button :copy_event, "no", "No", :id => "no"
+          / .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.add-data
+          /   .bs-componet
+          /     .form-group.set_highlight_select
+          /       %label.col-lg-4.control-label.ml-color--shades-white
+          /         Do you want to add data from another event?
+          /       .col-lg-7
+          /         - if params[:action] == 'edit' or params[:action] == 'update'
+          /           = f.custom_radio_button :copy_event, "yes","Yes", :disabled => true
+          /           = f.custom_radio_button :copy_event, "no", "No", :disabled => true
+          /         - else
+          /           = f.custom_radio_button :copy_event, "yes","Yes", :id => "yes"
+          /           = f.custom_radio_button :copy_event, "no", "No", :id => "no"
+          .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.m-b-5.errorMess.md-checkboxsocialcheck.socialIconChkbox
+            .form-group.mobiappstype
+              .col-lg-4.mdl-typography--text-right
+                %p.displayInlineBlock.multicitytxt
+                  Social Icons
+              - @active_modules.each do |active_module|
+                .col-lg-7.p-h-12.socialchk
+                  .mdl-cell--12-col.mdl-cell--12-col-tablet.mdl-cell--1-col-phone.md-checkbox.m-v-8.chkbox_input_div
+                    %label.help-tip{:for => "active_module_#{active_module}"}
+                      = check_box_tag "event[copy_event][]","facebook","", :id => "active_module_#{active_module}"
+                      / = check_box_tag "event[copy_event][]","facebook",(f.object.social_icons.present? and f.object.social_icons.include?("facebook") ? "checked" : false), :id => "edm_1"
+                      %span.checkbox
+                      %span.top3
+                        Facebook
           .mdl-cell--12-col.mdl-cell--12-col-tablet.ml-color--shades-white.m-8.select-eventDiv
             .bs-componet
               .form-group.set_highlight_select
@@ -171,7 +186,7 @@
                   -# default_remarks << 'New Category'
                   %i.arrow.single
                   - event_name = Event.find(@event.parent_id).event_name rescue nil
-                  - if event_name.present? and (params[:action] == 'edit' or params[:action] == 'update')
+                  - if false# event_name.present? and (params[:action] == 'edit' or params[:action] == 'update')
                     .select2-single.form-control
                       = event_name
                   - else
@@ -188,12 +203,12 @@
                 %label.col-lg-4.control-label.ml-color--shades-white
                   Do you want to copy all content from this event? *
                 .col-lg-7.sdfsdfs
-                  - if params[:action] == 'edit' or params[:action] == 'update'
-                    = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
-                    = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
-                  - else
-                    = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
-                    = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
+                  / - if params[:action] == 'edit' or params[:action] == 'update'
+                  /   = f.custom_radio_button :copy_content_button, "yes", "Yes", :disabled => true
+                  /   = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :disabled => true
+                  / - else
+                  = f.custom_radio_button :copy_content_button, "yes", "Yes", :id => "copyButton"
+                  = f.custom_radio_button :copy_content_button, "no", "No, choose content to copy", :id => "customButton"
                   / %button.copyButton#copyButton{:onclick => "return false;", :style => @event.copy_content == 'true' ? 'background-color: #7b7c7c' : ''} Yes
                   / %button.customButton#customButton{:onclick => "return false;", :style => @event.custom_content == 'true' ? 'background-color: #7b7c7c' : ''} No, choose content to copy
                   - if @event.errors[:copy_content].present? and not (params[:action] == 'edit' or params[:action] == 'update')
