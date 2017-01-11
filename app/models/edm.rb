@@ -109,21 +109,26 @@ class Edm < ActiveRecord::Base
         elsif edm.email_sent == 'no'
           final_emails_arr = final_emails_arr - email_sent_yes_arr
         end
-
+                       
         email_opened_yes_arr = email_sent_yes.where(:open => 'yes').pluck(:email)
         if edm.email_opened == 'yes'
           final_emails_arr = final_emails_arr & email_opened_yes_arr
         elsif edm.email_opened == 'no'
           final_emails_arr = final_emails_arr - email_opened_yes_arr
         end
+        final_emails_arr1 = final_emails_arr
+        final_emails_arr = get_subscribed_users(final_emails_arr1)
       else
-        final_emails_arr = InviteeDatum.where(:invitee_structure_id => invitee_structure.id).pluck("#{database_email_field}") rescue []
+        final_emails_arr1 = InviteeDatum.where(:invitee_structure_id => invitee_structure.id).pluck("#{database_email_field}") rescue []
+        final_emails_arr = get_subscribed_users(final_emails_arr1)
       end
       
       if smtp_setting.present? and final_emails_arr.present?
         final_emails_arr.each do |email|
           email_sent = EdmMailSent.find_or_initialize_by(:event_id => event.id, :email => email, :edm_id => self.id)
           email_sent.save
+          subscribe_user = Unsubscribe.find_or_initialize_by(:event_id => event.id,:edm_id => self.id,:email => email)
+          subscribe_user.save
           UserMailer.default_template(edm,email,smtp_setting).deliver_now if edm.template_type.present? and edm.template_type == "default_template"
           UserMailer.custom_template(edm,email,smtp_setting).deliver_now if edm.template_type.present? and edm.template_type == "custom_template"
         end
@@ -162,5 +167,13 @@ class Edm < ActiveRecord::Base
       errors.add(:header_image, "Image size should be 600x105px only") if (dimensions_header_image.width != edm_header_image_width or dimensions_header_image.height != edm_header_image_height)
     end
   end
-    
+   
+  def get_subscribed_users(final_emails_arr1)
+    subscribe_users = Unsubscribe.where('email IN (?) AND unsubscribe = ?',final_emails_arr1,"false") if final_emails_arr1.present? 
+    get_new_users = subscribe_users.present? ? (final_emails_arr1 - subscribe_users.pluck(:email)) : final_emails_arr1
+    unsubscribe_users = Unsubscribe.where('email IN (?) AND unsubscribe = ?',final_emails_arr1,"true") if final_emails_arr1.present? 
+    get_new_users = (get_new_users - unsubscribe_users.pluck(:email))
+    subscribe_plus_new_users = (subscribe_users.present? or unsubscribe_users.present?) ? (subscribe_users.pluck(:email) + get_new_users) : final_emails_arr1
+    final_emails_arr = ((subscribe_users.present? or unsubscribe_users.present?) ? subscribe_plus_new_users  : final_emails_arr1)
+  end 
 end

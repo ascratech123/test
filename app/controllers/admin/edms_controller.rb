@@ -68,6 +68,10 @@ class Admin::EdmsController < ApplicationController
         format.html{}
         format.gif{send_data open("#{Rails.root}/public/Transparent.gif", "rb") { |f| f.read }}
       end
+    elsif params[:unsubscribe].present?
+      unsubscribe_user = Unsubscribe.where(:event_id => params[:event_id],:edm_id => params[:id],:email => params[:user_email]).first
+      unsubscribe_user.update_column('unsubscribe',params[:unsubscribe])
+      redirect_to admin_unsubscribes_success_path
     else
       render :layout => false
     end

@@ -13,6 +13,7 @@ namespace :admin do
   get 'bee_editor' => 'bee_editors#index'
   get '/mobile_applications/:mobile_application_id/success' => 'external_login#show'
   get '/events/:event_id/success' => 'user_registrations#show'
+  get '/unsubscribes/success' => 'unsubscribes#show'
   get 'bee_editor/token' => 'bee_editors#token'
   get 'bee_editor/template' => 'bee_editors#template'
   # get '/check_email_existance' => 'users#check_email_existance'

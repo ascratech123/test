@@ -10,12 +10,14 @@
       %th Subject
       %th Template
       %th eDM Broadcast Date
+      %th eDM Url
       %th
     - objs.each do |edm|
       %tr
         %td.font16= edm.subject_line
         %td.font16= (edm.template_type == "default_template" ? "Default Template" : "Custom Template")
         %td.font16= time_with_zone(edm.edm_broadcast_time,"IST")
+        %td.font16= link_to "#{APP_URL}/admin/events/#{@event.id}/campaigns/#{edm.campaign_id}/edms/#{edm.id}", admin_event_campaign_edm_path(:event_id => @event.id,:campaign_id => edm.campaign_id,:id => edm.id,:preview => true),:target => "_blank"
         %td.IconDrp
           = more_vert_button(edm.id)
           %ul.mdl-menu.mdl-menu--bottom-right.mdl-js-menu.mdl-js-ripple-effect{:for => "demo-menu-lower-right#{edm.id}"}

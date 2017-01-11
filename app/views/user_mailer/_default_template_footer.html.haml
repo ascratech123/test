@@ -26,7 +26,13 @@
                     %a{:href => "javascript:void(0);", :style => "display:inline-block;margin-right:10px;"}
                       %img{:src => "#{APP_URL}/assets/pinterest-icon.png", :style=>"width:32px;height:32px;"}/
           %td{:width => "50"}
-
+      %tr
+        %td 
+          %p{:style =>"padding:20px;"}
+            Want to open on differnt
+            = link_to "click here", "#{APP_URL}/admin/events/#{@event.id}/campaigns/#{@edm.campaign_id}/edms/#{@edm.id}?preview=true", :target => "_blank"
+            Lorem Ipsum
+            = link_to "unsubscribe", "#{APP_URL}/admin/events/#{@event.id}/campaigns/#{@edm.campaign_id}/edms/#{@edm.id}?user_email=#{@email}&unsubscribe=true&preview=true"
 / -elsif @edm.default_template.present? and @edm.default_template == "Template 2"
 /   %tr
 /     %td{:height => "20", :width => "600"}

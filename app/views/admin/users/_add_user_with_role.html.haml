@@ -54,3 +54,14 @@
         - elsif (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
           = link_to admin_clients_path(:feature => 'users', :role => 'telecaller'), :class => "mdl-color-text--white" do
             Add Telecaller
+      - if current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin
+        %li.mdl-menu__item
+          - if @event.present?
+            = link_to new_admin_event_user_path(:event_id => @event.id, :feature => 'users', :role => 'response_manager',:page_id => "#{page_id}" || params[:page_id], :get_role => params['role']), :class => "mdl-color-text--white" do
+              Add Response Manager
+          - elsif params[:client_id].present? and (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
+            = link_to admin_client_events_path(:client_id => params[:client_id], :feature => 'users', :role => 'response_manager', :redirect_page => 'new',:page_id => "#{page_id}" || params[:page_id]), :class => "mdl-color-text--white" do
+              Add Response Manager
+          - elsif (current_user.has_role? :licensee_admin or current_user.has_role? :client_admin or current_user.has_role? :event_admin)
+            = link_to admin_clients_path(:feature => 'users', :role => 'response_manager'), :class => "mdl-color-text--white" do
+              Add Response Manager

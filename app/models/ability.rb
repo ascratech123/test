@@ -525,6 +525,9 @@ class Ability
       can :read, :all
     elsif user.has_role? :response_manager
       can :read, :all
+      can :manage, Campaign
+      can :manage, Edm
+      can :manage, Grouping
     elsif user.has_role? :response_executive
       can :read, :all
     elsif user.has_role? :communication_manager
